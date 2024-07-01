@@ -1,0 +1,8 @@
+...is it reaching you?
+Strange beast, what brings you to my room? I don't think I have anything for you.
+0 : .  .  . : 50
+Interesting... there is no record of your blueprint in my database.
+In additional something don't let me do fully analyze your body structure without harmimg your health.
+But based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me. 
+In any case, I don't have the medical equipment to make it any easier on you.
+0 : You have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone. : 30

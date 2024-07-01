@@ -1,0 +1,85 @@
+{	"id": "TheVoid",
+	"name": "The Void",
+	"description": "An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.",
+	"features": {
+		"color": "000001",
+		"custom_colors": [
+			{
+				"name": "Body",
+				"story": "000001"
+
+			},
+			{
+				"name": "Eyes",
+				"story": "ffdd00",
+				"arena": [ "ffffff", "ffdd00", "ee3366", "7700dd" ]
+			}
+		],
+		
+		"weight": 1.21,
+		"tunnel_speed": 1.21,
+		"climb_speed": 1.21,
+		"walk_speed": 1.21,
+		"crouch_stealth": 1.21,
+		"throw_skill": 2,
+		"lung_capacity": 1.5,
+		"loudness": 0.66,
+		"alignments": {
+			"Lizards": {
+				"like": -1.0,
+				"locked": true
+			},
+			"Scavengers": {
+				"like": -0.5,
+				"locked": true
+			},
+			"Cicadas ": {
+				"like": -1.0,
+				"locked": true
+			},
+			"GarbageWorms": {
+				"like": -0.5,
+				"locked": true
+			},
+			"Deer": {
+				"like": -1.0,
+				"locked": true
+			},
+			"Jetfish": {
+				"like": -1.0,
+				"locked": true
+			}
+		},
+		"auto_grab_batflies": false,
+		"back_spear": false,
+		"can_maul": true,
+		"perma_unlock_gates": false,
+		"maul_damage": 6,
+		"karma": 2,
+		"karma_cap": 2,
+		"the_mark": false,
+		"the_glow": true,
+		"has_dreams": false,
+		"expedition_enabled": true,
+		"guide_overseer": 2,
+		"cycle_length_min": 6,
+		"cycle_length_max": 13,
+		"food_min": 9,
+		"food_max": 9,
+		"world_state": "Red",
+		"timeline_before":"Gourmand",
+		"timeline_after": "Red",
+		"start_room": "SB_A14",
+		"diet": {
+			"base": "White",
+			"corpses": 0.5,
+			"plants": 0.25,
+			"meat": 0.25
+		},
+		"title_card": "Void_Title_Card",
+		"sleep_scene": "Sleep_Void",
+		"select_menu_scene": "Slugcat_Void",
+		"death_scene": "Death_Void",
+		"intro_slideshow": "Void_Intro"
+	}
+}

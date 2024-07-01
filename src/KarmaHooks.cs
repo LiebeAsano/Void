@@ -11,7 +11,6 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MoreSlugcats;
-using Nutils.hook;
 using RWCustom;
 using TheVoid;
 using UnityEngine;
@@ -29,7 +28,7 @@ namespace VoidTemplate
             On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
             On.StoryGameSession.ctor += StoryGameSession_ctor;
 
-            On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
+            //On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
             On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
             On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 
@@ -318,7 +317,7 @@ namespace VoidTemplate
             }
         }
 
-        private static int SlugcatStats_NourishmentOfObjectEaten(On.SlugcatStats.orig_NourishmentOfObjectEaten orig, SlugcatStats.Name slugcatIndex, IPlayerEdible eatenobject)
+        /*private static int SlugcatStats_NourishmentOfObjectEaten(On.SlugcatStats.orig_NourishmentOfObjectEaten orig, SlugcatStats.Name slugcatIndex, IPlayerEdible eatenobject)
         {
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
@@ -328,7 +327,7 @@ namespace VoidTemplate
             }
 
             return orig(slugcatIndex, eatenobject);
-        }
+        }*/
 
 
 

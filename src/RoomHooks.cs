@@ -20,7 +20,7 @@ namespace VoidTemplate
 
         private static float TempleGuardAI_ThrowOutScore(On.TempleGuardAI.orig_ThrowOutScore orig, TempleGuardAI self, Tracker.CreatureRepresentation crit)
         {
-            if (crit.representedCreature.realizedCreature is Player player &&player.slugcatStats.name == Plugin.TheVoid)
+            if (crit.representedCreature.realizedCreature is Player player && player.slugcatStats.name == Plugin.TheVoid)
             {
                 return 500f;
             }
@@ -48,8 +48,10 @@ namespace VoidTemplate
             {
                 if (self.abstractRoom.name == "SB_E05")
                     self.AddObject(new ClimbTutorial(self));
-                
+
             }
         }
+
+        
     }
 }

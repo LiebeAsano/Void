@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BepInEx;
+using MonoMod.RuntimeDetour;
 using RWCustom;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -15,8 +17,8 @@ namespace VoidTemplate.Objects
         public ClimbTutorial(Room room) : base(room,new (215,0,room.Width,room.Height), 
             new Message[]
             {
-                new ("Line 1",0,400),
-                new ("Line 2")//Add your text here
+                new ("You have enough strength to climb the walls.",0,400),
+                new ("Hold down the 'Direction' and 'Up' buttons to climb the wall.")
             })
         {
         }
@@ -25,8 +27,8 @@ namespace VoidTemplate.Objects
     internal class TutorialTrigger : UpdatableAndDeletable
     {
 
-        public TutorialTrigger(Room room, params Message[] messages) 
-            : this(room,new(0, 0, room.Width, room.Height), messages)
+        public TutorialTrigger(Room room, params Message[] messages)
+            : this(room, new(0, 0, room.Width, room.Height), messages)
         {
         }
         public TutorialTrigger(Room room, IntRect triggerRect, params Message[] messages)
@@ -45,7 +47,7 @@ namespace VoidTemplate.Objects
                 return;
             }
 
-            if (room.PlayersInRoom.Any(i => 
+            if (room.PlayersInRoom.Any(i =>
                     i.abstractCreature.pos.x >= rect.left &&
                     i.abstractCreature.pos.x <= rect.right &&
                     i.abstractCreature.pos.y >= rect.bottom &&
@@ -92,4 +94,5 @@ namespace VoidTemplate.Objects
         private Message[] messageList;
         private IntRect rect;
     }
+
 }

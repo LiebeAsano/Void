@@ -9,6 +9,7 @@ using Nutils.hook;
 using SlugBase.Assets;
 using TheVoid;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace VoidTemplate
 {
@@ -23,6 +24,9 @@ namespace VoidTemplate
             On.Menu.KarmaLadder.KarmaSymbol.Update += KarmaSymbol_Update;
             On.Menu.SlugcatSelectMenu.SlugcatPage.AddImage += SlugcatPage_AddImage;
             On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
+            On.Mushroom.BitByPlayer += Mushroom_EatenByPlayer;
+            On.RainWorldGame.ExitToMenu += RainWorldGame_ExitToMenu;
+            Application.quitting += OnApplicationQuit;
 
             IL.Menu.KarmaLadderScreen.GetDataFromGame += KarmaLadderScreen_GetDataFixMSCStupidBug;
 
@@ -47,16 +51,16 @@ namespace VoidTemplate
                     i => i.MatchLdcI4(4));
                 c.Emit(OpCodes.Ldarg_0);
                 c.Emit(OpCodes.Ldarg_1);
-                c.EmitDelegate<Func<int,KarmaLadderScreen,KarmaLadderScreen.SleepDeathScreenDataPackage,int>>(
-                    (re,self,package) =>
-                {
-                    if (package.saveState != null && package.saveState.saveStateNumber == Plugin.TheVoid)
-                        if (self.ID == ProcessManager.ProcessID.GhostScreen)
-                            return self.preGhostEncounterKarmaCap;
-                        else
-                            return self.karma.y;
-                    return re;
-                });
+                c.EmitDelegate<Func<int, KarmaLadderScreen, KarmaLadderScreen.SleepDeathScreenDataPackage, int>>(
+                    (re, self, package) =>
+                    {
+                        if (package.saveState != null && package.saveState.saveStateNumber == Plugin.TheVoid)
+                            if (self.ID == ProcessManager.ProcessID.GhostScreen)
+                                return self.preGhostEncounterKarmaCap;
+                            else
+                                return self.karma.y;
+                        return re;
+                    });
             }
             catch (Exception e)
             {
@@ -75,7 +79,19 @@ namespace VoidTemplate
                 self.Destroy();
                 return;
             }
-            orig(self,grasp, eu);
+            orig(self, grasp, eu);
+        }
+
+        private static void Mushroom_EatenByPlayer(On.Mushroom.orig_BitByPlayer orig, Mushroom self, Creature.Grasp grasp, bool eu)
+        {
+            if (grasp.grabber is Player player && player.slugcatStats.name == Plugin.TheVoid)
+            {
+                self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
+                grasp.Release();
+                self.Destroy();
+                return;
+            }
+            orig(self, grasp, eu);
         }
 
         private static void SlugcatPage_AddImage(On.Menu.SlugcatSelectMenu.SlugcatPage.orig_AddImage orig, SlugcatSelectMenu.SlugcatPage self, bool ascended)
@@ -120,7 +136,7 @@ namespace VoidTemplate
                 return;
             }
 
-            orig(self,ascended);
+            orig(self, ascended);
         }
 
         private static void KarmaSymbol_Update(On.Menu.KarmaLadder.KarmaSymbol.orig_Update orig, KarmaLadder.KarmaSymbol self)
@@ -130,8 +146,8 @@ namespace VoidTemplate
                         self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.VengeanceGhostScreen ||
                         (ModManager.Expedition && self.menu.manager.rainWorld.ExpeditionMode &&
                          self.parent.moveToKarma == 0));
-            if (!flag && ModManager.MSC && self.parent.displayKarma.x == self.parent.moveToKarma && 
-                self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == Plugin.TheVoid 
+            if (!flag && ModManager.MSC && self.parent.displayKarma.x == self.parent.moveToKarma &&
+                self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == Plugin.TheVoid
                 && self.parent.moveToKarma == 0 && self.parent.menu.ID == ProcessManager.ProcessID.DeathScreen)
             {
                 self.waitForAnimate++;
@@ -169,7 +185,7 @@ namespace VoidTemplate
         private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
         {
 
-            if (self.GetStorySession.saveState.saveStateNumber == Plugin.TheVoid && (!ModManager.Expedition  || !self.rainWorld.ExpeditionMode))
+            if (self.GetStorySession.saveState.saveStateNumber == Plugin.TheVoid && (!ModManager.Expedition || !self.rainWorld.ExpeditionMode))
             {
                 if (self.manager.upcomingProcess != null) return;
 
@@ -191,7 +207,7 @@ namespace VoidTemplate
                 else
                     self.GetStorySession.saveState.AppendCycleToStatistics(self.Players[0].realizedCreature as Player, self.GetStorySession, true, 0);
 
-         
+
                 self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
                 self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
                 Debug.Log("[The Void] Exit to Statistics");
@@ -200,6 +216,41 @@ namespace VoidTemplate
             orig(self);
         }
 
+
+        private static void OnApplicationQuit()
+        {
+            RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
+            if (rainWorld != null)
+            {
+                ProcessManager processManager = rainWorld.processManager;
+                if (processManager.currentMainLoop is RainWorldGame game)
+                {
+                    CheckAndTriggerGameOver(game);
+                }
+            }
+        }
+
+        private static void CheckAndTriggerGameOver(RainWorldGame rainWorldGame)
+        {
+            if (rainWorldGame.session is StoryGameSession session &&
+                session.characterStats.name == Plugin.TheVoid &&
+                (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) &&
+                (!ModManager.Expedition || !rainWorldGame.rainWorld.ExpeditionMode))
+            {
+                rainWorldGame.GoToRedsGameOver();
+            }
+        }
+
+        private static void RainWorldGame_ExitToMenu(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
+        {
+            if (self.session is StoryGameSession session && session.characterStats.name == Plugin.TheVoid
+                && (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) && (!ModManager.Expedition || !self.rainWorld.ExpeditionMode))
+            {
+                self.GoToRedsGameOver();
+                return;
+            }
+            orig(self);
+        }
         private static void RainWorldGame_GameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
         {
             if (self.session is StoryGameSession session && session.characterStats.name == Plugin.TheVoid
@@ -212,4 +263,5 @@ namespace VoidTemplate
         }
 
     }
+
 }

@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MoreSlugcats;
-using Nutils.hook;
 using TheVoid;
 using UnityEngine;
+using Nutils.hook;
 
 namespace VoidTemplate
 {
@@ -66,7 +66,7 @@ namespace VoidTemplate
                     self.restartConversationAfterCurrentDialoge = true;
                 }
 
-                if (save.eatCounter == 5)
+                if (save.eatCounter == 11)
                 {
                     if (self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 6)
                     {
@@ -89,24 +89,49 @@ namespace VoidTemplate
         public static class SSConversation
         {
             public static Conversation.ID[] VoidConversation;
+            public static Conversation.ID[] MoonVoidConversation;
 
-            public static int[] cycleLingers = new[] { 0, 1, 5, 0, 5, 0, 5, 0, 5, 5, 0 };
+            public static int[] cycleLingers = new[] { 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0 };
+            public static int[] MooncycleLingers = new[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+            static SSConversation()
+            {
+                VoidConversation = new Conversation.ID[11];
+                for (int i = 0; i < VoidConversation.Length; i++)
+                    VoidConversation[i] = new($"VoidConversation_{i + 1}", true);
+                MoonVoidConversation = new Conversation.ID[11];
+                for (int i = 0; i < MoonVoidConversation.Length; i++)
+                    MoonVoidConversation[i] = new($"MoonVoidConversation_{i + 1}", true);
+            }
 
             public static string[] pickInterruptMessages = new[]
             {
-                "Yes, help yourself. They are not edible. 1",
-                "Yes, help yourself. They are not edible. 2",
-                "Yes, help yourself. They are not edible. 3"
-                //And so on
+                "Yes, help yourself. They are not edible.",
+                "You seem to like pearls.",
+                "Are you listening to me?",
+                "You need to stop being distracted by pearls.",
+                "Are you trying my patience?",
+                "...never mind...",
+                "Yes... this pearl contains data about my structure.",
+                "Strange.. This pearl shouldn't be here.",
+                "There is nothing useful in this pearl, you can eat it.",
+                "This pearl contains information about failed experiments.",
+                "I should back up the pearls more often..."
             };
 
             public static string[] eatInterruptMessages = new[]
             {
-                "1",
+                "I'm not sure you can stomach them.",
                 "2",
                 "3",
                 "4",
-                "5"
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11"
             };
 
             public static string[] eatInterruptMessages6Step = new[]
@@ -115,15 +140,17 @@ namespace VoidTemplate
                 "2-6",
                 "3-6",
                 "4-6",
-                "5-6"
+                "5-6",
+                "6-6",
+                "7-6",
+                "8-6",
+                "9-6",
+                "10-6",
+                "11-6"
             };
 
-            static SSConversation()
-            {
-                VoidConversation = new Conversation.ID[11];
-                for (int i = 0; i < VoidConversation.Length; i++)
-                    VoidConversation[i] = new ($"VoidConversation_{i + 1}", true);
-            }
+
+            
         }
 
         private static void SLOracleBehaviorHasMark_InitateConversation(On.SLOracleBehaviorHasMark.orig_InitateConversation orig, SLOracleBehaviorHasMark self)
@@ -153,7 +180,7 @@ namespace VoidTemplate
             if (SSConversation.VoidConversation.Contains(self.id))
             {
                 if (!self.owner.playerEnteredWithMark)
-                    self.events.Add(new Conversation.TextEvent(self, 0, ".  .  .", 0));
+                    self.events.Add(new Conversation.TextEvent(self, 0, ".  .  . ", 0));
                 else
                     self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
                 

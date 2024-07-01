@@ -1,89 +1,74 @@
 ﻿using System;
 using VoidTemplate;
 using UnityEngine;
-using HarmonyLib;
 using TheVoid;
-
-[HarmonyPatch(typeof(Player), nameof(Player.Update))]
-public class Patch_Player_Update
+public static class PlayerSpawnManager
 {
-    private static int targetRoomID = -1;
-    private static readonly WorldCoordinate originalSpawnPoint = new WorldCoordinate(-1, 38, 13, 0);
-    private static bool karmaTriggerInitialized = false;
+    public static void ApplyHooks()
+    {
+        On.Player.Update += Player_Update;
+        On.StoryGameSession.AddPlayer += static (orig, self, abstractPlayer) =>
+        {
+            orig(self, abstractPlayer);
+            Plugin.isSpawned = false;
+            Plugin.logger.LogMessage("Player added, isSpawned reset");
+        };
+    }
 
+    private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+    {
+        orig(self, eu);
+        if (!Plugin.isSpawned && self.room is Room playerRoom)
+        {
+            InitializeTargetRoomID(playerRoom);
+
+            KarmaInitLogic(playerRoom, self);
+
+            int currentRoomIndex = self.abstractCreature.pos.room;
+
+            if (currentRoomIndex == NewSpawnPoint.room)
+            {
+                self.abstractCreature.pos = NewSpawnPoint;
+                Vector2 newPosition = self.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
+                self.firstChunk.pos = newPosition;
+                self.mainBodyChunk.pos = newPosition;
+
+                Plugin.isSpawned = true;
+
+                self.animation = Player.AnimationIndex.StandUp;
+            }
+        }
+    }
+    #region minor helper functions
+    private static bool karmaTriggerInitialized = false;
+    private static void KarmaInitLogic(Room room, Player player)
+    {
+        if (!karmaTriggerInitialized)
+        {
+            KarmaCapCheck.Init(room, player);
+            karmaTriggerInitialized = true;
+        }
+
+    }
+
+    private static int targetRoomID = -1;
     static WorldCoordinate NewSpawnPoint
     {
         get
         {
-            if (targetRoomID == -1)
-            {
-                throw new Exception("[TheVoid] Target room ID is not initialized!");
-            }
+            if (targetRoomID == -1) throw new Exception("Target room ID is not initialized!");
             return new WorldCoordinate(targetRoomID, originalSpawnPoint.x, originalSpawnPoint.y, originalSpawnPoint.abstractNode);
         }
     }
-
+    private static readonly WorldCoordinate originalSpawnPoint = new WorldCoordinate(-1, 38, 13, 0);
     static void InitializeTargetRoomID(Room room)
     {
         if (targetRoomID == -1)
         {
-            AbstractRoom targetRoom = room.world.GetAbstractRoom("SB_A14");
-            if (targetRoom == null)
-            {
-                throw new Exception($"[TheVoid] Room 'SB_A14' does not exist.");
-            }
+            AbstractRoom targetRoom = room.world.GetAbstractRoom("SB_A14") ?? throw new Exception($"Room 'SB_A14' does not exist.");
             targetRoomID = targetRoom.index;
         }
     }
 
-    static void Postfix(Player __instance)
-    {
-        if (Plugin.isSpawned) return;
-
-        try
-        {
-            if (__instance == null || __instance.room == null)
-            {
-                Debug.LogWarning("[TheVoid] Player instance or room is null.");
-                return;
-            }
-
-            Room playerRoom = __instance.room;
-            InitializeTargetRoomID(playerRoom);
-
-            if (!karmaTriggerInitialized)
-            {
-                KarmaCapCheck.Init(playerRoom, __instance);
-                karmaTriggerInitialized = true;
-            }
-
-            int currentRoomIndex = __instance.abstractCreature.pos.room;
-
-            if (currentRoomIndex == NewSpawnPoint.room)
-            {
-                __instance.abstractCreature.pos = NewSpawnPoint;
-                Vector2 newPosition = __instance.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
-                __instance.firstChunk.pos = newPosition;
-                __instance.mainBodyChunk.pos = newPosition;
-
-                Plugin.isSpawned = true;
-
-                __instance.animation = Player.AnimationIndex.StandUp;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[TheVoid] Exception in Patch_Player_Update: {ex}");
-        }
-    }
-}
-
-[HarmonyPatch(typeof(StoryGameSession), nameof(StoryGameSession.AddPlayer))]
-class Patch_StoryGameSession_AddPlayer
-{
-    static void Prefix()
-    {
-        Plugin.isSpawned = false;
-        Debug.Log("[TheVoid] Player added, isSpawned reset.");
-    }
+    #endregion
 }

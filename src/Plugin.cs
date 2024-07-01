@@ -9,11 +9,11 @@ using static Creature;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
 using System.Threading.Tasks;
-using UnityEngine.LowLevel;
-using System.Collections.Generic;
+using System.Linq;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
+
 namespace TheVoid
 {
     [BepInPlugin(MOD_ID, "TheVoid", "0.0.1")]
@@ -24,31 +24,34 @@ namespace TheVoid
         public delegate void orig_Eat(global::DaddyLongLegs self, bool eu);
         public delegate void hook_Eat(orig_Eat orig, global::DaddyLongLegs self, bool eu);
 
-        public static bool isSpawned = false; // Публичное статическое поле
-
+        public static bool isSpawned = false;
+        public void OnEnable()
+        {
+            On.RainWorld.OnModsInit += RainWorld_OnModsInit;
+            On.Creature.Violence += Creature_Violence;
+            On.Leech.Attached += OnLeechAttached;
+            On.Player.Update += Player_Update;
+            On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
+        }
         public void Awake()
         {
             var harmony = new Harmony("liebeasano.thevoid");
             harmony.PatchAll();
-            Harmony harmonyInstance = new Harmony("com.example.patch");
             HookEndpointManager.Add<hook_Eat>(typeof(DaddyLongLegs).GetMethod("Eat", BindingFlags.Instance | BindingFlags.Public), OnDaddyLongLegsEat);
         }
 
         private static void OnLeechAttached(On.Leech.orig_Attached orig, global::Leech self)
         {
+
             orig(self);
-            //Debug.Log("[TheVoid] Leech attached to something.");
 
             if (self.grasps.Length > 0 && self.grasps[0] != null)
             {
                 var grabbedCreature = self.grasps[0].grabbed as Creature;
                 if (grabbedCreature is Player player)
                 {
-                    //Debug.Log("[TheVoid] Leech attached to player with slugcatStats.name: " + player.slugcatStats.name);
-
                     if (player.slugcatStats.name == Plugin.TheVoid)
                     {
-                        //Debug.Log("[TheVoid] Leech detected attachment to TheVoid player during Attached. Initiating kill sequence.");
                         AsyncKillLeech(self);
                     }
                 }
@@ -57,17 +60,10 @@ namespace TheVoid
 
         private static async void AsyncKillLeech(global::Leech leech)
         {
-            //Debug.Log("[TheVoid] Leech kill sequence initiated. Waiting 1 second.");
             await Task.Delay(6000);
-
             if (leech != null && leech.room != null)
             {
-                //Debug.Log("[TheVoid] Killing Leech.");
                 leech.Die();
-            }
-            else
-            {
-                //Debug.Log("[TheVoid] Leech or its room was null.");
             }
         }
 
@@ -77,12 +73,10 @@ namespace TheVoid
         {
             static void Postfix(ShelterDoor __instance)
             {
-                // Получаем экземпляр RainWorldGame
                 var gameInstance = __instance.room.game as RainWorldGame;
 
                 if (gameInstance == null) return;
 
-                // Проверка первого игрока в списке gameInstance.Players
                 if (gameInstance.Players.Count > 0)
                 {
                     for (int i = 0; i < gameInstance.Players.Count; i++)
@@ -125,12 +119,11 @@ namespace TheVoid
         {
             public static void Postfix(Player __instance)
             {
-                // Получаем экземпляр RainWorldGame
+
                 var gameInstance = __instance.room?.game as RainWorldGame;
 
                 if (gameInstance == null) return;
 
-                // Проверка каждого игрока среди игроков в игре.
                 if (gameInstance.Players.Count > 0)
                 {
                     for (int i = 0; i < gameInstance.Players.Count; i++)
@@ -141,9 +134,7 @@ namespace TheVoid
                             slugcat.slugcatStats.name == TheVoid &&
                             slugcat.room != null &&
                             slugcat.room == __instance.room)
-
                         {
-                            // Если слизнекот "TheVoid", снимаем любую истощенность только для него
                             if (slugcat.Malnourished)
                             {
                                 slugcat.Die();
@@ -152,16 +143,6 @@ namespace TheVoid
                     }
                 }
             }
-        }
-
-        // Add hooks
-        public void OnEnable()
-        {
-            On.RainWorld.OnModsInit += RainWorld_OnModsInit;
-            On.Creature.Violence += Creature_Violence;
-            On.Leech.Attached += OnLeechAttached;
-            On.Player.Update += Player_Update;
-            On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
         }
 
         private void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
@@ -174,7 +155,6 @@ namespace TheVoid
             }
         }
 
-        // Добавление игрока в сессию.
         private void StoryGameSession_AddPlayer(On.StoryGameSession.orig_AddPlayer orig, StoryGameSession self, AbstractCreature abstractCreature)
         {
             orig(self, abstractCreature);
@@ -188,44 +168,37 @@ namespace TheVoid
         private void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
         {
 
-            // Проверка, что существо — игрок с ID "TheVoid"
             if (self is Player player && player.slugcatStats.name == TheVoid && type == DamageType.Stab)
             {
                 int KarmaCap = player.KarmaCap;// Уменьшаем эффект оглушения
-                float StunResistance = 1f - 0.09f * KarmaCap; // уменьшение оглушения на 9% за каждый уровень KarmaCap
-                float DamageResistance = 1f - 0.09f * KarmaCap;  // уменьшение урона на 9% за каждый уровень KarmaCap
+                float StunResistance = 1f - 0.09f * KarmaCap;
+                float DamageResistance = 1f - 0.09f * KarmaCap;
                 stunBonus *= StunResistance;
                 damage *= DamageResistance;
                 Logger.LogInfo($"Creature: {self} | DamageType: {type} | Damage: {damage} | StunBonus: {stunBonus}");
             }
 
-            // Вызов оригинального метода с изменёнными значениями
             orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
         }
 
         private static async void OnDaddyLongLegsEat(orig_Eat orig, DaddyLongLegs self, bool eu)
         {
 
-            // Проверим список eatObjects
             foreach (var eatObject in self.eatObjects)
             {
                 if (eatObject.chunk?.owner is Player player)
                 {
-                    //Debug.Log($"Daddy Long Legs is eating a Player with slugcatStats.name: {player.slugcatStats.name}");
 
                     if (player.slugcatStats.name == TheVoid && player.dead)
                     {
-                        //Debug.Log("Daddy Long Legs has eaten a TheVoid slugcat! Initiating death sequence.");
                         await Task.Delay(3000);
                         DestroyBody(player);
                         self.Die();
                         FinishEating(self);
-                        return;  // Прерываем выполнение оригинального метода, если объект найден съеденным
+                        return;
                     }
                 }
             }
-
-            // Выполним оригинальный метод после всех проверок
             orig(self, eu);
         }
 
@@ -253,48 +226,34 @@ namespace TheVoid
         {
             static void Postfix(Player __instance)
             {
-                    if (__instance.eatMeat != 50)
-                    {
-                        return;
-                    }
+                if (__instance.eatMeat != 50)
+                {
+                    return;
+                }
 
-                    // Проверка текущего игрока на ID TheVoid
-                    if (__instance.slugcatStats.name == Plugin.TheVoid)
-                    {
-                        //Debug.Log($"[TheVoid] Player {__instance.abstractCreature.ID} has ID TheVoid and will not die.");
-                        return; // Слизнекот с ID TheVoid не умирает при поедании трупа с ID TheVoid
-                    }
+                if (__instance.slugcatStats.name == Plugin.TheVoid)
+                {
+                    return;
+                }
 
-                    // Проверяем каждый захват слота Player
-                    for (int i = 0; i < __instance.grasps.Length; i++)
+                for (int i = 0; i < __instance.grasps.Length; i++)
+                {
+                    var grasp = __instance.grasps[i];
+                    if (grasp != null)
                     {
-                        var grasp = __instance.grasps[i];
-                        if (grasp != null)
+                        if (grasp.grabbed is Player prey)
                         {
-                            //Debug.Log($"[TheVoid] Grasp at index {i} is not null and grasped object is {grasp.grabbed?.GetType()}.");
-
-                            if (grasp.grabbed is Player prey)
+                            if (prey.slugcatStats.name == Plugin.TheVoid)
                             {
-                                //Debug.Log($"[TheVoid] Player {__instance.abstractCreature.ID} is holding player {prey.abstractCreature.ID} with slugcatStats.name: {prey.slugcatStats.name}");
-
-                                // Проверяем, удерживается ли труп с ID TheVoid
-                                if (prey.slugcatStats.name == Plugin.TheVoid)
-                                {
-                                    //Debug.Log($"[TheVoid] Player {__instance.abstractCreature.ID} is holding Player {prey.abstractCreature.ID} with ID TheVoid.");
-
-                                    // Условие смерти для слизнекота, который захватил труп с ID TheVoid
-                                    __instance.Die();
-                                    return;  // Прекращаем выполнение, чтобы избежать лишних проверок
-                                }
+                                __instance.Die();
+                                return;
                             }
                         }
                     }
-
-                    // Дополнительный лог для отладки текущих захватов
-                    //Debug.Log("[TheVoid] Dumping current grasps:");
                 }
+            }
         }
-        
+
 
 
         private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
@@ -313,7 +272,6 @@ namespace TheVoid
             {
                 if (!isLoaded)
                 {
-                    //Create file named void.dev at RainWorld_Data\StreamingAssets to enabled
                     if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
                     {
                         DevEnabled = true;
@@ -330,7 +288,7 @@ namespace TheVoid
                     CreatureHooks.Hook();
                     if (DevEnabled)
                     {
-                        // On.RainWorldGame.Update += RainWorldGame_TestUpdate;
+                        On.RainWorldGame.Update += RainWorldGame_TestUpdate;
                     }
                     LoadResources(self);
                     isLoaded = true;
@@ -390,7 +348,8 @@ namespace TheVoid
             Futile.atlasManager.LoadImage("atlas-void/karma_blank");
         }
 
-        /* private static void RainWorldGame_TestUpdate(On.RainWorldGame.orig_Update orig, RainWorldGame self)
+
+        private static void RainWorldGame_TestUpdate(On.RainWorldGame.orig_Update orig, RainWorldGame self)
         {
             orig(self);
             if (self.session is StoryGameSession session &&
@@ -440,10 +399,9 @@ namespace TheVoid
 
                 }
             }
-        } */
+        }
 
     }
-
 
     public class VoidSave
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using TheVoid;
 using VoidTemplate.Objects;
 
@@ -48,10 +44,8 @@ namespace VoidTemplate
             {
                 if (self.abstractRoom.name == "SB_E05")
                     self.AddObject(new ClimbTutorial(self));
-
             }
         }
 
-        
     }
 }

@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kittehface.Framework20;
 using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MonoMod.RuntimeDetour;
 using MoreSlugcats;
 using RWCustom;
 using TheVoid;
 using UnityEngine;
-using LevelSelector = IL.Menu.LevelSelector;
 
 namespace VoidTemplate
 {
@@ -87,11 +79,11 @@ namespace VoidTemplate
                 }
             }
 
-            orig(self,menu, owner, pos, hud, displayKarma, reinforced);
+            orig(self, menu, owner, pos, hud, displayKarma, reinforced);
             if (needInsert)
             {
-                self.karmaSymbols.Insert(0,new KarmaLadder.KarmaSymbol(menu, self, 
-                    new Vector2(0f, 0f), self.containers[self.MainContainer], 
+                self.karmaSymbols.Insert(0, new KarmaLadder.KarmaSymbol(menu, self,
+                    new Vector2(0f, 0f), self.containers[self.MainContainer],
                     self.containers[self.FadeCircleContainer], new IntVector2(-1, 0)));
                 self.subObjects.Add(self.karmaSymbols[0]);
                 self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].MoveBehindOtherNode(
@@ -119,7 +111,7 @@ namespace VoidTemplate
             {
                 ILCursor c = new ILCursor(il);
                 c.GotoNext(MoveType.After,
-                    i=>i.MatchLdcI4(1),
+                    i => i.MatchLdcI4(1),
                     i => i.MatchStloc(15),
                     i => i.MatchLdloc(18),
                     i => i.MatchIsinst<Creature>());
@@ -153,7 +145,7 @@ namespace VoidTemplate
             try
             {
                 ILCursor c = new ILCursor(il);
-                c.GotoNext(MoveType.After,i => i.MatchLdfld<StoryGameSession>("saveStateNumber"),
+                c.GotoNext(MoveType.After, i => i.MatchLdfld<StoryGameSession>("saveStateNumber"),
                     i => i.MatchLdsfld<MoreSlugcatsEnums.SlugcatStatsName>("Saint"),
                     i => i.MatchCall(out var call) && call.Name.Contains("op_Equality"));
                 var label = (ILLabel)c.Next.Operand;
@@ -170,7 +162,7 @@ namespace VoidTemplate
             }
         }
 
-        private static string GetGhostConversationPath(InGameTranslator.LanguageID id,Conversation.ID convId,bool hasMark)
+        private static string GetGhostConversationPath(InGameTranslator.LanguageID id, Conversation.ID convId, bool hasMark)
         {
             var translator = Custom.rainWorld.inGameTranslator;
             var path = $"{translator.SpecificTextFolderDirectory(id)}/{convId}_";
@@ -182,8 +174,10 @@ namespace VoidTemplate
 
         //dialogue path : text/text_{language id}/ghost_{ghost region name (lower)}_{mark/nomark}.txt
         //eg: text/text_rus/ghost_sb_mark.txt
+
         //If the corresponding language dialogue cannot be found, the <English> version will be read.
         //If it is still not found, read the original in-game text (a prompt will be added for DEBUG)
+
         private static void GhostConversation_AddEvents(On.GhostConversation.orig_AddEvents orig, GhostConversation self)
         {
             if (self.ghost.room.game.session is StoryGameSession session &&
@@ -199,24 +193,21 @@ namespace VoidTemplate
 
                 if (File.Exists(path))
                 {
-                    Debug.Log($"[The Void] Load Conv In file : {path}");
                     foreach (var line in File.ReadAllLines(path))
                     {
                         var split = LocalizationTranslator.ConsolidateLineInstructions(line);
-                        if(split.Length == 3)
-                            self.events.Add(new Conversation.TextEvent(self, int.Parse(split[0]), 
+                        if (split.Length == 3)
+                            self.events.Add(new Conversation.TextEvent(self, int.Parse(split[0]),
                                 split[1], int.Parse(split[2])));
                         else
-                            self.events.Add(new Conversation.TextEvent(self,0,line,0));
+                            self.events.Add(new Conversation.TextEvent(self, 0, line, 0));
                     }
 
                     return;
                 }
-                Debug.Log($"[The Void] Load FallBack");
 
-                //TODO : DELETE THIS AFTER TEST
-                self.events.Add(new Conversation.TextEvent(self,0,$"Can't find conv at {GetGhostConversationPath(InGameTranslator.LanguageID.English, self.id,
-                    session.saveState.deathPersistentSaveData.theMark)}<LINE> for {self.id}",0));
+                self.events.Add(new Conversation.TextEvent(self, 0, $"Can't find conv at {GetGhostConversationPath(InGameTranslator.LanguageID.English, self.id,
+                    session.saveState.deathPersistentSaveData.theMark)}<LINE> for {self.id}", 0));
 
             }
             orig(self);
@@ -228,7 +219,7 @@ namespace VoidTemplate
                 game.session is StoryGameSession session &&
                 session.saveStateNumber == Plugin.TheVoid)
                 return true;
-            var re =orig(ghostID,karma,karmaCap,ghostPreviouslyEncountered,playingAsRed);
+            var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
             return re;
         }
 
@@ -239,7 +230,7 @@ namespace VoidTemplate
                 ILCursor c = new ILCursor(il);
                 c.GotoNext(MoveType.After, i => i.MatchLdcI4(9));
                 c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<int, SaveState,int>>((re, self) =>
+                c.EmitDelegate<Func<int, SaveState, int>>((re, self) =>
                     self.saveStateNumber == Plugin.TheVoid ? 10 : re);
             }
             catch (Exception e)
@@ -258,14 +249,14 @@ namespace VoidTemplate
 
         private static void SlugcatPageNewGame_ctor(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
         {
-            orig(self,menu, owner, pageIndex, slugcatNumber);
+            orig(self, menu, owner, pageIndex, slugcatNumber);
             if (slugcatNumber == Plugin.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
                 self.infoLabel.text = self.menu.Translate("Clear the game as Hunter to unlock.");
         }
 
         private static bool SlugcatStats_SlugcatUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
         {
-            var re = orig(i,rainWorld);
+            var re = orig(i, rainWorld);
             if (i == Plugin.TheVoid &&
                 !rainWorld.progression.miscProgressionData.beaten_Hunter)
                 return Plugin.DevEnabled;
@@ -274,7 +265,7 @@ namespace VoidTemplate
 
         private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
         {
-            orig(self,package);
+            orig(self, package);
             MenuScene.SceneID sceneID = null;
 
             if (self.saveState?.saveStateNumber == Plugin.TheVoid && self.IsSleepScreen)
@@ -291,7 +282,7 @@ namespace VoidTemplate
                 self.pages[0].subObjects.RemoveAll(i => i is InteractiveMenuScene);
                 self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
                 self.pages[0].subObjects.Add(self.scene);
-                for(int i = self.scene.depthIllustrations.Count-1;i>0;i--)
+                for (int i = self.scene.depthIllustrations.Count - 1; i > 0; i--)
                     self.scene.depthIllustrations[i].sprite.MoveToBack();
             }
         }
@@ -317,6 +308,8 @@ namespace VoidTemplate
             }
         }
 
+        //Механика связанная с 11 кармой.
+
         /*private static int SlugcatStats_NourishmentOfObjectEaten(On.SlugcatStats.orig_NourishmentOfObjectEaten orig, SlugcatStats.Name slugcatIndex, IPlayerEdible eatenobject)
         {
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
@@ -328,8 +321,6 @@ namespace VoidTemplate
 
             return orig(slugcatIndex, eatenobject);
         }*/
-
-
 
 
         private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
@@ -345,10 +336,8 @@ namespace VoidTemplate
             {
                 return (small ? "smallKarma" : "karma") + Mathf.Clamp(k.x, min, 4);
             }
-            return (small ? "smallKarma" : "karma") + Mathf.Clamp(k.x, 5, 10)+ "-" + Mathf.Clamp(k.y, k.x, 10);
+            return (small ? "smallKarma" : "karma") + Mathf.Clamp(k.x, 5, 10) + "-" + Mathf.Clamp(k.y, k.x, 10);
         }
-
-
 
 
         private static void SlugcatPageContinue_ctorIL(ILContext il)
@@ -363,7 +352,7 @@ namespace VoidTemplate
                     c.Emit(OpCodes.Ldarg_S, (byte)4);
                     c.Emit(OpCodes.Ldarg_0);
 
-                    c.EmitDelegate<Func<int, SlugcatStats.Name,SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
+                    c.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
                     {
                         if (name == Plugin.TheVoid && self.saveGameData.karma == 10)
                             return 9;
@@ -391,7 +380,7 @@ namespace VoidTemplate
                 Debug.LogException(e);
             }
         }
- 
+
     }
 
 }

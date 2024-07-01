@@ -55,21 +55,12 @@ public class Patch_Player_Update
             {
                 KarmaCapCheck.Init(playerRoom, __instance);
                 karmaTriggerInitialized = true;
-                Debug.Log("[TheVoid] KarmaCapTrigger initialized.");
             }
 
             int currentRoomIndex = __instance.abstractCreature.pos.room;
 
-            // Логгирование состояния игрока
-            //LogPlayerState(__instance);
-
-            // Логгирование ввода игрока
-            //LogPlayerInput(__instance);
-
-            // Если игрок в целевой комнате
             if (currentRoomIndex == NewSpawnPoint.room)
             {
-                // Обновляем позицию игрока
                 __instance.abstractCreature.pos = NewSpawnPoint;
                 Vector2 newPosition = __instance.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
                 __instance.firstChunk.pos = newPosition;
@@ -77,39 +68,12 @@ public class Patch_Player_Update
 
                 Plugin.isSpawned = true;
 
-                // Автоматически активируем анимацию стояния
                 __instance.animation = Player.AnimationIndex.StandUp;
-                //Debug.Log("[TheVoid] Player automatically set to StandUp animation.");
             }
         }
         catch (Exception ex)
         {
             Debug.LogError($"[TheVoid] Exception in Patch_Player_Update: {ex}");
-        }
-    }
-
-    // Метод для логгирования состояния игрока
-    static void LogPlayerState(Player player)
-    {
-        Debug.Log($"[TheVoid] Player State - Room: {player.abstractCreature.pos.room}, X: {player.abstractCreature.pos.x}, Y: {player.abstractCreature.pos.y}");
-        Debug.Log($"[TheVoid] Player Position - X: {player.firstChunk.pos.x}, Y: {player.firstChunk.pos.y}");
-        Debug.Log($"[TheVoid] Player Animation: {player.animation}");
-    }
-
-    // Метод для логгирования ввода игрока
-    static void LogPlayerInput(Player player)
-    {
-        // Проверка на наличие и доступность свойства input.
-        if (player.input != null && player.input.Length > 0)
-        {
-            foreach (var input in player.input)
-            {
-                Debug.Log($"[TheVoid] Player Input Package: {input.ToString()}");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("[TheVoid] Player input is null or empty.");
         }
     }
 }

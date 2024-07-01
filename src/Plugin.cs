@@ -10,6 +10,7 @@ using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Linq;
+using BepInEx.Logging;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -21,20 +22,16 @@ namespace TheVoid
     {
         private const string MOD_ID = "liebeasano.thevoid";
         public static readonly SlugcatStats.Name TheVoid = new("TheVoid");
-        public delegate void orig_Eat(DaddyLongLegs self, bool eu);
-        public delegate void hook_Eat(orig_Eat orig, DaddyLongLegs self, bool eu);
+        public static ManualLogSource logger;
 
         public static bool isSpawned = false;
         public void OnEnable()
         {
-            ColdImmunityPatch.Hook();
+
+            logger = Logger;
 
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
-            On.Creature.Violence += Creature_Violence;
-            On.Leech.Attached += OnLeechAttached;
-            On.Player.Update += Player_Update;
-            On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
-            On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
+
         }
         public void Awake()
         {
@@ -260,16 +257,7 @@ namespace TheVoid
 
         private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
         {
-            try
-            {
-                orig(self);
-
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-
+            orig(self);
             try
             {
                 if (!isLoaded)
@@ -281,7 +269,12 @@ namespace TheVoid
                     Nutils.hook.DeathSaveDataHook.Register<VoidSave>(SaveName);
 
                     On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-
+                    On.Creature.Violence += Creature_Violence;
+                    On.Leech.Attached += OnLeechAttached;
+                    On.Player.Update += Player_Update;
+                    On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
+                    On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
+                    ColdImmunityPatch.Hook();
                     DeathHooks.Hook();
                     PlayerHooks.Hook();
                     OracleHooks.Hook();

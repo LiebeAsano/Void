@@ -21,23 +21,25 @@ namespace TheVoid
     {
         private const string MOD_ID = "liebeasano.thevoid";
         public static readonly SlugcatStats.Name TheVoid = new("TheVoid");
-        public delegate void orig_Eat(global::DaddyLongLegs self, bool eu);
-        public delegate void hook_Eat(orig_Eat orig, global::DaddyLongLegs self, bool eu);
+        public delegate void orig_Eat(DaddyLongLegs self, bool eu);
+        public delegate void hook_Eat(orig_Eat orig, DaddyLongLegs self, bool eu);
 
         public static bool isSpawned = false;
         public void OnEnable()
         {
+            ColdImmunityPatch.Hook();
+
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
             On.Creature.Violence += Creature_Violence;
             On.Leech.Attached += OnLeechAttached;
             On.Player.Update += Player_Update;
             On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
+            On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
         }
         public void Awake()
         {
             var harmony = new Harmony("liebeasano.thevoid");
             harmony.PatchAll();
-            HookEndpointManager.Add<hook_Eat>(typeof(DaddyLongLegs).GetMethod("Eat", BindingFlags.Instance | BindingFlags.Public), OnDaddyLongLegsEat);
         }
 
         private static void OnLeechAttached(On.Leech.orig_Attached orig, global::Leech self)
@@ -181,7 +183,7 @@ namespace TheVoid
             orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
         }
 
-        private static async void OnDaddyLongLegsEat(orig_Eat orig, DaddyLongLegs self, bool eu)
+        private static async void OnDaddyLongLegsEat(On.DaddyLongLegs.orig_Eat orig, DaddyLongLegs self, bool eu)
         {
 
             foreach (var eatObject in self.eatObjects)

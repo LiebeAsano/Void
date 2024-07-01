@@ -274,6 +274,7 @@ namespace TheVoid
                     On.Player.Update += Player_Update;
                     On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
                     On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
+                    PlayerSpawnManager.ApplyHooks();
                     ColdImmunityPatch.Hook();
                     DeathHooks.Hook();
                     PlayerHooks.Hook();

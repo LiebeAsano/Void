@@ -40,30 +40,30 @@ namespace VoidTemplate
             On.Player.CanBeSwallowed += Player_CanBeSwallowed;
             On.Player.Grabability += Player_Grabability;
 
+            On.Rock.HitSomething += Rock_HitSomething_Update;
+
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
 
             IL.Player.UpdateAnimation += Player_UpdateAnimation;
             IL.Player.UpdateMSC += Player_ForbidenDrone;
-
-            var harmony = new Harmony("com.yourname.rainworldmod");
-            harmony.Patch
-            (
-                original: AccessTools.Method(typeof(Rock), "HitSomething"),
-                postfix: new HarmonyMethod(typeof(PlayerHooks), nameof(Rock_HitSomething_Postfix))
-            );
         }
 
-        public static void Rock_HitSomething_Postfix(Rock __instance, SharedPhysics.CollisionResult result, bool eu)
+        private static bool Rock_HitSomething_Update(On.Rock.orig_HitSomething orig, Rock self, SharedPhysics.CollisionResult result, bool eu)
         {
-            if (__instance.thrownBy is Player player && player.slugcatStats.name == Plugin.TheVoid)
+
+            if (self.thrownBy is Player player && player.slugcatStats.name == Plugin.TheVoid)
             {
                 if (result.obj is Creature creature)
                 {
                     creature.Stun(69);
                 }
             }
+            
+            return orig(self, result, eu);
         }
-        private static void Player_ForbidenDrone(ILContext il)
+    
+
+    private static void Player_ForbidenDrone(ILContext il)
         {
             try
             {

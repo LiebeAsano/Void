@@ -4,7 +4,6 @@ using System.IO;
 using UnityEngine;
 using VoidTemplate;
 using System.Security.Permissions;
-using HarmonyLib;
 using static Creature;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
@@ -27,17 +26,60 @@ namespace TheVoid
         public static bool isSpawned = false;
         public void OnEnable()
         {
-
             logger = Logger;
-
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
+        }
+        private static bool isLoaded;
+        public static bool DevEnabled = false;
+
+        public const string SaveName = "THEVOID";
+        private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
+        {
+            orig(self);
+            try
+            {
+                if (!isLoaded)
+                {
+                    if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
+                    {
+                        DevEnabled = true;
+                    }
+                    Nutils.hook.DeathSaveDataHook.Register<VoidSave>(SaveName);
+
+                    On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+                    On.Creature.Violence += Creature_Violence;
+                    On.Leech.Attached += OnLeechAttached;
+                    On.Player.Update += PlayerLungLogic;
+                    On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
+                    On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
+                    On.ShelterDoor.Close += CycleEndLogic;
+                    On.Player.Update += MalnourishmentDeath;
+                    On.Player.EatMeatUpdate += Player_EatMeatUpdate;
+                    PlayerSpawnManager.ApplyHooks();
+                    ColdImmunityPatch.Hook();
+                    DeathHooks.Hook();
+                    PlayerHooks.Hook();
+                    OracleHooks.Hook();
+                    KarmaHooks.Hook();
+                    RoomHooks.Hook();
+                    CreatureHooks.Hook();
+                    if (DevEnabled)
+                    {
+                        On.RainWorldGame.Update += RainWorldGame_TestUpdate;
+                    }
+                    LoadResources(self);
+                    isLoaded = true;
+
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
 
         }
-        public void Awake()
-        {
-            var harmony = new Harmony("liebeasano.thevoid");
-            harmony.PatchAll();
-        }
+
+
 
         private static void OnLeechAttached(On.Leech.orig_Attached orig, global::Leech self)
         {
@@ -66,85 +108,44 @@ namespace TheVoid
             }
         }
 
-        // Patch для обновления состояния сна/гибернации
-        [HarmonyPatch(typeof(ShelterDoor), nameof(ShelterDoor.Close))]
-        class Patch_ShelterDoor_Close
+        private void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
         {
-            static void Postfix(ShelterDoor __instance)
+            orig(self);
+            RainWorldGame game = self.room.game;
+            game.Players.ForEach(absPlayer =>
             {
-                var gameInstance = __instance.room.game as RainWorldGame;
-
-                if (gameInstance == null) return;
-
-                if (gameInstance.Players.Count > 0)
+                if(absPlayer.realizedCreature is Player player
+                && player.slugcatStats.name == Plugin.TheVoid
+                && player.room != null 
+                && player.room == self.room
+                && player.FoodInStomach < player.slugcatStats.foodToHibernate
+                && self.room.game.session is StoryGameSession session
+                && session.characterStats.name == Plugin.TheVoid
+                && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
                 {
-                    for (int i = 0; i < gameInstance.Players.Count; i++)
-                    {
-                        var abstractPlayer = gameInstance.Players[i];
-
-                        if (abstractPlayer.realizedCreature is Player slugcat &&
-                            slugcat.slugcatStats.name == Plugin.TheVoid &&
-                            slugcat.room != null &&
-                            slugcat.room == __instance.room)
-                        {
-                            if (slugcat.FoodInStomach < slugcat.slugcatStats.foodToHibernate)
-                            {
-                                if (__instance.room.game.session is StoryGameSession session &&
-                                    session.characterStats.name == Plugin.TheVoid &&
-                                    (!ModManager.Expedition || !__instance.room.game.rainWorld.ExpeditionMode))
-                                {
-                                    if (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10)
-                                    {
-                                        gameInstance.GoToRedsGameOver();
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        gameInstance.GoToStarveScreen();
-                                        return;
-                                    }
-                                }
-
-
-                            }
-                        }
-                    }
+                    if (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) game.GoToRedsGameOver();
+                    else game.GoToStarveScreen();
                 }
-            }
+            });
         }
 
-        [HarmonyPatch(typeof(Player), nameof(Player.Update))]
-        public class PreventMalnourishmentPatch
+        private void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
         {
-            public static void Postfix(Player __instance)
+            orig(self, eu);
+            if (self.room == null) return;
+            RainWorldGame game = self.room.game;
+            game.Players.ForEach(absPlayer =>
             {
+                if(absPlayer.realizedCreature is Player player
+                && player.slugcatStats.name == Plugin.TheVoid
+                && player.room != null
+                && player.room == self.room
+                && player.Malnourished) player.Die();
+            });
 
-                var gameInstance = __instance.room?.game as RainWorldGame;
-
-                if (gameInstance == null) return;
-
-                if (gameInstance.Players.Count > 0)
-                {
-                    for (int i = 0; i < gameInstance.Players.Count; i++)
-                    {
-                        var abstractPlayer = gameInstance.Players[i];
-
-                        if (abstractPlayer.realizedCreature is Player slugcat &&
-                            slugcat.slugcatStats.name == TheVoid &&
-                            slugcat.room != null &&
-                            slugcat.room == __instance.room)
-                        {
-                            if (slugcat.Malnourished)
-                            {
-                                slugcat.Die();
-                            }
-                        }
-                    }
-                }
-            }
         }
 
-        private void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+        private void PlayerLungLogic(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
 
@@ -218,90 +219,22 @@ namespace TheVoid
             self.moving = false;
             self.tentaclesHoldOn = false;
         }
-
         // Новый метод-обработчик для события съедения мяса
-        [HarmonyPatch(typeof(Player), nameof(Player.EatMeatUpdate))]
-        class Player_EatMeatUpdate_Patch
+        private void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
         {
-            static void Postfix(Player __instance)
+            orig(self, graspIndex);
+            if (self.eatMeat != 50 || self.slugcatStats.name == Plugin.TheVoid) return;
+            Array.ForEach(self.grasps, grasp =>
             {
-                if (__instance.eatMeat != 50)
-                {
-                    return;
-                }
-
-                if (__instance.slugcatStats.name == Plugin.TheVoid)
-                {
-                    return;
-                }
-
-                for (int i = 0; i < __instance.grasps.Length; i++)
-                {
-                    var grasp = __instance.grasps[i];
-                    if (grasp != null)
-                    {
-                        if (grasp.grabbed is Player prey)
-                        {
-                            if (prey.slugcatStats.name == Plugin.TheVoid)
-                            {
-                                __instance.Die();
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
+                if (grasp != null
+                && grasp.grabbed is Player prey
+                && prey.slugcatStats.name == Plugin.TheVoid)
+                    self.Die();
+                
+            });
         }
 
 
-
-        private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
-        {
-            orig(self);
-            try
-            {
-                if (!isLoaded)
-                {
-                    if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
-                    {
-                        DevEnabled = true;
-                    }
-                    Nutils.hook.DeathSaveDataHook.Register<VoidSave>(SaveName);
-
-                    On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-                    On.Creature.Violence += Creature_Violence;
-                    On.Leech.Attached += OnLeechAttached;
-                    On.Player.Update += Player_Update;
-                    On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
-                    On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
-                    PlayerSpawnManager.ApplyHooks();
-                    ColdImmunityPatch.Hook();
-                    DeathHooks.Hook();
-                    PlayerHooks.Hook();
-                    OracleHooks.Hook();
-                    KarmaHooks.Hook();
-                    RoomHooks.Hook();
-                    CreatureHooks.Hook();
-                    if (DevEnabled)
-                    {
-                        On.RainWorldGame.Update += RainWorldGame_TestUpdate;
-                    }
-                    LoadResources(self);
-                    isLoaded = true;
-
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-
-        }
-
-        private static bool isLoaded;
-        public static bool DevEnabled = false;
-
-        public const string SaveName = "THEVOID";
 
 
         private void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)

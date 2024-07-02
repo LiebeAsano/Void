@@ -13,8 +13,8 @@
                 float newLungCapacity = baseLungCapacity - (additionalCapacityPerKarma * (karmaCap + 1));
 
                 player.slugcatStats.lungsFac = newLungCapacity;
-
-                player.LungUpdate();
+#warning check this out later
+                player.LungUpdate(); //very questionable
             }
         }
     }

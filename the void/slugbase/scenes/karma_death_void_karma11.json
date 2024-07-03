@@ -5,8 +5,6 @@
 		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],
-	"glow_pos": [480, 250],
-	"mark_pos": [480, 335],
 	"select_menu_pos": [0, 0],
 	"slugcat_depth": 3.5
 }

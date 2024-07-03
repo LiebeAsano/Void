@@ -22,32 +22,32 @@
 		"walk_speed": 1.21,
 		"crouch_stealth": 1.21,
 		"throw_skill": 2,
-		"lung_capacity": 1.5,
+		"lung_capacity": 1.0,
 		"loudness": 0.66,
 		"alignments": {
 			"Lizards": {
-				"like": -1.0,
-				"locked": true
+				"like": -0.15,
+				"locked": false
 			},
 			"Scavengers": {
-				"like": -0.5,
-				"locked": true
+				"like": -0.15,
+				"locked": false
 			},
 			"Cicadas ": {
-				"like": -1.0,
-				"locked": true
+				"like": -0.15,
+				"locked": false
 			},
 			"GarbageWorms": {
-				"like": -0.5,
-				"locked": true
+				"like": -0.15,
+				"locked": false
 			},
 			"Deer": {
-				"like": -1.0,
-				"locked": true
+				"like": -0.15,
+				"locked": false
 			},
 			"Jetfish": {
-				"like": -1.0,
-				"locked": true
+				"like": -0.15,
+				"locked": false
 			}
 		},
 		"auto_grab_batflies": false,
@@ -56,7 +56,7 @@
 		"perma_unlock_gates": false,
 		"maul_damage": 6,
 		"karma": 2,
-		"karma_cap": 4,
+		"karma_cap": 2,
 		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": false,
@@ -67,19 +67,22 @@
 		"food_min": 9,
 		"food_max": 9,
 		"world_state": "Red",
-		"timeline_before":"Gourmand",
 		"timeline_after": "Red",
 		"start_room": "SB_A14",
 		"diet": {
 			"base": "White",
 			"corpses": 0.5,
 			"plants": 0.25,
-			"meat": 0.25
+			"meat": 0.5,
+			"overrides": {
+				"Fly" : 0.25
+			}
 		},
 		"title_card": "Void_Title_Card",
 		"sleep_scene": "Sleep_Void",
 		"select_menu_scene": "Slugcat_Void",
 		"death_scene": "Death_Void",
+		"starve_scene": "Death_Void",
 		"intro_slideshow": "Void_Intro"
 	}
 }

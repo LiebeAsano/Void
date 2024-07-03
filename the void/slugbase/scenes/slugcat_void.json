@@ -3,12 +3,11 @@
 	"scene_folder": "slugbase/scenes/slugcat - void",
 	"images": [
 		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" },
-		{ "name": "slugcat-void", "pos": [480,250], "depth": 3, "shader": "Basic" },
-		{ "name": "fg-void", "pos": [460,230], "depth": 2, "shader": "Basic" }
+		{ "name": "slugcat-void", "pos": [440,208], "depth": 3, "shader": "Basic" },
+		{ "name": "fg-void", "pos": [426,195], "depth": 2, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],
-	"glow_pos": [480, 250],
-	"mark_pos": [480, 335],
 	"select_menu_pos": [0, 0],
+	 "mark_pos": [-4000, -180],
 	"slugcat_depth": 3.5
 }

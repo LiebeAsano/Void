@@ -35,10 +35,10 @@ namespace VoidTemplate
             On.Player.UpdateBodyMode += Player_UpdateBodyMode;
             On.Player.ctor += Player_Ctor;
             On.Player.SwallowObject += Player_SwallowObject;
-            On.Player.Update += Player_Update;
+            On.Player.Update += NoForceSleep;
             On.Player.CanBeSwallowed += Player_CanBeSwallowed;
             On.Player.Grabability += Player_Grabability;
-
+            
             On.Rock.HitSomething += Rock_HitSomething_Update;
 
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
@@ -50,14 +50,10 @@ namespace VoidTemplate
         private static bool Rock_HitSomething_Update(On.Rock.orig_HitSomething orig, Rock self, SharedPhysics.CollisionResult result, bool eu)
         {
 
-            if (self.thrownBy is Player player && player.slugcatStats.name == Plugin.TheVoid)
-            {
-                if (result.obj is Creature creature)
-                {
+            if (self.thrownBy is Player player 
+                && player.slugcatStats.name == Plugin.TheVoid
+                && result.obj is Creature creature)
                     creature.Stun(69);
-                }
-            }
-            
             return orig(self, result, eu);
         }
     
@@ -118,35 +114,15 @@ namespace VoidTemplate
             }
             return orig(self, testObj);
         }
-
-        private static void TutorialTrigger(Player self, Room currentRoom, Player currentPlayer)
-        {
-            if (self.slugcatStats.name == Plugin.TheVoid && self.KarmaCap == 4)
-            {
-                KarmaCapCheck.Init(currentRoom, currentPlayer);
-            }
-        }
-        private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+        private static void NoForceSleep(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
-            if (self.slugcatStats.name == Plugin.TheVoid)
-            {
-                self.forceSleepCounter = 0;
-
-            }
-
-            Room currentRoom = self.room;
-            Player currentPlayer = self;
-
-            TutorialTrigger(self, currentRoom, currentPlayer);
+            if (self.slugcatStats.name == Plugin.TheVoid)   self.forceSleepCounter = 0;
         }
 
         private static bool KarmaCap_Check(Player self)
         {
-            if (self.slugcatStats.name == Plugin.TheVoid && self.KarmaCap > 3)
-                return true;
-            else
-                return false;
+            return self.slugcatStats.name == Plugin.TheVoid && self.KarmaCap > 3;
         }
 
         private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)

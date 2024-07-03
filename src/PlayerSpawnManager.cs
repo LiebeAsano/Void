@@ -23,8 +23,6 @@ public static class PlayerSpawnManager
         {
             InitializeTargetRoomID(playerRoom);
 
-            KarmaInitLogic(playerRoom, self);
-
             int currentRoomIndex = self.abstractCreature.pos.room;
 
             if (currentRoomIndex == NewSpawnPoint.room)
@@ -41,16 +39,6 @@ public static class PlayerSpawnManager
         }
     }
     #region minor helper functions
-    private static bool karmaTriggerInitialized = false;
-    private static void KarmaInitLogic(Room room, Player player)
-    {
-        if (!karmaTriggerInitialized)
-        {
-            KarmaCapCheck.Init(room, player);
-            karmaTriggerInitialized = true;
-        }
-
-    }
 
     private static int targetRoomID = -1;
     static WorldCoordinate NewSpawnPoint

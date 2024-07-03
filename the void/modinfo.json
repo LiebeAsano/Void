@@ -4,6 +4,6 @@
 	"version": "0.3.1",
 	"authors": "Liebe Asano",
 	"description": "",
-	"requirements": ["moreslugcats", "slime-cubed.slugbase", "nutils"],
-	"requirements_names": ["More Slugcats Expansion", "SlugBase","Nutils"]
+	"requirements": ["moreslugcats", "slime-cubed.slugbase"],
+	"requirements_names": ["More Slugcats Expansion", "SlugBase"]
 }

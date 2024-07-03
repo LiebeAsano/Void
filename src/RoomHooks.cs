@@ -9,7 +9,7 @@ namespace VoidTemplate
         public static void Hook()
         {
             On.RainWorldGame.ctor += RainWorldGame_ctor;
-            On.Room.Loaded += Room_Loaded;
+            On.Room.Loaded += RoomSpeficScript;
             On.TempleGuardAI.Update += TempleGuardAI_Update;
             On.TempleGuardAI.ThrowOutScore += TempleGuardAI_ThrowOutScore;
         }
@@ -37,13 +37,21 @@ namespace VoidTemplate
             orig(self, manager);
         }
 
-        private static void Room_Loaded(On.Room.orig_Loaded orig, Room self)
+        private static void RoomSpeficScript(On.Room.orig_Loaded orig, Room self)
         {
             orig(self);
             if (self.game?.session?.characterStats?.name == Plugin.TheVoid)
             {
                 if (self.abstractRoom.name == "SB_E05")
                     self.AddObject(new ClimbTutorial(self));
+                if(!self.game.GetStorySession.saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.slugcatStats.name == Plugin.TheVoid && p.KarmaCap == 4))
+                {
+                    self.AddObject(new KarmaCapTrigger(self, new KarmaCapTrigger.Message[]
+                    {
+                        new("Your body is strong enough to climb the ceilings.", 0, 400),
+                        new("Hold down the 'Up' and 'Direction' buttons to climb the ceiling.")
+                    }));
+                }
             }
         }
 

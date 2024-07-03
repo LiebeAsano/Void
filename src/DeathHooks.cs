@@ -5,7 +5,6 @@ using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
-using Nutils.hook;
 using SlugBase.Assets;
 using TheVoid;
 using UnityEngine;
@@ -44,28 +43,24 @@ namespace VoidTemplate
 
         private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)
         {
-            try
+            ILCursor c = new ILCursor(il);
+            if(c.TryGotoNext(MoveType.After, i => i.MatchLdarg(0),
+                i => i.MatchLdcI4(4)))
             {
-                ILCursor c = new ILCursor(il);
-                c.GotoNext(MoveType.After, i => i.MatchLdarg(0),
-                    i => i.MatchLdcI4(4));
                 c.Emit(OpCodes.Ldarg_0);
                 c.Emit(OpCodes.Ldarg_1);
                 c.EmitDelegate<Func<int, KarmaLadderScreen, KarmaLadderScreen.SleepDeathScreenDataPackage, int>>(
-                    (re, self, package) =>
-                    {
-                        if (package.saveState != null && package.saveState.saveStateNumber == Plugin.TheVoid)
-                            if (self.ID == ProcessManager.ProcessID.GhostScreen)
-                                return self.preGhostEncounterKarmaCap;
-                            else
-                                return self.karma.y;
-                        return re;
-                    });
+                (re, self, package) =>
+                {
+                    if (package.saveState != null && package.saveState.saveStateNumber == Plugin.TheVoid)
+                        if (self.ID == ProcessManager.ProcessID.GhostScreen)
+                            return self.preGhostEncounterKarmaCap;
+                        else
+                            return self.karma.y;
+                    return re;
+                });
             }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
+
         }
 
         private static void KarmaFlower_BitByPlayer(On.KarmaFlower.orig_BitByPlayer orig, KarmaFlower self, Creature.Grasp grasp, bool eu)

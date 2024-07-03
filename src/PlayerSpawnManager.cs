@@ -4,13 +4,14 @@ using UnityEngine;
 using TheVoid;
 public static class PlayerSpawnManager
 {
+    public static bool isSpawned = false;
     public static void ApplyHooks()
     {
         On.Player.Update += Player_Update;
         On.StoryGameSession.AddPlayer += static (orig, self, abstractPlayer) =>
         {
             orig(self, abstractPlayer);
-            Plugin.isSpawned = false;
+            isSpawned = false;
             Plugin.logger.LogMessage("Player added, isSpawned reset");
         };
     }
@@ -18,7 +19,7 @@ public static class PlayerSpawnManager
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
     {
         orig(self, eu);
-        if (!Plugin.isSpawned && self.room is Room playerRoom)
+        if (!isSpawned && self.room is Room playerRoom)
         {
             InitializeTargetRoomID(playerRoom);
 
@@ -33,7 +34,7 @@ public static class PlayerSpawnManager
                 self.firstChunk.pos = newPosition;
                 self.mainBodyChunk.pos = newPosition;
 
-                Plugin.isSpawned = true;
+                isSpawned = true;
 
                 self.animation = Player.AnimationIndex.StandUp;
             }

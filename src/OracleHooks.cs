@@ -6,7 +6,7 @@ using System.Linq;
 using MoreSlugcats;
 using TheVoid;
 using UnityEngine;
-using Nutils.hook;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate
 {
@@ -30,7 +30,7 @@ namespace VoidTemplate
             if (self.id == Moon_VoidConversation)
             {
                 self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Hello little... creature. Is it you?.."), 50));
-                self.events.Add(new Conversation.TextEvent(self, 0,  self.Translate("Oh, I'm sorry, I was mistaken."), 50));
+                self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Oh, I'm sorry, I was mistaken."), 50));
                 self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("My memory is failing me and I don't know what to do about it..."), 0));
                 self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("..."), 100));
                 self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Little creature..."), 15));
@@ -46,41 +46,40 @@ namespace VoidTemplate
             }
         }
 
-        public static SSOracleBehavior.Action MeetVoid_Init = new  ("MeetVoid_Init", true);
-        public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new ("VoidTalk", true);
-  
-        public static Conversation.ID Moon_VoidConversation = new ("Moon_VoidConversation", true);
+        public static SSOracleBehavior.Action MeetVoid_Init = new("MeetVoid_Init", true);
+        public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
+
+        public static Conversation.ID Moon_VoidConversation = new("Moon_VoidConversation", true);
 
 
         public static void EatPearlsInterrupt(this SSOracleBehavior self)
         {
-            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.TryGetCustomValue(
-                    Plugin.SaveName, out VoidSave save))
+
+            if (self.conversation != null)
             {
-                if (self.conversation != null)
-                {
-                    self.conversation.paused = true;
-                    self.restartConversationAfterCurrentDialoge = true;
-                }
-
-                if (save.eatCounter == 11)
-                {
-                    if (self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 6)
-                    {
-                        self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
-                        self.getToWorking = 1f;
-                    }
-
-                }
-                else
-                {
-                    self.dialogBox.Interrupt(self.Translate(
-                        self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
-                            ? SSConversation.eatInterruptMessages6Step[save.eatCounter]
-                            : SSConversation.eatInterruptMessages[save.eatCounter]), 10);
-                    save.eatCounter++;
-                }
+                self.conversation.paused = true;
+                self.restartConversationAfterCurrentDialoge = true;
             }
+            var savestate = self.oracle.room.game.GetStorySession.saveState;
+            var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
+            if (amountOfEatenPearls == 11
+            && self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 6)
+            {
+
+                self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+                self.getToWorking = 1f;
+
+
+            }
+            else
+            {
+                self.dialogBox.Interrupt(self.Translate(
+                    self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
+                        ? SSConversation.eatInterruptMessages6Step[savestate.GetPebblesPearlsEaten()]
+                        : SSConversation.eatInterruptMessages[savestate.GetPebblesPearlsEaten()]), 10);
+                savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
+            }
+
         }
 
         public static class SSConversation
@@ -147,7 +146,7 @@ namespace VoidTemplate
             };
 
 
-            
+
         }
 
         private static void SLOracleBehaviorHasMark_InitateConversation(On.SLOracleBehaviorHasMark.orig_InitateConversation orig, SLOracleBehaviorHasMark self)
@@ -180,7 +179,7 @@ namespace VoidTemplate
                     self.events.Add(new Conversation.TextEvent(self, 0, ".  .  . ", 0));
                 else
                     self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
-                
+
                 var path = AssetManager.ResolveFilePath($"text/oracle/{self.id.value.ToLower()}.txt");
                 if (File.Exists(path))
                 {
@@ -191,7 +190,7 @@ namespace VoidTemplate
                             self.events.Add(new Conversation.TextEvent(self, int.Parse(split[0]),
                                 self.Translate(split[1]), int.Parse(split[2])));
                         else
-                            self.events.Add(new Conversation.TextEvent(self, 0,self.Translate(line), 0));
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate(line), 0));
                     }
                 }
                 else
@@ -250,17 +249,15 @@ namespace VoidTemplate
             foreach (var player in self.oracle.room.game.Players)
                 if (player.realizedCreature is Player)
                     seePeople = true;
-            
-            if (seePeople && self.oracle.room.game.session.characterStats.name == Plugin.TheVoid &&
-                self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.
-                    TryGetCustomValue(Plugin.SaveName, out VoidSave data))
+
+            if (seePeople && self.oracle.room.game.session.characterStats.name == Plugin.TheVoid)
             {
                 var saveState = self.oracle.room.game.GetStorySession.saveState;
                 var miscData = saveState.miscWorldSaveData;
                 var need = miscData.SSaiConversationsHad >= 10
                     ? -1
                     : SSConversation.cycleLingers[miscData.SSaiConversationsHad];
-                Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {data.lastMeetCycles}, NeedCycle: {need}");
+                Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
                 if (miscData.SSaiConversationsHad >= 10)
                 {
                     //Maybe changed
@@ -269,13 +266,13 @@ namespace VoidTemplate
                 else if ((miscData.SSaiConversationsHad >= 5 && miscData.SLOracleState.playerEncountersWithMark <= 0) ||
                          (miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 5) ||
                          (miscData.SSaiConversationsHad == 7 && saveState.deathPersistentSaveData.karmaCap < 8) ||
-                    ((saveState.cycleNumber - data.lastMeetCycles) < SSConversation.cycleLingers[miscData.SSaiConversationsHad]))
+                    ((saveState.cycleNumber - saveState.GetLastMeetCycles()) < SSConversation.cycleLingers[miscData.SSaiConversationsHad]))
                 {
                     self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
                 }
                 else if (self.action != MeetVoid_Init)
                 {
-                    data.lastMeetCycles = saveState.cycleNumber;
+                    saveState.SetLastMeetCycles(saveState.cycleNumber);
                     if (self.timeSinceSeenPlayer < 0)
                     {
                         self.timeSinceSeenPlayer = 0;
@@ -310,17 +307,17 @@ namespace VoidTemplate
 
         public class SSOracleVoidBehavior : SSOracleBehavior.ConversationBehavior
         {
-            public SSOracleVoidBehavior(SSOracleBehavior owner,int times) : base(owner, VoidTalk,SSConversation.VoidConversation[times-1])
+            public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, SSConversation.VoidConversation[times - 1])
             {
-                if (ModManager.MMF && owner.oracle.room.game.IsStorySession 
-                                   && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked && 
+                if (ModManager.MMF && owner.oracle.room.game.IsStorySession
+                                   && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked &&
                                    oracle.room.world.rainCycle.timer > oracle.room.world.rainCycle.cycleLength / 4)
                 {
                     oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
                     oracle.room.world.rainCycle.dayNightCounter = 0;
                 }
 
-              
+
             }
 
             public override void Update()
@@ -339,13 +336,13 @@ namespace VoidTemplate
             {
                 if (newAction == MeetVoid_Init && owner.conversation == null)
                 {
-                    owner.InitateConversation(SSConversation.VoidConversation[MeetTimes-1], this);
+                    owner.InitateConversation(SSConversation.VoidConversation[MeetTimes - 1], this);
                     base.NewAction(oldAction, newAction);
                 }
 
             }
 
-            int MeetTimes =>  owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
+            int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
         }
         private static void SSOracleBehavior_Update(ILContext il)
         {
@@ -360,16 +357,16 @@ namespace VoidTemplate
             c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
                 => self.oracle.room.game.StoryCharacter == Plugin.TheVoid || re);
 
-            c2.GotoNext(MoveType.After,i => i.MatchLdstr("Yes, help yourself. They are not edible."));
+            c2.GotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible."));
             c2.Emit(OpCodes.Ldarg_0);
             c2.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
             {
                 if (self.oracle.room.game.session.characterStats.name == Plugin.TheVoid &&
                     SSConversation.pickInterruptMessages.Length >
-                    self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad-1)
+                    self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1)
                 {
                     return SSConversation.pickInterruptMessages[
-                        self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad-1];
+                        self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1];
                 }
 
                 return str;

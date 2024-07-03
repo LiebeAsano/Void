@@ -1,8 +1,15 @@
 The Void|Пустотный
 THE VOID|ПУСТОТНЫЙ
 Void|Пустотный
-An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.|Разъярённый и голодный хищник вырывается из пустотного моря.<LINE>Балансируя между жизнью и смертью зверь ищет своё новое место в этом мире.
-Clear the game as Hunter to unlock.|Чтобы открыть, пройди игру как Охотник.
+An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.|Разъярённый и голодный хищник вырывается из пустотного моря.<LINE>Балансируя между жизнью и смертью, зверь ищет своё новое место в этом мире.
+Clear the game as Hunter to unlock.|Чтобы открыть, пройди игру за Охотника.
+You have enough strength to climb the walls.|У тебя достаточно сил, чтобы взбираться на стены.
+Your body is strong enough to climb the ceilings.|Твоё тело достаточно окрепло, чтобы лазать по потолкам.
+Hold down the 'Up' and 'Direction' buttons to climb the ceiling.|Удерживай кнопки 'Вверх' и 'Направления', чтобы лазать по потолку.
+Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай кнопки 'Направления' и 'Вверх', чтобы взобраться на стену.
+
+
+
 ...is it reaching you?|...ты понимаешь меня?
 Strange beast, what brings you to my room? I don't think I have anything for you.|Странный зверь, что привело тебя в мою комнату? Ну думаю, что у меня есть что-то для тебя.
 Interesting... there is no record of your blueprint in my database.|Интересно... В моей базе данных нет записи о твоём чертеже.

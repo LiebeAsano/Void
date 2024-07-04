@@ -80,21 +80,15 @@ class Plugin : BaseUnityPlugin
     }
 
 
-    private static void OnLeechAttached(On.Leech.orig_Attached orig, Leech self)
+    private static async void OnLeechAttached(On.Leech.orig_Attached orig, Leech self)
     {
-#warning change asyncs
         orig(self);
 
         if (Array.Exists(self.grasps, grasp => grasp.grabbed is Player player
-        && player.slugcatStats.name == TheVoid)) AsyncKillLeech(self);
-    }
-
-    private static async void AsyncKillLeech(Leech leech)
-    {
-        await Task.Delay(6000);
-        if (leech != null && leech.room != null)
+        && player.slugcatStats.name == TheVoid && self != null && self.room != null))
         {
-            leech.Die();
+            await Task.Delay(6000);
+            self.Die();
         }
     }
 

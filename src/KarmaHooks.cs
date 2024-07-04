@@ -120,7 +120,7 @@ namespace VoidTemplate
                 var label2 = c.DefineLabel();
                 c.Emit(OpCodes.Dup);
                 c.EmitDelegate<Func<Creature, bool>>((self) =>
-                    self is Player player && player.slugcatStats.name == Plugin.TheVoid && player.KarmaCap == 10);
+                    self is Player player && player.slugcatStats.name == Plugin.TheVoid);
                 c.Emit(OpCodes.Brtrue_S, label);
                 c.GotoNext(MoveType.After,
                     i => i.MatchCallvirt<Creature>("Die"));

@@ -451,8 +451,6 @@ namespace VoidTemplate
             }
         }
 
-
-
         public static bool SlugcatHand_EngageInMovement(On.SlugcatHand.orig_EngageInMovement orig, global::SlugcatHand slugcat_hand)
         {
             if (slugcat_hand.owner is not PlayerGraphics player_graphics ||
@@ -462,6 +460,7 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
+            // Инициализация рук если слизнекот не в режиме лазания по стенам или потолку.
             if ((player.bodyMode != Player.BodyModeIndex.WallClimb && player.bodyMode != BodyModeIndexExtension.CeilCrawl) ||
                 player.input[0].y == 0 || player.animation != Player.AnimationIndex.None)
             {
@@ -469,6 +468,7 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
+            // Инициализация рук для лазания
             if (attached_fields.initialize_hands)
             {
                 if (slugcat_hand.limbNumber == 1)
@@ -479,170 +479,70 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
-            // Сохранение текущего положения лапки
-            Vector2 current_absolute_hunt_position = slugcat_hand.absoluteHuntPos;
-            bool originalReturn = orig(slugcat_hand);
-
+            // Логика для лазания по потолку
             if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
             {
-                player.animationFrame++;
-            }
-
-            slugcat_hand.absoluteHuntPos = current_absolute_hunt_position;
-
-            if (player_graphics.legs != null && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
-            {
-                player_graphics.legs.pos = new Vector2(-1000, -1000);// Скроем ноги, переместив их за экран
-            }
-
-            // Включать движение лап только при нажатии кнопки вверх в режиме CeilCrawl
-            bool isCeilCrawlStep = player.bodyMode == BodyModeIndexExtension.CeilCrawl && player.input[0].y > 0;
-            bool isLeftLegStep = slugcat_hand.limbNumber == 0 && (player.animationFrame % 20 == 0 || isCeilCrawlStep);
-            bool isRightLegStep = slugcat_hand.limbNumber == 1 && (player.animationFrame % 20 == 10 || isCeilCrawlStep);
-
-
-            if (isLeftLegStep || isRightLegStep)
-            {
-                slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
-
-                Vector2 attached_position;
-                Vector2 grip_end;
-                Vector2 grip_direction;
-                Vector2 handPositionOffset;
-
-                if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                if (player_graphics.legs != null)
                 {
-                    Vector2 frontLegOffset = new Vector2(player.flipDirection * 70f, 0.0f);
-                    Vector2 backLegOffset = new Vector2(player.flipDirection * 70f, -20.0f);
-
-                    handPositionOffset = slugcat_hand.limbNumber == 1 ? frontLegOffset : backLegOffset;
-
-                    attached_position = slugcat_hand.connection.pos + handPositionOffset;
-
-                    if (player.input[0].x != 0)
-                    {
-                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(player.flipDirection * 100f, 0.0f), 0f);
-                        player_graphics.objectLooker.timeLookingAtThis = 6;
-                        player.animationFrame++;
-                    }
-                    else if (player.input[0].x < 0)
-                    {
-                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0f), 0f);
-                        player_graphics.objectLooker.timeLookingAtThis = 6;
-                    }
-                    else if (player.input[0].x > 0)
-                    {
-                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0f), 0f);
-                        player_graphics.objectLooker.timeLookingAtThis = 6;
-                    }
-
-                    // Увеличим расстояние захвата на два тайла (40 пикселей)
-                    grip_direction = new Vector2(player.flipDirection * 60.0f, -35.0f);
-                    grip_end = attached_position + grip_direction;
+                    player_graphics.legs.pos = new Vector2(-1000, -1000); // Hide legs by moving them off screen
                 }
-                else
+                if (player.input[0].x != 0)
                 {
-                    // Логика для лазания по стенам
-                    attached_position = slugcat_hand.connection.pos + new Vector2(player.flipDirection * 35f, 0.0f);
-                    if (player.input[0].y > 0)
-                    {
-                        grip_end = attached_position + new Vector2(0.0f, 45f);
-                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
-                    }
-                    else
-                    {
-                        grip_end = attached_position + new Vector2(0.0f, -15f);
-                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
-                    }
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(player.flipDirection * 100f, 0.0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
                     player.animationFrame++;
-
-                    grip_direction = new Vector2(0.0f, 45.0f);
                 }
-
-                Vector2 grip_start = attached_position;
-
-                slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, grip_end, -player.flipDirection, 2, false);
-
-                if (player.bodyMode == BodyModeIndexExtension.CeilCrawl &&
-                    (slugcat_hand.absoluteHuntPos.x < grip_start.x || slugcat_hand.absoluteHuntPos.x > grip_end.x ||
-                    slugcat_hand.absoluteHuntPos.y < grip_end.y || slugcat_hand.absoluteHuntPos.y > grip_start.y))
+                else if (player.input[0].x < 0)
                 {
-                    attached_position = FindNearbyTile(slugcat_hand.connection.pos, player, grip_direction);
-
-                    grip_end = attached_position + new Vector2(player.flipDirection * 20.0f, -20.0f);
-
-                    // Выполним корректировку захвата
-                    slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, grip_end, -player.flipDirection, 2, false);
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
+                }
+                else if (player.input[0].x > 0)
+                {
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
 
-                player_graphics.objectLooker.timeLookingAtThis = 6;
+                // Копирование логики из Player.BodyModeIndex.CorridorClimb
+                if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
+                {
+                    Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
+                    Vector2 gripDirectionOffset = new Vector2(player.flipDirection * 10f, 5f);
+                    slugcat_hand.FindGrip(player.room, slugcat_hand.connection.pos, slugcat_hand.connection.pos, 100f,
+                        slugcat_hand.connection.pos + (vector + new Vector2(player.input[0].x, player.input[0].y).normalized * 1.5f).normalized * 20f + gripDirectionOffset, 2, 2, false);
+                }
                 return false;
             }
-            return originalReturn;
-        }
 
-        // Примерный метод корректировки пункта захвата
-        private static Vector2 FindNearbyTile(Vector2 position, Player player, Vector2 direction)
-        {
-            Room room = player.room;
-            Vector2 nearTile = position;
-            float minDistance = float.MaxValue;
-
-            // Проходим по всем тайтлам в комнате и ищем ближайший подходящий
-            foreach (Room.Tile tile in room.Tiles)
+            // Логика для лазания по стенам
+            if (player.bodyMode == Player.BodyModeIndex.WallClimb)
             {
-                Vector2 tilePosition = new Vector2(tile.X * 20 + 10, tile.Y * 20 + 10);
-                float distance = Vector2.Distance(position, tilePosition);
-
-                if (distance < minDistance &&
-                    room.GetTile(tilePosition - direction).Solid)// Убедимся, что тайл соответствует критериям
-                {
-                    nearTile = tilePosition;
-                    minDistance = distance;
-                }
-            }
-            return nearTile;
-        }
-
-        private static void HandleWallClimbMovement(Player player, PlayerGraphics player_graphics, SlugcatHand slugcat_hand)
-        {
-            // Определяем смещения для передних лап, увеличиваем расстояние для хватки через тайл
-            Vector2 frontLegOffset = new Vector2(player.flipDirection * 40f, 0.0f); // Увеличили смещение
-            Vector2 altFrontLegOffset = new Vector2(player.flipDirection * 40f, -20.0f); // Увеличили смещение
-
-            Vector2 handPositionOffset = slugcat_hand.limbNumber % 2 == 0 ? frontLegOffset : altFrontLegOffset;
-
-            slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
-
-            Vector2 targetPosition = slugcat_hand.connection.pos + handPositionOffset;
-            targetPosition = FindNearestTile(targetPosition);
-
-            slugcat_hand.absoluteHuntPos = Vector2.Lerp(slugcat_hand.absoluteHuntPos, targetPosition, 0.2f);
-
-            if (player.input[0].y != 0)
-            {
-                if (player.input[0].y > 0) // Взбираемся вверх
+                if (player.input[0].y > 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
                 }
-                else // Спускаемся вниз
+                else
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
                 }
-
                 player_graphics.objectLooker.timeLookingAtThis = 6;
                 player.animationFrame++;
+
+            if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
+                {
+                    Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
+                    Vector2 gripDirectionOffset = new Vector2(player.flipDirection * 10f, 5f);
+                    slugcat_hand.FindGrip(player.room, slugcat_hand.connection.pos, slugcat_hand.connection.pos, 100f,
+                        slugcat_hand.connection.pos + (vector + new Vector2(player.input[0].x, player.input[0].y).normalized * 1.5f).normalized * 20f + gripDirectionOffset, 2, 2, false);
+                }
+                return false;
             }
+
+            return orig(slugcat_hand);
         }
 
-        private static Vector2 FindNearestTile(Vector2 position)
-        {
-            float tileSize = 20f;
-            float x = Mathf.Round(position.x / tileSize) * tileSize;
-            float y = Mathf.Round(position.y / tileSize) * tileSize;
-            return new Vector2(x, y);
-        }
+
+        // Adjust the grip point method
 
         public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
         {

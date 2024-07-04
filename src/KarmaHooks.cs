@@ -107,9 +107,23 @@ namespace VoidTemplate
 
         private static void Player_ClassMechanicsSaint(ILContext il)
         {
+
             try
             {
                 ILCursor c = new ILCursor(il);
+                //if (physicalObject is Creature)
+                //{
+                //    if (!(physicalObject as Creature).dead)
+                //    {
+                //        flag2 = true;
+                //    }
+                //    (physicalObject as Creature) <if void and karma 11 TO label > .Die();
+                //    <TO label2
+                //    label
+                //    POP creature.die
+                //    if victim is thevoid stun for 11 seconds
+                //    label2>
+                //}
                 c.GotoNext(MoveType.After,
                     i => i.MatchLdcI4(1),
                     i => i.MatchStloc(15),
@@ -127,6 +141,11 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Br, label2);
                 c.MarkLabel(label);
                 c.Emit(OpCodes.Pop);
+                c.Emit(OpCodes.Ldloc, 18);
+                c.EmitDelegate((PhysicalObject PhysicalObject) =>
+                {
+                    if (PhysicalObject is Player p && p.slugcatStats.name == Plugin.TheVoid) p.Stun(Plugin.TicksPerSecond * 11);
+                });
                 c.MarkLabel(label2);
             }
             catch (Exception e)

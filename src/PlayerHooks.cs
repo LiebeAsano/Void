@@ -49,16 +49,31 @@ namespace VoidTemplate
 
         private static bool Rock_HitSomething_Update(On.Rock.orig_HitSomething orig, Rock self, SharedPhysics.CollisionResult result, bool eu)
         {
-
-            if (self.thrownBy is Player player 
+            if (self.thrownBy is Player player
                 && player.slugcatStats.name == Plugin.TheVoid
-                && result.obj is Creature creature)
-                    creature.Stun(69);
+                && result.obj is Creature creature
+                && creature.Template.type != CreatureTemplate.Type.Vulture
+                && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
+                && creature.Template.type != CreatureTemplate.Type.DaddyLongLegs
+                && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
+                && creature.Template.type != CreatureTemplate.Type.Deer
+                && creature.Template.type != CreatureTemplate.Type.BigEel
+                && creature.Template.type != CreatureTemplate.Type.PoleMimic
+                && creature.Template.type != CreatureTemplate.Type.TentaclePlant
+                && creature.Template.type != CreatureTemplate.Type.MirosBird
+                && creature.Template.type != CreatureTemplate.Type.RedLizard
+                && creature.Template.type != CreatureTemplate.Type.KingVulture
+                && creature.Template.type != CreatureTemplate.Type.RedCentipede
+                && creature.Template.type != CreatureTemplate.Type.Deer)
+
+            {
+                creature.Stun(69);
+            }
             return orig(self, result, eu);
         }
-    
 
-    private static void Player_ForbidenDrone(ILContext il)
+
+        private static void Player_ForbidenDrone(ILContext il)
         {
             try
             {

@@ -8,8 +8,8 @@ public static class Lung
         {
             int karmaCap = player.KarmaCap;
 
-            float baseLungCapacity = 0.6f;
-            float additionalCapacityPerKarma = 0.04f;
+            float baseLungCapacity = 1.0f;
+            float additionalCapacityPerKarma = 0.08f;
             float newLungCapacity = baseLungCapacity - (additionalCapacityPerKarma * (karmaCap + 1));
 
             player.slugcatStats.lungsFac = newLungCapacity;

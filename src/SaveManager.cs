@@ -4,10 +4,11 @@ namespace VoidTemplate;
 
 public static class SaveManager
 {
-    private const string teleportationDone = "TeleportationDone";
-    private const string messageShown = "MessageShown";
-    private const string lastMeetCycles = "LastMeetCycles";
-    private const string pebblesPearlsEaten = "PebblesPearlsEaten";
+    private const string uniqueprefix = "VoidSlugcat";
+    private const string teleportationDone = uniqueprefix + "TeleportationDone";
+    private const string messageShown = uniqueprefix + "MessageShown";
+    private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
+    private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
 
     public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
     public static void SetTeleportationDone(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(teleportationDone, value);

@@ -10,6 +10,8 @@ public static class SaveManager
     private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
     private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
 
+    private const string voidCatDead = uniqueprefix + "VoidCatDead";
+
     public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
     public static void SetTeleportationDone(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(teleportationDone, value);
 
@@ -39,4 +41,7 @@ public static class SaveManager
         return eatenPearlsAmount;
     }
     public static void SetPebblesPearlsEaten(this SaveState save, int amount) => save.miscWorldSaveData.GetSlugBaseData().Set(pebblesPearlsEaten, amount);
+
+    public static bool GetVoidCatDead(this PlayerProgression progression) => progression.miscProgressionData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
+    public static void SetVoidCatDead(this PlayerProgression progression, bool value) => progression.miscProgressionData.GetSlugBaseData().Set(voidCatDead, value);
 }

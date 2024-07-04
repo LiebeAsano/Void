@@ -186,6 +186,7 @@ namespace VoidTemplate
 
                 self.manager.musicPlayer?.FadeOutAllSongs(20f);
                 self.GetStorySession.saveState.redExtraCycles = true;
+                self.rainWorld.progression.SetVoidCatDead(true);
                 KarmaHooks.ForceFailed = true;
                 if (ModManager.CoopAvailable)
                 {

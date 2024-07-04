@@ -63,6 +63,7 @@ class Plugin : BaseUnityPlugin
                 KarmaHooks.Hook();
                 RoomHooks.Hook();
                 CreatureHooks.Hook();
+                MenuHooks.Hook();
                 if (DevEnabled)
                 {
                     On.RainWorldGame.Update += RainWorldGame_TestUpdate;

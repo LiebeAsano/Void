@@ -45,7 +45,10 @@ namespace VoidTemplate
         {
             orig(self, saveStateNumber);
             if (saveStateNumber == Plugin.TheVoid)
+            {
                 ForceFailed = false;
+                self.SetVoidCatDead(false);
+            }
         }
 
         public static bool ForceFailed = false;

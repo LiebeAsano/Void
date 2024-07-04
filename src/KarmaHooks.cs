@@ -120,6 +120,7 @@ namespace VoidTemplate
                 //    (physicalObject as Creature) <if void and karma 11 TO label > .Die();
                 //    <TO label2
                 //    label
+                //    //this is a bubble for the condition "void and karma 11"
                 //    POP creature.die
                 //    if victim is thevoid stun for 11 seconds
                 //    label2>
@@ -150,7 +151,8 @@ namespace VoidTemplate
             }
             catch (Exception e)
             {
-                Debug.LogException(e);
+                Plugin.logger.LogError(e);
+                throw;
             }
         }
 

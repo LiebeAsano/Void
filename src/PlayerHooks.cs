@@ -56,7 +56,6 @@ namespace VoidTemplate
                 && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
                 && creature.Template.type != CreatureTemplate.Type.DaddyLongLegs
                 && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
-                && creature.Template.type != CreatureTemplate.Type.Deer
                 && creature.Template.type != CreatureTemplate.Type.BigEel
                 && creature.Template.type != CreatureTemplate.Type.PoleMimic
                 && creature.Template.type != CreatureTemplate.Type.TentaclePlant

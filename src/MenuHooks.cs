@@ -10,7 +10,7 @@ namespace VoidTemplate;
 
 internal static class MenuHooks
 {
-    private const string MenuLabel = "glue glue glue \n did you know industrial complex spilled glue?";
+    private const string MenuLabel = "The vessel could not withstand the impact of the void liquid.\nNow you are doomed to relive your last cycles forever.";
     static ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
     {

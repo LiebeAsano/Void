@@ -7,7 +7,7 @@ You have enough strength to climb the walls.|У тебя достаточно с
 Your body is strong enough to climb the ceilings.|Твоё тело достаточно окрепло, чтобы лазать по потолкам.
 Hold down the 'Up' and 'Direction' buttons to climb the ceiling.|Удерживай кнопки 'Вверх' и 'Направления', чтобы лазать по потолку.
 Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай кнопки 'Направления' и 'Вверх', чтобы взобраться на стену.
-
+The vessel could not withstand the impact of the void liquid.\nNow you are doomed to relive your last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.\nТеперь ты обречён вечно переживать свои последние циклы.
 
 
 ...is it reaching you?|...ты понимаешь меня?

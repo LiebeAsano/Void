@@ -571,14 +571,8 @@ namespace VoidTemplate
             {
                 player.canWallJump = player.IsClimbingOnBeam() ? 0 : player.input[0].x * -15;
 
-                if (body_chunk_0.pos.y < body_chunk_1.pos.y)
-                {
-                    body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, 2f * player.gravity, 0.8f, 1f);
-                    body_chunk_1.vel.y = Custom.LerpAndTick(body_chunk_1.vel.y, 0.0f, 0.8f, 1f);
-                    body_chunk_1.vel.x = -player.input[0].x * 5f;
-                }
-                else
-                {
+                
+                
                     float velXGain = 2.4f * Mathf.Lerp(1f, 1.2f, player.Adrenaline) * player.surfaceFriction;
                     if (player.slowMovementStun > 0)
                     {
@@ -619,7 +613,7 @@ namespace VoidTemplate
                             body_chunk_1.vel.x = -player.input[0].x * velXGain;
                         }
                     }
-                }
+                
             }
 
             if (player.slideLoop != null && player.slideLoop.volume > 0.0f)

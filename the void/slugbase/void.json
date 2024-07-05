@@ -56,7 +56,7 @@
 		"perma_unlock_gates": false,
 		"maul_damage": 6,
 		"karma": 2,
-		"karma_cap": 2,
+		"karma_cap": 9,
 		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": false,

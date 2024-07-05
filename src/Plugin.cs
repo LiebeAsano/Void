@@ -4,8 +4,6 @@ using System.IO;
 using UnityEngine;
 using VoidTemplate;
 using System.Security.Permissions;
-using static Creature;
-using System.Threading.Tasks;
 using System.Linq;
 using BepInEx.Logging;
 #pragma warning disable CS0618
@@ -18,12 +16,12 @@ namespace TheVoid;
 class Plugin : BaseUnityPlugin
 {
     private const string MOD_ID = "liebeasano.thevoid";
-    public static readonly SlugcatStats.Name TheVoid = new("TheVoid");
+    
     /// <summary>
     /// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs
     /// </summary>
     public static ManualLogSource logger;
-    public const int TicksPerSecond = 40;
+    
 
     public const string SaveName = "THEVOID";
     public static bool DevEnabled = false;
@@ -87,12 +85,12 @@ class Plugin : BaseUnityPlugin
         game.Players.ForEach(absPlayer =>
         {
             if (absPlayer.realizedCreature is Player player
-            && player.slugcatStats.name == Plugin.TheVoid
+            && player.slugcatStats.name == StaticStuff.TheVoid
             && player.room != null
             && player.room == self.room
             && player.FoodInStomach < player.slugcatStats.foodToHibernate
             && self.room.game.session is StoryGameSession session
-            && session.characterStats.name == Plugin.TheVoid
+            && session.characterStats.name == StaticStuff.TheVoid
             && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
             {
                 if (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) game.GoToRedsGameOver();
@@ -109,7 +107,7 @@ class Plugin : BaseUnityPlugin
         game.Players.ForEach(absPlayer =>
         {
             if (absPlayer.realizedCreature is Player player
-            && player.slugcatStats.name == Plugin.TheVoid
+            && player.slugcatStats.name == StaticStuff.TheVoid
             && player.room != null
             && player.room == self.room
             && player.Malnourished) player.Die();
@@ -120,7 +118,7 @@ class Plugin : BaseUnityPlugin
     private void PlayerLungLogic(On.Player.orig_Update orig, Player self, bool eu)
     {
         orig(self, eu);
-        if (self.slugcatStats.name == TheVoid) Lung.UpdateLungCapacity(self);
+        if (self.slugcatStats.name == StaticStuff.TheVoid) Lung.UpdateLungCapacity(self);
     }
 
     private void StoryGameSession_AddPlayer(On.StoryGameSession.orig_AddPlayer orig, StoryGameSession self, AbstractCreature abstractCreature)
@@ -128,7 +126,7 @@ class Plugin : BaseUnityPlugin
         orig(self, abstractCreature);
 
         if (abstractCreature.realizedCreature is Player player
-            && player.slugcatStats.name == TheVoid)
+            && player.slugcatStats.name == StaticStuff.TheVoid)
         {
             Lung.UpdateLungCapacity(player);
         }
@@ -137,12 +135,12 @@ class Plugin : BaseUnityPlugin
     private void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
     {
         orig(self, graspIndex);
-        if (self.eatMeat != 50 || self.slugcatStats.name == Plugin.TheVoid) return;
+        if (self.eatMeat != 50 || self.slugcatStats.name == StaticStuff.TheVoid) return;
         Array.ForEach(self.grasps, grasp =>
         {
             if (grasp != null
             && grasp.grabbed is Player prey
-            && prey.slugcatStats.name == Plugin.TheVoid)
+            && prey.slugcatStats.name == StaticStuff.TheVoid)
                 self.Die();
 
         });
@@ -154,7 +152,7 @@ class Plugin : BaseUnityPlugin
     private void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
         orig(self, sLeaser, rCam, timeStacker, camPos);
-        if (self.player.slugcatStats.name != TheVoid) return;
+        if (self.player.slugcatStats.name != StaticStuff.TheVoid) return;
         foreach (var sprite in sLeaser.sprites)
         {
             if (sprite.element.name.StartsWith("PlayerArm") ||
@@ -196,7 +194,7 @@ class Plugin : BaseUnityPlugin
     {
         orig(self);
         if (self.session is StoryGameSession session &&
-            session.saveStateNumber == TheVoid)
+            session.saveStateNumber == StaticStuff.TheVoid)
         {
             if (Input.GetKey(KeyCode.LeftControl) &&
                 session.saveState.deathPersistentSaveData.karmaCap != 10)

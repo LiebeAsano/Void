@@ -13,7 +13,7 @@ public static class PlayerSpawnManager
     {
         orig(self, eu);
         var save = self.room.game.GetStorySession.saveState;
-        if (self.room is Room playerRoom && self.room.game.GetStorySession.saveStateNumber == Plugin.TheVoid && !save.GetTeleportationDone())
+        if (self.room is Room playerRoom && self.room.game.GetStorySession.saveStateNumber == StaticStuff.TheVoid && !save.GetTeleportationDone())
         {
             InitializeTargetRoomID(playerRoom);
 

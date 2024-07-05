@@ -156,7 +156,7 @@ namespace VoidTemplate
                 self.dialogBox.NewMessage("...", 10);
                 return;
             }
-            if ((self.oracle.room.game.session is StoryGameSession session) && session.characterStats.name == Plugin.TheVoid &&
+            if ((self.oracle.room.game.session is StoryGameSession session) && session.characterStats.name == StaticStuff.TheVoid &&
                 self.State.playerEncountersWithMark <= 0)
             {
                 if (self.State.playerEncounters < 0)
@@ -250,7 +250,7 @@ namespace VoidTemplate
                 if (player.realizedCreature is Player)
                     seePeople = true;
 
-            if (seePeople && self.oracle.room.game.session.characterStats.name == Plugin.TheVoid)
+            if (seePeople && self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid)
             {
                 var saveState = self.oracle.room.game.GetStorySession.saveState;
                 var miscData = saveState.miscWorldSaveData;
@@ -355,13 +355,13 @@ namespace VoidTemplate
                 i => i.MatchLdloc(10));
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
-                => self.oracle.room.game.StoryCharacter == Plugin.TheVoid || re);
+                => self.oracle.room.game.StoryCharacter == StaticStuff.TheVoid || re);
 
             c2.GotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible."));
             c2.Emit(OpCodes.Ldarg_0);
             c2.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
             {
-                if (self.oracle.room.game.session.characterStats.name == Plugin.TheVoid &&
+                if (self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid &&
                     SSConversation.pickInterruptMessages.Length >
                     self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1)
                 {

@@ -44,10 +44,11 @@ namespace VoidTemplate
         private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
         {
             orig(self, saveStateNumber);
-            if (saveStateNumber == Plugin.TheVoid)
+            if (saveStateNumber == StaticStuff.TheVoid)
             {
                 ForceFailed = false;
                 self.SetVoidCatDead(false);
+                //self.SetEndingEncountered(false);
             }
         }
 
@@ -69,7 +70,7 @@ namespace VoidTemplate
             bool needInsert = false;
             var lastScreen = screen.ID;
 
-            if (screen.saveState.saveStateNumber == Plugin.TheVoid)
+            if (screen.saveState.saveStateNumber == StaticStuff.TheVoid)
             {
                 if (screen.saveState.redExtraCycles || ForceFailed)
                 {
@@ -138,7 +139,7 @@ namespace VoidTemplate
                 var label2 = c.DefineLabel();
                 c.Emit(OpCodes.Dup);
                 c.EmitDelegate<Func<Creature, bool>>((self) =>
-                    self is Player player && player.slugcatStats.name == Plugin.TheVoid);
+                    self is Player player && player.slugcatStats.name == StaticStuff.TheVoid);
                 c.Emit(OpCodes.Brtrue_S, label);
                 c.GotoNext(MoveType.After,
                     i => i.MatchCallvirt<Creature>("Die"));
@@ -148,7 +149,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldloc, 18);
                 c.EmitDelegate((PhysicalObject PhysicalObject) =>
                 {
-                    if (PhysicalObject is Player p && p.slugcatStats.name == Plugin.TheVoid) p.Stun(Plugin.TicksPerSecond * 11);
+                    if (PhysicalObject is Player p && p.slugcatStats.name == StaticStuff.TheVoid) p.Stun(StaticStuff.TicksPerSecond * 11);
                 });
                 c.MarkLabel(label2);
             }
@@ -177,7 +178,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<bool, Ghost, bool>>((re, self) =>
                     re || ((self.room.game.session is StoryGameSession session) &&
-                           session.saveStateNumber == Plugin.TheVoid));
+                           session.saveStateNumber == StaticStuff.TheVoid));
 
             }
             catch (Exception e)
@@ -205,7 +206,7 @@ namespace VoidTemplate
         private static void GhostConversation_AddEvents(On.GhostConversation.orig_AddEvents orig, GhostConversation self)
         {
             if (self.ghost.room.game.session is StoryGameSession session &&
-                session.saveStateNumber == Plugin.TheVoid)
+                session.saveStateNumber == StaticStuff.TheVoid)
             {
                 var path = AssetManager.ResolveFilePath(GetGhostConversationPath(Custom.rainWorld.inGameTranslator.currentLanguage, self.id,
                     session.saveState.deathPersistentSaveData.theMark));
@@ -241,7 +242,7 @@ namespace VoidTemplate
         {
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
-                session.saveStateNumber == Plugin.TheVoid)
+                session.saveStateNumber == StaticStuff.TheVoid)
                 return true;
             var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
             return re;
@@ -255,7 +256,7 @@ namespace VoidTemplate
                 c.GotoNext(MoveType.After, i => i.MatchLdcI4(9));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<int, SaveState, int>>((re, self) =>
-                    self.saveStateNumber == Plugin.TheVoid ? 10 : re);
+                    self.saveStateNumber == StaticStuff.TheVoid ? 10 : re);
             }
             catch (Exception e)
             {
@@ -266,7 +267,7 @@ namespace VoidTemplate
         private static void MenuScene_BuildScene(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
         {
             if (self.sceneID == new MenuScene.SceneID("Slugcat_Void") &&
-                !SlugcatStats.SlugcatUnlocked(Plugin.TheVoid, Custom.rainWorld))
+                !SlugcatStats.SlugcatUnlocked(StaticStuff.TheVoid, Custom.rainWorld))
                 self.sceneID = new MenuScene.SceneID("Slugcat_Void_Dark");
             orig(self);
         }
@@ -274,14 +275,14 @@ namespace VoidTemplate
         private static void SlugcatPageNewGame_ctor(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
         {
             orig(self, menu, owner, pageIndex, slugcatNumber);
-            if (slugcatNumber == Plugin.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
+            if (slugcatNumber == StaticStuff.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
                 self.infoLabel.text = self.menu.Translate("Clear the game as Hunter to unlock.");
         }
 
         private static bool SlugcatStats_SlugcatUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
         {
             var re = orig(i, rainWorld);
-            if (i == Plugin.TheVoid &&
+            if (i == StaticStuff.TheVoid &&
                 !rainWorld.progression.miscProgressionData.beaten_Hunter)
                 return Plugin.DevEnabled;
             return re;
@@ -292,7 +293,7 @@ namespace VoidTemplate
             orig(self, package);
             MenuScene.SceneID sceneID = null;
 
-            if (self.saveState?.saveStateNumber == Plugin.TheVoid && self.IsSleepScreen)
+            if (self.saveState?.saveStateNumber == StaticStuff.TheVoid && self.IsSleepScreen)
             {
                 if (self.karmaLadder.displayKarma.y == 10)
                     sceneID = new MenuScene.SceneID("Sleep_Void_Karma11");
@@ -314,7 +315,7 @@ namespace VoidTemplate
         private static void SleepAndDeathScreen_AddBkgIllustration(On.Menu.SleepAndDeathScreen.orig_AddBkgIllustration orig, SleepAndDeathScreen self)
         {
             if (self.manager.currentMainLoop is RainWorldGame game &&
-                game.session.characterStats.name == Plugin.TheVoid)
+                game.session.characterStats.name == StaticStuff.TheVoid)
             {
                 return;
             }
@@ -324,7 +325,7 @@ namespace VoidTemplate
         private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
         {
             orig(self, saveStateNumber, game);
-            if (self.characterStats.name == Plugin.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
+            if (self.characterStats.name == StaticStuff.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
             {
                 self.characterStats.foodToHibernate = 6;
                 self.characterStats.maxFood = 9;
@@ -338,7 +339,7 @@ namespace VoidTemplate
         {
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
-                session.characterStats.name == Plugin.TheVoid && session.saveState.deathPersistentSaveData.karma == 10)
+                session.characterStats.name == StaticStuff.TheVoid && session.saveState.deathPersistentSaveData.karma == 10)
             {
                 return orig(slugcatIndex, eatenobject) * 2;
             }
@@ -378,7 +379,7 @@ namespace VoidTemplate
 
                     c.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
                     {
-                        if (name == Plugin.TheVoid && self.saveGameData.karma == 10)
+                        if (name == StaticStuff.TheVoid && self.saveGameData.karma == 10)
                             return 9;
                         return x;
                     });
@@ -393,7 +394,7 @@ namespace VoidTemplate
 
                     c2.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((y, name, self) =>
                     {
-                        if (name == Plugin.TheVoid && self.saveGameData.karma == 10)
+                        if (name == StaticStuff.TheVoid && self.saveGameData.karma == 10)
                             return 6;
                         return y;
                     });

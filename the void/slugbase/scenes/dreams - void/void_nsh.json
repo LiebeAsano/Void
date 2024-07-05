@@ -1,0 +1,15 @@
+{
+	"id": "Sleep_Void_Karma11",
+	"scene_folder": "slugbase/scenes/sleep - void",
+	"images": [
+		{ "name": "BackGround_Sleep", "pos": [650,65], "depth": 10, "shader": "Basic" },
+		{ "name": "Leaf_Sleep",    "pos": [650,65], "depth": 7.0, "shader": "Basic" },
+	
+        { "name": "FrontLeaf_Sleep",    "pos": [650,65], "depth": 5.0, "shader": "Basic" }
+	],
+	"idle_depths": [ 2.8 ],
+	"glow_pos": [750, 100],
+	"mark_pos": [800, 150],
+	"select_menu_pos": [0, 0],
+	"slugcat_depth": 2.8
+}

@@ -1,0 +1,10 @@
+{
+	"id": "karma_death_void_karma11",
+	"scene_folder": "slugbase/scenes/karma - death - void",
+	"images": [
+		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" }
+	],
+	"idle_depths": [ 2.8 ],
+	"select_menu_pos": [0, 0],
+	"slugcat_depth": 3.5
+}

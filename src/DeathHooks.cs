@@ -26,6 +26,8 @@ namespace VoidTemplate
             On.Mushroom.BitByPlayer += Mushroom_EatenByPlayer;
             On.RainWorldGame.ExitToMenu += RainWorldGame_ExitToMenu;
             Application.quitting += OnApplicationQuit;
+            
+            
 
             IL.Menu.KarmaLadderScreen.GetDataFromGame += KarmaLadderScreen_GetDataFixMSCStupidBug;
 
@@ -40,6 +42,8 @@ namespace VoidTemplate
                     };
             }
         }
+
+
 
         private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)
         {
@@ -100,7 +104,6 @@ namespace VoidTemplate
                 self.sceneOffset.x = (1366f - self.menu.manager.rainWorld.options.ScreenSize.x) / 2f;
 
                 var id = menu.saveGameData.karmaCap == 10 ? new MenuScene.SceneID("karma_death_void_karma11") : new MenuScene.SceneID("karma_death_void");
-                Debug.Log($"[The Void] Load Image {id}");
                 self.slugcatImage = new InteractiveMenuScene(self.menu, self, id);
 
                 self.subObjects.Add(self.slugcatImage);
@@ -206,7 +209,6 @@ namespace VoidTemplate
 
                 self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
                 self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
-                Debug.Log("[The Void] Exit to Statistics");
                 return;
             }
             orig(self);
@@ -221,12 +223,12 @@ namespace VoidTemplate
                 ProcessManager processManager = rainWorld.processManager;
                 if (processManager.currentMainLoop is RainWorldGame game)
                 {
-                    CheckAndTriggerGameOver(game);
+                    GameOverVoid(game);
                 }
             }
         }
 
-        private static void CheckAndTriggerGameOver(RainWorldGame rainWorldGame)
+        private static void GameOverVoid(RainWorldGame rainWorldGame)
         {
             if (rainWorldGame.session is StoryGameSession session &&
                 session.characterStats.name == Plugin.TheVoid &&

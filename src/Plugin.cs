@@ -47,11 +47,8 @@ class Plugin : BaseUnityPlugin
                     DevEnabled = true;
                 }
                 On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-                On.Creature.Violence += Creature_Violence;
-                On.Leech.Attached += OnLeechAttached;
                 On.Player.Update += PlayerLungLogic;
                 On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
-                On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
                 On.ShelterDoor.Close += CycleEndLogic;
                 On.Player.Update += MalnourishmentDeath;
                 On.Player.EatMeatUpdate += DontEatVoid;
@@ -81,17 +78,7 @@ class Plugin : BaseUnityPlugin
     }
 
 
-    private static async void OnLeechAttached(On.Leech.orig_Attached orig, Leech self)
-    {
-        orig(self);
 
-        if (Array.Exists(self.grasps, grasp => grasp.grabbed is Player player
-        && player.slugcatStats.name == TheVoid && self != null && self.room != null))
-        {
-            await Task.Delay(6000);
-            self.Die();
-        }
-    }
 
     private void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
     {
@@ -145,55 +132,6 @@ class Plugin : BaseUnityPlugin
         {
             Lung.UpdateLungCapacity(player);
         }
-    }
-
-    private void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
-    {
-        if (self is Player player
-            && player.slugcatStats.name == TheVoid
-            && type == DamageType.Stab)
-        {
-            int KarmaCap = player.KarmaCap;// Уменьшаем эффект оглушения
-            float StunResistance = 1f - 0.09f * KarmaCap;
-            float DamageResistance = 1f - 0.09f * KarmaCap;
-            stunBonus *= StunResistance;
-            damage *= DamageResistance;
-        }
-        orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
-    }
-    private static async void OnDaddyLongLegsEat(On.DaddyLongLegs.orig_Eat orig, DaddyLongLegs self, bool eu)
-    {
-        foreach (var eatObject in self.eatObjects)
-        {
-            if (eatObject.chunk.owner is Player player
-                && player.slugcatStats.name == TheVoid
-                && player.dead)
-            {
-                await Task.Delay(3000);
-                DestroyBody(player);
-                self.Die();
-                FinishEating(self);
-                return;
-            }
-        }
-        orig(self, eu);
-    }
-
-    private static void DestroyBody(Player player)
-    {
-        if (player != null && player.room != null)
-        {
-            player.room.RemoveObject(player);
-        }
-        player.dead = true;
-    }
-
-    private static void FinishEating(DaddyLongLegs self)
-    {
-        self.eatObjects.Clear();
-        self.digestingCounter = 0;
-        self.moving = false;
-        self.tentaclesHoldOn = false;
     }
     // Новый метод-обработчик для события съедения мяса
     private void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)

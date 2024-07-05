@@ -29,7 +29,6 @@ internal static class MenuHooks
             float alpha = self.UseAlpha(timeStacker);
             label.label.alpha = alpha;
             label.label.x = self.MidXpos + scroll * self.ScrollMagnitude + 0.01f;
-            label.label.color = Color.white;
         }
 
 
@@ -81,7 +80,7 @@ internal static class MenuHooks
             var textlabel = new MenuLabel(menu, self, MenuLabel, new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
             textlabel.label.alignment = FLabelAlignment.Center;
             self.subObjects.Add(textlabel);
-            textlabel.label.color = Color.green;
+            textlabel.label.color = new HSLColor(0.73055553f, 0.08f, 0.3f).rgb;
             textlabel.label.alpha = 1f;
             assLabel.Add(self, textlabel);
         }

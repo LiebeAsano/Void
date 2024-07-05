@@ -5,6 +5,7 @@ using TheVoid;
 using Menu;
 using UnityEngine;
 using System.Linq;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 
@@ -17,10 +18,19 @@ internal static class MenuHooks
         //when voidcat is dead, those hide useless hud
         On.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += HideKarmaAndFoodSplitter;
         On.HUD.FoodMeter.CharSelectUpdate += HideFoodPips;
-        On.Menu.SlugcatSelectMenu.SlugcatPageContinue.GrafUpdate += SlugcatPageContinue_GrafUpdate;
+        On.Menu.SlugcatSelectMenu.SlugcatPageContinue.GrafUpdate += MakeTextScroll;
+        On.Menu.MenuScene.BuildScene += FinalDeathSceneReplacement;
     }
 
-    private static void SlugcatPageContinue_GrafUpdate(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_GrafUpdate orig, SlugcatSelectMenu.SlugcatPageContinue self, float timeStacker)
+    private static void FinalDeathSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
+    {
+        if (self.owner.menu is StoryGameStatisticsScreen && self.sceneID == StaticStuff.SleepSceneID)
+        {
+            self.sceneID = StaticStuff.DeathSceneID;
+        }
+            orig(self);
+    }
+    private static void MakeTextScroll(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_GrafUpdate orig, SlugcatSelectMenu.SlugcatPageContinue self, float timeStacker)
     {
         orig(self, timeStacker);
         if(assLabel.TryGetValue(self, out var label))
@@ -30,8 +40,6 @@ internal static class MenuHooks
             label.label.alpha = alpha;
             label.label.x = self.MidXpos + scroll * self.ScrollMagnitude + 0.01f;
         }
-
-
     }
 
     private static void HideFoodPips(On.HUD.FoodMeter.orig_CharSelectUpdate orig, FoodMeter self)

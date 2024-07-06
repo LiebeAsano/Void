@@ -2,6 +2,7 @@
 using VoidTemplate;
 using UnityEngine;
 using TheVoid;
+
 public static class PlayerSpawnManager
 {
     public static void ApplyHooks()
@@ -12,7 +13,21 @@ public static class PlayerSpawnManager
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
     {
         orig(self, eu);
+
+        if (self.room == null || self.room.game == null || self.room.game.GetStorySession == null)
+        {
+            Debug.LogWarning("PlayerSpawnManager: null reference detected in arena mode or other non-story modes.");
+            return;
+        }
+
         var save = self.room.game.GetStorySession.saveState;
+
+        if (save == null)
+        {
+            Debug.LogError("PlayerSpawnManager: saveState is null");
+            return;
+        }
+
         if (self.room is Room playerRoom && self.room.game.GetStorySession.saveStateNumber == StaticStuff.TheVoid && !save.GetTeleportationDone())
         {
             InitializeTargetRoomID(playerRoom);
@@ -24,12 +39,13 @@ public static class PlayerSpawnManager
                 save.SetTeleportationDone(true);
                 self.abstractCreature.pos = NewSpawnPoint;
                 Vector2 newPosition = self.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
-                Array.ForEach(self.bodyChunks, x=>x.pos = newPosition);
+                Array.ForEach(self.bodyChunks, x => x.pos = newPosition);
                 self.standing = true;
                 self.animation = Player.AnimationIndex.StandUp;
             }
         }
     }
+
     #region minor helper functions
 
     private static int targetRoomID = -1;
@@ -41,7 +57,9 @@ public static class PlayerSpawnManager
             return new WorldCoordinate(targetRoomID, originalSpawnPoint.x, originalSpawnPoint.y, originalSpawnPoint.abstractNode);
         }
     }
+
     private static readonly WorldCoordinate originalSpawnPoint = new WorldCoordinate(-1, 27, 13, 0);
+
     static void InitializeTargetRoomID(Room room)
     {
         if (targetRoomID == -1)

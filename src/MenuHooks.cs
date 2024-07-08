@@ -11,7 +11,7 @@ namespace VoidTemplate;
 
 internal static class MenuHooks
 {
-    private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.\nNow you are doomed to relive your last cycles forever.";
+    private const string TextIfDead = "The vessel could not withstand the impact of the void liquid. <LINE> Now the soul is doomed to relive his last cycles forever.";
     private const string TextIfEnding = "there is another text here surprisingly";
     static ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()

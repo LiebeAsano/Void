@@ -118,16 +118,16 @@ namespace VoidTemplate
             public static string[] eatInterruptMessages = new[]
             {
                 "I'm not sure you can stomach them.",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-                "10",
-                "11"
+                "You really shouldn't eat pearls.",
+                ". . .",
+                ". . .",
+                "Do you really eat them?",
+                "You must stop right now.",
+                ". . .",
+                "I forbid to do it!",
+                "I said no!",
+                "Wait, don't eat it, it's very impo...",
+                "I'm warning you for the last time!"
             };
 
             public static string[] eatInterruptMessages6Step = new[]

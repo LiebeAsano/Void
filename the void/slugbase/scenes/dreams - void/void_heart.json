@@ -1,5 +1,5 @@
 {
-	"id": "Slugcat_Void_Dark",
+	"id": "Heart_Dream_Void",
 	"scene_folder": "slugbase/scenes/slugcat - void",
 	"images": [
 		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" },

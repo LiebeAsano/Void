@@ -1,5 +1,5 @@
 {
-	"id": "Death_Void",
+	"id": "Moon_Dream_Void",
 	"scene_folder": "slugbase/scenes/death - void",
 	"images": [
 		{"name": "death screen - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},

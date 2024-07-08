@@ -1,5 +1,5 @@
 {
-	"id": "karma_death_void",
+	"id": "Pebble_Dream_Void",
 	"scene_folder": "slugbase/scenes/karma - death - void",
 	"images": [
 		{ "name": "bg-void", "pos": [335,220], "depth": 4, "shader": "Basic" },

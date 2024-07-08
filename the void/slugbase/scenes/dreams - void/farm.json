@@ -1,5 +1,5 @@
 {
-	"id": "Sleep_Void",
+	"id": "Farm_Dream_Void",
 	"scene_folder": "slugbase/scenes/sleep - void",
 	"images": [
 	    {"name": "sleep screen - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},

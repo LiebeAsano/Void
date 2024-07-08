@@ -1,5 +1,5 @@
 {
-	"id": "Sleep_Void_Karma11",
+	"id": "Void_NSH_Dream_Void",
 	"scene_folder": "slugbase/scenes/sleep - void",
 	"images": [
 		{ "name": "BackGround_Sleep", "pos": [650,65], "depth": 10, "shader": "Basic" },

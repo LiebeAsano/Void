@@ -55,7 +55,6 @@ namespace VoidTemplate
                 && creature.Template.type != CreatureTemplate.Type.Vulture
                 && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
                 && creature.Template.type != CreatureTemplate.Type.DaddyLongLegs
-                && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
                 && creature.Template.type != CreatureTemplate.Type.BigEel
                 && creature.Template.type != CreatureTemplate.Type.PoleMimic
                 && creature.Template.type != CreatureTemplate.Type.TentaclePlant
@@ -63,6 +62,7 @@ namespace VoidTemplate
                 && creature.Template.type != CreatureTemplate.Type.RedLizard
                 && creature.Template.type != CreatureTemplate.Type.KingVulture
                 && creature.Template.type != CreatureTemplate.Type.RedCentipede
+                && creature.Template.type != CreatureTemplate.Type.TempleGuard
                 && creature.Template.type != CreatureTemplate.Type.Deer)
 
             {
@@ -450,7 +450,6 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
-            // Инициализация рук если слизнекот не в режиме лазания по стенам или потолку.
             if ((player.bodyMode != Player.BodyModeIndex.WallClimb && player.bodyMode != BodyModeIndexExtension.CeilCrawl) ||
                 player.input[0].y == 0 || player.animation != Player.AnimationIndex.None)
             {
@@ -458,7 +457,6 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
-            // Инициализация рук для лазания
             if (attached_fields.initialize_hands)
             {
                 if (slugcat_hand.limbNumber == 1)
@@ -474,7 +472,7 @@ namespace VoidTemplate
             {
                 if (player_graphics.legs != null)
                 {
-                    player_graphics.legs.pos = new Vector2(-1000, -1000); // Hide legs by moving them off screen
+                    player_graphics.legs.pos = new Vector2(-1000, -1000);
                 }
                 if (player.input[0].x != 0)
                 {
@@ -493,7 +491,6 @@ namespace VoidTemplate
                     player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
 
-                // Копирование логики из Player.BodyModeIndex.CorridorClimb
                 if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
                 {
                     Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
@@ -510,12 +507,13 @@ namespace VoidTemplate
                 if (player.input[0].y > 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
                 else
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
-                player_graphics.objectLooker.timeLookingAtThis = 6;
                 player.animationFrame++;
 
             if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
@@ -531,8 +529,6 @@ namespace VoidTemplate
             return orig(slugcat_hand);
         }
 
-
-        // Adjust the grip point method
 
         public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
         {

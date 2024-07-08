@@ -1,5 +1,5 @@
 {
-	"id": "karma_death_void_karma11",
+	"id": "NSH_Dream_Void",
 	"scene_folder": "slugbase/scenes/karma - death - void",
 	"images": [
 		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" }

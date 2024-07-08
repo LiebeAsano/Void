@@ -13,22 +13,11 @@ public static class PlayerSpawnManager
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
     {
         orig(self, eu);
-
-        if (self.room == null || self.room.game == null || self.room.game.GetStorySession == null)
-        {
-            Debug.LogWarning("PlayerSpawnManager: null reference detected in arena mode or other non-story modes.");
-            return;
-        }
-
-        var save = self.room.game.GetStorySession.saveState;
-
-        if (save == null)
-        {
-            Debug.LogError("PlayerSpawnManager: saveState is null");
-            return;
-        }
-
-        if (self.room is Room playerRoom && self.room.game.GetStorySession.saveStateNumber == StaticStuff.TheVoid && !save.GetTeleportationDone())
+        if (self.room is Room playerRoom 
+            && playerRoom.game.IsStorySession 
+            && playerRoom.game.GetStorySession.saveStateNumber == StaticStuff.TheVoid
+            && playerRoom.game.GetStorySession.saveState is SaveState save
+            && !save.GetTeleportationDone())
         {
             InitializeTargetRoomID(playerRoom);
 
@@ -37,6 +26,7 @@ public static class PlayerSpawnManager
             if (currentRoomIndex == NewSpawnPoint.room)
             {
                 save.SetTeleportationDone(true);
+                save.EnlistDreamInShowQueue(SaveManager.Dream.Farm);
                 self.abstractCreature.pos = NewSpawnPoint;
                 Vector2 newPosition = self.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
                 Array.ForEach(self.bodyChunks, x => x.pos = newPosition);

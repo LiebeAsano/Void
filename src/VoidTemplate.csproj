@@ -2,7 +2,7 @@
     
     <PropertyGroup>
         <TargetFramework>net48</TargetFramework>
-        <LangVersion>11</LangVersion>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     
     <ItemGroup>
@@ -10,18 +10,9 @@
             <Private>false</Private>
         </Reference>
     </ItemGroup>
-    
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <Reference Include="Nutils">
-        <HintPath>..\..\OpKeyBinderEx\OpKeyBinderEx\bin\Debug\net48\Nutils.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-    
-
 	<Target Name="MoveBinariesToProperFoler" AfterTargets="PostBuildEvent">
 		<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb" DestinationFolder="$(ProjectDir)../the void/plugins/" />
 	</Target>

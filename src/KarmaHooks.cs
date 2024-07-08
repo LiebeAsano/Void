@@ -30,10 +30,6 @@ namespace VoidTemplate
 
             IL.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
 
-            On.SlugcatStats.SlugcatUnlocked += SlugcatStats_SlugcatUnlocked;
-            On.Menu.MenuScene.BuildScene += MenuScene_BuildScene;
-            On.RainWorld.PostModsInit += RainWorld_PostModsInit;
-
             On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
             On.Menu.KarmaLadder.GoToKarma += KarmaLadder_GoToKarma;
 
@@ -160,11 +156,6 @@ namespace VoidTemplate
             }
         }
 
-        private static void RainWorld_PostModsInit(On.RainWorld.orig_PostModsInit orig, RainWorld self)
-        {
-            orig(self);
-            On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += SlugcatPageNewGame_ctor;
-        }
         private static void Ghost_UpdateIL(ILContext il)
         {
             try
@@ -264,29 +255,7 @@ namespace VoidTemplate
             }
         }
 
-        private static void MenuScene_BuildScene(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
-        {
-            if (self.sceneID == new MenuScene.SceneID("Slugcat_Void") &&
-                !SlugcatStats.SlugcatUnlocked(StaticStuff.TheVoid, Custom.rainWorld))
-                self.sceneID = new MenuScene.SceneID("Slugcat_Void_Dark");
-            orig(self);
-        }
 
-        private static void SlugcatPageNewGame_ctor(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
-        {
-            orig(self, menu, owner, pageIndex, slugcatNumber);
-            if (slugcatNumber == StaticStuff.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
-                self.infoLabel.text = self.menu.Translate("Clear the game as Hunter to unlock.");
-        }
-
-        private static bool SlugcatStats_SlugcatUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
-        {
-            var re = orig(i, rainWorld);
-            if (i == StaticStuff.TheVoid &&
-                !rainWorld.progression.miscProgressionData.beaten_Hunter)
-                return Plugin.DevEnabled;
-            return re;
-        }
 
         private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
         {

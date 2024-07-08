@@ -11,7 +11,7 @@ namespace VoidTemplate;
 
 internal static class MenuHooks
 {
-    private const string TextIfDead = "The vessel could not withstand the impact of the void liquid. <LINE> Now the soul is doomed to relive his last cycles forever.";
+    private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
     private const string TextIfEnding = "there is another text here surprisingly";
     static ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
@@ -21,8 +21,31 @@ internal static class MenuHooks
         On.HUD.FoodMeter.CharSelectUpdate += HideFoodPips;
         On.Menu.SlugcatSelectMenu.SlugcatPageContinue.GrafUpdate += MakeTextScroll;
         On.Menu.MenuScene.BuildScene += SceneReplacement;
+        On.SlugcatStats.SlugcatUnlocked += IsVoidUnlocked;
+        On.Menu.MenuScene.BuildScene += ImageIfNotUnlocked;
+        On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += TextLabelIfNotUnlocked;
     }
-
+    private static void ImageIfNotUnlocked(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
+    {
+        if (self.sceneID == new MenuScene.SceneID("Slugcat_Void") &&
+            !SlugcatStats.SlugcatUnlocked(StaticStuff.TheVoid, RWCustom.Custom.rainWorld))
+            self.sceneID = new MenuScene.SceneID("Slugcat_Void_Dark");
+        orig(self);
+    }
+    private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
+    {
+        var re = orig(i, rainWorld);
+        if (i == StaticStuff.TheVoid &&
+            !rainWorld.progression.miscProgressionData.beaten_Hunter)
+            return Plugin.DevEnabled;
+        return re;
+    }
+    private static void TextLabelIfNotUnlocked(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
+    {
+        orig(self, menu, owner, pageIndex, slugcatNumber);
+        if (slugcatNumber == StaticStuff.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
+            self.infoLabel.text = self.menu.Translate("Clear the game as Hunter to unlock.");
+    }
     private static void SceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
     {
         if (self.owner.menu is StoryGameStatisticsScreen statscreen && self.sceneID == StaticStuff.SleepSceneID)
@@ -99,7 +122,7 @@ internal static class MenuHooks
                 VerticalOffset = 30f;
             }
             string text = prog.GetEndingEncountered() ? TextIfEnding : TextIfDead;
-            var textlabel = new MenuLabel(menu, self, RWCustom.Custom.rainWorld.inGameTranslator.Translate(text), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
+            var textlabel = new MenuLabel(menu, self, text.TranslateStringComplex(), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
             textlabel.label.alignment = FLabelAlignment.Center;
             self.subObjects.Add(textlabel);
             textlabel.label.color = new HSLColor(0.73055553f, 0.08f, 0.3f).rgb;

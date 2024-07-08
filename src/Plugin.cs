@@ -40,6 +40,8 @@ class Plugin : BaseUnityPlugin
         {
             if (!ModLoaded)
             {
+                StaticStuff.RegisterEnums();
+                Dreams.RegisterMaps();
                 if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
                 {
                     DevEnabled = true;
@@ -59,6 +61,7 @@ class Plugin : BaseUnityPlugin
                 RoomHooks.Hook();
                 CreatureHooks.Hook();
                 MenuHooks.Hook();
+                Dreams.Hook();
                 if (DevEnabled)
                 {
                     On.RainWorldGame.Update += RainWorldGame_TestUpdate;

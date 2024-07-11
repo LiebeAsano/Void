@@ -29,12 +29,14 @@ internal static class SelectScreenScenes
             self.sceneID = LockedSlugcat;
         }
         if(self.owner is SlugcatSelectMenu.SlugcatPageContinue page2
-            && page2.slugcatNumber == TheVoid
-            && !(self.sceneID == KarmaDeath11 || self.sceneID == KarmaDeath)) //these two are already handled
+            && page2.slugcatNumber == TheVoid)
         {
             SaveState save = RWCustom.Custom.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);
-            if (save.GetEndingEncountered()) self.sceneID = DeathSceneID;
+            if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
+            else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
+            else if (save.GetEndingEncountered()) self.sceneID = DeathSceneID;
             else if (save.GetVisitedPebblesSixTimes()) self.sceneID = SelectFPScene;
+            //if none of them work, the default scene happens
         }
         orig(self);
     }

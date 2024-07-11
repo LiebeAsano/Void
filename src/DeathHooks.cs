@@ -21,7 +21,7 @@ namespace VoidTemplate
             On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
             On.RainWorldGame.GoToRedsGameOver += RainWorldGame_GoToRedsGameOver;
             On.Menu.KarmaLadder.KarmaSymbol.Update += KarmaSymbol_Update;
-            On.Menu.SlugcatSelectMenu.SlugcatPage.AddImage += SlugcatPage_AddImage;
+            //On.Menu.SlugcatSelectMenu.SlugcatPage.AddImage += SlugcatPage_AddImage;
             On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
             On.Mushroom.BitByPlayer += Mushroom_EatenByPlayer;
             On.RainWorldGame.ExitToMenu += RainWorldGame_ExitToMenu;

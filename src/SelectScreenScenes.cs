@@ -34,9 +34,9 @@ internal static class SelectScreenScenes
             SaveState save = RWCustom.Custom.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);
             if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
             else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
-            else if (save.GetEndingEncountered()) self.sceneID = DeathSceneID;
+            else if (save.GetEndingEncountered()) self.sceneID = SelectEndingScene;
             else if (save.GetVisitedPebblesSixTimes()) self.sceneID = SelectFPScene;
-            //if none of them work, the default scene happens
+            //if none of them work, the default scene happens, which is default ready to play slugcat
         }
         orig(self);
     }

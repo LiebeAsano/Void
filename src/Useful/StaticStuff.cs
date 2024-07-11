@@ -1,4 +1,4 @@
-﻿namespace TheVoid;
+﻿namespace VoidTemplate;
 using Menu;
 using static System.Net.Mime.MediaTypeNames;
 using static VoidTemplate.SaveManager;
@@ -37,11 +37,28 @@ public static class StaticStuff
         Void_NSHDream = new(uniqueprefix + "NSHVoidDream", true);
         Void_SeaDream = new(uniqueprefix + "VoidSeaDream", true);
 
+        UnlockedSlugcat = new("Slugcat_Void");
+        LockedSlugcat = new("Slugcat_Void_Dark");
+        KarmaDeath = new("karma_death_void");
+        KarmaDeath11 = new("karma_death_void_karma11");
+
+        SelectFPScene = new("placeholder1");
+        SelectEndingScene = new("placeholder2");
     }
 
     public static MenuScene.SceneID SleepSceneID;
     public static MenuScene.SceneID DeathSceneID;
     public static MenuScene.SceneID SleepKarma11ID;
+
+    public static MenuScene.SceneID UnlockedSlugcat;
+    public static MenuScene.SceneID LockedSlugcat;
+    public static MenuScene.SceneID KarmaDeath;
+    public static MenuScene.SceneID KarmaDeath11;
+
+    #region SelectScreenScenes
+    public static MenuScene.SceneID SelectEndingScene;
+    public static MenuScene.SceneID SelectFPScene;
+    #endregion
     #region dreams and dream scenes
     public static MenuScene.SceneID Farm;
     public static MenuScene.SceneID Moon;

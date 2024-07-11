@@ -5,9 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheVoid;
+using VoidTemplate;
 using Unity.IO.LowLevel.Unsafe;
-using static TheVoid.StaticStuff;
+using static VoidTemplate.StaticStuff;
 using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate;

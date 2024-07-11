@@ -1,11 +1,14 @@
 ﻿using HUD;
 using System;
 using System.Runtime.CompilerServices;
-using TheVoid;
+using VoidTemplate;
 using Menu;
 using UnityEngine;
 using System.Linq;
 using SlugBase.SaveData;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace VoidTemplate;
 
@@ -20,17 +23,10 @@ internal static class MenuHooks
         On.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += HideKarmaAndFoodSplitterAndAddText;
         On.HUD.FoodMeter.CharSelectUpdate += HideFoodPips;
         On.Menu.SlugcatSelectMenu.SlugcatPageContinue.GrafUpdate += MakeTextScroll;
-        On.Menu.MenuScene.BuildScene += SceneReplacement;
+        On.Menu.MenuScene.BuildScene += StatisticsSceneReplacement;
         On.SlugcatStats.SlugcatUnlocked += IsVoidUnlocked;
-        On.Menu.MenuScene.BuildScene += ImageIfNotUnlocked;
         On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += TextLabelIfNotUnlocked;
-    }
-    private static void ImageIfNotUnlocked(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
-    {
-        if (self.sceneID == new MenuScene.SceneID("Slugcat_Void") &&
-            !SlugcatStats.SlugcatUnlocked(StaticStuff.TheVoid, RWCustom.Custom.rainWorld))
-            self.sceneID = new MenuScene.SceneID("Slugcat_Void_Dark");
-        orig(self);
+
     }
     private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
     {
@@ -46,20 +42,14 @@ internal static class MenuHooks
         if (slugcatNumber == StaticStuff.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
             self.infoLabel.text = self.menu.Translate("Clear the game as Hunter to unlock.");
     }
-    private static void SceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
+    private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
     {
         if (self.owner.menu is StoryGameStatisticsScreen statscreen && self.sceneID == StaticStuff.SleepSceneID)
         {
-            if (self.owner.menu.manager.rainWorld.progression.GetEndingEncountered()) self.sceneID = StaticStuff.SleepKarma11ID;
+            RainWorld rainWorld = self.menu.manager.rainWorld;
+            SaveState save = rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);
+            if (save.GetEndingEncountered()) self.sceneID = StaticStuff.SleepKarma11ID;
             else self.sceneID = StaticStuff.DeathSceneID;
-        }
-        if( self.owner is SlugcatSelectMenu.SlugcatPageContinue page && page.slugcatNumber == StaticStuff.TheVoid )
-        {
-            //Plugin.logger.LogInfo($"trying to load slugcat page. Progression is {page.menu.manager.rainWorld.progression.GetHashCode()}. Encountered? {page.menu.manager.rainWorld.progression.GetEndingEncountered()}\n" +
-              //  $"does it exist even? {page.menu.manager.rainWorld.progression.miscProgressionData.GetSlugBaseData().TryGet(SaveManager.endingDone, out bool done)} {done}");
-            if (page.menu is SlugcatSelectMenu menu 
-                && menu.saveGameData.TryGetValue(page.slugcatNumber, out var saveGameData)
-                && page.menu.manager.rainWorld.progression.GetEndingEncountered()) self.sceneID = StaticStuff.SleepKarma11ID;
         }
             orig(self);
     }
@@ -80,8 +70,9 @@ internal static class MenuHooks
         orig(self);
         if (self.hud.owner is Menu.SlugcatSelectMenu.SlugcatPageContinue page
             && page.slugcatNumber == StaticStuff.TheVoid
-            && page.menu.manager.rainWorld.progression is PlayerProgression p
-            && (p.GetVoidCatDead() || p.GetEndingEncountered()))
+            && page.menu.manager.rainWorld is RainWorld rainWorld
+            && rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, rainWorld.processManager.menuSetup, false) is SaveState save
+            && (save.GetVoidCatDead() || save.GetEndingEncountered()))
         {
             self.circles.ForEach(ccircle => Array.ForEach(ccircle.circles, c => c.fade = 0));
         }
@@ -90,7 +81,9 @@ internal static class MenuHooks
     private static void HideKarmaAndFoodSplitterAndAddText(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_ctor orig, Menu.SlugcatSelectMenu.SlugcatPageContinue self, Menu.Menu menu, Menu.MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
     {
         orig(self, menu, owner, pageIndex, slugcatNumber);
-        if (slugcatNumber == StaticStuff.TheVoid && menu.manager.rainWorld.progression is PlayerProgression prog && (prog.GetVoidCatDead() || prog.GetEndingEncountered()))
+        if (slugcatNumber == StaticStuff.TheVoid 
+            && menu.manager.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, menu.manager.menuSetup, false) is SaveState save
+            && (save.GetVoidCatDead() || save.GetEndingEncountered()))
         {
             var hud = self.hud;
             foreach (var part in hud.parts)
@@ -121,7 +114,7 @@ internal static class MenuHooks
             {
                 VerticalOffset = 30f;
             }
-            string text = prog.GetEndingEncountered() ? TextIfEnding : TextIfDead;
+            string text = save.GetEndingEncountered() ? TextIfEnding : TextIfDead;
             var textlabel = new MenuLabel(menu, self, text.TranslateStringComplex(), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
             textlabel.label.alignment = FLabelAlignment.Center;
             self.subObjects.Add(textlabel);

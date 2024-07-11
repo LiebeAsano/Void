@@ -10,7 +10,7 @@ using BepInEx.Logging;
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
 
-namespace TheVoid;
+namespace VoidTemplate;
 
 [BepInPlugin(MOD_ID, "TheVoid", "0.0.1")]
 class Plugin : BaseUnityPlugin
@@ -62,6 +62,7 @@ class Plugin : BaseUnityPlugin
                 CreatureHooks.Hook();
                 MenuHooks.Hook();
                 Dreams.Hook();
+                SelectScreenScenes.Hook();
                 if (DevEnabled)
                 {
                     On.RainWorldGame.Update += RainWorldGame_TestUpdate;

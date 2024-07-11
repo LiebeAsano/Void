@@ -14,6 +14,8 @@ public static class SaveManager
     private const string voidCatDead = uniqueprefix + "VoidCatDead";
 
     private const string dream = "Dream";
+    public const string VisitedFP6times = uniqueprefix + "visitedFP6times";
+
 
 
     /// <summary>
@@ -81,11 +83,11 @@ public static class SaveManager
     }
     public static void SetPebblesPearlsEaten(this SaveState save, int amount) => save.miscWorldSaveData.GetSlugBaseData().Set(pebblesPearlsEaten, amount);
 
-    public static bool GetVoidCatDead(this PlayerProgression progression) => progression.miscProgressionData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
-    public static void SetVoidCatDead(this PlayerProgression progression, bool value) => progression.miscProgressionData.GetSlugBaseData().Set(voidCatDead, value);
+    public static bool GetVoidCatDead(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
+    public static void SetVoidCatDead(this SaveState progression, bool value) => progression.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
 
-    public static bool GetEndingEncountered(this PlayerProgression progression) => progression.miscProgressionData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
-    public static void SetEndingEncountered(this PlayerProgression save, bool value) => save.miscProgressionData.GetSlugBaseData().Set(endingDone, value);
+    public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
+    public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);
 
     #region Dreams scheduled/shown
     public static DreamData GetDreamData(this SaveState save, Dream dream)
@@ -100,9 +102,19 @@ public static class SaveManager
     }
     public static void SetDreamData(this SaveState save, Dream dream, DreamData data)
     {
-        save.miscWorldSaveData.GetSlugBaseData().Set(uniqueprefix+dream.ToString() + dream, data);
+        save.miscWorldSaveData.GetSlugBaseData().Set(uniqueprefix+dream.ToString() + SaveManager.dream, data);
     }
+    /// <summary>
+    /// Request dream to be shown next time (if it was already shown, it will enlist it again)
+    /// </summary>
+    /// <param name="save"></param>
+    /// <param name="dream"></param>
     public static void EnlistDreamInShowQueue(this SaveState save, Dream dream) => save.SetDreamData(dream, new DreamData(true));
+    #endregion
+
+    #region SelectScreenProgression
+    public static bool GetVisitedPebblesSixTimes(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(VisitedFP6times, out bool value) && value;
+    public static void SetVisitedPebblesSixTimes(this SaveState save, bool set) => save.miscWorldSaveData.GetSlugBaseData().Set(VisitedFP6times, set);
     #endregion
 
 }

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using TheVoid;
+using VoidTemplate;
 using RWCustom;
 using System.IO;
 using Newtonsoft.Json;

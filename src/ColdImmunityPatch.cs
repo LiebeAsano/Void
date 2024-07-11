@@ -1,4 +1,4 @@
-﻿namespace TheVoid;
+﻿namespace VoidTemplate;
 
 public static class ColdImmunityPatch
 {

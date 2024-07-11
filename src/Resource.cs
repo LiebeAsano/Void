@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Resources;
 using System.Runtime.CompilerServices;
 
-namespace TheVoid.Resource
+namespace VoidTemplate.Resource
 {
     [GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [DebuggerNonUserCode]

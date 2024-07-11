@@ -3,7 +3,7 @@ using System.Linq;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RWCustom;
-using TheVoid;
+using VoidTemplate;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;

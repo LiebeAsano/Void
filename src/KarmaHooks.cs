@@ -5,7 +5,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
-using TheVoid;
+using VoidTemplate;
 using UnityEngine;
 
 namespace VoidTemplate
@@ -43,8 +43,10 @@ namespace VoidTemplate
             if (saveStateNumber == StaticStuff.TheVoid)
             {
                 ForceFailed = false;
-                self.SetVoidCatDead(false);
-                //self.SetEndingEncountered(false);
+                RainWorld rainWorld = self.rainWorld;
+                SaveState save = rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.rainWorld.processManager.menuSetup, false);
+                save.SetVoidCatDead(false);
+                save.SetEndingEncountered(false);
             }
         }
 

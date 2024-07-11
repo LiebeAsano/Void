@@ -1,7 +1,7 @@
 ﻿using System;
 using VoidTemplate;
 using UnityEngine;
-using TheVoid;
+using VoidTemplate;
 
 public static class PlayerSpawnManager
 {

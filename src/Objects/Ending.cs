@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using TheVoid;
+using VoidTemplate;
 
 namespace VoidTemplate.Objects;
 internal class Ending : UpdatableAndDeletable
@@ -75,7 +75,8 @@ internal class Ending : UpdatableAndDeletable
                     {
                         state = State.End;
                         slatedForDeletetion = true;
-                        room.game.rainWorld.progression.SetEndingEncountered(true);
+                        room.game.GetStorySession.saveState.SetEndingEncountered(true);
+                        room.game.rainWorld.progression.SaveWorldStateAndProgression(false);
                         room.game.rainWorld.processManager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
                     }
                     break;

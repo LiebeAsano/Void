@@ -6,7 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using SlugBase.Assets;
-using TheVoid;
+using VoidTemplate;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -103,7 +103,7 @@ namespace VoidTemplate
                 self.sceneOffset = Vector2.zero;
                 self.sceneOffset.x = (1366f - self.menu.manager.rainWorld.options.ScreenSize.x) / 2f;
 
-                var id = menu.saveGameData.karmaCap == 10 ? new MenuScene.SceneID("karma_death_void_karma11") : new MenuScene.SceneID("karma_death_void");
+                var id = menu.saveGameData.karmaCap == 10 ? StaticStuff.KarmaDeath11 : StaticStuff.KarmaDeath;
                 self.slugcatImage = new InteractiveMenuScene(self.menu, self, id);
 
                 self.subObjects.Add(self.slugcatImage);
@@ -189,7 +189,8 @@ namespace VoidTemplate
 
                 self.manager.musicPlayer?.FadeOutAllSongs(20f);
                 self.GetStorySession.saveState.redExtraCycles = true;
-                self.rainWorld.progression.SetVoidCatDead(true);
+                SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.manager.menuSetup, false);
+                save.SetVoidCatDead(true);
                 KarmaHooks.ForceFailed = true;
                 if (ModManager.CoopAvailable)
                 {

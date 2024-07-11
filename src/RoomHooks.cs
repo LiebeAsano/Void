@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using TheVoid;
+using VoidTemplate;
 using VoidTemplate.Objects;
 
 namespace VoidTemplate

@@ -93,7 +93,7 @@ public static class SaveManager
     public static DreamData GetDreamData(this SaveState save, Dream dream)
     {
         var data = save.miscWorldSaveData.GetSlugBaseData();
-        if(!data.TryGet<DreamData>(uniqueprefix + dream.ToString() + dream, out var dreamdata))
+        if(!data.TryGet<DreamData>(uniqueprefix + dream.ToString() + SaveManager.dream, out var dreamdata))
         {
             data.Set(uniqueprefix + dream.ToString() + dream, new DreamData());
             return new DreamData();

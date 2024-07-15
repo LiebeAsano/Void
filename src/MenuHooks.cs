@@ -49,7 +49,7 @@ internal static class MenuHooks
             RainWorld rainWorld = self.menu.manager.rainWorld;
             SaveState save = rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);
             if (save.GetEndingEncountered()) self.sceneID = StaticStuff.SleepKarma11ID;
-            else self.sceneID = StaticStuff.DeathSceneID;
+            else self.sceneID = StaticStuff.StaticDeath;
         }
             orig(self);
     }

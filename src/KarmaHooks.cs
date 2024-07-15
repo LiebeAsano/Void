@@ -18,7 +18,7 @@ namespace VoidTemplate
             IL.SaveState.GhostEncounter += SaveState_GhostEncounterIL;
 
             On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
-            On.StoryGameSession.ctor += StoryGameSession_ctor;
+            //On.StoryGameSession.ctor += StoryGameSession_ctor;
 
             //On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
             On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
@@ -293,7 +293,9 @@ namespace VoidTemplate
             orig(self);
         }
 
-        private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+        //Механика связанная с 11 кармой.
+
+        /*private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
         {
             orig(self, saveStateNumber, game);
             if (self.characterStats.name == StaticStuff.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
@@ -303,6 +305,7 @@ namespace VoidTemplate
                 Debug.Log("Adjust food to hibernate");
             }
         }
+        */
 
         //Механика связанная с 11 кармой.
 

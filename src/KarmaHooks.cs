@@ -266,10 +266,9 @@ namespace VoidTemplate
 
             if (self.saveState?.saveStateNumber == StaticStuff.TheVoid && self.IsSleepScreen)
             {
-                if (self.karmaLadder.displayKarma.y == 10)
-                    sceneID = new MenuScene.SceneID("Sleep_Void_Karma11");
-                else
-                    sceneID = new MenuScene.SceneID("Sleep_Void");
+                if (self.IsStarveScreen) sceneID = StaticStuff.DeathSceneID;
+                else if (self.karmaLadder.displayKarma.y == 10) sceneID = StaticStuff.SleepKarma11ID;
+                else sceneID = StaticStuff.SleepSceneID;
                 Debug.Log($"[The Void] Karma Sleep Scene, Karma : {self.karmaLadder.displayKarma.y}");
             }
             if (sceneID != null && sceneID.Index != -1)

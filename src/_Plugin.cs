@@ -49,9 +49,11 @@ class _Plugin : BaseUnityPlugin
                 On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
                 On.Player.Update += PlayerLungLogic;
                 On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
-                On.ShelterDoor.Close += CycleEndLogic;
+
                 On.Player.Update += MalnourishmentDeath;
                 On.Player.EatMeatUpdate += DontEatVoid;
+
+                CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
                 ColdImmunityPatch.Hook();
                 DeathHooks.Hook();
@@ -87,26 +89,7 @@ class _Plugin : BaseUnityPlugin
 
 
 
-    private void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
-    {
-        orig(self);
-        RainWorldGame game = self.room.game;
-        game.Players.ForEach(absPlayer =>
-        {
-            if (absPlayer.realizedCreature is Player player
-            && player.slugcatStats.name == StaticStuff.TheVoid
-            && player.room != null
-            && player.room == self.room
-            && player.FoodInStomach < player.slugcatStats.foodToHibernate
-            && self.room.game.session is StoryGameSession session
-            && session.characterStats.name == StaticStuff.TheVoid
-            && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
-            {
-                if (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) game.GoToRedsGameOver();
-                else game.GoToStarveScreen();
-            }
-        });
-    }
+
 
     private void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
     {

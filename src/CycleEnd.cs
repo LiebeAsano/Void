@@ -12,7 +12,24 @@ internal static class CycleEnd
     public static void Hook()
     {
         On.ShelterDoor.Close += CycleEndLogic;
+        On.RainWorldGame.Update += RainWorldGame_Update;
     }
+
+    private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
+    {
+        orig(self);
+        if (timerStarted) timer++;
+        if (timer > timeToWait) self.GoToStarveScreen();
+
+    }
+
+    //immutable
+    private const int timeToWait = StaticStuff.TicksPerSecond * 3;
+
+    //mutable
+    private static int timer = 0;
+    private static bool timerStarted;
+
     private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
     {
         orig(self);
@@ -29,6 +46,7 @@ internal static class CycleEnd
             && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
             {
                 if (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) game.GoToRedsGameOver();
+                else timerStarted = true;
             }
         });
     }

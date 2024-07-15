@@ -12,6 +12,7 @@ public static class StaticStuff
         DeathSceneID = new("Death_Void");
         SleepKarma11ID = new("Sleep_Void_Karma11");
         TheVoid = new("TheVoid");
+        StaticDeath = new("Static_Void_Death");
 
         Farm = new("Farm_Dream_Void");
         Moon = new("Moon_Dream_Void");
@@ -50,6 +51,7 @@ public static class StaticStuff
     public static MenuScene.SceneID SleepSceneID;
     public static MenuScene.SceneID DeathSceneID;
     public static MenuScene.SceneID SleepKarma11ID;
+    public static MenuScene.SceneID StaticDeath;
 
     public static MenuScene.SceneID UnlockedSlugcat;
     public static MenuScene.SceneID LockedSlugcat;

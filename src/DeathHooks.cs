@@ -31,7 +31,7 @@ namespace VoidTemplate
 
             IL.Menu.KarmaLadderScreen.GetDataFromGame += KarmaLadderScreen_GetDataFixMSCStupidBug;
 
-            if (Plugin.DevEnabled)
+            if (_Plugin.DevEnabled)
             {
                 On.Menu.KarmaLadder.KarmaSymbol.ctor +=
                     (orig, self, menu, owner, pos, container, foregroundContainer, karma) =>

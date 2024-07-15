@@ -153,7 +153,7 @@ namespace VoidTemplate
             }
             catch (Exception e)
             {
-                Plugin.logger.LogError(e);
+                _Plugin.logger.LogError(e);
                 throw;
             }
         }

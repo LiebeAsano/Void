@@ -13,7 +13,7 @@ using BepInEx.Logging;
 namespace VoidTemplate;
 
 [BepInPlugin(MOD_ID, "TheVoid", "0.0.1")]
-class Plugin : BaseUnityPlugin
+class _Plugin : BaseUnityPlugin
 {
     private const string MOD_ID = "liebeasano.thevoid";
     
@@ -63,6 +63,11 @@ class Plugin : BaseUnityPlugin
                 MenuHooks.Hook();
                 Dreams.Hook();
                 SelectScreenScenes.Hook();
+                On.RainWorldGame.Update += static (orig, self) =>
+                {
+                    orig(self);
+                    if (Input.GetKey(KeyCode.G)) self.world.rainCycle.timer = self.world.rainCycle.cycleLength;
+                };
                 if (DevEnabled)
                 {
                     On.RainWorldGame.Update += RainWorldGame_TestUpdate;

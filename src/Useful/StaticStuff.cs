@@ -44,6 +44,7 @@ public static class StaticStuff
 
         SelectFPScene = new("placeholder1");
         SelectEndingScene = new("placeholder2");
+        SelectKarma5Scene = new("placeholder3");
     }
 
     public static MenuScene.SceneID SleepSceneID;
@@ -58,6 +59,7 @@ public static class StaticStuff
     #region SelectScreenScenes
     public static MenuScene.SceneID SelectEndingScene;
     public static MenuScene.SceneID SelectFPScene;
+    public static MenuScene.SceneID SelectKarma5Scene;
     #endregion
     #region dreams and dream scenes
     public static MenuScene.SceneID Farm;

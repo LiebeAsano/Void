@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using VoidTemplate;
 using static VoidTemplate.StaticStuff;
 using static VoidTemplate.SaveManager;
+using IL.Menu.Remix;
 
 namespace VoidTemplate;
 
@@ -36,6 +37,7 @@ internal static class SelectScreenScenes
             else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
             else if (save.GetEndingEncountered()) self.sceneID = SelectEndingScene;
             else if (save.GetVisitedPebblesSixTimes()) self.sceneID = SelectFPScene;
+            else if (save.deathPersistentSaveData.karmaCap == 4) self.sceneID = SelectKarma5Scene; 
             //if none of them work, the default scene happens, which is default ready to play slugcat
         }
         orig(self);

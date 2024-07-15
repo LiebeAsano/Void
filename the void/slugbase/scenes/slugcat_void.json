@@ -2,6 +2,7 @@
 	"id": "Slugcat_Void",
 	"scene_folder": "slugbase/scenes/slugcat - void",
 	"images": [
+		{"name": "slugcat - screen - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" },
 		{ "name": "slugcat-void", "pos": [440,208], "depth": 3, "shader": "Basic" },
 		{ "name": "fg-void", "pos": [426,195], "depth": 2, "shader": "Basic" }

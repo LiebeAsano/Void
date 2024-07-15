@@ -59,7 +59,7 @@
 		"karma_cap": 0,
 		"the_mark": false,
 		"the_glow": true,
-		"has_dreams": false,
+		"has_dreams": true,
 		"expedition_enabled": true,
 		"guide_overseer": 2,
 		"cycle_length_min": 6,

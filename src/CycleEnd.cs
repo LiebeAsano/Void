@@ -13,9 +13,6 @@ internal static class CycleEnd
     {
         On.ShelterDoor.Close += CycleEndLogic;
     }
-
-    //immutable
-    private const int preStarveTimer;
     private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
     {
         orig(self);

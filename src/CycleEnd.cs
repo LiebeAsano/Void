@@ -22,7 +22,7 @@ internal static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
     {
-        if(self.StoryCharacter == StaticStuff.TheVoid && malnourished)
+        if(self.StoryCharacter == StaticStuff.TheVoid && malnourished)  //while it may seem bad that no orig is summoned while the condition is true, thing is, it's not supposed to be a game win if it's true
         {
             self.GoToDeathScreen();
             return;

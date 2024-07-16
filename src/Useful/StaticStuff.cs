@@ -46,8 +46,10 @@ public static class StaticStuff
         SelectFPScene = new("placeholder1");
         SelectEndingScene = new("placeholder2");
         SelectKarma5Scene = new("placeholder3");
-    }
 
+        Moon_VoidConversation = new("Moon_VoidConversation", true);
+    }
+    #region StandardScenes
     public static MenuScene.SceneID SleepSceneID;
     public static MenuScene.SceneID DeathSceneID;
     public static MenuScene.SceneID SleepKarma11ID;
@@ -57,7 +59,7 @@ public static class StaticStuff
     public static MenuScene.SceneID LockedSlugcat;
     public static MenuScene.SceneID KarmaDeath;
     public static MenuScene.SceneID KarmaDeath11;
-
+    #endregion
     #region SelectScreenScenes
     public static MenuScene.SceneID SelectEndingScene;
     public static MenuScene.SceneID SelectFPScene;
@@ -88,7 +90,9 @@ public static class StaticStuff
     public static DreamsState.DreamID Void_NSHDream;
     public static DreamsState.DreamID Void_SeaDream;
     #endregion
-
+    #region conversations
+    public static Conversation.ID Moon_VoidConversation;
+    #endregion
 
 
     public const string EndingRoomName = "SI_A07";

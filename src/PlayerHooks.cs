@@ -3,11 +3,11 @@ using System.Linq;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RWCustom;
-using VoidTemplate;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using static Room;
+using VoidTemplate.Oracles;
 
 namespace VoidTemplate
 {

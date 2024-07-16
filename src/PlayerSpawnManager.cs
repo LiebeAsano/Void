@@ -1,7 +1,6 @@
 ﻿using System;
 using VoidTemplate;
 using UnityEngine;
-using VoidTemplate;
 
 public static class PlayerSpawnManager
 {

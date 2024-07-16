@@ -41,7 +41,7 @@ static class OracleHooks
     private static void AddEventsByID(On.SLOracleBehaviorHasMark.MoonConversation.orig_AddEvents orig, SLOracleBehaviorHasMark.MoonConversation self)
     {
         orig(self);
-        if (Array.Exists(modSpecificConversations, x => self.id == x)) //if id is from this mod
+        if (Array.Exists(modSpecificConversations, x => self.id == x) || Array.Exists(OracleConversation.MoonVoidConversation, x => self.id == x)) //if id is from this mod
         {
             string path = AssetManager.ResolveFilePath("text/RainWorldLastWishMoonConversations/" + self.id + ".txt"); //look it up in our specific folder
             if (File.Exists(path))
@@ -86,14 +86,14 @@ static class OracleHooks
         {
             self.dialogBox.Interrupt(self.Translate(
                 self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
-                    ? SSConversation.eatInterruptMessages6Step[savestate.GetPebblesPearlsEaten()]
-                    : SSConversation.eatInterruptMessages[savestate.GetPebblesPearlsEaten()]), 10);
+                    ? OracleConversation.eatInterruptMessages6Step[savestate.GetPebblesPearlsEaten()]
+                    : OracleConversation.eatInterruptMessages[savestate.GetPebblesPearlsEaten()]), 10);
             savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
         }
 
     }
 
-    public static class SSConversation
+    public static class OracleConversation
     {
         public static Conversation.ID[] VoidConversation;
         public static Conversation.ID[] MoonVoidConversation;
@@ -101,7 +101,7 @@ static class OracleHooks
         public static int[] cycleLingers = new[] { 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0 };
         public static int[] MooncycleLingers = new[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-        static SSConversation()
+        static OracleConversation()
         {
             VoidConversation = new Conversation.ID[11];
             for (int i = 0; i < VoidConversation.Length; i++)
@@ -167,14 +167,14 @@ static class OracleHooks
             self.dialogBox.NewMessage("...", 10);
             return;
         }
-        if (self.oracle.room.game.session is StoryGameSession session && session.characterStats.name == StaticStuff.TheVoid &&
+        if (self.oracle.room.game.StoryCharacter == StaticStuff.TheVoid &&
             self.State.playerEncountersWithMark <= 0)
         {
             if (self.State.playerEncounters < 0)
             {
                 self.State.playerEncounters = 0;
             }
-            self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(Moon_VoidConversation, self, SLOracleBehaviorHasMark.MiscItemType.NA);
+            if(self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length) self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
             return;
         }
         orig(self);
@@ -184,7 +184,7 @@ static class OracleHooks
     {
         orig(self);
 
-        if (SSConversation.VoidConversation.Contains(self.id))
+        if (OracleConversation.VoidConversation.Contains(self.id))
         {
             if (!self.owner.playerEnteredWithMark)
                 self.events.Add(new Conversation.TextEvent(self, 0, ".  .  . ", 0));
@@ -267,7 +267,7 @@ static class OracleHooks
             var miscData = saveState.miscWorldSaveData;
             var need = miscData.SSaiConversationsHad >= 10
                 ? -1
-                : SSConversation.cycleLingers[miscData.SSaiConversationsHad];
+                : OracleConversation.cycleLingers[miscData.SSaiConversationsHad];
             Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
             if (miscData.SSaiConversationsHad >= 10)
             {
@@ -277,7 +277,7 @@ static class OracleHooks
             else if (miscData.SSaiConversationsHad >= 5 && miscData.SLOracleState.playerEncountersWithMark <= 0 ||
                      miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 5 ||
                      miscData.SSaiConversationsHad == 7 && saveState.deathPersistentSaveData.karmaCap < 8 ||
-                saveState.cycleNumber - saveState.GetLastMeetCycles() < SSConversation.cycleLingers[miscData.SSaiConversationsHad])
+                saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad])
             {
                 self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
             }
@@ -318,7 +318,7 @@ static class OracleHooks
 
     public class SSOracleVoidBehavior : SSOracleBehavior.ConversationBehavior
     {
-        public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, SSConversation.VoidConversation[times - 1])
+        public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.VoidConversation[times - 1])
         {
             if (ModManager.MMF && owner.oracle.room.game.IsStorySession
                                && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked &&
@@ -347,7 +347,7 @@ static class OracleHooks
         {
             if (newAction == MeetVoid_Init && owner.conversation == null)
             {
-                owner.InitateConversation(SSConversation.VoidConversation[MeetTimes - 1], this);
+                owner.InitateConversation(OracleConversation.VoidConversation[MeetTimes - 1], this);
                 base.NewAction(oldAction, newAction);
             }
 
@@ -373,10 +373,10 @@ static class OracleHooks
         c2.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
         {
             if (self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid &&
-                SSConversation.pickInterruptMessages.Length >
+                OracleConversation.pickInterruptMessages.Length >
                 self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1)
             {
-                return SSConversation.pickInterruptMessages[
+                return OracleConversation.pickInterruptMessages[
                     self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1];
             }
 

@@ -22,7 +22,7 @@ internal static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
     {
-        if(self.StoryCharacter == StaticStuff.TheVoid)
+        if(self.StoryCharacter == StaticStuff.TheVoid && malnourished)
         {
             self.GoToDeathScreen();
             return;

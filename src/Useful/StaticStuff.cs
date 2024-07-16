@@ -12,7 +12,7 @@ public static class StaticStuff
         DeathSceneID = new("Death_Void");
         SleepKarma11ID = new("Sleep_Void_Karma11");
         TheVoid = new("TheVoid");
-        StaticDeath = new("Static_Void_Death");
+        StaticDeath = new("Static_Death_Void");
 
         Farm = new("Farm_Dream_Void");
         Moon = new("Moon_Dream_Void");
@@ -45,7 +45,7 @@ public static class StaticStuff
 
         SelectFPScene = new("placeholder1");
         SelectEndingScene = new("placeholder2");
-        SelectKarma5Scene = new("placeholder3");
+        SelectKarma5Scene = new("Scene_Five_Karma_Void");
 
         Moon_VoidConversation = new("Moon_VoidConversation", true);
     }
@@ -97,7 +97,7 @@ public static class StaticStuff
 
     public const string EndingRoomName = "SI_A07";
 
-    public const int TicksPerSecond = 40;
+    public const int TicksPerSecond = 40; 
     public static SlugcatStats.Name TheVoid;
     public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 }

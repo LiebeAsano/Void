@@ -296,6 +296,9 @@ namespace VoidTemplate
             }
 
             var state = player.GetPlayerState(); // Получаем состояние игрока
+            bool isSSRoom = PlayerRoomChecker.IsRoomIDSS_AI(player);
+
+            Debug.Log($"Is Room SS_AI: {isSSRoom}");
 
             player.diveForce = Mathf.Max(0f, player.diveForce - 0.05f);
             player.waterRetardationImmunity = Mathf.InverseLerp(0f, 0.3f, player.diveForce) * 0.85f;
@@ -331,7 +334,7 @@ namespace VoidTemplate
             {
                 UpdateBodyMode_WallClimb(player);
             }
-            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && KarmaCap_Check(player))
+            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && KarmaCap_Check(player) && !isSSRoom)
             {
                 player.bodyMode = BodyModeIndexExtension.CeilCrawl;
                 UpdateBodyMode_CeilCrawl(player);
@@ -679,5 +682,18 @@ namespace VoidTemplate
     {
         public bool IsCeilCrawling { get; set; } = false;
         public float CeilCrawlStartTime { get; set; } = 0f;
+    }
+
+    public class PlayerRoomChecker
+    {
+        public static bool IsRoomIDSS_AI(Player player)
+        {
+            if (player.room != null && player.room.abstractRoom != null)
+            {
+                return player.room.abstractRoom.name == "SS_AI";
+            }
+
+            return false;
+        }
     }
 }

@@ -53,7 +53,7 @@ class _Plugin : BaseUnityPlugin
 
                 On.Player.Update += MalnourishmentDeath;
                 On.Player.EatMeatUpdate += DontEatVoid;
-
+                DisablePassage.Hook();
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
                 ColdImmunityPatch.Hook();

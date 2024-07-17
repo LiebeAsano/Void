@@ -275,8 +275,8 @@ static class OracleHooks
                 self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
             }
             else if (miscData.SSaiConversationsHad >= 5 && miscData.SLOracleState.playerEncountersWithMark <= 0 ||
-                     miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 5 ||
-                     miscData.SSaiConversationsHad == 7 && saveState.deathPersistentSaveData.karmaCap < 8 ||
+                     miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 4 ||
+                     miscData.SSaiConversationsHad == 7 && saveState.deathPersistentSaveData.karmaCap < 7 ||
                 saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad])
             {
                 self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);

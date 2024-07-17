@@ -269,6 +269,9 @@ static class OracleHooks
                 ? -1
                 : OracleConversation.cycleLingers[miscData.SSaiConversationsHad];
             Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+
+            
+
             if (miscData.SSaiConversationsHad >= 10)
             {
                 //Maybe changed
@@ -290,7 +293,9 @@ static class OracleHooks
                 }
                 if (self.currSubBehavior.ID != VoidTalk)
                 {
-                    self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad++;
+                    miscData.SSaiConversationsHad++;
+                    if(miscData.SSaiConversationsHad == 5) saveState.SetVisitedPebblesSixTimes(true);
+                    
                     if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark)
                     {
                         self.NewAction(MeetVoid_Init);

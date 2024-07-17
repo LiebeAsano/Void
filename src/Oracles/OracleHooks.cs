@@ -22,7 +22,6 @@ static class OracleHooks
         IL.SSOracleBehavior.Update += SSOracleBehavior_Update;
     }
     private static void logerr(object e) => _Plugin.logger.LogError(e);
-    private static void loginf(object e) => _Plugin.logger.LogInfo(e);
     #region Moon look up conversation
     /// <summary>
     /// This thing checks the ID that conversation gets when it is created and looks up file in {anymod}/text/RainWorldLastWishMoonConversations/{ID}.txt
@@ -99,7 +98,7 @@ static class OracleHooks
         public static Conversation.ID[] VoidConversation;
         public static Conversation.ID[] MoonVoidConversation;
 
-        public static int[] cycleLingers = new[] { 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0 };
+        public static int[] cycleLingers = new[] { 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0 };
         public static int[] MooncycleLingers = new[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         static OracleConversation()
@@ -261,6 +260,7 @@ static class OracleHooks
         foreach (var player in self.oracle.room.game.Players)
             if (player.realizedCreature is Player)
                 seePeople = true;
+
         if (seePeople && self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid)
         {
             var saveState = self.oracle.room.game.GetStorySession.saveState;
@@ -268,18 +268,16 @@ static class OracleHooks
             var need = miscData.SSaiConversationsHad >= 10
                 ? -1
                 : OracleConversation.cycleLingers[miscData.SSaiConversationsHad];
-            loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+            Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
 
-            
 
-            if (miscData.SSaiConversationsHad >= 10)
+
+            if (miscData.SSaiConversationsHad > 5 && miscData.SLOracleState.playerEncountersWithMark <= 0)
             {
                 //Maybe changed
                 self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
             }
-            else if (miscData.SSaiConversationsHad >= 5 && miscData.SLOracleState.playerEncountersWithMark <= 0 ||
-                     miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 4 ||
-                     miscData.SSaiConversationsHad == 7 && saveState.deathPersistentSaveData.karmaCap < 7 ||
+            else if (miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 4 ||
                 saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad])
             {
                 self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
@@ -294,7 +292,6 @@ static class OracleHooks
                 if (self.currSubBehavior.ID != VoidTalk)
                 {
                     miscData.SSaiConversationsHad++;
-                    
                     if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark)
                     {
                         self.NewAction(MeetVoid_Init);
@@ -310,7 +307,6 @@ static class OracleHooks
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                     }
                 }
-
             }
         }
         else

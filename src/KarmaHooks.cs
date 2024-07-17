@@ -123,7 +123,7 @@ namespace VoidTemplate
                 //    <TO label2
                 //    label
                 //    //this is a bubble for the condition "void and karma 11"
-                //    POP creature.die
+                //    POP creature
                 //    if victim is thevoid stun for 11 seconds
                 //    label2>
                 //}

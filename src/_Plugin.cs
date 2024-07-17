@@ -6,6 +6,7 @@ using System.Security.Permissions;
 using System.Linq;
 using BepInEx.Logging;
 using VoidTemplate.Oracles;
+using VoidTemplate.MenuTinkery;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618

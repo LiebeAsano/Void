@@ -1,7 +1,6 @@
 ﻿using HUD;
 using System;
 using System.Runtime.CompilerServices;
-using VoidTemplate;
 using Menu;
 using UnityEngine;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace VoidTemplate;
+namespace VoidTemplate.MenuTinkery;
 
 internal static class MenuHooks
 {
@@ -51,12 +50,12 @@ internal static class MenuHooks
             if (save.GetEndingEncountered()) self.sceneID = StaticStuff.SleepKarma11ID;
             else self.sceneID = StaticStuff.StaticDeath;
         }
-            orig(self);
+        orig(self);
     }
     private static void MakeTextScroll(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_GrafUpdate orig, SlugcatSelectMenu.SlugcatPageContinue self, float timeStacker)
     {
         orig(self, timeStacker);
-        if(assLabel.TryGetValue(self, out var label))
+        if (assLabel.TryGetValue(self, out var label))
         {
             float scroll = self.Scroll(timeStacker);
             float alpha = self.UseAlpha(timeStacker);
@@ -68,7 +67,7 @@ internal static class MenuHooks
     private static void HideFoodPips(On.HUD.FoodMeter.orig_CharSelectUpdate orig, FoodMeter self)
     {
         orig(self);
-        if (self.hud.owner is Menu.SlugcatSelectMenu.SlugcatPageContinue page
+        if (self.hud.owner is SlugcatSelectMenu.SlugcatPageContinue page
             && page.slugcatNumber == StaticStuff.TheVoid
             && page.menu.manager.rainWorld is RainWorld rainWorld
             && rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, rainWorld.processManager.menuSetup, false) is SaveState save
@@ -81,7 +80,7 @@ internal static class MenuHooks
     private static void HideKarmaAndFoodSplitterAndAddText(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_ctor orig, Menu.SlugcatSelectMenu.SlugcatPageContinue self, Menu.Menu menu, Menu.MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
     {
         orig(self, menu, owner, pageIndex, slugcatNumber);
-        if (slugcatNumber == StaticStuff.TheVoid 
+        if (slugcatNumber == StaticStuff.TheVoid
             && menu.manager.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, menu.manager.menuSetup, false) is SaveState save
             && (save.GetVoidCatDead() || save.GetEndingEncountered()))
         {
@@ -93,7 +92,7 @@ internal static class MenuHooks
                     k.ClearSprites();
                     k.glowSprite.isVisible = false;
                 }
-                if(part is FoodMeter f)
+                if (part is FoodMeter f)
                 {
                     f.ClearSprites();
                     f.initPlopCircle = -1;
@@ -104,11 +103,11 @@ internal static class MenuHooks
                     {
                         compfoodcircle.plopped = false;
                         Array.ForEach(compfoodcircle.circles, circle => circle.visible = false);
-                    });                    
+                    });
                     f.lineSprite.isVisible = false;
                 }
             }
-            int amountOfPageBreaks = Enumerable.Count<char>(TextIfDead, (char f) => f == '\n');
+            int amountOfPageBreaks = TextIfDead.Count((f) => f == '\n');
             float VerticalOffset = 0f;
             if (amountOfPageBreaks > 1)
             {

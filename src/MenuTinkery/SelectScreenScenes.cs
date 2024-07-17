@@ -12,7 +12,7 @@ using static VoidTemplate.StaticStuff;
 using static VoidTemplate.SaveManager;
 using IL.Menu.Remix;
 
-namespace VoidTemplate;
+namespace VoidTemplate.MenuTinkery;
 
 internal static class SelectScreenScenes
 {

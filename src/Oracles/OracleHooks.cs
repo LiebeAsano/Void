@@ -22,6 +22,7 @@ static class OracleHooks
         IL.SSOracleBehavior.Update += SSOracleBehavior_Update;
     }
     private static void logerr(object e) => _Plugin.logger.LogError(e);
+    private static void loginf(object e) => _Plugin.logger.LogInfo(e);
     #region Moon look up conversation
     /// <summary>
     /// This thing checks the ID that conversation gets when it is created and looks up file in {anymod}/text/RainWorldLastWishMoonConversations/{ID}.txt
@@ -260,7 +261,6 @@ static class OracleHooks
         foreach (var player in self.oracle.room.game.Players)
             if (player.realizedCreature is Player)
                 seePeople = true;
-
         if (seePeople && self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid)
         {
             var saveState = self.oracle.room.game.GetStorySession.saveState;
@@ -268,7 +268,7 @@ static class OracleHooks
             var need = miscData.SSaiConversationsHad >= 10
                 ? -1
                 : OracleConversation.cycleLingers[miscData.SSaiConversationsHad];
-            Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+            loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
 
             
 
@@ -294,7 +294,6 @@ static class OracleHooks
                 if (self.currSubBehavior.ID != VoidTalk)
                 {
                     miscData.SSaiConversationsHad++;
-                    if(miscData.SSaiConversationsHad == 5) saveState.SetVisitedPebblesSixTimes(true);
                     
                     if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark)
                     {

@@ -36,7 +36,7 @@ internal static class SelectScreenScenes
             if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
             else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
             else if (save.GetEndingEncountered()) self.sceneID = SelectEndingScene;
-            else if (save.GetVisitedPebblesSixTimes()) self.sceneID = SelectFPScene;
+            else if (save.miscWorldSaveData.SSaiConversationsHad >= 6) self.sceneID = SelectFPScene;
             else if (save.deathPersistentSaveData.karmaCap > 3) self.sceneID = SelectKarma5Scene; 
             //if none of them work, the default scene happens, which is default ready to play slugcat
         }

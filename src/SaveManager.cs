@@ -120,9 +120,4 @@ public static class SaveManager
     public static void EnlistDreamInShowQueue(this SaveState save, Dream dream) => save.SetDreamData(dream, new DreamData(true));
     #endregion
 
-    #region SelectScreenProgression
-    public static bool GetVisitedPebblesSixTimes(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(VisitedFP6times, out bool value) && value;
-    public static void SetVisitedPebblesSixTimes(this SaveState save, bool set) => save.miscWorldSaveData.GetSlugBaseData().Set(VisitedFP6times, set);
-    #endregion
-
 }

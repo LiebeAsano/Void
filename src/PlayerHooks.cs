@@ -298,8 +298,6 @@ namespace VoidTemplate
             var state = player.GetPlayerState(); // Получаем состояние игрока
             bool isSSRoom = PlayerRoomChecker.IsRoomIDSS_AI(player);
 
-            Debug.Log($"Is Room SS_AI: {isSSRoom}");
-
             player.diveForce = Mathf.Max(0f, player.diveForce - 0.05f);
             player.waterRetardationImmunity = Mathf.InverseLerp(0f, 0.3f, player.diveForce) * 0.85f;
 

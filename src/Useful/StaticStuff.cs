@@ -43,8 +43,8 @@ public static class StaticStuff
         KarmaDeath = new("karma_death_void");
         KarmaDeath11 = new("karma_death_void_karma11");
 
-        SelectFPScene = new("placeholder1");
-        SelectEndingScene = new("placeholder2");
+        SelectFPScene = new("Scene_Five_Pebbles_Void");
+        SelectEndingScene = new("Scene_Five_Pebbles_Void");
         SelectKarma5Scene = new("Scene_Five_Karma_Void");
 
         Moon_VoidConversation = new("Moon_VoidConversation", true);

@@ -82,12 +82,12 @@ static class OracleHooks
 
 
         }
-        else
+        else if(amountOfEatenPearls < 11)
         {
             self.dialogBox.Interrupt(self.Translate(
                 self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
-                    ? OracleConversation.eatInterruptMessages6Step[savestate.GetPebblesPearlsEaten()]
-                    : OracleConversation.eatInterruptMessages[savestate.GetPebblesPearlsEaten()]), 10);
+                    ? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
+                    : OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
             savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
         }
 

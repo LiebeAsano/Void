@@ -3,9 +3,11 @@
 	"scene_folder": "slugbase/scenes/scene - five - pebbles - void",
 	"images": [
 		{"name": "scene - five - pebbles - void - flat", "pos": [408,237], "depth": -1.0, "flatmode": true},
-		{ "name": "back", "pos": [433,250], "depth": 4, "shader": "Basic" },
-		{ "name": "ceil", "pos": [433,250], "depth": 3, "shader": "Basic" },
-		{ "name": "void", "pos": [433,250], "depth": 3, "shader": "Basic" },
+		{ "name": "back", "pos": [408,237], "depth": 4, "shader": "Basic" },
+		{ "name": "screen", "pos": [408,237], "depth": 3, "shader": "Basic" },
+		{ "name": "pebbles", "pos": [408,237], "depth": 3, "shader": "Basic" },
+		{ "name": "pearls", "pos": [408,237], "depth": 1.8, "shader": "Basic" },
+		{ "name": "void", "pos": [408,237], "depth": 2.5, "shader": "Basic" },
 		{ "name": "front", "pos": [408,237], "depth": 2, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],

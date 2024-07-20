@@ -1,11 +1,10 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MoreSlugcats;
 using System;
 using System.IO;
 using System.Linq;
-using MoreSlugcats;
 using UnityEngine;
-using static VoidTemplate.SaveManager;
 using static VoidTemplate.StaticStuff;
 
 namespace VoidTemplate.Oracles;
@@ -21,7 +20,8 @@ static class OracleHooks
         On.SLOracleBehaviorHasMark.MoonConversation.AddEvents += AddEventsByID;
         IL.SSOracleBehavior.Update += SSOracleBehavior_Update;
     }
-    private static void logerr(object e) => _Plugin.logger.LogError(e);
+    private static void Logerr(object e) => _Plugin.logger.LogError(e);
+    private static void Loginf(object e) => _Plugin.logger.LogInfo(e);
     #region Moon look up conversation
     /// <summary>
     /// This thing checks the ID that conversation gets when it is created and looks up file in {anymod}/text/RainWorldLastWishMoonConversations/{ID}.txt
@@ -29,13 +29,13 @@ static class OracleHooks
     /// Example: "   5>>I am not sure what this means!   "
     /// </summary>
     #region immutable
-    private static Conversation.ID[] modSpecificConversations = [Moon_VoidConversation];
+    private static readonly Conversation.ID[] modSpecificConversations = [Moon_VoidConversation];
     #endregion
     private static (int, string) ParseLine(string line)
     {
         string[] res = line.Split(new string[] { ">>" }, StringSplitOptions.None);
-        if (res.Length != 2) logerr($"the line \"{line}\" was invalid for parsing (splitting with '>>' resulted in non-two array)");
-        if (!int.TryParse(res[0], out int value)) logerr($"the line \"{line}\" has invalid int number before '>>'");
+        if (res.Length != 2) Logerr($"the line \"{line}\" was invalid for parsing (splitting with '>>' resulted in non-two array)");
+        if (!int.TryParse(res[0], out int value)) Logerr($"the line \"{line}\" has invalid int number before '>>'");
         return (value, res[1]);
     }
     private static void AddEventsByID(On.SLOracleBehaviorHasMark.MoonConversation.orig_AddEvents orig, SLOracleBehaviorHasMark.MoonConversation self)
@@ -53,7 +53,7 @@ static class OracleHooks
                     self.events.Add(new Conversation.TextEvent(self, 0, StaticStuff.TranslateStringComplex(q.Item2), q.Item1));
                 });
             }
-            else logerr($"the path '{path}' has no existing file. No events were loaded.");
+            else Logerr($"the path '{path}' has no existing file. No events were loaded.");
         }
     }
     #endregion
@@ -82,7 +82,7 @@ static class OracleHooks
 
 
         }
-        else if(amountOfEatenPearls < 11)
+        else if (amountOfEatenPearls < 11)
         {
             self.dialogBox.Interrupt(self.Translate(
                 self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
@@ -98,8 +98,8 @@ static class OracleHooks
         public static Conversation.ID[] VoidConversation;
         public static Conversation.ID[] MoonVoidConversation;
 
-        public static int[] cycleLingers = new[] { 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0 };
-        public static int[] MooncycleLingers = new[] { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        public static int[] cycleLingers = [0, 1, 1, 0, 1, 0, 0];
+        public static int[] MooncycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
         static OracleConversation()
         {
@@ -174,7 +174,7 @@ static class OracleHooks
             {
                 self.State.playerEncounters = 0;
             }
-            if(self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length) self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
+            if (self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length) self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
             return;
         }
         orig(self);
@@ -219,11 +219,9 @@ static class OracleHooks
     {
         if (nextAction == MeetVoid_Init)
         {
-            var behaviorID = VoidTalk;
-
             self.inActionCounter = 0;
             self.action = nextAction;
-            if (self.currSubBehavior.ID == behaviorID)
+            if (self.currSubBehavior.ID == VoidTalk)
             {
                 self.currSubBehavior.Activate(self.action, nextAction);
                 return;
@@ -231,7 +229,7 @@ static class OracleHooks
             SSOracleBehavior.SubBehavior subBehavior = null;
             for (int i = 0; i < self.allSubBehaviors.Count; i++)
             {
-                if (self.allSubBehaviors[i].ID == behaviorID)
+                if (self.allSubBehaviors[i].ID == VoidTalk)
                 {
                     subBehavior = self.allSubBehaviors[i];
                     break;
@@ -256,59 +254,57 @@ static class OracleHooks
 
     private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
     {
-        bool seePeople = false;
-        foreach (var player in self.oracle.room.game.Players)
-            if (player.realizedCreature is Player)
-                seePeople = true;
-
-        if (seePeople && self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid)
+        if (self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid
+            && self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
         {
             var saveState = self.oracle.room.game.GetStorySession.saveState;
             var miscData = saveState.miscWorldSaveData;
-            var need = miscData.SSaiConversationsHad >= 10
-                ? -1
-                : OracleConversation.cycleLingers[miscData.SSaiConversationsHad];
-            Debug.Log($"[The Void] HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+            var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
+                ? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
+                : -1;
+            Loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
 
-
-
-            if (miscData.SSaiConversationsHad >= 10)
+            switch (miscData.SSaiConversationsHad)
             {
-                //Maybe changed
-                self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-            }
-            else if ((miscData.SSaiConversationsHad >= 5 && miscData.SLOracleState.playerEncountersWithMark <= 0) ||
-                           (miscData.SSaiConversationsHad == 3 && saveState.deathPersistentSaveData.karmaCap < 5) ||
-                           (miscData.SSaiConversationsHad == 7 && saveState.deathPersistentSaveData.karmaCap < 8) ||
-                saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad])
-            {
-                self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-            }
-            else if (self.action != MeetVoid_Init)
-            {
-                saveState.SetLastMeetCycles(saveState.cycleNumber);
-                if (self.timeSinceSeenPlayer < 0)
-                {
-                    self.timeSinceSeenPlayer = 0;
-                }
-                if (self.currSubBehavior.ID != VoidTalk)
-                {
-                    miscData.SSaiConversationsHad++;
-                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark)
+                case 0:
                     {
-                        self.NewAction(MeetVoid_Init);
-                        self.SlugcatEnterRoomReaction();
-                        self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-
-                    }
-                    else
-                    {
+                        miscData.SSaiConversationsHad++;
                         self.NewAction(SSOracleBehavior.Action.General_GiveMark);
                         self.afterGiveMarkAction = MeetVoid_Init;
                         self.SlugcatEnterRoomReaction();
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                        break;
                     }
-                }
+                case 3:
+                case < 7 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
+                case 5 when miscData.SLOracleState.playerEncountersWithMark <= 0:
+                case 7:
+                    {
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        break;
+                    }
+                case 10:
+                    {
+                        //Maybe changed
+                        self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                        break;
+                    }
+                default:
+                    {
+                        if (self.action != MeetVoid_Init)
+                        {
+                            saveState.SetLastMeetCycles(saveState.cycleNumber);
+                            if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;
+                            if (self.currSubBehavior.ID != VoidTalk)
+                            {
+                                miscData.SSaiConversationsHad++;
+                                self.NewAction(MeetVoid_Init);
+                                self.SlugcatEnterRoomReaction();
+                                self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                            }
+                        }
+                        break;
+                    }
             }
         }
         else

@@ -3,7 +3,7 @@
 	"scene_folder": "slugbase/scenes/scene - five - karma - void",
 	"images": [
 		{"name": "scene - five - karma - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "back", "pos": [433,250], "depth": 4, "shader": "Basic" },
+		{ "name": "back", "pos": [433,250], "depth": 9, "shader": "Basic" },
 		{ "name": "ceil", "pos": [433,250], "depth": 3, "shader": "Basic" },
 		{ "name": "void", "pos": [433,250], "depth": 3, "shader": "Basic" },
 		{ "name": "front", "pos": [408,237], "depth": 2, "shader": "Basic" }

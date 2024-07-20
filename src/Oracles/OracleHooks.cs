@@ -98,7 +98,7 @@ static class OracleHooks
         public static Conversation.ID[] VoidConversation;
         public static Conversation.ID[] MoonVoidConversation;
 
-        public static int[] cycleLingers = [0, 1, 1, 0, 1, 0, 0];
+        public static int[] cycleLingers = [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0];
         public static int[] MooncycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
         static OracleConversation()
@@ -275,10 +275,9 @@ static class OracleHooks
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                         break;
                     }
-                case 3:
-                case < 7 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
+                case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
+                case < 5 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
                 case 5 when miscData.SLOracleState.playerEncountersWithMark <= 0:
-                case 7:
                     {
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
                         break;

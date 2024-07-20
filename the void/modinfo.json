@@ -1,7 +1,7 @@
 ﻿{
 	"id": "thevoid.liebeasano",
 	"name": "Rain world: Last Wish",
-	"version": "0.8.1",
+	"version": "0.9.1",
 	"authors": "Liebe Asano",
 	"description": "",
 	"requirements": ["moreslugcats", "slime-cubed.slugbase"],

@@ -10,9 +10,9 @@ public static class StaticStuff
     {
         SleepSceneID = new("Sleep_Void");
         DeathSceneID = new("Death_Void");
-        SleepKarma11ID = new("Sleep_Void_Karma11");
         TheVoid = new("TheVoid");
         StaticDeath = new("Static_Death_Void");
+        StaticEnd = new("Static_End_Scene_Void");
 
         Farm = new("Farm_Dream_Void");
         Moon = new("Moon_Dream_Void");
@@ -44,7 +44,7 @@ public static class StaticStuff
         KarmaDeath11 = new("karma_death_void_karma11");
 
         SelectFPScene = new("Scene_Five_Pebbles_Void");
-        SelectEndingScene = new("Scene_Five_Pebbles_Void");
+        SelectEndingScene = new("End_Scene_Void");
         SelectKarma5Scene = new("Scene_Five_Karma_Void");
 
         Moon_VoidConversation = new("Moon_VoidConversation", true);
@@ -52,7 +52,7 @@ public static class StaticStuff
     #region StandardScenes
     public static MenuScene.SceneID SleepSceneID;
     public static MenuScene.SceneID DeathSceneID;
-    public static MenuScene.SceneID SleepKarma11ID;
+    public static MenuScene.SceneID StaticEnd;
     public static MenuScene.SceneID StaticDeath;
 
     public static MenuScene.SceneID UnlockedSlugcat;

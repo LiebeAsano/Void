@@ -98,7 +98,7 @@ static class OracleHooks
         public static Conversation.ID[] VoidConversation;
         public static Conversation.ID[] MoonVoidConversation;
 
-        public static int[] cycleLingers = [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0];
+        public static int[] cycleLingers = [0, 1, 0, 1, 1, 0, 2, 2, 2, 2, 0];
         public static int[] MooncycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
         static OracleConversation()
@@ -282,7 +282,8 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
                         break;
                     }
-                case 10:
+                case > 4 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
+                case > 10:
                     {
                         //Maybe changed
                         self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);

@@ -37,9 +37,13 @@ internal static class MenuHooks
     }
     private static void TextLabelIfNotUnlocked(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
     {
+        if(slugcatNumber == StaticStuff.TheVoid && SlugBase.SlugBaseCharacter.TryGet(slugcatNumber, out var character))
+        {
+            character.Description = (menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber) ?
+                "An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world."
+                : "Clear the game as Hunter to unlock.";
+        }
         orig(self, menu, owner, pageIndex, slugcatNumber);
-        if (slugcatNumber == StaticStuff.TheVoid && !(menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber))
-            self.infoLabel.text = self.menu.Translate("Clear the game as Hunter to unlock.");
     }
     private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
     {

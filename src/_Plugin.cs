@@ -140,7 +140,7 @@ class _Plugin : BaseUnityPlugin
     }
 
 
-
+    const int tailSpriteIndex = 2;
 
     private void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
@@ -148,15 +148,28 @@ class _Plugin : BaseUnityPlugin
         if (self.player.slugcatStats.name != StaticStuff.TheVoid) return;
         foreach (var sprite in sLeaser.sprites)
         {
-            if (sprite.element.name.StartsWith("Tail"))
+            if (sLeaser.sprites[tailSpriteIndex] is TriangleMesh tail)
             {
-                string tail =
-                    self.player.abstractCreature.world.game.session is StoryGameSession session &&
-                    session.saveState.deathPersistentSaveData.karma == 10
-                        ? "TheVoid11-"
-                        : "TheVoid-";
-                if (Futile.atlasManager.DoesContainElementWithName(tail + sprite.element.name))
-                    sprite.element = Futile.atlasManager.GetElementWithName(tail + sprite.element.name);
+                tail.element = Futile.atlasManager.GetElementWithName("TheVoid-StuntTail");
+                tail.color = new(1f, 0.86f, 0f);
+                for (var i = tail.vertices.Length - 1; i >= 0; i--)
+                {
+                    var perc = i / 2 / (float)(tail.vertices.Length / 2);
+
+                    Vector2 uv;
+                    if (i % 2 == 0)
+                        uv = new Vector2(perc, 0f);
+                    else if (i < tail.vertices.Length - 1)
+                        uv = new Vector2(perc, 1f);
+                    else
+                        uv = new Vector2(1f, 0f);
+
+                    // Map UV values to the element
+                    uv.x = Mathf.Lerp(tail.element.uvBottomLeft.x, tail.element.uvTopRight.x, uv.x);
+                    uv.y = Mathf.Lerp(tail.element.uvBottomLeft.y, tail.element.uvTopRight.y, uv.y);
+
+                    tail.UVvertices[i] = uv;
+                }
             }
             if (sprite.element.name.StartsWith("Face"))
             {

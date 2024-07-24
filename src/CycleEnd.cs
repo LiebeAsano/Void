@@ -94,7 +94,7 @@ internal static class CycleEnd
             && session.characterStats.name == StaticStuff.TheVoid
             && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
             {
-                if (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10) game.GoToRedsGameOver();
+                if (session.saveState.deathPersistentSaveData.karma == 0) game.GoToRedsGameOver();
                 //else timerStarted = true;
             }
         });

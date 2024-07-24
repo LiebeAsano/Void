@@ -187,7 +187,7 @@ static class OracleHooks
         if (OracleConversation.VoidConversation.Contains(self.id))
         {
             if (!self.owner.playerEnteredWithMark)
-                self.events.Add(new Conversation.TextEvent(self, 0, ".  .  . ", 0));
+                self.events.Add(new Conversation.TextEvent(self, 0, ". . .", 0));
             else
                 self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
 
@@ -212,8 +212,6 @@ static class OracleHooks
             }
         }
     }
-
-
 
     private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
     {

@@ -14,7 +14,7 @@ namespace VoidTemplate.MenuTinkery;
 internal static class MenuHooks
 {
     private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
-    private const string TextIfEnding = "there is another text here surprisingly";
+    private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
     static ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
     {

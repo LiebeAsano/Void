@@ -73,7 +73,7 @@ class _Plugin : BaseUnityPlugin
                 };
                 if (DevEnabled)
                 {
-                    On.RainWorldGame.Update += RainWorldGame_TestUpdate;
+                    //On.RainWorldGame.Update += RainWorldGame_TestUpdate;
                 }
                 LoadResources();
                 ModLoaded = true;
@@ -148,21 +148,25 @@ class _Plugin : BaseUnityPlugin
         if (self.player.slugcatStats.name != StaticStuff.TheVoid) return;
         foreach (var sprite in sLeaser.sprites)
         {
-            if (sprite.element.name.StartsWith("PlayerArm") ||
-                sprite.element.name.StartsWith("Body") ||
-                sprite.element.name.StartsWith("Face") ||
-                sprite.element.name.StartsWith("Head") ||
-                sprite.element.name.StartsWith("Hips") ||
-                sprite.element.name.StartsWith("Leg") ||
-                sprite.element.name.StartsWith("OnTopOfTerrainHand"))
+            if (sprite.element.name.StartsWith("Tail"))
             {
-                string head =
+                string tail =
                     self.player.abstractCreature.world.game.session is StoryGameSession session &&
                     session.saveState.deathPersistentSaveData.karma == 10
                         ? "TheVoid11-"
                         : "TheVoid-";
-                if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-                    sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+                if (Futile.atlasManager.DoesContainElementWithName(tail + sprite.element.name))
+                    sprite.element = Futile.atlasManager.GetElementWithName(tail + sprite.element.name);
+            }
+            if (sprite.element.name.StartsWith("Face"))
+            {
+                string face =
+                    self.player.abstractCreature.world.game.session is StoryGameSession session &&
+                    session.saveState.deathPersistentSaveData.karma == 10
+                        ? "TheVoid11-"
+                        : "TheVoid-";
+                if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                    sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
             }
         }
     }
@@ -183,7 +187,7 @@ class _Plugin : BaseUnityPlugin
     }
 
 
-    private static void RainWorldGame_TestUpdate(On.RainWorldGame.orig_Update orig, RainWorldGame self)
+    /*private static void RainWorldGame_TestUpdate(On.RainWorldGame.orig_Update orig, RainWorldGame self)
     {
         orig(self);
         if (self.session is StoryGameSession session &&
@@ -233,6 +237,6 @@ class _Plugin : BaseUnityPlugin
 
             }
         }
-    }
+    }*/
 
 }

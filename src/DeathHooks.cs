@@ -11,11 +11,13 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using System.Threading;
 using System.Timers;
+using System.Diagnostics;
 
 namespace VoidTemplate;
 
 static class DeathHooks
 {
+    static void logerr(object e) => _Plugin.logger.LogError(e);
     public static void Hook()
     {
         On.RainWorldGame.GameOver += GenericGameOver;
@@ -29,6 +31,7 @@ static class DeathHooks
         
 
         IL.Menu.KarmaLadderScreen.GetDataFromGame += KarmaLadderScreen_GetDataFixMSCStupidBug;
+        IL.HUD.TextPrompt.Update += TextPrompt_Update;
 
         if (_Plugin.DevEnabled)
         {
@@ -36,10 +39,32 @@ static class DeathHooks
                 (orig, self, menu, owner, pos, container, foregroundContainer, karma) =>
                 {
                     orig(self, menu, owner, pos, container, foregroundContainer, karma);
-                    Debug.Log(
+                    UnityEngine.Debug.Log(
                         $"[The Void] {karma}, {(menu as KarmaLadderScreen).karma}, {(menu as KarmaLadderScreen).preGhostEncounterKarmaCap}");
                 };
         }
+    }
+
+    private static void TextPrompt_Update(ILContext il)
+    {
+        ILCursor c = new(il);
+        var bubbleStart = c.DefineLabel();
+        var bubbleEnd = c.DefineLabel();
+        if (c.TryGotoNext(MoveType.Before, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
+        {
+            c.Emit(OpCodes.Dup);
+            c.EmitDelegate<Func<RainWorldGame, bool>>(VoidSpecificGameOverCondition);
+            c.Emit(OpCodes.Brtrue, bubbleStart);
+        }
+        else logerr("IL failed to match.\n" + new StackTrace().ToString());
+        if(c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
+        {
+            c.Emit(OpCodes.Br, bubbleEnd);
+            c.MarkLabel(bubbleStart);
+            c.EmitDelegate((RainWorldGame game) => game.GoToRedsGameOver());
+            c.MarkLabel(bubbleEnd);
+        }
+        else logerr("IL failed to match.\n" + new StackTrace().ToString());
     }
 
     private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)
@@ -62,50 +87,6 @@ static class DeathHooks
             });
         }
 
-    }
-
-    private static void SlugcatPage_AddImage(On.Menu.SlugcatSelectMenu.SlugcatPage.orig_AddImage orig, SlugcatSelectMenu.SlugcatPage self, bool ascended)
-    {
-        if (self.slugcatNumber == StaticStuff.TheVoid && self is SlugcatSelectMenu.SlugcatPageContinue menu &&
-            menu.saveGameData.redsExtraCycles)
-        {
-            self.imagePos = new Vector2(683f, 484f);
-            self.slugcatDepth = 3f;
-            self.sceneOffset = Vector2.zero;
-            self.sceneOffset.x = (1366f - self.menu.manager.rainWorld.options.ScreenSize.x) / 2f;
-
-            var id = menu.saveGameData.karmaCap == 10 ? StaticStuff.KarmaDeath11 : StaticStuff.KarmaDeath;
-            self.slugcatImage = new InteractiveMenuScene(self.menu, self, id);
-
-            self.subObjects.Add(self.slugcatImage);
-
-            if (CustomScene.Registry.TryGet(id, out var customScene))
-            {
-                self.markOffset = (customScene.MarkPos ?? self.markOffset);
-                self.glowOffset = (customScene.GlowPos ?? self.glowOffset);
-                self.sceneOffset = (customScene.SelectMenuOffset ?? self.sceneOffset);
-                self.slugcatDepth = (customScene.SlugcatDepth ?? self.slugcatDepth);
-            }
-            if (self.HasMark)
-            {
-                self.markSquare = new FSprite("pixel")
-                {
-                    scale = 14f,
-                    color = Color.Lerp(self.effectColor, Color.white, 0.7f)
-                };
-                self.Container.AddChild(self.markSquare);
-                self.markGlow = new FSprite("Futile_White")
-                {
-                    shader = self.menu.manager.rainWorld.Shaders["FlatLight"],
-                    color = self.effectColor
-                };
-                self.Container.AddChild(self.markGlow);
-            }
-
-            return;
-        }
-
-        orig(self, ascended);
     }
 
     private static void PulsateKarmaSymbol(On.Menu.KarmaLadder.KarmaSymbol.orig_Update orig, KarmaLadder.KarmaSymbol self)

@@ -15,7 +15,7 @@ internal static class MenuHooks
 {
     private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
     private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
-    static ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
+    private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
     {
         //when voidcat is dead, those hide useless hud
@@ -47,7 +47,7 @@ internal static class MenuHooks
     }
     private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
     {
-        if (self.owner.menu is StoryGameStatisticsScreen statscreen && self.sceneID == StaticStuff.SleepSceneID)
+        if (self.owner.menu is StoryGameStatisticsScreen && self.sceneID == StaticStuff.SleepSceneID)
         {
             RainWorld rainWorld = self.menu.manager.rainWorld;
             SaveState save = rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);

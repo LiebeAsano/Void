@@ -66,11 +66,6 @@ class _Plugin : BaseUnityPlugin
                 MenuHooks.Hook();
                 Dreams.Hook();
                 SelectScreenScenes.Hook();
-                On.RainWorldGame.Update += static (orig, self) =>
-                {
-                    orig(self);
-                    if (Input.GetKey(KeyCode.G)) self.world.rainCycle.timer = self.world.rainCycle.cycleLength;
-                };
                 if (DevEnabled)
                 {
                     //On.RainWorldGame.Update += RainWorldGame_TestUpdate;
@@ -148,7 +143,9 @@ class _Plugin : BaseUnityPlugin
         if (self.player.slugcatStats.name != StaticStuff.TheVoid) return;
         foreach (var sprite in sLeaser.sprites)
         {
-            if (sLeaser.sprites[tailSpriteIndex] is TriangleMesh tail)
+            if (sLeaser.sprites[tailSpriteIndex] is TriangleMesh tail &&
+            self.player.abstractCreature.world.game.session is StoryGameSession session &&
+            session.saveState.deathPersistentSaveData.karma == 10)
             {
                 tail.element = Futile.atlasManager.GetElementWithName("TheVoid-StuntTail");
                 tail.color = new(1f, 0.86f, 0f);
@@ -174,8 +171,8 @@ class _Plugin : BaseUnityPlugin
             if (sprite.element.name.StartsWith("Face"))
             {
                 string face =
-                    self.player.abstractCreature.world.game.session is StoryGameSession session &&
-                    session.saveState.deathPersistentSaveData.karma == 10
+                    self.player.abstractCreature.world.game.session is StoryGameSession session2 &&
+                    session2.saveState.deathPersistentSaveData.karma == 10
                         ? "TheVoid11-"
                         : "TheVoid-";
                 if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))

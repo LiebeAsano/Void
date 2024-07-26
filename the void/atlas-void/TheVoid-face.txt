@@ -159,6 +159,166 @@
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA0.png":
+{
+	"frame": {"x":2,"y":2,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA1.png":
+{
+	"frame": {"x":50,"y":2,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA2.png":
+{
+	"frame": {"x":98,"y":2,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA3.png":
+{
+	"frame": {"x":146,"y":2,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA4.png":
+{
+	"frame": {"x":194,"y":2,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA5.png":
+{
+	"frame": {"x":2,"y":52,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA6.png":
+{
+	"frame": {"x":50,"y":52,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA7.png":
+{
+	"frame": {"x":98,"y":52,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceA8.png":
+{
+	"frame": {"x":146,"y":52,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB0.png":
+{
+	"frame": {"x":194,"y":52,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB1.png":
+{
+	"frame": {"x":2,"y":102,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB2.png":
+{
+	"frame": {"x":50,"y":102,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB3.png":
+{
+	"frame": {"x":98,"y":102,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB4.png":
+{
+	"frame": {"x":146,"y":102,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB5.png":
+{
+	"frame": {"x":194,"y":102,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB6.png":
+{
+	"frame": {"x":2,"y":152,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB7.png":
+{
+	"frame": {"x":50,"y":152,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceB8.png":
+{
+	"frame": {"x":98,"y":152,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceDead.png":
+{
+	"frame": {"x":146,"y":152,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
+},
+"TheVoid11-FaceStunned.png":
+{
+	"frame": {"x":194,"y":152,"w":46,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
+	"sourceSize": {"w":46,"h":48}
 }},
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",

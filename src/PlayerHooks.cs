@@ -61,6 +61,7 @@ namespace VoidTemplate
                 && creature.Template.type != CreatureTemplate.Type.MirosBird
                 && creature.Template.type != CreatureTemplate.Type.RedLizard
                 && creature.Template.type != CreatureTemplate.Type.KingVulture
+                && creature.Template.type != CreatureTemplate.Type.Centipede
                 && creature.Template.type != CreatureTemplate.Type.RedCentipede
                 && creature.Template.type != CreatureTemplate.Type.TempleGuard
                 && creature.Template.type != CreatureTemplate.Type.Deer)
@@ -167,8 +168,14 @@ namespace VoidTemplate
                     {
 
                         orig(self, grasp);
-
-                        self.AddFood(2);
+                        if (self.Karma != 10)
+                        {
+                            self.AddFood(2);
+                        }
+                        else
+                        {
+                            self.AddFood(4);
+                        }
 
                         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                         {
@@ -182,9 +189,15 @@ namespace VoidTemplate
 
                         orig(self, grasp);
 
-                        self.AddQuarterFood();
-                        self.AddQuarterFood();
-
+                        if (self.Karma != 10)
+                        {
+                            self.AddQuarterFood();
+                            self.AddQuarterFood();
+                        }
+                        else
+                        {
+                            self.AddFood(1);
+                        }
                         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                         {
                             self.objectInStomach.Destroy();
@@ -207,7 +220,7 @@ namespace VoidTemplate
 
             orig(self, grasp);
 
-            if (self.slugcatStats.name == StaticStuff.TheVoid && self.Karma != 10 && self.objectInStomach != null)
+            if (self.slugcatStats.name == StaticStuff.TheVoid && self.objectInStomach != null)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
@@ -255,7 +268,8 @@ namespace VoidTemplate
                 bool isDiagonal = (slopeDirection_0 == SlopeDirection.UpLeft ||
                            slopeDirection_0 == SlopeDirection.UpRight ||
                            slopeDirection_0 == SlopeDirection.DownLeft ||
-                           slopeDirection_0 == SlopeDirection.DownRight || slopeDirection_1 == SlopeDirection.UpLeft ||
+                           slopeDirection_0 == SlopeDirection.DownRight || 
+                           slopeDirection_1 == SlopeDirection.UpLeft ||
                            slopeDirection_1 == SlopeDirection.UpRight ||
                            slopeDirection_1 == SlopeDirection.DownLeft ||
                            slopeDirection_1 == SlopeDirection.DownRight);

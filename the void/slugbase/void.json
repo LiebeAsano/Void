@@ -55,8 +55,8 @@
 		"can_maul": true,
 		"perma_unlock_gates": false,
 		"maul_damage": 6,
-		"karma": 9,
-		"karma_cap": 9,
+		"karma": 10,
+		"karma_cap": 10,
 		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": true,
@@ -72,8 +72,8 @@
 		"diet": {
 			"base": "White",
 			"corpses": 0.5,
-			"plants": 0.25,
 			"meat": 0.5,
+			"plants": 0.25,
 			"overrides": {
 				"Fly" : 0.25
 			}

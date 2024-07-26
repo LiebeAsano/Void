@@ -18,9 +18,7 @@ namespace VoidTemplate
             IL.SaveState.GhostEncounter += SaveState_GhostEncounterIL;
 
             On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
-            //On.StoryGameSession.ctor += StoryGameSession_ctor;
 
-            //On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
             On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
             On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 
@@ -35,6 +33,10 @@ namespace VoidTemplate
 
             On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
 
+            // Механики 11 кармы.
+
+            On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
+            On.StoryGameSession.ctor += StoryGameSession_ctor;
         }
 
         private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
@@ -294,32 +296,47 @@ namespace VoidTemplate
 
         //Механика связанная с 11 кармой.
 
-        /*private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+        private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
         {
             orig(self, saveStateNumber, game);
             if (self.characterStats.name == StaticStuff.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
             {
                 self.characterStats.foodToHibernate = 6;
                 self.characterStats.maxFood = 9;
-                Debug.Log("Adjust food to hibernate");
             }
         }
-        */
+
 
         //Механика связанная с 11 кармой.
 
-        /*private static int SlugcatStats_NourishmentOfObjectEaten(On.SlugcatStats.orig_NourishmentOfObjectEaten orig, SlugcatStats.Name slugcatIndex, IPlayerEdible eatenobject)
+        private static int SlugcatStats_NourishmentOfObjectEaten(On.SlugcatStats.orig_NourishmentOfObjectEaten orig, SlugcatStats.Name slugcatIndex, IPlayerEdible eatenobject)
         {
+
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
-                session.characterStats.name == StaticStuff.TheVoid && session.saveState.deathPersistentSaveData.karma == 10)
+                session.characterStats.name == StaticStuff.TheVoid &&
+                session.saveState.deathPersistentSaveData.karma == 10)
             {
-                return orig(slugcatIndex, eatenobject) * 2;
+
+                string objectId = eatenobject.ToString();
+
+                Debug.Log("Object ID: " + objectId);
+
+                if (objectId is "Fly" or "DangleFruit" or "WaterNut" or
+                    "SlimeMold" or "SSOracleSwarmer" or "MoreSlugcats.GooieDuck" or
+                    "MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
+                    "MoreSlugcats.Seed" or "MoreSlugcats.FireEgg")
+                {
+                    return orig(slugcatIndex, eatenobject);
+                }
+                else
+                {
+                    return orig(slugcatIndex, eatenobject) * 2;
+                }
             }
 
             return orig(slugcatIndex, eatenobject);
-        }*/
-
+        }
 
         private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
         {

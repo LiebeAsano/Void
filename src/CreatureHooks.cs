@@ -57,15 +57,16 @@ static class CreatureHooks
             self.Die();
         }
     }
-    private static void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
+    private static async void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
     {
         if (self is Player player
             && player.slugcatStats.name == StaticStuff.TheVoid
             && type == DamageType.Stab)
         {
-            int KarmaCap = player.KarmaCap;// Уменьшаем эффект оглушения
-            float StunResistance = 1f - 0.09f * KarmaCap;
-            float DamageResistance = 1f - 0.09f * KarmaCap;
+            int Karma = player.Karma;// Уменьшаем эффект оглушения
+            float StunResistance = 1f - 0.09f * Karma;
+            float DamageResistance = 1f - 0.09f * Karma;
+            await Task.Delay(11000);
             stunBonus *= StunResistance;
             damage *= DamageResistance;
         }

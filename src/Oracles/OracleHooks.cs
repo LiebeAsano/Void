@@ -275,6 +275,16 @@ static class OracleHooks
                     }
                 case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
                 case < 5 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
+                    {
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        break;
+                    }
+                case 5 when miscData.SLOracleState.neuronsLeft < 5:
+                    {
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+                        
+                        break;
+                    }
                 case 5 when miscData.SLOracleState.playerEncountersWithMark <= 0:
                     {
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
@@ -323,8 +333,6 @@ static class OracleHooks
                 oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
                 oracle.room.world.rainCycle.dayNightCounter = 0;
             }
-
-
         }
 
         public override void Update()

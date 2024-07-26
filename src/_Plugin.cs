@@ -60,6 +60,7 @@ class _Plugin : BaseUnityPlugin
                 DeathHooks.Hook();
                 PlayerHooks.Hook();
                 OracleHooks.Hook();
+                //NewOracles.Hook();
                 KarmaHooks.Hook();
                 RoomHooks.Hook();
                 CreatureHooks.Hook();

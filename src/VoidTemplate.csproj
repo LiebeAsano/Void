@@ -10,6 +10,14 @@
             <Private>false</Private>
         </Reference>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="Oracles\NewOracles.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Include="Oracles\NewOracles.cs" />
+    </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>

@@ -66,6 +66,7 @@ class _Plugin : BaseUnityPlugin
                 MenuHooks.Hook();
                 Dreams.Hook();
                 SelectScreenScenes.Hook();
+                EdibleChanges.Hook();
                 if (DevEnabled)
                 {
                     //On.RainWorldGame.Update += RainWorldGame_TestUpdate;

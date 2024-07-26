@@ -4,14 +4,9 @@ namespace VoidTemplate
 {
     internal class Texture
     {
-        public class PlayerGraphics : GraphicsModule
+        public class PlayerGraphics(PhysicalObject owner, bool internalContainers) : GraphicsModule(owner, internalContainers)
         {
             public GenericBodyPart legs;
-
-            public PlayerGraphics(PhysicalObject owner, bool internalContainers) : base(owner, internalContainers)
-            {
-
-            }
 
             public override void Update()
             {

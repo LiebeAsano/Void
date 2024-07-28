@@ -132,7 +132,8 @@ namespace VoidTemplate
         private static void NoForceSleep(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
-            if (self.slugcatStats.name == StaticStuff.TheVoid)   self.forceSleepCounter = 0;
+            if (self.slugcatStats.name == StaticStuff.TheVoid)   
+                self.forceSleepCounter = 0;
         }
 
         private static bool KarmaCap_Check(Player self)
@@ -517,6 +518,10 @@ namespace VoidTemplate
             }
 
             // Логика для лазания по стенам
+
+            BodyChunk body_chunk_0 = player.bodyChunks[0];
+            BodyChunk body_chunk_1 = player.bodyChunks[1];
+
             if (player.bodyMode == Player.BodyModeIndex.WallClimb)
             {
                 if (player.input[0].y > 0)
@@ -526,8 +531,11 @@ namespace VoidTemplate
                 }
                 else
                 {
-                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
-                    player_graphics.objectLooker.timeLookingAtThis = 6;
+                    if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+                    {
+                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
+                        player_graphics.objectLooker.timeLookingAtThis = 6;
+                    }
                 }
                 player.animationFrame++;
 

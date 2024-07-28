@@ -62,7 +62,7 @@ public static class SaveManager
     #endregion
 
     public static bool GetVoidCatDead(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
-    public static void SetVoidCatDead(this SaveState progression, bool value) => progression.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
+    public static void SetVoidCatDead(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
 
     public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
     public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);

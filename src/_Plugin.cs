@@ -57,7 +57,7 @@ class _Plugin : BaseUnityPlugin
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
                 ColdImmunityPatch.Hook();
-                DeathHooks.Hook();
+                PermadeathConditions.Hook();
                 PlayerHooks.Hook();
                 OracleHooks.Hook();
                 KarmaHooks.Hook();

@@ -15,14 +15,13 @@ using System.Diagnostics;
 
 namespace VoidTemplate;
 
-static class DeathHooks
+static class PermadeathConditions
 {
     static void logerr(object e) => _Plugin.logger.LogError(e);
+    static void loginf(object e) => _Plugin.logger.LogInfo(e);
     public static void Hook()
     {
         On.RainWorldGame.GameOver += GenericGameOver;
-        On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
-        On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
         On.RainWorldGame.GoToRedsGameOver += RainWorldGame_GoToRedsGameOver;
         On.Menu.KarmaLadder.KarmaSymbol.Update += PulsateKarmaSymbol;
         //On.Menu.SlugcatSelectMenu.SlugcatPage.AddImage += SlugcatPage_AddImage;
@@ -50,6 +49,7 @@ static class DeathHooks
         ILCursor c = new(il);
         var bubbleStart = c.DefineLabel();
         var bubbleEnd = c.DefineLabel();
+        // this code makes it so that exiting game with void in prepermadeath conditions leads you to game over screen
         if (c.TryGotoNext(MoveType.Before, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
         {
             c.Emit(OpCodes.Dup);
@@ -108,35 +108,11 @@ static class DeathHooks
         }
         orig(self);
     }
-    private static void SlugcatSelectMenu_ContinueStartedGame(On.Menu.SlugcatSelectMenu.orig_ContinueStartedGame orig, Menu.SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
-    {
-        if (storyGameCharacter == StaticStuff.TheVoid && self.saveGameData[storyGameCharacter].redsExtraCycles)
-        {
-            self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
-            self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
-            self.PlaySound(SoundID.MENU_Switch_Page_Out);
-            return;
-        }
-        orig(self, storyGameCharacter);
-
-    }
-
-    private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
-    {
-        if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == StaticStuff.TheVoid &&
-            self.GetSaveGameData(self.slugcatPageIndex) != null &&
-            self.GetSaveGameData(self.slugcatPageIndex).redsExtraCycles)
-        {
-            self.startButton.menuLabel.text = self.Translate("STATISTICS");
-        }
-        else
-            orig(self);
-    }
 
     private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
     {
 
-        if (self.GetStorySession.saveState.saveStateNumber == StaticStuff.TheVoid && (!ModManager.Expedition || !self.rainWorld.ExpeditionMode))
+        if (self.GetStorySession.saveState.saveStateNumber == StaticStuff.TheVoid && !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
         {
             if (self.manager.upcomingProcess != null) return;
 
@@ -168,7 +144,17 @@ static class DeathHooks
         orig(self);
     }
     #region GameOverConditions
-
+    private static void SetVoidCatDeadTrue(RainWorldGame game)
+    {
+        if(game.StoryCharacter == StaticStuff.TheVoid
+            && game.IsStorySession
+            && game.GetStorySession.saveState is SaveState save)
+        {
+            save.SetVoidCatDead(true);
+            save.redExtraCycles = true;
+            game.rainWorld.progression.SaveWorldStateAndProgression(false);
+        }
+    }
     private static void ApplicationQuitGameOver()
     {
         RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
@@ -176,20 +162,21 @@ static class DeathHooks
             && rainWorld.processManager is ProcessManager manager
             && manager.currentMainLoop is RainWorldGame game
             && VoidSpecificGameOverCondition(game))
-            game.GoToRedsGameOver();
+            SetVoidCatDeadTrue(game);
+            
     }
     private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
     {
         return rainWorldGame.session is StoryGameSession session
             && session.characterStats.name == StaticStuff.TheVoid
             && (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10)
-            && (!ModManager.Expedition || !rainWorldGame.rainWorld.ExpeditionMode);
+            && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
     }
 
     private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
     {
-        if(VoidSpecificGameOverCondition(self)) self.GoToRedsGameOver();
         orig(self);
+        if(VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * StaticStuff.TicksPerSecond) SetVoidCatDeadTrue(self);
     }
     private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
     {

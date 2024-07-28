@@ -19,7 +19,11 @@ internal static class SelectScreenScenes
     public static void Hook()
     {
         On.Menu.MenuScene.BuildScene += CustomSelectScene;
+
+        On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
+        On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
     }
+    private static void loginf(object e) => _Plugin.logger.LogInfo(e);
 
     private static void CustomSelectScene(On.Menu.MenuScene.orig_BuildScene orig, Menu.MenuScene self)
     {
@@ -41,6 +45,29 @@ internal static class SelectScreenScenes
             //if none of them work, the default scene happens, which is default ready to play slugcat
         }
         orig(self);
+    }
+    private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
+    {
+        if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == StaticStuff.TheVoid &&
+            self.GetSaveGameData(self.slugcatPageIndex) != null &&
+            self.GetSaveGameData(self.slugcatPageIndex).redsExtraCycles)
+        {
+            self.startButton.menuLabel.text = self.Translate("STATISTICS");
+        }
+        else
+            orig(self);
+    }
+    private static void SlugcatSelectMenu_ContinueStartedGame(On.Menu.SlugcatSelectMenu.orig_ContinueStartedGame orig, Menu.SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
+    {
+        if (storyGameCharacter == StaticStuff.TheVoid && self.saveGameData[storyGameCharacter].redsExtraCycles)
+        {
+            self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
+            self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
+            self.PlaySound(SoundID.MENU_Switch_Page_Out);
+            return;
+        }
+        orig(self, storyGameCharacter);
+
     }
 
 

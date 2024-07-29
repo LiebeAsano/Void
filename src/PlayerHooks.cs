@@ -13,21 +13,6 @@ namespace VoidTemplate
 {
     static class PlayerHooks
     {
-        private static readonly HashSet<Type> HalfFoodObjects = new HashSet<Type>
-        {
-            typeof(Hazer),
-            typeof(VultureGrub)
-        };
-
-        private static readonly HashSet<Type> QuarterFoodObjects = new HashSet<Type>
-        {
-            typeof(WaterNut)
-        };
-
-        private static readonly HashSet<Type> FullPinFoodObjects = new HashSet<Type>
-        {
-            typeof(NeedleEgg),
-        };
 
         public static void Hook()
         {
@@ -38,7 +23,9 @@ namespace VoidTemplate
             On.Player.Update += NoForceSleep;
             On.Player.CanBeSwallowed += Player_CanBeSwallowed;
             On.Player.Grabability += Player_Grabability;
-            
+            On.Player.EatMeatUpdate += DontEatVoid;
+            On.Player.Update += MalnourishmentDeath;
+
             On.Rock.HitSomething += Rock_HitSomething_Update;
 
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
@@ -114,6 +101,36 @@ namespace VoidTemplate
             }
         }
 
+        private static void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
+        {
+            orig(self, graspIndex);
+            if (self.eatMeat != 50 || self.slugcatStats.name == StaticStuff.TheVoid) return;
+            Array.ForEach(self.grasps, grasp =>
+            {
+                if (grasp != null
+                && grasp.grabbed is Player prey
+                && prey.slugcatStats.name == StaticStuff.TheVoid)
+                    self.Die();
+
+            });
+        }
+
+        private static void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
+        {
+            orig(self, eu);
+            if (self.room == null) return;
+            RainWorldGame game = self.room.game;
+            game.Players.ForEach(absPlayer =>
+            {
+                if (absPlayer.realizedCreature is Player player
+                && player.slugcatStats.name == StaticStuff.TheVoid
+                && player.room != null
+                && player.room == self.room
+                && player.Malnourished) player.Die();
+            });
+
+        }
+
         private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
         {
             if (obj is PoleMimic || obj is TentaclePlant)
@@ -140,6 +157,22 @@ namespace VoidTemplate
         {
             return self.slugcatStats.name == StaticStuff.TheVoid && self.KarmaCap > 3;
         }
+
+        private static readonly HashSet<Type> HalfFoodObjects = new()
+        {
+            typeof(Hazer),
+            typeof(VultureGrub)
+        };
+
+        private static readonly HashSet<Type> QuarterFoodObjects = new()
+        {
+            typeof(WaterNut)
+        };
+
+        private static readonly HashSet<Type> FullPinFoodObjects = new()
+        {
+            typeof(NeedleEgg),
+        };
 
         private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
         {

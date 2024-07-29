@@ -23,8 +23,6 @@ class _Plugin : BaseUnityPlugin
     /// </summary>
     public static ManualLogSource logger;
     
-
-    public const string SaveName = "THEVOID";
     public static bool DevEnabled = false;
 
     public void OnEnable()
@@ -52,7 +50,6 @@ class _Plugin : BaseUnityPlugin
                 On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
 
                 On.Player.Update += MalnourishmentDeath;
-                On.Player.EatMeatUpdate += DontEatVoid;
                 DisablePassage.Hook();
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
@@ -83,27 +80,6 @@ class _Plugin : BaseUnityPlugin
 
     }
 
-
-
-
-
-
-    private void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
-    {
-        orig(self, eu);
-        if (self.room == null) return;
-        RainWorldGame game = self.room.game;
-        game.Players.ForEach(absPlayer =>
-        {
-            if (absPlayer.realizedCreature is Player player
-            && player.slugcatStats.name == StaticStuff.TheVoid
-            && player.room != null
-            && player.room == self.room
-            && player.Malnourished) player.Die();
-        });
-
-    }
-
     private void PlayerLungLogic(On.Player.orig_Update orig, Player self, bool eu)
     {
         orig(self, eu);
@@ -120,24 +96,10 @@ class _Plugin : BaseUnityPlugin
             Lung.UpdateLungCapacity(player);
         }
     }
-    // Новый метод-обработчик для события съедения мяса
-    private void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
-    {
-        orig(self, graspIndex);
-        if (self.eatMeat != 50 || self.slugcatStats.name == StaticStuff.TheVoid) return;
-        Array.ForEach(self.grasps, grasp =>
-        {
-            if (grasp != null
-            && grasp.grabbed is Player prey
-            && prey.slugcatStats.name == StaticStuff.TheVoid)
-                self.Die();
 
-        });
-    }
-
+    //Atlas
 
     const int tailSpriteIndex = 2;
-
     private void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
         orig(self, sLeaser, rCam, timeStacker, camPos);
@@ -181,6 +143,7 @@ class _Plugin : BaseUnityPlugin
             }
         }
     }
+
     // Load any resources, such as sprites or sounds
     private void LoadResources()
     {

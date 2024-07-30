@@ -49,7 +49,6 @@ class _Plugin : BaseUnityPlugin
                 On.Player.Update += PlayerLungLogic;
                 On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
 
-                On.Player.Update += MalnourishmentDeath;
                 DisablePassage.Hook();
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();

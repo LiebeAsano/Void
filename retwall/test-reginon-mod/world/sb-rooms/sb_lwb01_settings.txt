@@ -1,0 +1,5 @@
+DangerType: None
+Palette: 14
+EffectColorA: 0
+EffectColorB: 0
+FadePalette: 28, 0.6086956, 0.8043478

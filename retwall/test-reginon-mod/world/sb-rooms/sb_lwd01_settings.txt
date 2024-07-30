@@ -1,0 +1,20 @@
+Template: NONE
+DangerType: Rain
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0.01086957
+WaveSpeed: 0.5
+WaveLength: 1
+WaveAmplitude: 0
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.8043478
+Grime: 0.2065217
+WaterReflectionAlpha: 1
+Palette: 28
+EffectColorA: 0
+EffectColorB: 6
+Effects: DayNight-0.9565217-851-551, Flies-0.06521739-849-500, HeatWave-0.2065217-848-448, Dustpuffs-0.3043478-850-397, AboveCloudsView-0-850-344, Fog-1-848-606, 
+PlacedObjects: LightSource><4117.911><339.3117><1~EffectColor1~-40~175~-612.8723~192.6508~0~0~None~0~0, LightSource><4116.331><368.1515><0.3144293~EffectColor1~18~33~-350.0913~169.6902~0~1~None~0~0, LightSource><4118.461><289.9348><0.3144293~EffectColor1~-24~27~-607.0093~248.4507~0~1~None~0~0, 
+FadePalette: 53, 0.3043478, 0.2065217, 0.1086956, 0.05434782
+BackgroundOffset: 0,-550

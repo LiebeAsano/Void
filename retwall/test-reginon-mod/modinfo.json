@@ -1,0 +1,11 @@
+{
+	"id": "iteafox_test_rooms",
+	"name": "ITeaFox's Rooms",
+	"version": "1.0.0",
+	"hide_version": false,
+	"authors": "ITeaFox",
+	"description": "Some practicing in mapmaking",
+		"requirements": ["regionkit", "crs"],
+	"requirements_names": ["RegionKit", "Custom Regions Support"],
+	"checksum_override_version": false,
+}

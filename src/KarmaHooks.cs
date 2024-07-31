@@ -21,7 +21,7 @@ namespace VoidTemplate
             On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
             On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 
-            On.GhostWorldPresence.SpawnGhost += GhostWorldPresence_SpawnGhost;
+            IL.World.SpawnGhost += KarmaReqTinker;
             On.GhostConversation.AddEvents += GhostConversation_AddEvents;
             IL.Ghost.Update += Ghost_UpdateIL;
 
@@ -37,6 +37,40 @@ namespace VoidTemplate
             On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
             On.Player.EatMeatUpdate += Player_EatMeatUpdate;
         }
+
+        private static void KarmaReqTinker(ILContext il)
+        {
+            ILCursor c = new(il);
+            // bool flag = this.game.setupValues.ghosts > 0
+            // || GhostWorldPresence.SpawnGhost(ghostID,
+            // (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma <replace with karmacap, method thinks void is always at max karma>,
+            // (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap,
+            // num,
+            // this.game.StoryCharacter == SlugcatStats.Name.Red <OR VOID> );
+            if (c.TryGotoNext(MoveType.After,
+                x => x.MatchLdfld<DeathPersistentSaveData>(nameof(DeathPersistentSaveData.karma))))
+            {
+                c.Emit(OpCodes.Pop);
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<World, int>>((self) =>
+                {
+                    return (self.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+                });
+            }
+            else logerr(new System.Diagnostics.StackTrace());
+            if(c.TryGotoNext(MoveType.After, x => x.MatchCall("ExtEnum`1<SlugcatStats/Name>", "op_Equality")))
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<bool, World, bool>>((orig, world) =>
+                {
+                    return orig || world.game.StoryCharacter == StaticStuff.TheVoid;
+                });
+            }
+            else logerr(new System.Diagnostics.StackTrace());
+        }
+
+        private static void loginf(object e) => _Plugin.logger.LogInfo(e);
+        private static void logerr(object e) => _Plugin.logger.LogError(e);
 
         private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
         {
@@ -240,6 +274,7 @@ namespace VoidTemplate
                 return true;
             var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
             return re;
+            
         }
 
         private static void SaveState_GhostEncounterIL(ILContext il)

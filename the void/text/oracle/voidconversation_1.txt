@@ -1,8 +1,9 @@
 ...is it reaching you?
-Strange beast, what brings you to my room? I don't think I have anything for you.
-0 : .  .  . : 50
-Interesting... there is no record of your blueprint in my database.
-In additional something don't let me do fully analyze your body structure without harmimg your health.
-But based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me. 
-In any case, I don't have the medical equipment to make it any easier on you.
+0 : It was pretty dangerous to implant a mark in you. Something doesn't allow me to analyze your body. : 50
+0 : There is no information about you in my database. : 30
+But as I thought, your body structure is similar to the purpose organism that I have already met.
+50 : You are a very interesting instance... : 50
+I don't have proper medical equipment so there's no point in killing you to study your body.
+But based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me.
+In any case, I can't help you with anything. You came to me too late.
 0 : You have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone. : 30

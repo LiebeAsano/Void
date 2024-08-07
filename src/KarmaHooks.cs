@@ -35,7 +35,7 @@ namespace VoidTemplate
             // Механики 11 кармы.
 
             On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
-            On.Player.EatMeatUpdate += Player_EatMeatUpdate;
+            //On.Player.EatMeatUpdate += Player_EatMeatUpdate; //found to be broken due to vanilla code + orig
         }
 
         private static void KarmaReqTinker(ILContext il)

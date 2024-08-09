@@ -112,7 +112,7 @@ namespace VoidTemplate
                 }
                 else
                 {
-                    Debug.Log($"[The Void] {screen.saveState.SaveToString()}");
+                    loginf("here save string should have been logged");
                 }
             }
 

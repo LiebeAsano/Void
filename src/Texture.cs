@@ -20,7 +20,7 @@ namespace VoidTemplate
                 {
                     if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
                     {
-                        legs.pos = new Vector2(-1000, -1000);
+                        legs.pos = new Vector2(1000, 1000);
                     }
                     else
                     {

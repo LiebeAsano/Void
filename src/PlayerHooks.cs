@@ -522,7 +522,7 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
-            if ((player.input[0].y == 0 || player.animation != Player.AnimationIndex.None) && (player.bodyMode != Player.BodyModeIndex.WallClimb || player.bodyMode != BodyModeIndexExtension.CeilCrawl))
+            if (player.animation != Player.AnimationIndex.None || player.input[0].y == 0 || (player.bodyMode != Player.BodyModeIndex.WallClimb && player.bodyMode != BodyModeIndexExtension.CeilCrawl))
             {
                 attached_fields.initialize_hands = true;
                 return orig(slugcat_hand);
@@ -544,26 +544,28 @@ namespace VoidTemplate
 
                 if (player_graphics.legs != null)
                 {
-                    player_graphics.legs.pos = new Vector2(-1000, -1000);
+                    player_graphics.legs.pos = new Vector2(1000, 1000);
                 }
                 if (player.input[0].x != 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(player.flipDirection * 100f, 0.0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
-                    player.animationFrame++;
                 }
                 else if (player.input[0].x < 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
-                    player.animationFrame++;
                 }
                 else if (player.input[0].x > 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
-                    player.animationFrame++;
                 }
+                player.animationFrame++;
+
+                slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
+
+                orig(slugcat_hand);
 
                 if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
                 {
@@ -605,15 +607,23 @@ namespace VoidTemplate
 
                 if (player.input[0].y > 0 && player.bodyMode == Player.BodyModeIndex.WallClimb)
                 {
-                    slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 30f), -player.flipDirection, 2, false);
-                    return false;
+                    if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+                    {
+                        slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 30f), -player.flipDirection, 2, false);
+                        return false;
+                    }   
+                    else
+                    {
+                        slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 0f), -player.flipDirection, 2, false);
+                        return false;
+                    }
                 }
 
                 slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -10f), -player.flipDirection, 2, false);
                 return false;
             }
 
-                return orig(slugcat_hand);
+            return orig(slugcat_hand);
         }
 
 

@@ -63,7 +63,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<bool, World, bool>>((orig, world) =>
                 {
-                    return orig || world.game.StoryCharacter == StaticStuff.TheVoid;
+                    return orig || world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
                 });
             }
             else logerr(new System.Diagnostics.StackTrace());
@@ -75,11 +75,11 @@ namespace VoidTemplate
         private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
         {
             orig(self, saveStateNumber);
-            if (saveStateNumber == StaticStuff.TheVoid)
+            if (saveStateNumber == VoidEnums.SlugcatID.TheVoid)
             {
                 ForceFailed = false;
                 RainWorld rainWorld = self.rainWorld;
-                SaveState save = rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.rainWorld.processManager.menuSetup, false);
+                SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.rainWorld.processManager.menuSetup, false);
                 save.SetVoidCatDead(false);
                 save.SetEndingEncountered(false);
             }
@@ -103,7 +103,7 @@ namespace VoidTemplate
             bool needInsert = false;
             var lastScreen = screen.ID;
 
-            if (screen.saveState.saveStateNumber == StaticStuff.TheVoid)
+            if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
             {
                 if (screen.saveState.redExtraCycles || ForceFailed)
                 {
@@ -172,7 +172,7 @@ namespace VoidTemplate
                 var label2 = c.DefineLabel();
                 c.Emit(OpCodes.Dup);
                 c.EmitDelegate<Func<Creature, bool>>((self) =>
-                    self is Player player && player.slugcatStats.name == StaticStuff.TheVoid);
+                    self is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid);
                 c.Emit(OpCodes.Brtrue_S, label);
                 c.GotoNext(MoveType.After,
                     i => i.MatchCallvirt<Creature>("Die"));
@@ -182,7 +182,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldloc, 18);
                 c.EmitDelegate((PhysicalObject PhysicalObject) =>
                 {
-                    if (PhysicalObject is Player p && p.slugcatStats.name == StaticStuff.TheVoid) p.Stun(StaticStuff.TicksPerSecond * 5);
+                    if (PhysicalObject is Player p && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid) p.Stun(VoidEnums.TicksPerSecond * 5);
                 });
                 c.MarkLabel(label2);
             }
@@ -206,7 +206,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<bool, Ghost, bool>>((re, self) =>
                     re || ((self.room.game.session is StoryGameSession session) &&
-                           session.saveStateNumber == StaticStuff.TheVoid));
+                           session.saveStateNumber == VoidEnums.SlugcatID.TheVoid));
 
             }
             catch (Exception e)
@@ -234,7 +234,7 @@ namespace VoidTemplate
         private static void GhostConversation_AddEvents(On.GhostConversation.orig_AddEvents orig, GhostConversation self)
         {
             if (self.ghost.room.game.session is StoryGameSession session &&
-                session.saveStateNumber == StaticStuff.TheVoid)
+                session.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
             {
                 var path = AssetManager.ResolveFilePath(GetGhostConversationPath(Custom.rainWorld.inGameTranslator.currentLanguage, self.id,
                     session.saveState.deathPersistentSaveData.theMark));
@@ -270,7 +270,7 @@ namespace VoidTemplate
         {
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
-                session.saveStateNumber == StaticStuff.TheVoid)
+                session.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
                 return true;
             var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
             return re;
@@ -285,7 +285,7 @@ namespace VoidTemplate
                 c.GotoNext(MoveType.After, i => i.MatchLdcI4(9));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<int, SaveState, int>>((re, self) =>
-                    self.saveStateNumber == StaticStuff.TheVoid ? 10 : re);
+                    self.saveStateNumber == VoidEnums.SlugcatID.TheVoid ? 10 : re);
             }
             catch (Exception e)
             {
@@ -300,11 +300,11 @@ namespace VoidTemplate
             orig(self, package);
             MenuScene.SceneID sceneID = null;
 
-            if (self.saveState?.saveStateNumber == StaticStuff.TheVoid && self.IsSleepScreen)
+            if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.IsSleepScreen)
             {
-                if (self.IsStarveScreen) sceneID = StaticStuff.DeathSceneID;
-                else if (self.karmaLadder.displayKarma.y == 10) sceneID = StaticStuff.StaticEnd;
-                else sceneID = StaticStuff.SleepSceneID;
+                if (self.IsStarveScreen) sceneID = VoidEnums.SceneID.DeathSceneID;
+                else if (self.karmaLadder.displayKarma.y == 10) sceneID = VoidEnums.SceneID.StaticEnd;
+                else sceneID = VoidEnums.SceneID.SleepSceneID;
                 Debug.Log($"[The Void] Karma Sleep Scene, Karma : {self.karmaLadder.displayKarma.y}");
             }
             if (sceneID != null && sceneID.Index != -1)
@@ -321,7 +321,7 @@ namespace VoidTemplate
         private static void SleepAndDeathScreen_AddBkgIllustration(On.Menu.SleepAndDeathScreen.orig_AddBkgIllustration orig, SleepAndDeathScreen self)
         {
             if (self.manager.currentMainLoop is RainWorldGame game &&
-                game.session.characterStats.name == StaticStuff.TheVoid)
+                game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
             {
                 return;
             }
@@ -336,7 +336,7 @@ namespace VoidTemplate
 
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
-                session.characterStats.name == StaticStuff.TheVoid &&
+                session.characterStats.name == VoidEnums.SlugcatID.TheVoid &&
                 session.saveState.deathPersistentSaveData.karma == 10)
             {
 
@@ -363,7 +363,7 @@ namespace VoidTemplate
         //Механика связанная с 11 кармой.
         private static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
         {
-            if (self.slugcatStats.name == StaticStuff.TheVoid)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
             {
                 if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is Creature creature))
                 {

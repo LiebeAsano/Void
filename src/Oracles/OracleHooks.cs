@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using static VoidTemplate.StaticStuff;
+using static VoidTemplate.VoidEnums.ConversationID;
 
 namespace VoidTemplate.Oracles;
 
@@ -50,7 +50,7 @@ static class OracleHooks
                 Array.ForEach(lines, line =>
                 {
                     var q = ParseLine(line);
-                    self.events.Add(new Conversation.TextEvent(self, 0, StaticStuff.TranslateStringComplex(q.Item2), q.Item1));
+                    self.events.Add(new Conversation.TextEvent(self, 0, VoidEnums.TranslateStringComplex(q.Item2), q.Item1));
                 });
             }
             else Logerr($"the path '{path}' has no existing file. No events were loaded.");
@@ -167,7 +167,7 @@ static class OracleHooks
             self.dialogBox.NewMessage("...", 10);
             return;
         }
-        if (self.oracle.room.game.StoryCharacter == StaticStuff.TheVoid &&
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid &&
             self.State.playerEncountersWithMark <= 0)
         {
             if (self.State.playerEncounters < 0)
@@ -252,7 +252,7 @@ static class OracleHooks
 
     private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
     {
-        if (self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid
+        if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid
             && self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
         {
             var saveState = self.oracle.room.game.GetStorySession.saveState;
@@ -362,13 +362,13 @@ static class OracleHooks
             i => i.MatchLdloc(10));
         c.Emit(OpCodes.Ldarg_0);
         c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
-            => self.oracle.room.game.StoryCharacter == StaticStuff.TheVoid || re);
+            => self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid || re);
 
         c2.GotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible."));
         c2.Emit(OpCodes.Ldarg_0);
         c2.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
         {
-            if (self.oracle.room.game.session.characterStats.name == StaticStuff.TheVoid &&
+            if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid &&
                 OracleConversation.pickInterruptMessages.Length >
                 self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1)
             {

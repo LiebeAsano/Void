@@ -1,0 +1,130 @@
+﻿namespace VoidTemplate;
+using Menu;
+
+public static class VoidEnums
+{
+    private const string uniqueprefix = "TheVoidSlugCat";
+    public static void RegisterEnums()
+    {
+        SceneID.Register();
+        DreamID.Register();
+        ConversationID.Register();
+        SlugcatID.Register();
+    }
+    public static class SceneID
+    {
+        public static void Register()
+        {
+            Farm = new("Farm_Dream_Void");
+            Moon = new("Moon_Dream_Void");
+            NSH = new("NSH_Dream_Void");
+            Pebble = new("Pebble_Dream_Void");
+            Rot = new("Rot_Dream_Void");
+            Sky = new("Sky_Dream_Void");
+            Sub = new("Sub_Dream_Void");
+            Void_Body = new("Body_Dream_Void");
+            Void_Heart = new("Heart_Dream_Void");
+            Void_NSH = new("Void_NSH_Dream_Void");
+            Void_Sea = new("Void_Sea_Dream_Void");
+
+            SleepSceneID = new("Sleep_Void");
+            DeathSceneID = new("Death_Void");
+
+            StaticDeath = new("Static_Death_Void");
+            StaticDeath11 = new("Static_Death_Void11");
+            StaticEnd = new("Static_End_Scene_Void");
+            StaticEnd11 = new("Static_End_Scene_Void11");
+
+            UnlockedSlugcat = new("Slugcat_Void");
+            LockedSlugcat = new("Slugcat_Void_Dark");
+            KarmaDeath = new("karma_death_void");
+            KarmaDeath11 = new("karma_death_void_karma11");
+
+            SelectFPScene = new("Scene_Five_Pebbles_Void");
+            SelectEndingScene = new("End_Scene_Void");
+            SelectKarma5Scene = new("Scene_Five_Karma_Void");
+            SelectKarma11Scene = new("Scene_Eleven_Karma_Void");
+        }
+        public static MenuScene.SceneID SleepSceneID;
+        public static MenuScene.SceneID DeathSceneID;
+        public static MenuScene.SceneID StaticEnd;
+        public static MenuScene.SceneID StaticEnd11;
+        public static MenuScene.SceneID StaticDeath;
+        public static MenuScene.SceneID StaticDeath11;
+
+        public static MenuScene.SceneID UnlockedSlugcat;
+        public static MenuScene.SceneID LockedSlugcat;
+        public static MenuScene.SceneID KarmaDeath;
+        public static MenuScene.SceneID KarmaDeath11;
+
+        public static MenuScene.SceneID SelectEndingScene;
+        public static MenuScene.SceneID SelectFPScene;
+        public static MenuScene.SceneID SelectKarma5Scene;
+        public static MenuScene.SceneID SelectKarma11Scene;
+
+        public static MenuScene.SceneID Farm;
+        public static MenuScene.SceneID Moon;
+        public static MenuScene.SceneID NSH;
+        public static MenuScene.SceneID Pebble;
+        public static MenuScene.SceneID Rot;
+        public static MenuScene.SceneID Sky;
+        public static MenuScene.SceneID Sub;
+        public static MenuScene.SceneID Void_Body;
+        public static MenuScene.SceneID Void_Heart;
+        public static MenuScene.SceneID Void_NSH;
+        public static MenuScene.SceneID Void_Sea;
+    }
+    public static class DreamID
+    {
+        public static void Register()
+        {
+            FarmDream = new(uniqueprefix + "FarmDream", true);
+            MoonDream = new(uniqueprefix + "MoonDream", true);
+            NSHDream = new(uniqueprefix + "NSHDream", true);
+            PebbleDream = new(uniqueprefix + "PebbleDream", true);
+            RotDream = new(uniqueprefix + "RotDream", true);
+            SkyDream = new(uniqueprefix + "SkyDream", true);
+            SubDream = new(uniqueprefix + "SubDream", true);
+            Void_BodyDream = new(uniqueprefix + "BodyDream", true);
+            Void_HeartDream = new(uniqueprefix + "HeartDream", true);
+            Void_NSHDream = new(uniqueprefix + "NSHVoidDream", true);
+            Void_SeaDream = new(uniqueprefix + "VoidSeaDream", true);
+        }
+
+        public static DreamsState.DreamID FarmDream;
+        public static DreamsState.DreamID MoonDream;
+        public static DreamsState.DreamID NSHDream;
+        public static DreamsState.DreamID PebbleDream;
+        public static DreamsState.DreamID RotDream;
+        public static DreamsState.DreamID SkyDream;
+        public static DreamsState.DreamID SubDream;
+        public static DreamsState.DreamID Void_BodyDream;
+        public static DreamsState.DreamID Void_HeartDream;
+        public static DreamsState.DreamID Void_NSHDream;
+        public static DreamsState.DreamID Void_SeaDream;
+    }
+    public static class ConversationID
+    {
+        public static void Register()
+        {
+            Moon_VoidConversation = new("Moon_VoidConversation", true);
+        }
+        public static Conversation.ID Moon_VoidConversation;
+    }
+    public static class RoomNames
+    {
+        public const string EndingRoomName = "SI_A07";
+    }
+    public static class SlugcatID
+    {
+        public static void Register()
+        {
+            TheVoid = new("TheVoid");
+        }
+        public static SlugcatStats.Name TheVoid;
+    }
+
+
+    public const int TicksPerSecond = 40; 
+    public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
+}

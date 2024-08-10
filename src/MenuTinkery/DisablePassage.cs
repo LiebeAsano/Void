@@ -36,7 +36,7 @@ internal static class DisablePassage
             x => x.MatchLdsfld<ModManager>(nameof(ModManager.MMF))))
         {
             c.Emit(OpCodes.Ldarg_1);
-            c.EmitDelegate<Func<bool, KarmaLadderScreen.SleepDeathScreenDataPackage, bool>>(static (orig, package) => orig && !(package.characterStats.name == StaticStuff.TheVoid));
+            c.EmitDelegate<Func<bool, KarmaLadderScreen.SleepDeathScreenDataPackage, bool>>(static (orig, package) => orig && !(package.characterStats.name == VoidEnums.SlugcatID.TheVoid));
         }
         else logerr("IL error at voidmod, MenuTinkery.DisablePassage.SleepAndDeathScreen_GetDataFromGame, anti collectible hook (failed to find)");
         //i spent an hour figuring out the issue in matching operator in generic. turns out type argument hates ExtEnum
@@ -47,14 +47,14 @@ internal static class DisablePassage
             ))
         {
             c.Emit(OpCodes.Ldarg_1);
-            c.EmitDelegate<Func<bool, KarmaLadderScreen.SleepDeathScreenDataPackage, bool>>(static (orig, package) => orig && package.characterStats.name != StaticStuff.TheVoid);
+            c.EmitDelegate<Func<bool, KarmaLadderScreen.SleepDeathScreenDataPackage, bool>>(static (orig, package) => orig && package.characterStats.name != VoidEnums.SlugcatID.TheVoid);
         }
         else logerr("IL error at voidmod, MenuTinkery.DisablePassage.SleepAndDeathScreen_GetDataFromGame, anti endgame tokens hook (failed to find)");
     }
 
     private static void RemoveButtonForVoid(On.Menu.SleepAndDeathScreen.orig_AddPassageButton orig, Menu.SleepAndDeathScreen self, bool buttonBlack)
     {
-        if (self.saveState != null && (self.saveState.saveStateNumber == StaticStuff.TheVoid)) return; //no need in calling orig if it's void, because the button is not supposed to be here at all
+        if (self.saveState != null && (self.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)) return; //no need in calling orig if it's void, because the button is not supposed to be here at all
         orig(self, buttonBlack);
     }
 }

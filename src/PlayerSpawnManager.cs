@@ -14,7 +14,7 @@ public static class PlayerSpawnManager
         orig(self, eu);
         if (self.room is Room playerRoom 
             && playerRoom.game.IsStorySession 
-            && playerRoom.game.GetStorySession.saveStateNumber == StaticStuff.TheVoid
+            && playerRoom.game.GetStorySession.saveStateNumber == VoidEnums.SlugcatID.TheVoid
             && playerRoom.game.GetStorySession.saveState is SaveState save
             && !save.GetTeleportationDone())
         {

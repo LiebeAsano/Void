@@ -51,7 +51,7 @@ internal class KarmaCapTrigger : UpdatableAndDeletable
 
     public static bool IsMainCampaign(RainWorldGame game)
     {
-        if (game.session is StoryGameSession session && session.characterStats.name == StaticStuff.TheVoid
+        if (game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
             && (!ModManager.Expedition || !game.rainWorld.ExpeditionMode))
         {
             return true;

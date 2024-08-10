@@ -78,7 +78,7 @@ static class PermadeathConditions
             c.EmitDelegate<Func<int, KarmaLadderScreen, KarmaLadderScreen.SleepDeathScreenDataPackage, int>>(
             (re, self, package) =>
             {
-                if (package.saveState != null && package.saveState.saveStateNumber == StaticStuff.TheVoid)
+                if (package.saveState != null && package.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
                     if (self.ID == ProcessManager.ProcessID.GhostScreen)
                         return self.preGhostEncounterKarmaCap;
                     else
@@ -98,7 +98,7 @@ static class PermadeathConditions
                 && self.menu.manager.rainWorld.ExpeditionMode 
                 && self.parent.moveToKarma == 0));
         if (!flag && ModManager.MSC && self.parent.displayKarma.x == self.parent.moveToKarma &&
-            self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == StaticStuff.TheVoid
+            self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid
             && self.parent.moveToKarma == 0 && self.parent.menu.ID == ProcessManager.ProcessID.DeathScreen)
         {
             self.waitForAnimate++;
@@ -112,13 +112,13 @@ static class PermadeathConditions
     private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
     {
 
-        if (self.GetStorySession.saveState.saveStateNumber == StaticStuff.TheVoid && !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
+        if (self.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid && !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
         {
             if (self.manager.upcomingProcess != null) return;
 
             self.manager.musicPlayer?.FadeOutAllSongs(20f);
             self.GetStorySession.saveState.redExtraCycles = true;
-            SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.manager.menuSetup, false);
+            SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.manager.menuSetup, false);
             save.SetVoidCatDead(true);
             KarmaHooks.ForceFailed = true;
             if (ModManager.CoopAvailable)
@@ -146,7 +146,7 @@ static class PermadeathConditions
     #region GameOverConditions
     private static void SetVoidCatDeadTrue(RainWorldGame game)
     {
-        if(game.StoryCharacter == StaticStuff.TheVoid
+        if(game.StoryCharacter == VoidEnums.SlugcatID.TheVoid
             && game.IsStorySession
             && game.GetStorySession.saveState is SaveState save)
         {
@@ -168,7 +168,7 @@ static class PermadeathConditions
     private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
     {
         return rainWorldGame.session is StoryGameSession session
-            && session.characterStats.name == StaticStuff.TheVoid
+            && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
             && (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10)
             && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
     }
@@ -176,7 +176,7 @@ static class PermadeathConditions
     private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
     {
         orig(self);
-        if(VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * StaticStuff.TicksPerSecond) SetVoidCatDeadTrue(self);
+        if(VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * VoidEnums.TicksPerSecond) SetVoidCatDeadTrue(self);
     }
     private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
     {

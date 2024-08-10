@@ -8,10 +8,10 @@ namespace VoidTemplate.Objects;
 internal class Ending : UpdatableAndDeletable
 {
     #region immutable
-    const int DelayTreshold = 0 * StaticStuff.TicksPerSecond;
+    const int DelayTreshold = 0 * VoidEnums.TicksPerSecond;
     static Vector2 expectedPositionOfTrigger = new Vector2(200, 200);
     const int triggerRadius = 2000;
-    const int timeToMoveCamera = 4 * StaticStuff.TicksPerSecond;
+    const int timeToMoveCamera = 4 * VoidEnums.TicksPerSecond;
     /// <summary>
     /// I am using S curve to move camera to desired position.
     /// https://www.desmos.com/calculator/eijfplyf1l
@@ -45,7 +45,7 @@ internal class Ending : UpdatableAndDeletable
                 {
                     if (room.world.game.Players.Exists(x =>
                     x.realizedCreature is Player p
-                    && p.slugcatStats.name == StaticStuff.TheVoid
+                    && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
                     && (p.mainBodyChunk.pos - expectedPositionOfTrigger).magnitude < triggerRadius))
                     {
                         state = State.PreStartDelay;

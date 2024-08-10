@@ -24,7 +24,7 @@ static class CreatureHooks
 
     private static bool OverseerCommunicationModule_WantToShowImage(On.OverseerCommunicationModule.orig_WantToShowImage orig, OverseerCommunicationModule self, string roomName)
     {
-        if (self.player.abstractCreature.world.game.StoryCharacter == StaticStuff.TheVoid)
+        if (self.player.abstractCreature.world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid)
             return self.overseerAI.overseer.hologram.message != OverseerHologram.Message.GateScene &&
                    !self.GuideState.HasImageBeenShownInRoom(roomName);
         return orig(self, roomName);
@@ -32,7 +32,7 @@ static class CreatureHooks
 
     private static void OverseerCommunicationModule_ReevaluateConcern(On.OverseerCommunicationModule.orig_ReevaluateConcern orig, OverseerCommunicationModule self, Player player)
     {
-        if (player.abstractCreature.world.game.StoryCharacter == StaticStuff.TheVoid)
+        if (player.abstractCreature.world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid)
         {
             self.forcedDirectionToGive = null;
             self.inputInstruction = null;
@@ -42,7 +42,7 @@ static class CreatureHooks
 
     private static bool OverseerCommunicationModule_AnyProgressionDirection(On.OverseerCommunicationModule.orig_AnyProgressionDirection orig, OverseerCommunicationModule self, Player player)
     {
-        if (player.abstractCreature.world.game.StoryCharacter == StaticStuff.TheVoid)
+        if (player.abstractCreature.world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid)
             return false;
         return orig(self, player);
     }
@@ -51,7 +51,7 @@ static class CreatureHooks
         orig(self);
 
         if (Array.Exists(self.grasps, grasp => grasp.grabbed is Player player
-        && player.slugcatStats.name == StaticStuff.TheVoid && self != null && self.room != null))
+        && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid && self != null && self.room != null))
         {
             await Task.Delay(6000);
             self.Die();
@@ -60,7 +60,7 @@ static class CreatureHooks
     private static async void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
     {
         if (self is Player player
-            && player.slugcatStats.name == StaticStuff.TheVoid
+            && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
             && type == DamageType.Stab)
         {
             int Karma = player.Karma;// Уменьшаем эффект оглушения
@@ -77,7 +77,7 @@ static class CreatureHooks
         foreach (var eatObject in self.eatObjects)
         {
             if (eatObject.chunk.owner is Player player
-                && player.slugcatStats.name == StaticStuff.TheVoid
+                && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
                 && player.dead)
             {
                 await Task.Delay(3000);

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Menu;
-using Newtonsoft.Json;
-using VoidTemplate;
-using static VoidTemplate.StaticStuff;
+﻿using Menu;
+using static VoidTemplate.VoidEnums.SlugcatID;
+using static VoidTemplate.VoidEnums.SceneID;
 using static VoidTemplate.SaveManager;
-using IL.Menu.Remix;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -36,7 +27,7 @@ internal static class SelectScreenScenes
         if(self.owner is SlugcatSelectMenu.SlugcatPageContinue page2
             && page2.slugcatNumber == TheVoid)
         {
-            SaveState save = RWCustom.Custom.rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);
+            SaveState save = RWCustom.Custom.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.menu.manager.menuSetup, false);
             if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
             else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
             else if (save.GetEndingEncountered()) self.sceneID = SelectEndingScene;
@@ -48,7 +39,7 @@ internal static class SelectScreenScenes
     }
     private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
     {
-        if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == StaticStuff.TheVoid &&
+        if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == VoidEnums.SlugcatID.TheVoid &&
             self.GetSaveGameData(self.slugcatPageIndex) != null &&
             self.GetSaveGameData(self.slugcatPageIndex).redsExtraCycles)
         {
@@ -59,7 +50,7 @@ internal static class SelectScreenScenes
     }
     private static void SlugcatSelectMenu_ContinueStartedGame(On.Menu.SlugcatSelectMenu.orig_ContinueStartedGame orig, Menu.SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
     {
-        if (storyGameCharacter == StaticStuff.TheVoid && self.saveGameData[storyGameCharacter].redsExtraCycles)
+        if (storyGameCharacter == VoidEnums.SlugcatID.TheVoid && self.saveGameData[storyGameCharacter].redsExtraCycles)
         {
             self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
             self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);

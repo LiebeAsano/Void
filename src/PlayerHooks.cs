@@ -37,7 +37,7 @@ namespace VoidTemplate
         private static bool Rock_HitSomething_Update(On.Rock.orig_HitSomething orig, Rock self, SharedPhysics.CollisionResult result, bool eu)
         {
             if (self.thrownBy is Player player
-                && player.slugcatStats.name == StaticStuff.TheVoid
+                && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
                 && result.obj is Creature creature)
                 {
                     string creatureTypeName = creature.Template.type.ToString();
@@ -87,7 +87,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
                     re && (self.abstractCreature.world.game.session is StoryGameSession session &&
-                           session.saveStateNumber == StaticStuff.TheVoid));
+                           session.saveStateNumber == VoidEnums.SlugcatID.TheVoid));
 
             }
             catch (Exception e)
@@ -105,7 +105,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
                 {
-                    if (self.slugcatStats.name == StaticStuff.TheVoid &&
+                    if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid &&
                         self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
                         return false;
                     return re;
@@ -120,12 +120,12 @@ namespace VoidTemplate
         private static void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
         {
             orig(self, graspIndex);
-            if (self.eatMeat != 50 || self.slugcatStats.name == StaticStuff.TheVoid) return;
+            if (self.eatMeat != 50 || self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid) return;
             Array.ForEach(self.grasps, grasp =>
             {
                 if (grasp != null
                 && grasp.grabbed is Player prey
-                && prey.slugcatStats.name == StaticStuff.TheVoid)
+                && prey.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
                     self.Die();
 
             });
@@ -139,7 +139,7 @@ namespace VoidTemplate
             game.Players.ForEach(absPlayer =>
             {
                 if (absPlayer.realizedCreature is Player player
-                && player.slugcatStats.name == StaticStuff.TheVoid
+                && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
                 && player.room != null
                 && player.room == self.room
                 && player.Malnourished) player.Die();
@@ -156,7 +156,7 @@ namespace VoidTemplate
 
         private static bool Player_CanBeSwallowed(On.Player.orig_CanBeSwallowed orig, Player self, PhysicalObject testObj)
         {
-            if (self.slugcatStats.name == StaticStuff.TheVoid)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
             {
                 return testObj is not Creature && testObj is not Spear && testObj is not VultureMask || orig(self, testObj);
             }
@@ -165,13 +165,13 @@ namespace VoidTemplate
         private static void NoForceSleep(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
-            if (self.slugcatStats.name == StaticStuff.TheVoid)   
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)   
                 self.forceSleepCounter = 0;
         }
 
         private static bool KarmaCap_Check(Player self)
         {
-            return self.slugcatStats.name == StaticStuff.TheVoid && self.KarmaCap > 3;
+            return self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid && self.KarmaCap > 3;
         }
 
         private static readonly HashSet<Type> HalfFoodObjects = new()
@@ -194,7 +194,7 @@ namespace VoidTemplate
         {
             AbstractPhysicalObject abstractGrabbed = self.grasps[grasp]?.grabbed?.abstractPhysicalObject;
 
-            if (self.slugcatStats.name == StaticStuff.TheVoid)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
             {
                 var grabbed = self.grasps[grasp]?.grabbed;
 
@@ -258,7 +258,7 @@ namespace VoidTemplate
                 }
             }
 
-            if (self.slugcatStats.name == StaticStuff.TheVoid && self.Karma != 10)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid && self.Karma != 10)
             {
                 if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl &&
                     self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
@@ -270,7 +270,7 @@ namespace VoidTemplate
 
             orig(self, grasp);
 
-            if (self.slugcatStats.name == StaticStuff.TheVoid && self.objectInStomach != null)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid && self.objectInStomach != null)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
@@ -285,9 +285,9 @@ namespace VoidTemplate
         private static void Player_Ctor(On.Player.orig_ctor orig, Player player, AbstractCreature abstract_creature, World world)
         {
             orig(player, abstract_creature, world);
-            if (world.game.session is StoryGameSession session && session.characterStats.name == StaticStuff.TheVoid)
+            if (world.game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
                 player.slugcatStats.foodToHibernate = session.characterStats.foodToHibernate;
-            if (player.slugcatStats.name != StaticStuff.TheVoid) return;
+            if (player.slugcatStats.name != VoidEnums.SlugcatID.TheVoid) return;
             player.Add_Attached_Fields();
 
 
@@ -353,7 +353,7 @@ namespace VoidTemplate
 
         private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
         {
-            if (player.slugcatStats.name != StaticStuff.TheVoid)
+            if (player.slugcatStats.name != VoidEnums.SlugcatID.TheVoid)
             {
                 orig(player);
                 return;
@@ -618,7 +618,7 @@ namespace VoidTemplate
 
         public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
         {
-            if (self.slugcatStats.name == StaticStuff.TheVoid)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
             {
                 bool canPick = true;
                 foreach (var grasp in self.grasps)

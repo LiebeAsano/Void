@@ -22,7 +22,7 @@ internal static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
     {
-        if(self.StoryCharacter == StaticStuff.TheVoid && malnourished)  //while it may seem bad that no orig is summoned while the condition is true, thing is, it's not supposed to be a game win if it's true
+        if(self.StoryCharacter == VoidEnums.SlugcatID.TheVoid && malnourished)  //while it may seem bad that no orig is summoned while the condition is true, thing is, it's not supposed to be a game win if it's true
         {
             self.GoToDeathScreen();
             return;
@@ -43,7 +43,7 @@ internal static class CycleEnd
             x => x.MatchCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToStarveScreen))))
         {
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<ShelterDoor, bool>>((self) => (self.room.game.IsStorySession && self.room.game.GetStorySession.characterStats.name == StaticStuff.TheVoid));
+            c.EmitDelegate<Func<ShelterDoor, bool>>((self) => (self.room.game.IsStorySession && self.room.game.GetStorySession.characterStats.name == VoidEnums.SlugcatID.TheVoid));
             c.Emit(OpCodes.Brtrue_S, bubblestart);
         }
         else
@@ -73,7 +73,7 @@ internal static class CycleEnd
     }
 
     //immutable
-    private const int timeToWait = StaticStuff.TicksPerSecond * 3;
+    private const int timeToWait = VoidEnums.TicksPerSecond * 3;
 
     //mutable
     private static int timer = 0;
@@ -86,12 +86,12 @@ internal static class CycleEnd
         game.Players.ForEach(absPlayer =>
         {
             if (absPlayer.realizedCreature is Player player
-            && player.slugcatStats.name == StaticStuff.TheVoid
+            && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
             && player.room != null
             && player.room == self.room
             && player.FoodInStomach < player.slugcatStats.foodToHibernate
             && self.room.game.session is StoryGameSession session
-            && session.characterStats.name == StaticStuff.TheVoid
+            && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
             && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
             {
                 if (session.saveState.deathPersistentSaveData.karma == 0) game.GoToRedsGameOver();

@@ -17,10 +17,7 @@ internal static class Grabability
     {
         var result = orig(self, obj);
         if (self.slugcatStats.name != StaticStuff.TheVoid) return result;
-        int amountOfSpearsInHands = self.grasps.Aggregate(0, (int acc, Creature.Grasp grasp) =>
-        {
-            return acc + ((grasp != null && grasp.grabbed is Spear) ? 1 : 0);
-        });
+        int amountOfSpearsInHands = self.grasps.Aggregate(func: (int acc, Creature.Grasp grasp) => acc + ((grasp?.grabbed is Spear) ? 1 : 0), seed: 0);
         if (amountOfSpearsInHands == 1 && self.Grabability(obj) == Player.ObjectGrabability.Drag) return true;
         return result;
     }

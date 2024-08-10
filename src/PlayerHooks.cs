@@ -555,13 +555,14 @@ namespace VoidTemplate
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
+                    player.animationFrame++;
                 }
                 else if (player.input[0].x > 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
+                    player.animationFrame++;
                 }
-                player.animationFrame++;
 
                 if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
                 {
@@ -573,19 +574,19 @@ namespace VoidTemplate
                 return false;
             }
 
-            Vector2 current_absolute_hunt_position = slugcat_hand.absoluteHuntPos;
-            orig(slugcat_hand);
-            slugcat_hand.absoluteHuntPos = current_absolute_hunt_position;
-
-            if (!(player.animationFrame == 1 && slugcat_hand.limbNumber == 0 || player.animationFrame == 11 && slugcat_hand.limbNumber == 1)) return false;
-            slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
-            Vector2 attached_position = slugcat_hand.connection.pos + new Vector2(player.flipDirection * 10f, 0.0f);
-
-            BodyChunk body_chunk_0 = player.bodyChunks[0];
-            BodyChunk body_chunk_1 = player.bodyChunks[1];
-
             if (player.bodyMode == Player.BodyModeIndex.WallClimb)
             {
+                Vector2 current_absolute_hunt_position = slugcat_hand.absoluteHuntPos;
+                orig(slugcat_hand);
+                slugcat_hand.absoluteHuntPos = current_absolute_hunt_position;
+
+                if (!(player.animationFrame == 1 && slugcat_hand.limbNumber == 0 || player.animationFrame == 11 && slugcat_hand.limbNumber == 1)) return false;
+                slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
+                Vector2 attached_position = slugcat_hand.connection.pos + new Vector2(player.flipDirection * 10f, 0.0f);
+
+                BodyChunk body_chunk_0 = player.bodyChunks[0];
+                BodyChunk body_chunk_1 = player.bodyChunks[1];
+
                 if (player.input[0].y > 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
@@ -600,7 +601,7 @@ namespace VoidTemplate
                     }
                 }
                 player.animationFrame++;
-            }
+
                 if (player.input[0].y > 0 && player.bodyMode == Player.BodyModeIndex.WallClimb)
                 {
                     slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 30f), -player.flipDirection, 2, false);
@@ -609,7 +610,9 @@ namespace VoidTemplate
 
                 slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -10f), -player.flipDirection, 2, false);
                 return false;
-            
+            }
+
+                return orig(slugcat_hand);
         }
 
 

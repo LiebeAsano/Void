@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using VoidTemplate;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.Objects;
 internal class Ending : UpdatableAndDeletable
 {
     #region immutable
-    const int DelayTreshold = 0 * VoidEnums.TicksPerSecond;
+    const int DelayTreshold = 0 * Utils.TicksPerSecond;
     static Vector2 expectedPositionOfTrigger = new Vector2(200, 200);
     const int triggerRadius = 2000;
-    const int timeToMoveCamera = 4 * VoidEnums.TicksPerSecond;
+    const int timeToMoveCamera = 4 * Utils.TicksPerSecond;
     /// <summary>
     /// I am using S curve to move camera to desired position.
     /// https://www.desmos.com/calculator/eijfplyf1l

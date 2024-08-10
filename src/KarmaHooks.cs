@@ -5,8 +5,9 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
-using VoidTemplate;
+using VoidTemplate.Useful;
 using UnityEngine;
+
 
 namespace VoidTemplate
 {
@@ -182,7 +183,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldloc, 18);
                 c.EmitDelegate((PhysicalObject PhysicalObject) =>
                 {
-                    if (PhysicalObject is Player p && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid) p.Stun(VoidEnums.TicksPerSecond * 5);
+                    if (PhysicalObject is Player p && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid) p.Stun(Utils.TicksPerSecond * 5);
                 });
                 c.MarkLabel(label2);
             }

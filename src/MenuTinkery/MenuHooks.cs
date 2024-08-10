@@ -4,10 +4,7 @@ using System.Runtime.CompilerServices;
 using Menu;
 using UnityEngine;
 using System.Linq;
-using SlugBase.SaveData;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using System.Text;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.MenuTinkery;
 

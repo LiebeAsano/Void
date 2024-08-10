@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mono.Cecil.Cil;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 
@@ -73,7 +74,7 @@ internal static class CycleEnd
     }
 
     //immutable
-    private const int timeToWait = VoidEnums.TicksPerSecond * 3;
+    private const int timeToWait = Utils.TicksPerSecond * 3;
 
     //mutable
     private static int timer = 0;

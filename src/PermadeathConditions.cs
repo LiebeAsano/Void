@@ -176,7 +176,7 @@ static class PermadeathConditions
     private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
     {
         orig(self);
-        if(VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * VoidEnums.TicksPerSecond) SetVoidCatDeadTrue(self);
+        if(VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond) SetVoidCatDeadTrue(self);
     }
     private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
     {

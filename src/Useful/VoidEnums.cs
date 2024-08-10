@@ -124,7 +124,4 @@ public static class VoidEnums
         public static SlugcatStats.Name TheVoid;
     }
 
-
-    public const int TicksPerSecond = 40; 
-    public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 }

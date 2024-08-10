@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using VoidTemplate;
 using VoidTemplate.Objects;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate
 {
@@ -16,7 +16,7 @@ namespace VoidTemplate
 
         private static float TempleGuardAI_ThrowOutScore(On.TempleGuardAI.orig_ThrowOutScore orig, TempleGuardAI self, Tracker.CreatureRepresentation crit)
         {
-            if (crit.representedCreature.realizedCreature is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
+            if (crit.representedCreature.realizedCreature is Player player && player.IsVoid())
             {
                 return 500f;
             }
@@ -26,7 +26,7 @@ namespace VoidTemplate
         private static void TempleGuardAI_Update(On.TempleGuardAI.orig_Update orig, TempleGuardAI self)
         {
             orig(self);
-            if (self.guard.room.PlayersInRoom.Any(i => i.slugcatStats.name == VoidEnums.SlugcatID.TheVoid))
+            if (self.guard.room.PlayersInRoom.Any(i => i.IsVoid()))
             {
                 self.patience = 9999;
             }
@@ -42,7 +42,7 @@ namespace VoidTemplate
             orig(self);
             if (self.game?.session?.characterStats?.name == VoidEnums.SlugcatID.TheVoid)
             {
-                if(!self.game.GetStorySession.saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid && p.KarmaCap == 4))
+                if(!self.game.GetStorySession.saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
                 {
                     self.AddObject(new KarmaCapTrigger(self, new KarmaCapTrigger.Message[]
                     {

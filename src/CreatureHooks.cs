@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OverseerHolograms;
-using VoidTemplate;
 using UnityEngine;
+using static VoidTemplate.Useful.Utils;
 using static Creature;
 
 namespace VoidTemplate;
@@ -51,7 +51,7 @@ static class CreatureHooks
         orig(self);
 
         if (Array.Exists(self.grasps, grasp => grasp.grabbed is Player player
-        && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid && self != null && self.room != null))
+        && player.IsVoid() && self != null && self.room != null))
         {
             await Task.Delay(6000);
             self.Die();
@@ -60,7 +60,7 @@ static class CreatureHooks
     private static async void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
     {
         if (self is Player player
-            && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
+            && player.IsVoid()
             && type == DamageType.Stab)
         {
             int Karma = player.Karma;// Уменьшаем эффект оглушения
@@ -77,7 +77,7 @@ static class CreatureHooks
         foreach (var eatObject in self.eatObjects)
         {
             if (eatObject.chunk.owner is Player player
-                && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
+                && player.IsVoid()
                 && player.dead)
             {
                 await Task.Delay(3000);

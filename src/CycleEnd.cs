@@ -87,7 +87,7 @@ internal static class CycleEnd
         game.Players.ForEach(absPlayer =>
         {
             if (absPlayer.realizedCreature is Player player
-            && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
+            && player.IsVoid()
             && player.room != null
             && player.room == self.room
             && player.FoodInStomach < player.slugcatStats.foodToHibernate

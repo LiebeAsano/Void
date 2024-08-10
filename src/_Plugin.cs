@@ -7,6 +7,7 @@ using System.Linq;
 using BepInEx.Logging;
 using VoidTemplate.Oracles;
 using VoidTemplate.MenuTinkery;
+using VoidTemplate.Useful;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -83,7 +84,7 @@ class _Plugin : BaseUnityPlugin
     private void PlayerLungLogic(On.Player.orig_Update orig, Player self, bool eu)
     {
         orig(self, eu);
-        if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid) Lung.UpdateLungCapacity(self);
+        if (self.IsVoid()) Lung.UpdateLungCapacity(self);
     }
 
     private void StoryGameSession_AddPlayer(On.StoryGameSession.orig_AddPlayer orig, StoryGameSession self, AbstractCreature abstractCreature)
@@ -91,7 +92,7 @@ class _Plugin : BaseUnityPlugin
         orig(self, abstractCreature);
 
         if (abstractCreature.realizedCreature is Player player
-            && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
+            && player.IsVoid())
         {
             Lung.UpdateLungCapacity(player);
         }
@@ -103,7 +104,7 @@ class _Plugin : BaseUnityPlugin
     private void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
         orig(self, sLeaser, rCam, timeStacker, camPos);
-        if (self.player.slugcatStats.name != VoidEnums.SlugcatID.TheVoid) return;
+        if (!self.player.IsVoid()) return;
         foreach (var sprite in sLeaser.sprites)
         {
             if (sLeaser.sprites[tailSpriteIndex] is TriangleMesh tail &&

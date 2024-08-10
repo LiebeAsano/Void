@@ -4,7 +4,7 @@ using MoreSlugcats;
 using System;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+using VoidTemplate.Useful;
 using static VoidTemplate.VoidEnums.ConversationID;
 
 namespace VoidTemplate.Oracles;
@@ -50,7 +50,7 @@ static class OracleHooks
                 Array.ForEach(lines, line =>
                 {
                     var q = ParseLine(line);
-                    self.events.Add(new Conversation.TextEvent(self, 0, VoidEnums.TranslateStringComplex(q.Item2), q.Item1));
+                    self.events.Add(new Conversation.TextEvent(self, 0, Utils.TranslateStringComplex(q.Item2), q.Item1));
                 });
             }
             else Logerr($"the path '{path}' has no existing file. No events were loaded.");

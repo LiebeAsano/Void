@@ -45,7 +45,7 @@ internal class Ending : UpdatableAndDeletable
                 {
                     if (room.world.game.Players.Exists(x =>
                     x.realizedCreature is Player p
-                    && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid
+                    && p.IsVoid()
                     && (p.mainBodyChunk.pos - expectedPositionOfTrigger).magnitude < triggerRadius))
                     {
                         state = State.PreStartDelay;

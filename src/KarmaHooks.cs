@@ -173,7 +173,7 @@ namespace VoidTemplate
                 var label2 = c.DefineLabel();
                 c.Emit(OpCodes.Dup);
                 c.EmitDelegate<Func<Creature, bool>>((self) =>
-                    self is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.TheVoid);
+                    self is Player player && player.IsVoid());
                 c.Emit(OpCodes.Brtrue_S, label);
                 c.GotoNext(MoveType.After,
                     i => i.MatchCallvirt<Creature>("Die"));
@@ -183,7 +183,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldloc, 18);
                 c.EmitDelegate((PhysicalObject PhysicalObject) =>
                 {
-                    if (PhysicalObject is Player p && p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid) p.Stun(Utils.TicksPerSecond * 5);
+                    if (PhysicalObject is Player p && p.IsVoid()) p.Stun(Utils.TicksPerSecond * 5);
                 });
                 c.MarkLabel(label2);
             }
@@ -364,7 +364,7 @@ namespace VoidTemplate
         //Механика связанная с 11 кармой.
         private static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
         {
-            if (self.slugcatStats.name == VoidEnums.SlugcatID.TheVoid)
+            if (self.IsVoid())
             {
                 if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is Creature creature))
                 {

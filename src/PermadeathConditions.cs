@@ -6,7 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using SlugBase.Assets;
-using VoidTemplate;
+using VoidTemplate.Useful;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using System.Threading;

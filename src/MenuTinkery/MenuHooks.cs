@@ -47,7 +47,7 @@ internal static class MenuHooks
     }
     private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
     {
-        if (self.owner.menu is StoryGameStatisticsScreen && self.sceneID == StaticStuff.SleepSceneID)
+        if (self.owner?.menu is StoryGameStatisticsScreen && self.sceneID == StaticStuff.SleepSceneID)
         {
             RainWorld rainWorld = self.menu.manager.rainWorld;
             SaveState save = rainWorld.progression.GetOrInitiateSaveState(StaticStuff.TheVoid, null, self.menu.manager.menuSetup, false);

@@ -35,7 +35,7 @@ namespace VoidTemplate
             // Механики 11 кармы.
 
             On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
-            //On.Player.EatMeatUpdate += Player_EatMeatUpdate; //found to be broken due to vanilla code + orig
+            On.Player.EatMeatUpdate += Player_EatMeatUpdate;
         }
 
         private static void KarmaReqTinker(ILContext il)
@@ -182,7 +182,7 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Ldloc, 18);
                 c.EmitDelegate((PhysicalObject PhysicalObject) =>
                 {
-                    if (PhysicalObject is Player p && p.slugcatStats.name == StaticStuff.TheVoid) p.Stun(StaticStuff.TicksPerSecond * 11);
+                    if (PhysicalObject is Player p && p.slugcatStats.name == StaticStuff.TheVoid) p.Stun(StaticStuff.TicksPerSecond * 5);
                 });
                 c.MarkLabel(label2);
             }

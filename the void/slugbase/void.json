@@ -16,10 +16,10 @@
 			}
 		],
 		
-		"weight": 1.21,
-		"tunnel_speed": 1.21,
-		"climb_speed": 1.21,
-		"walk_speed": 1.21,
+		"weight": 1.2,
+		"tunnel_speed": 1.25,
+		"climb_speed": 1.25,
+		"walk_speed": 1.25,
 		"throw_skill": 2,
 		"lung_capacity": 1.0,
 		"crouch_stealth": 0.66,

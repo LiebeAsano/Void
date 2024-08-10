@@ -38,24 +38,40 @@ namespace VoidTemplate
         {
             if (self.thrownBy is Player player
                 && player.slugcatStats.name == StaticStuff.TheVoid
-                && result.obj is Creature creature
-                && creature.Template.type != CreatureTemplate.Type.Vulture
-                && creature.Template.type != CreatureTemplate.Type.BrotherLongLegs
-                && creature.Template.type != CreatureTemplate.Type.DaddyLongLegs
-                && creature.Template.type != CreatureTemplate.Type.BigEel
-                && creature.Template.type != CreatureTemplate.Type.PoleMimic
-                && creature.Template.type != CreatureTemplate.Type.TentaclePlant
-                && creature.Template.type != CreatureTemplate.Type.MirosBird
-                && creature.Template.type != CreatureTemplate.Type.RedLizard
-                && creature.Template.type != CreatureTemplate.Type.KingVulture
-                && creature.Template.type != CreatureTemplate.Type.Centipede
-                && creature.Template.type != CreatureTemplate.Type.RedCentipede
-                && creature.Template.type != CreatureTemplate.Type.TempleGuard
-                && creature.Template.type != CreatureTemplate.Type.Deer)
+                && result.obj is Creature creature)
+                {
+                    string creatureTypeName = creature.Template.type.ToString();
 
-            {
-                creature.Stun(69);
+                    string[] excludedCreatureTypes = {
+                    "Vulture",
+                    "BrotherLongLegs",
+                    "DaddyLongLegs",
+                    "BigEel",
+                    "PoleMimic",
+                    "TentaclePlant",
+                    "MirosBird",
+                    "RedLizard",
+                    "KingVulture",
+                    "Centipede",
+                    "RedCentipede",
+                    "TempleGuard",
+                    "Deer",
+                    "MirosVulture",
+                    "HunterDaddy",
+                    "ScavengerKing",
+                    "TrainLizard",
+                    "Inspector",
+                    "TerrorLongLegs",
+                    "AquaCenti",
+                    "StowawayBug"
+                    };
+
+                if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)
+                {
+                    creature.Stun(69);
+                }
             }
+
             return orig(self, result, eu);
         }
 
@@ -333,7 +349,7 @@ namespace VoidTemplate
             return isSolid_0 || isSolid_1;
         }
 
-        private static readonly float CeilCrawlDuration = 0.2f;
+        private static readonly float CeilCrawlDuration = 0.3f;
 
         private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
         {
@@ -343,7 +359,7 @@ namespace VoidTemplate
                 return;
             }
 
-            var state = player.GetPlayerState(); // Получаем состояние игрока
+            var state = player.GetPlayerState();
             bool isSSRoom = PlayerRoomChecker.IsRoomIDSS_AI(player);
 
             player.diveForce = Mathf.Max(0f, player.diveForce - 0.05f);
@@ -380,14 +396,14 @@ namespace VoidTemplate
             {
                 UpdateBodyMode_WallClimb(player);
             }
-            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && KarmaCap_Check(player) && !isSSRoom)
+            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && KarmaCap_Check(player) && !isSSRoom)
             {
                 player.bodyMode = BodyModeIndexExtension.CeilCrawl;
                 UpdateBodyMode_CeilCrawl(player);
                 state.IsCeilCrawling = true;
-                state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.14f;
+                state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.15f;
             }
-            else if (IsTouchingDiagonalCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && KarmaCap_Check(player))
+            else if (IsTouchingDiagonalCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && KarmaCap_Check(player))
             {
                 player.bodyMode = BodyModeIndexExtension.CeilCrawl;
                 UpdateBodyMode_CeilCrawl(player);
@@ -428,6 +444,12 @@ namespace VoidTemplate
 
             float climbSpeed = 1f;
 
+            if (!player.input[0].jmp)
+                if (body_chunk_0.pos.x > body_chunk_1.pos.x && player.input[0].x < 0)
+                    climbSpeed = -0.25f;
+                else if (body_chunk_0.pos.x < body_chunk_1.pos.x && player.input[0].x > 0)
+                        climbSpeed = -0.25f;
+
             // Горизонтальное движение при ползке по потолку
             if (player.input[0].x != 0)
             {
@@ -446,7 +468,7 @@ namespace VoidTemplate
                 }
             }
 
-            float ceilingForce = player.gravity * 10f;
+            float ceilingForce = player.gravity * 6f;
 
             if (player.input[0].y > 0)
             {
@@ -499,8 +521,7 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
-            if ((player.bodyMode != Player.BodyModeIndex.WallClimb && player.bodyMode != BodyModeIndexExtension.CeilCrawl) ||
-                player.input[0].y == 0 || player.animation != Player.AnimationIndex.None)
+            if ((player.input[0].y == 0 || player.animation != Player.AnimationIndex.None) && (player.bodyMode != Player.BodyModeIndex.WallClimb || player.bodyMode != BodyModeIndexExtension.CeilCrawl))
             {
                 attached_fields.initialize_hands = true;
                 return orig(slugcat_hand);
@@ -519,6 +540,7 @@ namespace VoidTemplate
             // Логика для лазания по потолку
             if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
             {
+
                 if (player_graphics.legs != null)
                 {
                     player_graphics.legs.pos = new Vector2(-1000, -1000);
@@ -539,6 +561,7 @@ namespace VoidTemplate
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
+                player.animationFrame++;
 
                 if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
                 {
@@ -550,7 +573,13 @@ namespace VoidTemplate
                 return false;
             }
 
-            // Логика для лазания по стенам
+            Vector2 current_absolute_hunt_position = slugcat_hand.absoluteHuntPos;
+            orig(slugcat_hand);
+            slugcat_hand.absoluteHuntPos = current_absolute_hunt_position;
+
+            if (!(player.animationFrame == 1 && slugcat_hand.limbNumber == 0 || player.animationFrame == 11 && slugcat_hand.limbNumber == 1)) return false;
+            slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
+            Vector2 attached_position = slugcat_hand.connection.pos + new Vector2(player.flipDirection * 10f, 0.0f);
 
             BodyChunk body_chunk_0 = player.bodyChunks[0];
             BodyChunk body_chunk_1 = player.bodyChunks[1];
@@ -571,18 +600,16 @@ namespace VoidTemplate
                     }
                 }
                 player.animationFrame++;
-
-            if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
-                {
-                    Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
-                    Vector2 gripDirectionOffset = new Vector2(player.flipDirection * 10f, 5f);
-                    slugcat_hand.FindGrip(player.room, slugcat_hand.connection.pos, slugcat_hand.connection.pos, 100f,
-                        slugcat_hand.connection.pos + (vector + new Vector2(player.input[0].x, player.input[0].y).normalized * 1.5f).normalized * 20f + gripDirectionOffset, 2, 2, false);
-                }
-                return false;
             }
+                if (player.input[0].y > 0 && player.bodyMode == Player.BodyModeIndex.WallClimb)
+                {
+                    slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 30f), -player.flipDirection, 2, false);
+                    return false;
+                }
 
-            return orig(slugcat_hand);
+                slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -10f), -player.flipDirection, 2, false);
+                return false;
+            
         }
 
 
@@ -643,8 +670,16 @@ namespace VoidTemplate
                         body_chunk_0.vel.y += player.gravity;
                         body_chunk_1.vel.y += player.gravity;
 
-                        body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f, 0.3f);
-                        body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f, 0.3f);
+                        if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+                        {
+                            body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f, 0.3f);
+                            body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f, 0.3f);
+                        }
+                        else
+                        {
+                            body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 1.5f, 0.3f);
+                            body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 1.5f, 0.3f);
+                    }
                         ++player.animationFrame;
                     }
                     else if (player.lowerBodyFramesOffGround > 8 && player.input[0].y != -1)

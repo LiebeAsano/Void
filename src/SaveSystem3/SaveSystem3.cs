@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Permissions;
 using MonoMod.RuntimeDetour;
+using Newtonsoft.Json;
 
 namespace VoidTemplate.SaveSystem3;
 
@@ -50,7 +51,7 @@ internal static class SaveSystem3
         if (series == "SaveSlot")
         {
             SaveSlot = to;
-            UpdateSaveData();
+            GetSaveDataFromDisk();
         }
     }
 
@@ -61,20 +62,20 @@ internal static class SaveSystem3
         if(self.manager.rainWorld.OptionsReady && !initialized)
         {
             SaveSlot = self.manager.rainWorld.options.saveSlot;
-            UpdateSaveData();
+            GetSaveDataFromDisk();
             initialized = true;
         }
     }
     #endregion
 
-    public bool TryGet<T>(string key, Datatype datatype, out T value)
+    public static bool TryGet<T>(string key, Datatype datatype, out T value)
     {
         value = default(T);
         switch(datatype)
         {
             case Datatype.DeathPersistent:
                 {
-                    
+                                        
                     break;
                 }
         }
@@ -85,14 +86,12 @@ internal static class SaveSystem3
     static Dictionary<string, string> SaveDataChangingForCycle;
     static Dictionary<string, string> DeathPersistentSaveData;
     static Dictionary<string, string> SaveWipeResistantSaveData;
-    static void UpdateSaveData()
+    static void GetSaveDataFromDisk()
     {
         SaveDataConstantForCycle = Parser.GetDataFromDisk(SaveSlot, Datatype.MiscWorld);
         DeathPersistentSaveData = Parser.GetDataFromDisk(SaveSlot, Datatype.DeathPersistent);
         SaveWipeResistantSaveData = Parser.GetDataFromDisk(SaveSlot, Datatype.SaveWipeResistant);
     }
-
-    static Datatype[] datatypes = [Datatype.SaveWipeResistant, Datatype.DeathPersistent, Datatype.MiscWorld];
     public enum Datatype
     {
         SaveWipeResistant,
@@ -105,7 +104,19 @@ internal static class SaveSystem3
         { Datatype.MiscWorld, "MiscWorld" },
         { Datatype.DeathPersistent, "DeathPersistent" }
     };
-ы
+
+    static class Wrapper
+    {
+        public static string Serialize<T>(T obj) => Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj)));
+        public static T Deserialize<T>(string obj)
+        {
+            try
+            {
+                var bytes = Convert.FromBase64String(obj);
+                var json = Encoding 
+            }
+        }
+    }
     static class Parser
     {
         static class DiskCommunicator

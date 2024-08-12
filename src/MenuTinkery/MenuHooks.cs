@@ -44,11 +44,12 @@ internal static class MenuHooks
     }
     private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
     {
-        if (self.owner?.menu is StoryGameStatisticsScreen && self.sceneID == VoidEnums.SceneID.StaticEnd)
+        if (self.owner?.menu is StoryGameStatisticsScreen)
         {
             RainWorld rainWorld = self.menu.manager.rainWorld;
             SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.menu.manager.menuSetup, false);
-            if (save.GetEndingEncountered()) self.sceneID = VoidEnums.SceneID.StaticEnd;
+            if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
+            else if (save.GetEndingEncountered()) self.sceneID = VoidEnums.SceneID.StaticEnd;
             else self.sceneID = VoidEnums.SceneID.StaticEnd;
         }
         orig(self);

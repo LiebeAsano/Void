@@ -8,6 +8,7 @@ using BepInEx.Logging;
 using VoidTemplate.Oracles;
 using VoidTemplate.MenuTinkery;
 using VoidTemplate.Useful;
+using VoidTemplate.CreatureInteractions;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -64,6 +65,7 @@ class _Plugin : BaseUnityPlugin
                 Dreams.Hook();
                 SelectScreenScenes.Hook();
                 EdibleChanges.Hook();
+                AntiSpiderStun.Hook();
                 PlayerMechanics._PlayerMechanicsMeta.Hook();
                 if (DevEnabled)
                 {

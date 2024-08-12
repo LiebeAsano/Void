@@ -18,7 +18,6 @@ static class CreatureHooks
         //On.OverseerCommunicationModule.ReevaluateConcern += OverseerCommunicationModule_ReevaluateConcern;
         //On.OverseerCommunicationModule.WantToShowImage += OverseerCommunicationModule_WantToShowImage;
         On.Leech.Attached += OnLeechAttached;
-        On.Creature.Violence += Creature_Violence;
         On.DaddyLongLegs.Eat += OnDaddyLongLegsEat;
     }
 
@@ -56,21 +55,6 @@ static class CreatureHooks
             await Task.Delay(6000);
             self.Die();
         }
-    }
-    private static async void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, DamageType type, float damage, float stunBonus)
-    {
-        if (self is Player player
-            && player.IsVoid()
-            && type == DamageType.Stab)
-        {
-            int Karma = player.Karma;// Уменьшаем эффект оглушения
-            float StunResistance = 1f - 0.09f * Karma;
-            float DamageResistance = 1f - 0.09f * Karma;
-            await Task.Delay(11000);
-            stunBonus *= StunResistance;
-            damage *= DamageResistance;
-        }
-        orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
     }
     private static async void OnDaddyLongLegsEat(On.DaddyLongLegs.orig_Eat orig, DaddyLongLegs self, bool eu)
     {

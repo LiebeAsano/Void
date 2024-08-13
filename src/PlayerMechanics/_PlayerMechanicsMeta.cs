@@ -6,6 +6,7 @@ public static class _PlayerMechanicsMeta
     {
         ColdImmunityPatch.Hook();
         DreamManager.Hook();
+        ExtendedLungs.Hook();
         Grabability.Hook();
         SpearmasterAntiMechanic.Hook();
     }

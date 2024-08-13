@@ -49,9 +49,6 @@ class _Plugin : BaseUnityPlugin
                     DevEnabled = true;
                 }
                 On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-                On.Player.Update += PlayerLungLogic;
-                On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
-
                 DisablePassage.Hook();
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
@@ -64,7 +61,7 @@ class _Plugin : BaseUnityPlugin
                 SelectScreenScenes.Hook();
                 EdibleChanges.Hook();
                 _CreatureInteractionsMeta.Hook();
-                PlayerMechanics._PlayerMechanicsMeta.Hook();
+                _PlayerMechanicsMeta.Hook();
                 if (DevEnabled)
                 {
                     //On.RainWorldGame.Update += RainWorldGame_TestUpdate;
@@ -79,23 +76,6 @@ class _Plugin : BaseUnityPlugin
             Debug.LogException(e);
         }
 
-    }
-
-    private void PlayerLungLogic(On.Player.orig_Update orig, Player self, bool eu)
-    {
-        orig(self, eu);
-        if (self.IsVoid()) Lung.UpdateLungCapacity(self);
-    }
-
-    private void StoryGameSession_AddPlayer(On.StoryGameSession.orig_AddPlayer orig, StoryGameSession self, AbstractCreature abstractCreature)
-    {
-        orig(self, abstractCreature);
-
-        if (abstractCreature.realizedCreature is Player player
-            && player.IsVoid())
-        {
-            Lung.UpdateLungCapacity(player);
-        }
     }
 
     //Atlas

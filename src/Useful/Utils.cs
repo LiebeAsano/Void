@@ -14,5 +14,6 @@ internal static class Utils
     public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
     public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
             && !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
+    public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
     
 }

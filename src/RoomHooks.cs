@@ -44,7 +44,7 @@ namespace VoidTemplate
             {
                 if(!self.game.GetStorySession.saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
                 {
-                    self.AddObject(new KarmaCapTrigger(self, new KarmaCapTrigger.Message[]
+                    self.AddObject(new CeilingClimbTutorial(self, new CeilingClimbTutorial.Message[]
                     {
                         new("Your body is strong enough to climb the ceilings.", 0, 400),
                         new("Hold down the 'Up' and 'Direction' buttons to climb the ceiling.")

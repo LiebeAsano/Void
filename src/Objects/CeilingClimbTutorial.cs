@@ -1,18 +1,12 @@
-﻿using UnityEngine;
-using VoidTemplate;
-using RWCustom;
-using System.IO;
-using Newtonsoft.Json;
+﻿using RWCustom;
 using System;
-using static VoidTemplate.SaveManager;
+namespace VoidTemplate.Objects;
 
-namespace VoidTemplate;
-
-internal class KarmaCapTrigger : UpdatableAndDeletable
+internal class CeilingClimbTutorial : UpdatableAndDeletable
 {
     private static int targetRoomID = -1;
 
-    public KarmaCapTrigger(Room room, params Message[] messages)
+    public CeilingClimbTutorial(Room room, params Message[] messages)
     {
         messageList = messages;
         this.room = room;

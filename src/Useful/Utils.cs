@@ -11,4 +11,8 @@ internal static class Utils
     public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 
     public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid;
+    public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
+    public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
+            && !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
+    
 }

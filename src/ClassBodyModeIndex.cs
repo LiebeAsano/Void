@@ -49,17 +49,6 @@ internal class KarmaCapTrigger : UpdatableAndDeletable
         targetRoomID = targetRoom.index;
     }
 
-    public static bool IsMainCampaign(RainWorldGame game)
-    {
-        if (game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
-            && (!ModManager.Expedition || !game.rainWorld.ExpeditionMode))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public class Message
     {
         public readonly string text;

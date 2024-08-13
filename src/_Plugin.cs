@@ -43,7 +43,7 @@ class _Plugin : BaseUnityPlugin
             if (!ModLoaded)
             {
                 VoidEnums.RegisterEnums();
-                Dreams.RegisterMaps();
+                DreamManager.RegisterMaps();
                 if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
                 {
                     DevEnabled = true;

@@ -6,7 +6,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-public static class Dreams
+public static class DreamManager
 {
     public static void RegisterMaps()
     {

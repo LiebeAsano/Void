@@ -60,12 +60,11 @@ class _Plugin : BaseUnityPlugin
                 OracleHooks.Hook();
                 KarmaHooks.Hook();
                 RoomHooks.Hook();
-                CreatureHooks.Hook();
                 MenuHooks.Hook();
                 Dreams.Hook();
                 SelectScreenScenes.Hook();
                 EdibleChanges.Hook();
-                AntiSpiderStun.Hook();
+                _CreatureInteractionsMeta.Hook();
                 PlayerMechanics._PlayerMechanicsMeta.Hook();
                 if (DevEnabled)
                 {

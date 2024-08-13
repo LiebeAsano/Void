@@ -9,6 +9,7 @@ using VoidTemplate.Oracles;
 using VoidTemplate.MenuTinkery;
 using VoidTemplate.Useful;
 using VoidTemplate.CreatureInteractions;
+using VoidTemplate.PlayerMechanics;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -60,7 +61,6 @@ class _Plugin : BaseUnityPlugin
                 KarmaHooks.Hook();
                 RoomHooks.Hook();
                 MenuHooks.Hook();
-                Dreams.Hook();
                 SelectScreenScenes.Hook();
                 EdibleChanges.Hook();
                 _CreatureInteractionsMeta.Hook();

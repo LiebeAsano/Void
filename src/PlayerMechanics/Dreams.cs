@@ -1,17 +1,10 @@
-﻿using BepInEx.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VoidTemplate;
-using Unity.IO.LowLevel.Unsafe;
 using static VoidTemplate.VoidEnums.DreamID;
 using static VoidTemplate.VoidEnums.SceneID;
 using static VoidTemplate.SaveManager;
 
-namespace VoidTemplate;
+namespace VoidTemplate.PlayerMechanics;
 
 public static class Dreams
 {
@@ -56,7 +49,7 @@ public static class Dreams
     /// and also if there's no dream here, it won't appear
     /// </summary>
     private static Dream[] DreamPriority = [Dream.Farm, Dream.Moon, Dream.NSH, Dream.Pebble, Dream.Rot, Dream.Sky, Dream.Sub, Dream.VoidBody, Dream.VoidHeart, Dream.VoidNSH, Dream.VoidSea];
-    
+
     public static void Hook()
     {
         On.DreamsState.StaticEndOfCycleProgress += ScheduleDream;
@@ -83,7 +76,7 @@ public static class Dreams
 
     private static void ScheduleDream(On.DreamsState.orig_StaticEndOfCycleProgress orig, SaveState saveState, string currentRegion, string denPosition, ref int cyclesSinceLastDream, ref int cyclesSinceLastFamilyDream, ref int cyclesSinceLastGuideDream, ref int inGWOrSHCounter, ref DreamsState.DreamID upcomingDream, ref DreamsState.DreamID eventDream, ref bool everSleptInSB, ref bool everSleptInSB_S01, ref bool guideHasShownHimselfToPlayer, ref int guideThread, ref bool guideHasShownMoonThisRound, ref int familyThread)
     {
-        if(saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+        if (saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
         {
             var dreamtoshow = DreamPriority.FirstOrDefault(dream =>
             {

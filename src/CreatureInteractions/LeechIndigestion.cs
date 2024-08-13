@@ -1,12 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using VoidTemplate.Useful;
 
-namespace VoidTemplate.CreatureInteractions
+namespace VoidTemplate.CreatureInteractions;
+
+internal static class LeechIndigestion
 {
-    internal class LeechIndigestion
+    public static void Hook()
     {
+        On.Leech.Attached += OnLeechAttached;
+    }
+
+#warning todo: move from async
+    private static async void OnLeechAttached(On.Leech.orig_Attached orig, Leech self)
+    {
+        orig(self);
+
+        if (Array.Exists(self.grasps, grasp => grasp.grabbed is Player player
+        && player.IsVoid() && self != null && self.room != null))
+        {
+            await Task.Delay(6000);
+            self.Die();
+        }
     }
 }

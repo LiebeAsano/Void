@@ -4,9 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoidTemplate.CreatureInteractions
+namespace VoidTemplate.CreatureInteractions;
+
+public static class _CreatureInteractionsMeta
 {
-    internal class _CreatureInteractionsMeta
+    public static void Hook()
     {
+        AntiSpiderStun.Hook();
+        DLLindigestion.Hook();
+        LeechIndigestion.Hook();
+        //OverseerBehavior.Hook();
     }
+
 }

@@ -54,7 +54,6 @@ class _Plugin : BaseUnityPlugin
                 DisablePassage.Hook();
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
-                ColdImmunityPatch.Hook();
                 PermadeathConditions.Hook();
                 PlayerHooks.Hook();
                 OracleHooks.Hook();

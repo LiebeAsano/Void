@@ -1,5 +1,5 @@
 ﻿using static VoidTemplate.Useful.Utils;
-namespace VoidTemplate;
+namespace VoidTemplate.PlayerMechanics;
 
 public static class ColdImmunityPatch
 {

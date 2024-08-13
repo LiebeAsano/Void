@@ -10,6 +10,7 @@ public static class _PlayerMechanicsMeta
 {
     public static void Hook()
     {
+        ColdImmunityPatch.Hook();
         Grabability.Hook();
         SpearmasterAntiMechanic.Hook();
     }

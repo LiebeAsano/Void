@@ -5,11 +5,7 @@ using UnityEngine;
 using System.Security.Permissions;
 using System.Linq;
 using BepInEx.Logging;
-using VoidTemplate.Oracles;
-using VoidTemplate.MenuTinkery;
-using VoidTemplate.Useful;
-using VoidTemplate.CreatureInteractions;
-using VoidTemplate.PlayerMechanics;
+using static VoidTemplate.Useful.Utils;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -43,25 +39,25 @@ class _Plugin : BaseUnityPlugin
             if (!ModLoaded)
             {
                 VoidEnums.RegisterEnums();
-                DreamManager.RegisterMaps();
+
                 if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
                 {
                     DevEnabled = true;
                 }
                 On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-                DisablePassage.Hook();
+                MenuTinkery.DisablePassage.Hook();
+                MenuTinkery.MenuHooks.Hook();
                 CycleEnd.Hook();
                 PlayerSpawnManager.ApplyHooks();
                 PermadeathConditions.Hook();
                 PlayerHooks.Hook();
-                OracleHooks.Hook();
+                Oracles.OracleHooks.Hook();
                 KarmaHooks.Hook();
                 RoomHooks.Hook();
-                MenuHooks.Hook();
-                SelectScreenScenes.Hook();
+                MenuTinkery.SelectScreenScenes.Hook();
                 EdibleChanges.Hook();
-                _CreatureInteractionsMeta.Hook();
-                _PlayerMechanicsMeta.Hook();
+                CreatureInteractions._CreatureInteractionsMeta.Hook();
+                PlayerMechanics._PlayerMechanicsMeta.Hook();
                 if (DevEnabled)
                 {
                     //On.RainWorldGame.Update += RainWorldGame_TestUpdate;

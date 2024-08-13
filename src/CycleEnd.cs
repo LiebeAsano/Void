@@ -23,7 +23,7 @@ internal static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
     {
-        if(self.StoryCharacter == VoidEnums.SlugcatID.TheVoid && malnourished)  //while it may seem bad that no orig is summoned while the condition is true, thing is, it's not supposed to be a game win if it's true
+        if(self.IsVoidWorld() && malnourished)  //while it may seem bad that no orig is summoned while the condition is true, thing is, it's not supposed to be a game win if it's true
         {
             self.GoToDeathScreen();
             return;
@@ -37,14 +37,16 @@ internal static class CycleEnd
         var bubblestart = c.DefineLabel();
         var pastbubble = c.DefineLabel();
         // this.room.game <if TheVoid campaign, go to bubblestart>.GoToStarveScreen();
-        // < bubblestart
+        // < go to bubbleend 
+        // bubblestart
         // pop
-        // 
+        // go to death screen
+        // bubbleend >
         if (c.TryGotoNext(MoveType.Before,
             x => x.MatchCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToStarveScreen))))
         {
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<ShelterDoor, bool>>((self) => (self.room.game.IsStorySession && self.room.game.GetStorySession.characterStats.name == VoidEnums.SlugcatID.TheVoid));
+            c.EmitDelegate<Func<ShelterDoor, bool>>((self) => self.room.game.IsVoidWorld());
             c.Emit(OpCodes.Brtrue_S, bubblestart);
         }
         else

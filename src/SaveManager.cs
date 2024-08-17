@@ -117,7 +117,14 @@ public static class SaveManager
     /// </summary>
     /// <param name="save"></param>
     /// <param name="dream"></param>
-    public static void EnlistDreamInShowQueue(this SaveState save, Dream dream) => save.SetDreamData(dream, new DreamData(true));
+    public static void ForceEnlistDreamInShowQueue(this SaveState save, Dream dream) => save.SetDreamData(dream, new DreamData(true));
+    public static void EnlistDreamIfNotSeen(this SaveState save, Dream dream)
+    {
+        if(!save.GetDreamData(dream).WasShown)
+        {
+            save.ForceEnlistDreamInShowQueue(dream);
+        }
+    }
     #endregion
 
 }

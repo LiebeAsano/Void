@@ -25,7 +25,6 @@ public static class PlayerSpawnManager
             if (currentRoomIndex == NewSpawnPoint.room)
             {
                 save.SetTeleportationDone(true);
-                save.ForceEnlistDreamInShowQueue(SaveManager.Dream.Farm);
                 self.abstractCreature.pos = NewSpawnPoint;
                 Vector2 newPosition = self.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
                 Array.ForEach(self.bodyChunks, x => x.pos = newPosition);

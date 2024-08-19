@@ -6,6 +6,7 @@ public static class _PlayerMechanicsMeta
     {
         ColdImmunityPatch.Hook();
         DreamManager.RegisterMaps();
+        DreamCustom.Hook();
         DreamManager.Hook();
         ExtendedLungs.Hook();
         Grabability.Hook();

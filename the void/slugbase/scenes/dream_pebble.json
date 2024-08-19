@@ -1,8 +1,8 @@
 {
 	"id": "Pebble_Dream_Void",
-	"scene_folder": "slugbase/scenes/karma - death - void",
+	"scene_folder": "slugbase/scenes/dreams - void/pebble",
 	"images": [
-		{ "name": "bg-void", "pos": [335,220], "depth": 4, "shader": "Basic" },
+		{ "name": "2", "pos": [335,220], "depth": 4, "shader": "Basic" },
 		{ "name": "death-void", "pos": [335,220], "depth": 3, "shader": "Basic" },
 		{ "name": "goldy_void", "pos": [335,220], "depth": 2, "shader": "Basic" }
 	],

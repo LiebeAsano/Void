@@ -271,6 +271,7 @@ static class OracleHooks
                         self.afterGiveMarkAction = MeetVoid_Init;
                         self.SlugcatEnterRoomReaction();
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
                         break;
                     }
                 case 2 when saveState.deathPersistentSaveData.karmaCap < 4:

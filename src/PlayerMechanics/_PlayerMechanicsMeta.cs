@@ -1,9 +1,13 @@
-﻿namespace VoidTemplate.PlayerMechanics;
+﻿using VoidTemplate.PlayerMechanics.Karma11Foundation;
+
+namespace VoidTemplate.PlayerMechanics;
 
 public static class _PlayerMechanicsMeta
 {
     public static void Hook()
     {
+        KarmaLadderTweaks.Hook();
+
         ColdImmunityPatch.Hook();
         DreamManager.RegisterMaps();
         DreamCustom.Hook();

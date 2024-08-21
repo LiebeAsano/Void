@@ -267,17 +267,6 @@ namespace VoidTemplate
             orig(self);
         }
 
-        private static bool GhostWorldPresence_SpawnGhost(On.GhostWorldPresence.orig_SpawnGhost orig, GhostWorldPresence.GhostID ghostID, int karma, int karmaCap, int ghostPreviouslyEncountered, bool playingAsRed)
-        {
-            if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
-                game.session is StoryGameSession session &&
-                session.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
-                return true;
-            var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
-            return re;
-            
-        }
-
         private static void SaveState_GhostEncounterIL(ILContext il)
         {
             try

@@ -12,17 +12,23 @@ internal static class KarmaLadderTweaks
     public static void Hook()
     {
         On.Menu.KarmaLadder.KarmaSymbol.ctor += KarmaSymbol_ctor;
-        On.Menu.KarmaLadderScreen.FoodCountDownDone += KarmaLadderScreen_FoodCountDownDone;
+        On.Menu.SleepAndDeathScreen.FoodCountDownDone += SleepAndDeathScreen_FoodCountDownDone;
     }
-    /// <summary>
-    /// prevents karma 11 from going up or down
-    /// </summary>
-    /// <param name="orig"></param>
-    /// <param name="self"></param>
-    private static void KarmaLadderScreen_FoodCountDownDone(On.Menu.KarmaLadderScreen.orig_FoodCountDownDone orig, Menu.KarmaLadderScreen self)
+
+    private static void SleepAndDeathScreen_FoodCountDownDone(On.Menu.SleepAndDeathScreen.orig_FoodCountDownDone orig, Menu.SleepAndDeathScreen self)
     {
         orig(self);
-        if(self.karma.x == karma11index) self.karmaLadder.GoToKarma(karma11index, false);
+        if (self.karma.x == karma11index)
+        {
+            if (self.IsSleepScreen)
+            {
+                self.karmaLadder.GoToKarma(karma11index, false);
+            }
+            else if (self.IsAnyDeath)
+            {
+                self.karmaLadder.GoToKarma(-1, true);
+            }
+        }
     }
 
     /// <summary>

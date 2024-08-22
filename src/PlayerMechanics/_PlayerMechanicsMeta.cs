@@ -14,7 +14,9 @@ public static class _PlayerMechanicsMeta
         DreamManager.Hook();
         ExtendedLungs.Hook();
         Grabability.Hook();
+        SaintArenaSpears.Hook();
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();
+
     }
 }

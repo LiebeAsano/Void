@@ -27,8 +27,10 @@ public static class VoidEnums
             Void_NSH = new("Void_NSH_Dream_Void");
             Void_Sea = new("Void_Sea_Dream_Void");
 
-            SleepSceneID = new("Sleep_Void");
-            DeathSceneID = new("Death_Void");
+            SleepScene = new("Sleep_Void");
+            SleepScene11 = new("Sleep_Void11");
+            DeathScene = new("Death_Void");
+            DeathScene11 = new("Death_Void11");
 
             StaticDeath = new("Static_Death_Void");
             StaticDeath11 = new("Static_Death_Void11");
@@ -42,11 +44,14 @@ public static class VoidEnums
 
             SelectFPScene = new("Scene_Five_Pebbles_Void");
             SelectEndingScene = new("End_Scene_Void");
+            SelectEnding11Scene = new("End_Scene_Void11");
             SelectKarma5Scene = new("Scene_Five_Karma_Void");
             SelectKarma11Scene = new("Scene_Eleven_Karma_Void");
         }
-        public static MenuScene.SceneID SleepSceneID;
-        public static MenuScene.SceneID DeathSceneID;
+        public static MenuScene.SceneID SleepScene;
+        public static MenuScene.SceneID SleepScene11;
+        public static MenuScene.SceneID DeathScene;
+        public static MenuScene.SceneID DeathScene11;
         public static MenuScene.SceneID StaticEnd;
         public static MenuScene.SceneID StaticEnd11;
         public static MenuScene.SceneID StaticDeath;
@@ -58,6 +63,7 @@ public static class VoidEnums
         public static MenuScene.SceneID KarmaDeath11;
 
         public static MenuScene.SceneID SelectEndingScene;
+        public static MenuScene.SceneID SelectEnding11Scene;
         public static MenuScene.SceneID SelectFPScene;
         public static MenuScene.SceneID SelectKarma5Scene;
         public static MenuScene.SceneID SelectKarma11Scene;

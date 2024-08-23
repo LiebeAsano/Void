@@ -3,9 +3,9 @@
 	"scene_folder": "slugbase/scenes/karma - death - void",
 	"images": [
 		{"name": "karma - death - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "bg-void", "pos": [335,220], "depth": 4, "shader": "Basic" },
-		{ "name": "death-void", "pos": [335,220], "depth": 3, "shader": "Basic" },
-		{ "name": "goldy_void", "pos": [335,220], "depth": 2, "shader": "Basic" }
+		{ "name": "bg - void", "pos": [335,220], "depth": 4, "shader": "Basic" },
+		{ "name": "death - void", "pos": [335,220], "depth": 3, "shader": "Basic" },
+		{ "name": "goldy - void", "pos": [335,220], "depth": 2, "shader": "Basic" }
 	],
 	"idle_depths": [2.8],
 	"select_menu_pos": [0, 0],

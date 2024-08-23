@@ -2,7 +2,11 @@
 	"id": "karma_death_void_karma11",
 	"scene_folder": "slugbase/scenes/karma - death - void",
 	"images": [
-		{ "name": "bg-void", "pos": [480,250], "depth": 4, "shader": "Basic" }
+		{"name": "karma - death - void - flat11", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{ "name": "back", "pos": [385,258], "depth": 5.5, "shader": "Basic" },
+		{ "name": "back2", "pos": [385,258], "depth": 8, "shader": "Basic" },
+		{ "name": "slime", "pos": [385,258], "depth": 7, "shader": "Basic" },
+		{ "name": "animals", "pos": [385,258], "depth": 5, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],
 	"select_menu_pos": [0, 0],

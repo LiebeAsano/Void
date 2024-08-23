@@ -2,9 +2,8 @@
 	"id": "Static_Death_Void11",
 	"scene_folder": "slugbase/scenes/static - death - void",
 	"images": [
-		{"name": "static - death - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "light - void", "pos": [570,61], "depth": 4, "shader": "Basic" },
-		{ "name": "body - void", "pos": [570,61], "depth": 3.9, "shader": "Basic" }
+		{"name": "static - death - void - flat11", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{ "name": "body - void11", "pos": [0,0], "depth": 11, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],
 	"select_menu_pos": [0, 0],

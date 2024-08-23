@@ -11,6 +11,7 @@ namespace VoidTemplate.MenuTinkery;
 internal static class MenuHooks
 {
     private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
+    private const string TextIfDead11 = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
     private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
     private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
@@ -48,8 +49,9 @@ internal static class MenuHooks
         {
             RainWorld rainWorld = self.menu.manager.rainWorld;
             SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.menu.manager.menuSetup, false);
-            if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
-            else if (save.GetEndingEncountered()) self.sceneID = VoidEnums.SceneID.StaticEnd;
+            if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticDeath11;
+            else if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
+            else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticEnd11;
             else self.sceneID = VoidEnums.SceneID.StaticEnd;
         }
         orig(self);

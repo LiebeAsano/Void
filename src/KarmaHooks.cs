@@ -19,7 +19,7 @@ namespace VoidTemplate
 
             On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
 
-            On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
+            //On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
             On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 
             IL.World.SpawnGhost += KarmaReqTinker;
@@ -243,9 +243,9 @@ namespace VoidTemplate
 
             if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.IsSleepScreen)
             {
-                if (self.IsStarveScreen) sceneID = VoidEnums.SceneID.DeathSceneID;
-                else if (self.karmaLadder.displayKarma.y == 10) sceneID = VoidEnums.SceneID.StaticEnd;
-                else sceneID = VoidEnums.SceneID.SleepSceneID;
+                if (self.IsStarveScreen) sceneID = VoidEnums.SceneID.DeathScene;
+                else if (self.karmaLadder.displayKarma.y == 10) sceneID = VoidEnums.SceneID.SleepScene11;
+                else sceneID = VoidEnums.SceneID.SleepScene;
                 Debug.Log($"[The Void] Karma Sleep Scene, Karma : {self.karmaLadder.displayKarma.y}");
             }
             if (sceneID != null && sceneID.Index != -1)

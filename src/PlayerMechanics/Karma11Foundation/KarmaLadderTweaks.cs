@@ -20,14 +20,7 @@ internal static class KarmaLadderTweaks
         orig(self);
         if (self.karma.x == karma11index)
         {
-            if (self.IsSleepScreen)
-            {
-                self.karmaLadder.GoToKarma(karma11index, false);
-            }
-            else if (self.IsAnyDeath)
-            {
-                self.karmaLadder.GoToKarma(-1, true);
-            }
+            self.karmaLadder.GoToKarma(karma11index, true);
         }
     }
 

@@ -11,7 +11,7 @@ namespace VoidTemplate.MenuTinkery;
 internal static class MenuHooks
 {
     private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
-    private const string TextIfDead11 = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
+    private const string TextIfDead11 = "Meow.";
     private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
     private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
@@ -117,7 +117,10 @@ internal static class MenuHooks
             {
                 VerticalOffset = 30f;
             }
-            string text = save.GetEndingEncountered() ? TextIfEnding : TextIfDead;
+            string text;
+            if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) text = TextIfDead11;
+            else if (save.GetVoidCatDead()) text = TextIfDead;
+            else text = TextIfEnding;
             var textlabel = new MenuLabel(menu, self, text.TranslateStringComplex(), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
             textlabel.label.alignment = FLabelAlignment.Center;
             self.subObjects.Add(textlabel);

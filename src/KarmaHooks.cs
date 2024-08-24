@@ -106,7 +106,7 @@ namespace VoidTemplate
 
             if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
             {
-                if (screen.saveState.redExtraCycles || ForceFailed)
+                if ((screen.saveState.redExtraCycles || ForceFailed) && screen.saveState.deathPersistentSaveData.karmaCap != 10)
                 {
                     screen.ID = MoreSlugcatsEnums.ProcessID.KarmaToMinScreen;
                     needInsert = true;

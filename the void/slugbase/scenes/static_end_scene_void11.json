@@ -2,14 +2,15 @@
 	"id": "Static_End_Scene_Void11",
 	"scene_folder": "slugbase/scenes/static - end - scene - void",
 	"images": [
-		{"name": "static - end - scene - void - flat", "pos": [0,0], "depth": -1.0, "flatmode": true},
-		{ "name": "back", "pos": [350,237], "depth": 20, "shader": "Basic" },
-		{ "name": "iterator - 2", "pos": [350,237], "depth": 18, "shader": "Basic" },
-		{ "name": "iterator", "pos": [350,237], "depth": 16, "shader": "Basic" },
-		{ "name": "sparkle", "pos": [350,237], "depth": 18, "shader": "Basic" },
-		{ "name": "wall", "pos": [350,237], "depth": 2.5, "shader": "Basic" },
-		{ "name": "void", "pos": [350,237], "depth": 2.5, "shader": "Basic" },
-		{ "name": "front", "pos": [325,212], "depth": 2, "shader": "Basic" }
+		{"name": "static - end - scene - void - flat11", "pos": [0,0], "depth": -1.0, "flatmode": true},
+		{ "name": "background", "pos": [0,0], "depth": 9, "shader": "Basic" },
+		{ "name": "overseer", "pos": [0,0], "depth": 7, "shader": "Basic" },
+		{ "name": "lights", "pos": [0,0], "depth": 6.5, "shader": "Basic" },
+		{ "name": "green - light", "pos": [0,0], "depth": 8, "shader": "Basic" },
+		{ "name": "NSH", "pos": [0,0], "depth": 6.5, "shader": "Basic" },
+		{ "name": "back - grass", "pos": [0,0], "depth": 6, "shader": "Basic" },
+		{ "name": "void11", "pos": [0,0], "depth": 5, "shader": "Basic" },
+		{ "name": "front - grass", "pos": [0,0], "depth": 4, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],
 	"select_menu_pos": [0, 0],

@@ -17,6 +17,7 @@ public static class _PlayerMechanicsMeta
         SaintArenaSpears.Hook();
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();
+        HealthSpear.Hook();
 
     }
 }

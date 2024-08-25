@@ -37,7 +37,7 @@ namespace VoidTemplate.PlayerMechanics
 				});
 			}
 			else
-				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for permanent damage tracking failed");
+				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for dealing damage to player failed");
 
             //if (player.playerState.permanentDamageTracking >= 1.0 < OR 1.25 IF VOID>)
             if (c.TryGotoNext(MoveType.After,

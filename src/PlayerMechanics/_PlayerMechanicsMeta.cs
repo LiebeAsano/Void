@@ -14,10 +14,11 @@ public static class _PlayerMechanicsMeta
         DreamManager.Hook();
         ExtendedLungs.Hook();
         Grabability.Hook();
+        GraspSave.Hook();
+        HealthSpear.Hook();
         SaintArenaSpears.Hook();
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();
-        HealthSpear.Hook();
 
     }
 }

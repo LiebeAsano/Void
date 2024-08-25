@@ -39,8 +39,8 @@ namespace VoidTemplate.PlayerMechanics
 			else
 				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for permanent damage tracking failed");
 
-			//permanent damage cap 1.25 instead of 1 for void
-			if (c.TryGotoNext(MoveType.After,
+            //if (player.playerState.permanentDamageTracking >= 1.0 < OR 1.25 IF VOID>)
+            if (c.TryGotoNext(MoveType.After,
 				x => x.MatchLdfld<global::PlayerState>(nameof(global::PlayerState.permanentDamageTracking)),
 				x => x.MatchLdcR8(1d)))
 			{

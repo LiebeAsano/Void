@@ -16,6 +16,7 @@ public static class _PlayerMechanicsMeta
         Grabability.Hook();
         GraspSave.Hook();
         HealthSpear.Hook();
+        SaintArenaKarma.Hook();
         SaintArenaSpears.Hook();
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();

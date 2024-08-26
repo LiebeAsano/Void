@@ -25,7 +25,7 @@ internal static class GraspSave
 			if(Array.Exists(self.grasps, grasp => grasp != null && grasp.grabbed is Player p && p.IsVoid()))
 			{
 				timer.Value++;
-				Player p = Array.Find(self.grasps, grasp => grasp.grabbed is Player p && p.IsVoid()).grabbed as Player;
+				Player p = Array.Find(self.grasps, grasp => grasp != null && grasp.grabbed is Player p && p.IsVoid()).grabbed as Player;
 				if (timer.Value > TicksUntilDeath(p))
 				{
 					self.Die();

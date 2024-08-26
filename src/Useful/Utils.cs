@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 namespace VoidTemplate.Useful;
 internal static class Utils
 {
-    public const int TicksPerSecond = 40;
-    public static void loginf(object e) => _Plugin.logger.LogInfo(e);
-    public static void logerr(object e) => _Plugin.logger.LogError(e);
-    public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
+	public const string ModID = "thevoid.liebeasano";
+	public const int TicksPerSecond = 40;
+	public static void loginf(object e) => _Plugin.logger.LogInfo(e);
+	public static void logerr(object e) => _Plugin.logger.LogError(e);
+	public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 
-    public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid;
-    public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
-    public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
-            && !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
-    public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
-    
+	public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.TheVoid;
+	public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
+	public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
+			&& !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
+	public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
+	
 }

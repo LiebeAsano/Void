@@ -30,12 +30,12 @@ internal static class SaintKarmaImmunity
             //    {
             //        flag2 = true;
             //    }
-            //    (physicalObject as Creature) <if void and karma 11 TO label > .Die();
+            //    (physicalObject as Creature) <if void > .Die();
             //    <TO label2
             //    label
-            //    //this is a bubble for the condition "void and karma 11"
+            //    //this is a bubble for the condition "void"
             //    POP creature
-            //    if victim is thevoid stun for 11 seconds
+            //    if victim is thevoid stun for 5 seconds
             //    label2>
             //}
             c.GotoNext(MoveType.After,

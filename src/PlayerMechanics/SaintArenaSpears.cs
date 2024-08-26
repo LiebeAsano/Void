@@ -13,7 +13,20 @@ internal static class SaintArenaSpears
 {
     public static void Hook()
     {
-        IL.Player.ThrowObject += Player_ThrowObject;
+        if (VoidTemplate.PlayerMechanics.RemixOptions.Instance?.EnableSaintArenaSpears.Value ?? false)
+        {
+            IL.Player.ThrowObject += Player_ThrowObject;
+        }
+    }
+
+    public static void UpdateHooks()
+    {
+        IL.Player.ThrowObject -= Player_ThrowObject;
+
+        if (VoidTemplate.PlayerMechanics.RemixOptions.Instance?.EnableSaintArenaSpears.Value ?? false)
+        {
+            IL.Player.ThrowObject += Player_ThrowObject;
+        }
     }
 
     private static void Player_ThrowObject(MonoMod.Cil.ILContext il)

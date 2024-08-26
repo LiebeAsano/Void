@@ -24,7 +24,7 @@ namespace VoidTemplate.PlayerMechanics
 		public static void Spear_HitSomething(ILContext il)
 		{
 			ILCursor c = new(il);
-			//Creature.Violence(1 <OR .99 IF VOID>);
+			//Creature.Violence(1 <OR .9 IF VOID>);
 			if (c.TryGotoNext(MoveType.After, x => x.MatchLdsfld(typeof(Creature.DamageType).GetField(nameof(Creature.DamageType.Stab))),
 				x => x.MatchLdloc(2)))
 			{
@@ -32,7 +32,7 @@ namespace VoidTemplate.PlayerMechanics
 				c.Emit(OpCodes.Ldarg_1);
 				c.EmitDelegate<Func<float, Spear, SharedPhysics.CollisionResult, float>>((float orig, Spear self, SharedPhysics.CollisionResult result) =>
 				{
-					if (self.thrownBy is Scavenger && result.obj is Player p && p.IsVoid()) return 0.99f;
+					if (self.thrownBy is Scavenger && result.obj is Player p && p.IsVoid()) return 0.9f;
 					return orig;
 				});
 			}

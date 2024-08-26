@@ -12,12 +12,25 @@ namespace VoidTemplate.PlayerMechanics;
 
 internal static class SaintArenaKarma
 {
-	public static void Hook()
-	{
-		IL.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
-	}
+    public static void Hook()
+    {
+        if (VoidTemplate.PlayerMechanics.RemixOptions.Instance?.EnableSaintArenaKarma.Value ?? false)
+        {
+            IL.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
+        }
+    }
 
-	private static void Player_ClassMechanicsSaint(ILContext il)
+    public static void UpdateHooks()
+    {
+        IL.Player.ClassMechanicsSaint -= Player_ClassMechanicsSaint;
+
+        if (VoidTemplate.PlayerMechanics.RemixOptions.Instance?.EnableSaintArenaKarma.Value ?? false)
+        {
+            IL.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
+        }
+    }
+
+    private static void Player_ClassMechanicsSaint(ILContext il)
 	{
 		ILCursor c = new(il);
 		ILLabel? label = null;

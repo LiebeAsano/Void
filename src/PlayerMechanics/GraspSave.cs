@@ -25,18 +25,18 @@ internal static class GraspSave
 			if(Array.Exists(self.grasps, grasp => grasp != null && grasp.grabbed is Player p && p.IsVoid()))
 			{
 				timer.Value++;
-				Player p = Array.Find(self.grasps, grasp => grasp.grabbed is Player p && p.IsVoid()).grabbed as Player;
+				Player p = Array.Find(self.grasps, grasp => grasp != null && grasp.grabbed is Player p && p.IsVoid()).grabbed as Player;
 				if (timer.Value > TicksUntilDeath(p))
 				{
-					self.Die();
-				}
+					self.Stun(TicksPerSecond * 5);
+                }
 			}
 			else grabbers.Remove(self.abstractCreature);
 		}
 	}
 	static int TicksUntilDeath(Player p)
 	{
-		return TicksPerSecond * (p.KarmaCap == 11 ? 90 : 180);
+		return TicksPerSecond * (p.KarmaCap == 10 ? 60 : 90);
 	}
 
 	static ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbers = new();

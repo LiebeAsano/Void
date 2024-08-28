@@ -16,9 +16,9 @@ internal class VoidOptionInterface : global::OptionInterface
 	{
 		base.Initialize();
 		Tabs = [new OpTab(this, "blahblahblah")];
-		Tabs[0].GenerateCheckbox(cfgSaintArenaAscension, new Vector2(600,600));
-		Tabs[0].GenerateCheckbox(cfgSaintArenaSpears, new Vector2(0, 0));
-		Tabs[0].GenerateBigText("~ Arena ~".TranslateStringComplex(), new Vector2(70, 550));
+		Tabs[0].GenerateBigText("~ Arena ~".TranslateStringComplex(), new Vector2(60, 550));
+		Tabs[0].GenerateCheckbox(cfgSaintArenaAscension, new Vector2(50,550-marginBetweenVerticalElements));
+		Tabs[0].GenerateCheckbox(cfgSaintArenaSpears, new Vector2(50, 550-marginBetweenVerticalElements*2));
 	}
 
 

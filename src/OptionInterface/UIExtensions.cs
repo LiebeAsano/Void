@@ -19,7 +19,7 @@ internal static class UIExtensions
 		{
 			description = configurable.info.description.TranslateStringComplex()
 		};
-		OpLabel opLabel = new(pos: pos + new Vector2(30, -5),
+		OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
 			size: new Vector2(240f, 30f),
 			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "").TranslateStringComplex(),
 			FLabelAlignment.Left);

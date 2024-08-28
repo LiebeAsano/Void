@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace VoidTemplate.PlayerMechanics;
     // Класс для настроек мода
-    public class RemixOptions : OptionInterface
+    public class RemixOptions : global::OptionInterface
     {
         public static RemixOptions Instance { get; private set; }
 

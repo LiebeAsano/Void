@@ -1,13 +1,13 @@
 {
 	"id": "Moon_Dream_Void",
-	"scene_folder": "slugbase/scenes/death - void",
+	"scene_folder": "slugbase/scenes/dreams - void/moon",
 	"images": [
-		{"name": "death screen - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "BackGround_Death", "pos": [598,0], "depth": 2.9, "shader": "Basic"},
-		{ "name": "Leaf_Death_2",    "pos": [598,0], "depth": 2.6, "shader": "Basic"},
-		{ "name": "Leaf_Death",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
-		{ "name": "Void_Death",    "pos": [598,0], "depth": 2.0, "shader": "Basic"},
-        { "name": "FrontLeaf_Death",    "pos": [598,0], "depth": 1.7, "shader": "Basic"}                              
+		{ "name": "moon - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{ "name": "background", "pos": [0,0], "depth": 10, "shader": "Basic" },
+		{ "name": "stone", "pos": [0,0], "depth": 10, "shader": "Basic" },
+		{ "name": "moon", "pos": [0,0], "depth": 10, "shader": "Basic" },
+		{ "name": "hunter", "pos": [0,0], "depth": 8, "shader": "Basic" },
+		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" }                             
 	],
 	"idle_depths": [ 2.8 ],
 	"select_menu_pos": [0, 0],

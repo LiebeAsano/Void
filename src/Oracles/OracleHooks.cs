@@ -302,6 +302,8 @@ static class OracleHooks
                                 self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                             }
                         }
+                        if (miscData.SSaiConversationsHad == 8)
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
                         break;
                     }
             }

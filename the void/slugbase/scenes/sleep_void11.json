@@ -3,11 +3,11 @@
 	"scene_folder": "slugbase/scenes/sleep - void",
 	"images": [
 		{"name": "sleep - screen - void - flat11", "pos": [598, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "BackGround_Sleep", "pos": [598,0], "depth": 4, "shader": "Basic"},
-		{ "name": "Leaf_Sleep2",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
-		{ "name": "Leaf_Sleep",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
-		{ "name": "Void_Sleep11",    "pos": [598,0], "depth": 2.0, "shader": "Basic"},
-        { "name": "FrontLeaf_Sleep",    "pos": [598,0], "depth": 1.7, "shader": "Basic"}
+		{ "name": "background - sleep", "pos": [598,0], "depth": 4, "shader": "Basic"},
+		{ "name": "leaf - sleep2",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
+		{ "name": "leaf - sleep",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
+		{ "name": "void - sleep11",    "pos": [598,0], "depth": 2.0, "shader": "Basic"},
+        { "name": "frontleaf - sleep",    "pos": [598,0], "depth": 1.7, "shader": "Basic"}
 	],
 	"idle_depths": [ 2.8 ],
 	"glow_pos": [750, 100],

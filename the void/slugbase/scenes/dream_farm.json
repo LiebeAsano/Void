@@ -1,13 +1,13 @@
 {
 	"id": "Farm_Dream_Void",
-	"scene_folder": "slugbase/scenes/sleep - void",
+	"scene_folder": "slugbase/scenes/dreams - void/farm",
 	"images": [
-	    {"name": "sleep screen - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "BackGround_Sleep", "pos": [598,0], "depth": 4, "shader": "Basic"},
-		{ "name": "Leaf_Sleep_2",    "pos": [598,0], "depth": 2.6, "shader": "Basic"},
-		{ "name": "Leaf_Sleep",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
-		{ "name": "Void_Sleep",    "pos": [598,0], "depth": 2.0, "shader": "Basic"},
-        { "name": "FrontLeaf_Sleep",    "pos": [598,0], "depth": 1.7, "shader": "Basic"}
+	    {"name": "farm - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{ "name": "background", "pos": [0,0], "depth": -1, "shader": "Basic" },
+		{ "name": "grass", "pos": [0,0], "depth": 7, "shader": "Basic" },
+		{ "name": "deer", "pos": [0,0], "depth": 4, "shader": "Basic" },
+		{ "name": "column", "pos": [0,0], "depth": 3, "shader": "Basic" },
+		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" }
 	],
 	"idle_depths": [2.8],
 	"select_menu_pos": [0, 0],

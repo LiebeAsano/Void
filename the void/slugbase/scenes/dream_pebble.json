@@ -2,9 +2,15 @@
 	"id": "Pebble_Dream_Void",
 	"scene_folder": "slugbase/scenes/dreams - void/pebble",
 	"images": [
-		{ "name": "2", "pos": [335,220], "depth": 4, "shader": "Basic" },
-		{ "name": "death-void", "pos": [335,220], "depth": 3, "shader": "Basic" },
-		{ "name": "goldy_void", "pos": [335,220], "depth": 2, "shader": "Basic" }
+		{"name": "pebble - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{ "name": "background", "pos": [0,0], "depth": 8.0, "shader": "Basic" },
+		{ "name": "shadow", "pos": [0,0], "depth": 5.5, "shader": "Basic" },
+		{ "name": "fog", "pos": [0,0], "depth": -1.0, "shader": "Basic" },
+		{ "name": "lights", "pos": [0,0], "depth": 5, "shader": "Basic" },
+		{ "name": "pebble", "pos": [0,0], "depth": 5, "shader": "Basic" },
+		{ "name": "neuron", "pos": [0,0], "depth": 4, "shader": "Basic" },
+		{ "name": "hunter", "pos": [0,0], "depth": 3, "shader": "Basic" },
+		{ "name": "pearls", "pos": [0,0], "depth": 2, "shader": "Basic" }
 	],
 	"idle_depths": [2.8],
 	"select_menu_pos": [0, 0],

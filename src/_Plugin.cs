@@ -45,8 +45,7 @@ class _Plugin : BaseUnityPlugin
 					DevEnabled = true;
 				}
 				On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-				MenuTinkery.DisablePassage.Hook();
-				MenuTinkery.MenuHooks.Hook();
+
 				CycleEnd.Hook();
 				PlayerSpawnManager.ApplyHooks();
 				PermadeathConditions.Hook();
@@ -54,8 +53,8 @@ class _Plugin : BaseUnityPlugin
 				Oracles.OracleHooks.Hook();
 				KarmaHooks.Hook();
 				RoomHooks.Hook();
-				MenuTinkery.SelectScreenScenes.Hook();
 				EdibleChanges.Hook();
+				MenuTinkery._MenuMeta.Startup();
 				CreatureInteractions._CreatureInteractionsMeta.Hook();
 				PlayerMechanics._PlayerMechanicsMeta.Hook();
 				OptionInterface._OIMeta.Initialize();

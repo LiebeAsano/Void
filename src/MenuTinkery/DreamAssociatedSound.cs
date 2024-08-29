@@ -50,7 +50,7 @@ internal static class DreamAssociatedSound
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Predicate<DreamScreen>>((DreamScreen self) => DreamSoundMap.ContainsKey(self.dreamID));
 			c.Emit(OpCodes.Brtrue_S, bubblestart);
-			c.GotoNext();
+			c.GotoNext(MoveType.After, x => x.MatchLdsfld("SoundID", "MENU_Dream_Init"));
 			c.Emit(OpCodes.Br, bubbleend);
 			c.MarkLabel(bubblestart);
 			c.EmitDelegate<Func<DreamScreen, SoundID>>((DreamScreen screen) => DreamSoundMap[screen.dreamID]);

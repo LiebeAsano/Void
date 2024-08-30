@@ -14,13 +14,14 @@ internal static class DreamAssociatedSound
 		On.Menu.Menu.PlaySound_SoundID += Menu_PlaySound_SoundID;
 		DreamSoundMap = new()
 		{
-			{ FarmDream, SoundID.Bomb_Explode}
+			{ FarmDream, SoundID.Bomb_Explode },
+			{ Void_NSHDream, SoundID.Bomb_Explode },
 		};
 	}
 
 	private static void Menu_PlaySound_SoundID(On.Menu.Menu.orig_PlaySound_SoundID orig, Menu.Menu self, SoundID soundID)
 	{
-		if(self is Menu.DreamScreen screen && !screen.initSound && DreamSoundMap.ContainsKey(screen.dreamID)) orig(self, DreamSoundMap[screen.dreamID]);
+		if(self is Menu.DreamScreen screen && soundID == SoundID.MENU_Dream_Switch && DreamSoundMap.ContainsKey(screen.dreamID)) orig(self, DreamSoundMap[screen.dreamID]);
 		else orig(self, soundID);
 	}
 }

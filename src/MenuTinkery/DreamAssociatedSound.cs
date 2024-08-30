@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
+﻿using System.Collections.Generic;
 using static VoidTemplate.VoidEnums.DreamID;
-using Menu;
-using static VoidTemplate.Useful.Utils;
-using VoidTemplate.PlayerMechanics;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -20,43 +11,16 @@ internal static class DreamAssociatedSound
 
 	public static void Startup()
 	{
-		IL.Menu.DreamScreen.Update += DreamScreen_Update;
-        DreamSoundMap = new()
+		On.Menu.Menu.PlaySound_SoundID += Menu_PlaySound_SoundID;
+		DreamSoundMap = new()
 		{
 			{ FarmDream, SoundID.Bomb_Explode}
 		};
-    }
+	}
 
-	private static void DreamScreen_Update(MonoMod.Cil.ILContext il)
+	private static void Menu_PlaySound_SoundID(On.Menu.Menu.orig_PlaySound_SoundID orig, Menu.Menu self, SoundID soundID)
 	{
-		ILCursor c = new(il);
-
-		//if (!this.initSound)
-		//{
-		//	base.PlaySound( <if within keys go to bubblestart>
-		//	SoundID.MENU_Dream_Init
-		//	<Go to bubbleend
-		//	bubblestart
-		// 	give associated sound
-		// 	bubbleend> );
-		//	this.initSound = true;
-		//}
-
-		var bubblestart = c.DefineLabel();
-		var bubbleend = c.DefineLabel();
-
-		if (c.TryGotoNext(MoveType.Before, x => x.MatchLdsfld("SoundID", "MENU_Dream_Init")))
-		{
-			c.Emit(OpCodes.Ldarg_0);
-			c.EmitDelegate<Predicate<DreamScreen>>((DreamScreen self) => DreamSoundMap.ContainsKey(self.dreamID));
-			c.Emit(OpCodes.Brtrue_S, bubblestart);
-			c.GotoNext(MoveType.After, x => x.MatchLdsfld("SoundID", "MENU_Dream_Init"));
-			c.Emit(OpCodes.Br, bubbleend);
-			c.MarkLabel(bubblestart);
-			c.EmitDelegate<Func<DreamScreen, SoundID>>((DreamScreen screen) => DreamSoundMap[screen.dreamID]);
-			c.MarkLabel(bubbleend);
-		}
-		else logerr($"{nameof(VoidTemplate.MenuTinkery)}.{nameof(DreamAssociatedSound)}.{nameof(DreamScreen_Update)}: first match failed");
-
-    }
+		if(self is Menu.DreamScreen screen && !screen.initSound && DreamSoundMap.ContainsKey(screen.dreamID)) orig(self, DreamSoundMap[screen.dreamID]);
+		else orig(self, soundID);
+	}
 }

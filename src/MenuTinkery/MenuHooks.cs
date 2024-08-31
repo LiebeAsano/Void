@@ -11,8 +11,8 @@ namespace VoidTemplate.MenuTinkery;
 internal static class MenuHooks
 {
     private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
-    private const string TextIfDead11 = "Meow.";
-    private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You have the feeling that you must fulfil the last wish.";
+    private const string TextIfDead11 = "Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.";
+    private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.";
     private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
     public static void Hook()
     {
@@ -26,7 +26,7 @@ internal static class MenuHooks
 
     }
     private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
-    {
+    { 
         var re = orig(i, rainWorld);
         if (i == VoidEnums.SlugcatID.TheVoid &&
             !rainWorld.progression.miscProgressionData.beaten_Hunter)

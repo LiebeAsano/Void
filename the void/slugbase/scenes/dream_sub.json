@@ -6,7 +6,7 @@
 		{ "name": "background", "pos": [0,0], "depth": -1, "shader": "Basic" },
 		{ "name": "tunnel", "pos": [0,0], "depth": 9, "shader": "Basic" },
 		{ "name": "pipe", "pos": [0,0], "depth": 8, "shader": "Basic" },
-		{ "name": "hunter", "pos": [0,0], "depth": 7, "shader": "Basic" },
+		{ "name": "hunter", "pos": [0,-48], "depth": 7, "shader": "Basic" },
 		{ "name": "vines", "pos": [0,-42], "depth": 4, "shader": "Basic" },
 		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" },
 		{ "name": "nsh", "pos": [0,0], "depth": 2, "shader": "Basic" }

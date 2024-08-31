@@ -8,6 +8,7 @@ public static class VoidEnums
     {
         SceneID.Register();
         DreamID.Register();
+        //SoundID.Register();
         ConversationID.Register();
         SlugcatID.Register();
     }
@@ -109,6 +110,16 @@ public static class VoidEnums
         public static DreamsState.DreamID Void_NSHDream;
         public static DreamsState.DreamID Void_SeaDream;
     }
+
+    /*public static class SoundID
+    {
+        public static void Register()
+        {
+            VoidNSHDreamSound = new("Void_NSH_Dream_Sound");
+        }
+
+        public static global::SoundID VoidNSHDreamSound;
+    }*/
     public static class ConversationID
     {
         public static void Register()

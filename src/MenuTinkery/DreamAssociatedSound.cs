@@ -15,7 +15,7 @@ internal static class DreamAssociatedSound
 		DreamSoundMap = new()
 		{
 			{ FarmDream, SoundID.Bomb_Explode },
-			{ Void_NSHDream, SoundID.Bomb_Explode },
+			//{ Void_NSHDream, VoidEnums.SoundID.VoidNSHDreamSound },
 		};
 	}
 

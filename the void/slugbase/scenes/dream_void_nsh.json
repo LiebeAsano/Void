@@ -8,7 +8,7 @@
 		{"name": "void - nsh - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background", "pos": [0,0], "depth": -1.0, "shader": "Basic" },
 		{ "name": "clothes", "pos": [0,0], "depth": 10, "shader": "Basic" },
-		{ "name": "nsh", "pos": [0,0], "depth": 8, "shader": "Basic" },
+		{ "name": "nsh", "pos": [0,-50], "depth": 8, "shader": "Basic" },
 		{ "name": "hunter", "pos": [0,0], "depth": 6, "shader": "Basic" },
 		{ "name": "hands", "pos": [0,0], "depth": 8, "shader": "Basic" },
 		{ "name": "sparks", "pos": [0,0], "depth": 2, "shader": "Basic" }

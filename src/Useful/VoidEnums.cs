@@ -111,7 +111,7 @@ public static class VoidEnums
         public static DreamsState.DreamID Void_SeaDream;
     }
 
-    public static class SoundID
+    /*public static class SoundID
     {
         public static void Register()
         {
@@ -119,7 +119,7 @@ public static class VoidEnums
         }
 
         public static global::SoundID VoidNSHDreamSound;
-    }
+    }*/
     public static class ConversationID
     {
         public static void Register()

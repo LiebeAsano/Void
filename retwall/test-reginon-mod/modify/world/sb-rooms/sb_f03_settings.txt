@@ -1,0 +1,2 @@
+[FIND]WhiteToken><715.0526><4505.718><99~28~-345~-142~0~Chatlog_SB0~White|Yellow|Red|Rivulet|Saint|Gourmand~0~1~0~0,
+[REPLACE]WhiteToken><923.0526><4145.718><-23~-67~-345~-142~0~Chatlog_SB0~White|Yellow|Red|Rivulet|Saint|Gourmand~0~1~0~0~0~1~0~0,

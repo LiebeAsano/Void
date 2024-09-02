@@ -15,7 +15,10 @@ SB_LWB02 : DISCONNECTED, SB_LWC01
 END ROOMS
 
 CREATURES
+SB_LWB01 : 2-WhiteLizard
+SB_LWB02 : 3-BigSpider, 4-SpitterSpider, 5-PoleMimic-{Ignorecycle}
+SB_LWC01 : 5-WhiteLizard
+SB_LWC02 : 3-CyanLizard, 4-CyanLizard
 SB_LWD01 : 2-BigSpider-2-{Night}, 4-SpitterSpider-{Night}, 5-BigSpider-2-{Night}
-SB_LWB02 : 5-PoleMimic-{Ignorecycle}
 END CREATURES
 [ENDMERGE]

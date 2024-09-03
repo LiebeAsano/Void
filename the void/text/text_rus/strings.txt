@@ -4,8 +4,7 @@ Void|Пустотный
 An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.|Разъярённый и голодный хищник вырывается из пустотного моря.<LINE>Балансируя между жизнью и смертью, зверь ищет своё новое место в этом мире.
 Clear the game as Hunter to unlock.|Чтобы открыть, пройди игру за Охотника.
 You have enough strength to climb the walls.|У тебя достаточно сил, чтобы взбираться на стены.
-Your body is strong enough to climb the ceilings.|Твоё тело достаточно окрепло, чтобы лазать по потолкам.
-Hold down the 'Up' and 'Direction' buttons to climb the ceiling.|Удерживай кнопки 'Вверх' и 'Направления', чтобы лазать по потолку.
+Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
 Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай кнопки 'Направления' и 'Вверх', чтобы взобраться на стену.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречёна вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Ты должен исполнить последнее желание того, кто дал тебе второй шанс.
@@ -18,6 +17,28 @@ Saint ascension|Возвышение Святого
 Saint wields weapon|Святой владеет оружием
 Allows Saint to use ascension mechanic in arena|Позволяет Святому использовать возвышение на арене
 Allows Saint to throw spears in arena|Позволяет Святому кидать копья на арене
+
+//PICK INTERRUPT MESSAGES
+
+Yes, help yourself. They are not edible.|Да, угощайся. Они несъедобны.
+You seem to like pearls.|Кажется, тебе нравятся жемчужины.
+Are you listening to me?|Ты меня слушаешь?
+You need to stop being distracted by pearls.|Тебе нужно перестать отвлекаться на жемчужины.
+Are you trying my patience?|Ты испытываешь моё терпение?
+I will tell you about this pearls another time.|Я расскажу тебе об этих жемчужинах в другой раз.
+Yes... this pearl contains data about my structure.|Да... это жемчужина содержит данные о моей структуре.
+Strange... This pearl shouldn't be here.|Странно... Этой жемчужины здесь быть не должно. 
+There is nothing useful in this pearl, you can eat it if you want.|В этой жемчужине нет ничего полезного, ты можешь съесть ее, если хочешь.
+You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.|Ты можешь заметить, что эта жемчужина слегка выцвела, к сожалению, даже в них информация не вечна.
+I wish I could just teach you how to read them...|Жаль, что я не могу просто научить тебя их читать...
+
+//EATING PEARLS
+
+I'm not sure you can stomach pearl.|Я не уверен, что ты cможешь переварить жемчужину. 
+Do you really eat them?|Ты действительно их ешь?
+Little creature. You shouldn't eat pearls.|Зверёк. Тебе не следует есть жемчуги.
+You must stop right now.|Ты должен прекратить прямо сейчас.
+I'm warning you for the last time.|Я предупреждаю тебя в последний раз.  
 
 //FIVE PEBBLES
 

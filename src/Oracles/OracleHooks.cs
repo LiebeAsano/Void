@@ -73,7 +73,7 @@ static class OracleHooks
         }
         var savestate = self.oracle.room.game.GetStorySession.saveState;
         var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
-        if (amountOfEatenPearls == 11
+        if (amountOfEatenPearls == 6
         && self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 6)
         {
 
@@ -118,35 +118,30 @@ static class OracleHooks
             "Are you listening to me?",
             "You need to stop being distracted by pearls.",
             "Are you trying my patience?",
-            "...never mind...",
+            "I will tell you about this pearls another time.",
             "Yes... this pearl contains data about my structure.",
-            "Strange.. This pearl shouldn't be here.",
-            "There is nothing useful in this pearl, you can eat it.",
-            "This pearl contains information about failed experiments.",
-            "I should back up the pearls more often..."
+            "Strange... This pearl shouldn't be here.",
+            "There is nothing useful in this pearl, you can eat it if you want.",
+            "You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.",
+            "I wish I could just teach you how to read them..."
         };
 
         public static string[] eatInterruptMessages = new[]
         {
-            "I'm not sure you can stomach them.",
-            "You really shouldn't eat pearls.",
-            ". . .",
+            "I'm not sure you can stomach pearl.",
             ". . .",
             "Do you really eat them?",
+            "You really shouldn't eat pearls.",
             "You must stop right now.",
-            ". . .",
-            "I forbid to do it!",
-            "I said no!",
-            "Wait, don't eat it, it's very impo...",
-            "I'm warning you for the last time!"
+            "I'm warning you for the last time."
         };
 
         public static string[] eatInterruptMessages6Step = new[]
         {
-            "1-6",
-            "2-6",
-            "3-6",
-            "4-6",
+            "I'm not sure you can stomach pearl.",
+            ". . .",
+            "Do you really eat them?",
+            "Little creature. You shouldn't eat pearls.",
             "5-6",
             "6-6",
             "7-6",

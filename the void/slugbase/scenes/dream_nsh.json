@@ -7,7 +7,7 @@
 		{ "name": "info", "pos": [0,0], "depth": 8, "shader": "Basic" },
 		{ "name": "circle", "pos": [0,0], "depth": 7, "shader": "Basic" },
 		{ "name": "hunter", "pos": [0,0], "depth": 6, "shader": "Basic" },
-		{ "name": "nsh", "pos": [0,0], "depth": 3, "shader": "Basic" },
+		{ "name": "nsh", "pos": [-40,-20], "depth": 3, "shader": "Basic" },
 		{ "name": "pearls", "pos": [0,0], "depth": 2, "shader": "Basic" },
 		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" }
 	],

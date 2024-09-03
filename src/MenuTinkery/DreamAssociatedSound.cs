@@ -15,8 +15,10 @@ internal static class DreamAssociatedSound
 		DreamSoundMap = new()
 		{
 			{ FarmDream, SoundID.Bomb_Explode },
-			//{ Void_NSHDream, VoidEnums.SoundID.VoidNSHDreamSound },
-		};
+			{ Void_NSHDream, VoidEnums.SoundID.VoidNSHDreamSound },
+			{ NSHDream, VoidEnums.SoundID.NSHDreamSound },
+            { SkyDream, VoidEnums.SoundID.SkyDreamSound }
+        };
 	}
 
 	private static void Menu_PlaySound_SoundID(On.Menu.Menu.orig_PlaySound_SoundID orig, Menu.Menu self, SoundID soundID)

@@ -3,9 +3,9 @@
 	"scene_folder": "slugbase/scenes/dreams - void/void - hearth",
 	"images": [
 	    {"name": "void - hearth - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
-		{ "name": "background", "pos": [0,0], "depth": 10, "shader": "Basic" },
-		{ "name": "karma", "pos": [0,0], "depth": 8, "shader": "Basic" },
-		{ "name": "void", "pos": [0,0], "depth": 7, "shader": "Basic" },
+		{ "name": "background", "pos": [-70,-40], "depth": 12, "shader": "Basic" },
+		{ "name": "karma", "pos": [0,0], "depth": 10, "shader": "Basic" },
+		{ "name": "void", "pos": [0,0], "depth": 8, "shader": "Basic" },
 		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" }
 	],
 	"idle_depths": [ 2.8 ],

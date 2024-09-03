@@ -5,7 +5,7 @@
 		{ "name": "sky - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background", "pos": [0,0], "depth": -1, "shader": "Basic" },
 		{ "name": "iterarot", "pos": [0,0], "depth": 100, "shader": "Basic" },
-		{ "name": "cloud", "pos": [0,0], "depth": 15, "shader": "Basic" },
+		{ "name": "cloud", "pos": [0,0], "depth": 30, "shader": "Basic" },
 		{ "name": "stone", "pos": [0,0], "depth": 7, "shader": "Basic" },
 		{ "name": "hunter", "pos": [0,0], "depth": 5, "shader": "Basic" },
 		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" }

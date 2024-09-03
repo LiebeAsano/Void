@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -11,26 +12,26 @@ internal static class ExtendedLungs
 {
     public static void Hook()
     {
-        On.StoryGameSession.AddPlayer += StoryGameSession_AddPlayer;
+        On.Player.Update += Player_Update;
     }
-    private static void StoryGameSession_AddPlayer(On.StoryGameSession.orig_AddPlayer orig, StoryGameSession self, AbstractCreature abstractCreature)
+    private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
     {
-        orig(self, abstractCreature);
-        if (abstractCreature.realizedCreature is Player player
-            && player.IsVoid())
+        orig(self, eu);
+        if (self.IsVoid())
         {
-            if (player.KarmaCap != 10)
+            if (self.KarmaCap != 10)
             {
-                int karma = player.Karma;
+                int karma = self.Karma;
 
                 float baseLungAirConsumption = 1.0f;
                 float reducePerKarma = 0.06f;
                 float newLungCapacity = baseLungAirConsumption - (reducePerKarma * (karma + 1));
 
-                player.slugcatStats.lungsFac = newLungCapacity;
+                self.slugcatStats.lungsFac = newLungCapacity;
+
             }
             else
-                player.slugcatStats.lungsFac = 0.15f;
+                self.slugcatStats.lungsFac = 0.25f;
         }
     }
 }

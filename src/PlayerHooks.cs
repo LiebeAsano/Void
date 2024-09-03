@@ -31,6 +31,8 @@ namespace VoidTemplate
 
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
 
+            On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+
             IL.Player.UpdateAnimation += Player_UpdateAnimation;
             IL.Player.UpdateMSC += Player_ForbidenDrone;
         }
@@ -361,7 +363,6 @@ namespace VoidTemplate
             }
 
             var state = player.GetPlayerState();
-            bool isSSRoom = PlayerRoomChecker.IsRoomIDSS_AI(player);
 
             player.diveForce = Mathf.Max(0f, player.diveForce - 0.05f);
             player.waterRetardationImmunity = Mathf.InverseLerp(0f, 0.3f, player.diveForce) * 0.85f;
@@ -397,7 +398,7 @@ namespace VoidTemplate
             {
                 UpdateBodyMode_WallClimb(player);
             }
-            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && KarmaCap_Check(player) && !isSSRoom)
+            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && KarmaCap_Check(player))
             {
                 player.bodyMode = BodyModeIndexExtension.CeilCrawl;
                 UpdateBodyMode_CeilCrawl(player);
@@ -542,10 +543,6 @@ namespace VoidTemplate
             if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
             {
 
-                if (player_graphics.legs != null)
-                {
-                    player_graphics.legs.pos = new Vector2(1000, 1000);
-                }
                 if (player.input[0].x != 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(player.flipDirection * 100f, 0.0f), 0f);
@@ -626,6 +623,14 @@ namespace VoidTemplate
             return orig(slugcat_hand);
         }
 
+        private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
+        {
+            orig(self, sLeaser, rCam, timeStacker, camPos);
+            if (self.owner is Player player && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            {
+                sLeaser.sprites[4].isVisible = false;
+            }
+        }
 
         public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
         {

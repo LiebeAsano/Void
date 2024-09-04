@@ -27,18 +27,18 @@ You need to stop being distracted by pearls.|Тебе нужно переста�
 Are you trying my patience?|Ты испытываешь моё терпение?
 I will tell you about this pearls another time.|Я расскажу тебе об этих жемчужинах в другой раз.
 Yes... this pearl contains data about my structure.|Да... это жемчужина содержит данные о моей структуре.
-Strange... This pearl shouldn't be here.|Странно... Этой жемчужины здесь быть не должно. 
-There is nothing useful in this pearl, you can eat it if you want.|В этой жемчужине нет ничего полезного, ты можешь съесть ее, если хочешь.
+Strange... This pearl shouldn't be here.|Странно... Этой жемчужины здесь быть не должно.
+This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.|Эта жемчужина, созданная многими поколениями, содержит в себе истории, технологии и мысли давно ушедших цивилизаций.
 You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.|Ты можешь заметить, что эта жемчужина слегка выцвела, к сожалению, даже в них информация не вечна.
 I wish I could just teach you how to read them...|Жаль, что я не могу просто научить тебя их читать...
 
 //EATING PEARLS
 
-I'm not sure you can stomach pearl.|Я не уверен, что ты cможешь переварить жемчужину. 
+I'm not sure you can stomach pearl.|Я не уверен, что ты cможешь переварить жемчужину.
 Do you really eat them?|Ты действительно их ешь?
 Little creature. You shouldn't eat pearls.|Зверёк. Тебе не следует есть жемчуги.
 You must stop right now.|Ты должен прекратить прямо сейчас.
-I'm warning you for the last time.|Я предупреждаю тебя в последний раз.  
+I'm warning you for the last time.|Я предупреждаю тебя в последний раз.
 
 //FIVE PEBBLES
 

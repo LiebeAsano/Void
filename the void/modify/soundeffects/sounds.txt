@@ -1,3 +1,4 @@
+[ADD]Sub_Dream_Sound/dopplerFac=0 : SubDreamSound/vol=0.5
 [ADD]Sky_Dream_Sound/dopplerFac=0 : SkyDreamSound/vol=0.5
 [ADD]NSH_Dream_Sound/dopplerFac=0 : NSHDreamSound/vol=0.5
 [ADD]Void_NSH_Dream_Sound/dopplerFac=0 : VoidNSHDreamSound/vol=0.5

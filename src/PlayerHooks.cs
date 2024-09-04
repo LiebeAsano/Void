@@ -303,8 +303,8 @@ namespace VoidTemplate
             BodyChunk body_chunk_1 = player.bodyChunks[1];
 
             Vector2[] directions = {
-        new Vector2(0, 2)
-    };
+            new Vector2(0, 2)
+            };
 
             foreach (var direction in directions)
             {
@@ -539,23 +539,21 @@ namespace VoidTemplate
                 return orig(slugcat_hand);
             }
 
+            BodyChunk body_chunk_0 = player.bodyChunks[0];
+            BodyChunk body_chunk_1 = player.bodyChunks[1];
+
             // Логика для лазания по потолку
             if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
             {
 
-                if (player.input[0].x != 0)
+                if (body_chunk_0.pos.x > body_chunk_1.pos.x)
                 {
-                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(player.flipDirection * 100f, 0.0f), 0f);
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0.0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
-                else if (player.input[0].x < 0)
+                else
                 {
-                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0f), 0f);
-                    player_graphics.objectLooker.timeLookingAtThis = 6;
-                }
-                else if (player.input[0].x > 0)
-                {
-                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0f), 0f);
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0.0f), 0f);
                     player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
                 player.animationFrame++;
@@ -564,7 +562,7 @@ namespace VoidTemplate
 
                 orig(slugcat_hand);
 
-                if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f))
+                if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f)) 
                 {
                     Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
                     Vector2 gripDirectionOffset = new Vector2(player.flipDirection * 10f, 5f);
@@ -584,9 +582,6 @@ namespace VoidTemplate
                 slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
                 Vector2 attached_position = slugcat_hand.connection.pos + new Vector2(player.flipDirection * 10f, 0.0f);
 
-                BodyChunk body_chunk_0 = player.bodyChunks[0];
-                BodyChunk body_chunk_1 = player.bodyChunks[1];
-
                 if (player.input[0].y > 0)
                 {
                     player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
@@ -594,11 +589,8 @@ namespace VoidTemplate
                 }
                 else
                 {
-                    if (body_chunk_0.pos.y > body_chunk_1.pos.y)
-                    {
-                        player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
-                        player_graphics.objectLooker.timeLookingAtThis = 6;
-                    }
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
                 }
                 player.animationFrame++;
 

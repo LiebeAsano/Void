@@ -82,7 +82,7 @@ static class OracleHooks
 
 
         }
-        else if (amountOfEatenPearls < 11)
+        else if (amountOfEatenPearls < 12)
         {
             self.dialogBox.Interrupt(self.Translate(
                 self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
@@ -121,7 +121,7 @@ static class OracleHooks
             "I will tell you about this pearls another time.",
             "Yes... this pearl contains data about my structure.",
             "Strange... This pearl shouldn't be here.",
-            "There is nothing useful in this pearl, you can eat it if you want.",
+            "This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.",
             "You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.",
             "I wish I could just teach you how to read them..."
         };
@@ -131,7 +131,7 @@ static class OracleHooks
             "I'm not sure you can stomach pearl.",
             ". . .",
             "Do you really eat them?",
-            "You really shouldn't eat pearls.",
+            "Little creature. You shouldn't eat pearls.",
             "You must stop right now.",
             "I'm warning you for the last time."
         };
@@ -142,14 +142,15 @@ static class OracleHooks
             ". . .",
             "Do you really eat them?",
             "Little creature. You shouldn't eat pearls.",
-            "5-6",
-            "6-6",
-            "7-6",
-            "8-6",
-            "9-6",
-            "10-6",
-            "11-6"
-        };
+            "Can you stop dissolving my pearls?",
+            "You just ate something more valuable than you can imagine.",
+            "This pearl that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I can't get it back.",
+            "Considering that your body weight does not change, this means that all the objects you eat are simply dissolved by the void fluid.",
+            "Although if to assume that all the water in your body has been displaced by the void fluid, its concentration is still insufficient to dissolve objects so fast.",
+            "Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.",
+            "I would never have thought that such wasteful use of pearls could bring me closer to understanding the nature of the void fluid.",
+            ""
+        }; 
 
 
 

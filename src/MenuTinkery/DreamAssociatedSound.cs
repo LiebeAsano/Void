@@ -17,7 +17,8 @@ internal static class DreamAssociatedSound
 			{ FarmDream, SoundID.Bomb_Explode },
 			{ Void_NSHDream, VoidEnums.SoundID.VoidNSHDreamSound },
 			{ NSHDream, VoidEnums.SoundID.NSHDreamSound },
-            { SkyDream, VoidEnums.SoundID.SkyDreamSound }
+            { SkyDream, VoidEnums.SoundID.SkyDreamSound },
+            { SubDream, VoidEnums.SoundID.SubDreamSound },
         };
 	}
 

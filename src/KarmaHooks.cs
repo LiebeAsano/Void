@@ -234,19 +234,18 @@ namespace VoidTemplate
             }
         }
 
-
-
         private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
         {
             orig(self, package);
             MenuScene.SceneID sceneID = null;
-
             if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.IsSleepScreen)
             {
-                if (self.IsStarveScreen) sceneID = VoidEnums.SceneID.DeathScene;
+                if (self.IsStarveScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+                {
+                    sceneID = VoidEnums.SceneID.DeathScene;
+                }
                 else if (self.karmaLadder.displayKarma.y == 10) sceneID = VoidEnums.SceneID.SleepScene11;
                 else sceneID = VoidEnums.SceneID.SleepScene;
-                Debug.Log($"[The Void] Karma Sleep Scene, Karma : {self.karmaLadder.displayKarma.y}");
             }
             if (sceneID != null && sceneID.Index != -1)
             {
@@ -257,16 +256,6 @@ namespace VoidTemplate
                 for (int i = self.scene.depthIllustrations.Count - 1; i > 0; i--)
                     self.scene.depthIllustrations[i].sprite.MoveToBack();
             }
-        }
-
-        private static void SleepAndDeathScreen_AddBkgIllustration(On.Menu.SleepAndDeathScreen.orig_AddBkgIllustration orig, SleepAndDeathScreen self)
-        {
-            if (self.manager.currentMainLoop is RainWorldGame game &&
-                game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
-            {
-                return;
-            }
-            orig(self);
         }
 
 

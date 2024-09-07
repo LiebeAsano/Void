@@ -20,118 +20,15 @@ namespace VoidTemplate
             On.Player.CanIPickThisUp += Player_CanIPickThisUp;
             On.Player.UpdateBodyMode += Player_UpdateBodyMode;
             On.Player.ctor += Player_Ctor;
-            On.Player.SwallowObject += Player_SwallowObject;
             On.Player.Update += NoForceSleep;
             On.Player.CanBeSwallowed += Player_CanBeSwallowed;
             On.Player.Grabability += Player_Grabability;
-            On.Player.EatMeatUpdate += DontEatVoid;
             On.Player.Update += MalnourishmentDeath;
-
-            On.Rock.HitSomething += Rock_HitSomething_Update;
 
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
 
             On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-
-            IL.Player.UpdateAnimation += Player_UpdateAnimation;
-            IL.Player.UpdateMSC += Player_ForbidenDrone;
-        }
-
-        private static bool Rock_HitSomething_Update(On.Rock.orig_HitSomething orig, Rock self, SharedPhysics.CollisionResult result, bool eu)
-        {
-            if (self.thrownBy is Player player
-                && player.IsVoid()
-                && result.obj is Creature creature)
-                {
-                    string creatureTypeName = creature.Template.type.ToString();
-
-                    string[] excludedCreatureTypes = [
-                    "Vulture",
-                    "BrotherLongLegs",
-                    "DaddyLongLegs",
-                    "BigEel",
-                    "PoleMimic",
-                    "TentaclePlant",
-                    "MirosBird",
-                    "RedLizard",
-                    "KingVulture",
-                    "Centipede",
-                    "RedCentipede",
-                    "TempleGuard",
-                    "Deer",
-                    "MirosVulture",
-                    "HunterDaddy",
-                    "ScavengerKing",
-                    "TrainLizard",
-                    "Inspector",
-                    "TerrorLongLegs",
-                    "AquaCenti",
-                    "StowawayBug"
-                    ];
-
-                if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)
-                {
-                    creature.Stun(69);
-                }
-            }
-
-            return orig(self, result, eu);
-        }
-
-
-        private static void Player_ForbidenDrone(ILContext il)
-        {
-            try
-            {
-                ILCursor c = new(il);
-                c.GotoNext(MoveType.After, i => i.MatchLdfld<UpdatableAndDeletable>("room"),
-                    i => i.MatchLdfld<Room>("game"),
-                    i => i.MatchLdfld<RainWorldGame>("wasAnArtificerDream"));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
-                    re && (self.abstractCreature.world.game.session is StoryGameSession session &&
-                           session.saveStateNumber == VoidEnums.SlugcatID.TheVoid));
-
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-        private static void Player_UpdateAnimation(ILContext il)
-        {
-            try
-            {
-                ILCursor c = new(il);
-                c.GotoNext(MoveType.After,
-                    i => i.MatchCallvirt<ClimbableVinesSystem>("VineCurrentlyClimbable"));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
-                {
-                    if (self.IsVoid() &&
-                        self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
-                        return false;
-                    return re;
-                });
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-
-        private static void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
-        {
-            orig(self, graspIndex);
-            if (self.eatMeat != 50 || self.IsVoid()) return;
-            Array.ForEach(self.grasps, grasp =>
-            {
-                if (grasp != null
-                && grasp.grabbed is Player prey
-                && prey.IsVoid())
-                    self.Die();
-
-            });
+            
         }
 
         private static void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
@@ -145,6 +42,7 @@ namespace VoidTemplate
                 && player.IsVoid()
                 && player.room != null
                 && player.room == self.room
+                && player.KarmaCap != 10
                 && player.Malnourished) player.Die();
             });
 
@@ -168,7 +66,7 @@ namespace VoidTemplate
         private static void NoForceSleep(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
-            if (self.IsVoid())   
+            if (self.IsVoid() && self.KarmaCap != 10)   
                 self.forceSleepCounter = 0;
         }
 
@@ -176,114 +74,6 @@ namespace VoidTemplate
         {
             return self.IsVoid() && self.KarmaCap > 3;
         }
-
-        private static readonly HashSet<Type> HalfFoodObjects =
-        [
-            typeof(Hazer),
-            typeof(VultureGrub)
-        ];
-
-        private static readonly HashSet<Type> QuarterFoodObjects =
-        [
-            typeof(WaterNut)
-        ];
-
-        private static readonly HashSet<Type> FullPinFoodObjects =
-        [
-            typeof(NeedleEgg),
-        ];
-
-        private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
-        {
-            AbstractPhysicalObject abstractGrabbed = self.grasps[grasp]?.grabbed?.abstractPhysicalObject;
-
-            if (self.IsVoid())
-            {
-                var grabbed = self.grasps[grasp]?.grabbed;
-
-                if (grabbed != null)
-                {
-                    if (QuarterFoodObjects.Contains(grabbed.GetType()))
-                    {
-
-                        orig(self, grasp);
-
-                        self.AddQuarterFood();
-
-                        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                        }
-                        return;
-                    }
-                    else if (FullPinFoodObjects.Contains(grabbed.GetType()))
-                    {
-
-                        orig(self, grasp);
-                        if (self.Karma != 10)
-                        {
-                            self.AddFood(2);
-                        }
-                        else
-                        {
-                            self.AddFood(4);
-                        }
-
-                        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                        }
-                        return;
-                    }
-                    else if (HalfFoodObjects.Contains(grabbed.GetType()))
-                    {
-
-                        orig(self, grasp);
-
-                        if (self.Karma != 10)
-                        {
-                            self.AddQuarterFood();
-                            self.AddQuarterFood();
-                        }
-                        else
-                        {
-                            self.AddFood(1);
-                        }
-                        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                        }
-                        return;
-                    }
-                }
-            }
-
-            if (self.IsVoid() && self.Karma != 10)
-            {
-                if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl &&
-                    self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
-                {
-                    ((self.room.updateList.First(i => i is Oracle) as Oracle)
-                        .oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
-                }
-            }
-
-            orig(self, grasp);
-
-            if (self.IsVoid() && self.objectInStomach != null)
-            {
-                self.objectInStomach.Destroy();
-                self.objectInStomach = null;
-            }
-
-            orig(self, grasp);
-        }
-
-
-
 
         private static void Player_Ctor(On.Player.orig_ctor orig, Player player, AbstractCreature abstract_creature, World world)
         {

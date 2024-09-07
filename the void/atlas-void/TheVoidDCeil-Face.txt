@@ -1,6 +1,6 @@
 {"frames": {
 
-"TheVoid-FaceA0.png":
+"TheVoidDCeil-FaceA0.png":
 {
 	"frame": {"x":2,"y":2,"w":46,"h":48},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA1.png":
+"TheVoidDCeil-FaceA1.png":
 {
 	"frame": {"x":50,"y":2,"w":46,"h":48},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA2.png":
+"TheVoidDCeil-FaceA2.png":
 {
 	"frame": {"x":98,"y":2,"w":46,"h":48},
 	"rotated": false,
@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA3.png":
+"TheVoidDCeil-FaceA3.png":
 {
 	"frame": {"x":146,"y":2,"w":46,"h":48},
 	"rotated": false,
@@ -32,7 +32,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA4.png":
+"TheVoidDCeil-FaceA4.png":
 {
 	"frame": {"x":194,"y":2,"w":46,"h":48},
 	"rotated": false,
@@ -40,7 +40,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA5.png":
+"TheVoidDCeil-FaceA5.png":
 {
 	"frame": {"x":2,"y":52,"w":46,"h":48},
 	"rotated": false,
@@ -48,7 +48,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA6.png":
+"TheVoidDCeil-FaceA6.png":
 {
 	"frame": {"x":50,"y":52,"w":46,"h":48},
 	"rotated": false,
@@ -56,7 +56,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA7.png":
+"TheVoidDCeil-FaceA7.png":
 {
 	"frame": {"x":98,"y":52,"w":46,"h":48},
 	"rotated": false,
@@ -64,7 +64,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceA8.png":
+"TheVoidDCeil-FaceA8.png":
 {
 	"frame": {"x":146,"y":52,"w":46,"h":48},
 	"rotated": false,
@@ -72,7 +72,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB0.png":
+"TheVoidDCeil-FaceB0.png":
 {
 	"frame": {"x":194,"y":52,"w":46,"h":48},
 	"rotated": false,
@@ -80,7 +80,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB1.png":
+"TheVoidDCeil-FaceB1.png":
 {
 	"frame": {"x":2,"y":102,"w":46,"h":48},
 	"rotated": false,
@@ -88,7 +88,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB2.png":
+"TheVoidDCeil-FaceB2.png":
 {
 	"frame": {"x":50,"y":102,"w":46,"h":48},
 	"rotated": false,
@@ -96,7 +96,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB3.png":
+"TheVoidDCeil-FaceB3.png":
 {
 	"frame": {"x":98,"y":102,"w":46,"h":48},
 	"rotated": false,
@@ -104,7 +104,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB4.png":
+"TheVoidDCeil-FaceB4.png":
 {
 	"frame": {"x":146,"y":102,"w":46,"h":48},
 	"rotated": false,
@@ -112,7 +112,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB5.png":
+"TheVoidDCeil-FaceB5.png":
 {
 	"frame": {"x":194,"y":102,"w":46,"h":48},
 	"rotated": false,
@@ -120,7 +120,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB6.png":
+"TheVoidDCeil-FaceB6.png":
 {
 	"frame": {"x":2,"y":152,"w":46,"h":48},
 	"rotated": false,
@@ -128,7 +128,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB7.png":
+"TheVoidDCeil-FaceB7.png":
 {
 	"frame": {"x":50,"y":152,"w":46,"h":48},
 	"rotated": false,
@@ -136,7 +136,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceB8.png":
+"TheVoidDCeil-FaceB8.png":
 {
 	"frame": {"x":98,"y":152,"w":46,"h":48},
 	"rotated": false,
@@ -144,7 +144,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceDead.png":
+"TheVoidDCeil-FaceDead.png":
 {
 	"frame": {"x":146,"y":152,"w":46,"h":48},
 	"rotated": false,
@@ -152,7 +152,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 },
-"TheVoid-FaceStunned.png":
+"TheVoidDCeil-FaceStunned.png":
 {
 	"frame": {"x":194,"y":152,"w":46,"h":48},
 	"rotated": false,
@@ -160,10 +160,11 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":48},
 	"sourceSize": {"w":46,"h":48}
 }},
+
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "TheVoid-Face.png",
+	"image": "TheVoidDCeil-Face.png",
 	"format": "RGBA8888",
 	"size": {"w":242,"h":202},
 	"scale": "1",

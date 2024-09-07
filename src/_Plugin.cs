@@ -101,13 +101,13 @@ class _Plugin : BaseUnityPlugin
         BodyChunk body_chunk_1 = player.bodyChunks[1];
 
         Vector2[] directions = {
-            new Vector2(0, 2)
+            new Vector2(0, 1)
             };
 
         foreach (var direction in directions)
         {
-            Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 5);
-            Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 5);
+            Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
+            Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
 
             IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
             IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
@@ -168,7 +168,23 @@ class _Plugin : BaseUnityPlugin
 			}
             if (sprite.element.name.StartsWith("Head"))
 			{
-				if (self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                {
+                    if (!self.player.input[0].jmp)
+                    {
+                        string head = "TheVoidDCeil-";
+                        if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+                    }
+                    else
+                    {
+                        string head = "TheVoid-";
+                        if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+                    }
+                }
+                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 				{
                     if (!self.player.input[0].jmp)
                     {
@@ -190,7 +206,23 @@ class _Plugin : BaseUnityPlugin
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
                 BodyChunk body_chunk_1 = self.player.bodyChunks[1];
 
-                if ((IsTouchingCeiling(self.player) || IsTouchingDiagonalCeiling(self.player)) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                {
+                    if (!self.player.input[0].jmp)
+                    {
+                        string face = "TheVoidDCeil-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                    else
+                    {
+                        string face = "TheVoid-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                }
+
+                else if ((IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl))
 				{
 					if (!self.player.input[0].jmp)
 					{
@@ -205,32 +237,23 @@ class _Plugin : BaseUnityPlugin
                             sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
                     }
 				}
-				else
-				{
-					if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y)
-					{
-						if (self.player.abstractCreature.world.game.session is StoryGameSession session2 &&
-							session2.saveState.deathPersistentSaveData.karma == 10)
-						{
-							string face = "TheVoid11-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-						else
-						{
-							string face = "TheVoid-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-					}
-					else
-					{
-						string face = "TheVoidDown-";
-						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-					}
-				}
-			}
+
+                else
+                {
+                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y)
+                    {
+                        string face = "TheVoid-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                    else
+                    {
+                        string face = "TheVoidDown-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                }
+            }
 		}
 	}
 

@@ -45,7 +45,7 @@ namespace VoidTemplate
                 {
                     string creatureTypeName = creature.Template.type.ToString();
 
-                    string[] excludedCreatureTypes = {
+                    string[] excludedCreatureTypes = [
                     "Vulture",
                     "BrotherLongLegs",
                     "DaddyLongLegs",
@@ -67,7 +67,7 @@ namespace VoidTemplate
                     "TerrorLongLegs",
                     "AquaCenti",
                     "StowawayBug"
-                    };
+                    ];
 
                 if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)
                 {
@@ -83,7 +83,7 @@ namespace VoidTemplate
         {
             try
             {
-                ILCursor c = new ILCursor(il);
+                ILCursor c = new(il);
                 c.GotoNext(MoveType.After, i => i.MatchLdfld<UpdatableAndDeletable>("room"),
                     i => i.MatchLdfld<Room>("game"),
                     i => i.MatchLdfld<RainWorldGame>("wasAnArtificerDream"));
@@ -177,21 +177,21 @@ namespace VoidTemplate
             return self.IsVoid() && self.KarmaCap > 3;
         }
 
-        private static readonly HashSet<Type> HalfFoodObjects = new()
-        {
+        private static readonly HashSet<Type> HalfFoodObjects =
+        [
             typeof(Hazer),
             typeof(VultureGrub)
-        };
+        ];
 
-        private static readonly HashSet<Type> QuarterFoodObjects = new()
-        {
+        private static readonly HashSet<Type> QuarterFoodObjects =
+        [
             typeof(WaterNut)
-        };
+        ];
 
-        private static readonly HashSet<Type> FullPinFoodObjects = new()
-        {
+        private static readonly HashSet<Type> FullPinFoodObjects =
+        [
             typeof(NeedleEgg),
-        };
+        ];
 
         private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
         {
@@ -302,14 +302,14 @@ namespace VoidTemplate
             BodyChunk body_chunk_0 = player.bodyChunks[0];
             BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-            Vector2[] directions = {
-            new Vector2(0, 2)
-            };
+            Vector2[] directions = [
+            new Vector2(0, 1)
+            ];
 
             foreach (var direction in directions)
             {
-                Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 5);
-                Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 5);
+                Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
+                Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
 
                 IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
                 IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
@@ -318,12 +318,8 @@ namespace VoidTemplate
                 SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
                 SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
 
-                bool isDiagonal = (slopeDirection_0 == SlopeDirection.UpLeft ||
-                           slopeDirection_0 == SlopeDirection.UpRight ||
-                           slopeDirection_0 == SlopeDirection.DownLeft ||
-                           slopeDirection_0 == SlopeDirection.DownRight || 
-                           slopeDirection_1 == SlopeDirection.UpLeft ||
-                           slopeDirection_1 == SlopeDirection.UpRight ||
+                bool isDiagonal = (slopeDirection_0 == SlopeDirection.DownLeft ||
+                           slopeDirection_0 == SlopeDirection.DownRight ||  
                            slopeDirection_1 == SlopeDirection.DownLeft ||
                            slopeDirection_1 == SlopeDirection.DownRight);
 
@@ -335,6 +331,7 @@ namespace VoidTemplate
 
             return false;
         }
+
         private static bool IsTouchingCeiling(Player player)
         {
             BodyChunk body_chunk_0 = player.bodyChunks[0];
@@ -497,11 +494,6 @@ namespace VoidTemplate
                     {
                         body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
                     }
-
-                    if (!player.input[0].jmp)
-                    {
-                        body_chunk_1.vel.y = Custom.LerpAndTick(body_chunk_1.vel.y, ceilingForce, 0.3f, 1f);
-                    }
                 }
                 if (player.slideLoop != null && player.slideLoop.volume > 0.0f)
                 {
@@ -565,7 +557,7 @@ namespace VoidTemplate
                 if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f)) 
                 {
                     Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
-                    Vector2 gripDirectionOffset = new Vector2(player.flipDirection * 10f, 5f);
+                    Vector2 gripDirectionOffset = new(player.flipDirection * 10f, 5f);
                     slugcat_hand.FindGrip(player.room, slugcat_hand.connection.pos, slugcat_hand.connection.pos, 100f,
                         slugcat_hand.connection.pos + (vector + new Vector2(player.input[0].x, player.input[0].y).normalized * 1.5f).normalized * 20f + gripDirectionOffset, 2, 2, false);
                 }
@@ -618,9 +610,62 @@ namespace VoidTemplate
         private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
             orig(self, sLeaser, rCam, timeStacker, camPos);
-            if (self.owner is Player player && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+
+            Player player = self.player;
+
+            BodyChunk body_chunk_0 = player.bodyChunks[0];
+            BodyChunk body_chunk_1 = player.bodyChunks[1];
+
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl || 
+                player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
             {
                 sLeaser.sprites[4].isVisible = false;
+
+                if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
+                    LeftWallApplyCeilCrawlForce(self);
+                else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
+                        RightWallApplyCeilCrawlForce(self);
+                else if (!player.input[0].jmp)
+                        ApplyCeilCrawlForce(self);
+            }
+        }
+
+        private static void ApplyCeilCrawlForce(PlayerGraphics playerGraphics)
+        {
+            int tailSegments = playerGraphics.tail.Length;
+
+            for (int i = 0; i < tailSegments; i++)
+            {
+                TailSegment tailSegment = playerGraphics.tail[i];
+
+                Vector2 force = new Vector2(0, 0.1f);
+                tailSegment.vel += force;
+            }
+        }
+
+        private static void LeftWallApplyCeilCrawlForce(PlayerGraphics playerGraphics)
+        {
+            int tailSegments = playerGraphics.tail.Length;
+
+            for (int i = 0; i < tailSegments; i++)
+            {
+                TailSegment tailSegment = playerGraphics.tail[i];
+
+                Vector2 force = new Vector2(-0.1f, 0.1f);
+                tailSegment.vel += force;
+            }
+        }
+
+        private static void RightWallApplyCeilCrawlForce(PlayerGraphics playerGraphics)
+        {
+            int tailSegments = playerGraphics.tail.Length;
+
+            for (int i = 0; i < tailSegments; i++)
+            {
+                TailSegment tailSegment = playerGraphics.tail[i];
+
+                Vector2 force = new Vector2(0.1f, 0.1f);
+                tailSegment.vel += force;
             }
         }
 
@@ -730,16 +775,16 @@ namespace VoidTemplate
 
     public static class PlayMod
     {
-        public static PlayMod.Player_Attached_Fields Get_Attached_Fields(this Player player)
+        public static Player_Attached_Fields Get_Attached_Fields(this Player player)
         {
-            PlayMod.Player_Attached_Fields attached_fields;
-            PlayMod.all_attached_fields.TryGetValue(player, out attached_fields);
+            Player_Attached_Fields attached_fields;
+            all_attached_fields.TryGetValue(player, out attached_fields);
             return attached_fields;
         }
 
         public static void Add_Attached_Fields(this Player player)
         {
-            if (!PlayMod.all_attached_fields.TryGetValue(player, out _))
+            if (!all_attached_fields.TryGetValue(player, out _))
                 all_attached_fields.Add(player, new());
         }
 
@@ -763,7 +808,7 @@ namespace VoidTemplate
 
     public static class PlayerExtensions
     {
-        private static readonly Dictionary<Player, PlayerState> PlayerStates = new Dictionary<Player, PlayerState>();
+        private static readonly Dictionary<Player, PlayerState> PlayerStates = [];
 
         public static PlayerState GetPlayerState(this Player player)
         {

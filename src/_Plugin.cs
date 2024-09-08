@@ -27,8 +27,6 @@ class _Plugin : BaseUnityPlugin
 	public static ManualLogSource logger;
 	
 	public static bool DevEnabled = false;
-
-    public static readonly SlugcatStats.Name TheVoid = new("TheVoid");
     public void OnEnable()
 	{
 		logger = Logger;

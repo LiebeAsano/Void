@@ -24,8 +24,7 @@ static class EdibleChanges
             if (self.bites == 0 && player.KarmaCap == 10)
             {
                 var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-                if (savestate.GetKarmaToken(out int currentTokens)) savestate.SetKarmaToken(currentTokens + 2);
-                else savestate.SetKarmaToken(2);
+                savestate.SetKarmaToken(Math.Min(10, savestate.GetKarmaToken() + 2));
             }
             grasp.Release();
             self.Destroy();

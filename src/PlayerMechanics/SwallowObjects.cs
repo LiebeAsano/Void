@@ -23,10 +23,21 @@ internal static class SwallowObjects
 
     private static readonly HashSet<Type> QuarterFoodObjects =
     [
-        typeof(WaterNut)
+        typeof(WaterNut),
+        typeof(FirecrackerPlant),
+        typeof(FlyLure),
+        typeof(FlareBomb),
+        typeof(PuffBall),
+        typeof(FlyLure),
+        typeof(BubbleGrass)
     ];
 
     private static readonly HashSet<Type> FullPinFoodObjects =
+    [
+        typeof(SporePlant),
+        ];
+
+    private static readonly HashSet<Type> TwoFullPinFoodObjects =
     [
         typeof(NeedleEgg),
         ];
@@ -56,6 +67,27 @@ internal static class SwallowObjects
                     return;
                 }
                 else if (FullPinFoodObjects.Contains(grabbed.GetType()))
+                {
+
+                    orig(self, grasp);
+
+                    if (self.Karma != 10)
+                    {
+                        self.AddFood(1);
+                    }
+                    else
+                    {
+                        self.AddFood(2);
+                    }
+
+                    if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
+                    {
+                        self.objectInStomach.Destroy();
+                        self.objectInStomach = null;
+                    }
+                    return;
+                }
+                else if (TwoFullPinFoodObjects.Contains(grabbed.GetType()))
                 {
 
                     orig(self, grasp);

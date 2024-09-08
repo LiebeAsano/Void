@@ -23,29 +23,11 @@ namespace VoidTemplate
             On.Player.Update += NoForceSleep;
             On.Player.CanBeSwallowed += Player_CanBeSwallowed;
             On.Player.Grabability += Player_Grabability;
-            On.Player.Update += MalnourishmentDeath;
 
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
 
             On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
             
-        }
-
-        private static void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
-        {
-            orig(self, eu);
-            if (self.room == null) return;
-            RainWorldGame game = self.room.game;
-            game.Players.ForEach(absPlayer =>
-            {
-                if (absPlayer.realizedCreature is Player player
-                && player.IsVoid()
-                && player.room != null
-                && player.room == self.room
-                && player.KarmaCap != 10
-                && player.Malnourished) player.Die();
-            });
-
         }
 
         private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)

@@ -28,7 +28,8 @@ class _Plugin : BaseUnityPlugin
 	
 	public static bool DevEnabled = false;
 
-	public void OnEnable()
+    public static readonly SlugcatStats.Name TheVoid = new("TheVoid");
+    public void OnEnable()
 	{
 		logger = Logger;
 		On.RainWorld.OnModsInit += RainWorld_OnModsInit;

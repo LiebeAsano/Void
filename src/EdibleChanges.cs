@@ -21,6 +21,12 @@ static class EdibleChanges
             self.bites--;
             self.room.PlaySound((self.bites == 0) ? SoundID.Slugcat_Eat_Karma_Flower : SoundID.Slugcat_Bite_Karma_Flower, self.firstChunk.pos);
             self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
+            if (self.bites == 0 && player.KarmaCap == 10)
+            {
+                var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
+                if (savestate.GetKarmaToken(out int currentTokens)) savestate.SetKarmaToken(currentTokens + 2);
+                else savestate.SetKarmaToken(2);
+            }
             grasp.Release();
             self.Destroy();
             return;

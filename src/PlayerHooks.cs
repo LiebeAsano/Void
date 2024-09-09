@@ -20,134 +20,14 @@ namespace VoidTemplate
             On.Player.CanIPickThisUp += Player_CanIPickThisUp;
             On.Player.UpdateBodyMode += Player_UpdateBodyMode;
             On.Player.ctor += Player_Ctor;
-            On.Player.SwallowObject += Player_SwallowObject;
             On.Player.Update += NoForceSleep;
             On.Player.CanBeSwallowed += Player_CanBeSwallowed;
             On.Player.Grabability += Player_Grabability;
-            On.Player.EatMeatUpdate += DontEatVoid;
-            On.Player.Update += MalnourishmentDeath;
-
-            On.Rock.HitSomething += Rock_HitSomething_Update;
 
             On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
 
             On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-
-            IL.Player.UpdateAnimation += Player_UpdateAnimation;
-            IL.Player.UpdateMSC += Player_ForbidenDrone;
-        }
-
-        private static bool Rock_HitSomething_Update(On.Rock.orig_HitSomething orig, Rock self, SharedPhysics.CollisionResult result, bool eu)
-        {
-            if (self.thrownBy is Player player
-                && player.IsVoid()
-                && result.obj is Creature creature)
-                {
-                    string creatureTypeName = creature.Template.type.ToString();
-
-                    string[] excludedCreatureTypes = {
-                    "Vulture",
-                    "BrotherLongLegs",
-                    "DaddyLongLegs",
-                    "BigEel",
-                    "PoleMimic",
-                    "TentaclePlant",
-                    "MirosBird",
-                    "RedLizard",
-                    "KingVulture",
-                    "Centipede",
-                    "RedCentipede",
-                    "TempleGuard",
-                    "Deer",
-                    "MirosVulture",
-                    "HunterDaddy",
-                    "ScavengerKing",
-                    "TrainLizard",
-                    "Inspector",
-                    "TerrorLongLegs",
-                    "AquaCenti",
-                    "StowawayBug"
-                    };
-
-                if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)
-                {
-                    creature.Stun(69);
-                }
-            }
-
-            return orig(self, result, eu);
-        }
-
-
-        private static void Player_ForbidenDrone(ILContext il)
-        {
-            try
-            {
-                ILCursor c = new ILCursor(il);
-                c.GotoNext(MoveType.After, i => i.MatchLdfld<UpdatableAndDeletable>("room"),
-                    i => i.MatchLdfld<Room>("game"),
-                    i => i.MatchLdfld<RainWorldGame>("wasAnArtificerDream"));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
-                    re && (self.abstractCreature.world.game.session is StoryGameSession session &&
-                           session.saveStateNumber == VoidEnums.SlugcatID.TheVoid));
-
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-        private static void Player_UpdateAnimation(ILContext il)
-        {
-            try
-            {
-                ILCursor c = new(il);
-                c.GotoNext(MoveType.After,
-                    i => i.MatchCallvirt<ClimbableVinesSystem>("VineCurrentlyClimbable"));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
-                {
-                    if (self.IsVoid() &&
-                        self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
-                        return false;
-                    return re;
-                });
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-
-        private static void DontEatVoid(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
-        {
-            orig(self, graspIndex);
-            if (self.eatMeat != 50 || self.IsVoid()) return;
-            Array.ForEach(self.grasps, grasp =>
-            {
-                if (grasp != null
-                && grasp.grabbed is Player prey
-                && prey.IsVoid())
-                    self.Die();
-
-            });
-        }
-
-        private static void MalnourishmentDeath(On.Player.orig_Update orig, Player self, bool eu)
-        {
-            orig(self, eu);
-            if (self.room == null) return;
-            RainWorldGame game = self.room.game;
-            game.Players.ForEach(absPlayer =>
-            {
-                if (absPlayer.realizedCreature is Player player
-                && player.IsVoid()
-                && player.room != null
-                && player.room == self.room
-                && player.Malnourished) player.Die();
-            });
-
+            
         }
 
         private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
@@ -168,7 +48,7 @@ namespace VoidTemplate
         private static void NoForceSleep(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
-            if (self.IsVoid())   
+            if (self.IsVoid() && self.KarmaCap != 10)   
                 self.forceSleepCounter = 0;
         }
 
@@ -176,114 +56,6 @@ namespace VoidTemplate
         {
             return self.IsVoid() && self.KarmaCap > 3;
         }
-
-        private static readonly HashSet<Type> HalfFoodObjects = new()
-        {
-            typeof(Hazer),
-            typeof(VultureGrub)
-        };
-
-        private static readonly HashSet<Type> QuarterFoodObjects = new()
-        {
-            typeof(WaterNut)
-        };
-
-        private static readonly HashSet<Type> FullPinFoodObjects = new()
-        {
-            typeof(NeedleEgg),
-        };
-
-        private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
-        {
-            AbstractPhysicalObject abstractGrabbed = self.grasps[grasp]?.grabbed?.abstractPhysicalObject;
-
-            if (self.IsVoid())
-            {
-                var grabbed = self.grasps[grasp]?.grabbed;
-
-                if (grabbed != null)
-                {
-                    if (QuarterFoodObjects.Contains(grabbed.GetType()))
-                    {
-
-                        orig(self, grasp);
-
-                        self.AddQuarterFood();
-
-                        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                        }
-                        return;
-                    }
-                    else if (FullPinFoodObjects.Contains(grabbed.GetType()))
-                    {
-
-                        orig(self, grasp);
-                        if (self.Karma != 10)
-                        {
-                            self.AddFood(2);
-                        }
-                        else
-                        {
-                            self.AddFood(4);
-                        }
-
-                        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                        }
-                        return;
-                    }
-                    else if (HalfFoodObjects.Contains(grabbed.GetType()))
-                    {
-
-                        orig(self, grasp);
-
-                        if (self.Karma != 10)
-                        {
-                            self.AddQuarterFood();
-                            self.AddQuarterFood();
-                        }
-                        else
-                        {
-                            self.AddFood(1);
-                        }
-                        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                        }
-                        return;
-                    }
-                }
-            }
-
-            if (self.IsVoid() && self.Karma != 10)
-            {
-                if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl &&
-                    self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
-                {
-                    ((self.room.updateList.First(i => i is Oracle) as Oracle)
-                        .oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
-                }
-            }
-
-            orig(self, grasp);
-
-            if (self.IsVoid() && self.objectInStomach != null)
-            {
-                self.objectInStomach.Destroy();
-                self.objectInStomach = null;
-            }
-
-            orig(self, grasp);
-        }
-
-
-
 
         private static void Player_Ctor(On.Player.orig_ctor orig, Player player, AbstractCreature abstract_creature, World world)
         {
@@ -302,14 +74,14 @@ namespace VoidTemplate
             BodyChunk body_chunk_0 = player.bodyChunks[0];
             BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-            Vector2[] directions = {
-            new Vector2(0, 2)
-            };
+            Vector2[] directions = [
+            new Vector2(0, 1)
+            ];
 
             foreach (var direction in directions)
             {
-                Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 5);
-                Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 5);
+                Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
+                Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
 
                 IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
                 IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
@@ -318,12 +90,8 @@ namespace VoidTemplate
                 SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
                 SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
 
-                bool isDiagonal = (slopeDirection_0 == SlopeDirection.UpLeft ||
-                           slopeDirection_0 == SlopeDirection.UpRight ||
-                           slopeDirection_0 == SlopeDirection.DownLeft ||
-                           slopeDirection_0 == SlopeDirection.DownRight || 
-                           slopeDirection_1 == SlopeDirection.UpLeft ||
-                           slopeDirection_1 == SlopeDirection.UpRight ||
+                bool isDiagonal = (slopeDirection_0 == SlopeDirection.DownLeft ||
+                           slopeDirection_0 == SlopeDirection.DownRight ||  
                            slopeDirection_1 == SlopeDirection.DownLeft ||
                            slopeDirection_1 == SlopeDirection.DownRight);
 
@@ -335,6 +103,7 @@ namespace VoidTemplate
 
             return false;
         }
+
         private static bool IsTouchingCeiling(Player player)
         {
             BodyChunk body_chunk_0 = player.bodyChunks[0];
@@ -497,11 +266,6 @@ namespace VoidTemplate
                     {
                         body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
                     }
-
-                    if (!player.input[0].jmp)
-                    {
-                        body_chunk_1.vel.y = Custom.LerpAndTick(body_chunk_1.vel.y, ceilingForce, 0.3f, 1f);
-                    }
                 }
                 if (player.slideLoop != null && player.slideLoop.volume > 0.0f)
                 {
@@ -565,7 +329,7 @@ namespace VoidTemplate
                 if (!Custom.DistLess(slugcat_hand.pos, slugcat_hand.connection.pos, 20f)) 
                 {
                     Vector2 vector = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
-                    Vector2 gripDirectionOffset = new Vector2(player.flipDirection * 10f, 5f);
+                    Vector2 gripDirectionOffset = new(player.flipDirection * 10f, 5f);
                     slugcat_hand.FindGrip(player.room, slugcat_hand.connection.pos, slugcat_hand.connection.pos, 100f,
                         slugcat_hand.connection.pos + (vector + new Vector2(player.input[0].x, player.input[0].y).normalized * 1.5f).normalized * 20f + gripDirectionOffset, 2, 2, false);
                 }
@@ -615,10 +379,51 @@ namespace VoidTemplate
             return orig(slugcat_hand);
         }
 
+        private static float timeSinceLastForceUpdate = 0f;
+        private static readonly float forceUpdateInterval = 1f / 40f;
+
         private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
+            timeSinceLastForceUpdate += Time.deltaTime;
+
+            Player player = self.player;
+
+            BodyChunk body_chunk_0 = player.bodyChunks[0];
+            BodyChunk body_chunk_1 = player.bodyChunks[1];
+
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+                player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
+            {
+                if (timeSinceLastForceUpdate >= forceUpdateInterval)
+                {
+                    foreach (TailSegment tailSegment in self.tail)
+                    {
+                        Vector2 force = Vector2.zero;
+
+                        if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
+                        {
+                            force = new Vector2(-0.7f, 0.7f);
+                        }
+                        else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
+                        {
+                            force = new Vector2(0.7f, 0.7f);
+                        }
+                        else if (!player.input[0].jmp)
+                        {
+                            force = new Vector2(0f, 0.7f);
+                        }
+
+                        tailSegment.vel += force;
+                    }
+
+                    timeSinceLastForceUpdate = 0f; // сбрасываем счётчик
+                }
+            }
+
             orig(self, sLeaser, rCam, timeStacker, camPos);
-            if (self.owner is Player player && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+                player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
             {
                 sLeaser.sprites[4].isVisible = false;
             }
@@ -730,16 +535,16 @@ namespace VoidTemplate
 
     public static class PlayMod
     {
-        public static PlayMod.Player_Attached_Fields Get_Attached_Fields(this Player player)
+        public static Player_Attached_Fields Get_Attached_Fields(this Player player)
         {
-            PlayMod.Player_Attached_Fields attached_fields;
-            PlayMod.all_attached_fields.TryGetValue(player, out attached_fields);
+            Player_Attached_Fields attached_fields;
+            all_attached_fields.TryGetValue(player, out attached_fields);
             return attached_fields;
         }
 
         public static void Add_Attached_Fields(this Player player)
         {
-            if (!PlayMod.all_attached_fields.TryGetValue(player, out _))
+            if (!all_attached_fields.TryGetValue(player, out _))
                 all_attached_fields.Add(player, new());
         }
 
@@ -763,7 +568,7 @@ namespace VoidTemplate
 
     public static class PlayerExtensions
     {
-        private static readonly Dictionary<Player, PlayerState> PlayerStates = new Dictionary<Player, PlayerState>();
+        private static readonly Dictionary<Player, PlayerState> PlayerStates = [];
 
         public static PlayerState GetPlayerState(this Player player)
         {

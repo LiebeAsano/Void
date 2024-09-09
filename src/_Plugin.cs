@@ -8,6 +8,8 @@ using BepInEx.Logging;
 using static VoidTemplate.Useful.Utils;
 using RWCustom;
 using static Room;
+using VoidTemplate.MenuTinkery;
+using VoidTemplate.Misc;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -25,8 +27,7 @@ class _Plugin : BaseUnityPlugin
 	public static ManualLogSource logger;
 	
 	public static bool DevEnabled = false;
-
-	public void OnEnable()
+    public void OnEnable()
 	{
 		logger = Logger;
 		On.RainWorld.OnModsInit += RainWorld_OnModsInit;
@@ -59,7 +60,8 @@ class _Plugin : BaseUnityPlugin
 				MenuTinkery._MenuMeta.Startup();
 				CreatureInteractions._CreatureInteractionsMeta.Hook();
 				PlayerMechanics._PlayerMechanicsMeta.Hook();
-				OptionInterface._OIMeta.Initialize();
+				_MiscMeta.Hook();
+                OptionInterface._OIMeta.Initialize();
 				if (DevEnabled)
 				{
 					//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
@@ -80,58 +82,64 @@ class _Plugin : BaseUnityPlugin
 
     private static bool IsTouchingCeiling(Player player)
     {
-        BodyChunk body_chunk_0 = player.bodyChunks[0];
-        BodyChunk body_chunk_1 = player.bodyChunks[1];
+		if (player.room is not null)
+		{
+			BodyChunk body_chunk_0 = player.bodyChunks[0];
+			BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-        Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(0, body_chunk_0.rad + 5);
-        Vector2 upperPosition_1 = body_chunk_1.pos + new Vector2(0, body_chunk_1.rad + 5);
+			Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(0, body_chunk_0.rad + 5);
+			Vector2 upperPosition_1 = body_chunk_1.pos + new Vector2(0, body_chunk_1.rad + 5);
 
-        IntVector2 tileAbove_0 = player.room.GetTilePosition(upperPosition_0);
-        IntVector2 tileAbove_1 = player.room.GetTilePosition(upperPosition_1);
+			IntVector2 tileAbove_0 = player.room.GetTilePosition(upperPosition_0);
+			IntVector2 tileAbove_1 = player.room.GetTilePosition(upperPosition_1);
 
-        bool isSolid_0 = player.room.GetTile(tileAbove_0).Solid;
-        bool isSolid_1 = player.room.GetTile(tileAbove_1).Solid;
+			bool isSolid_0 = player.room.GetTile(tileAbove_0).Solid;
+			bool isSolid_1 = player.room.GetTile(tileAbove_1).Solid;
 
-        return isSolid_0 || isSolid_1;
+            return isSolid_0 || isSolid_1;
+        }
+		return false;
     }
 
     private static bool IsTouchingDiagonalCeiling(Player player)
     {
-        BodyChunk body_chunk_0 = player.bodyChunks[0];
-        BodyChunk body_chunk_1 = player.bodyChunks[1];
+		if (player.room is not null)
+		{
+			BodyChunk body_chunk_0 = player.bodyChunks[0];
+			BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-        Vector2[] directions = {
-            new Vector2(0, 2)
-            };
+			Vector2[] directions = {
+			new Vector2(0, 1)
+			};
 
-        foreach (var direction in directions)
-        {
-            Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 5);
-            Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 5);
+			foreach (var direction in directions)
+			{
+				Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
+				Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
 
-            IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
-            IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
+				IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
+				IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
 
-            // Использование IdentifySlope для определения диагонального тайла
-            SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
-            SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
+				// Использование IdentifySlope для определения диагонального тайла
+				SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
+				SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
 
-            bool isDiagonal = (slopeDirection_0 == SlopeDirection.UpLeft ||
-                       slopeDirection_0 == SlopeDirection.UpRight ||
-                       slopeDirection_0 == SlopeDirection.DownLeft ||
-                       slopeDirection_0 == SlopeDirection.DownRight ||
-                       slopeDirection_1 == SlopeDirection.UpLeft ||
-                       slopeDirection_1 == SlopeDirection.UpRight ||
-                       slopeDirection_1 == SlopeDirection.DownLeft ||
-                       slopeDirection_1 == SlopeDirection.DownRight);
+				bool isDiagonal = (slopeDirection_0 == SlopeDirection.UpLeft ||
+						   slopeDirection_0 == SlopeDirection.UpRight ||
+						   slopeDirection_0 == SlopeDirection.DownLeft ||
+						   slopeDirection_0 == SlopeDirection.DownRight ||
+						   slopeDirection_1 == SlopeDirection.UpLeft ||
+						   slopeDirection_1 == SlopeDirection.UpRight ||
+						   slopeDirection_1 == SlopeDirection.DownLeft ||
+						   slopeDirection_1 == SlopeDirection.DownRight);
 
-            if (isDiagonal)
-            {
-                return true;
-            }
-        }
-
-        return false;
+				if (isDiagonal)
+				{
+					return true;
+				}
+			}
+		}
+			return false;
     }
 
     const int tailSpriteIndex = 2;
@@ -168,7 +176,23 @@ class _Plugin : BaseUnityPlugin
 			}
             if (sprite.element.name.StartsWith("Head"))
 			{
-				if (self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                {
+                    if (!self.player.input[0].jmp)
+                    {
+                        string head = "TheVoidDCeil-";
+                        if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+                    }
+                    else
+                    {
+                        string head = "TheVoid-";
+                        if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+                    }
+                }
+                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 				{
                     if (!self.player.input[0].jmp)
                     {
@@ -190,7 +214,23 @@ class _Plugin : BaseUnityPlugin
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
                 BodyChunk body_chunk_1 = self.player.bodyChunks[1];
 
-                if ((IsTouchingCeiling(self.player) || IsTouchingDiagonalCeiling(self.player)) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                {
+                    if (!self.player.input[0].jmp)
+                    {
+                        string face = "TheVoidDCeil-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                    else
+                    {
+                        string face = "TheVoid-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                }
+
+                else if ((IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl))
 				{
 					if (!self.player.input[0].jmp)
 					{
@@ -205,32 +245,23 @@ class _Plugin : BaseUnityPlugin
                             sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
                     }
 				}
-				else
-				{
-					if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y)
-					{
-						if (self.player.abstractCreature.world.game.session is StoryGameSession session2 &&
-							session2.saveState.deathPersistentSaveData.karma == 10)
-						{
-							string face = "TheVoid11-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-						else
-						{
-							string face = "TheVoid-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-					}
-					else
-					{
-						string face = "TheVoidDown-";
-						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-					}
-				}
-			}
+
+                else
+                {
+                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y)
+                    {
+                        string face = "TheVoid-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                    else
+                    {
+                        string face = "TheVoidDown-";
+                        if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                    }
+                }
+            }
 		}
 	}
 

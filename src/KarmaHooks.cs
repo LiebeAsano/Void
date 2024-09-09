@@ -37,6 +37,9 @@ namespace VoidTemplate
 
             On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
             On.Player.EatMeatUpdate += Player_EatMeatUpdate;
+            On.StoryGameSession.ctor += StoryGameSession_ctor;
+
+            //IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctorIL;
         }
 
         private static void KarmaReqTinker(ILContext il)
@@ -234,19 +237,18 @@ namespace VoidTemplate
             }
         }
 
-
-
         private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
         {
             orig(self, package);
             MenuScene.SceneID sceneID = null;
-
             if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.IsSleepScreen)
             {
-                if (self.IsStarveScreen) sceneID = VoidEnums.SceneID.DeathScene;
+                if (self.IsStarveScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+                {
+                    sceneID = VoidEnums.SceneID.DeathScene;
+                }
                 else if (self.karmaLadder.displayKarma.y == 10) sceneID = VoidEnums.SceneID.SleepScene11;
                 else sceneID = VoidEnums.SceneID.SleepScene;
-                Debug.Log($"[The Void] Karma Sleep Scene, Karma : {self.karmaLadder.displayKarma.y}");
             }
             if (sceneID != null && sceneID.Index != -1)
             {
@@ -257,16 +259,6 @@ namespace VoidTemplate
                 for (int i = self.scene.depthIllustrations.Count - 1; i > 0; i--)
                     self.scene.depthIllustrations[i].sprite.MoveToBack();
             }
-        }
-
-        private static void SleepAndDeathScreen_AddBkgIllustration(On.Menu.SleepAndDeathScreen.orig_AddBkgIllustration orig, SleepAndDeathScreen self)
-        {
-            if (self.manager.currentMainLoop is RainWorldGame game &&
-                game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
-            {
-                return;
-            }
-            orig(self);
         }
 
 
@@ -429,7 +421,56 @@ namespace VoidTemplate
             }
             return (small ? "smallKarma" : "karma") + Mathf.Clamp(k.x, 5, 10) + "-" + Mathf.Clamp(k.y, k.x, 10);
         }
+        private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+        {
+            orig(self, saveStateNumber, game);
+            if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
+            {
+                self.characterStats.foodToHibernate = 6;
+                self.characterStats.maxFood = 9;
+            }
+        }
 
+        /*private static void SlugcatPageContinue_ctorIL(ILContext il)
+        {
+            try
+            {
+                ILCursor c = new ILCursor(il);
+                while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(4),
+                           i => i.MatchCall<SlugcatStats>("SlugcatFoodMeter"),
+                           i => i.MatchLdfld<IntVector2>("x")))
+                {
+                    c.Emit(OpCodes.Ldarg_S, (byte)4);
+                    c.Emit(OpCodes.Ldarg_0);
+
+                    c.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
+                    {
+                        if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
+                            return 9;
+                        return x;
+                    });
+                }
+                ILCursor c2 = new ILCursor(il);
+                while (c2.TryGotoNext(MoveType.After, i => i.MatchLdarg(4),
+                           i => i.MatchCall<SlugcatStats>("SlugcatFoodMeter"),
+                           i => i.MatchLdfld<IntVector2>("y")))
+                {
+                    c2.Emit(OpCodes.Ldarg_S, (byte)4);
+                    c2.Emit(OpCodes.Ldarg_0);
+
+                    c2.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((y, name, self) =>
+                    {
+                        if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
+                            return 6;
+                        return y;
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }*/
     }
 
 }

@@ -17,6 +17,20 @@ public static class SaveManager
     public static bool GetMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(messageShown, out bool shown) && shown;
     public static void SetMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(messageShown, value);
 
+    private const string KarmaToken = uniqueprefix + "KarmaToken";
+
+    public static void SetKarmaToken(this SaveState save, int amount) => save.deathPersistentSaveData.GetSlugBaseData().Set(KarmaToken, amount);
+
+    public static int GetKarmaToken(this SaveState save)
+    {
+        var data = save.deathPersistentSaveData.GetSlugBaseData();
+        if (!data.TryGet(KarmaToken, out int KarmaTokenAmount))
+        {
+            KarmaTokenAmount = 0;
+            data.Set(KarmaToken, 0);
+        }
+        return KarmaTokenAmount;
+    }
 
     #region oracle data
     private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";

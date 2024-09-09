@@ -9,6 +9,8 @@ public static class _PlayerMechanicsMeta
         KarmaLadderTweaks.Hook();
 
         ColdImmunityPatch.Hook();
+        DontBiteMimic.Hook();
+        DontEatVoid.Hook();
         DreamManager.RegisterMaps();
         DreamCustom.Hook();
         DreamManager.Hook();
@@ -16,10 +18,13 @@ public static class _PlayerMechanicsMeta
         Grabability.Hook();
         GraspSave.Hook();
         HealthSpear.Hook();
+        MalnourishmentDeath.Hook();
+        RockHitSomething.Hook();
         SaintArenaKarma.Hook();
         SaintArenaSpears.Hook();
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();
+        SwallowObjects.Hook();
 
     }
 }

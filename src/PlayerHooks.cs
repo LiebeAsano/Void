@@ -379,65 +379,53 @@ namespace VoidTemplate
             return orig(slugcat_hand);
         }
 
+        private static float timeSinceLastForceUpdate = 0f;
+        private static readonly float forceUpdateInterval = 1f / 40f;
+
         private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
-            orig(self, sLeaser, rCam, timeStacker, camPos);
+            timeSinceLastForceUpdate += Time.deltaTime;
 
             Player player = self.player;
 
             BodyChunk body_chunk_0 = player.bodyChunks[0];
             BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl || 
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+                player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
+            {
+                if (timeSinceLastForceUpdate >= forceUpdateInterval)
+                {
+                    foreach (TailSegment tailSegment in self.tail)
+                    {
+                        Vector2 force = Vector2.zero;
+
+                        if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
+                        {
+                            force = new Vector2(-0.7f, 0.7f);
+                        }
+                        else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
+                        {
+                            force = new Vector2(0.7f, 0.7f);
+                        }
+                        else if (!player.input[0].jmp)
+                        {
+                            force = new Vector2(0f, 0.7f);
+                        }
+
+                        tailSegment.vel += force;
+                    }
+
+                    timeSinceLastForceUpdate = 0f; // сбрасываем счётчик
+                }
+            }
+
+            orig(self, sLeaser, rCam, timeStacker, camPos);
+
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
                 player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
             {
                 sLeaser.sprites[4].isVisible = false;
-
-                if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
-                    LeftWallApplyCeilCrawlForce(self);
-                else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
-                        RightWallApplyCeilCrawlForce(self);
-                else if (!player.input[0].jmp)
-                        ApplyCeilCrawlForce(self);
-            }
-        }
-
-        private static void ApplyCeilCrawlForce(PlayerGraphics playerGraphics)
-        {
-            int tailSegments = playerGraphics.tail.Length;
-
-            for (int i = 0; i < tailSegments; i++)
-            {
-                TailSegment tailSegment = playerGraphics.tail[i];
-
-                Vector2 force = new Vector2(0, 0.1f);
-                tailSegment.vel += force;
-            }
-        }
-
-        private static void LeftWallApplyCeilCrawlForce(PlayerGraphics playerGraphics)
-        {
-            int tailSegments = playerGraphics.tail.Length;
-
-            for (int i = 0; i < tailSegments; i++)
-            {
-                TailSegment tailSegment = playerGraphics.tail[i];
-
-                Vector2 force = new Vector2(-0.1f, 0.1f);
-                tailSegment.vel += force;
-            }
-        }
-
-        private static void RightWallApplyCeilCrawlForce(PlayerGraphics playerGraphics)
-        {
-            int tailSegments = playerGraphics.tail.Length;
-
-            for (int i = 0; i < tailSegments; i++)
-            {
-                TailSegment tailSegment = playerGraphics.tail[i];
-
-                Vector2 force = new Vector2(0.1f, 0.1f);
-                tailSegment.vel += force;
             }
         }
 

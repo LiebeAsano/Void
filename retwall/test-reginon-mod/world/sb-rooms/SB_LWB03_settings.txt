@@ -1,0 +1,8 @@
+Template: NONE
+Clouds: 0.2861298
+Grime: 0.206137
+Palette: 14
+EffectColorB: 18
+Effects: LightBurn-0.2474636-20-20, 
+PlacedObjects: DataPearl><83.11688><709.0031><60.474~96.04688~0~25~Misc~0, ReliableSpear><57.98094><195.3272><, ReliableSpear><268.4951><695.4773><, ReliableSpear><1436.69><570.9138><, ReliableSpear><1106.414><193.9635><, ReliableSpear><1680.571><473.0648><, ReliableSpear><1650.637><213.8297><, ReliableSpear><2029.843><156.734><, GooieDuck><1935.084><448.3804><0~0~2~3, GooieDuck><1854.874><507.5563><0~0~2~3, DangleFruit><492.2968><531.9899><-147.9833~-157.9438~2~3, DangleFruit><521.2269><479.6367><96.75839~77.54898~2~3, DangleFruit><559.2767><512.3548><-34.15002~-127.3511~2~3, DangleFruit><247.9199><537.2468><-34.15002~-127.3511~2~3, DangleFruit><297.0104><507.3656><-34.15002~-127.3511~2~3, FirecrackerPlant><293.0535><147.4745><0~0~2~3, FirecrackerPlant><333.4612><152.8019><0~0~2~3, 
+FadePalette: 10, 0.6109264, 0.3866622

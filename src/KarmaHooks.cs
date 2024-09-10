@@ -403,17 +403,7 @@ namespace VoidTemplate
 
             orig(self, graspIndex);
         }
-
-
-        private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
-        {
-            orig(self, saveStateNumber, game);
-            if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
-            {
-                self.characterStats.foodToHibernate = 6;
-                self.characterStats.maxFood = 9;
-            }
-        }
+        
 
         /*private static void SlugcatPageContinue_ctorIL(ILContext il)
         {

@@ -153,7 +153,7 @@ class _Plugin : BaseUnityPlugin
 			self.player.abstractCreature.world.game.session is StoryGameSession session &&
 			session.saveState.deathPersistentSaveData.karma == 10)
 			{
-				tail.element = Futile.atlasManager.GetElementWithName("TheVoid-StuntTail");
+				tail.element = Futile.atlasManager.GetElementWithName("TheVoid-Tail");
 				tail.color = new(1f, 0.86f, 0f);
 				for (var i = tail.vertices.Length - 1; i >= 0; i--)
 				{

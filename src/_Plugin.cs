@@ -277,11 +277,17 @@ class _Plugin : BaseUnityPlugin
 		{
 			if(file.Extension == ".png")
 			{
-				if (Array.Exists(listOfFiles, file2 => file2.Name == file.Name && file2.Extension == ".txt"))
-					Futile.atlasManager.LoadAtlas("atlas-void/" + file.Name.Split('.')[0]);
-				else Futile.atlasManager.LoadImage("atlas-void/" + file.Name.Split('.')[0]);
+				if (Array.Exists(listOfFiles, file2 => NameWithoutExtension(file2) == NameWithoutExtension(file) && file2.Extension == ".txt"))
+				{
+					Futile.atlasManager.LoadAtlas("atlas-void/" + NameWithoutExtension(file));
+                }
+				else
+				{
+					Futile.atlasManager.LoadImage("atlas-void/" + NameWithoutExtension(file));
+                }
 			}
 		}
+		string NameWithoutExtension(FileInfo f) => f.Name.Split('.')[0];
 	}
 
 

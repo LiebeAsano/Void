@@ -17,8 +17,6 @@ namespace VoidTemplate
         {
             IL.SaveState.GhostEncounter += SaveState_GhostEncounterIL;
 
-            On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
-
             //On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
             On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 
@@ -406,21 +404,7 @@ namespace VoidTemplate
             orig(self, graspIndex);
         }
 
-        private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
-        {
-            if (!small && k.x == -1)
-                return "atlas-void/karma_blank";
-            int min = 0;
-            if (ModManager.MSC && small)
-            {
-                min = -1;
-            }
-            if (k.x < 5)
-            {
-                return (small ? "smallKarma" : "karma") + Mathf.Clamp(k.x, min, 4);
-            }
-            return (small ? "smallKarma" : "karma") + Mathf.Clamp(k.x, 5, 10) + "-" + Mathf.Clamp(k.y, k.x, 10);
-        }
+
         private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
         {
             orig(self, saveStateNumber, game);

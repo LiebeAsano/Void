@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
+namespace VoidTemplate.PlayerMechanics.Karma11Features;
 
 internal static class FoodToHibernate
 {

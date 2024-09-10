@@ -35,7 +35,6 @@ namespace VoidTemplate
 
             On.SlugcatStats.NourishmentOfObjectEaten += SlugcatStats_NourishmentOfObjectEaten;
             On.Player.EatMeatUpdate += Player_EatMeatUpdate;
-            On.StoryGameSession.ctor += StoryGameSession_ctor;
 
             //IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctorIL;
         }

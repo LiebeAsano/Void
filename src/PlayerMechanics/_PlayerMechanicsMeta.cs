@@ -1,4 +1,5 @@
-﻿using VoidTemplate.PlayerMechanics.Karma11Foundation;
+﻿using VoidTemplate.PlayerMechanics.Karma11Features;
+using VoidTemplate.PlayerMechanics.Karma11Foundation;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -7,6 +8,8 @@ public static class _PlayerMechanicsMeta
     public static void Hook()
     {
         KarmaLadderTweaks.Hook();
+        NoVisualMalnourishment.Startup();
+        FoodToHibernate.Hook();
 
         ColdImmunityPatch.Hook();
         DontBiteMimic.Hook();
@@ -25,7 +28,6 @@ public static class _PlayerMechanicsMeta
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();
         SwallowObjects.Hook();
-        NoVisualMalnourishment.Startup();
 
     }
 }

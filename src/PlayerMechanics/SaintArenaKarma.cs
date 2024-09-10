@@ -21,7 +21,7 @@ internal static class SaintArenaKarma
     private static void Player_ClassMechanicsSaint(ILContext il)
     {
         ILCursor c = new(il);
-        ILLabel? label = null;
+        ILLabel label = null;
         if (c.TryGotoNext(MoveType.After,
             x => x.MatchCall<Player>("get_KarmaCap"),
             x => x.MatchLdcI4(9),

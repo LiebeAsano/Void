@@ -272,13 +272,16 @@ class _Plugin : BaseUnityPlugin
 		//load all sprites which name starts with "TheVoid" in folder "atlas-void" 
 		DirectoryInfo folder = new DirectoryInfo(AssetManager.ResolveDirectory("atlas-void"));
 
-		foreach (FileInfo file in folder.GetFiles("*.txt"))
+		var listOfFiles = folder.GetFiles();
+		foreach (FileInfo file in listOfFiles)
 		{
-			if (file.Name.StartsWith("TheVoid"))
-				Futile.atlasManager.LoadAtlas("atlas-void/" + file.Name.Split('.')[0]);
-			Debug.Log("[The void] " + file.Name);
+			if(file.Extension == ".png")
+			{
+				if (Array.Exists(listOfFiles, file2 => file2.Name == file.Name && file2.Extension == ".txt"))
+					Futile.atlasManager.LoadAtlas("atlas-void/" + file.Name.Split('.')[0]);
+				else Futile.atlasManager.LoadImage("atlas-void/" + file.Name.Split('.')[0]);
+			}
 		}
-		Futile.atlasManager.LoadImage("atlas-void/karma_blank");
 	}
 
 

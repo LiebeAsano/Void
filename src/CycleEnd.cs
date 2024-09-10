@@ -23,7 +23,10 @@ internal static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
     {
-        if (self.IsVoidWorld() && malnourished && self.Players[0].realizedCreature is Player p && p.KarmaCap != 10)  //while it may seem bad that no orig is summoned while the condition is true, thing is, it's not supposed to be a game win if it's true
+
+        var savestate = self.world.game.GetStorySession.saveState;
+
+        if (self.IsVoidWorld() && malnourished && savestate.GetKarmaToken() == 0)
         {
             self.GoToDeathScreen();
             return;
@@ -89,16 +92,26 @@ internal static class CycleEnd
         game.Players.ForEach(absPlayer =>
         {
             if (absPlayer.realizedCreature is Player player
-            && player.IsVoid()
-            && player.room != null
-            && player.room == self.room
-            && player.FoodInStomach < player.slugcatStats.foodToHibernate
-            && self.room.game.session is StoryGameSession session
-            && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
-            && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
+            && player.IsVoid())
             {
-                if (session.saveState.deathPersistentSaveData.karma == 0) game.GoToRedsGameOver();
-                //else timerStarted = true;
+                var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
+
+                if (player.room != null
+                && player.room == self.room
+                && player.FoodInStomach < player.slugcatStats.foodToHibernate
+                && self.room.game.session is StoryGameSession session
+                && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
+                && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
+                {
+                    if (session.saveState.deathPersistentSaveData.karma == 0) game.GoToRedsGameOver();
+                    //else timerStarted = true;
+                }
+
+                if (player.KarmaCap != 10)
+                {
+                    savestate.SetKarmaToken(10);
+                }
+
             }
         });
     }

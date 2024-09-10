@@ -26,8 +26,7 @@ static class PermadeathConditions
         On.Menu.KarmaLadder.KarmaSymbol.Update += PulsateKarmaSymbol;
         //On.Menu.SlugcatSelectMenu.SlugcatPage.AddImage += SlugcatPage_AddImage;
         On.RainWorldGame.ExitToMenu += ExitToMenuGameOver;
-        Application.quitting += ApplicationQuitGameOver;    
-        
+        Application.quitting += ApplicationQuitGameOver;
 
         IL.Menu.KarmaLadderScreen.GetDataFromGame += KarmaLadderScreen_GetDataFixMSCStupidBug;
         IL.HUD.TextPrompt.Update += TextPrompt_Update;
@@ -169,7 +168,7 @@ static class PermadeathConditions
     {
         return rainWorldGame.session is StoryGameSession session
             && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
-            && (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.deathPersistentSaveData.karma == 10)
+            && (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.GetKarmaToken() == 0)
             && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
     }
 

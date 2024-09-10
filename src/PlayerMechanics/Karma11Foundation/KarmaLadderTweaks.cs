@@ -18,10 +18,8 @@ internal static class KarmaLadderTweaks
     private static void SleepAndDeathScreen_FoodCountDownDone(On.Menu.SleepAndDeathScreen.orig_FoodCountDownDone orig, Menu.SleepAndDeathScreen self)
     {
         orig(self);
-        if (self.karma.x == karma11index)
-        {
-            self.karmaLadder.GoToKarma(karma11index, true);
-        }
+        if (self.karma.x == 10)
+            self.karmaLadder.GoToKarma(10, true);
     }
 
     /// <summary>

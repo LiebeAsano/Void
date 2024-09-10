@@ -391,8 +391,8 @@ namespace VoidTemplate
             BodyChunk body_chunk_0 = player.bodyChunks[0];
             BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-                player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
+            if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+                player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y) && player.bodyMode != Player.BodyModeIndex.CorridorClimb)
             {
                 if (timeSinceLastForceUpdate >= forceUpdateInterval)
                 {

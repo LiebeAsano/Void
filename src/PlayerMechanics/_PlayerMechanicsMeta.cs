@@ -25,6 +25,7 @@ public static class _PlayerMechanicsMeta
         SaintKarmaImmunity.Hook();
         SpearmasterAntiMechanic.Hook();
         SwallowObjects.Hook();
+        NoVisualMalnourishment.Startup();
 
     }
 }

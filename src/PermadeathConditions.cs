@@ -149,6 +149,17 @@ static class PermadeathConditions
             && game.IsStorySession
             && game.GetStorySession.saveState is SaveState save)
         {
+            Player player = null;
+            foreach (var abstractPlayer in game.Players)
+            {
+                if (abstractPlayer.realizedCreature is Player mainPlayer)
+                {
+                    player = mainPlayer;
+                    break;
+                }
+            }
+            var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
+            if (player.KarmaCap == 10) savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
             save.SetVoidCatDead(true);
             save.redExtraCycles = true;
             game.rainWorld.progression.SaveWorldStateAndProgression(false);
@@ -163,7 +174,7 @@ static class PermadeathConditions
             && VoidSpecificGameOverCondition(game))
             SetVoidCatDeadTrue(game);
             
-    }
+    } 
     private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
     {
         return rainWorldGame.session is StoryGameSession session

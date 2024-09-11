@@ -23,10 +23,7 @@ internal static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
     {
-
-        var savestate = self.world.game.GetStorySession.saveState;
-
-        if (self.IsVoidWorld() && malnourished && savestate.GetKarmaToken() == 0)
+        if (self.IsVoidWorld() && malnourished && self.Players[0].realizedCreature is Player p && p.KarmaCap != 10)
         {
             self.GoToDeathScreen();
             return;
@@ -103,15 +100,13 @@ internal static class CycleEnd
                 && session.characterStats.name == VoidEnums.SlugcatID.TheVoid
                 && (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
                 {
-                    if (session.saveState.deathPersistentSaveData.karma == 0) game.GoToRedsGameOver();
+                    if (session.saveState.deathPersistentSaveData.karma == 0 || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();
+
                     //else timerStarted = true;
                 }
 
-                if (player.KarmaCap != 10)
-                {
-                    savestate.SetKarmaToken(10);
-                }
-
+                if (player.KarmaCap != 10) savestate.SetKarmaToken(10);
+                
             }
         });
     }

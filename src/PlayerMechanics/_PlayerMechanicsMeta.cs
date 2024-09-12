@@ -9,7 +9,7 @@ public static class _PlayerMechanicsMeta
     {
         KarmaLadderTweaks.Hook();
         NoVisualMalnourishment.Startup();
-        FoodToHibernate.Hook();
+        Karma11FoodChange.Hook();
 
         ColdImmunityPatch.Hook();
         DontBiteMimic.Hook();

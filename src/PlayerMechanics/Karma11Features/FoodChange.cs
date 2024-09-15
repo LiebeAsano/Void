@@ -59,7 +59,13 @@ internal static class FoodChange
 		}
 		else LogExErr("failed to locate slugcatfoodmeter call in shelterdoor closing. expect mismatch between food requirements and success of hybernation");
 	}
-
+	/// <summary>
+	/// replaces main menu food requirements
+	/// </summary>
+	/// <param name="orig"></param>
+	/// <param name="self"></param>
+	/// <param name="saveStateNumber"></param>
+	/// <param name="game"></param>
 	private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
 	{
 		orig(self, saveStateNumber, game);

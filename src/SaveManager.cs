@@ -26,8 +26,8 @@ public static class SaveManager
         var data = save.deathPersistentSaveData.GetSlugBaseData();
         if (!data.TryGet(KarmaToken, out int KarmaTokenAmount))
         {
-            KarmaTokenAmount = 0;
-            data.Set(KarmaToken, 0);
+            KarmaTokenAmount = 10;
+            data.Set(KarmaToken, 10);
         }
         return KarmaTokenAmount;
     }

@@ -10,15 +10,13 @@ internal static class Grabability
 {
     public static void Hook()
     {
-        On.Player.CanIPickThisUp += Player_CanIPickThisUp;
+        On.Player.Grabability += Player_Grabability;
     }
 
-    private static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
+    private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {
-        var result = orig(self, obj);
-        if (self.slugcatStats.name != VoidEnums.SlugcatID.TheVoid) return result;
-        int amountOfSpearsInHands = self.grasps.Aggregate(func: (int acc, Creature.Grasp grasp) => acc + ((grasp?.grabbed is Spear) ? 1 : 0), seed: 0);
-        if (amountOfSpearsInHands == 1 && self.Grabability(obj) == Player.ObjectGrabability.Drag) return true;
-        return result;
+        if (obj is PoleMimic || obj is TentaclePlant)
+            return Player.ObjectGrabability.CantGrab;
+        return orig(self, obj);
     }
 }

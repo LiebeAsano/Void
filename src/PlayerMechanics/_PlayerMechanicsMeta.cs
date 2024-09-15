@@ -7,10 +7,10 @@ public static class _PlayerMechanicsMeta
 {
     public static void Hook()
     {
-        KarmaLadderTweaks.Hook();
-        NoVisualMalnourishment.Hook();
-        Karma11FoodChange.Hook();
 
+        CanBeSwallowed.Hook();
+        CanIPickThisUp.Hook();
+        Climbing.Hook();
         ColdImmunityPatch.Hook();
         DontBiteMimic.Hook();
         DontEatVoid.Hook();
@@ -22,6 +22,8 @@ public static class _PlayerMechanicsMeta
         GraspSave.Hook();
         HealthSpear.Hook();
         MalnourishmentDeath.Hook();
+        NoForceSleep.Hook();
+        NoVisualMalnourishment.Hook();
         RockHitSomething.Hook();
         SaintArenaKarma.Hook();
         SaintArenaSpears.Hook();

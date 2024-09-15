@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
 
-internal static class Karma11FoodChange
+internal static class FoodChange
 {
 	public static void Hook()
 	{

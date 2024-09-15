@@ -104,8 +104,6 @@ internal static class CycleEnd
 
                     //else timerStarted = true;
                 }
-
-                if (player.KarmaCap != 10) savestate.SetKarmaToken(10);
                 
             }
         });

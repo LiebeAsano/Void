@@ -26,14 +26,10 @@ internal static class NoKarmaDecreaseOnDeath
             && c.TryGotoNext(MoveType.Before, x => x.MatchLdcI4(1)))
         {
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate((DeathPersistentSaveData saveData) =>
-            {
-                return saveData.karma == 10;
-            });
+            c.EmitDelegate<Predicate<DeathPersistentSaveData>>((DeathPersistentSaveData saveData) => saveData.karma == 10);
             c.Emit(OpCodes.Brtrue_S, skipSubtract);
-            c.Index++;
+            c.Index+=2;
             c.MarkLabel(skipSubtract);
-            LogExInf("injection success");
         }
         else
         {

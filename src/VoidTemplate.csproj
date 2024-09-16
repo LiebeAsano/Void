@@ -6,12 +6,13 @@
     </PropertyGroup>
     
     <ItemGroup>
+		
         <Reference Include="../lib/*.dll">
             <Private>false</Private>
         </Reference>
-    </ItemGroup>
-    <ItemGroup>
+		
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		
     </ItemGroup>
 	<Target Name="MoveBinariesToProperFoler" AfterTargets="PostBuildEvent">
 		<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb" DestinationFolder="$(ProjectDir)../the void/plugins/" />

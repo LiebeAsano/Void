@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.Useful;
+using static UnityEngine.Mesh;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
 
@@ -18,6 +19,7 @@ internal static class EatMeatUpdate
 
     private static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
     {
+
         if (self.IsVoid())
         {
             if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is Creature creature))
@@ -103,7 +105,11 @@ internal static class EatMeatUpdate
 
                         (self.grasps[graspIndex].grabbed as Creature).State.meatLeft--;
 
-                        if (self.KarmaCap == 10)
+                        var game = self.abstractCreature.world.game;
+
+                        bool hasMark = game.IsStorySession && (game.GetStorySession.saveState.deathPersistentSaveData.theMark);
+
+                        if (self.KarmaCap == 10 || hasMark)
                         {
                             self.AddFood(1);
                         }

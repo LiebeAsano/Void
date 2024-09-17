@@ -24,14 +24,14 @@ internal static class ExtendedLungs
                 int karma = self.Karma;
 
                 float baseLungAirConsumption = 1.0f;
-                float reducePerKarma = 0.06f;
+                float reducePerKarma = 0.07f;
                 float newLungCapacity = baseLungAirConsumption - (reducePerKarma * (karma + 1));
 
                 self.slugcatStats.lungsFac = newLungCapacity;
 
             }
             else
-                self.slugcatStats.lungsFac = 0.25f;
+                self.slugcatStats.lungsFac = 0.2f;
         }
     }
 }

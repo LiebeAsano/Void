@@ -139,23 +139,34 @@ namespace VoidTemplate
         {
             orig(self, package);
             MenuScene.SceneID sceneID = null;
-            if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.IsSleepScreen)
+            if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
             {
-                if (self.IsStarveScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+                if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+                {
+                    sceneID = VoidEnums.SceneID.SleepScene;
+                }
+                else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap == 10)
+                {
+                    sceneID = VoidEnums.SceneID.SleepScene11;
+                }
+                else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap != 10)
                 {
                     sceneID = VoidEnums.SceneID.DeathScene;
                 }
-                else if (self.karmaLadder.displayKarma.y == 10) sceneID = VoidEnums.SceneID.SleepScene11;
-                else sceneID = VoidEnums.SceneID.SleepScene;
-            }
-            if (sceneID != null && sceneID.Index != -1)
-            {
-                self.scene.RemoveSprites();
-                self.pages[0].subObjects.RemoveAll(i => i is InteractiveMenuScene);
-                self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
-                self.pages[0].subObjects.Add(self.scene);
-                for (int i = self.scene.depthIllustrations.Count - 1; i > 0; i--)
-                    self.scene.depthIllustrations[i].sprite.MoveToBack();
+                else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap == 10)
+                {
+                    sceneID = VoidEnums.SceneID.DeathScene11;
+                }
+                
+                if (sceneID != null && sceneID.Index != -1)
+                {
+                    self.scene.RemoveSprites();
+                    self.pages[0].subObjects.RemoveAll(i => i is InteractiveMenuScene);
+                    self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
+                    self.pages[0].subObjects.Add(self.scene);
+                    for (int i = self.scene.depthIllustrations.Count - 1; i >= 0; i--)
+                        self.scene.depthIllustrations[i].sprite.MoveToBack();
+                }
             }
         }
 

@@ -1,8 +1,8 @@
-[ADD]Moon_Dream_Sound/dopplerFac=0 : MoonDreamSound/vol=0.5
-[ADD]Farm_Dream_Sound/dopplerFac=0 : FarmDreamSound/vol=0.5
-[ADD]Sub_Dream_Sound/dopplerFac=0 : SubDreamSound/vol=0.5
-[ADD]Sky_Dream_Sound/dopplerFac=0 : SkyDreamSound/vol=0.5
-[ADD]NSH_Dream_Sound/dopplerFac=0 : NSHDreamSound/vol=0.5
-[ADD]Void_NSH_Dream_Sound/dopplerFac=0 : VoidNSHDreamSound/vol=0.5
+[ADD]Moon_Dream_Sound/dopplerFac=0 : MoonDreamSound/vol=0.25
+[ADD]Farm_Dream_Sound/dopplerFac=0 : FarmDreamSound/vol=0.25
+[ADD]Sub_Dream_Sound/dopplerFac=0 : SubDreamSound/vol=0.25
+[ADD]Sky_Dream_Sound/dopplerFac=0 : SkyDreamSound/vol=0.25
+[ADD]NSH_Dream_Sound/dopplerFac=0 : NSHDreamSound/vol=0.25
+[ADD]Void_NSH_Dream_Sound/dopplerFac=0 : VoidNSHDreamSound/vol=0.25
 [ADD]SlugcatMeowVoid/dopplerFac=0/rangeFac=1 : MeowVoid1/vol=0.6/maxPitch=1.1/minPitch=0.9
 [ADD]SlugcatMeowVoidShort/dopplerFac=0/rangeFac=1 : MeowVoid1Short/vol=0.6/maxPitch=1.1/minPitch=0.9

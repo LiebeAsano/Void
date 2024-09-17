@@ -17,27 +17,32 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
         private static int SlugcatStats_NourishmentOfObjectEaten(On.SlugcatStats.orig_NourishmentOfObjectEaten orig, SlugcatStats.Name slugcatIndex, IPlayerEdible eatenobject)
         {
 
+
             if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
                 game.session is StoryGameSession session &&
-                session.characterStats.name == VoidEnums.SlugcatID.TheVoid &&
-                session.saveState.deathPersistentSaveData.karma == 10)
+                session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
             {
 
-                string objectId = eatenobject.ToString();
+                bool hasMark = game.IsStorySession && game.GetStorySession.saveState.deathPersistentSaveData.theMark;
 
-                if (objectId is "Fly" or "DangleFruit" or "WaterNut" or
-                    "SlimeMold" or "SSOracleSwarmer" or "MoreSlugcats.GooieDuck" or
-                    "MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
-                    "MoreSlugcats.Seed")
+                if (hasMark || session.saveState.deathPersistentSaveData.karma == 10)
                 {
-                    return orig(slugcatIndex, eatenobject);
+                    string objectId = eatenobject.ToString();
+
+                    if (objectId is "Fly" or "DangleFruit" or "WaterNut" or
+                        "SlimeMold" or "SSOracleSwarmer" or "MoreSlugcats.GooieDuck" or
+                        "MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
+                        "MoreSlugcats.Seed")
+                    {
+                        return orig(slugcatIndex, eatenobject);
+                    }
+                    else
+                    {
+                        return orig(slugcatIndex, eatenobject) * 2;
+                    }
                 }
-                else
-                {
-                    return orig(slugcatIndex, eatenobject) * 2;
-                }
+                return orig(slugcatIndex, eatenobject);
             }
-
             return orig(slugcatIndex, eatenobject);
         }
 

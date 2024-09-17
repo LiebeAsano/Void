@@ -50,6 +50,10 @@ internal static class SwallowObjects
         {
             var grabbed = self.grasps[grasp]?.grabbed;
 
+            var game = self.abstractCreature.world.game;
+
+            bool hasMark = game.IsStorySession && (game.GetStorySession.saveState.deathPersistentSaveData.theMark);
+
             if (grabbed != null)
             {
                 if (QuarterFoodObjects.Contains(grabbed.GetType()))
@@ -71,7 +75,7 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    if (self.Karma != 10)
+                    if (self.Karma != 10 && !hasMark)
                     {
                         self.AddFood(1);
                     }
@@ -91,7 +95,7 @@ internal static class SwallowObjects
                 {
 
                     orig(self, grasp);
-                    if (self.Karma != 10)
+                    if (self.Karma != 10 && !hasMark)
                     {
                         self.AddFood(2);
                     }
@@ -112,7 +116,7 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    if (self.Karma != 10)
+                    if (self.Karma != 10 && !hasMark)
                     {
                         self.AddQuarterFood();
                         self.AddQuarterFood();

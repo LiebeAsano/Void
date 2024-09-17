@@ -84,17 +84,24 @@ internal static class EngageInMovement
             slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
             Vector2 attached_position = slugcat_hand.connection.pos + new Vector2(player.flipDirection * 10f, 0.0f);
 
-            if (player.input[0].y > 0)
-            {
-                player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
-                player_graphics.objectLooker.timeLookingAtThis = 6;
-            }
-            else
-            {
-                player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
-                player_graphics.objectLooker.timeLookingAtThis = 6;
-            }
-            player.animationFrame++;
+            if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+                if (player.input[0].y > 0)
+                {
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 100f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
+                }
+                else if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+                {
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, -100f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
+                }
+                else
+                {
+                    player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(0.0f, 0f), 0f);
+                    player_graphics.objectLooker.timeLookingAtThis = 6;
+                }
+
+                player.animationFrame++;
 
             if (player.input[0].y > 0 && player.bodyMode == Player.BodyModeIndex.WallClimb)
             {

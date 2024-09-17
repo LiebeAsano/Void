@@ -403,3 +403,4 @@ FodyWeavers.xsd
 the*void/plugins/*
 the*void/plugins/VoidTemplate.dll
 /the*void/plugins
+/the void/plugins/VoidTemplate.dll

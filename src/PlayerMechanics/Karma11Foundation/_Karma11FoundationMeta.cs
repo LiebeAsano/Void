@@ -13,5 +13,6 @@ internal static class _Karma11FoundationMeta
     {
         KarmaLadderTweaks.Hook();
         NoKarmaDecreaseOnDeath.Initiate();
+        TokenSystem.Initiate();
     }
 }

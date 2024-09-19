@@ -23,7 +23,11 @@ public static class SaveManager
 
     public static int GetKarmaToken(this SaveState save)
     {
-        var data = save.deathPersistentSaveData.GetSlugBaseData();
+        return save.deathPersistentSaveData.GetKarmaToken();
+    }
+    public static int GetKarmaToken(this DeathPersistentSaveData save)
+    {
+        var data = save.GetSlugBaseData();
         if (!data.TryGet(KarmaToken, out int KarmaTokenAmount))
         {
             KarmaTokenAmount = 10;
@@ -31,6 +35,7 @@ public static class SaveManager
         }
         return KarmaTokenAmount;
     }
+
 
     #region oracle data
     private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";

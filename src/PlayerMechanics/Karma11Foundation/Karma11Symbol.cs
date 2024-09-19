@@ -8,6 +8,9 @@ using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 using RWCustom;
 using System.Runtime.CompilerServices;
+using MonoMod.Cil;
+using Mono.Cecil.Cil;
+using HUD;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
@@ -35,22 +38,32 @@ internal static class Karma11Symbol
 	{
 		On.Menu.KarmaLadder.KarmaSymbol.ctor += KarmaSymbol_ctor;
 		On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
+        On.DeathPersistentSaveData.SaveToString += DeathPersistentSaveData_SaveToString;
 	}
+
+    private static string DeathPersistentSaveData_SaveToString(On.DeathPersistentSaveData.orig_SaveToString orig, DeathPersistentSaveData self, bool saveAsIfPlayerDied, bool saveAsIfPlayerQuit)
+    {
+		//bypass for death screen
+		bypassRequestKarmaTokenAmount = (ushort)self.GetKarmaToken();
+		return orig(self, saveAsIfPlayerDied, saveAsIfPlayerQuit);
+    }
+
+
     #region bypassed function
 #nullable enable
-    static ushort? bypassPetals = null;
+    public static ushort? bypassRequestKarmaTokenAmount = null;
 	private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
 	{
 		if (!small && k.x == -1) return "atlas-void/karma_blank";
 		if(k.x == 10)
 		{
-			if (bypassPetals == null) 
+			if (bypassRequestKarmaTokenAmount == null) 
 			{ 
 				logerr("lookup for karma string summonned without bypass. assuming zero karma tokens. from: " + new System.Diagnostics.StackTrace());
-				bypassPetals = 0;
+				bypassRequestKarmaTokenAmount = 0;
 			}
-			string res = $"atlas-void/KarmaToken{bypassPetals}" + (small ? "Small" : "Big");
-			bypassPetals = null;
+			string res = $"atlas-void/KarmaToken{bypassRequestKarmaTokenAmount}" + (small ? "Small" : "Big");
+			bypassRequestKarmaTokenAmount = null;
 			return res;
         }
 		return orig(small, k);
@@ -73,7 +86,7 @@ internal static class Karma11Symbol
     private static void KarmaSymbol_ctor(On.Menu.KarmaLadder.KarmaSymbol.orig_ctor orig, KarmaLadder.KarmaSymbol self, Menu.Menu menu, MenuObject owner, Vector2 pos, FContainer container, FContainer foregroundContainer, IntVector2 displayKarma)
 	{
         var savestate = (menu as KarmaLadderScreen).saveState;
-		bypassPetals = tokensToPelletsMap[(ushort)savestate.GetKarmaToken()];
+		bypassRequestKarmaTokenAmount = tokensToPelletsMap[(ushort)savestate.GetKarmaToken()];
 		orig(self, menu, owner, pos, container, foregroundContainer, displayKarma);
 
 		if (displayKarma.x == karma11index)

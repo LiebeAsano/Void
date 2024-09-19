@@ -40,9 +40,10 @@ namespace VoidTemplate
         private static void RoomSpeficScript(On.Room.orig_Loaded orig, Room self)
         {
             orig(self);
-            if (self.game?.session?.characterStats?.name == VoidEnums.SlugcatID.TheVoid)
+            if (self.game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
             {
-                if(!self.game.GetStorySession.saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
+                SaveState saveState = self.game.GetStorySession.saveState;
+                if(!saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
                 {
                     self.AddObject(new CeilingClimbTutorial(self, new CeilingClimbTutorial.Message[]
                     {
@@ -56,6 +57,9 @@ namespace VoidTemplate
                         break;
                     case VoidEnums.RoomNames.EndingRoomName:
                         self.AddObject(new Ending(self));
+                        break;
+                    case "SB_SS" when !saveState.GetDreamData(SaveManager.Dream.Moon).WasShown:
+                        self.AddObject(new EnqueueMoonDream(self));
                         break;
                 }
                 

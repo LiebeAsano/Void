@@ -58,7 +58,7 @@ namespace VoidTemplate
                     case VoidEnums.RoomNames.EndingRoomName:
                         self.AddObject(new Ending(self));
                         break;
-                    case "SB_SS" when !saveState.GetDreamData(SaveManager.Dream.Moon).WasShown:
+                    case "SL_AI" when !saveState.GetDreamData(SaveManager.Dream.Moon).WasShown:
                         self.AddObject(new EnqueueMoonDream(self));
                         break;
                 }

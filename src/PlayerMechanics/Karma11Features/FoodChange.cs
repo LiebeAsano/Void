@@ -71,7 +71,7 @@ internal static class FoodChange
 		orig(self, saveStateNumber, game);
 		if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
 		{
-			self.characterStats.foodToHibernate = 6;
+            self.characterStats.foodToHibernate = 6;
 			self.characterStats.maxFood = 9;
 		}
 	}

@@ -33,16 +33,6 @@ internal class CeilingClimbTutorial : UpdatableAndDeletable
         slatedForDeletetion = true;
     }
 
-    private static void InitializeTargetRoomID(Room room)
-    {
-        AbstractRoom targetRoom = room.world.GetAbstractRoom("SB_A14");
-        if (targetRoom == null)
-        {
-            throw new Exception($"[TheVoid] Room 'SB_A14' does not exist.");
-        }
-        targetRoomID = targetRoom.index;
-    }
-
     public class Message
     {
         public readonly string text;

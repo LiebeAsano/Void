@@ -16,14 +16,14 @@
 			}
 		],
 		
-		"weight": 1.2,
-		"tunnel_speed": 1.25,
-		"climb_speed": 1.25,
-		"walk_speed": 1.25,
-		"throw_skill": 2,
+		"weight": [1.2, 1.0],
+		"tunnel_speed": [1.25, 0.8],
+		"climb_speed": [1.25, 0.8],
+		"walk_speed": [1.25, 0.8],
+		"throw_skill": [2, 0],
 		"lung_capacity": 1.0,
-		"crouch_stealth": 0.66,
-		"loudness": 0.66,
+		"crouch_stealth": [0.66, 1.0],
+		"loudness": [0.66, 1.0],
 		"alignments": {
 			"Lizards": {
 				"like": -0.15,

@@ -1,3 +1,4 @@
+[ADD]Pebble_Dream_Sound/dopplerFac=0 : PebbleDreamSound/vol=0.25
 [ADD]Moon_Dream_Sound/dopplerFac=0 : MoonDreamSound/vol=0.25
 [ADD]Farm_Dream_Sound/dopplerFac=0 : FarmDreamSound/vol=0.25
 [ADD]Sub_Dream_Sound/dopplerFac=0 : SubDreamSound/vol=0.25

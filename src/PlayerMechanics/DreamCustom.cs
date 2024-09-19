@@ -36,12 +36,6 @@ public static class DreamCustom
                     saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
                         break;
                 }
-                default:
-                    {
-                        if (miscData.SLOracleState.playerEncountersWithMark <= 0)
-                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Moon);
-                        break;
-                    }
             }
             switch (saveState.deathPersistentSaveData.karmaCap)
             {

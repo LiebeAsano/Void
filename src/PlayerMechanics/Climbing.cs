@@ -225,7 +225,6 @@ namespace VoidTemplate.PlayerMechanics
                 }
 
                 if (player.animationFrame <= 20) return;
-                player.room?.PlaySound(SoundID.Slugcat_Crawling_Step, player.mainBodyChunk);
                 player.animationFrame = 0;
             }
         }

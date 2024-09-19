@@ -216,7 +216,9 @@ internal class DrawSprites
         BodyChunk body_chunk_1 = player.bodyChunks[1];
 
         if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y) && player.bodyMode != Player.BodyModeIndex.CorridorClimb)
+            player.bodyMode == Player.BodyModeIndex.WallClimb &&
+            body_chunk_0.pos.y < body_chunk_1.pos.y) &&
+            player.bodyMode != Player.BodyModeIndex.CorridorClimb)
         {
             if (timeSinceLastForceUpdate >= forceUpdateInterval)
             {
@@ -234,13 +236,34 @@ internal class DrawSprites
                     }
                     else if (!player.input[0].jmp)
                     {
-                        force = new Vector2(0f, 0.7f);
+                        if (body_chunk_0.pos.x > body_chunk_1.pos.x)
+                            force = new Vector2(-0.7f, 0.7f);
+                        else
+                            force = new Vector2(0.7f, 0.7f);
                     }
 
                     tailSegment.vel += force;
                 }
 
                 timeSinceLastForceUpdate = 0f; // сбрасываем счётчик
+            }
+        }
+
+        else if (player.bodyMode == Player.BodyModeIndex.CorridorClimb &&
+            body_chunk_0.pos.y + 10f < body_chunk_1.pos.y)
+        {
+            if (timeSinceLastForceUpdate >= forceUpdateInterval)
+            {
+                foreach (TailSegment tailSegment in self.tail)
+                {
+                    Vector2 force = Vector2.zero;
+
+                    force = new Vector2(0.0f, 1.0f);
+
+                    tailSegment.vel += force;
+                }
+
+                timeSinceLastForceUpdate = 0f;
             }
         }
 

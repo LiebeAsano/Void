@@ -54,7 +54,6 @@ internal static class Karma11Symbol
     public static ushort? bypassRequestKarmaTokenAmount = null;
 	private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
 	{
-		if (!small && k.x == -1) return "atlas-void/karma_blank";
 		if(k.x == 10)
 		{
 			if (bypassRequestKarmaTokenAmount == null) 

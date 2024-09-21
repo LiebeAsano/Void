@@ -25,6 +25,7 @@ namespace VoidTemplate
 
             On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
             On.Menu.KarmaLadder.GoToKarma += KarmaLadder_GoToKarma;
+            On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
 
             On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
 
@@ -90,7 +91,13 @@ namespace VoidTemplate
             }
         }
 
-        private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
+        private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
+        {
+            if (!small && k.x == -1) return "atlas-void/karma_blank";
+            return orig(small, k);
+        }
+
+            private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
         {
             var screen = menu as KarmaLadderScreen;
             bool needInsert = false;

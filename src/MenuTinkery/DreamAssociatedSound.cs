@@ -21,6 +21,7 @@ internal static class DreamAssociatedSound
             { FarmDream, VoidEnums.SoundID.FarmDreamSound },
             { MoonDream, VoidEnums.SoundID.MoonDreamSound },
 			{ PebbleDream, VoidEnums.SoundID.PebbleDreamSound },
+            { RotDream, VoidEnums.SoundID.RotDreamSound },
         };
 	}
 

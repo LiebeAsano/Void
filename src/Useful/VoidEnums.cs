@@ -122,6 +122,7 @@ public static class VoidEnums
             FarmDreamSound = new("Farm_Dream_Sound", true);
             MoonDreamSound = new("Moon_Dream_Sound", true);
             PebbleDreamSound = new("Pebble_Dream_Sound", true);
+            RotDreamSound = new("Rot_Dream_Sound", true);
         }
 
         public static global::SoundID VoidNSHDreamSound;
@@ -131,6 +132,7 @@ public static class VoidEnums
         public static global::SoundID FarmDreamSound;
         public static global::SoundID MoonDreamSound;
         public static global::SoundID PebbleDreamSound;
+        public static global::SoundID RotDreamSound;
     }
     public static class ConversationID
     {

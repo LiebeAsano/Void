@@ -7,7 +7,7 @@
 		{ "name": "stone", "pos": [0,0], "depth": 10, "shader": "Basic" },
 		{ "name": "moon", "pos": [0,0], "depth": 10, "shader": "Basic" },
 		{ "name": "hunter", "pos": [0,0], "depth": 8, "shader": "Basic" },
-		{ "name": "fog", "pos": [0,0], "depth": -1, "shader": "Basic" }                             
+		{ "name": "fog", "pos": [0,-10], "depth": -1, "shader": "Basic" }                             
 	],
 	"idle_depths": [ 2.8 ],
 	"select_menu_pos": [0, 0],

@@ -12,6 +12,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
         {
             ConversationPath.Hook();
             EncounterIL.Hook();
+            KarmaLadderNonRefillCapIncrease.Hook();
             UpdateIL.Hook();
         }
     }

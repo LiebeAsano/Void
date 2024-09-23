@@ -208,68 +208,55 @@ internal class DrawSprites
     private static readonly float forceUpdateInterval = 1f / 40f;
     private static void PlayerGraphics_DrawTail(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
-        timeSinceLastForceUpdate += Time.deltaTime;
 
         Player player = self.player;
 
         BodyChunk body_chunk_0 = player.bodyChunks[0];
         BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-        if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            player.bodyMode == Player.BodyModeIndex.WallClimb &&
-            body_chunk_0.pos.y < body_chunk_1.pos.y) &&
-            player.bodyMode != Player.BodyModeIndex.CorridorClimb)
+        if (player.IsVoid())
         {
-            if (timeSinceLastForceUpdate >= forceUpdateInterval)
-            {
-                foreach (TailSegment tailSegment in self.tail)
-                {
-                    Vector2 force = Vector2.zero;
 
-                    if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
+            timeSinceLastForceUpdate += Time.deltaTime;
+
+            if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+                player.bodyMode == Player.BodyModeIndex.WallClimb &&
+                body_chunk_0.pos.y < body_chunk_1.pos.y) &&
+                player.bodyMode != Player.BodyModeIndex.CorridorClimb)
+            {
+                if (timeSinceLastForceUpdate >= forceUpdateInterval)
+                {
+                    foreach (TailSegment tailSegment in self.tail)
                     {
-                        force = new Vector2(-0.7f, 0.7f);
-                    }
-                    else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
-                    {
-                        force = new Vector2(0.7f, 0.7f);
-                    }
-                    else if (!player.input[0].jmp)
-                    {
-                        if (body_chunk_0.pos.x > body_chunk_1.pos.x)
+                        Vector2 force = Vector2.zero;
+
+                        if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
+                        {
                             force = new Vector2(-0.7f, 0.7f);
-                        else
+                        }
+                        else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
+                        {
                             force = new Vector2(0.7f, 0.7f);
+                        }
+                        else if (!player.input[0].jmp)
+                        {
+                            if (body_chunk_0.pos.x > body_chunk_1.pos.x)
+                                force = new Vector2(-0.7f, 0.7f);
+                            else
+                                force = new Vector2(0.7f, 0.7f);
+                        }
+
+                        tailSegment.vel += force;
                     }
 
-                    tailSegment.vel += force;
+                    timeSinceLastForceUpdate = 0f; // сбрасываем счётчик
                 }
-
-                timeSinceLastForceUpdate = 0f; // сбрасываем счётчик
-            }
-        }
-
-        else if (player.bodyMode == Player.BodyModeIndex.CorridorClimb &&
-            body_chunk_0.pos.y + 10f < body_chunk_1.pos.y)
-        {
-            if (timeSinceLastForceUpdate >= forceUpdateInterval)
-            {
-                foreach (TailSegment tailSegment in self.tail)
-                {
-                    Vector2 force = Vector2.zero;
-
-                    force = new Vector2(0.0f, 1.0f);
-
-                    tailSegment.vel += force;
-                }
-
-                timeSinceLastForceUpdate = 0f;
             }
         }
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
-        if (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+        if (player.IsVoid() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
             player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
         {
             sLeaser.sprites[4].isVisible = false;

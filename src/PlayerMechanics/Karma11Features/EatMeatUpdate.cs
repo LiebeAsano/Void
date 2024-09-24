@@ -14,7 +14,7 @@ internal static class EatMeatUpdate
 {
     public static void Hook()
     {
-        On.Player.EatMeatUpdate += Player_EatMeatUpdate;
+        //On.Player.EatMeatUpdate += Player_EatMeatUpdate;
     }
 
     private static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)

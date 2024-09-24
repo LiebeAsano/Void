@@ -115,7 +115,7 @@ internal class DrawSprites
             if (sprite.element.name.StartsWith("Head"))
             {
 
-                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                 {
                     if (!self.player.input[0].jmp)
                     {
@@ -130,7 +130,7 @@ internal class DrawSprites
                             sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
                     }
                 }
-                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                 {
                     if (!self.player.input[0].jmp)
                     {
@@ -152,7 +152,7 @@ internal class DrawSprites
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
                 BodyChunk body_chunk_1 = self.player.bodyChunks[1];
 
-                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                 {
                     if (!self.player.input[0].jmp)
                     {
@@ -168,7 +168,7 @@ internal class DrawSprites
                     }
                 }
 
-                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                 {
                     if (!self.player.input[0].jmp)
                     {
@@ -186,7 +186,7 @@ internal class DrawSprites
 
                 else
                 {
-                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y && self.player.bodyMode == Player.BodyModeIndex.ZeroG)
                     {
                         string face = "TheVoid-";
                         if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))

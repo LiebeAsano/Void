@@ -75,14 +75,7 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    if (self.Karma != 10 && !hasMark)
-                    {
-                        self.AddFood(1);
-                    }
-                    else
-                    {
-                        self.AddFood(2);
-                    }
+                    self.AddFood(1);
 
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
@@ -95,14 +88,8 @@ internal static class SwallowObjects
                 {
 
                     orig(self, grasp);
-                    if (self.Karma != 10 && !hasMark)
-                    {
-                        self.AddFood(2);
-                    }
-                    else
-                    {
-                        self.AddFood(4);
-                    }
+
+                    self.AddFood(2);
 
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
@@ -116,15 +103,9 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    if (self.Karma != 10 && !hasMark)
-                    {
-                        self.AddQuarterFood();
-                        self.AddQuarterFood();
-                    }
-                    else
-                    {
-                        self.AddFood(1);
-                    }
+                    self.AddQuarterFood();
+                    self.AddQuarterFood();
+
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
                         self.objectInStomach.Destroy();

@@ -13,6 +13,7 @@ using VoidTemplate.Misc;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.PlayerMechanics.Karma11Foundation;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
+using VoidTemplate.PlayerMechanics;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -61,6 +62,7 @@ class _Plugin : BaseUnityPlugin
 				EdibleChanges.Hook();
 				MenuTinkery._MenuMeta.Startup();
 				CreatureInteractions._CreatureInteractionsMeta.Hook();
+				PersistCycleLengthForGracePeriodRestarts.Hook();
 				_GhostFeaturesMeta.Hook();
                 _Karma11FeaturesMeta.Hook();
 				_Karma11FoundationMeta.Hook();

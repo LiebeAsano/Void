@@ -22,7 +22,7 @@ internal class VoidOptionInterface : global::OptionInterface
 			]);
 		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: [
 			(cfgSimpleFood, MediumGrey),
-			(cfgPermaDeath, CheatingColor),
+			(cfgNoPermaDeath, CheatingColor),
 			(cfgForceUnlockCampaign, CheatingColor)
 			]);
 	}

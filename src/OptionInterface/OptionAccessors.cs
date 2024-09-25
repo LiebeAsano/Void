@@ -7,7 +7,7 @@ public static class OptionAccessors
 	public static bool SaintArenaSpears => cfgSaintArenaSpears.Value;
 	public static bool SaintArenaAscension => cfgSaintArenaAscension.Value;
 	public static bool SimpleFood => cfgSimpleFood.Value;
-	public static bool PermaDeath => cfgNoPermaDeath.Value;
+	public static bool PermaDeath => !cfgNoPermaDeath.Value;
 	public static bool ForceUnlockCampaign => cfgForceUnlockCampaign.Value;
 	#endregion
 

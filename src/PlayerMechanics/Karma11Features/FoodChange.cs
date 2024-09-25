@@ -27,7 +27,6 @@ internal static class FoodChange
 			&& c.TryGotoPrev(MoveType.After,
 			x => x.MatchLdfld<RWCustom.IntVector2>("y")))
 		{
-			LogExInf("creation found!");
 			c.Emit(OpCodes.Ldarg, 4);
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<int, SlugcatStats.Name, Menu.SlugcatSelectMenu.SlugcatPageContinue, int>>((int origRess, SlugcatStats.Name name, Menu.SlugcatSelectMenu.SlugcatPageContinue slugcatPageContinue) =>
@@ -39,6 +38,7 @@ internal static class FoodChange
 		else LogExErr("couldn't find creation of food meter instruction. expect main menu food meter to always be at 10 required pips for survival");
 	}
 
+	//fix for whether slugcat will be malnourished in next cycle
 	private static void ShelterDoor_DoorClosed(MonoMod.Cil.ILContext il)
 	{
 		ILCursor c = new(il);
@@ -71,8 +71,9 @@ internal static class FoodChange
 		orig(self, saveStateNumber, game);
 		if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid && self.saveState.deathPersistentSaveData.karma == 10)
 		{
-            self.characterStats.foodToHibernate = 6;
+			self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
 			self.characterStats.maxFood = 9;
+
 		}
 	}
 }

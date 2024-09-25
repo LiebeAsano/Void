@@ -25,6 +25,20 @@ internal static class UIExtensions
 			FLabelAlignment.Left);
 		opTab.AddItems([opCheckBox, opLabel]);
 	}
+	public static void GenerateColoredCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos, Color color)
+	{
+        OpCheckBox opCheckBox = new OpCheckBox(configurable, pos)
+        {
+            description = configurable.info.description.TranslateStringComplex()
+        };
+        OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
+            size: new Vector2(240f, 30f),
+            text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "").TranslateStringComplex(),
+            FLabelAlignment.Left);
+		opCheckBox.colorEdge = color;
+		opLabel.color = color;
+        opTab.AddItems([opCheckBox, opLabel]);
+    }
 	public static void GenerateBigText(this OpTab opTab, string text, Vector2 pos)
 	{
 		OpLabel opLabel = new(pos: pos,

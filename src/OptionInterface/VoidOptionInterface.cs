@@ -21,6 +21,7 @@ internal class VoidOptionInterface : global::OptionInterface
 		Tabs[0].GenerateCheckbox(cfgSaintArenaSpears, new Vector2(50, 550-marginBetweenVerticalElements*2));
 
 		Tabs[0].GenerateCheckbox(cfgSimpleFood, new Vector2(50,550 - marginBetweenVerticalElements*4));
+		Tabs[0].GenerateColoredCheckbox(cfgPermaDeath, new Vector2(50, 550 - marginBetweenVerticalElements * 5), new Color(0.85f, 0.35f, 0.4f));
 	}
 
 

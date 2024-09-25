@@ -13,11 +13,13 @@ public static class OptionAccessors
 	public static bool SaintArenaSpears => cfgSaintArenaSpears.Value;
 	public static bool SaintArenaAscension => cfgSaintArenaAscension.Value;
 	public static bool SimpleFood => cfgSimpleFood.Value;
+	public static bool PermaDeath => cfgPermaDeath.Value;
 	#endregion
 
 	#region configs
 	internal static Configurable<bool> cfgSaintArenaSpears;
 	internal static Configurable<bool> cfgSaintArenaAscension;
 	internal static Configurable<bool> cfgSimpleFood;
+	internal static Configurable<bool> cfgPermaDeath;
 	#endregion
 }

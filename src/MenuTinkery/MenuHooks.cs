@@ -30,7 +30,7 @@ internal static class MenuHooks
 		var re = orig(i, rainWorld);
 		if (i == VoidEnums.SlugcatID.TheVoid &&
 			!rainWorld.progression.miscProgressionData.beaten_Hunter)
-			return _Plugin.DevEnabled;
+			return _Plugin.DevEnabled || OptionInterface.OptionAccessors.ForceUnlockCampaign;
 		return re;
 	}
 	private static void TextLabelIfNotUnlocked(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)

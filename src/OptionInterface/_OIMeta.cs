@@ -25,6 +25,7 @@ public static class _OIMeta
 		OptionAccessors.cfgSimpleFood = voidOI.config.Bind<bool>(uniqueprefix + "SimpleFood", false, new ConfigurableInfo("Gives you whole pips when eating food instead of half pips", tags: "Simple food"));
 #warning to be implemented
 		OptionAccessors.cfgPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "PermaDeath", true, new ConfigurableInfo("The intended experience - permadeath upon failing at this world", tags: "Permadeath"));
+		OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete hunter to play this mod, you mouse", tags: "Unlock Void Campaign"));
 
 	}
 }

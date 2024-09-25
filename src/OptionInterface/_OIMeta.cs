@@ -22,6 +22,7 @@ public static class _OIMeta
 		//IMPORTANT: the creation of checkboxes uses first tag as text for checkbox
 		OptionAccessors.cfgSaintArenaAscension = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaAscension", true, new ConfigurableInfo("Allows Saint to use ascension mechanic in arena", tags: "Saint ascension"));
 		OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
+		OptionAccessors.cfgSimpleFood = voidOI.config.Bind<bool>(uniqueprefix + "SimpleFood", false, new ConfigurableInfo("gives you whole pips when eating food instead of half pips", tags: "Simple food"));
 
 	}
 }

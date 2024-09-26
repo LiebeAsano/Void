@@ -1,0 +1,17 @@
+Template: NONE
+DangerType: Rain
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 0.8043478
+Grime: 0.05434782
+RandomItemDensity: 0
+RandomItemSpearChance: 0
+Palette: 28
+EffectColorA: 10
+EffectColorB: 6
+Effects: DayNight-0.9565217-997-555, Fog-1-998-504, AboveCloudsView-0-999-435, Dustpuffs-0.2065217-998-361, HeatWave-0.2065217-1000-310, 
+PlacedObjects: LightSource><489.6455><1175.363><0.2934783~EffectColor1~23~28~77~147.6025~0~1~None~0~0, LightSource><462><1176><0.6630435~EffectColor1~79~62~104~40.60254~0~0~None~0~0, 
+AmbientSounds: OMNI><AM_ENV-NatWind.ogg><872.3728><49.40784><0.3586957><1, OMNI><AM_WIN-HowlingWnd.ogg><873.554><117.7897><0.5><1, SPOT><SO_SFX-Data1.ogg><728.4558><565.4451><0.5><1><84.45581><1000.445><-35.35534><-35.35534><0><0.1000001, SPOT><SO_SFX-Data2.ogg><891.1995><421.9852><0.5><1><865.1995><1009.985><-35.35534><-35.35534><0><0.1, SPOT><SO_SFX-Data5.ogg><748.8538><201.6365><0.5><1><343.8538><1982.636><-75.35535><-29.35535><0><0.1, SPOT><SO_SFX-Data4.ogg><747.6022><305.6719><0.5><1><585.6022><1977.671><-83.35535><-51.35535><0><0.1, SPOT><AM_IND-ElectricHum03.ogg><741.3308><266.3934><0.5><1><464.3307><1167.394><-26.35535><-17.35535><0><0.1, SPOT><AM_IND-50hz.ogg><66.49603><393.7><0.5><1><460.496><2191.7><-56.35535><-83.35535><0><0.1326087, 
+FadePalette: 53, 0.1086956, 0.1086956, 0.1086956
+BackgroundOffset: 0,-700

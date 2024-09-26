@@ -1,0 +1,21 @@
+Template: NONE
+DangerType: Rain
+CeilingDrips: 0
+RainIntensity: 0.3043478
+RumbleIntensity: 0.3043478
+WaveSpeed: 0.5014877
+WaveLength: 0.9992561
+WaveAmplitude: 0.005186427
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.8043478
+Grime: 0.2065217
+Palette: 14
+EffectColorA: 0
+EffectColorB: 6
+Effects: Flies-0.02173913-807-321, DayNight-0.8913044-1056-130, AboveCloudsView-0.2826087-1054-234, Darkness-0.06521739-810-427, Contrast-0.02173913-808-479, Fog-1-1059-318, 
+PlacedObjects: SuperStructureFuses><592.0909><1030.629><21~28, SuperStructureFuses><591><1191><27~27, SuperStructureFuses><651><1029><23~27, SuperStructureFuses><813><1150><24~25, LightFixture><1.42157><1089.603><RedLight~-16.6795~139~88, LightSource><500.5106><592.0503><0.1195652~EffectColor1~95~-1~270~-24.39746~1~1~None~0~0, LightSource><501.2297><592.449><1~EffectColor1~198~-60~271~-136.3975~1~0~None~0~0, LightSource><470.4489><1623.479><0.4021739~EffectColor1~37~6~264~325.6025~1~1~None~0~0, LightSource><537><1670><0.4021739~EffectColor1~35~5~238~183.6025~1~1~None~0~0, LightSource><469><1667><0.1847826~EffectColor1~16~5~-128~199.6025~1~1~None~0~0, LightSource><550><1623><0.1847826~EffectColor1~16~5~-128~199.6025~1~1~None~0~0, LightSource><495><1670><0.1847826~EffectColor1~16~5~-128~199.6025~1~1~None~0~0, LightSource><507><1651><0.5326087~EffectColor1~221~34~-33~345.6025~1~0~None~0~0, DayNightSettings><304.092><310.3727><368~164.6602~3~10, DandelionPeach><756.21><1323.446><0~0~2~3, DandelionPeach><824.094><1328.375><0~0~2~3, GooieDuck><434.8757><1341.907><0~0~2~3, GooieDuck><504.8121><1322.069><0~0~2~3, 
+AmbientSounds: OMNI><AM_ENV-LightWind.ogg><848.0611><508.0657><0.423913><0.9021739, OMNI><AM_ENV-NatWind.ogg><851.2105><440.3039><0.4456522><1, SPOT><AM_IND-50hz.ogg><393.4139><344.1805><0.5><1><497.4139><1645.181><-47.35535><-43.35535><0><0.1652175, SPOT><SO_SFX-Data5.ogg><209.6224><348.0919><0.5><1><681.6224><1580.092><9.644653><-94.35535><0><0.1652175, SPOT><SO_SFX-DataStream.ogg><393.2246><469.3016><0.5326087><1.117391><629.2246><1041.308><-43.35535><-44.35535><0><0.1760871, SPOT><SO_SFX-Data3.ogg><217.4001><475.1733><0.5><1><795.4001><1124.174><-43.35535><-41.35535><0><0.1869567, SPOT><SO_SFX-Data2.ogg><565.4138><465.1804><0.5><1><697.4138><1218.181><-35.35534><-35.35534><0><0.1978262, SPOT><AM_ENV-WallHum.ogg><216.8523><228.6152><0.4456522><1><-17.14764><1135.615><-109.3553><-99.35535><0><0.2630436, SPOT><SO_SFX-Data1.ogg><405.1697><223.5668><0.5><1><682.1696><738.5671><-35.35534><-35.35534><0><0.1652175, SPOT><AM_IND-ElectricHum01.ogg><576.6971><337.9664><0.5><1><500.6971><600.9664><-35.35534><-35.35534><0><0.1108697, SPOT><AM_IND-Midsex01.ogg><592.4944><220.0501><0.5><1><350.4944><190.0501><-80.35535><-56.35535><0><0.1326088, SPOT><AM_SUB-BlankState.ogg><733.0512><263.5219><0.5978261><1><287.0513><631.5219><-35.35534><-35.35534><0><0.252174, 
+FadePalette: 28, 0.5, 0.3586957, 0.1086956
+BackgroundOffset: 0,-200
+BackgroundType: insidewallsperimeter

@@ -1,0 +1,2 @@
+[FINDLINESTART]Triggers: Spot<tA>event<tB>MusicEvent<eA>songName<eB>NA_32 - Else1
+[REPLACE]

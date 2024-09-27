@@ -86,31 +86,28 @@ internal static class CycleEnd
 	private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
 	{
 		orig(self);
-		if(OptionAccessors.PermaDeath)
-		{
 			RainWorldGame game = self.room.game;
-			game.Players.ForEach(absPlayer =>
+		game.Players.ForEach(absPlayer =>
+		{
+			if (absPlayer.realizedCreature is Player player
+			&& player.IsVoid())
 			{
-				if (absPlayer.realizedCreature is Player player
-				&& player.IsVoid())
+				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
+
+				if (player.room != null
+				&& player.room == self.room
+				&& player.FoodInStomach < player.slugcatStats.foodToHibernate
+				&& self.room.game.session is StoryGameSession session
+				&& session.characterStats.name == VoidEnums.SlugcatID.TheVoid
+				&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
 				{
-					var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
+					if ((session.saveState.deathPersistentSaveData.karma == 0 && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();
 
-					if (player.room != null
-					&& player.room == self.room
-					&& player.FoodInStomach < player.slugcatStats.foodToHibernate
-					&& self.room.game.session is StoryGameSession session
-					&& session.characterStats.name == VoidEnums.SlugcatID.TheVoid
-					&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
-					{
-						if (session.saveState.deathPersistentSaveData.karma == 0 || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();
-
-						//else timerStarted = true;
-					}
-
+					//else timerStarted = true;
 				}
-			});
-		}
+
+			}
+		});
 	}
 
 }

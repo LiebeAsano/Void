@@ -186,7 +186,7 @@ internal class DrawSprites
 
                 else
                 {
-                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y && self.player.bodyMode == Player.BodyModeIndex.ZeroG)
+                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                     {
                         string face = "TheVoid-";
                         if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))

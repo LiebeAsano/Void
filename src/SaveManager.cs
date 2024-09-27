@@ -7,6 +7,7 @@ public static class SaveManager
     private const string uniqueprefix = "VoidSlugcat";
     private const string teleportationDone = uniqueprefix + "TeleportationDone";
     private const string messageShown = uniqueprefix + "MessageShown";
+    private const string punishDeath = uniqueprefix + "NonPermaDeath";
 
     public const string endingDone = uniqueprefix + "EndingDone";
     private const string voidCatDead = uniqueprefix + "VoidCatDead";
@@ -36,7 +37,9 @@ public static class SaveManager
         return KarmaTokenAmount;
     }
 
+    public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
 
+    public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
     #region oracle data
     private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
     private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";

@@ -166,9 +166,8 @@ static class PermadeathConditions
 	{
 		return rainWorldGame.session is StoryGameSession session
 			&& session.characterStats.name == VoidEnums.SlugcatID.TheVoid
-			&& (session.saveState.deathPersistentSaveData.karma == 0 || session.saveState.GetKarmaToken() == 0)
-			&& !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode)
-			&& PermaDeath;
+			&& (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath || session.saveState.GetKarmaToken() == 0)
+			&& !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}
 
 	private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)

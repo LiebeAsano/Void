@@ -27,11 +27,11 @@ internal static class ConversationPath
             session.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
         {
             var path = AssetManager.ResolveFilePath(GetGhostConversationPath(Custom.rainWorld.inGameTranslator.currentLanguage, self.id,
-                session.saveState.deathPersistentSaveData.theMark));
+                session.saveState.deathPersistentSaveData.theMark, session.saveState.GetPunishNonPermaDeath()));
             if (!File.Exists(path))
             {
                 path = AssetManager.ResolveFilePath(GetGhostConversationPath(InGameTranslator.LanguageID.English, self.id,
-                    session.saveState.deathPersistentSaveData.theMark));
+                    session.saveState.deathPersistentSaveData.theMark, session.saveState.GetPunishNonPermaDeath()));
             }
 
             if (File.Exists(path))
@@ -50,16 +50,16 @@ internal static class ConversationPath
             }
 
             self.events.Add(new Conversation.TextEvent(self, 0, $"Can't find conv at {GetGhostConversationPath(InGameTranslator.LanguageID.English, self.id,
-                session.saveState.deathPersistentSaveData.theMark)}<LINE> for {self.id}", 0));
+                session.saveState.deathPersistentSaveData.theMark, session.saveState.GetPunishNonPermaDeath())}<LINE> for {self.id}", 0));
 
         }
         orig(self);
     }
-    private static string GetGhostConversationPath(InGameTranslator.LanguageID id, Conversation.ID convId, bool hasMark)
+    private static string GetGhostConversationPath(InGameTranslator.LanguageID id, Conversation.ID convId, bool hasMark, bool punishDeath)
     {
         var translator = Custom.rainWorld.inGameTranslator;
         var path = $"{translator.SpecificTextFolderDirectory(id)}/{convId}_";
-        path += hasMark ? "mark.txt" : "nomark.txt";
+        path += hasMark || punishDeath ? "mark.txt" : "nomark.txt";
         return path;
     }
 }

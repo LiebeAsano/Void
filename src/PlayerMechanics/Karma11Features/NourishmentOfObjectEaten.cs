@@ -25,7 +25,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 
                 bool hasMark = game.IsStorySession && game.GetStorySession.saveState.deathPersistentSaveData.theMark;
 
-                if (hasMark || session.saveState.deathPersistentSaveData.karma == 10)
+                if (OptionInterface.OptionAccessors.SimpleFood)
                 {
                     string objectId = eatenobject.ToString();
 

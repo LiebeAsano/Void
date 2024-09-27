@@ -24,6 +24,7 @@ public static class _PlayerMechanicsMeta
         MalnourishmentDeath.Hook();
         NoForceSleep.Hook();
         NoVisualMalnourishment.Hook();
+        PunishNonPermaDeath.Hook();
         RockHitSomething.Hook();
         SaintArenaKarma.Hook();
         SaintArenaSpears.Hook();

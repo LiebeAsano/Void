@@ -144,7 +144,7 @@ public static class VoidEnums
     }
     public static class RoomNames
     {
-        public const string EndingRoomName = "SI_A07";
+        public const string EndingRoomName = "SB_LWA01";
     }
     public static class SlugcatID
     {

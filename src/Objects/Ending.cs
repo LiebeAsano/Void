@@ -8,17 +8,17 @@ namespace VoidTemplate.Objects;
 internal class Ending : UpdatableAndDeletable
 {
     #region immutable
-    const int DelayTreshold = 0 * Utils.TicksPerSecond;
-    static Vector2 expectedPositionOfTrigger = new Vector2(200, 200);
-    const int triggerRadius = 2000;
-    const int timeToMoveCamera = 4 * Utils.TicksPerSecond;
+    const int DelayTreshold = 2 * Utils.TicksPerSecond;
+    static Vector2 expectedPositionOfTrigger = new Vector2(300, 280);
+    const int triggerRadius = 160;
+    const int timeToMoveCamera = 9 * Utils.TicksPerSecond;
     /// <summary>
     /// I am using S curve to move camera to desired position.
     /// https://www.desmos.com/calculator/eijfplyf1l
     /// this should be between 0 and 1
     /// </summary>
-    const float cameraMoveSteepnessModifier = 0.4f;
-    static Vector2 desiredCamOffset = new Vector2(0,1000);
+    const float cameraMoveSteepnessModifier = 0.1f;
+    static Vector2 desiredCamOffset = new Vector2(0,3000);
     static Vector2 initialcampos;
     private enum State
     {

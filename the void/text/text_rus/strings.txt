@@ -9,6 +9,7 @@ Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречёна вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Ты должен исполнить последнее желание того, кто дал тебе второй шанс.
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового.
+Retained Wall|Подпорная Стена
 
 //REMIX
 
@@ -17,6 +18,14 @@ Saint ascension|Возвышение Святого
 Saint wields weapon|Святой владеет оружием
 Allows Saint to use ascension mechanic in arena|Позволяет Святому использовать возвышение на арене
 Allows Saint to throw spears in arena|Позволяет Святому кидать копья на арене
+
+~ Assist ~|~ Помощь ~
+Simplified hunger|Упрощённый голод
+Disable permadeath|Отключить перманентную смерть
+Unlock campaign|Разблокировать кампанию
+Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
+Disable permadeath for Void|Отключает перманентную смерть для Пустотного
+Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
 
 //PICK INTERRUPT MESSAGES
 
@@ -59,17 +68,3 @@ You might be looking for a friend of mine. Her name is Looks to the Moon, her st
 She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.|Она находится на небольшом расстоянии к востоку отсюда. Если маленький зверек справился со своей миссией, возможно, она поможет тебе найти то, что ты ищешь.
 
 //LOOKS TO THE MOON
- 
-Tell her I'm sorry...|Передай ей, что мне жаль...
-Hello little... creature. Is it you?..|Привет маленький... зверёк. Это ты?..
-Oh, I'm sorry, I was mistaken.|О, прости, я обозналась. 
-My memory is failing me and I don't know what to do about it...|Моя память подводит меня, и я не знаю, что с этим делать...
-Little creature...|Маленький зверёк
-Are you feeling okay?|Ты хорошо себя чувствуешь? 
-I've never seen a creature in a more horrible state.|Я никогда не видила создание в более худшем состоянии.
-Your body... is still trying to maintain such an unstable structure.|Ваше тело... всё ещё пытается поддерживать такую нестабильную структуру. 
-You remind me of a friend of mine.|Ты напоминаешь мне одного моего друга.
-I miss him.|Я скучаю по нему. 
-I realise it's selfish of me to ask you in such... state, but could you please pass on a message to my friend.|Я понимаю, что это эгоистично с моей стороны просить тебя в таком... состоянии, но не мог бы ты передать сообщение моему другу. 
-His name is No Significant Harassment, you have to overcome the wall that surrounds Five Pebble's terriory to get to him...|Его зовут Нет Значимых Забот, чтобы добраться до него, тебе придётся преодолеть стену, окружающую территорию Пяти Галек...
-I'm sorry, I can't ask a little creature for this...|Прости, но я не могу просить об этом маленькое создание...

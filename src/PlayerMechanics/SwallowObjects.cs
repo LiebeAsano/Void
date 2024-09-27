@@ -61,13 +61,22 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    self.AddQuarterFood();
-
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
+                        if (self.Karma != 10)
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            self.AddQuarterFood();
+                        }
+                        else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            self.AddQuarterFood();
+                        }
                     }
+
                     return;
                 }
                 else if (FullPinFoodObjects.Contains(grabbed.GetType()))
@@ -75,13 +84,28 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    self.AddFood(1);
-
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
+                        if (self.Karma != 10)
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            if (OptionInterface.OptionAccessors.SimpleFood)
+                                self.AddFood(2);
+                            else
+                                self.AddFood(1);
+                        }
+                        else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            if (OptionInterface.OptionAccessors.SimpleFood)
+                                self.AddFood(2);
+                            else
+                                self.AddFood(1);
+                        }
                     }
+
                     return;
                 }
                 else if (TwoFullPinFoodObjects.Contains(grabbed.GetType()))
@@ -89,13 +113,16 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    self.AddFood(2);
-
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            if (OptionInterface.OptionAccessors.SimpleFood)
+                                self.AddFood(4);
+                            else
+                                self.AddFood(2);
                     }
+
                     return;
                 }
                 else if (HalfFoodObjects.Contains(grabbed.GetType()))
@@ -103,14 +130,34 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    self.AddQuarterFood();
-                    self.AddQuarterFood();
-
                     if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
                     {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
+                        if (self.Karma != 10)
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            if (OptionInterface.OptionAccessors.SimpleFood)
+                                self.AddFood(1);
+                            else
+                            {
+                                self.AddQuarterFood();
+                                self.AddQuarterFood();
+                            } 
+                        }
+                        else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            if (OptionInterface.OptionAccessors.SimpleFood)
+                                self.AddFood(1);
+                            else
+                            {
+                                self.AddQuarterFood();
+                                self.AddQuarterFood();
+                            }
+                        }
                     }
+
                     return;
                 }
             }
@@ -128,7 +175,7 @@ internal static class SwallowObjects
 
         orig(self, grasp);
 
-        if (self.IsVoid() && self.objectInStomach != null)
+        if (self.IsVoid() && self.objectInStomach != null && self.Karma != 10)
         {
             self.objectInStomach.Destroy();
             self.objectInStomach = null;

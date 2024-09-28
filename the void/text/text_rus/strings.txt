@@ -24,7 +24,7 @@ Simplified hunger|Упрощённый голод
 Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
 Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
-Disable permadeath for Void|Отключает перманентную смерть для Пустотного
+Disables permadeath for Void, but also closes access to the true ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к истинной концовке
 Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
 
 //PICK INTERRUPT MESSAGES

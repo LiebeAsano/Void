@@ -152,9 +152,9 @@ internal class DrawSprites
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
                 BodyChunk body_chunk_1 = self.player.bodyChunks[1];
 
-                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
                 {
-                    if (!self.player.input[0].jmp)
+                    if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                     {
                         string face = "TheVoidDCeil-";
                         if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
@@ -168,9 +168,9 @@ internal class DrawSprites
                     }
                 }
 
-                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+                else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
                 {
-                    if (!self.player.input[0].jmp)
+                    if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
                     {
                         string face = "TheVoidCeil-";
                         if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
@@ -186,7 +186,8 @@ internal class DrawSprites
 
                 else
                 {
-                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+                    if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
+                        self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned)
                     {
                         string face = "TheVoid-";
                         if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))

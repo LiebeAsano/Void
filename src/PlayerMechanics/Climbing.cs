@@ -119,14 +119,14 @@ namespace VoidTemplate.PlayerMechanics
             {
                 UpdateBodyMode_WallClimb(player);
             }
-            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && KarmaCap_Check(player))
+            else if (IsTouchingCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && KarmaCap_Check(player))
             {
                 player.bodyMode = BodyModeIndexExtension.CeilCrawl;
                 UpdateBodyMode_CeilCrawl(player);
                 state.IsCeilCrawling = true;
                 state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.15f;
             }
-            else if (IsTouchingDiagonalCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && KarmaCap_Check(player))
+            else if (IsTouchingDiagonalCeiling(player) && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && KarmaCap_Check(player))
             {
                 player.bodyMode = BodyModeIndexExtension.CeilCrawl;
                 UpdateBodyMode_CeilCrawl(player);

@@ -1,9 +1,9 @@
 ﻿{
 	"id": "thevoid.liebeasano",
 	"name": "Rain world: Last Wish",
-	"version": "0.12.1",
+	"version": "0.12.9",
 	"authors": "Liebe Asano",
 	"description": "",
-	"requirements": ["moreslugcats", "slime-cubed.slugbase", "crs"],
-	"requirements_names": ["More Slugcats Expansion", "SlugBase", "Custom Regions Support"]
+	"requirements": ["moreslugcats", "slime-cubed.slugbase", "crs", "regionkit"],
+	"requirements_names": ["More Slugcats Expansion", "SlugBase", "Custom Regions Support", "RegionKit"]
 }

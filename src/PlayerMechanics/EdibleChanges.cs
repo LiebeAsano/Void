@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static VoidTemplate.Useful.Utils;
+﻿using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
 static class EdibleChanges
 {
-    public static void Hook()
-    {
-        On.Mushroom.BitByPlayer += Mushroom_EatenByPlayer;
-    }
+	public static void Hook()
+	{
+		On.Mushroom.BitByPlayer += Mushroom_EatenByPlayer;
+	}
 
 
-    private static void Mushroom_EatenByPlayer(On.Mushroom.orig_BitByPlayer orig, Mushroom self, Creature.Grasp grasp, bool eu)
-    {
-        if (grasp.grabber is Player player && player.IsVoid())
-        {
-            self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
-            grasp.Release();
-            self.Destroy();
-            return;
-        }
-        orig(self, grasp, eu);
-    }
+	private static void Mushroom_EatenByPlayer(On.Mushroom.orig_BitByPlayer orig, Mushroom self, Creature.Grasp grasp, bool eu)
+	{
+		if (grasp.grabber is Player player && player.IsVoid())
+		{
+			self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
+			grasp.Release();
+			self.Destroy();
+			return;
+		}
+		orig(self, grasp, eu);
+	}
 }

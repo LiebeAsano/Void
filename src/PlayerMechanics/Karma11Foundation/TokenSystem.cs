@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static VoidTemplate.Useful.Utils;
-
-namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
+﻿namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
 internal static class TokenSystem
 {

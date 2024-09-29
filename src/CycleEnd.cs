@@ -1,13 +1,8 @@
-﻿using MonoMod.Cil;
-using MonoMod.RuntimeDetour;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mono.Cecil.Cil;
-using VoidTemplate.Useful;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 
@@ -86,7 +81,7 @@ internal static class CycleEnd
 	private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
 	{
 		orig(self);
-			RainWorldGame game = self.room.game;
+		RainWorldGame game = self.room.game;
 		game.Players.ForEach(absPlayer =>
 		{
 			if (absPlayer.realizedCreature is Player player

@@ -1,8 +1,8 @@
 ﻿using Menu.Remix.MixedUI;
-using VoidTemplate.Useful;
 using UnityEngine;
-using static VoidTemplate.Useful.Utils;
+using VoidTemplate.Useful;
 using static VoidTemplate.OptionInterface.OptionAccessors;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.OptionInterface;
 

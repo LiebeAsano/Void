@@ -1,9 +1,9 @@
 ﻿using HUD;
-using System;
-using System.Runtime.CompilerServices;
 using Menu;
-using UnityEngine;
+using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.MenuTinkery;
@@ -25,8 +25,8 @@ internal static class MenuHooks
 		On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += TextLabelIfNotUnlocked;
 
 	}
-    private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
-	{ 
+	private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
+	{
 		var re = orig(i, rainWorld);
 		if (i == VoidEnums.SlugcatID.TheVoid &&
 			!rainWorld.progression.miscProgressionData.beaten_Hunter)
@@ -35,7 +35,7 @@ internal static class MenuHooks
 	}
 	private static void TextLabelIfNotUnlocked(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
 	{
-		if(slugcatNumber == VoidEnums.SlugcatID.TheVoid && SlugBase.SlugBaseCharacter.TryGet(slugcatNumber, out var character))
+		if (slugcatNumber == VoidEnums.SlugcatID.TheVoid && SlugBase.SlugBaseCharacter.TryGet(slugcatNumber, out var character))
 		{
 			character.Description = (menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber) ?
 				"An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world."

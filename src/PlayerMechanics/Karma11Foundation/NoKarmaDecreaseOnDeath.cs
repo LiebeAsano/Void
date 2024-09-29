@@ -1,12 +1,7 @@
-﻿using MonoMod.Cil;
-using Mono.Cecil.Cil;
-using static VoidTemplate.Useful.Utils;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SlugBase.SaveData;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
@@ -23,19 +18,19 @@ internal static class NoKarmaDecreaseOnDeath
 		ILLabel skipSubtract = c.DefineLabel();
 
 		//rain world saves karma-1 to disk and then loads it back, so we are intercepting it here, at last moment
-		if(c.TryGotoNext(MoveType.After, x => x.MatchLdstr("REINFORCEDKARMA<dpB>0<dpA>"))
+		if (c.TryGotoNext(MoveType.After, x => x.MatchLdstr("REINFORCEDKARMA<dpB>0<dpA>"))
 			&& c.TryGotoNext(MoveType.Before, x => x.MatchLdcI4(1)))
 		{
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Predicate<DeathPersistentSaveData>>((DeathPersistentSaveData saveData) =>
 			{
-				
+
 				Karma11Symbol.bypassRequestKarmaTokenAmount = (ushort)saveData.GetKarmaToken();
 
 				return saveData.karma == 10;
 			});
 			c.Emit(OpCodes.Brtrue_S, skipSubtract);
-			c.Index+=2;
+			c.Index += 2;
 			c.MarkLabel(skipSubtract);
 		}
 		else

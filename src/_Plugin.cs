@@ -1,19 +1,14 @@
-﻿using System;
-using BepInEx;
-using System.IO;
-using UnityEngine;
-using System.Security.Permissions;
-using System.Linq;
+﻿using BepInEx;
 using BepInEx.Logging;
-using static VoidTemplate.Useful.Utils;
-using RWCustom;
-using static Room;
-using VoidTemplate.MenuTinkery;
+using System;
+using System.IO;
+using System.Security.Permissions;
+using UnityEngine;
 using VoidTemplate.Misc;
+using VoidTemplate.PlayerMechanics;
+using VoidTemplate.PlayerMechanics.GhostFeatures;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.PlayerMechanics.Karma11Foundation;
-using VoidTemplate.PlayerMechanics.GhostFeatures;
-using VoidTemplate.PlayerMechanics;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 #pragma warning restore CS0618
@@ -24,14 +19,14 @@ namespace VoidTemplate;
 class _Plugin : BaseUnityPlugin
 {
 	private const string MOD_ID = "liebeasano.thevoid";
-	
+
 	/// <summary>
 	/// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs
 	/// </summary>
 	public static ManualLogSource logger;
-	
+
 	public static bool DevEnabled = false;
-    public void OnEnable()
+	public void OnEnable()
 	{
 		logger = Logger;
 		On.RainWorld.OnModsInit += RainWorld_OnModsInit;
@@ -51,9 +46,9 @@ class _Plugin : BaseUnityPlugin
 				{
 					DevEnabled = true;
 				}
-				
+
 				CycleEnd.Hook();
-                DrawSprites.Hook();
+				DrawSprites.Hook();
 				PlayerSpawnManager.ApplyHooks();
 				PermadeathConditions.Hook();
 				Oracles.OracleHooks.Hook();
@@ -63,11 +58,11 @@ class _Plugin : BaseUnityPlugin
 				CreatureInteractions._CreatureInteractionsMeta.Hook();
 				PersistCycleLengthForGracePeriodRestarts.Hook();
 				_GhostFeaturesMeta.Hook();
-                _Karma11FeaturesMeta.Hook();
+				_Karma11FeaturesMeta.Hook();
 				_Karma11FoundationMeta.Hook();
 				PlayerMechanics._PlayerMechanicsMeta.Hook();
 				_MiscMeta.Hook();
-                OptionInterface._OIMeta.Initialize();
+				OptionInterface._OIMeta.Initialize();
 				if (DevEnabled)
 				{
 					//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
@@ -94,20 +89,20 @@ class _Plugin : BaseUnityPlugin
 		var listOfFiles = folder.GetFiles();
 		foreach (FileInfo file in listOfFiles)
 		{
-			if(file.Extension == ".png")
+			if (file.Extension == ".png")
 			{
 				if (Array.Exists(listOfFiles, file2 => NameWithoutExtension(file2) == NameWithoutExtension(file) && file2.Extension == ".txt"))
 				{
 					Futile.atlasManager.LoadAtlas("atlas-void/" + NameWithoutExtension(file));
-                }
+				}
 				else
 				{
 					Futile.atlasManager.LoadImage("atlas-void/" + NameWithoutExtension(file));
-                }
+				}
 			}
 		}
 
-        static string NameWithoutExtension(FileInfo f) => f.Name.Split('.')[0];
+		static string NameWithoutExtension(FileInfo f) => f.Name.Split('.')[0];
 	}
 
 

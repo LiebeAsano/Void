@@ -1,12 +1,7 @@
-﻿using MonoMod.Cil;
-using static VoidTemplate.Useful.Utils;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
 

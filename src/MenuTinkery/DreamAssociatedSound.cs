@@ -16,18 +16,18 @@ internal static class DreamAssociatedSound
 		{
 			{ Void_NSHDream, VoidEnums.SoundID.VoidNSHDreamSound },
 			{ NSHDream, VoidEnums.SoundID.NSHDreamSound },
-            { SkyDream, VoidEnums.SoundID.SkyDreamSound },
-            { SubDream, VoidEnums.SoundID.SubDreamSound },
-            { FarmDream, VoidEnums.SoundID.FarmDreamSound },
-            { MoonDream, VoidEnums.SoundID.MoonDreamSound },
+			{ SkyDream, VoidEnums.SoundID.SkyDreamSound },
+			{ SubDream, VoidEnums.SoundID.SubDreamSound },
+			{ FarmDream, VoidEnums.SoundID.FarmDreamSound },
+			{ MoonDream, VoidEnums.SoundID.MoonDreamSound },
 			{ PebbleDream, VoidEnums.SoundID.PebbleDreamSound },
-            { RotDream, VoidEnums.SoundID.RotDreamSound },
-        };
+			{ RotDream, VoidEnums.SoundID.RotDreamSound },
+		};
 	}
 
 	private static void Menu_PlaySound_SoundID(On.Menu.Menu.orig_PlaySound_SoundID orig, Menu.Menu self, SoundID soundID)
 	{
-		if(self is Menu.DreamScreen screen && soundID == SoundID.MENU_Dream_Switch && DreamSoundMap.ContainsKey(screen.dreamID)) orig(self, DreamSoundMap[screen.dreamID]);
+		if (self is Menu.DreamScreen screen && soundID == SoundID.MENU_Dream_Switch && DreamSoundMap.ContainsKey(screen.dreamID)) orig(self, DreamSoundMap[screen.dreamID]);
 		else orig(self, soundID);
 	}
 }

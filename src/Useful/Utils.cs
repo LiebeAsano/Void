@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace VoidTemplate.Useful;
@@ -24,18 +20,18 @@ internal static class Utils
 
 
 
-    //stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
-    private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }
-    private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
-    private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
-    public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
-    {
-        loginf($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
-    }
-    public static void LogExErr(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
-    {
-        logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
-    }
+	//stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
+	private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }
+	private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
+	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
+	public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+	{
+		loginf($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
+	}
+	public static void LogExErr(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
+	{
+		logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
+	}
 
 
 }

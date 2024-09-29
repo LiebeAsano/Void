@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Menu;
+﻿using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
-using VoidTemplate.Useful;
-using UnityEngine;
-using Object = UnityEngine.Object;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using static VoidTemplate.Useful.Utils;
+using System.Linq;
+using UnityEngine;
+using VoidTemplate.Useful;
 using static VoidTemplate.OptionInterface.OptionAccessors;
+using static VoidTemplate.Useful.Utils;
+using Object = UnityEngine.Object;
 
 
 namespace VoidTemplate;
@@ -43,7 +43,7 @@ static class PermadeathConditions
 			c.Emit(OpCodes.Brtrue, bubbleStart);
 		}
 		else logerr("IL failed to match.\n" + new StackTrace().ToString());
-		if(c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
+		if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
 		{
 			c.Emit(OpCodes.Br, bubbleEnd);
 			c.MarkLabel(bubbleStart);
@@ -56,7 +56,7 @@ static class PermadeathConditions
 	private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)
 	{
 		ILCursor c = new ILCursor(il);
-		if(c.TryGotoNext(MoveType.After, i => i.MatchLdarg(0),
+		if (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(0),
 			i => i.MatchLdcI4(4)))
 		{
 			c.Emit(OpCodes.Ldarg_0);
@@ -77,11 +77,11 @@ static class PermadeathConditions
 
 	private static void PulsateKarmaSymbol(On.Menu.KarmaLadder.KarmaSymbol.orig_Update orig, KarmaLadder.KarmaSymbol self)
 	{
-		
-		var flag = ModManager.MSC 
-			&& self.parent.displayKarma.x == self.parent.moveToKarma 
-			&& (self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.KarmaToMinScreen || self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.VengeanceGhostScreen || (ModManager.Expedition 
-				&& self.menu.manager.rainWorld.ExpeditionMode 
+
+		var flag = ModManager.MSC
+			&& self.parent.displayKarma.x == self.parent.moveToKarma
+			&& (self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.KarmaToMinScreen || self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.VengeanceGhostScreen || (ModManager.Expedition
+				&& self.menu.manager.rainWorld.ExpeditionMode
 				&& self.parent.moveToKarma == 0));
 		if (!flag && ModManager.MSC && self.parent.displayKarma.x == self.parent.moveToKarma &&
 			self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid
@@ -132,7 +132,7 @@ static class PermadeathConditions
 	#region GameOverConditions
 	private static void SetVoidCatDeadTrue(RainWorldGame game)
 	{
-		if(game.StoryCharacter == VoidEnums.SlugcatID.TheVoid
+		if (game.StoryCharacter == VoidEnums.SlugcatID.TheVoid
 			&& game.IsStorySession
 			&& game.GetStorySession.saveState is SaveState save)
 		{
@@ -160,8 +160,8 @@ static class PermadeathConditions
 			&& manager.currentMainLoop is RainWorldGame game
 			&& VoidSpecificGameOverCondition(game))
 			SetVoidCatDeadTrue(game);
-			
-	} 
+
+	}
 	private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
 	{
 		return rainWorldGame.session is StoryGameSession session
@@ -173,7 +173,7 @@ static class PermadeathConditions
 	private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
 	{
 		orig(self);
-		if(VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond) SetVoidCatDeadTrue(self);
+		if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond) SetVoidCatDeadTrue(self);
 	}
 	private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
 	{

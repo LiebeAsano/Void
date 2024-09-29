@@ -5,34 +5,34 @@ namespace VoidTemplate.PlayerMechanics;
 
 public static class _PlayerMechanicsMeta
 {
-    public static void Hook()
-    {
+	public static void Hook()
+	{
 
-        CanBeSwallowed.Hook();
-        CanIPickThisUp.Hook();
-        Climbing.Hook();
-        ColdImmunityPatch.Hook();
-        DontBiteMimic.Hook();
-        DontEatVoid.Hook();
-        DreamManager.RegisterMaps();
-        DreamCustom.Hook();
-        DreamManager.Hook();
-        EdibleChanges.Hook();
-        ExtendedLungs.Hook();
-        Grabability.Hook();
-        GraspSave.Hook();
-        HealthSpear.Hook();
-        KarmaFlowerChanges.Initiate();
-        MalnourishmentDeath.Hook();
-        NoForceSleep.Hook();
-        NoVisualMalnourishment.Hook();
-        PunishNonPermaDeath.Hook();
-        RockHitSomething.Hook();
-        SaintArenaKarma.Hook();
-        SaintArenaSpears.Hook();
-        SaintKarmaImmunity.Hook();
-        SpearmasterAntiMechanic.Hook();
-        SwallowObjects.Hook();
+		CanBeSwallowed.Hook();
+		CanIPickThisUp.Hook();
+		Climbing.Hook();
+		ColdImmunityPatch.Hook();
+		DontBiteMimic.Hook();
+		DontEatVoid.Hook();
+		DreamManager.RegisterMaps();
+		DreamCustom.Hook();
+		DreamManager.Hook();
+		EdibleChanges.Hook();
+		ExtendedLungs.Hook();
+		Grabability.Hook();
+		GraspSave.Hook();
+		HealthSpear.Hook();
+		KarmaFlowerChanges.Initiate();
+		MalnourishmentDeath.Hook();
+		NoForceSleep.Hook();
+		NoVisualMalnourishment.Hook();
+		PunishNonPermaDeath.Hook();
+		RockHitSomething.Hook();
+		SaintArenaKarma.Hook();
+		SaintArenaSpears.Hook();
+		SaintKarmaImmunity.Hook();
+		SpearmasterAntiMechanic.Hook();
+		SwallowObjects.Hook();
 
-    }
+	}
 }

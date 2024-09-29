@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VoidTemplate.Misc;
+﻿namespace VoidTemplate.Misc;
 
 internal static class _MiscMeta
 {
-    public static void Hook()
-    {
-        Ctor.Hook();
-        ForbidenDrone.Hook();
-        EngageInMovement.Hook();
-    }
+	public static void Hook()
+	{
+		Ctor.Hook();
+		ForbidenDrone.Hook();
+		EngageInMovement.Hook();
+	}
 }

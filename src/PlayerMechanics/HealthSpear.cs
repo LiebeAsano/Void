@@ -1,16 +1,7 @@
-﻿using MonoMod.Cil;
-using static VoidTemplate.Useful.Utils;
-using MoreSlugcats;
-using RWCustom;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using Mono.Cecil.Cil;
-using static Creature;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
 {
@@ -39,8 +30,8 @@ namespace VoidTemplate.PlayerMechanics
 			else
 				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for dealing damage to player failed");
 
-            //if (player.playerState.permanentDamageTracking >= 1.0 < OR 1.25 IF VOID>)
-            if (c.TryGotoNext(MoveType.After,
+			//if (player.playerState.permanentDamageTracking >= 1.0 < OR 1.25 IF VOID>)
+			if (c.TryGotoNext(MoveType.After,
 				x => x.MatchLdfld<global::PlayerState>(nameof(global::PlayerState.permanentDamageTracking)),
 				x => x.MatchLdcR8(1d)))
 			{
@@ -51,7 +42,7 @@ namespace VoidTemplate.PlayerMechanics
 						return 1.25;
 					else
 						return orig;
-				}); 
+				});
 			}
 			else
 				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for permanent damage tracking failed");

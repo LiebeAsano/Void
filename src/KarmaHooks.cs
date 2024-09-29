@@ -1,222 +1,221 @@
-﻿using System;
-using System.IO;
-using Menu;
+﻿using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
-using static VoidTemplate.Useful.Utils;
+using System;
 using UnityEngine;
+using static VoidTemplate.Useful.Utils;
 
 
 namespace VoidTemplate
 {
-    static class KarmaHooks
-    {
-        public static void Hook()
-        {
+	static class KarmaHooks
+	{
+		public static void Hook()
+		{
 
-            //On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
-            On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
+			//On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
+			On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 
-            IL.World.SpawnGhost += KarmaReqTinker;
+			IL.World.SpawnGhost += KarmaReqTinker;
 
 
 
-            On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
-            On.Menu.KarmaLadder.GoToKarma += KarmaLadder_GoToKarma;
-            On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
+			On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
+			On.Menu.KarmaLadder.GoToKarma += KarmaLadder_GoToKarma;
+			On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
 
-            On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
+			On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
 
-            //IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctorIL;
-        }
+			//IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctorIL;
+		}
 
-        private static void KarmaReqTinker(ILContext il)
-        {
-            ILCursor c = new(il);
-            // bool flag = this.game.setupValues.ghosts > 0
-            // || GhostWorldPresence.SpawnGhost(ghostID,
-            // (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma <replace with karmacap, method thinks void is always at max karma>,
-            // (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap,
-            // num,
-            // this.game.StoryCharacter == SlugcatStats.Name.Red <OR VOID> );
-            if (c.TryGotoNext(x => x.MatchLdsfld(typeof(SlugcatStats.Name).GetField("Red")) &&
-                c.TryGotoPrev(MoveType.After,
-                x => x.MatchLdfld<DeathPersistentSaveData>(nameof(DeathPersistentSaveData.karma)))))
-            {
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<int, World, int>>((originalResult, world) =>
-                {
-                    if(world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid) return (world.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
-                    return originalResult;
-                });
-            }
-            else LogExErr("Failed to replace karma with karmacap");
-            if(c.TryGotoNext(MoveType.After, x => x.MatchCall("ExtEnum`1<SlugcatStats/Name>", "op_Equality")))
-            {
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<bool, World, bool>>((orig, world) =>
-                {
-                    return orig || world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
-                });
-            }
-            else LogExErr("Failed to find comparison to red in echo spawning ");
-        }
+		private static void KarmaReqTinker(ILContext il)
+		{
+			ILCursor c = new(il);
+			// bool flag = this.game.setupValues.ghosts > 0
+			// || GhostWorldPresence.SpawnGhost(ghostID,
+			// (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma <replace with karmacap, method thinks void is always at max karma>,
+			// (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap,
+			// num,
+			// this.game.StoryCharacter == SlugcatStats.Name.Red <OR VOID> );
+			if (c.TryGotoNext(x => x.MatchLdsfld(typeof(SlugcatStats.Name).GetField("Red")) &&
+				c.TryGotoPrev(MoveType.After,
+				x => x.MatchLdfld<DeathPersistentSaveData>(nameof(DeathPersistentSaveData.karma)))))
+			{
+				c.Emit(OpCodes.Ldarg_0);
+				c.EmitDelegate<Func<int, World, int>>((originalResult, world) =>
+				{
+					if (world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid) return (world.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+					return originalResult;
+				});
+			}
+			else LogExErr("Failed to replace karma with karmacap");
+			if (c.TryGotoNext(MoveType.After, x => x.MatchCall("ExtEnum`1<SlugcatStats/Name>", "op_Equality")))
+			{
+				c.Emit(OpCodes.Ldarg_0);
+				c.EmitDelegate<Func<bool, World, bool>>((orig, world) =>
+				{
+					return orig || world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
+				});
+			}
+			else LogExErr("Failed to find comparison to red in echo spawning ");
+		}
 
-        private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
-        {
-            orig(self, saveStateNumber);
-            if (saveStateNumber == VoidEnums.SlugcatID.TheVoid)
-            {
-                ForceFailed = false;
-                RainWorld rainWorld = self.rainWorld;
-                SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.rainWorld.processManager.menuSetup, false);
-                save.SetVoidCatDead(false);
-                save.SetEndingEncountered(false);
-            }
-        }
+		private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
+		{
+			orig(self, saveStateNumber);
+			if (saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			{
+				ForceFailed = false;
+				RainWorld rainWorld = self.rainWorld;
+				SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.rainWorld.processManager.menuSetup, false);
+				save.SetVoidCatDead(false);
+				save.SetEndingEncountered(false);
+			}
+		}
 
-        public static bool ForceFailed = false;
+		public static bool ForceFailed = false;
 
-        private static void KarmaLadder_GoToKarma(On.Menu.KarmaLadder.orig_GoToKarma orig, KarmaLadder self, int newGoalKarma, bool displayMetersOnRest)
-        {
-            orig(self, newGoalKarma, displayMetersOnRest);
-            if (self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].element.name.Contains("blank"))
-            {
-                self.movementShown = true;
-                self.showEndGameMetersCounter = 85;
-            }
-        }
+		private static void KarmaLadder_GoToKarma(On.Menu.KarmaLadder.orig_GoToKarma orig, KarmaLadder self, int newGoalKarma, bool displayMetersOnRest)
+		{
+			orig(self, newGoalKarma, displayMetersOnRest);
+			if (self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].element.name.Contains("blank"))
+			{
+				self.movementShown = true;
+				self.showEndGameMetersCounter = 85;
+			}
+		}
 
-        private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
-        {
-            if (!small && k.x == -1) return "atlas-void/karma_blank";
-            return orig(small, k);
-        }
+		private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
+		{
+			if (!small && k.x == -1) return "atlas-void/karma_blank";
+			return orig(small, k);
+		}
 
-            private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
-        {
-            var screen = menu as KarmaLadderScreen;
-            bool needInsert = false;
-            var lastScreen = screen.ID;
+		private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
+		{
+			var screen = menu as KarmaLadderScreen;
+			bool needInsert = false;
+			var lastScreen = screen.ID;
 
-            if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
-            {
-                if ((screen.saveState.redExtraCycles || ForceFailed) && screen.saveState.deathPersistentSaveData.karmaCap != 10)
-                {
-                    screen.ID = MoreSlugcatsEnums.ProcessID.KarmaToMinScreen;
-                    needInsert = true;
-                }
-                else
-                {
-                    loginf("here save string should have been logged");
-                }
-            }
+			if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			{
+				if ((screen.saveState.redExtraCycles || ForceFailed) && screen.saveState.deathPersistentSaveData.karmaCap != 10)
+				{
+					screen.ID = MoreSlugcatsEnums.ProcessID.KarmaToMinScreen;
+					needInsert = true;
+				}
+				else
+				{
+					loginf("here save string should have been logged");
+				}
+			}
 
-            orig(self, menu, owner, pos, hud, displayKarma, reinforced);
-            if (needInsert)
-            {
-                self.karmaSymbols.Insert(0, new KarmaLadder.KarmaSymbol(menu, self,
-                    new Vector2(0f, 0f), self.containers[self.MainContainer],
-                    self.containers[self.FadeCircleContainer], new IntVector2(-1, 0)));
-                self.subObjects.Add(self.karmaSymbols[0]);
-                self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].MoveBehindOtherNode(
-                    self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
-                self.karmaSymbols[0].sprites[self.karmaSymbols[0].RingSprite].MoveBehindOtherNode(
-                    self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
-                self.karmaSymbols[0].sprites[self.karmaSymbols[0].LineSprite].MoveBehindOtherNode(
-                    self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
+			orig(self, menu, owner, pos, hud, displayKarma, reinforced);
+			if (needInsert)
+			{
+				self.karmaSymbols.Insert(0, new KarmaLadder.KarmaSymbol(menu, self,
+					new Vector2(0f, 0f), self.containers[self.MainContainer],
+					self.containers[self.FadeCircleContainer], new IntVector2(-1, 0)));
+				self.subObjects.Add(self.karmaSymbols[0]);
+				self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].MoveBehindOtherNode(
+					self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
+				self.karmaSymbols[0].sprites[self.karmaSymbols[0].RingSprite].MoveBehindOtherNode(
+					self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
+				self.karmaSymbols[0].sprites[self.karmaSymbols[0].LineSprite].MoveBehindOtherNode(
+					self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
 
-                self.karmaSymbols[0].sprites[self.karmaSymbols[0].GlowSprite(0)].MoveBehindOtherNode(
-                    self.karmaSymbols[1].sprites[self.karmaSymbols[1].GlowSprite(0)]);
-                self.karmaSymbols[0].sprites[self.karmaSymbols[0].GlowSprite(1)].MoveBehindOtherNode(
-                    self.karmaSymbols[1].sprites[self.karmaSymbols[1].GlowSprite(0)]);
-                foreach (var symbol in self.karmaSymbols)
-                    symbol.displayKarma.x++;
-                self.displayKarma.x++;
-                self.scroll = self.displayKarma.x;
-                self.lastScroll = self.displayKarma.x;
-            }
-        }
+				self.karmaSymbols[0].sprites[self.karmaSymbols[0].GlowSprite(0)].MoveBehindOtherNode(
+					self.karmaSymbols[1].sprites[self.karmaSymbols[1].GlowSprite(0)]);
+				self.karmaSymbols[0].sprites[self.karmaSymbols[0].GlowSprite(1)].MoveBehindOtherNode(
+					self.karmaSymbols[1].sprites[self.karmaSymbols[1].GlowSprite(0)]);
+				foreach (var symbol in self.karmaSymbols)
+					symbol.displayKarma.x++;
+				self.displayKarma.x++;
+				self.scroll = self.displayKarma.x;
+				self.lastScroll = self.displayKarma.x;
+			}
+		}
 
-        private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
-        {
-            orig(self, package);
-            MenuScene.SceneID sceneID = null;
-            if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
-            {
-                if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
-                {
-                    sceneID = VoidEnums.SceneID.SleepScene;
-                }
-                else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap == 10)
-                {
-                    sceneID = VoidEnums.SceneID.SleepScene11;
-                }
-                else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap != 10)
-                {
-                    sceneID = VoidEnums.SceneID.DeathScene;
-                }
-                else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap == 10)
-                {
-                    sceneID = VoidEnums.SceneID.DeathScene11;
-                }
-                
-                if (sceneID != null && sceneID.Index != -1)
-                {
-                    self.scene.RemoveSprites();
-                    self.pages[0].subObjects.RemoveAll(i => i is InteractiveMenuScene);
-                    self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
-                    self.pages[0].subObjects.Add(self.scene);
-                    for (int i = self.scene.depthIllustrations.Count - 1; i >= 0; i--)
-                        self.scene.depthIllustrations[i].sprite.MoveToBack();
-                }
-            }
-        }
+		private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
+		{
+			orig(self, package);
+			MenuScene.SceneID sceneID = null;
+			if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			{
+				if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				{
+					sceneID = VoidEnums.SceneID.SleepScene;
+				}
+				else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap == 10)
+				{
+					sceneID = VoidEnums.SceneID.SleepScene11;
+				}
+				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				{
+					sceneID = VoidEnums.SceneID.DeathScene;
+				}
+				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap == 10)
+				{
+					sceneID = VoidEnums.SceneID.DeathScene11;
+				}
 
-        
+				if (sceneID != null && sceneID.Index != -1)
+				{
+					self.scene.RemoveSprites();
+					self.pages[0].subObjects.RemoveAll(i => i is InteractiveMenuScene);
+					self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
+					self.pages[0].subObjects.Add(self.scene);
+					for (int i = self.scene.depthIllustrations.Count - 1; i >= 0; i--)
+						self.scene.depthIllustrations[i].sprite.MoveToBack();
+				}
+			}
+		}
 
-        /*private static void SlugcatPageContinue_ctorIL(ILContext il)
-        {
-            try
-            {
-                ILCursor c = new ILCursor(il);
-                while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(4),
-                           i => i.MatchCall<SlugcatStats>("SlugcatFoodMeter"),
-                           i => i.MatchLdfld<IntVector2>("x")))
-                {
-                    c.Emit(OpCodes.Ldarg_S, (byte)4);
-                    c.Emit(OpCodes.Ldarg_0);
 
-                    c.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
-                    {
-                        if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
-                            return 9;
-                        return x;
-                    });
-                }
-                ILCursor c2 = new ILCursor(il);
-                while (c2.TryGotoNext(MoveType.After, i => i.MatchLdarg(4),
-                           i => i.MatchCall<SlugcatStats>("SlugcatFoodMeter"),
-                           i => i.MatchLdfld<IntVector2>("y")))
-                {
-                    c2.Emit(OpCodes.Ldarg_S, (byte)4);
-                    c2.Emit(OpCodes.Ldarg_0);
 
-                    c2.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((y, name, self) =>
-                    {
-                        if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
-                            return 6;
-                        return y;
-                    });
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }*/
-    }
+		/*private static void SlugcatPageContinue_ctorIL(ILContext il)
+		{
+			try
+			{
+				ILCursor c = new ILCursor(il);
+				while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(4),
+						   i => i.MatchCall<SlugcatStats>("SlugcatFoodMeter"),
+						   i => i.MatchLdfld<IntVector2>("x")))
+				{
+					c.Emit(OpCodes.Ldarg_S, (byte)4);
+					c.Emit(OpCodes.Ldarg_0);
+
+					c.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
+					{
+						if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
+							return 9;
+						return x;
+					});
+				}
+				ILCursor c2 = new ILCursor(il);
+				while (c2.TryGotoNext(MoveType.After, i => i.MatchLdarg(4),
+						   i => i.MatchCall<SlugcatStats>("SlugcatFoodMeter"),
+						   i => i.MatchLdfld<IntVector2>("y")))
+				{
+					c2.Emit(OpCodes.Ldarg_S, (byte)4);
+					c2.Emit(OpCodes.Ldarg_0);
+
+					c2.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((y, name, self) =>
+					{
+						if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
+							return 6;
+						return y;
+					});
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.LogException(e);
+			}
+		}*/
+	}
 
 }

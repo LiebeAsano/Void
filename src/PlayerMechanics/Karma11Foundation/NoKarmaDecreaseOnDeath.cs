@@ -24,9 +24,6 @@ internal static class NoKarmaDecreaseOnDeath
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Predicate<DeathPersistentSaveData>>((DeathPersistentSaveData saveData) =>
 			{
-
-				Karma11Symbol.bypassRequestKarmaTokenAmount = (ushort)saveData.GetKarmaToken();
-
 				return saveData.karma == 10;
 			});
 			c.Emit(OpCodes.Brtrue_S, skipSubtract);

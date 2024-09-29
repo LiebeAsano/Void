@@ -4,13 +4,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
+using static VoidTemplate.VoidEnums;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
 internal static class Karma11Symbol
 {
+	public static void Startup()
+	{
+		On.Menu.KarmaLadder.KarmaSymbol.ctor += KarmaSymbol_ctor;
+		On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
+		On.PlayerProgression.GetOrInitiateSaveState += PlayerProgression_GetOrInitiateSaveState;
+	}
+
 	const int karma11index = 10;
-	const ushort maximumTokens = 10;
 	static Dictionary<ushort, ushort> tokensToPelletsMap = new()
 	{
 		{0, 0},
@@ -25,43 +32,28 @@ internal static class Karma11Symbol
 		{9, 5},
 		{10, 5},
 	};
+	public static ushort currentKarmaTokens = 0;
 
-
-	public static void Startup()
+	private static SaveState PlayerProgression_GetOrInitiateSaveState(On.PlayerProgression.orig_GetOrInitiateSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber, RainWorldGame game, ProcessManager.MenuSetup setup, bool saveAsDeathOrQuit)
 	{
-		On.Menu.KarmaLadder.KarmaSymbol.ctor += KarmaSymbol_ctor;
-		On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
-		On.DeathPersistentSaveData.SaveToString += DeathPersistentSaveData_SaveToString;
+		SaveState result = orig(self, saveStateNumber, game, setup, saveAsDeathOrQuit);
+		if (saveStateNumber == SlugcatID.TheVoid)
+		{
+			currentKarmaTokens = (ushort)result.GetKarmaToken();
+		}
+		return result;
 	}
 
-	private static string DeathPersistentSaveData_SaveToString(On.DeathPersistentSaveData.orig_SaveToString orig, DeathPersistentSaveData self, bool saveAsIfPlayerDied, bool saveAsIfPlayerQuit)
-	{
-		//bypass for death screen
-		bypassRequestKarmaTokenAmount = (ushort)self.GetKarmaToken();
-		return orig(self, saveAsIfPlayerDied, saveAsIfPlayerQuit);
-	}
-
-
-	#region bypassed function
-#nullable enable
-	public static ushort? bypassRequestKarmaTokenAmount = null;
 	private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
 	{
 		if (k.x == 10)
 		{
-			if (bypassRequestKarmaTokenAmount == null)
-			{
-				logerr("lookup for karma string summonned without bypass. assuming zero karma tokens. from: " + new System.Diagnostics.StackTrace());
-				bypassRequestKarmaTokenAmount = 0;
-			}
-			string res = $"atlas-void/KarmaToken{bypassRequestKarmaTokenAmount}" + (small ? "Small" : "Big");
-			bypassRequestKarmaTokenAmount = null;
+			loginf($"looking up {k.x}/{k.y} karma (logged due to looking up k10)");
+			string res = $"atlas-void/KarmaToken{tokensToPelletsMap[currentKarmaTokens]}" + (small ? "Small" : "Big");
 			return res;
 		}
 		return orig(small, k);
 	}
-#nullable disable
-	#endregion
 
 
 	/// <summary>
@@ -77,8 +69,6 @@ internal static class Karma11Symbol
 	/// <param name="displayKarma"></param>
 	private static void KarmaSymbol_ctor(On.Menu.KarmaLadder.KarmaSymbol.orig_ctor orig, KarmaLadder.KarmaSymbol self, Menu.Menu menu, MenuObject owner, Vector2 pos, FContainer container, FContainer foregroundContainer, IntVector2 displayKarma)
 	{
-		var savestate = (menu as KarmaLadderScreen).saveState;
-		bypassRequestKarmaTokenAmount = tokensToPelletsMap[(ushort)savestate.GetKarmaToken()];
 		orig(self, menu, owner, pos, container, foregroundContainer, displayKarma);
 
 		if (displayKarma.x == karma11index)

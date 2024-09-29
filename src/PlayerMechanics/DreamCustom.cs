@@ -31,7 +31,25 @@ public static class DreamCustom
 						break;
 					}
 			}
-			switch (saveState.deathPersistentSaveData.karmaCap)
+            switch (saveState.cycleNumber)
+            {
+                case >= 18:
+                    {
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidSea);
+                        break;
+                    }
+                case >= 12:
+                    {
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidBody);
+                        break;
+                    }
+                case >= 6:
+                    {
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.NSH);
+                        break;
+                    }
+            }
+            switch (saveState.deathPersistentSaveData.karmaCap)
 			{
 				case 10:
 					{

@@ -22,7 +22,10 @@ internal static class DreamAssociatedSound
 			{ MoonDream, VoidEnums.SoundID.MoonDreamSound },
 			{ PebbleDream, VoidEnums.SoundID.PebbleDreamSound },
 			{ RotDream, VoidEnums.SoundID.RotDreamSound },
-		};
+            { Void_SeaDream, VoidEnums.SoundID.VoidSeaDreamSound },
+            { Void_BodyDream, VoidEnums.SoundID.VoidBodyDreamSound },
+            { Void_HeartDream, VoidEnums.SoundID.VoidHeartDreamSound },
+        };
 	}
 
 	private static void Menu_PlaySound_SoundID(On.Menu.Menu.orig_PlaySound_SoundID orig, Menu.Menu self, SoundID soundID)

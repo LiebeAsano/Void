@@ -5,7 +5,7 @@ namespace VoidTemplate.Objects;
 internal class Ending : UpdatableAndDeletable
 {
 	#region immutable
-	const int DelayTreshold = 2 * Utils.TicksPerSecond;
+	const int DelayTreshold = 1 * Utils.TicksPerSecond;
 	static Vector2 expectedPositionOfTrigger = new Vector2(300, 280);
 	const int triggerRadius = 160;
 	const int timeToMoveCamera = 9 * Utils.TicksPerSecond;
@@ -14,8 +14,8 @@ internal class Ending : UpdatableAndDeletable
 	/// https://www.desmos.com/calculator/eijfplyf1l
 	/// this should be between 0 and 1
 	/// </summary>
-	const float cameraMoveSteepnessModifier = 0.1f;
-	static Vector2 desiredCamOffset = new Vector2(0, 3000);
+	const float cameraMoveSteepnessModifier = 0.15f;
+	static Vector2 desiredCamOffset = new Vector2(0, 4500);
 	static Vector2 initialcampos;
 	private enum State
 	{

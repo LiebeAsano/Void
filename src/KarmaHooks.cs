@@ -5,7 +5,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
-using VoidTemplate.Useful;
+using static VoidTemplate.Useful.Utils;
 using UnityEngine;
 
 
@@ -41,17 +41,18 @@ namespace VoidTemplate
             // (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap,
             // num,
             // this.game.StoryCharacter == SlugcatStats.Name.Red <OR VOID> );
-            if (c.TryGotoNext(MoveType.After,
-                x => x.MatchLdfld<DeathPersistentSaveData>(nameof(DeathPersistentSaveData.karma))))
+            if (c.TryGotoNext(x => x.MatchLdsfld(typeof(SlugcatStats.Name).GetField("Red")) &&
+                c.TryGotoPrev(MoveType.After,
+                x => x.MatchLdfld<DeathPersistentSaveData>(nameof(DeathPersistentSaveData.karma)))))
             {
-                c.Emit(OpCodes.Pop);
                 c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<World, int>>((self) =>
+                c.EmitDelegate<Func<int, World, int>>((originalResult, world) =>
                 {
-                    return (self.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+                    if(world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid) return (world.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+                    return originalResult;
                 });
             }
-            else logerr(new System.Diagnostics.StackTrace());
+            else LogExErr("Failed to replace karma with karmacap");
             if(c.TryGotoNext(MoveType.After, x => x.MatchCall("ExtEnum`1<SlugcatStats/Name>", "op_Equality")))
             {
                 c.Emit(OpCodes.Ldarg_0);
@@ -60,11 +61,8 @@ namespace VoidTemplate
                     return orig || world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
                 });
             }
-            else logerr(new System.Diagnostics.StackTrace());
+            else LogExErr("Failed to find comparison to red in echo spawning ");
         }
-
-        private static void loginf(object e) => _Plugin.logger.LogInfo(e);
-        private static void logerr(object e) => _Plugin.logger.LogError(e);
 
         private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
         {

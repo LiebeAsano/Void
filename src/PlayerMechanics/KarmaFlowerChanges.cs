@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static VoidTemplate.Useful.Utils;
+using VoidTemplate.Useful;
 
-namespace VoidTemplate;
+namespace VoidTemplate.PlayerMechanics;
 
-static class EdibleChanges
+internal class KarmaFlowerChanges
 {
-    public static void Hook()
+    public static void Initiate()
     {
         On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
-        On.Mushroom.BitByPlayer += Mushroom_EatenByPlayer;
+        On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
     }
+
+    private static int Player_FoodInRoom_Room_bool(On.Player.orig_FoodInRoom_Room_bool orig, Player self, Room checkRoom, bool eatAndDestroy)
+    {
+        var res = orig(self, checkRoom, eatAndDestroy);
+        if (self.IsVoid() && checkRoom.game.IsStorySession) checkRoom.game.GetStorySession.saveState.deathPersistentSaveData.reinforcedKarma = false; 
+        return res;
+    }
+
     private static void KarmaFlower_BitByPlayer(On.KarmaFlower.orig_BitByPlayer orig, KarmaFlower self, Creature.Grasp grasp, bool eu)
     {
         if (self.bites < 2 && grasp.grabber is Player player && player.IsVoid())
@@ -26,18 +34,6 @@ static class EdibleChanges
                 var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
                 savestate.SetKarmaToken(Math.Min(10, savestate.GetKarmaToken() + 2));
             }
-            grasp.Release();
-            self.Destroy();
-            return;
-        }
-        orig(self, grasp, eu);
-    }
-
-    private static void Mushroom_EatenByPlayer(On.Mushroom.orig_BitByPlayer orig, Mushroom self, Creature.Grasp grasp, bool eu)
-    {
-        if (grasp.grabber is Player player && player.IsVoid())
-        {
-            self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
             grasp.Release();
             self.Destroy();
             return;

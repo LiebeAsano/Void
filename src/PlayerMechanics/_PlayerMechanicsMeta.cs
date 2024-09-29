@@ -17,10 +17,12 @@ public static class _PlayerMechanicsMeta
         DreamManager.RegisterMaps();
         DreamCustom.Hook();
         DreamManager.Hook();
+        EdibleChanges.Hook();
         ExtendedLungs.Hook();
         Grabability.Hook();
         GraspSave.Hook();
         HealthSpear.Hook();
+        KarmaFlowerChanges.Initiate();
         MalnourishmentDeath.Hook();
         NoForceSleep.Hook();
         NoVisualMalnourishment.Hook();

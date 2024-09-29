@@ -59,7 +59,6 @@ class _Plugin : BaseUnityPlugin
 				Oracles.OracleHooks.Hook();
 				KarmaHooks.Hook();
 				RoomHooks.Hook();
-				EdibleChanges.Hook();
 				MenuTinkery._MenuMeta.Startup();
 				CreatureInteractions._CreatureInteractionsMeta.Hook();
 				PersistCycleLengthForGracePeriodRestarts.Hook();

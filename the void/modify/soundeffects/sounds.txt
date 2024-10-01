@@ -1,3 +1,6 @@
+[ADD]Void_Heart_Dream_Sound/dopplerFac=0 : VoidHeartDreamSound/vol=0.25
+[ADD]Void_Body_Dream_Sound/dopplerFac=0 : VoidBodyDreamSound/vol=0.25
+[ADD]Void_Sea_Dream_Sound/dopplerFac=0 : VoidSeaDreamSound/vol=0.25
 [ADD]Rot_Dream_Sound/dopplerFac=0 : RotDreamSound/vol=0.25
 [ADD]Pebble_Dream_Sound/dopplerFac=0 : PebbleDreamSound/vol=0.25
 [ADD]Moon_Dream_Sound/dopplerFac=0 : MoonDreamSound/vol=0.25

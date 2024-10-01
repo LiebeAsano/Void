@@ -123,7 +123,11 @@ public static class VoidEnums
 			MoonDreamSound = new("Moon_Dream_Sound", true);
 			PebbleDreamSound = new("Pebble_Dream_Sound", true);
 			RotDreamSound = new("Rot_Dream_Sound", true);
-		}
+            VoidSeaDreamSound = new("Void_Sea_Dream_Sound", true);
+            VoidBodyDreamSound = new("Void_Body_Dream_Sound", true);
+			VoidHeartDreamSound = new("Void_Heart_Dream_Sound", true);
+
+        }
 
 		public static global::SoundID VoidNSHDreamSound;
 		public static global::SoundID NSHDreamSound;
@@ -133,7 +137,10 @@ public static class VoidEnums
 		public static global::SoundID MoonDreamSound;
 		public static global::SoundID PebbleDreamSound;
 		public static global::SoundID RotDreamSound;
-	}
+        public static global::SoundID VoidSeaDreamSound;
+        public static global::SoundID VoidBodyDreamSound;
+        public static global::SoundID VoidHeartDreamSound;
+    }
 	public static class ConversationID
 	{
 		public static void Register()

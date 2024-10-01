@@ -16,8 +16,11 @@ internal static class LeechIndigestion
 	{
 		orig(self);
 
-		if (Array.Exists(self.grasps, grasp => grasp.grabbed is Player player
-		&& player.IsVoid() && self != null && self.room != null))
+		if (Array.Exists(self.grasps, grasp => grasp is not null 
+		&& grasp.grabbed is Player player
+		&& player.IsVoid() 
+		&& self != null 
+		&& self.room != null))
 		{
 			await Task.Delay(6000);
 			self.Die();

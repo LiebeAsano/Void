@@ -50,7 +50,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
                     iLLabel.Target = iLCursor.Previous;
                 }
 
-                iLCursor.EmitDelegate(ThisIsVoidCampaign);
+                iLCursor.EmitDelegate(TheVoidPassCheckForMSEcho);
                 iLCursor.Emit(OpCodes.Brtrue, MSEchoCheckPassLabel);
             }
             else
@@ -59,9 +59,25 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
             }
         }
 
+        private static bool TheVoidPassCheckForMSEcho(World self)
+        {
+            if (ThisIsVoidCampaign(self))
+            {
+                return TheVoidCanMeetMSEcho(self);
+            }
+
+            return false;
+        }
+
         private static bool ThisIsVoidCampaign(World self)
         {
             return (self.game.session as StoryGameSession).saveStateNumber == VoidEnums.SlugcatID.TheVoid;
+        }
+
+        private static bool TheVoidCanMeetMSEcho(World self)
+        {
+            DeathPersistentSaveData deathPersistentSaveData = (self.game.session as StoryGameSession).saveState.deathPersistentSaveData;
+            return !deathPersistentSaveData.theMark;
         }
     }
 }

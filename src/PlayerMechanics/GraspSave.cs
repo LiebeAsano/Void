@@ -32,7 +32,7 @@ internal static class GraspSave
 	}
 	static int TicksUntilDeath(Player p)
 	{
-		return TicksPerSecond * (p.KarmaCap == 10 ? 60 : 90);
+		return TicksPerSecond * (p.KarmaCap == 10 ? 40 : 60);
 	}
 
 	static ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbers = new();

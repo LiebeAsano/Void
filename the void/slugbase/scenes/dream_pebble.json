@@ -5,7 +5,7 @@
 		{"name": "pebble - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background", "pos": [0,0], "depth": 8.0, "shader": "Basic" },
 		{ "name": "shadow", "pos": [0,0], "depth": 5.5, "shader": "Basic" },
-		{ "name": "fog", "pos": [0,0], "depth": -1.0, "shader": "Basic" },
+		{ "name": "fog", "pos": [0,-10], "depth": -1.0, "shader": "Basic" },
 		{ "name": "lights", "pos": [0,0], "depth": 5, "shader": "Basic" },
 		{ "name": "pebble", "pos": [0,0], "depth": 5, "shader": "Basic" },
 		{ "name": "neuron", "pos": [0,0], "depth": 4, "shader": "Basic" },

@@ -15,7 +15,7 @@ internal static class SwallowObjects
 	private static readonly HashSet<Type> HalfFoodObjects =
 		[
 			typeof(Hazer),
-			typeof(VultureGrub)
+			typeof(VultureGrub),
 		];
 
 	private static readonly HashSet<Type> QuarterFoodObjects =
@@ -26,7 +26,8 @@ internal static class SwallowObjects
 		typeof(FlareBomb),
 		typeof(PuffBall),
 		typeof(FlyLure),
-		typeof(BubbleGrass)
+		typeof(BubbleGrass),
+		typeof(Lantern),
 	];
 
 	private static readonly HashSet<Type> FullPinFoodObjects =

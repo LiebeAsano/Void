@@ -110,7 +110,7 @@ internal class DrawSprites
 			if (sprite.element.name.StartsWith("Head"))
 			{
 
-				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 				{
 					if (!self.player.input[0].jmp)
 					{
@@ -125,7 +125,7 @@ internal class DrawSprites
 							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 					}
 				}
-				else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+				else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 				{
 					if (!self.player.input[0].jmp)
 					{
@@ -149,7 +149,7 @@ internal class DrawSprites
 
 				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 				{
-					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 					{
 						string face = "TheVoidDCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
@@ -165,7 +165,7 @@ internal class DrawSprites
 
 				else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 				{
-					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG)
+					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 					{
 						string face = "TheVoidCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
@@ -218,7 +218,8 @@ internal class DrawSprites
 			if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
 				player.bodyMode == Player.BodyModeIndex.WallClimb &&
 				body_chunk_0.pos.y < body_chunk_1.pos.y) &&
-				player.bodyMode != Player.BodyModeIndex.CorridorClimb)
+				player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
+                player.bodyMode != Player.BodyModeIndex.Crawl)
 			{
 				if (timeSinceLastForceUpdate >= forceUpdateInterval)
 				{

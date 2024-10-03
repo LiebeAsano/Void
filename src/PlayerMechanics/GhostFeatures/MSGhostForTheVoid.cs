@@ -66,7 +66,8 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
                 &&
                 self.room.game.session is StoryGameSession storyGameSession && storyGameSession.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
             {
-                if (!HasMetMSGhost(storyGameSession.saveState.deathPersistentSaveData) && self.room.world.region.name == "MS")
+                if (!HasMetMSGhost(storyGameSession.saveState.deathPersistentSaveData) && self.room.world.region.name == "MS"
+                    && TheVoidCanMeetMSGhost(self.room.world))
                 {
                     self.room.AddObject(new GhostPing(self.room));
                 }

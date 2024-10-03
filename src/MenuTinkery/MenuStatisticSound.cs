@@ -18,7 +18,7 @@ internal static class MenuStatisticSound
 
         StatisticSoundMap = new()
         {
-            { "Static_Death_Void",  VoidEnums.SoundID.NSHDreamSound },
+            { "Static_Death_Void",  VoidEnums.SoundID.StaticDeathSound },
             { "Static_Death_Void11",  VoidEnums.SoundID.StaticDeathSound11 },
             { "Static_End_Scene_Void", VoidEnums.SoundID.StaticEndSound },
             { "Static_End_Scene_Void11", VoidEnums.SoundID.StaticEndSound11 },

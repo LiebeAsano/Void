@@ -16,6 +16,56 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
             IL.World.SpawnGhost += World_SpawnGhost;
 
             On.World.CheckForRegionGhost += World_CheckForRegionGhost;
+
+            IL.Room.Loaded += Room_Loaded;
+        }
+
+        private static void Room_Loaded(ILContext il)
+        {
+            ILCursor iLCursor = new(il);
+
+            if (iLCursor.TryGotoNext(MoveType.After,
+                c => c.MatchLdarg(0),
+                c => c.MatchLdfld<Room>(nameof(Room.game)),
+                c => c.MatchCallvirt(typeof(RainWorldGame).GetProperty(nameof(RainWorldGame.world)).GetMethod),
+                c => c.MatchLdfld<World>(nameof(World.worldGhost)),
+                c => c.MatchBrfalse(out _)))
+            {
+                ILLabel doNotPlayGhostHunchLabel = null;
+
+                if (iLCursor.TryGotoNext(MoveType.After,
+                    c => c.MatchLdarg(0),
+                    c => c.MatchLdfld<Room>(nameof(Room.world)),
+                    c => c.MatchLdfld<World>(nameof(World.region)),
+                    c => c.MatchBrfalse(out doNotPlayGhostHunchLabel)))
+                {
+                    List<ILLabel> labelsToRetarget = iLCursor.IncomingLabels.ToList();
+
+                    iLCursor.Emit(OpCodes.Ldarg_0);
+
+                    foreach (ILLabel label in labelsToRetarget)
+                    {
+                        label.Target = iLCursor.Previous;
+                    }
+
+                    iLCursor.EmitDelegate(DoNotPlayGhostHunch);
+                    iLCursor.Emit(OpCodes.Brtrue, doNotPlayGhostHunchLabel);
+
+                    return;
+                }
+            }
+
+            logerr("Failed to patch Room.Loaded logics for GhostSpot. The Void may receive erroneus Ghost Hunch.");
+        }
+
+        private static bool DoNotPlayGhostHunch(Room self)
+        {
+            if (self.world.game.session is StoryGameSession storyGameSession)
+            {
+                return self.world.region.name == "MS" && storyGameSession.saveStateNumber == VoidEnums.SlugcatID.TheVoid;
+            }
+
+            return false;
         }
 
         private static bool World_CheckForRegionGhost(On.World.orig_CheckForRegionGhost orig, SlugcatStats.Name slugcatIndex, string regionString)

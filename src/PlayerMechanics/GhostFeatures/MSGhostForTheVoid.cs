@@ -19,6 +19,8 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
         {
             IL.World.SpawnGhost += World_SpawnGhost;
 
+            On.GhostWorldPresence.ctor += GhostWorldPresence_ctor;
+
             On.World.CheckForRegionGhost += World_CheckForRegionGhost;
 
             IL.Room.Loaded += Room_Loaded;
@@ -27,6 +29,19 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
             On.Player.ctor += Player_ctor;
             On.Player.Update += Player_Update;
+        }
+
+        private static void GhostWorldPresence_ctor(On.GhostWorldPresence.orig_ctor orig, GhostWorldPresence self, World world, GhostWorldPresence.GhostID ghostID)
+        {
+            orig(self, world, ghostID);
+
+            if (world.game.session is StoryGameSession storyGameSession)
+            {
+                if (storyGameSession.saveStateNumber == VoidEnums.SlugcatID.TheVoid && ghostID == MoreSlugcatsEnums.GhostID.MS)
+                {
+                    self.songName = "Void_Echo_Music";
+                }
+            }
         }
 
         private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)

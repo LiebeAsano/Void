@@ -40,7 +40,7 @@ internal static class Karma11Symbol
 		if (saveStateNumber == SlugcatID.TheVoid)
 		{
 			currentKarmaTokens = (ushort)result.GetKarmaToken();
-		}
+        }
 		return result;
 	}
 
@@ -48,7 +48,6 @@ internal static class Karma11Symbol
 	{
 		if (k.x == 10)
 		{
-			loginf($"looking up {k.x}/{k.y} karma (logged due to looking up k10)");
 			string res = $"atlas-void/KarmaToken{tokensToPelletsMap[currentKarmaTokens]}" + (small ? "Small" : "Big");
 			return res;
 		}

@@ -28,7 +28,10 @@ internal class KarmaFlowerChanges
 			if (self.bites == 0 && player.KarmaCap == 10)
 			{
 				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-				savestate.SetKarmaToken(Math.Min(10, savestate.GetKarmaToken() + 2));
+				var amountOfTokens = Math.Min(10, savestate.GetKarmaToken() + 2);
+                savestate.SetKarmaToken(amountOfTokens);
+				Karma11Foundation.Karma11Symbol.currentKarmaTokens = (ushort)amountOfTokens;
+				self.room.game.cameras[0].hud.karmaMeter.UpdateGraphic(10, 10);
 			}
 			grasp.Release();
 			self.Destroy();

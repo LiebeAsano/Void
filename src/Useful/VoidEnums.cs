@@ -127,6 +127,11 @@ public static class VoidEnums
             VoidBodyDreamSound = new("Void_Body_Dream_Sound", true);
 			VoidHeartDreamSound = new("Void_Heart_Dream_Sound", true);
 
+			StaticDeathSound = new("Static_Death_Sound", true);
+            StaticDeathSound11 = new("Static_Death_Sound11", true);
+			StaticEndSound = new("Static_End_Sound", true);
+			StaticEndSound11 = new("Static_End_Sound11", true);
+
         }
 
 		public static global::SoundID VoidNSHDreamSound;
@@ -140,6 +145,11 @@ public static class VoidEnums
         public static global::SoundID VoidSeaDreamSound;
         public static global::SoundID VoidBodyDreamSound;
         public static global::SoundID VoidHeartDreamSound;
+
+        public static global::SoundID StaticDeathSound;
+        public static global::SoundID StaticDeathSound11;
+        public static global::SoundID StaticEndSound;
+        public static global::SoundID StaticEndSound11;
     }
 	public static class ConversationID
 	{

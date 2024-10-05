@@ -1,3 +1,6 @@
+[ADD]Static_Death_Sound/dopplerFac=0 : StaticDeathSound/vol=0.25
+[ADD]Static_Death_Sound11/dopplerFac=0 : StaticDeathSound11/vol=0.25
+
 [ADD]Void_Heart_Dream_Sound/dopplerFac=0 : VoidHeartDreamSound/vol=0.25
 [ADD]Void_Body_Dream_Sound/dopplerFac=0 : VoidBodyDreamSound/vol=0.25
 [ADD]Void_Sea_Dream_Sound/dopplerFac=0 : VoidSeaDreamSound/vol=0.25
@@ -9,5 +12,6 @@
 [ADD]Sky_Dream_Sound/dopplerFac=0 : SkyDreamSound/vol=0.25
 [ADD]NSH_Dream_Sound/dopplerFac=0 : NSHDreamSound/vol=0.25
 [ADD]Void_NSH_Dream_Sound/dopplerFac=0 : VoidNSHDreamSound/vol=0.25
+
 [ADD]SlugcatMeowVoid/dopplerFac=0/rangeFac=1 : MeowVoid1/vol=0.6/maxPitch=1.1/minPitch=0.9
 [ADD]SlugcatMeowVoidShort/dopplerFac=0/rangeFac=1 : MeowVoid1Short/vol=0.6/maxPitch=1.1/minPitch=0.9

@@ -40,9 +40,12 @@ namespace VoidTemplate
 			// (this.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap,
 			// num,
 			// this.game.StoryCharacter == SlugcatStats.Name.Red <OR VOID> );
-			if (c.TryGotoNext(x => x.MatchLdsfld(typeof(SlugcatStats.Name).GetField("Red")) &&
-				c.TryGotoPrev(MoveType.After,
-				x => x.MatchLdfld<DeathPersistentSaveData>(nameof(DeathPersistentSaveData.karma)))))
+			if (
+				c.TryGotoNext(x => x.MatchLdsfld("SlugcatStats/Name", "Red"))
+				&&	c.TryGotoPrev(MoveType.After,	
+					x => x.MatchLdfld(typeof(DeathPersistentSaveData).GetField("karma"))
+					)
+			)
 			{
 				c.Emit(OpCodes.Ldarg_0);
 				c.EmitDelegate<Func<int, World, int>>((originalResult, world) =>
@@ -52,7 +55,11 @@ namespace VoidTemplate
 				});
 			}
 			else LogExErr("Failed to replace karma with karmacap");
-			if (c.TryGotoNext(MoveType.After, x => x.MatchCall("ExtEnum`1<SlugcatStats/Name>", "op_Equality")))
+
+			if (
+				c.TryGotoNext(MoveType.After, 
+					x => x.MatchCall("ExtEnum`1<SlugcatStats/Name>", "op_Equality"))
+			)
 			{
 				c.Emit(OpCodes.Ldarg_0);
 				c.EmitDelegate<Func<bool, World, bool>>((orig, world) =>

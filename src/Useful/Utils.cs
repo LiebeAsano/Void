@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -33,5 +35,20 @@ internal static class Utils
 		logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
 	}
 
+	public static void LogdumpIL(ILContext iLContext)
+	{
+		loginf("Dumping IL -----");
 
+		foreach (Instruction instruction in iLContext.Instrs)
+		{
+			try
+			{
+				loginf(instruction.OpCode);
+				loginf(instruction.Operand);
+			}
+			catch { }
+		}
+
+		loginf("IL Dump end -----");
+	}
 }

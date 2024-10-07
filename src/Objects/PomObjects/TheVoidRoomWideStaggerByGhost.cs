@@ -49,6 +49,11 @@ namespace VoidTemplate.Objects.PomObjects
             if (room.world.worldGhost == null)
                 return;
 
+            if (room.world.game.session is not StoryGameSession storyGameSession || storyGameSession.saveState.deathPersistentSaveData.karmaCap >= 9)
+            {
+                return;
+            }
+
             foreach (AbstractCreature player in room.game.Players.Where(p => p.Room == room.abstractRoom))
             {
                 Creature playerCreature = player.realizedCreature;

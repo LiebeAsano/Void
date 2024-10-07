@@ -63,6 +63,8 @@ class _Plugin : BaseUnityPlugin
 				PlayerMechanics._PlayerMechanicsMeta.Hook();
 				_MiscMeta.Hook();
 				OptionInterface._OIMeta.Initialize();
+
+				RegisterPOMObjects();
 				if (DevEnabled)
 				{
 					//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
@@ -77,6 +79,11 @@ class _Plugin : BaseUnityPlugin
 			Debug.LogException(e);
 		}
 
+	}
+
+	private static void RegisterPOMObjects()
+	{
+		Objects.PomObjects.TheVoidRoomWideStaggerByGhost.Register();
 	}
 
 	// Load any resources, such as sprites or sounds

@@ -13,5 +13,6 @@ Palette: 37
 EffectColorA: 11
 EffectColorB: 8
 Effects: Fog-0.4891304-20-20, 
+PlacedObjects: TheVoidRoomWideStaggerByGhost><1461.355><500.5675><100~50~200~50~50~40, 
 AmbientSounds: OMNI><AM_WIN-MedWind.ogg><745.869><537.4011><0.6521739><1, OMNI><AM_WIN-HowlingWnd.ogg><741.3217><463.5906><0.5652174><0.7847826, OMNI><MSC-MetalVariety.ogg><744.6196><382.6603><0.2173913><0.6869565, 
 FadePalette: 40, 0.5652174, 0.5543478, 0.5760869

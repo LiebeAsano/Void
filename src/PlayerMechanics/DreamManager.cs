@@ -67,7 +67,7 @@ public static class DreamManager
 	private static void SaveState_ctor(On.SaveState.orig_ctor orig, SaveState self, SlugcatStats.Name saveStateNumber, PlayerProgression progression)
 	{
 		orig(self, saveStateNumber, progression);
-		if (saveStateNumber == VoidEnums.SlugcatID.TheVoid) self.dreamsState = new();
+		if (saveStateNumber == VoidEnums.SlugcatID.Void) self.dreamsState = new();
 	}
 	private static Menu.MenuScene.SceneID DreamScreen_SceneFromDream(On.Menu.DreamScreen.orig_SceneFromDream orig, Menu.DreamScreen self, DreamsState.DreamID dreamID)
 	{
@@ -76,7 +76,7 @@ public static class DreamManager
 
 	private static void ScheduleDream(On.DreamsState.orig_StaticEndOfCycleProgress orig, SaveState saveState, string currentRegion, string denPosition, ref int cyclesSinceLastDream, ref int cyclesSinceLastFamilyDream, ref int cyclesSinceLastGuideDream, ref int inGWOrSHCounter, ref DreamsState.DreamID upcomingDream, ref DreamsState.DreamID eventDream, ref bool everSleptInSB, ref bool everSleptInSB_S01, ref bool guideHasShownHimselfToPlayer, ref int guideThread, ref bool guideHasShownMoonThisRound, ref int familyThread)
 	{
-		if (saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+		if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
 			var dreamtoshow = DreamPriority.FirstOrDefault(dream =>
 			{
@@ -90,6 +90,6 @@ public static class DreamManager
 			}
 		}
 		orig(saveState, currentRegion, denPosition, ref cyclesSinceLastDream, ref cyclesSinceLastFamilyDream, ref cyclesSinceLastGuideDream, ref inGWOrSHCounter, ref upcomingDream, ref eventDream, ref everSleptInSB, ref everSleptInSB_S01, ref guideHasShownHimselfToPlayer, ref guideThread, ref guideHasShownMoonThisRound, ref familyThread);
-		if (saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid && !DreamEnumMapper.Values.Contains(upcomingDream)) upcomingDream = null;
+		if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void && !DreamEnumMapper.Values.Contains(upcomingDream)) upcomingDream = null;
 	}
 }

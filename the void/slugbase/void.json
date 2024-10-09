@@ -1,4 +1,4 @@
-{	"id": "TheVoid",
+{	"id": "Void",
 	"name": "The Void",
 	"description": "An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.",
 	"features": {
@@ -55,8 +55,8 @@
 		"can_maul": true,
 		"perma_unlock_gates": false,
 		"maul_damage": 6,
-		"karma": 2,
-		"karma_cap": 2,
+		"karma": 10,
+		"karma_cap": 10,
 		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": true,
@@ -66,7 +66,7 @@
 		"cycle_length_max": 13,
 		"food_min": 9,
 		"food_max": 9,
-		"world_state": ["TheVoid","Red"],
+		"world_state": ["Void","Red"],
 		"timeline_after": "Red",
 		"start_room": "SB_A14",
 		"diet": {

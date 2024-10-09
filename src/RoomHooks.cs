@@ -40,7 +40,7 @@ namespace VoidTemplate
 		private static void RoomSpeficScript(On.Room.orig_Loaded orig, Room self)
 		{
 			orig(self);
-			if (self.game != null && self.game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
+			if (self.game != null && self.game.session.characterStats.name == VoidEnums.SlugcatID.Void)
 			{
 				SaveState saveState = self.game.GetStorySession.saveState;
 				if (!saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))

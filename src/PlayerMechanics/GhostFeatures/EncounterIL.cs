@@ -62,7 +62,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
 		private static void KarmaCapTo10ForVoidMSGhost(SaveState self, GhostWorldPresence.GhostID ghostId)
 		{
-			if (self.saveStateNumber == VoidEnums.SlugcatID.TheVoid
+			if (self.saveStateNumber == VoidEnums.SlugcatID.Void
 				&& ghostId == MoreSlugcatsEnums.GhostID.MS)
 			{
 				self.deathPersistentSaveData.karmaCap = 10;
@@ -71,7 +71,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
 		private static int KarmaRefillControl(int unmodifiedNewKarma, SaveState self, GhostWorldPresence.GhostID ghostID)
 		{
-			if (self.saveStateNumber == VoidEnums.SlugcatID.TheVoid
+			if (self.saveStateNumber == VoidEnums.SlugcatID.Void
 				&& ghostID != MoreSlugcatsEnums.GhostID.MS)
 			{
 				return Custom.IntClamp(self.deathPersistentSaveData.karma + 1, 0, self.deathPersistentSaveData.karmaCap);

@@ -1,7 +1,7 @@
 {
 	"custom_meows": [
 		{
-			"slugcat_id": "TheVoid",
+			"slugcat_id": "Void",
 			"short_meow_soundid": "SlugcatMeowVoidShort",
 			"long_meow_soundid": "SlugcatMeowVoid",
 			"volume_multiplier": 0.9

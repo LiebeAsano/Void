@@ -28,14 +28,14 @@ internal static class MenuHooks
 	private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
 	{
 		var re = orig(i, rainWorld);
-		if (i == VoidEnums.SlugcatID.TheVoid &&
+		if (i == VoidEnums.SlugcatID.Void &&
 			!rainWorld.progression.miscProgressionData.beaten_Hunter)
 			return _Plugin.DevEnabled || OptionInterface.OptionAccessors.ForceUnlockCampaign;
 		return re;
 	}
 	private static void TextLabelIfNotUnlocked(On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.orig_ctor orig, SlugcatSelectMenu.SlugcatPageNewGame self, Menu.Menu menu, MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
 	{
-		if (slugcatNumber == VoidEnums.SlugcatID.TheVoid && SlugBase.SlugBaseCharacter.TryGet(slugcatNumber, out var character))
+		if (slugcatNumber == VoidEnums.SlugcatID.Void && SlugBase.SlugBaseCharacter.TryGet(slugcatNumber, out var character))
 		{
 			character.Description = (menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber) ?
 				"An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world."
@@ -45,10 +45,10 @@ internal static class MenuHooks
 	}
 	private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
 	{
-		if (self.owner?.menu is StoryGameStatisticsScreen && RainWorld.lastActiveSaveSlot == VoidEnums.SlugcatID.TheVoid)
+		if (self.owner?.menu is StoryGameStatisticsScreen && RainWorld.lastActiveSaveSlot == VoidEnums.SlugcatID.Void)
 		{
 			RainWorld rainWorld = self.menu.manager.rainWorld;
-			SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.menu.manager.menuSetup, false);
+			SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
 			if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticDeath11;
 			else if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
 			else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticEnd11;
@@ -72,9 +72,9 @@ internal static class MenuHooks
 	{
 		orig(self);
 		if (self.hud.owner is SlugcatSelectMenu.SlugcatPageContinue page
-			&& page.slugcatNumber == VoidEnums.SlugcatID.TheVoid
+			&& page.slugcatNumber == VoidEnums.SlugcatID.Void
 			&& page.menu.manager.rainWorld is RainWorld rainWorld
-			&& rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, rainWorld.processManager.menuSetup, false) is SaveState save
+			&& rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, rainWorld.processManager.menuSetup, false) is SaveState save
 			&& (save.GetVoidCatDead() || save.GetEndingEncountered()))
 		{
 			self.circles.ForEach(ccircle => Array.ForEach(ccircle.circles, c => c.fade = 0));
@@ -84,8 +84,8 @@ internal static class MenuHooks
 	private static void HideKarmaAndFoodSplitterAndAddText(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_ctor orig, Menu.SlugcatSelectMenu.SlugcatPageContinue self, Menu.Menu menu, Menu.MenuObject owner, int pageIndex, SlugcatStats.Name slugcatNumber)
 	{
 		orig(self, menu, owner, pageIndex, slugcatNumber);
-		if (slugcatNumber == VoidEnums.SlugcatID.TheVoid
-			&& menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, menu.manager.menuSetup, false) is SaveState save
+		if (slugcatNumber == VoidEnums.SlugcatID.Void
+			&& menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save
 			&& (save.GetVoidCatDead() || save.GetEndingEncountered()))
 		{
 			var hud = self.hud;

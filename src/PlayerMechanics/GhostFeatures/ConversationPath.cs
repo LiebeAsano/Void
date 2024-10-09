@@ -19,7 +19,7 @@ internal static class ConversationPath
 	private static void GhostConversation_AddEvents(On.GhostConversation.orig_AddEvents orig, GhostConversation self)
 	{
 		if (self.ghost.room.game.session is StoryGameSession session &&
-			session.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			session.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
 			var path = AssetManager.ResolveFilePath(GetGhostConversationPath(Custom.rainWorld.inGameTranslator.currentLanguage, self.id,
 				session.saveState.deathPersistentSaveData.theMark, session.saveState.GetPunishNonPermaDeath()));

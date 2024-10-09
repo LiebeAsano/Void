@@ -3,7 +3,7 @@ using Menu;
 
 public static class VoidEnums
 {
-	private const string uniqueprefix = "TheVoidSlugCat";
+	private const string uniqueprefix = "VoidSlugCat";
 	public static void RegisterEnums()
 	{
 		SceneID.Register();
@@ -167,9 +167,9 @@ public static class VoidEnums
 	{
 		public static void Register()
 		{
-			TheVoid = new("TheVoid");
+			Void = new("Void");
 		}
-		public static SlugcatStats.Name TheVoid;
+		public static SlugcatStats.Name Void;
 	}
 
 }

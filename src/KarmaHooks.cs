@@ -50,7 +50,7 @@ namespace VoidTemplate
 				c.Emit(OpCodes.Ldarg_0);
 				c.EmitDelegate<Func<int, World, int>>((originalResult, world) =>
 				{
-					if (world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid) return (world.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+					if (world.game.StoryCharacter == VoidEnums.SlugcatID.Void) return (world.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
 					return originalResult;
 				});
 			}
@@ -64,7 +64,7 @@ namespace VoidTemplate
 				c.Emit(OpCodes.Ldarg_0);
 				c.EmitDelegate<Func<bool, World, bool>>((orig, world) =>
 				{
-					return orig || world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid;
+					return orig || world.game.StoryCharacter == VoidEnums.SlugcatID.Void;
 				});
 			}
 			else LogExErr("Failed to find comparison to red in echo spawning ");
@@ -73,11 +73,11 @@ namespace VoidTemplate
 		private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
 		{
 			orig(self, saveStateNumber);
-			if (saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			if (saveStateNumber == VoidEnums.SlugcatID.Void)
 			{
 				ForceFailed = false;
 				RainWorld rainWorld = self.rainWorld;
-				SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.TheVoid, null, self.rainWorld.processManager.menuSetup, false);
+				SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.rainWorld.processManager.menuSetup, false);
 				save.SetVoidCatDead(false);
 				save.SetEndingEncountered(false);
 			}
@@ -107,7 +107,7 @@ namespace VoidTemplate
 			bool needInsert = false;
 			var lastScreen = screen.ID;
 
-			if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 			{
 				if ((screen.saveState.redExtraCycles || ForceFailed) && screen.saveState.deathPersistentSaveData.karmaCap != 10)
 				{
@@ -150,7 +150,7 @@ namespace VoidTemplate
 		{
 			orig(self, package);
 			MenuScene.SceneID sceneID = null;
-			if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
 			{
 				if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
 				{
@@ -197,7 +197,7 @@ namespace VoidTemplate
 
 					c.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((x, name, self) =>
 					{
-						if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
+						if (name == _Plugin.Void && self.saveGameData.karma == 10)
 							return 9;
 						return x;
 					});
@@ -212,7 +212,7 @@ namespace VoidTemplate
 
 					c2.EmitDelegate<Func<int, SlugcatStats.Name, SlugcatSelectMenu.SlugcatPageContinue, int>>((y, name, self) =>
 					{
-						if (name == _Plugin.TheVoid && self.saveGameData.karma == 10)
+						if (name == _Plugin.Void && self.saveGameData.karma == 10)
 							return 6;
 						return y;
 					});

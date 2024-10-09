@@ -17,7 +17,7 @@ namespace VoidTemplate.PlayerMechanics
 		{
 			orig(self, world, minutes);
 
-			if (world.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid)
+			if (world.game.StoryCharacter == VoidEnums.SlugcatID.Void)
 			{
 				SlugBaseSaveData slugBaseSaveData = world.game.rainWorld.progression?.currentSaveState?.deathPersistentSaveData?.GetSlugBaseData();
 				if (slugBaseSaveData != null)
@@ -38,7 +38,7 @@ namespace VoidTemplate.PlayerMechanics
 		{
 			loginf($"Called Exit Game with asDeath: {asDeath}, asQuit: {asQuit}, clock: {self.clock}");
 
-			if (self.clock <= 1200 && self.StoryCharacter == VoidEnums.SlugcatID.TheVoid)
+			if (self.clock <= 1200 && self.StoryCharacter == VoidEnums.SlugcatID.Void)
 			{
 				SlugBaseSaveData slugBaseSaveData = self.manager.rainWorld.progression?.currentSaveState?.deathPersistentSaveData?.GetSlugBaseData();
 				if (slugBaseSaveData != null)

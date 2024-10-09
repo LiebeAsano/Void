@@ -32,7 +32,7 @@ internal static class CycleEnd
 		ILCursor c = new(il);
 		var bubblestart = c.DefineLabel();
 		var pastbubble = c.DefineLabel();
-		// this.room.game <if TheVoid campaign, go to bubblestart>.GoToStarveScreen();
+		// this.room.game <if Void campaign, go to bubblestart>.GoToStarveScreen();
 		// < go to bubbleend 
 		// bubblestart
 		// pop
@@ -93,7 +93,7 @@ internal static class CycleEnd
 				&& player.room == self.room
 				&& player.FoodInStomach < player.slugcatStats.foodToHibernate
 				&& self.room.game.session is StoryGameSession session
-				&& session.characterStats.name == VoidEnums.SlugcatID.TheVoid
+				&& session.characterStats.name == VoidEnums.SlugcatID.Void
 				&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
 				{
 					if ((session.saveState.deathPersistentSaveData.karma == 0 && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();

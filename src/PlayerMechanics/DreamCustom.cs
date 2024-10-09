@@ -9,7 +9,7 @@ public static class DreamCustom
 
 	private static void CustomDream(On.DreamsState.orig_EndOfCycleProgress orig, DreamsState self, SaveState saveState, string currentRegion, string denPosition)
 	{
-		if (saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+		if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
 			var miscData = saveState.miscWorldSaveData;
 

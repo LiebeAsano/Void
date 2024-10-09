@@ -15,10 +15,10 @@ using VoidTemplate.PlayerMechanics.Karma11Foundation;
 
 namespace VoidTemplate;
 
-[BepInPlugin(MOD_ID, "TheVoid", "0.0.1")]
+[BepInPlugin(MOD_ID, "Void", "13.1.1")]
 class _Plugin : BaseUnityPlugin
 {
-	private const string MOD_ID = "liebeasano.thevoid";
+	private const string MOD_ID = "void.liebeasano";
 
 	/// <summary>
 	/// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs
@@ -90,7 +90,7 @@ class _Plugin : BaseUnityPlugin
 	private void LoadResources()
 	{
 
-		//load all sprites which name starts with "TheVoid" in folder "atlas-void" 
+		//load all sprites which name starts with "Void" in folder "atlas-void" 
 		DirectoryInfo folder = new DirectoryInfo(AssetManager.ResolveDirectory("atlas-void"));
 
 		var listOfFiles = folder.GetFiles();
@@ -117,7 +117,7 @@ class _Plugin : BaseUnityPlugin
 	{
 		orig(self);
 		if (self.session is StoryGameSession session &&
-			session.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+			session.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
 			if (Input.GetKey(KeyCode.LeftControl) &&
 				session.saveState.deathPersistentSaveData.karmaCap != 10)

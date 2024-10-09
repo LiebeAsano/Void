@@ -37,7 +37,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
             if (world.game.session is StoryGameSession storyGameSession)
             {
-                if (storyGameSession.saveStateNumber == VoidEnums.SlugcatID.TheVoid && ghostID == MoreSlugcatsEnums.GhostID.MS)
+                if (storyGameSession.saveStateNumber == VoidEnums.SlugcatID.Void && ghostID == MoreSlugcatsEnums.GhostID.MS)
                 {
                     self.songName = "Void_Echo_Music";
                 }
@@ -48,7 +48,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
         {
             orig(self, eu);
 
-            if (self.room?.game?.session is StoryGameSession storyGameSession && storyGameSession.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid
+            if (self.room?.game?.session is StoryGameSession storyGameSession && storyGameSession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void
                 && self.room.world.region.name == "MS"
                 && TheVoidCanMeetMSGhost(self.room.world) && !HasMetMSGhost(storyGameSession.saveState.deathPersistentSaveData))
             {
@@ -79,7 +79,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
             if (frameStartClosedFac >= 0.04f && frameEndClosedFac < 0.04f
                 &&
-                self.room.game.session is StoryGameSession storyGameSession && storyGameSession.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+                self.room.game.session is StoryGameSession storyGameSession && storyGameSession.saveStateNumber == VoidEnums.SlugcatID.Void)
             {
                 if (!HasMetMSGhost(storyGameSession.saveState.deathPersistentSaveData) && self.room.world.region.name == "MS"
                     && TheVoidCanMeetMSGhost(self.room.world))
@@ -131,7 +131,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
         {
             if (self.world.game.session is StoryGameSession storyGameSession)
             {
-                return self.world.region.name == "MS" && storyGameSession.saveStateNumber == VoidEnums.SlugcatID.TheVoid;
+                return self.world.region.name == "MS" && storyGameSession.saveStateNumber == VoidEnums.SlugcatID.Void;
             }
 
             return false;
@@ -143,7 +143,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
             GhostWorldPresence.GhostID ghostID = GhostWorldPresence.GetGhostID(regionString);
 
-            if (ModManager.MSC && ghostID == MoreSlugcats.MoreSlugcatsEnums.GhostID.MS && slugcatIndex == VoidEnums.SlugcatID.TheVoid)
+            if (ModManager.MSC && ghostID == MoreSlugcats.MoreSlugcatsEnums.GhostID.MS && slugcatIndex == VoidEnums.SlugcatID.Void)
             {
                 return true;
             }
@@ -190,7 +190,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
         private static bool ThisIsVoidCampaign(World self)
         {
-            return (self.game.session as StoryGameSession).saveStateNumber == VoidEnums.SlugcatID.TheVoid;
+            return (self.game.session as StoryGameSession).saveStateNumber == VoidEnums.SlugcatID.Void;
         }
 
         private static bool TheVoidCanMeetMSGhost(World self)

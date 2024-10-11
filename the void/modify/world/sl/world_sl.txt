@@ -1,0 +1,11 @@
+[MERGE]
+CREATURES
+(X-Saint,Void)LINEAGE : SL_D05 : 5 : NONE-0.05, Salamander-0
+(X-Saint,Void)LINEAGE : SL_D05 : 6 : NONE-0.02, Salamander-0
+
+(Void)SL_D05 : 5-Salamander, 6-Salamander
+(Void)SL_TUNNELA : 7-Eel, 9-Salamander, 9-Eel-{PreCycle}
+(Void)SL_C09 : 4-Salamander, 4-Eel-{PreCycle}, 7-Salamander, 7-Eel-{PreCycle}
+(Void)SL_B02 : 3-White, 4-Salamander
+END CREATURES
+[ENDMERGE]

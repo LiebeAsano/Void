@@ -12,9 +12,9 @@ internal static class Ctor
 	private static void Player_Ctor(On.Player.orig_ctor orig, Player player, AbstractCreature abstract_creature, World world)
 	{
 		orig(player, abstract_creature, world);
-		if (world.game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
+		if (world.game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.Void)
 			player.slugcatStats.foodToHibernate = session.characterStats.foodToHibernate;
-		if (player.slugcatStats.name != VoidEnums.SlugcatID.TheVoid) return;
+		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void) return;
 		player.Add_Attached_Fields();
 	}
 }

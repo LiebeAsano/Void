@@ -28,7 +28,7 @@ internal static class MenuStatisticSound
 
     private static void GetDataFromGame_Update(On.Menu.StoryGameStatisticsScreen.orig_GetDataFromGame orig, Menu.StoryGameStatisticsScreen self, Menu.KarmaLadderScreen.SleepDeathScreenDataPackage package)
     {
-        if (package.saveState.saveStateNumber == VoidEnums.SlugcatID.TheVoid)
+        if (package.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
             string currentScene = self.scene.sceneID.value;
 

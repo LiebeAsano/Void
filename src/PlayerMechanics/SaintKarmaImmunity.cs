@@ -30,7 +30,7 @@ internal static class SaintKarmaImmunity
 			//    label
 			//    //this is a bubble for the condition "void"
 			//    POP creature
-			//    if victim is thevoid stun for 5 seconds
+			//    if victim is the void stun for 5 seconds
 			//    label2>
 			//}
 			c.GotoNext(MoveType.After,

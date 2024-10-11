@@ -8,6 +8,7 @@
 			EncounterIL.Hook();
 			KarmaLadderNonRefillCapIncrease.Hook();
 			UpdateIL.Hook();
+			MSGhostForTheVoid.Hook();
 		}
 	}
 }

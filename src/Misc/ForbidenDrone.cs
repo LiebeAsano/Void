@@ -23,7 +23,7 @@ internal static class ForbidenDrone
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
 				re && (self.abstractCreature.world.game.session is StoryGameSession session &&
-					   session.saveStateNumber == VoidEnums.SlugcatID.TheVoid));
+					   session.saveStateNumber == VoidEnums.SlugcatID.Void));
 
 		}
 		catch (Exception e)

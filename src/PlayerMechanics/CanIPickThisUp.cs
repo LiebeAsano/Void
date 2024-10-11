@@ -14,7 +14,7 @@ internal static class CanIPickThisUp
 	private static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
 	{
 		var result = orig(self, obj);
-		if (self.slugcatStats.name != VoidEnums.SlugcatID.TheVoid) return result;
+		if (self.slugcatStats.name != VoidEnums.SlugcatID.Void) return result;
 		int amountOfSpearsInHands = self.grasps.Aggregate(func: (int acc, Creature.Grasp grasp) => acc + ((grasp?.grabbed is Spear) ? 1 : 0), seed: 0);
 		if (amountOfSpearsInHands == 1 && self.Grabability(obj) == Player.ObjectGrabability.Drag) return true;
 		return result;

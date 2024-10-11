@@ -77,7 +77,7 @@ namespace VoidTemplate.PlayerMechanics
 
 		private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 		{
-			if (player.slugcatStats.name != VoidEnums.SlugcatID.TheVoid)
+			if (player.slugcatStats.name != VoidEnums.SlugcatID.Void)
 			{
 				orig(player);
 				return;

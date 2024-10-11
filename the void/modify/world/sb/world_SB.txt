@@ -21,10 +21,10 @@ SB_LWS01 : SB_LWC02 : SHELTER
 END ROOMS
 
 CREATURES
-(TheVoid)SB_F02 : 5-Black, 6-Black
-(TheVoid)SB_I01 : 8-Black, 10-Black, 12-Black
-(TheVoid)SB_C06 : 3-Black, 4-Black
-(TheVoid)SB_H02 : 4-Centipede-3, 5-BigSpider-5, 7-Centipede-4
+(Void)SB_F02 : 5-Black, 6-Black
+(Void)SB_I01 : 8-Black, 10-Black, 12-Black
+(Void)SB_C06 : 3-Black, 4-Black
+(Void)SB_H02 : 4-Centipede-3, 5-BigSpider-5, 7-Centipede-4
 SB_LWB01 : 2-WhiteLizard
 SB_LWB02 : 3-BigSpider, 4-SpitterSpider, 5-PoleMimic-{Ignorecycle}
 SB_LWB03 : 2-DropBug-2, 3-WhiteLizard

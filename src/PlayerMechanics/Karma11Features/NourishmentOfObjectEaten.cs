@@ -15,7 +15,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 
 			if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
 				game.session is StoryGameSession session &&
-				session.characterStats.name == VoidEnums.SlugcatID.TheVoid)
+				session.characterStats.name == VoidEnums.SlugcatID.Void)
 			{
 
 				bool hasMark = game.IsStorySession && game.GetStorySession.saveState.deathPersistentSaveData.theMark;

@@ -61,7 +61,7 @@
         {"name": "Main_Layer_4", "pos": [0,0], "depth": 4,    "shader": "Basic"},
         {"name": "Big_Karma_14", "pos": [0,50], "depth": 3.5, "shader": "Basic"},
         {"name": "Dust_14",    "pos": [0,0], "depth": 1.0,    "shader": "Basic"},
-		{"name": "Void_Cat_14",    "pos": [0,0], "depth": 1.6,    "shader": "Basic"},
+		{"name": "Void_Cat_14",    "pos": [0,-5], "depth": 1.6,    "shader": "Basic"},
 		{"name": "Karma_34", "pos": [0,0], "depth": -1, "shader": "Basic"}
       ],
       "camera_path": [ [0,300] ]

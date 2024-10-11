@@ -163,7 +163,7 @@ static class OracleHooks
 			self.dialogBox.NewMessage("...", 10);
 			return;
 		}
-		if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid &&
+		if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void &&
 			self.State.playerEncountersWithMark <= 0)
 		{
 			if (self.State.playerEncounters < 0)
@@ -248,7 +248,7 @@ static class OracleHooks
 
 	private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
 	{
-		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid
+		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
 			&& self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
 		{
 			var saveState = self.oracle.room.game.GetStorySession.saveState;
@@ -361,13 +361,13 @@ static class OracleHooks
 			i => i.MatchLdloc(10));
 		c.Emit(OpCodes.Ldarg_0);
 		c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
-			=> self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.TheVoid || re);
+			=> self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void || re);
 
 		c2.GotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible."));
 		c2.Emit(OpCodes.Ldarg_0);
 		c2.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
 		{
-			if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.TheVoid &&
+			if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void &&
 				OracleConversation.pickInterruptMessages.Length >
 				self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1)
 			{

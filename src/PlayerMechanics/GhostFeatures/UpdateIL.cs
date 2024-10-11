@@ -26,7 +26,7 @@ internal static class UpdateIL
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<bool, Ghost, bool>>((re, self) =>
 				re || ((self.room.game.session is StoryGameSession session) &&
-					   session.saveStateNumber == VoidEnums.SlugcatID.TheVoid));
+					   session.saveStateNumber == VoidEnums.SlugcatID.Void));
 
 		}
 		catch (Exception e)

@@ -1,0 +1,108 @@
+{"frames": {
+
+"karma5-10.png":
+{
+	"frame": {"x":45,"y":45,"w":63,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":63},
+	"sourceSize": {"w":63,"h":63}
+},
+"karma6-10.png":
+{
+	"frame": {"x":108,"y":45,"w":63,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":63},
+	"sourceSize": {"w":63,"h":63}
+},
+"karma7-10.png":
+{
+	"frame": {"x":171,"y":45,"w":63,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":63},
+	"sourceSize": {"w":63,"h":63}
+},
+"karma8-10.png":
+{
+	"frame": {"x":0,"y":108,"w":63,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":63},
+	"sourceSize": {"w":63,"h":63}
+},
+"karma9-10.png":
+{
+	"frame": {"x":63,"y":108,"w":63,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":63},
+	"sourceSize": {"w":63,"h":63}
+},
+"karma10-10.png":
+{
+	"frame": {"x":126,"y":108,"w":63,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":63},
+	"sourceSize": {"w":63,"h":63}
+},
+"smallKarma5-10.png":
+{
+	"frame": {"x":0,"y":0,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+"smallKarma6-10.png":
+{
+	"frame": {"x":45,"y":0,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+"smallKarma7-10.png":
+{
+	"frame": {"x":90,"y":0,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+"smallKarma8-10.png":
+{
+	"frame": {"x":135,"y":0,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+"smallKarma9-10.png":
+{
+	"frame": {"x":180,"y":0,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+"smallKarma10-10.png":
+{
+	"frame": {"x":0,"y":45,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Void-Karma.png",
+	"format": "RGBA8888",
+	"size": {"w":234,"h":171},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e0009be61dccb8e5a09e8cf5db0f72e8:cf7babeb9c58cdc20b04e6f10e5ba2e2:b18dfcfed7a8c8a68708cd151ee5fef3$"
+}
+}

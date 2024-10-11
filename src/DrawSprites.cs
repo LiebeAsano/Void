@@ -86,7 +86,7 @@ internal class DrawSprites
 			self.player.abstractCreature.world.game.session is StoryGameSession session &&
 			session.saveState.deathPersistentSaveData.karma == 10)
 			{
-				tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "TheVoid-MalnourishmentTail" : "TheVoid-Tail");
+				tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
 				tail.color = new(1f, 0.86f, 0f);
 				for (var i = tail.vertices.Length - 1; i >= 0; i--)
 				{
@@ -114,13 +114,13 @@ internal class DrawSprites
 				{
 					if (!self.player.input[0].jmp)
 					{
-						string head = "TheVoidDCeil-";
+						string head = "VoidDCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 					}
 					else
 					{
-						string head = "TheVoid-";
+						string head = "Void-";
 						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 					}
@@ -129,13 +129,13 @@ internal class DrawSprites
 				{
 					if (!self.player.input[0].jmp)
 					{
-						string head = "TheVoidCeil-";
+						string head = "VoidCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 					}
 					else
 					{
-						string head = "TheVoid-";
+						string head = "Void-";
 						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 					}
@@ -151,13 +151,13 @@ internal class DrawSprites
 				{
 					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 					{
-						string face = "TheVoidDCeil-";
+						string face = "VoidDCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}
 					else
 					{
-						string face = "TheVoid-";
+						string face = "Void-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}
@@ -167,13 +167,13 @@ internal class DrawSprites
 				{
 					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 					{
-						string face = "TheVoidCeil-";
+						string face = "VoidCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}
 					else
 					{
-						string face = "TheVoid-";
+						string face = "Void-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}
@@ -184,13 +184,13 @@ internal class DrawSprites
 					if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
 						self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned)
 					{
-						string face = "TheVoid-";
+						string face = "Void-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}
 					else
 					{
-						string face = "TheVoidDown-";
+						string face = "VoidDown-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}

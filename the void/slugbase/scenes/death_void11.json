@@ -2,7 +2,7 @@
 	"id": "Death_Void11",
 	"scene_folder": "slugbase/scenes/death - void",
 	"images": [
-		{"name": "death - screen - void - flat11", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{"name": "death - screen - void - flat11", "pos": [598, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background - death", "pos": [598,0], "depth": 2.9, "shader": "Basic"},
 		{ "name": "leaf - death2",    "pos": [598,0], "depth": 2.6, "shader": "Basic"},
 		{ "name": "leaf - death",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},

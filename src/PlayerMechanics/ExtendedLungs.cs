@@ -15,7 +15,7 @@ internal static class ExtendedLungs
 		{
 			if (self.KarmaCap != 10)
 			{
-				int karma = self.Karma;
+				int karma = self.KarmaCap;
 
 				float baseLungAirConsumption = 1.0f;
 				float reducePerKarma = 0.07f;

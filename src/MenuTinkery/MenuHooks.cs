@@ -13,7 +13,8 @@ internal static class MenuHooks
 	private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
 	private const string TextIfDead11 = "Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.";
 	private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.";
-	private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
+    private const string TextIfEnding11 = ".";
+    private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
 	public static void Hook()
 	{
 		//when voidcat is dead, those hide useless hud
@@ -120,8 +121,9 @@ internal static class MenuHooks
 			string text;
 			if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) text = TextIfDead11;
 			else if (save.GetVoidCatDead()) text = TextIfDead;
+			else if (save.deathPersistentSaveData.karmaCap == 10) text = TextIfEnding11;
 			else text = TextIfEnding;
-			var textlabel = new MenuLabel(menu, self, text.TranslateStringComplex(), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
+            var textlabel = new MenuLabel(menu, self, text.TranslateStringComplex(), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
 			textlabel.label.alignment = FLabelAlignment.Center;
 			self.subObjects.Add(textlabel);
 			textlabel.label.color = new HSLColor(0.73055553f, 0.08f, 0.3f).rgb;

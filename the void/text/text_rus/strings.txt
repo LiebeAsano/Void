@@ -10,6 +10,7 @@ The vessel could not withstand the impact of the void liquid.<LINE>Now the soul 
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Ты должен исполнить последнее желание того, кто дал тебе второй шанс.
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового.
 Retained Wall|Подпорная Стена
+Far Wall|Дальняя Стена
 
 //REMIX
 

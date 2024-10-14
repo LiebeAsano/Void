@@ -375,8 +375,8 @@ namespace VoidTemplate.PlayerMechanics
 					}
 					else
 					{
-						body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, -player.input[0].y * 1.5f, 0.3f);
-						body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, -player.input[0].y * 1.5f, 0.3f);
+						body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 1.5f, 0.3f);
+						body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 1.5f, 0.3f);
 					}
 					++player.animationFrame;
 				}

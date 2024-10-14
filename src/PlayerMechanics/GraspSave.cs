@@ -32,13 +32,13 @@ internal static class GraspSave
 	}
 	static int TicksUntilDeath(Player p)
 	{
-		return TicksPerSecond * (p.KarmaCap == 10 ? 40 : 60);
+		return TicksPerSecond * (p.KarmaCap == 10 ? 30 : 45);
 	}
 
 	static ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbers = new();
 	private static void Player_Grabbed(On.Player.orig_Grabbed orig, Player self, Creature.Grasp grasp)
 	{
 		orig(self, grasp);
-		if (self.IsVoid()) grabbers.Add(grasp.grabber.abstractCreature, new(0));
+		if (self.IsVoid() && !grabbers.TryGetValue(grasp.grabber.abstractCreature, out var _)) grabbers.Add(grasp.grabber.abstractCreature, new(0));
 	}
 }

@@ -229,11 +229,11 @@ internal class DrawSprites
 
 						if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
 						{
-							force = new Vector2(-0.7f, 0.7f);
+							force = new Vector2(-0.7f, 1.0f);
 						}
 						else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
 						{
-							force = new Vector2(0.7f, 0.7f);
+							force = new Vector2(0.7f, 1.0f);
 						}
 						else if (!player.input[0].jmp)
 						{

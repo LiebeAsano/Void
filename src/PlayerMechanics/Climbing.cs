@@ -1,4 +1,5 @@
 ﻿using RWCustom;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -11,11 +12,81 @@ namespace VoidTemplate.PlayerMechanics
 	{
 		public static void Hook()
 		{
-			On.Player.UpdateBodyMode += Player_UpdateBodyMode;
+            On.Player.WallJump += Player_UpdateWallJump;
+            On.Player.UpdateBodyMode += Player_UpdateBodyMode;
+        }
 
-		}
+        private static float lastWallJumpTime = 0f;
+        private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
+        {
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
+            {
+                float currentTime = Time.time;
 
-		private static bool KarmaCap_Check(Player self)
+                BodyChunk body_chunk_0 = self.bodyChunks[0];
+                BodyChunk body_chunk_1 = self.bodyChunks[1];
+
+                if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
+				{
+                    float num = Mathf.Lerp(1f, 1.15f, self.Adrenaline);
+
+                    if (self.exhausted)
+                    {
+                        num *= 1f - 0.5f * self.aerobicLevel;
+                    }
+
+                    self.bodyChunks[0].vel.y = 11f * num;
+                    self.bodyChunks[1].vel.y = 11f * num;
+
+                    self.bodyChunks[0].vel.x = 5f * -self.input[0].x;
+                    self.bodyChunks[1].vel.x = 5f * -self.input[0].x;
+
+                    self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
+                    self.standing = true;
+                    self.jumpBoost = 0;
+                    self.jumpStun = 0;
+
+                    self.canWallJump = 0;
+
+                    lastWallJumpTime = currentTime;
+
+                    return;
+                }
+				else if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y > 0 && self.input[0].jmp)
+				{
+					if (currentTime - lastWallJumpTime > 2f)
+					{
+						float num = Mathf.Lerp(1f, 1.15f, self.Adrenaline);
+
+						if (self.exhausted)
+						{
+							num *= 1f - 0.5f * self.aerobicLevel;
+						}
+
+						self.bodyChunks[0].vel.y = 10f * num;
+						self.bodyChunks[1].vel.y = 10f * num;
+
+						self.bodyChunks[0].vel.x = 7f * -self.input[0].x;
+						self.bodyChunks[1].vel.x = 7f * -self.input[0].x;
+
+						self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
+						self.standing = true;
+						self.jumpBoost = 0;
+						self.jumpStun = 0;
+
+						self.canWallJump = 0;
+
+						lastWallJumpTime = currentTime;
+
+						return;
+					}
+                    else return;
+				}
+            }
+            orig(self, direction);
+        }
+
+        private static bool KarmaCap_Check(Player self)
 		{
 			return self.IsVoid() && self.KarmaCap > 3;
 		}
@@ -75,7 +146,10 @@ namespace VoidTemplate.PlayerMechanics
 
 		private static readonly float CeilCrawlDuration = 0.3f;
 
-		private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
+        private static int flipTimer = -1;
+
+        private const int ticksToFlip = 10;
+        private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 		{
 			if (player.slugcatStats.name != VoidEnums.SlugcatID.Void)
 			{
@@ -115,10 +189,31 @@ namespace VoidTemplate.PlayerMechanics
 				player.lowerBodyFramesOffGround++;
 			}
 
-			if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming)
+            BodyChunk body_chunk_0 = player.bodyChunks[0];
+            BodyChunk body_chunk_1 = player.bodyChunks[1];
+
+			int RightLeft;
+
+            if (flipTimer > -1)
+            {
+				if (player.input[0].x < 0)
+					RightLeft = 1;
+				else
+					RightLeft = -1;
+				
+				player.bodyMode = Player.BodyModeIndex.ZeroG;
+                body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer) / ((float)ticksToFlip) * 180 * RightLeft) * 17;
+                flipTimer++;
+                if (flipTimer == ticksToFlip)
+                {
+                    flipTimer = -1;
+                }
+            }
+
+            if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming)
 			{
 				UpdateBodyMode_WallClimb(player);
-			}
+            }
 			else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && 
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
                 (player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
@@ -138,9 +233,9 @@ namespace VoidTemplate.PlayerMechanics
 				state.CeilCrawlStartTime = Time.realtimeSinceStartup;
 			}
 
-			if (state.IsCeilCrawling)
+            if (state.IsCeilCrawling)
 			{
-				if (player.input[0].y > 0)
+				if (player.input[0].y != 0)
 				{
 					float elapsedTime = Time.realtimeSinceStartup - state.CeilCrawlStartTime;
 
@@ -197,7 +292,7 @@ namespace VoidTemplate.PlayerMechanics
 
 			float ceilingForce = player.gravity * 6f;
 
-			if (player.input[0].y > 0)
+			if (player.input[0].y != 0)
 			{
 				if (!player.input[0].jmp)
 				{
@@ -238,7 +333,6 @@ namespace VoidTemplate.PlayerMechanics
 			int player_animation = (int)player.animation;
 			return (player_animation >= 6 && player_animation <= 12) || player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam;
 		}
-
 		public static void UpdateBodyMode_WallClimb(Player player)
 		{
 			BodyChunk body_chunk_0 = player.bodyChunks[0];
@@ -247,11 +341,14 @@ namespace VoidTemplate.PlayerMechanics
 			player.canJump = 1;
 			player.standing = true;
 
-			if (player.input[0].x != 0)
+            if (player.input[0].y < 0 && player.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y && flipTimer == -1)
+            {
+                flipTimer = 0;
+            }
+
+            if (player.input[0].x != 0)
 			{
 				player.canWallJump = player.IsClimbingOnBeam() ? 0 : player.input[0].x * -15;
-
-
 
 				float velXGain = 2.4f * Mathf.Lerp(1f, 1.2f, player.Adrenaline) * player.surfaceFriction;
 				if (player.slowMovementStun > 0)
@@ -261,7 +358,7 @@ namespace VoidTemplate.PlayerMechanics
 
 				if (player.input[0].y != 0)
 				{
-					if (player.input[0].y == 1 && !player.IsTileSolid(bChunk: 1, player.input[0].x, 0) && (body_chunk_1.pos.x < body_chunk_0.pos.x) == (player.input[0].x < 0)) // climb up even when lower body part is hanging in the air
+					if (player.input[0].y == 1 && !player.IsTileSolid(bChunk: 1, player.input[0].x, 0) && (body_chunk_1.pos.x < body_chunk_0.pos.x) == (player.input[0].x < 0))
 					{
 						body_chunk_0.pos.y += Mathf.Abs(body_chunk_0.pos.x - body_chunk_1.pos.x);
 						body_chunk_1.pos.x = body_chunk_0.pos.x;
@@ -304,7 +401,7 @@ namespace VoidTemplate.PlayerMechanics
 
 			}
 
-			if (player.slideLoop != null && player.slideLoop.volume > 0.0f)
+            if (player.slideLoop != null && player.slideLoop.volume > 0.0f)
 			{
 				player.slideLoop.volume = 0.0f;
 			}

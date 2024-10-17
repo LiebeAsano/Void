@@ -353,14 +353,14 @@ namespace VoidTemplate.PlayerMechanics
 
 	public static class PlayerExtensions
 	{
-		private static readonly Dictionary<Player, PlayerState> PlayerStates = [];
+		private static readonly ConditionalWeakTable<Player, PlayerState> PlayerStates = new();
 
 		public static PlayerState GetPlayerState(this Player player)
 		{
 			if (!PlayerStates.TryGetValue(player, out PlayerState state))
 			{
 				state = new PlayerState();
-				PlayerStates[player] = state;
+				PlayerStates.Add(player,state);
 			}
 
 			return state;

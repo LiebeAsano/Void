@@ -1,0 +1,3 @@
+[ADD]LW-rot : 3d43ff : 59b9ff : LW-rot
+[ADD]LW-void : 3d43ff : 59b9ff : LW-void
+[ADD]LW-slugcat : 3d43ff : 59b9ff : LW-slugcat

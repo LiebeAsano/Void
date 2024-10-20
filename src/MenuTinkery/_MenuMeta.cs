@@ -7,7 +7,7 @@ public static class _MenuMeta
 		MenuHooks.Hook();
 		SelectScreenScenes.Hook();
 		DreamAssociatedSound.Startup();
-        MenuStatisticSound.Hook();
+        MenuStatisticsSound.Hook();
 
     }
 }

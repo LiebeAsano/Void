@@ -9,7 +9,7 @@ using static IL.Menu.MenuScene;
 
 namespace VoidTemplate.MenuTinkery;
 
-internal static class MenuStatisticSound
+internal static class MenuStatisticsSound
 {
     static Dictionary<string, SoundID> StatisticSoundMap;
     public static void Hook()

@@ -1,10 +1,13 @@
 ﻿using HUD;
 using Menu;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.Useful;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -22,11 +25,35 @@ internal static class MenuHooks
 		On.HUD.FoodMeter.CharSelectUpdate += HideFoodPips;
 		On.Menu.SlugcatSelectMenu.SlugcatPageContinue.GrafUpdate += MakeTextScroll;
 		On.Menu.MenuScene.BuildScene += StatisticsSceneReplacement;
+		//dictates to RW whether void is unlocked or not
 		On.SlugcatStats.SlugcatUnlocked += IsVoidUnlocked;
+
 		On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += TextLabelIfNotUnlocked;
+		//fix for select menu dying when there is no karma and food meter for the page
+        IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
 
 	}
-	private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
+
+    private static void SlugcatPageContinue_Update(MonoMod.Cil.ILContext il)
+    {
+		ILCursor c = new(il);
+		ILLabel bubblestart = c.DefineLabel();
+		ILLabel bubbleend = c.DefineLabel();
+		if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt(typeof(HUD.HUD).GetMethod(nameof(HUD.HUD.Update)))))
+		{
+			c.Emit(OpCodes.Ldarg_0);
+			c.EmitDelegate<Predicate<SlugcatSelectMenu.SlugcatPageContinue>>((SlugcatSelectMenu.SlugcatPageContinue page) => (page.hud.foodMeter == null));
+			c.Emit(OpCodes.Brtrue, bubblestart);
+			c.Emit(OpCodes.Br, bubbleend);
+			c.MarkLabel(bubblestart);
+			c.Emit(OpCodes.Ret);
+			c.MarkLabel(bubbleend);
+
+		}
+		else LogExErr("failed to find HUD.Update. no jump");
+    }
+
+    private static bool IsVoidUnlocked(On.SlugcatStats.orig_SlugcatUnlocked orig, SlugcatStats.Name i, RainWorld rainWorld)
 	{
 		var re = orig(i, rainWorld);
 		if (i == VoidEnums.SlugcatID.Void &&
@@ -89,29 +116,12 @@ internal static class MenuHooks
 			&& menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save
 			&& (save.GetVoidCatDead() || save.GetEndingEncountered()))
 		{
+			if (!(save.GetVoidCatDead() || save.GetEndingEncountered())) return;
 			var hud = self.hud;
-			foreach (var part in hud.parts)
-			{
-				if (part is KarmaMeter k)
-				{
-					k.ClearSprites();
-					k.glowSprite.isVisible = false;
-				}
-				if (part is FoodMeter f)
-				{
-					f.ClearSprites();
-					f.initPlopCircle = -1;
-					f.initPlopDelay = 0;
-					f.lastFade = 0;
-					f.fade = 0;
-					f.circles.ForEach(compfoodcircle =>
-					{
-						compfoodcircle.plopped = false;
-						Array.ForEach(compfoodcircle.circles, circle => circle.visible = false);
-					});
-					f.lineSprite.isVisible = false;
-				}
-			}
+			hud.parts.Remove(hud.karmaMeter);
+			hud.karmaMeter = null;
+			hud.parts.Remove(hud.foodMeter);
+			hud.foodMeter = null;
 			int amountOfPageBreaks = TextIfDead.Count((f) => f == '\n');
 			float VerticalOffset = 0f;
 			if (amountOfPageBreaks > 1)

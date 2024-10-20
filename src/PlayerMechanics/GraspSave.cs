@@ -6,54 +6,63 @@ namespace VoidTemplate.PlayerMechanics;
 
 internal static class GraspSave
 {
+	const int secondsToStunOnK10 = 40;
+	const int secondsToStunBelowK10 = 60;
 
-    public static void Hook()
-    {
-        On.Player.Grabbed += Player_Grabbed;
-        On.Creature.Update += Creature_Update;
-    }
 
-    private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
-    {
-        orig(self, eu);
-        if (grabbers.TryGetValue(self.abstractCreature, out var grabbedCreatures))
-        {
-            Array.ForEach(self.grasps, grasp =>
-            {
-                if (grasp != null
-            && grasp.grabbed is Player p
-            && p.IsVoid()
-            && grabbedCreatures.TryGetValue(p.abstractCreature, out var timer))
-                {
-                    timer.Value++;
-                    if (timer.Value > TicksUntilDeath(p))
-                    {
-                        self.Stun(TicksPerSecond * 5);
-                    }
-                }
-            });
+	public static void Hook()
+	{
+		On.Player.Grabbed += Player_Grabbed;
+		On.Creature.Update += Creature_Update;
+	}
 
-        }
-    }
+	private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
+	{
+		orig(self, eu);
+		if (grabbers.TryGetValue(self.abstractCreature, out var grabbedVoidsTimers))
+		{
+			Array.ForEach(self.grasps, grasp =>
+			{
+				int a = 1;
+				if (grasp != null
+				&& grasp.grabbed is Player playerInGrasp
+				&& playerInGrasp.IsVoid()
+				&& grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
+				{
+					timerOfBeingGrasped.Value++;
+					if (timerOfBeingGrasped.Value > TicksUntilStun(playerInGrasp))
+					{
+						self.Stun(TicksPerSecond * 5);
+						timerOfBeingGrasped.Value = 0;
+					}
+				}
+			});
+		}
+	}
 
-    static int TicksUntilDeath(Player p)
-    {
-        return TicksPerSecond * (p.KarmaCap == 10 ? 40 : 60);
-    }
+	static int TicksUntilStun(Player p)
+	{
+		return TicksPerSecond * (p.KarmaCap == 10 ? secondsToStunOnK10 : secondsToStunBelowK10);
+	}
 
-    static ConditionalWeakTable<AbstractCreature, ConditionalWeakTable<AbstractCreature, StrongBox<int>>> grabbers = new();
-    private static void Player_Grabbed(On.Player.orig_Grabbed orig, Player self, Creature.Grasp grasp)
-    {
-        orig(self, grasp);
-        if (self.IsVoid())
-        {
-            ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbedCreatures;
-            if (!grabbers.TryGetValue(grasp.grabber.abstractCreature, out grabbedCreatures))
-            {
-                grabbedCreatures = new();
-            }
-            grabbedCreatures.Add(self.abstractCreature, new(0));
+	static ConditionalWeakTable<AbstractCreature, ConditionalWeakTable<AbstractCreature, StrongBox<int>>> grabbers = new();
+	private static void Player_Grabbed(On.Player.orig_Grabbed orig, Player self, Creature.Grasp grasp)
+	{
+		orig(self, grasp);
+		if (self.IsVoid())
+		{
+			ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbedVoidsTimers;
+			if (!grabbers.TryGetValue(grasp.grabber.abstractCreature, out grabbedVoidsTimers))
+			{
+				grabbedVoidsTimers = new();
+				grabbers.Add(grasp.grabber.abstractCreature, grabbedVoidsTimers);
+			}
 
-        }
-    }
+			if (!grabbedVoidsTimers.TryGetValue(self.abstractCreature, out _))
+			{
+				grabbedVoidsTimers.Add(self.abstractCreature, new(0));
+			}
+
+		}
+	}
 }

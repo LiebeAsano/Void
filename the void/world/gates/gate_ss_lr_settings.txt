@@ -1,0 +1,13 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 1
+Grime: 0.03600577
+BkgDroneVolume: 0
+Palette: 25
+Effects: ZeroG-0.6031925-323.0812-93.28021, ZeroGSpecks-0.1546649-81.22501-58.45834, SunBlock-0-22.21353-100.474, 
+PlacedObjects: CommonGateData><609.5187><368.9761><100~50~True~False~False~False~False~False~False~True~1~0~1, ElectricGateData><597.0225><57.02911><307.7458~111.1854~True~False~False~True~True~True~True~True~0~0~True~0.5413274~0.5205383~0.3221356, NoSpearStickZone><599.4519><355.869><-0.7114258~267.1927, LightSource><513.8772><569.7487><1~Environment~0~128.4584~-393.2385~-39.32562~1~0~None~0~0, LightSource><692.5698><571.4761><1~Environment~0~128.4584~-393.2385~-39.32562~1~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><739.5496><489.8318><0.3066685><1, SPOT><SO_SFX-DataTrans2.ogg><730.8203><418.2098><0.5><1><100.7088><350.7161><0.9290314><-45.31573><0><0.2778652, 
+WetTerrain: OFF

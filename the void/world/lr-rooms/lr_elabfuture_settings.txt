@@ -1,0 +1,12 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 0
+Grime: 0
+Palette: 10
+EffectColorA: 11
+Effects: ZeroG-0.5026607-20-20, SunBlock-1-20.75104-80.51354, 
+PlacedObjects: LightFixture><249.675><358.6525><RedLight~17.32051~-10~30, LightFixture><979.3047><325.928><RedLight~17.32051~-10~18, LightFixture><696.175><430.9972><RedLight~17.32051~-10~30, LightFixture><356.0979><562.0687><RedLight~17.32051~-10~30, LightSource><744.778><569.1088><0.5050725~EffectColor1~1.422913~-129.8011~-379.7208~-27.9422~0~0~None~0~0, LightSource><902.498><564.9146><0.5050719~EffectColor1~-1.422852~-126.9552~-379.7208~-27.9422~0~0~None~0~0, LightSource><742.4198><568.4719><0.2576085~EffectColor1~-6.103516E-05~-78.57605~-379.7208~-27.9422~0~1~None~0~0, LightSource><902.498><569.1833><0.2576085~EffectColor1~-6.103516E-05~-78.57605~-379.7208~-27.9422~0~1~None~0~0, KarmaFlower><513.0808><260.7484><0~0~5~7, LightSource><515.2272><253.2298><1~Environment~5.691711~122.0552~50~86.60254~1~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-DeepHum.ogg><709.4843><304.9134><0.3066691><0.7076837, OMNI><AM_IND-SuperStructure.ogg><762.3372><489.4984><0.3066691><0.7076824, OMNI><AM_SUB-BlankState.ogg><767.4445><266.7148><0.4072013><1, OMNI><SO_SFX-Kepler.ogg><481.8181><387.9846><0.08240476><0.7076837, 
+FadePalette: 18, 0.100532

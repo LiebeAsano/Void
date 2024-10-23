@@ -1,0 +1,11 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+Grime: 0
+Palette: 23
+EffectColorA: 11
+Effects: ZeroG-0.4021286-22.13434-93.99167, SunBlock-1-20-20, 
+PlacedObjects: LanternOnStick><650.7476><314.7094><-41.97601~-75.73026, LightFixture><864.4174><496.6646><RedLight~17.32051~-10~30, LightFixture><355.9172><543.6548><RedLight~17.32051~-10~24, 
+AmbientSounds: OMNI><AM_IND-DeepHum.ogg><748.1285><313.3524><0.182937><1, OMNI><AM_IND-SuperStructure.ogg><678.3426><488.9847><0.3066691><0.7076837, OMNI><AM_SUB-BlankState.ogg><795.0369><263.0547><0.4072007><1, OMNI><SO_SFX-Kepler.ogg><508.731><349.9947><0.08240409><0.7076837, 
+FadePalette: 10, 0.4021288

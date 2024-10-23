@@ -1,0 +1,193 @@
+GATE_UW_LC: -4959.254><-534.9154><-3376.94><-437.0005><2><><48><35
+LC_B04: -4414.17><-547.5823><-3253.286><-446.0837><2><><318><37
+LC_splitpath: -3985.209><-434.9374><-2717.953><-311.6107><2><><70><41
+LC_shelter_above: -4000.879><-336.6271><-2677.902><-159.5089><1><><48><35
+LC_entrancezone: -3671.286><-398.1683><-2551.454><-287.9179><1><Metropolis><153><41
+LC_cramped: -3478.713><-487.811><-2387.307><-448.0609><0><><70><41
+LC_C12: -3166.248><-379.5031><-2172.528><-282.6329><1><Metropolis><70><41
+LC_deepslumsuh: -3169.713><-456.8108><-2238.31><-433.0613><0><><118><35
+LC_C05: -2905.498><-454.9154><-1986.293><-401.0836><1><><48><78
+LC_scavtreasury: -2639.25><-371.5028><-1865.528><-288.6332><1><Metropolis><70><53
+LC_longslum: -2637.208><-527.9379><-1867.953><-413.6104><0><The Floor><192><35
+LC_floorpipes: -1986.245><-500.5028><-1458.523><-412.6332><0><The Floor><233><41
+LC_betweenwalls: -2172.694><-304.2106><-1497.413><-273.0084><1><><48><72
+LC_A04: -1486.869><-315.6281><-962.8978><-325.5081><0><><70><84
+LC_A05: -1653.135><-241.8493><-1076.48><-201.5038><0><><48><35
+LC_C07: -3174.703><-175.1154><-2175.293><-142.084><1><Metropolis><70><78
+LC_C10: -2739.185><-19.97699><-2021.483><2.496546><1><Metropolis><195><50
+LC_rooftophop: -1958.713><-47.81046><-1616.306><-67.06134><1><Metropolis><308><39
+LC_sroofs: -2097.886><-110.9911><-1372.353><-203.7553><0><><48><35
+LC_tallestconnection: -1415.203><132.0628><-1106.949><60.38944><1><Metropolis><120><78
+LC_towerCLIMB: -1319.872><534.3746><-864.8995><279.4925><1><Metropolis><48><164
+LC_THECLIMB: -1093.714><1172.188><-745.3071><787.9391><1><><50><196
+LC_capbase: -1095.513><1581.482><-744.8998><1264.35><1><Atop the Tallest Tower><50><35
+LC_highestpoint: -1193.643><2159.88><-849.2681><1392.167><1><Atop the Tallest Tower><100><312
+LC_tallbreak: -1166.282><815.8328><-746.4504><654.0818><1><><48><35
+LC_C03: -1109.247><572.4972><-707.5253><338.3662><1><Metropolis><48><121
+LC_tallSlums: -1053.207><243.0624><-704.9501><124.3894><1><Metropolis><48><78
+LC_slumtowers: -1340.871><29.8723><-848.9493><-69.65878><0><Metropolis><66><123
+LC_longori: -288.7102><302.1894><-590.3046><222.9382><1><Metropolis><412><35
+LC_gatehouse01: 451.0118><326.2858><251.4912><239.8533><2><Metropolis><102><35
+LC_gatehouse02: 359.3478><426.1525><250.911><368.5135><2><Metropolis><48><35
+LC_gatehouse03: 515.4934><496.7775><364.4303><377.7838><1><Metropolis><48><72
+LC_girderwalk: 833.2921><793.1882><423.6915><608.9391><1><><204><72
+LC_S03: 1180.869><746.3074><849.0612><554.3036><1><><48><35
+LC_downwards: -520.493><12.28997><-385.9877><-93.10887><1><><48><117
+LC_streets: -832.5171><-175.2957><-587.4266><-173.5965><1><The Floor><48><72
+LC_S01: -898.201><-334.9376><-629.9498><-298.6104><1><><48><35
+LC_fence: -604.9712><-276.5212><-475.8542><-226.2914><0><The Floor><101><35
+LC_crash: -165.8611><-135.8016><-259.1205><-265.6438><0><The Floor><59><147
+LC_ruin01: -47.23057><-91.30188><-45.51276><-113.0373><2><The Floor><61><72
+LC_ruin02: -1.169304><-325.1531><-16.208><-366.5211><2><The Floor><48><72
+LC_ruin03: -181.2097><-469.6531><-128.9366><-426.1668><1><The Floor><48><72
+LC_templegate: 225.915><-514.1575><97.14515><-436.1549><1><The Floor><101><35
+LC_A02: 874.7795><-528.9155><313.7115><-440.0843><1><><326><37
+LC_02A: -1487.209><-628.0427><-959.9169><-612.645><2><><68><72
+LC_SUBWAY01: -995.4499><-647.7327><-804.7067><-572.3474><2><><253><37
+LC_SUBWAY02: -220.3857><-647.6561><-282.7125><-572.0938><2><><253><37
+LC_station01: 327.1195><-657.8129><145.0898><-700.65><0><12th Council Pillar, the House of Braids><148><35
+LC_SUBWAY03: 852.0815><-663.1043><372.4283><-570.8369><2><12th Council Pillar, the House of Braids><251><39
+LC_SUBWAY04: 1563.208><-651.4219><1105.245><-566.5261><2><12th Council Pillar, the House of Braids><198><35
+LC_S06: 358.0142><-782.26><244.1685><-833.0319><2><><48><35
+LC_C08: -1933.88><-689.2974><-1406.02><-622.8116><2><The Floor><214><41
+LC_ShelterTrain1: -2071.708><-674.8106><-1520.306><-589.062><1><><62><35
+LC_stripmallNEW: -1062.871><-513.6282><-805.8998><-435.5078><2><The Floor><214><44
+LC_mallentrance: -608.0633><-524.9866><-352.8309><-430.477><1><The Floor><101><35
+LC_templeentrance: 1504.151><-448.7127><990.0821><-420.2156><2><12th Council Pillar, the House of Braids><141><72
+LC_S05: 1573.187><-584.1525><988.1651><-560.3906><1><><48><35
+LC_templeshaft: 1607.87><-133.0446><1153.573><-219.5786><2><12th Council Pillar, the House of Braids><48><110
+LC_LAB02: 1386.058><186.4939><946.4152><114.0115><2><12th Council Pillar, the House of Braids><101><72
+LC_corner: 1373.43><-105.7057><929.0872><-94.81716><2><12th Council Pillar, the House of Braids><101><72
+LC_junction: 1715.901><109.6853><1177.889><101.5889><2><12th Council Pillar, the House of Braids><96><35
+LC_LAB01: 2042.391><269.8664><1390.063><74.08468><2><12th Council Pillar, the House of Braids><101><152
+LC_midlab: 2281.024><401.8061><1613.501><184.0008><2><12th Council Pillar, the House of Braids><48><112
+LC_LAB03: 2644.647><533.3185><1872.533><408.5056><2><12th Council Pillar, the House of Braids><200><35
+LC_LAB04: 2500.139><284.2822><1866.762><118.168><2><12th Council Pillar, the House of Braids><48><35
+LC_LAB05: 2401.866><123.1156><1626.524><87.58475><2><12th Council Pillar, the House of Braids><101><35
+LC_LAB06: 2799.69><313.9625><2076.83><156.2789><2><12th Council Pillar, the House of Braids><101><35
+LC_topdoor: 1244.082><903.9736><849.5521><684.9214><2><12th Council Pillar, the House of Braids><48><72
+LC_topshaft: 1315.836><597.9307><967.282><402.3597><2><12th Council Pillar, the House of Braids><48><112
+LC_toplab: 1699.275><557.1603><1084.358><457.0265><2><12th Council Pillar, the House of Braids><148><35
+LC_templetoll: 1563.233><980.522><964.29><785.3932><1><12th Council Pillar, the House of Braids><148><35
+LC_westdome: 1920.472><1010.724><1276.79><758.3932><1><12th Council Pillar, the House of Braids><48><72
+LC_FINAL: 2321.447><969.986><1401.946><758.3019><0><12th Council Pillar, the House of Braids><198><35
+LC_dome: 2391.267><1142.708><1406.685><882.3203><1><12th Council Pillar, the House of Braids><247><72
+LC_eastdome: 2871.412><1030.297><1935.485><766.5526><1><12th Council Pillar, the House of Braids><48><72
+LC_topexit: 3037.729><901.1199><2051.098><771.4822><2><12th Council Pillar, the House of Braids><48><72
+LC_S04: 3116.485><752.0339><2162.013><774.9651><2><><48><35
+LC_tophall: 2730.253><756.2172><1853.079><540.8467><2><12th Council Pillar, the House of Braids><148><87
+LC_elevatorupper: 2402.953><663.6432><1744.477><419.5454><1><12th Council Pillar, the House of Braids><48><149
+LC_elevatorcab: 2398.615><395.7913><1744.352><273.7173><1><12th Council Pillar, the House of Braids><48><35
+LC_elevatorlower: 2398.308><121.2065><1746.308><-281.5444><1><12th Council Pillar, the House of Braids><48><149
+LC_elevatorentrance: 2721.37><411.0405><1973.419><279.8491><1><12th Council Pillar, the House of Braids><151><35
+LC_PIPES01: 2248.849><49.90007><1612.454><-223.155><0><12th Council Pillar, the House of Braids><48><112
+LC_PIPES02: 1558.699><-218.295><1283.162><-78.62768><0><12th Council Pillar, the House of Braids><148><35
+LC_PIPES03: 1956.052><-90.18507><1376.381><-206.9561><0><12th Council Pillar, the House of Braids><101><35
+LC_PIPES04: 1877.038><-352.2665><1515.543><-565.0236><0><12th Council Pillar, the House of Braids><48><112
+LC_PIPES05: 1735.248><-536.1688><1297.902><-441.2856><0><12th Council Pillar, the House of Braids><101><35
+LC_LR01: 2869.285><650.4366><2173.75><529.1826><1><12th Council Pillar, the House of Braids><50><35
+GATE_LC_LR: 2869.2><764.0721><2170.905><650.1305><1><><48><35
+OffScreenDen_LC: -1614.25><-6177.915><207.0573><-213.9993><1><Metropolis><0><0
+Connection: GATE_UW_LC,LC_B04,44,11,14,16,0,2
+Connection: LC_B04,LC_splitpath,301,21,34,8,1,3
+Connection: LC_splitpath,LC_shelter_above,31,35,25,4,1,3
+Connection: LC_splitpath,LC_entrancezone,57,22,16,16,0,2
+Connection: LC_entrancezone,LC_C12,138,16,14,9,0,2
+Connection: LC_entrancezone,LC_cramped,125,21,19,30,3,1
+Connection: LC_cramped,LC_deepslumsuh,57,23,6,10,0,2
+Connection: LC_C12,LC_C07,10,36,22,15,2,2
+Connection: LC_C12,LC_C05,56,20,3,65,0,2
+Connection: LC_deepslumsuh,LC_C05,105,27,6,5,0,2
+Connection: LC_deepslumsuh,LC_longslum,114,8,15,23,0,1
+Connection: LC_C05,LC_scavtreasury,42,48,20,21,1,2
+Connection: LC_longslum,LC_floorpipes,184,12,19,6,0,2
+Connection: LC_floorpipes,LC_betweenwalls,93,33,29,11,2,3
+Connection: LC_floorpipes,LC_A04,220,28,21,9,0,3
+Connection: LC_floorpipes,LC_02A,212,8,8,66,0,2
+Connection: LC_betweenwalls,LC_rooftophop,15,59,70,10,2,3
+Connection: LC_A04,LC_A05,16,71,32,16,2,0
+Connection: LC_A04,LC_slumtowers,56,71,14,16,0,3
+Connection: LC_C07,LC_C10,51,63,13,19,0,2
+Connection: LC_C10,LC_rooftophop,187,26,3,30,0,2
+Connection: LC_rooftophop,LC_tallestconnection,283,14,25,14,0,2
+Connection: LC_rooftophop,LC_sroofs,124,24,34,14,3,1
+Connection: LC_tallestconnection,LC_towerCLIMB,101,71,44,10,0,3
+Connection: LC_towerCLIMB,LC_C03,44,145,5,99,0,2
+Connection: LC_THECLIMB,LC_capbase,19,172,30,7,1,3
+Connection: LC_THECLIMB,LC_tallbreak,6,8,29,26,3,1
+Connection: LC_capbase,LC_highestpoint,11,33,62,12,2,3
+Connection: LC_tallbreak,LC_C03,28,5,11,109,3,1
+Connection: LC_C03,LC_tallSlums,6,10,6,60,2,2
+Connection: LC_tallSlums,LC_longori,44,59,3,18,0,2
+Connection: LC_tallSlums,LC_slumtowers,18,8,59,106,2,0
+Connection: LC_longori,LC_gatehouse01,396,16,7,8,0,2
+Connection: LC_longori,LC_downwards,95,2,4,101,3,2
+Connection: LC_gatehouse01,LC_gatehouse02,17,23,10,4,2,3
+Connection: LC_gatehouse02,LC_gatehouse03,36,18,4,13,0,2
+Connection: LC_gatehouse03,LC_girderwalk,41,43,13,12,0,3
+Connection: LC_girderwalk,LC_topdoor,191,56,3,8,0,2
+Connection: LC_girderwalk,LC_S03,189,22,16,19,0,2
+Connection: LC_downwards,LC_streets,10,15,43,55,2,0
+Connection: LC_streets,LC_fence,44,9,4,24,0,2
+Connection: LC_streets,LC_S01,9,6,30,19,3,1
+Connection: LC_fence,LC_crash,98,8,9,17,0,2
+Connection: LC_crash,LC_ruin01,47,127,11,61,3,1
+Connection: LC_ruin01,LC_ruin02,35,5,15,67,3,1
+Connection: LC_ruin02,LC_ruin03,4,5,45,53,2,0
+Connection: LC_ruin02,LC_templegate,36,12,5,7,3,2
+Connection: LC_ruin03,LC_mallentrance,5,28,95,28,2,0
+Connection: LC_ruin03,LC_SUBWAY02,30,2,147,32,3,1
+Connection: LC_templegate,LC_A02,96,10,5,16,0,2
+Connection: LC_A02,LC_templeentrance,286,16,5,7,0,2
+Connection: LC_02A,LC_stripmallNEW,59,64,17,12,0,2
+Connection: LC_02A,LC_C08,21,17,196,22,2,0
+Connection: LC_02A,LC_SUBWAY01,47,17,17,6,0,2
+Connection: LC_SUBWAY01,LC_SUBWAY02,231,7,8,7,0,2
+Connection: LC_SUBWAY02,LC_station01,233,14,17,12,3,2
+Connection: LC_station01,LC_S06,77,10,27,25,3,2
+Connection: LC_station01,LC_SUBWAY03,139,2,26,9,3,2
+Connection: LC_SUBWAY03,LC_SUBWAY04,225,15,10,9,0,2
+Connection: LC_SUBWAY04,LC_PIPES05,127,32,11,3,1,3
+Connection: LC_C08,LC_ShelterTrain1,44,22,15,14,0,2
+Connection: LC_stripmallNEW,LC_mallentrance,203,8,18,7,0,2
+Connection: LC_templeentrance,LC_templeshaft,119,66,38,8,1,3
+Connection: LC_templeentrance,LC_S05,84,7,28,21,3,2
+Connection: LC_templeshaft,LC_junction,35,103,23,3,1,3
+Connection: LC_templeshaft,LC_corner,6,50,96,22,2,0
+Connection: LC_LAB02,LC_topshaft,15,67,12,7,1,3
+Connection: LC_LAB02,LC_junction,92,9,6,16,0,2
+Connection: LC_LAB02,LC_corner,17,9,21,67,3,1
+Connection: LC_corner,LC_PIPES02,24,5,7,24,0,2
+Connection: LC_junction,LC_LAB01,90,10,5,15,0,2
+Connection: LC_LAB01,LC_toplab,10,130,125,4,2,3
+Connection: LC_LAB01,LC_midlab,98,124,5,60,0,2
+Connection: LC_LAB01,LC_PIPES01,91,59,4,105,3,2
+Connection: LC_LAB01,LC_LAB05,94,15,5,5,0,2
+Connection: LC_midlab,LC_LAB03,45,91,9,9,0,2
+Connection: LC_midlab,LC_LAB04,44,17,2,17,0,2
+Connection: LC_LAB03,LC_LR01,181,31,26,4,1,3
+Connection: LC_LAB03,LC_elevatorentrance,181,4,131,31,3,1
+Connection: LC_LAB04,LC_LAB06,45,17,3,7,0,2
+Connection: LC_LAB04,LC_LAB05,22,2,81,28,3,1
+Connection: LC_LAB06,LC_elevatorentrance,80,31,131,4,1,3
+Connection: LC_topdoor,LC_templetoll,43,51,11,7,0,2
+Connection: LC_topdoor,LC_topshaft,40,6,16,105,3,1
+Connection: LC_topshaft,LC_toplab,44,48,4,23,0,2
+Connection: LC_templetoll,LC_westdome,140,10,5,11,0,2
+Connection: LC_westdome,LC_dome,43,54,8,7,0,2
+Connection: LC_westdome,LC_FINAL,43,13,2,7,0,2
+Connection: LC_dome,LC_eastdome,243,7,6,49,0,2
+Connection: LC_eastdome,LC_topexit,43,9,5,51,0,2
+Connection: LC_topexit,LC_tophall,3,10,143,66,2,0
+Connection: LC_topexit,LC_S04,41,8,28,22,0,1
+Connection: LC_tophall,LC_elevatorupper,4,66,45,128,2,0
+Connection: LC_elevatorupper,LC_elevatorcab,10,2,30,30,3,2
+Connection: LC_elevatorcab,LC_elevatorentrance,45,11,5,6,0,2
+Connection: LC_elevatorcab,LC_elevatorlower,6,2,5,141,2,1
+Connection: LC_elevatorlower,LC_PIPES01,2,16,41,4,3,0
+Connection: LC_PIPES01,LC_PIPES03,5,15,82,23,2,0
+Connection: LC_PIPES02,LC_PIPES03,143,25,20,3,0,3
+Connection: LC_PIPES02,LC_PIPES04,132,4,7,87,3,2
+Connection: LC_PIPES03,LC_PIPES04,38,2,38,107,3,1
+Connection: LC_PIPES04,LC_PIPES05,40,7,85,6,3,0
+Connection: LC_LR01,GATE_LC_LR,21,31,2,11,1,2

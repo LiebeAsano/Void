@@ -1,0 +1,19 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.5
+WaveLength: 0.75
+WaveAmplitude: 0.04641051
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0
+Grime: 0
+Palette: 75
+EffectColorA: 18
+EffectColorB: 18
+Effects: ZeroG-0.603193-20-20, SunBlock-1-30-30, SuperStructureProjector-0.0850656-19.36771-105.4542, 
+PlacedObjects: SuperStructureFuses><750.4536><189.3748><122.5292~59.20937, LanternOnStick><159.601><1218.711><-30.59273~-84.2677, LanternOnStick><729.219><1333.546><-23.47815~-99.91977, LightFixture><81.50459><1376.381><RedLight~17.32051~-10~23, LightFixture><1104.984><1391.144><RedLight~17.32051~-10~25, SuperStructureFuses><1031.168><389.8192><46.40308~57.78638, LightFixture><1048.93><419.4165><DeepProcessing~17.32051~-10~17, LightFixture><814.466><218.4965><DeepProcessing~17.32051~-10~14, LightFixture><560.2385><856.4156><DeepProcessing~17.32051~-10~19, SuperStructureFuses><490.5157><808.7479><141.0271~97.62806, SuperStructureFuses><871.1458><848.5896><119.6831~36.44264, LightFixture><923.0823><868.5104><DeepProcessing~17.32051~-10~12, LightFixture><191.7031><764.3937><DeepProcessing~17.32051~-10~16, SuperStructureFuses><149.0157><751.8314><74.86145~53.51764, LightFixture><164.2267><1011.801><RedLight~17.32051~-10~13, LightFixture><1084.292><1061.799><RedLight~17.32051~-10~19, WallMycelia><253.8977><243.9506><-30.59274~58.73541, LightSource><244.4492><253.4635><0.3890733~White~0~100~50~86.60254~0~0~None~0~0, WallMycelia><553.8354><193.3479><-30.59274~58.73541, LightSource><555.9698><194.7708><0.3890733~White~0~100~50~86.60254~0~0~None~0~0, WallMycelia><1015.572><384.0187><-71.85742~-42.29169, LightSource><1000.631><368.3667><0.3890733~White~0~100~50~86.60254~0~0~None~0~0, LightSource><247.9589><615.1694><0.3040082~EffectColor1~2.845825~152.6479~50~86.60254~0~0~None~0~0, LightSource><723.1625><625.9146><0.3040082~EffectColor1~2.845825~152.6479~50~86.60254~0~0~None~0~0, LightSource><560.2386><620.9344><0.3040082~EffectColor1~2.845825~152.6479~50~86.60254~0~0~None~0~0, LightSource><403.0063><623.7802><0.3040082~EffectColor1~2.845825~152.6479~50~86.60254~0~0~None~0~0, WallMycelia><381.2353><449.5829><37.70724~43.08337, WallMycelia><675.2481><441.6218><-56.20526~65.13855, LightSource><82.35345><227.9576><1~Environment~59.76248~5.376038~50~86.60254~0~0~None~0~0, LightSource><753.0438><117.9333><1~Environment~69.7229~5.376038~50~86.60254~0~0~None~0~0, LightSource><1061.582><191.925><1~Environment~41.97607~4.664581~50~86.60254~0~0~None~0~0, LightSource><570.1989><1381.471><0.6906705~EffectColor2~80.39484~8.221863~-77.35107~-131.8152~0~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><764.4212><486.4122><0.2448027><0.9025608, 
+FadePalette: 39, 0.5026603, 0.2551966

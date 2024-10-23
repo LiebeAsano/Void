@@ -1,0 +1,14 @@
+Template: NONE
+DangerType: None
+Clouds: 0.502661
+Grime: 0
+RandomItemDensity: 0
+RandomItemSpearChance: 0
+Palette: 23
+EffectColorA: 15
+EffectColorB: 2
+Effects: ZeroG-0.6031927-22.84586-126.7188, SunBlock-1-23.55728-73.35938, 
+PlacedObjects: LightFixture><481.316><612.3257><RedLight~17.32051~-10~30, LightSource><482.0477><519.9444><0.2034766~EffectColor1~82.52917~8.933411~263.4376~-80.59015~0~1~None~0~0, LightSource><481.9656><387.3979><0.2034766~EffectColor1~82.52917~8.933411~263.4376~-80.59015~0~1~None~0~0, LightSource><481.2542><255.0667><0.2034766~EffectColor1~82.52917~8.933411~263.4376~-80.59015~0~1~None~0~0, LightSource><479.8312><148.3479><0.2034766~EffectColor1~82.52917~8.933411~263.4376~-80.59015~0~1~None~0~0, LightSource><479.8312><358.233><0.3040085~EffectColor1~433.2781~205.2961~-452.2895~-72.05261~0~0~None~0.3658739~0, LightSource><483.3885><127.7156><0.203476~EffectColor1~433.2781~205.2961~-452.2895~-72.05261~0~0~None~0.3658739~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><753.5685><490.5712><0.2061356><1, OMNI><AM_ENV-CityTone.ogg><754.6479><416.6415><0.252537><1, 
+FadePalette: 10, 0.9511886
+WetTerrain: OFF

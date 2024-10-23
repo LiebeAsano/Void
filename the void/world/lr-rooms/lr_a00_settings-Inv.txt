@@ -1,0 +1,13 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+Grime: 0
+BkgDroneVolume: 0.3015969
+Palette: 75
+EffectColorA: 18
+EffectColorB: 18
+Effects: ZeroG-0.603193-20-20, SunBlock-1-42.76666-88.3, SuperStructureProjector-0.1159986-30-30, 
+PlacedObjects: SuperStructureFuses><550.1106><331.9825><82.6875~41.42291, LightSource><417.525><356.4692><0.4354732~EffectColor1~2.134369~206.7188~50~86.60254~0~0~None~0~0, LightSource><478.4208><606.3375><0.4354732~EffectColor1~2.134369~206.7188~50~86.60254~0~0~None~0~0, LightSource><476.2865><67.0521><0.4354732~EffectColor1~2.134369~206.7188~50~86.60254~0~0~None~0~0, LightSource><702.5302><70.60938><0.4354736~EffectColor1~2.134369~206.7188~50~86.60254~0~0~None~0~0, LightSource><761.5813><351.6354><0.4354739~EffectColor1~2.134369~206.7188~50~86.60254~0~0~None~0~0, LightSource><702.5301><606.3373><0.4354746~EffectColor1~2.134369~206.7188~50~86.60254~0~0~None~0~0, LightSource><592.904><73.56445><1~Environment~48.37918~6.087524~50~86.60254~0~0~None~0~0, LightSource><591.5425><621.236><0.5824041~EffectColor2~93.20099~3.953186~-161.3032~-182.3287~0~0~None~0~0, LightSource><483.4011><269.1062><1~Environment~48.37918~6.087524~50~86.60254~0~0~None~0~0, LightSource><693.2813><471.8719><1~Environment~48.37918~6.087524~50~86.60254~0~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><743.2544><591.5473><0.1829363><1, SPOT><SO_SFX-Data5.ogg><715.1285><475.6088><0.5><1><585.8838><356.9174><-16.85742><-22.54907><0><0.1, 
+FadePalette: 39, 0.2551971

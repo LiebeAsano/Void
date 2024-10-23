@@ -1,0 +1,13 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 0
+Grime: 0
+RandomItemDensity: 0.113338
+Palette: 25
+Effects: ZeroG-0.6056049-20-20, SunBlock-1-24.30835-66.28437, SuperStructureProjector-0.07733237-30.03961-101.1854, 
+PlacedObjects: LightBeam><507.2154><1198.505><-4.980164~327.4292~187.2719~324.5833~185.1375~3.051758E-05~157.9438~56.2052~0.4~0~0~0~None~0~0, SuperStructureFuses><572.5868><87.80831><136.7584~125.375, SuperStructureFuses><169.594><571.798><99.76248~114.7031, SuperStructureFuses><150.5491><1010.223><94.0708~118.2604, LightFixture><190.1209><1056.042><DeepProcessing~17.32051~-10~21, LightFixture><635.1957><138.337><DeepProcessing~17.32051~-10~26, LightFixture><219.1599><629.0305><DeepProcessing~17.32051~-10~31, WallMycelia><696.197><1277.622><0~100, WallMycelia><333.0474><573.7334><53.35938~124.1896, WallMycelia><593.7153><180.8479><0~100, WallMycelia><557.2964><1002.176><-78.26038~3.241669, LightSource><242.0418><207.6848><1~Environment~40.55316~1.10733~50~86.60254~0~0~None~0~0, LightSource><694.7041><1345.879><1~Environment~40.55316~1.10733~50~86.60254~0~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><768.1636><494.9117><0.2834685><1, SPOT><SO_SFX-Data1.ogg><117.6118><350.912><0.5><1><640.0512><144.8974><-3.339783><107.6478><0><0.1, SPOT><SO_SFX-Data2.ogg><105.626><238.9185><0.5><1><194.7989><645.4694><121.877><6.620667><0><0.1, SPOT><SO_SFX-DataTrans.ogg><728.7092><424.4141><0.5><1><197.4904><1063.023><107.6478><118.3197><0><0.1, SPOT><AM_IND-Welder.ogg><603.311><299.4313><0.1056048><1><109.7996><210.0959><121.1655><-1.205338><0><0.1, 
+FadePalette: 12, 0.2165302, 0.1005315

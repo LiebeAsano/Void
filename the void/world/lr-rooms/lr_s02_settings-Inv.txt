@@ -1,0 +1,14 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 1
+Grime: 0
+RandomItemDensity: 0
+Palette: 75
+EffectColorA: 18
+Effects: ZeroG-0.4562613-20-20, SunBlock-1-0.1187592-70.55313, 
+PlacedObjects: SuperStructureFuses><510.5123><290.7277><101.1853~163.7937, WallMycelia><737.9989><379.9537><0~100, WallMycelia><1004.227><380.8764><0~100, WallMycelia><872.486><284.1128><0~100, LightFixture><561.3485><359.8851><DeepProcessing~-430.1867~154.3469~19, LightBeam><792.1818><383.0267><12.09491~121.8177~28.617~120.3949~35.73151~-1.422913~-313.7531~152.252~0.5469307~0~0~0~None~0~0, LightBeam><929.4855><380.8052><-4.980042~123.2406~10.83026~124.6636~24.34778~1.422852~-313.7531~152.252~0.5623972~0~0~0~None~0~0, LightSource><810.5704><495.9539><0.334941~EffectColor1~0~100~-594.5812~3.361847~0~1~None~0~0, LightSource><932.3308><498.9072><0.334941~EffectColor1~0~100~-447.3094~4.073364~0~1~None~0~0, LightSource><788.712><389.3488><0.5669376~EffectColor1~0~193.201~13.00427~100.1202~0~0~None~0~0, LightSource><933.7542><389.3427><0.5669376~EffectColor1~0~193.201~13.00427~100.1202~0~0~None~0~0, ShelterBhvrTriggerZone><183.9938><265.7798><265.5323~38.57709, ShelterBhvrSpawnPosition><880.8329><397.7384><, LightSource><93.97377><367.4592><1~Environment~46.24478~1.818756~75.61252~-1.618347~0~0~None~0~0, LightSource><217.3155><283.3354><0.5282719~Environment~103.8729~-0.3156433~75.61252~-1.618347~0~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><737.8898><492.4935><0.2834692><1, OMNI><SO_SFX-Celia.ogg><735.7013><365.6528><0.1674718><1, SPOT><SO_SFX-Data3.ogg><459.0573><539.3281><0.5><1><558.9021><365.8271><-100.098><3.063416><0><0.1231995, 
+FadePalette: 39, 0.3247961

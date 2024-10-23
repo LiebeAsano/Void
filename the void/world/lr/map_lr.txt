@@ -1,0 +1,68 @@
+GATE_SS_LR: -943.8135><-665.5617><-614.287><-650.3299><1><><60><37
+GATE_LC_LR: -758.3986><903.9154><-512.1129><852.2706><1><><48><35
+LR_SLOW: -540.9683><-560.2661><-366.54><-527.9592><2><><60><37
+LR_S01: -398.9532><482.7326><-311.3224><561.2839><2><><48><35
+LR_S02: 660.8436><-329.0413><679.463><-242.6636><0><><60><37
+LR_S03: 852.3013><359.811><654.3531><439.5043><1><><48><35
+LR_entrancelab: 738.5795><529.0014><-373.5279><728.7677><1><Data Archives><120><35
+LR_entranceshaft: 848.5795><529.0014><-88.94448><560.8635><1><Data Archives><48><110
+LR_scavengers: -116.1853><397.3577><-197.8815><364.2103><1><Quantum Research Complex><152><72
+LR_CENTER: 117.0834><-186.4337><67.40256><-263.6914><1><Data Archives><164><117
+LR_cross: 184.4851><321.231><123.4209><331.4827><1><Data Archives><48><35
+LR_tubes: 78.57944><479.0014><235.4805><373.7499><1><Data Archives><104><35
+LR_tubes_cross: 759.5034><316.9623><541.2073><320.0993><2><Data Archives><104><35
+LR_tubesL: 759.4175><150.995><484.9158><113.579><2><Data Archives><104><76
+LR_SSENTRANCE: -685.1187><-665.7594><-471.5599><-646.9705><1><Data Archives><112><37
+LR_C01: -331.0883><-605.2854><-230.6513><-632.0297><1><Data Archives><118><77
+LR_C02: -477.9248><-423.8636><-387.4484><-412.9005><1><Data Archives><176><43
+LR_C03: 125.1156><-551.9262><203.4972><-564.4413><1><Data Archives><164><37
+LR_A00: 58.67412><25.06662><117.135><38.16415><2><Data Archives><60><37
+LR_A01: -651.6373><-320.702><-394.6797><-278.4349><2><Data Archives><60><37
+LR_A02: -651.2017><-240.3072><-341.5963><-141.8348><1><Data Archives><60><37
+LR_A03: 408.5949><-222.5206><499.7828><-114.0878><2><Data Archives><60><37
+LR_B01: 478.7536><-502.8355><545.7519><-554.4807><1><Data Archives><60><77
+LR_B02: 188.5794><429.0014><250.4212><41.49884><1><Data Archives><110><39
+LR_B03: 185.2711><153.6435><114.9579><137.571><1><Data Archives><60><77
+LR_STORAGE01: -229.785><-111.0202><-66.02842><-145.5903><1><Data Archives><60><37
+LR_SCAVHOLE: -386.5821><-208.4893><-205.7503><-225.2732><2><Data Archives><60><37
+LR_STORAGE02: -227.4915><-292.4416><-66.5807><-290.7275><1><Data Archives><60><37
+LR_STORAGE03: 478.7105><-331.5717><545.709><-243.0597><1><Data Archives><60><37
+LR_STORAGE04: 457.0913><-113.154><413.8138><-7.566952><1><Data Archives><60><37
+LR_SECRET: 246.2231><-431.8875><299.7039><-416.6557><2><Data Archives><60><37
+OffScreenDen_LR: -746.028><-41.73037><-796.4201><-84.12666><1><><0><0
+Connection: GATE_SS_LR,LR_SSENTRANCE,50,17,7,15,0,2
+Connection: GATE_LC_LR,LR_entrancelab,45,9,9,9,0,2
+Connection: LR_SLOW,LR_SSENTRANCE,34,9,106,27,3,0
+Connection: LR_S01,LR_entranceshaft,30,24,15,8,0,3
+Connection: LR_S02,LR_STORAGE03,3,18,55,19,2,0
+Connection: LR_S03,LR_tubes_cross,23,17,83,18,0,3
+Connection: LR_entrancelab,LR_entranceshaft,96,4,15,103,3,1
+Connection: LR_entranceshaft,LR_scavengers,32,8,15,67,3,1
+Connection: LR_scavengers,LR_cross,141,9,2,17,0,2
+Connection: LR_CENTER,LR_A00,82,112,29,2,1,3
+Connection: LR_CENTER,LR_STORAGE04,162,95,6,30,0,1
+Connection: LR_CENTER,LR_STORAGE01,1,82,56,23,2,0
+Connection: LR_CENTER,LR_STORAGE02,1,19,56,24,2,0
+Connection: LR_CENTER,LR_STORAGE03,162,12,4,19,0,2
+Connection: LR_CENTER,LR_SECRET,131,4,15,34,2,1
+Connection: LR_cross,LR_tubes,45,17,4,22,0,2
+Connection: LR_cross,LR_B03,22,2,28,70,3,1
+Connection: LR_tubes,LR_tubes_cross,99,28,4,22,0,2
+Connection: LR_tubes_cross,LR_tubesL,36,1,94,74,3,1
+Connection: LR_tubesL,LR_B02,3,14,104,15,2,0
+Connection: LR_SSENTRANCE,LR_C01,106,17,6,21,0,2
+Connection: LR_C01,LR_C02,85,70,163,6,1,3
+Connection: LR_C01,LR_C03,108,47,5,13,0,2
+Connection: LR_C02,LR_A01,12,38,53,3,1,3
+Connection: LR_C02,LR_STORAGE02,163,38,3,10,1,2
+Connection: LR_C03,LR_SECRET,83,33,35,5,1,2
+Connection: LR_C03,LR_B01,157,15,10,10,0,2
+Connection: LR_A00,LR_B03,29,33,3,11,1,2
+Connection: LR_A01,LR_A02,6,33,30,8,1,3
+Connection: LR_A02,LR_STORAGE01,57,28,3,23,0,2
+Connection: LR_A03,LR_STORAGE04,29,32,30,4,1,3
+Connection: LR_A03,LR_STORAGE03,31,4,8,33,3,1
+Connection: LR_B01,LR_STORAGE03,8,72,8,6,1,3
+Connection: LR_B02,LR_B03,4,17,54,9,2,0
+Connection: LR_STORAGE01,LR_SCAVHOLE,3,9,56,27,2,0
+Connection: LR_SCAVHOLE,LR_STORAGE02,56,13,3,24,0,2

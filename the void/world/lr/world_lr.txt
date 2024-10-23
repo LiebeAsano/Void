@@ -1,0 +1,116 @@
+CONDITIONAL LINKS
+Artificer,Spear,Red,Gourmand,Inv : HIDEROOM : LR_eshaftFuture
+Artificer,Spear,Red,Gourmand,Inv : HIDEROOM : LR_elabFuture
+Artificer,Spear,Red,Gourmand,Inv : HIDEROOM : LR_tubesFuture
+White,Yellow,Rivulet,Saint : HIDEROOM : LR_entranceshaft
+White,Yellow,Rivulet,Saint : HIDEROOM : LR_B02
+White,Yellow,Rivulet,Saint : HIDEROOM : LR_tubes
+White,Yellow,Rivulet,Saint : HIDEROOM : LR_entrancelab
+
+White,Yellow,Rivulet,Saint : LR_S01 : LR_entranceshaft : LR_eshaftFuture
+White,Yellow,Rivulet,Saint : LR_scavengers : LR_entranceshaft : LR_eshaftFuture
+
+White,Yellow,Rivulet,Saint : GATE_LC_LR : LR_entrancelab : LR_elabFuture
+
+White,Yellow,Rivulet,Saint : LR_B03 : LR_B02 : LR_tubesFuture
+White,Yellow,Rivulet,Saint : LR_cross : LR_tubes : LR_tubesFuture
+White,Yellow,Rivulet,Saint : LR_tubes_cross : LR_tubes : LR_tubesFuture
+White,Yellow,Rivulet,Saint : LR_tubesL : LR_B02 : LR_tubesFuture
+END CONDITIONAL LINKS
+
+ROOMS
+GATE_SS_LR : DISCONNECTED, LR_SSENTRANCE : GATE
+GATE_LC_LR : DISCONNECTED, LR_entrancelab : GATE
+LR_SLOW : LR_SSENTRANCE : SHELTER
+LR_S01 : LR_entranceshaft : SHELTER
+LR_S02 : LR_STORAGE03 : SHELTER
+LR_S03 : LR_tubes_cross : SHELTER
+LR_entrancelab : GATE_LC_LR, LR_entranceshaft
+LR_entranceshaft : LR_entrancelab, LR_S01, LR_scavengers
+LR_scavengers : LR_entranceshaft, LR_cross : SCAVOUTPOST
+LR_CENTER : LR_A00, DISCONNECTED, LR_STORAGE04, LR_STORAGE01, LR_STORAGE02, LR_STORAGE03, DISCONNECTED, LR_SECRET : PERF_HEAVY
+LR_cross : LR_scavengers, LR_tubes, LR_B03
+LR_tubes : LR_tubes_cross, LR_cross
+LR_tubes_cross : LR_tubes, DISCONNECTED, LR_S03, LR_tubesL
+LR_tubesL : LR_tubes_cross, LR_B02
+LR_SSENTRANCE : LR_SLOW, LR_C01, GATE_SS_LR
+LR_C01 : LR_C02, LR_C03, LR_SSENTRANCE
+LR_C02 : LR_A01, LR_STORAGE02, LR_C01
+LR_C03 : LR_SECRET, LR_B01, LR_C01
+LR_A00 : LR_B03, LR_CENTER
+LR_A01 : LR_A02, LR_C02
+LR_A02 : LR_STORAGE01, LR_A01
+LR_A03 : LR_STORAGE04, DISCONNECTED, LR_STORAGE03
+LR_B01 : LR_STORAGE03, LR_C03
+LR_B02 : LR_B03, LR_tubesL, DISCONNECTED
+LR_B03 : LR_cross, LR_B02, LR_A00
+LR_STORAGE01 : LR_A02, LR_CENTER, LR_SCAVHOLE
+LR_SCAVHOLE : LR_STORAGE01, LR_STORAGE02
+LR_STORAGE02 : LR_SCAVHOLE, LR_CENTER, LR_C02
+LR_STORAGE03 : LR_A03, LR_CENTER, LR_S02, LR_B01
+LR_STORAGE04 : LR_CENTER, LR_A03
+LR_SECRET : LR_CENTER, LR_C03
+
+LR_eshaftFuture : LR_S01, LR_scavengers
+LR_elabFuture : GATE_LC_LR
+LR_tubesFuture : LR_tubes_cross, LR_cross, LR_B03, LR_tubesL
+END ROOMS
+
+CREATURES
+(Artificer,Spear)OFFSCREEN : 0-Scavenger-{Ignorecycle}-8, 0-Elite-{Ignorecycle}-2
+
+(Artificer,Spear,Red,Gourmand)LR_C01 : 3-Inspector-{Ignorecycle}
+
+(White,Yellow)LR_C01 : 3-OutspectorB-{Ignorecycle}
+
+(X-Inv)LR_C03 : 3-Inspector-{Ignorecycle}
+
+(Artificer,Spear)LR_A02 : 2-Inspector-{Ignorecycle}
+
+(Red,Gourmand,White,Yellow)LR_A02 : 2-Outspector-{Ignorecycle}
+
+(Artificer,Spear,Red,Gourmand)LINEAGE : LR_entrancelab : 3 : BigSpider-{Ignorecycle}-0.1, SpitterSpider-{Ignorecycle}-0
+
+(X-Inv)LR_entranceshaft : 3-Spider-{Ignorecycle}-8
+
+(Artificer,Spear,Red,Gourmand)LINEAGE : LR_entranceshaft : 4 : BigSpider-{Ignorecycle}-0.4, MotherSpider-{Ignorecycle}-0
+
+(White,Yellow)LR_entranceshaft : 4-BigSpider-{Ignorecycle}
+
+(Red,Gourmand,White,Yellow)LR_scavengers : 3-Yellow-{Ignorecycle}-3
+
+(Red,Gourmand)LR_scavengers : 4-Cyan-{Ignorecycle}
+
+(White,Yellow)LINEAGE : LR_scavengers : 4 : NONE-0.1, Blue-{Ignorecycle}-0.6, Cyan-{Ignorecycle}-0
+
+(X-Inv)LINEAGE : LR_B02 : 3 : NONE-0.35, BigSpider-{Ignorecycle}-0
+
+(Artificer,Spear,Red,Gourmand)LR_tubes_cross : 4-BigSpider-{Ignorecycle}, 5-SpitterSpider-{Ignorecycle}
+(White,Yellow)LR_tubes_cross : 4-BigSpider-{Ignorecycle}
+(White,Yellow)LINEAGE : LR_tubes_cross : 5 : BigSpider-{Ignorecycle}-0.35, SpitterSpider-{Ignorecycle}-0
+
+(Artificer,Spear,Red,Gourmand)LR_tubesL : 5-BigSpider-{Ignorecycle}-2, 6-MotherSpider-{Ignorecycle}
+(White,Yellow)LR_tubesL : 5-BigSpider-{Ignorecycle}
+(White,Yellow)LINEAGE : LR_tubesL : 6 : BigSpider-{Ignorecycle}-0.65, MotherSpider-{Ignorecycle}-0
+
+(Inv)LR_C01 : 3-OutspectorB-{Ignorecycle}, 3-HellBug-{Ignorecycle}
+(Inv)LR_C03 : 3-Outspector-{Ignorecycle}, 3-HellBug-{Ignorecycle}
+(Inv)LR_A02 : 2-OutspectorB-{Ignorecycle}, 2-HellBug-{Ignorecycle}
+(Inv)LR_entrancelab : 3-SpitterSpider-{Ignorecycle}
+(Inv)LR_entranceshaft : 3-Spider-{Ignorecycle}-10, 4-MotherSpider-{Ignorecycle}
+(Inv)LR_scavengers : 3-Red-{Ignorecycle, 4-Cyan-{Ignorecycle}-2, 2-HellBug-{Ignorecycle}
+(Inv)LR_B02 : 3-SpitterSpider-{Ignorecycle}
+(Inv)LR_tubes_cross : 4-SpitterSpider-{Ignorecycle}-2, 5-MotherSpider-{Ignorecycle}, 3-HellBug-{Ignorecycle}
+(Inv)LR_tubesL : 5-SpitterSpider-{Ignorecycle}, 6-BigSpider-{Ignorecycle}-3, 9-HellBug-{Ignorecycle}-2
+
+(Artificer,Spear,Red,Gourmand)LR_B03 : 3-Inspector-{Ignorecycle}
+(White,Yellow,Inv)LR_B03 : 3-OutspectorB-{Ignorecycle}
+
+(X-Inv)LR_C02 : 3-Inspector-{Ignorecycle}
+(Inv)LR_C02 : 3-Outspector-{Ignorecycle}
+
+(X-Inv)LR_CENTER : 13-Inspector-{Ignorecycle}
+(Inv)LR_CENTER : 13-OutspectorB-{Ignorecycle}
+
+LR_cross : 3-Spider-{Ignorecycle}-8
+END CREATURES

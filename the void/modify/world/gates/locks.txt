@@ -1,0 +1,2 @@
+[ADD]GATE_SS_LR : 1 : 1
+[ADD]GATE_LC_LR : 3 : R

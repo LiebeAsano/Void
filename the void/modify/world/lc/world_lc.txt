@@ -1,0 +1,9 @@
+[FIND]LC_LAB03 : LC_midlab, LC_elevatorentrance
+[REPLACE]LC_LAB03 : LC_LR01, LC_midlab, LC_elevatorentrance
+
+[MERGE]
+ROOMS
+LC_LR01 : GATE_LC_LR, LC_LAB03
+GATE_LC_LR : LC_LR01, DISCONNECTED : GATE
+END ROOMS
+[ENDMERGE]

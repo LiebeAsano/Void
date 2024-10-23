@@ -1,0 +1,17 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.5
+WaveLength: 0.75
+WaveAmplitude: 0.04738326
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0
+Grime: 0.005072552
+RandomItemDensity: 0.1520044
+Palette: 75
+Effects: ZeroG-1-20-20, SunBlock-0.3093298-30-30, SuperStructureProjector-0.07733237-34.30835-109.7229, 
+PlacedObjects: LightFixture><452.9252><208.9543><RedLight~17.32051~-10~81, LightFixture><773.2601><497.0097><RedLight~17.32051~-10~27, SSLightRod><347.628><350.793><17.32051~-10~0.2010644~45~80~0.5, SSLightRod><493.0228><404.3662><17.32051~-10~0.06186643~135~80~0.5, SuperStructureFuses><369.4664><428.4038><160.2365~101.8969, SuperStructureFuses><710.1069><168.9854><125.3751~104.0313, SSLightRod><797.5821><299.0272><-196.1171~153.6354~0.2010637~45~80~0.5, SSLightRod><690.7588><341.391><-223.1524~126.6~0.1778637~135~79.99998~0.5, LightSource><1074.373><98.54984><0.4741398~White~0~100~50~86.60254~0~0~None~0~0, LightSource><128.3833><634.7958><0.4741398~White~0~100~50~86.60254~0~0~None~0~0, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><768.7905><493.7268><0.2370705><1, SPOT><SO_SFX-Data1.ogg><665.4073><600.9562><0.5><1><447.2301><477.2573><-26.10635><-63.81366><0><0.1231995, SPOT><SO_SFX-Data5.ogg><558.5503><489.9953><0.5><1><764.4024><206.2182><-2.628296><87.0155><0><0.1231995, 
+FadePalette: 39, 0.1957427

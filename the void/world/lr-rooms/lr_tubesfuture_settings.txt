@@ -1,0 +1,17 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.5
+WaveLength: 0.75
+WaveAmplitude: 0.04249527
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 1
+Palette: 23
+EffectColorA: 11
+Effects: ZeroG-0.5026605-20-20, SunBlock-1-31.42291-77.66771, 
+PlacedObjects: LightFixture><780.853><1302.45><RedLight~17.32051~-10~17, LightFixture><162.1542><1355.302><RedLight~17.32051~-10~18, LightFixture><1206.96><1291.982><RedLight~17.32051~-10~18, LightFixture><1311.545><919.1782><RedLight~17.32051~-10~18, LightFixture><1900.632><1336.093><RedLight~17.32051~-10~18, LightFixture><226.1854><590.6302><RedLight~17.32051~-10~18, LightFixture><140.099><1047.952><RedLight~17.32051~-10~18, LightFixture><1626.721><1320.44><RedLight~17.32051~-10~18, LightFixture><1698.578><629.049><RedLight~17.32051~-10~18, LightSource><796.9042><351.8266><1~EffectColor1~-0.7114258~123.4781~50~86.60254~0~0~None~0~0, LightSource><848.7114><216.4031><1~EffectColor1~-0.7114258~123.4781~50~86.60254~0~0~None~0~0, LightSource><835.9052><493.8718><1~EffectColor1~-0.7114258~123.4781~50~86.60254~0~0~None~0~0, LightSource><1175.656><303.9125><1~EffectColor1~-0.7114258~123.4781~50~86.60254~0~0~None~0~0, LightSource><1111.625><529.4448><1~EffectColor1~-0.7114258~123.4781~50~86.60254~0~0~None~0~0, LightningMachine><1210.098><1221.119><50~-2.185569E-06~0~0~-50.71155~89.44836~-67.27307~22.05518~0.1029424~0~0~0.8026587~0.8~0.3~1~1~0~0.5~0~1~0, DeepProcessing><1433.301><107.9716><-1.422882~478.2583~457.6261~481.1042~451.9344~-8.537498~-235.4927~156.5208~0.8429227~0.8917346~0.0592051, LightFixture><1681.32><348.2822><DeepProcessing~17.32051~-10~22, SuperStructureFuses><390.0854><1170.121><98.33957~58.49792, SuperStructureFuses><1053.611><1072.853><89.09058~91.22504, 
+AmbientSounds: OMNI><AM_IND-DeepHum.ogg><681.4478><306.2638><0.3066691><0.7076837, OMNI><AM_IND-SuperStructure.ogg><729.0385><487.3906><0.5><0.4014457, 
+FadePalette: 10, 0.5026612, 0.5026605, 0.5026608, 0.5026605
+WetTerrain: OFF

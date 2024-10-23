@@ -1,0 +1,13 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+Grime: 0
+RandomItemDensity: 0.1056044
+RandomItemSpearChance: 1
+Palette: 75
+EffectColorA: 18
+Effects: SunBlock-1-20-20, ZeroG-0.9922671-19.32813-86.20521, SuperStructureProjector-0.06959899-220.6708-58.45834, 
+PlacedObjects: LightFixture><545.739><193.6675><RedLight~17.32051~-10~50, LightFixture><109.5585><659.7948><RedLight~17.32051~-10~36, LightFixture><1088.635><662.7769><RedLight~17.32051~-10~38, LightSource><539.6031><561.6088><0.4200068~EffectColor1~-0.7114868~156.2051~97.66772~7.630798~0~0~None~0~0, LightSource><681.8979><562.2271><0.4200068~EffectColor1~-0.7114868~156.2051~97.66772~7.630798~0~0~None~0~0, SuperStructureFuses><390.6163><210.8905><76.99585~55.65207, LightSource><100.7554><592.9263><1~Environment~51.22499~8.933289~0.9093628~-173.0798~0~0~None~0~0, LightSource><565.2188><410.6864><1~Environment~51.22499~8.933289~-466.5188~-230.7079~0~0~None~0~0, LightSource><656.9968><369.4219><1~Environment~51.22499~8.933289~-541.9333~-69.20688~0~0~None~0~0, LightSource><605.772><200.0948><1~Environment~27.0354~34.54581~-555.451~-136.084~0~0~None~0~0, LightSource><1118.733><567.9188><1~Environment~51.22499~8.933289~-541.9333~-69.20688~0~0~None~0~0, WallMycelia><95.37616><579.0269><99.60416~116.3635, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><723.3469><493.8291><0.1984047><1, SPOT><SO_SFX-Data3.ogg><591.9579><562.8831><0.5><1><415.0455><226.4581><109.7821><-6.185577><0><0.1, 
+FadePalette: 39, 0.2474639

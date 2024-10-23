@@ -1,0 +1,15 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 1
+Grime: 0
+BkgDroneVolume: 0
+RandomItemDensity: 0
+Palette: 23
+EffectColorA: 5
+Effects: ZeroG-0.4562613-20-20, SunBlock-1-0.1187592-70.55313, 
+PlacedObjects: LightSource><303.8539><376.7082><1~Environment~66.87711~6.798981~-139.2479~126.4442~0~0~None~0~0, LightSource><724.3692><351.9674><1~EffectColor1~158.6553~60.15833~-196.876~165.5744~1~0~None~0~0, LightSource><687.9618><350.6942><0.3968062~EffectColor1~1.525879E-05~19.60519~-709.8374~179.8036~1~1~None~0~0, LightSource><731.9365><369.2635><0.3968062~EffectColor1~1.525879E-05~19.60519~-490.7082~152.0568~1~1~None~0~0, LightFixture><511.5142><426.487><RedLight~17.32051~-10~52, LightFixture><279.0418><251.4072><RedLight~-212.4805~-109.6042~30, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><737.8898><492.4935><0.2834692><1, SPOT><AM_IND-50hz.ogg><706.0989><336.3919><0.5><1><695.9042><358.3835><-213.9314><-6.185547><0><0.1, 
+FadePalette: 12, 0.3247961

@@ -1,0 +1,16 @@
+lr_landscape - 8 : 50
+lr_landscape - 7 : 49
+lr_landscape - 6 : 30
+lr_landscape - 5 : 25
+lr_landscape - 4 : 24 : LightEdges
+lr_landscape - 3 : 20
+lr_landscape - 2 : 15
+lr_landscape - 1 : 10
+
+
+blurMin : 0.2
+blurMax : 0.5
+idleDepths : 30
+idleDepths : 24
+idleDepths : 15
+idleDepths : 10

@@ -1,0 +1,21 @@
+Template: NONE
+DangerType: None
+WaveSpeed: 0.4887486
+WaveLength: 0.9442909
+WaveAmplitude: 0.01624613
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0
+Grime: 0
+BkgDroneVolume: 0
+RandomItemDensity: 0.7087976
+RandomItemSpearChance: 0.3082654
+Palette: 75
+EffectColorA: 18
+EffectColorB: 2
+Effects: ZeroG-0.7578578-20-20, SunBlock-1-275.4531-20.75104, 
+PlacedObjects: LightSource><752.318><1699.544><0.1070198~EffectColor1~-101.9333~111.5657~-381~-36.39746~0~1~None~0.2551973~0, LightSource><822.9668><1793.589><0.2063068~EffectColor1~767.7574~669.8021~-431.5334~-42.52463~0~0~None~0~0, LightFixture><899.3994><1945.383><RedLight~-700.6795~-73~61, LightFixture><572.3774><2112.096><RedLight~-519.6795~-36~14, LightSource><348.1093><1095.118><0.2911569~EffectColor1~427.1666~192.2969~-226~-207.3975~0~0~None~0~0, LightSource><307.3703><1037.826><0.09782609~EffectColor1~15.22604~75.93747~50~86.60254~0~1~None~0~0, LightFixture><104.8096><1128.811><RedLight~17.32051~-10~19, LightSource><676.3904><596.6362><0.1261431~EffectColor1~995~715~-757.2906~-188.461~0~0~None~0.4098617~0, LightSource><758.6645><696.2872><0.08235898~EffectColor1~-55.24164~109.8344~-345~-172.3975~0~1~None~0~0, LightSource><698.5626><331.7935><0.09782609~EffectColor1~-74.66895~45.3125~-552~-258.3975~0~1~None~0~0, LightFixture><588.3851><64.5863><RedLight~-34.6795~-85~66, LightFixture><284.2764><123.7934><RedLight~-33.6795~-126~27, LightSource><426.0094><331.5406><0.1287593~EffectColor1~-12.77185~95.82605~-552~-258.3975~0~1~None~0~0, LightFixture><-3><180><RedLight~-33.6795~-126~27, LightSource><233.9157><1725.93><0.2911569~EffectColor1~454.202~101.2302~-226~-207.3975~0~0~None~0~0, LightFixture><59.60825><1862.86><RedLight~196.4695~131.1885~70, LanternOnStick><797.1523><322.1711><-44.82184~-121.9751, LanternOnStick><699.2094><382.7656><27.0354~-187.4292, CustomDecal><796.4384><259.7126><-7.82605~27.90521~20.79071~47.11459~36.44263~15.6521~-455.3334~34.86145~0~1~0~scavmark~0.6701315~0~0.6701315~0~0.6701315~0~0.6701315~0, 
+AmbientSounds: OMNI><AM_SUB-BlankState.ogg><772.175><637.2607><0.358141><1, OMNI><AM_IND-SuperStructure.ogg><770.4587><560.9138><0.3066691><0.7076837, SPOT><AM_IND-ElectricHum02.ogg><583.5879><601.4696><0.2061363><1.250556><761.2181><1697.297><-35.35534><-35.35534><0><0.1, SPOT><AM_IND-ElectricHum02.ogg><398.8928><602.5946><0.2061366><1.250558><227.9084><1668.541><-35.35534><-35.35534><0><0.1, SPOT><AM_IND-ElectricHum03.ogg><404.0294><494.6289><0.2061366><1.250558><289.9617><1045.859><-35.35534><-35.35534><0><0.1, SPOT><AM_IND-ElectricHum02.ogg><582.8641><492.1432><0.206137><1.250559><761.9172><678.466><-35.35534><-35.35534><0><0.1, SPOT><AM_IND-ElectricHum02.ogg><406.8881><385.031><0.206137><1.250558><424.4402><328.7466><-35.35534><-35.35534><0><0.1, SPOT><AM_IND-ElectricHum03.ogg><586.3781><384.859><0.2061376><1.250559><698.5543><324.3059><-35.35534><-35.35534><0><0.1, 
+Triggers: Spot<tA>event<tB>MusicEvent<eA>songName<eB>LR-entrance<eA>vol<eB>0.3541339<eA>prio<eB>0.7010638<eA>mxThrt<eB>1<eA>loop<eB>0<eA>droneTol<eB>0<eA>rooms<eB>-1<eA>rest<eB>5<eA>fadeIn<eB>0<eA>oneSongPerCycle<eB>0<eA>stopAtDeath<eB>0<eA>stopAtGate<eB>0<tA>multiUse<tB>0<tA>toCycle<tB>-1<tA>fromCycle<tB>0<tA>delay<tB>0<tA>panPos<tB>1059.523<tB>546.4568<tA>fireChance<tB>1<tA>entrance<tB>0<tA>karma<tB>0<tA>slugcats<tB><tA>pos<tB>431.7821<tB>1558.333<tA>handlePos<tB>-443.7324<tB>67.09471, 
+FadePalette: 39, 0.05413271, 0.05413254, 0.05413271
+WetTerrain: OFF

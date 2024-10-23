@@ -1,0 +1,13 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 0
+Grime: 0
+BkgDroneVolume: 0.3015963
+Palette: 25
+Effects: ZeroG-0.6031929-20-20, SunBlock-1-30-30, SuperStructureProjector-0-40-40, 
+PlacedObjects: LightFixture><438.4512><515.8665><RedLight~-144.1805~64.70319~30, LightFixture><705.251><362.3783><RedLight~17.32051~-10~35, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><728.1536><487.4156><0.2525363><1, OMNI><MSC-ElectricPulse.ogg><727.8484><414.0122><0.1056054><1, SPOT><SO_IND-MechHum01.ogg><774.1169><565.5899><0.2525363><1><737.3616><310.2711><-35.35534><-35.35534><0><0.1, SPOT><SO_IND-Survey.ogg><469.7415><584.6661><0.2370698><1><391.0101><494.4057><-35.35534><-35.35534><0><0.1, 
+FadePalette: 10, 0.3247961

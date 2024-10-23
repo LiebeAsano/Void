@@ -1,0 +1,18 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.4924563
+WaveLength: 0.9962282
+WaveAmplitude: 0.006183295
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0
+Grime: 0
+Palette: 75
+EffectColorA: 18
+Effects: ZeroG-0.5026608-20-20, SunBlock-1-30-30, 
+PlacedObjects: SuperStructureFuses><331.2118><289.5286><109.723~116.126, SuperStructureFuses><168.4554><90.01598><111.8573~72.72707, SuperStructureFuses><150.2983><568.9824><72.72711~121.1063, WallMycelia><333.8834><404.0638><0~100, LightFixture><384.6039><346.1011><DeepProcessing~17.32051~-10~20, LightFixture><184.9208><629.049><DeepProcessing~131.8653~1.383301~18, LightFixture><226.8969><121.0677><DeepProcessing~17.32051~-10~15, DeepProcessing><1431.755><104.102><7.825989~492.4875~531.6177~508.851~533.7522~-7.114578~-207.7457~160.7896~0.8429237~0.8994675~0.2525359, LanternOnStick><1319.951><310.3804><-44.8219~-79.99899, LanternOnStick><1064.995><286.8376><24.18951~-75.01877, SuperStructureFuses><1470.983><412.0945><89.802~37.15408, LightFixture><1519.291><429.1292><DeepProcessing~17.32051~-10~11, LightFixture><1818.815><373.6355><DeepProcessing~17.32051~-10~18, LightSource><794.5924><353.3101><0.4896055~EffectColor1~0~121.3437~-5.493652~112.9265~0~0~None~0~0, LightSource><833.0593><493.1604><0.4896055~EffectColor1~0~121.3437~-5.493652~112.9265~0~0~None~0~0, LightSource><852.2687><219.9604><0.4896055~EffectColor1~0~121.3437~-5.493652~112.9265~0~0~None~0~0, LightSource><1188.462><303.9125><0.4896055~EffectColor1~0~121.3437~-5.493652~112.9265~0~0~None~0~0, LightSource><1130.834><523.7531><0.4896055~EffectColor1~0~121.3437~-5.493652~112.9265~0~0~None~0~0, LightSource><1672.226><331.4069><0.381341~EffectColor1~500.8666~425.848~-16.16559~160.5943~0~0~None~0~0, SSLightRod><2047.936><276.4193><17.32051~-10~0.3325301~0~150.5275~0.5, LanternOnStick><733.4552><221.3833><-38.41882~-95.65105, 
+AmbientSounds: OMNI><AM_IND-SuperStructure.ogg><756.5181><490.8734><0.2448021><1, SPOT><SO_SFX-Data2.ogg><711.1489><525.0149><0.5><1><385.8738><347.1899><-50.29599><-36.77826><0><0.1, SPOT><SO_SFX-Data5.ogg><750.1147><476.4662><0.5><1><190.77><599.5881><-35.35534><-35.35534><0><0.1, SPOT><SO_SFX-DataStream.ogg><722.1265><459.2669><0.5><1><221.2425><124.2096><-35.35534><-35.35534><0><0.1, 
+FadePalette: 39, 0.2010637, 0.3093295

@@ -10,6 +10,7 @@ public static class _PlayerMechanicsMeta
 
 		CanBeSwallowed.Hook();
 		CanIPickThisUp.Hook();
+		СanMaul.Hook();
 		Climbing.Hook();
 		ColdImmunityPatch.Hook();
 		DontBiteMimic.Hook();
@@ -22,6 +23,7 @@ public static class _PlayerMechanicsMeta
 		Grabability.Hook();
 		GraspSave.Hook();
 		HealthSpear.Hook();
+		HeavyCarry.Hook();
 		KarmaFlowerChanges.Initiate();
 		MalnourishmentDeath.Hook();
 		NoForceSleep.Hook();

@@ -13,13 +13,13 @@ namespace VoidTemplate.Objects.PomObjects
     internal class TheVoidRoomWideStaggerByGhostData : ManagedData
     {
         [IntegerField("MinIntervalFrames", 0, int.MaxValue, 400, ControlType.text, "Minimal Interval")]
-        public int MinimalInterval;
+        public int MinimalInterval = 0;
         [IntegerField("MaxIntervalFrames", 0, int.MaxValue, 800, ControlType.text, "Maximal Interval")]
-        public int MaximalInterval;
+        public int MaximalInterval = 10000;
         [IntegerField("MinDurationFrames", 0, int.MaxValue, 5, ControlType.text, "Minimal Duration")]
-        public int MinimalDuration;
+        public int MinimalDuration = 0;
         [IntegerField("MaxDurationFrames", 0, int.MaxValue, 20, ControlType.text, "Maximal Duration")]
-        public int MaximalDuration;
+        public int MaximalDuration = 10000;
 
         public TheVoidRoomWideStaggerByGhostData(PlacedObject owner) : base(owner, [])
         {

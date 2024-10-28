@@ -144,7 +144,7 @@ namespace VoidTemplate.PlayerMechanics
 			return isSolid_0 || isSolid_1;
 		}
 
-		private static readonly float CeilCrawlDuration = 0.3f;
+        private static readonly float CeilCrawlDuration = 0.3f;
 
         private static int flipTimer = -1;
 
@@ -157,9 +157,9 @@ namespace VoidTemplate.PlayerMechanics
 				return;
 			}
 
-			var state = player.GetPlayerState();
+			var state = player.abstractCreature.GetPlayerState();
 
-			player.diveForce = Mathf.Max(0f, player.diveForce - 0.05f);
+            player.diveForce = Mathf.Max(0f, player.diveForce - 0.05f);
 			player.waterRetardationImmunity = Mathf.InverseLerp(0f, 0.3f, player.diveForce) * 0.85f;
 
 			if (player.dropGrabTile.HasValue && player.bodyMode != Player.BodyModeIndex.Default && player.bodyMode != Player.BodyModeIndex.CorridorClimb)
@@ -210,40 +210,44 @@ namespace VoidTemplate.PlayerMechanics
                 }
             }
 
-            if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming)
+            if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Crawl)
 			{
 				UpdateBodyMode_WallClimb(player);
+				//state.IsWallCrawling = true;
+				//state.CeilCrawlStartTime = Time.realtimeSinceStartup;
             }
-			else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && 
-				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
+			else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && player.input[0].y > 0 &&
+                ((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
                 (player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
 			{
 				player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-				UpdateBodyMode_CeilCrawl(player);
-				state.IsCeilCrawling = true;
+                UpdateBodyMode_CeilCrawl(player, state);
+                state.IsCeilCrawling = true;
 				state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.15f;
 			}
-			else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && 
-				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
+			else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && player.input[0].y > 0 &&
+                ((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
 				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
 			{
 				player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-				UpdateBodyMode_CeilCrawl(player);
-				state.IsCeilCrawling = true;
+                UpdateBodyMode_CeilCrawl(player, state);
+                state.IsCeilCrawling = true;
 				state.CeilCrawlStartTime = Time.realtimeSinceStartup;
 			}
 
+            player.bodyChunks[1].collideWithTerrain = true;
+
             if (state.IsCeilCrawling)
 			{
-				if (player.input[0].y != 0)
+				if (player.input[0].y > 0)
 				{
 					float elapsedTime = Time.realtimeSinceStartup - state.CeilCrawlStartTime;
 
 					if (elapsedTime < CeilCrawlDuration)
 					{
 						player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-						UpdateBodyMode_CeilCrawl(player);
-					}
+                        UpdateBodyMode_CeilCrawl(player, state);
+                    }
 					else
 					{
 						state.IsCeilCrawling = false;
@@ -254,10 +258,25 @@ namespace VoidTemplate.PlayerMechanics
 					state.IsCeilCrawling = false;
 				}
 			}
-			orig(player);
-		}
+            orig(player);
+        }
 
-		private static void UpdateBodyMode_CeilCrawl(Player player)
+        private static void TryApplyWallClimbOverride(Player player)
+        {
+            BodyChunk body_chunk_0 = player.bodyChunks[0];
+            BodyChunk body_chunk_1 = player.bodyChunks[1];
+
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl && body_chunk_1.pos.y > body_chunk_0.pos.y + 14)
+            {
+                player.bodyChunks[1].collideWithTerrain = false;
+            }
+            else
+            {
+                player.bodyChunks[1].collideWithTerrain = true;
+            }
+        }
+
+        private static void UpdateBodyMode_CeilCrawl(Player player, PlayerState state)
 		{
 			BodyChunk body_chunk_0 = player.bodyChunks[0];
 			BodyChunk body_chunk_1 = player.bodyChunks[1];
@@ -292,14 +311,20 @@ namespace VoidTemplate.PlayerMechanics
 
 			float ceilingForce = player.gravity * 6f;
 
-			if (player.input[0].y != 0)
+            TryApplyWallClimbOverride(player);
+
+            if (player.input[0].y > 0)
 			{
 				if (!player.input[0].jmp)
 				{
-					body_chunk_1.vel.y = Custom.LerpAndTick(body_chunk_1.vel.y, ceilingForce, 0.3f, 1f);
-				}
+                    if (player.bodyChunks[1].collideWithTerrain)
+                        body_chunk_1.vel.y = Custom.LerpAndTick(body_chunk_1.vel.y, ceilingForce, 0.3f, 1f);
+					else
+                        body_chunk_1.vel.y = Custom.LerpAndTick(body_chunk_1.vel.y, -player.gravity * 3, 0.5f, 1f);
 
-				body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
+                }
+
+                body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
 
 				if (player.input[0].jmp && player.input[0].x != 0)
 				{
@@ -375,8 +400,8 @@ namespace VoidTemplate.PlayerMechanics
 					}
 					else
 					{
-						body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 1.5f, 0.3f);
-						body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 1.5f, 0.3f);
+						body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, -player.input[0].y * 1.5f, 0.1f);
+						body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, -player.input[0].y * 1.5f, 0.1f);
 					}
 					++player.animationFrame;
 				}
@@ -450,9 +475,9 @@ namespace VoidTemplate.PlayerMechanics
 
 	public static class PlayerExtensions
 	{
-		private static readonly ConditionalWeakTable<Player, PlayerState> PlayerStates = new();
+		private static readonly ConditionalWeakTable<AbstractCreature, PlayerState> PlayerStates = new();
 
-		public static PlayerState GetPlayerState(this Player player)
+		public static PlayerState GetPlayerState(this AbstractCreature player)
 		{
 			if (!PlayerStates.TryGetValue(player, out PlayerState state))
 			{
@@ -462,12 +487,13 @@ namespace VoidTemplate.PlayerMechanics
 
 			return state;
 		}
-	}
+    }
 
 	public class PlayerState
 	{
 		public bool IsCeilCrawling { get; set; } = false;
-		public float CeilCrawlStartTime { get; set; } = 0f;
+        public bool IsWallCrawling { get; set; } = true;
+        public float CeilCrawlStartTime { get; set; } = 0f;
 	}
 
 	/*public class PlayerRoomChecker

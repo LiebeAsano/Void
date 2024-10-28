@@ -53,7 +53,6 @@ internal class DrawSprites
 				IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
 				IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
 
-				// Использование IdentifySlope для определения диагонального тайла
 				SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
 				SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
 
@@ -100,7 +99,6 @@ internal class DrawSprites
 					else
 						uv = new Vector2(1f, 0f);
 
-					// Map UV values to the element
 					uv.x = Mathf.Lerp(tail.element.uvBottomLeft.x, tail.element.uvTopRight.x, uv.x);
 					uv.y = Mathf.Lerp(tail.element.uvBottomLeft.y, tail.element.uvTopRight.y, uv.y);
 
@@ -151,7 +149,7 @@ internal class DrawSprites
 				{
 					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 					{
-						string face = "VoidDCeil-";
+						string face = "VoidDCeil-"; 
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 					}
@@ -182,7 +180,8 @@ internal class DrawSprites
 				else
 				{
 					if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
-						self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned)
+						self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned ||
+                        self.player.bodyMode == Player.BodyModeIndex.Crawl)
 					{
 						string face = "Void-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
@@ -229,11 +228,11 @@ internal class DrawSprites
 
 						if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
 						{
-							force = new Vector2(-0.7f, 1.0f);
+							force = new Vector2(-0.7f, 1.4f);
 						}
 						else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
 						{
-							force = new Vector2(0.7f, 1.0f);
+							force = new Vector2(0.7f, 1.4f);
 						}
 						else if (!player.input[0].jmp)
 						{
@@ -246,7 +245,7 @@ internal class DrawSprites
 						tailSegment.vel += force;
 					}
 
-					timeSinceLastForceUpdate = 0f; // сбрасываем счётчик
+					timeSinceLastForceUpdate = 0f;
 				}
 			}
 		}

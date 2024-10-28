@@ -3,7 +3,6 @@ namespace VoidTemplate.Objects;
 
 internal class CeilingClimbTutorial : UpdatableAndDeletable
 {
-	private static int targetRoomID = -1;
 
 	public CeilingClimbTutorial(Room room, params Message[] messages)
 	{

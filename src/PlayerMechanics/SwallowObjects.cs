@@ -158,25 +158,23 @@ internal static class SwallowObjects
 
 					return;
 				}
-			}
-		}
+				else if (self.Karma != 10)
+                {
+					if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl &&
+                        self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
+                    {
+                        ((self.room.updateList.First(i => i is Oracle) as Oracle)
+                        .oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
+                    }
 
-		if (self.IsVoid() && self.Karma != 10)
-		{
-			if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl &&
-				self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
-			{
-				((self.room.updateList.First(i => i is Oracle) as Oracle)
-					.oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
-			}
-		}
+                    orig(self, grasp);
 
-		orig(self, grasp);
+                    self.objectInStomach.Destroy();
+                    self.objectInStomach = null;
 
-		if (self.IsVoid() && self.objectInStomach != null && self.Karma != 10)
-		{
-			self.objectInStomach.Destroy();
-			self.objectInStomach = null;
+                    return;
+                }
+            }
 		}
 
 		orig(self, grasp);

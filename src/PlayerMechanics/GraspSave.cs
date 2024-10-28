@@ -6,8 +6,8 @@ namespace VoidTemplate.PlayerMechanics;
 
 internal static class GraspSave
 {
-	const int secondsToStunOnK10 = 40;
-	const int secondsToStunBelowK10 = 60;
+	const int secondsToStunOnK10 = 30;
+	const int secondsToStunBelowK10 = 45;
 
 
 	public static void Hook()
@@ -23,7 +23,6 @@ internal static class GraspSave
 		{
 			Array.ForEach(self.grasps, grasp =>
 			{
-				int a = 1;
 				if (grasp != null
 				&& grasp.grabbed is Player playerInGrasp
 				&& playerInGrasp.IsVoid()
@@ -37,7 +36,7 @@ internal static class GraspSave
 					}
 				}
 			});
-		}
+		} 
 	}
 
 	static int TicksUntilStun(Player p)

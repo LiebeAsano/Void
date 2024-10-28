@@ -263,12 +263,12 @@ static class OracleHooks
 				case 0:
 					{
 						miscData.SSaiConversationsHad++;
-						self.NewAction(SSOracleBehavior.Action.General_GiveMark);
+						self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
 						self.afterGiveMarkAction = MeetVoid_Init;
 						self.SlugcatEnterRoomReaction();
 						self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
-						break;
+                        break;
 					}
 				case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
 				case < 5 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:

@@ -19,10 +19,11 @@ internal static class Grabability
     {
 		ILCursor c = new(il);
 		ILLabel skipGrababilityCheck = c.DefineLabel();
-		if (c.TryGotoNext(x => x.MatchCall(typeof(Player).GetMethod(nameof(Player.Grabability))))
+		if (c.TryGotoNext(x => x.MatchCall(typeof(Player).GetMethod(nameof(Player.Grabability), bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)))
 			&& c.TryGotoNext(MoveType.After, x => x.MatchLdcI4(3))
 			&& c.TryGotoPrev(MoveType.After, x => x.MatchBrfalse(out skipGrababilityCheck)))
 		{
+			LogExInf("applying hooke");
 			c.Emit(OpCodes.Ldarg, 0);
 			c.EmitDelegate<Predicate<Player>>((player) => player.IsVoid());
 			c.Emit(OpCodes.Brtrue, skipGrababilityCheck);

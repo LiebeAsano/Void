@@ -172,4 +172,13 @@ public static class VoidEnums
 		public static SlugcatStats.Name Void;
 	}
 
+	public static class ProcessID
+	{
+		public static void Register()
+		{
+			TokenDecrease = new("Token Decrease", true);
+		}
+		public static ProcessManager.ProcessID TokenDecrease;
+	}
+
 }

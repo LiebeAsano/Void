@@ -19,20 +19,21 @@ internal static class KarmaLadderTokenDecrease
 		//making sleepanddeathscreen understand new ID
 		On.Menu.SleepAndDeathScreen.FoodCountDownDone += SleepAndDeathScreen_FoodCountDownDone;
 
-        On.Menu.KarmaLadder.Update += KarmaLadder_Update;
+        On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
 		//TODO: add new sprite, do fadeout
 	}
-	static ConditionalWeakTable<KarmaLadder, PositionedMenuObject> newKarmaToken = new();
 
-    private static void KarmaLadder_Update(On.Menu.KarmaLadder.orig_Update orig, KarmaLadder self)
+	
+    private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
     {
-		orig(self);
-		if(tokenFadeoutProcess.TryGetValue(self, out var process))
+		orig(self,timeStacker);
+		if (self.owner is KarmaLadder ladder
+			&& tokenFadeoutProcess.TryGetValue(ladder, out var process))
 		{
-			if(!newKarmaToken.TryGetValue(self, out var newKarma)) newKarmaToken.Add(self, )
-			process.Value += progressPerTick;
+
 		}
     }
+
 
     static ConditionalWeakTable<KarmaLadder, StrongBox<float>> tokenFadeoutProcess = new();
 

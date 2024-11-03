@@ -1,4 +1,5 @@
 ﻿using Menu;
+using System;
 using System.Runtime.CompilerServices;
 using static VoidTemplate.Useful.Utils;
 
@@ -23,15 +24,42 @@ internal static class KarmaLadderTokenDecrease
 		//TODO: add new sprite, do fadeout
 	}
 
-	
+
+	static WeakReference<KarmaLadder.KarmaSymbol> changingSymbol;
+	static WeakReference<KarmaLadder.KarmaSymbol> processDone;
     private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
     {
 		orig(self,timeStacker);
 		if (self.owner is KarmaLadder ladder
+			&& self.displayKarma.x == 10
 			&& tokenFadeoutProcess.TryGetValue(ladder, out var process))
 		{
-
-		}
+			if(changingSymbol == null || !changingSymbol.TryGetTarget(out var target))
+			{
+                #region init sprite
+                changingSymbol = new(self);
+				Array.Resize(ref self.sprites, self.sprites.Length + 1);
+				int lastIndexOfSprites = self.sprites.Length-1;
+				ushort resultingAmountOfTokens = Karma11Symbol.currentKarmaTokens;
+				self.sprites[lastIndexOfSprites] = new FSprite($"atlas-void/KarmaToken" +
+					$"{Karma11Symbol.tokensToPelletsMap[(ushort)(Karma11Symbol.currentKarmaTokens + 1)]}Small");
+				//we are expanding array of sprites and setting last sprite to be the old sprite
+				self.sprites[0].alpha = 0f;
+				self.sprites[lastIndexOfSprites].alpha = 1f;
+				#endregion
+			}
+			process.Value += progressPerTick;
+			if (process.Value <= 1f)
+			{
+				self.sprites[0].alpha = process.Value;
+				self.sprites[self.sprites.Length - 1].alpha = 1 - process.Value;
+			}
+			else if (processDone == null || !processDone.TryGetTarget(out var target2))
+			{
+				Array.Resize(ref self.sprites, self.sprites.Length - 1);
+				processDone = new(self);
+			}
+        }
     }
 
 

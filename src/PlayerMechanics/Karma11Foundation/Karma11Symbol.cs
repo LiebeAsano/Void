@@ -18,7 +18,7 @@ internal static class Karma11Symbol
 	}
 
 	const int karma11index = 10;
-	static Dictionary<ushort, ushort> tokensToPelletsMap = new()
+	public static Dictionary<ushort, ushort> tokensToPelletsMap = new()
 	{
 		{0, 0},
 		{1, 1},

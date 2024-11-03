@@ -97,7 +97,9 @@ internal static class KarmaLadderTokenDecrease
 			&& self.GetStorySession.saveState.GetKarmaToken() > 0)
 		{
 			self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.TokenDecrease);
+			loginf("requested process switch to token decrease.");
 		}
 		orig(self);
+		loginf("post orig. the process game wants to switch to is " + self.manager.upcomingProcess.value);
 	}
 }

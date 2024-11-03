@@ -5,6 +5,7 @@ internal static class _Karma11FoundationMeta
 	public static void Hook()
 	{
 		Karma11Symbol.Startup();
+		KarmaLadderTokenDecrease.Initiate();
 		KarmaLadderTweaks.Hook();
 		NoKarmaDecreaseOnDeath.Initiate();
 		TokenSystem.Initiate();

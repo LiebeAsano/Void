@@ -92,14 +92,14 @@ internal static class KarmaLadderTokenDecrease
 
 	private static void RainWorldGame_GoToDeathScreen(On.RainWorldGame.orig_GoToDeathScreen orig, RainWorldGame self)
 	{
+		orig(self);
 		if (self.IsVoidStoryCampaign()
 			&& self.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
 			&& self.GetStorySession.saveState.GetKarmaToken() > 0)
 		{
 			self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.TokenDecrease);
-			loginf("requested process switch to token decrease.");
+		 	loginf("requested process switch to token decrease.");
 		}
-		orig(self);
 		loginf("post orig. the process game wants to switch to is " + self.manager.upcomingProcess.value);
 	}
 }

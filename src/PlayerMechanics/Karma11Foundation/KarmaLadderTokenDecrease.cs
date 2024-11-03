@@ -40,9 +40,11 @@ internal static class KarmaLadderTokenDecrease
                 changingSymbol = new(self);
 				Array.Resize(ref self.sprites, self.sprites.Length + 1);
 				int lastIndexOfSprites = self.sprites.Length-1;
-				ushort resultingAmountOfTokens = Karma11Symbol.currentKarmaTokens;
+				var initialSprite = self.sprites[0];
 				self.sprites[lastIndexOfSprites] = new FSprite($"atlas-void/KarmaToken" +
-					$"{Karma11Symbol.tokensToPelletsMap[(ushort)(Karma11Symbol.currentKarmaTokens + 1)]}Small");
+					$"{Karma11Symbol.tokensToPelletsMap[(ushort)(Karma11Symbol.currentKarmaTokens + 1)]}Small")
+				{ x = initialSprite.x,
+				 y = initialSprite.y};
 				//we are expanding array of sprites and setting last sprite to be the old sprite
 				self.sprites[0].alpha = 0f;
 				self.sprites[lastIndexOfSprites].alpha = 1f;

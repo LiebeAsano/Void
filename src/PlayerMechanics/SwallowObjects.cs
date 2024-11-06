@@ -160,7 +160,7 @@ internal static class SwallowObjects
 				}
 				else if (self.Karma != 10)
                 {
-					if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl &&
+					if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl && hasMark &&
                         self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
                     {
                         ((self.room.updateList.First(i => i is Oracle) as Oracle)

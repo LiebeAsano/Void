@@ -95,25 +95,25 @@ static class OracleHooks
 
 	public static class OracleConversation
 	{
-		public static Conversation.ID[] VoidConversation;
+		public static Conversation.ID[] PebbleVoidConversation;
 		public static Conversation.ID[] MoonVoidConversation;
 
-		public static int[] cycleLingers = [0, 1, 0, 1, 1, 0, 2, 2, 2, 2, 0];
+		public static int[] cycleLingers = [0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0];
 		public static int[] MooncycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 		static OracleConversation()
 		{
-			VoidConversation = new Conversation.ID[11];
-			for (int i = 0; i < VoidConversation.Length; i++)
-				VoidConversation[i] = new($"VoidConversation_{i + 1}", true);
+            PebbleVoidConversation = new Conversation.ID[11];
+			for (int i = 0; i < PebbleVoidConversation.Length; i++)
+                PebbleVoidConversation[i] = new($"pebblevoidconversation_{i + 1}", true);
 			MoonVoidConversation = new Conversation.ID[11];
 			for (int i = 0; i < MoonVoidConversation.Length; i++)
-				MoonVoidConversation[i] = new($"MoonVoidConversation_{i + 1}", true);
+				MoonVoidConversation[i] = new($"moonvoidconversation_{i + 1}", true);
 		}
 
-		public static string[] pickInterruptMessages = new[]
-		{
-			"Yes, help yourself. They are not edible.",
+		public static string[] pickInterruptMessages =
+        [
+            "Yes, help yourself. They are not edible.",
 			"You seem to like pearls.",
 			"Are you listening to me?",
 			"You need to stop being distracted by pearls.",
@@ -124,21 +124,21 @@ static class OracleHooks
 			"This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.",
 			"You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.",
 			"I wish I could just teach you how to read them..."
-		};
+		];
 
-		public static string[] eatInterruptMessages = new[]
-		{
-			"I'm not sure you can stomach pearl.",
+		public static string[] eatInterruptMessages =
+        [
+            "I'm not sure you can stomach pearl.",
 			". . .",
 			"Do you really eat them?",
 			"Little creature. You shouldn't eat pearls.",
 			"You must stop right now.",
 			"I'm warning you for the last time."
-		};
+		];
 
-		public static string[] eatInterruptMessages6Step = new[]
-		{
-			"I'm not sure you can stomach pearl.",
+		public static string[] eatInterruptMessages6Step =
+        [
+            "I'm not sure you can stomach pearl.",
 			". . .",
 			"Do you really eat them?",
 			"Little creature. You shouldn't eat pearls.",
@@ -148,9 +148,9 @@ static class OracleHooks
 			"Considering that your body weight does not change, this means that all the objects you eat are simply dissolved by the void fluid.",
 			"Although if to assume that all the water in your body has been displaced by the void fluid, its concentration is still insufficient to dissolve objects so fast.",
 			"Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.",
-			"I would never have thought that such wasteful use of pearls could bring me closer to understanding the nature of the void fluid.",
-			""
-		};
+			"I would never have thought that such wasteful use of pearls could bring me closer to understanding the nature of the void sea.",
+            "Eat as much as you want, from now on I will no longer store important information here in your presence."
+        ];
 
 
 
@@ -170,7 +170,8 @@ static class OracleHooks
 			{
 				self.State.playerEncounters = 0;
 			}
-			if (self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length) self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
+			if (self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length) 
+				self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
 			return;
 		}
 		orig(self);
@@ -180,15 +181,19 @@ static class OracleHooks
 	{
 		orig(self);
 
-		if (OracleConversation.VoidConversation.Contains(self.id))
+		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
 		{
 			if (!self.owner.playerEnteredWithMark)
 				self.events.Add(new Conversation.TextEvent(self, 0, ". . .", 0));
 			else
 				self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
 
-			var path = AssetManager.ResolveFilePath($"text/oracle/{self.id.value.ToLower()}.txt");
-			if (File.Exists(path))
+			var path = AssetManager.ResolveFilePath($"text/oracle/pebble/{self.id.value.ToLower()}.txt");
+
+            if (self.owner.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                path = AssetManager.ResolveFilePath($"text/oracle/pebble11/{self.id.value.ToLower()}.txt");
+
+            if (File.Exists(path))
 			{
 				foreach (var line in File.ReadAllLines(path))
 				{
@@ -202,7 +207,6 @@ static class OracleHooks
 			}
 			else
 			{
-				//DEBUG
 				self.events.Add(new Conversation.TextEvent(self, 0,
 					$"text/oracle/{self.id.value.ToLower()}.txt can't find!", 0));
 			}
@@ -232,7 +236,8 @@ static class OracleHooks
 
 			if (subBehavior == null)
 			{
-				subBehavior = new SSOracleVoidBehavior(self,
+                self.LockShortcuts();
+                subBehavior = new SSOracleVoidBehavior(self,
 					self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad);
 				self.allSubBehaviors.Add(subBehavior);
 			}
@@ -263,14 +268,15 @@ static class OracleHooks
 				case 0:
 					{
 						miscData.SSaiConversationsHad++;
-						self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+						self.NewAction(SSOracleBehavior.Action.General_GiveMark);
 						self.afterGiveMarkAction = MeetVoid_Init;
-						self.SlugcatEnterRoomReaction();
-						self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
+                        self.SlugcatEnterRoomReaction(); 
+                        self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
                         break;
 					}
 				case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
+
 				case < 5 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
 				case 5 when miscData.SLOracleState.playerEncountersWithMark <= 0:
 					{
@@ -294,11 +300,11 @@ static class OracleHooks
 							{
 								miscData.SSaiConversationsHad++;
 								self.NewAction(MeetVoid_Init);
-								self.SlugcatEnterRoomReaction();
+                                self.SlugcatEnterRoomReaction();
 								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
 							}
 						}
-						if (miscData.SSaiConversationsHad == 8)
+						if (miscData.SSaiConversationsHad == 5)
 							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
 						break;
 					}
@@ -313,7 +319,7 @@ static class OracleHooks
 
 	public class SSOracleVoidBehavior : SSOracleBehavior.ConversationBehavior
 	{
-		public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.VoidConversation[times - 1])
+		public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.PebbleVoidConversation[times - 1])
 		{
 			if (ModManager.MMF && owner.oracle.room.game.IsStorySession
 							   && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked &&
@@ -342,7 +348,7 @@ static class OracleHooks
 		{
 			if (newAction == MeetVoid_Init && owner.conversation == null)
 			{
-				owner.InitateConversation(OracleConversation.VoidConversation[MeetTimes - 1], this);
+				owner.InitateConversation(OracleConversation.PebbleVoidConversation[MeetTimes - 1], this);
 				base.NewAction(oldAction, newAction);
 			}
 

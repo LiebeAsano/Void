@@ -1,6 +1,12 @@
-﻿using System;
+﻿using Mono.Cecil.Cil;
+using Mono.Cecil;
+using System;
 using System.Linq;
 using VoidTemplate.Useful;
+using MonoMod.Cil;
+using MoreSlugcats;
+using System.Reflection;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -11,7 +17,8 @@ internal static class CanIPickThisUp
 		On.Player.CanIPickThisUp += Player_CanIPickThisUp;
 		On.Player.CanIPickThisUp += Player_CanIPickThisSpear;
 		On.Player.SlugOnBack.SlugToBack += Player_SlugToBack;
-	}
+        IL.Player.Grabability += Player_GrababilityHook;
+    }
 
     private static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
 	{
@@ -62,5 +69,35 @@ internal static class CanIPickThisUp
         }
 
         orig(self, player);
+    }
+
+    private static void Player_GrababilityHook(ILContext il)
+    {
+        ILCursor c = new ILCursor(il);
+
+        if (c.TryGotoNext(
+            MoveType.After,
+            x => x.MatchLdsfld(typeof(MoreSlugcatsEnums.SlugcatStatsName).GetField("Slugpup", BindingFlags.Public | BindingFlags.Static))))
+        {
+            c.Index++;
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldarg_1);
+
+            c.EmitDelegate<Func<bool, Player, PhysicalObject, bool>>((orig, player, obj) =>
+            {
+                if (player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+                {
+                    if (obj is Player targetPlayer && targetPlayer.slugcatStats.name == VoidEnums.SlugcatID.Void && targetPlayer.bodyMode != Player.BodyModeIndex.Crawl)
+                        return false;
+                    else
+                        return true;
+                }
+                else
+                    return orig;
+            });
+
+        }
+        else
+            LogExErr("Failed to find comparison to slugpup. void won't be able to grab slugpups");
     }
 }

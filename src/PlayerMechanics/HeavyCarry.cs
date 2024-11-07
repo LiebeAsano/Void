@@ -21,7 +21,7 @@ internal static class HeavyCarry
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
             var crit = obj as Creature;
-            if (obj is Player && crit.dead) return false;
+            if (obj is Player) return false;
         }
         return orig(self, obj);
     }

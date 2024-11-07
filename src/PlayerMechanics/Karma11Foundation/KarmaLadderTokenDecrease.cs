@@ -10,24 +10,48 @@ namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
 internal static class KarmaLadderTokenDecrease
 {
-	const float secondsToFadeOut = 2f;
+	const float secondsToFadeOut = 3f;
 	const float ticksToFadeOut = secondsToFadeOut * TicksPerSecond;
 	const float progressPerTick = 1f/ ticksToFadeOut;
+	static MenuScene.SceneID sceneToUseWhenTokensDecrease => VoidEnums.SceneID.DeathScene11;
 	public static void Initiate()
 	{
 		//change process ID to be token decrease
 		On.RainWorldGame.GoToDeathScreen += RainWorldGame_GoToDeathScreen;
 		//making process manager understand how to recognize new ID
 		On.ProcessManager.PostSwitchMainProcess += ProcessManager_PostSwitchMainProcess;
-		//making sleepanddeathscreen understand new ID
-		On.Menu.SleepAndDeathScreen.FoodCountDownDone += SleepAndDeathScreen_FoodCountDownDone;
-
+        //making sleepanddeathscreen understand new ID
+        On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
+		//all the logic with swapping sprites
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
-		//TODO: add new sprite, do fadeout
+        //adding background illustration to new process ID
+        On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
+		
 	}
 
+    private static void SleepAndDeathScreen_AddBkgIllustration(On.Menu.SleepAndDeathScreen.orig_AddBkgIllustration orig, SleepAndDeathScreen self)
+    {
+		orig(self);
+		if(self.ID == VoidEnums.ProcessID.TokenDecrease)
+		{
+			self.scene = new InteractiveMenuScene(self, self.pages[0], sceneToUseWhenTokensDecrease);
+			self.pages[0].subObjects.Add(self.scene);
+		}
+    }
 
-	static WeakReference<KarmaLadder.KarmaSymbol> changingSymbol;
+    private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, UnityEngine.Vector2 pos, HUD.HUD hud, RWCustom.IntVector2 displayKarma, bool reinforced)
+    {
+		orig(self, menu, owner, pos, hud, displayKarma, reinforced);
+		if(menu is KarmaLadderScreen kscreen
+			&& kscreen.ID == VoidEnums.ProcessID.TokenDecrease)
+		{
+			tokenFadeoutProcess.Add(self, new(0));
+			changingSymbol = null;
+			processDone = null;
+		}
+    }
+
+    static WeakReference<KarmaLadder.KarmaSymbol> changingSymbol;
 	static WeakReference<KarmaLadder.KarmaSymbol> processDone;
 	private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
 	{
@@ -48,12 +72,13 @@ internal static class KarmaLadderTokenDecrease
 				int lastIndexOfSprites = self.sprites.Length-1;
 				var initialSprite = self.sprites[0];
 				self.sprites[lastIndexOfSprites] = new FSprite($"atlas-void/KarmaToken" +
-					$"{Karma11Symbol.tokensToPelletsMap[(ushort)(Karma11Symbol.currentKarmaTokens + 1)]}Small")
+					$"{Karma11Symbol.tokensToPelletsMap[(ushort)(Karma11Symbol.currentKarmaTokens + 1)]}Big")
 				{ x = initialSprite.x,
 				 y = initialSprite.y};
 				//we are expanding array of sprites and setting last sprite to be the old sprite
 				self.sprites[0].alpha = 0f;
 				self.sprites[lastIndexOfSprites].alpha = 1f;
+				ladder.containers[ladder.MainContainer].AddChild(self.sprites[lastIndexOfSprites]);
 				#endregion
 			}
 			process.Value += progressPerTick;
@@ -76,15 +101,6 @@ internal static class KarmaLadderTokenDecrease
 	private static void InitTokenDecrease(this KarmaLadder karmaLadder)
 	{
 		tokenFadeoutProcess.Add(karmaLadder, new(0f));
-	}
-
-	private static void SleepAndDeathScreen_FoodCountDownDone(On.Menu.SleepAndDeathScreen.orig_FoodCountDownDone orig, SleepAndDeathScreen self)
-	{
-		if(self.ID == VoidEnums.ProcessID.TokenDecrease)
-		{
-			self.karmaLadder.InitTokenDecrease();
-		}
-		else orig(self);
 	}
 
 	private static void ProcessManager_PostSwitchMainProcess(On.ProcessManager.orig_PostSwitchMainProcess orig, ProcessManager self, ProcessManager.ProcessID ID)

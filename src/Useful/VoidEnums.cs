@@ -11,6 +11,7 @@ public static class VoidEnums
 		SoundID.Register();
 		ConversationID.Register();
 		SlugcatID.Register();
+		ProcessID.Register();
 	}
 	public static class SceneID
 	{

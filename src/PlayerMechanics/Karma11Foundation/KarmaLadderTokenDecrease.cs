@@ -2,6 +2,8 @@
 using System;
 using System.Runtime.CompilerServices;
 using static VoidTemplate.Useful.Utils;
+using MoreSlugcats;
+using Expedition;
 
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
@@ -20,24 +22,28 @@ internal static class KarmaLadderTokenDecrease
 		//making sleepanddeathscreen understand new ID
 		On.Menu.SleepAndDeathScreen.FoodCountDownDone += SleepAndDeathScreen_FoodCountDownDone;
 
-        On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
+		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
 		//TODO: add new sprite, do fadeout
 	}
 
 
 	static WeakReference<KarmaLadder.KarmaSymbol> changingSymbol;
 	static WeakReference<KarmaLadder.KarmaSymbol> processDone;
-    private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
-    {
+	private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
+	{
 		orig(self,timeStacker);
+		if(self.displayKarma.x == 10)
+		{
+			_ = 10;
+		}
 		if (self.owner is KarmaLadder ladder
 			&& self.displayKarma.x == 10
 			&& tokenFadeoutProcess.TryGetValue(ladder, out var process))
 		{
 			if(changingSymbol == null || !changingSymbol.TryGetTarget(out var target))
 			{
-                #region init sprite
-                changingSymbol = new(self);
+				#region init sprite
+				changingSymbol = new(self);
 				Array.Resize(ref self.sprites, self.sprites.Length + 1);
 				int lastIndexOfSprites = self.sprites.Length-1;
 				var initialSprite = self.sprites[0];
@@ -61,11 +67,11 @@ internal static class KarmaLadderTokenDecrease
 				Array.Resize(ref self.sprites, self.sprites.Length - 1);
 				processDone = new(self);
 			}
-        }
-    }
+		}
+	}
 
 
-    static ConditionalWeakTable<KarmaLadder, StrongBox<float>> tokenFadeoutProcess = new();
+	static ConditionalWeakTable<KarmaLadder, StrongBox<float>> tokenFadeoutProcess = new();
 
 	private static void InitTokenDecrease(this KarmaLadder karmaLadder)
 	{
@@ -83,23 +89,30 @@ internal static class KarmaLadderTokenDecrease
 
 	private static void ProcessManager_PostSwitchMainProcess(On.ProcessManager.orig_PostSwitchMainProcess orig, ProcessManager self, ProcessManager.ProcessID ID)
 	{
-		orig(self, ID);
-		if(ID == VoidEnums.ProcessID.TokenDecrease)
+		if (ID == VoidEnums.ProcessID.TokenDecrease)
 		{
 			self.currentMainLoop = new SleepAndDeathScreen(self, ID);
 		}
+		orig(self, ID);
 	}
 
 	private static void RainWorldGame_GoToDeathScreen(On.RainWorldGame.orig_GoToDeathScreen orig, RainWorldGame self)
 	{
-		orig(self);
+		bool customLogic = false;
 		if (self.IsVoidStoryCampaign()
 			&& self.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
 			&& self.GetStorySession.saveState.GetKarmaToken() > 0)
 		{
+			customLogic = true;
 			self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.TokenDecrease);
-		 	loginf("requested process switch to token decrease.");
 		}
-		loginf("post orig. the process game wants to switch to is " + self.manager.upcomingProcess.value);
+		//if upcoming process is null, GoToDeathScreen returns before saving data to disk
+		//guess we are working around it
+		orig(self);
+		if(customLogic)
+		{
+			self.GetStorySession.saveState.SessionEnded(self, false, false);
+
+		}
 	}
 }

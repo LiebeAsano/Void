@@ -31,7 +31,7 @@ internal class KarmaFlowerChanges
 				var amountOfTokens = Math.Min(10, savestate.GetKarmaToken() + 2);
                 savestate.SetKarmaToken(amountOfTokens);
 				Karma11Foundation.Karma11Symbol.currentKarmaTokens = (ushort)amountOfTokens;
-				self.room.game.cameras[0].hud.karmaMeter.UpdateGraphic(10, 10);
+				self.room.game.cameras[0].hud.karmaMeter.reinforceAnimation = 0;
 			}
 			grasp.Release();
 			self.Destroy();

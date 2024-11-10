@@ -4,6 +4,7 @@ internal static class _Karma11FoundationMeta
 {
 	public static void Hook()
 	{
+		IngameHUDTokenBump.Startup();
 		Karma11Symbol.Startup();
 		KarmaLadderTokenDecrease.Initiate();
 		KarmaLadderTweaks.Hook();

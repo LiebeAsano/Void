@@ -30,8 +30,9 @@ internal class KarmaFlowerChanges
 				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
 				var amountOfTokens = Math.Min(10, savestate.GetKarmaToken() + 2);
                 savestate.SetKarmaToken(amountOfTokens);
+				bool needBumpTokenAnim = Karma11Foundation.Karma11Symbol.currentKarmaTokens != 10; 
 				Karma11Foundation.Karma11Symbol.currentKarmaTokens = (ushort)amountOfTokens;
-				self.room.game.cameras[0].hud.karmaMeter.reinforceAnimation = 0;
+				if(needBumpTokenAnim) self.room.game.cameras[0].hud.karmaMeter.reinforceAnimation = 0;
 			}
 			grasp.Release();
 			self.Destroy();

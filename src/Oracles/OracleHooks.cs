@@ -237,30 +237,47 @@ static class OracleHooks
     private static void ILSSOracleBehavior_Update(ILContext il)
 	{
 		ILCursor c = new ILCursor(il);
-		ILCursor c2 = new ILCursor(il);
-		c.GotoNext(MoveType.After,
+
+        // this.dialogBox.Interrupt(this.Translate("Yes, help yourself. They are not edible." < OR PICK ONE OF CUSTOM INTERRUPT LINES AFTER 1ST MEET>), 10);
+        if (c.TryGotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible.")))
+        {
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
+            {
+				//SSAIConversationsHad is assigned the moment oracle sees player.
+				//so the actual number is ConversationsHad - 1
+				//and counting from second time, need another -1 to map meetings 1, 2, 3... to indexes 0, 1, 2...
+                var amountOfPreviousMeetings = self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1;
+                if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
+                && amountOfPreviousMeetings > 0
+                && amountOfPreviousMeetings - 1 < OracleConversation.pickInterruptMessages.Length)
+                {
+                    return OracleConversation.pickInterruptMessages[amountOfPreviousMeetings - 1];
+                }
+                return str;
+            });
+        }
+        else LogExErr("failed to match eating string");
+        //else if (!ModManager.MSC
+		//|| (this.oracle.ID == Oracle.OracleID.SS
+		//	&& this.oracle.room.game.StoryCharacter != MoreSlugcatsEnums.SlugcatStatsName.Artificer <OR VOID>
+		//	&& !flag2))
+        //{
+        //    (this.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap = 9;
+        //}
+        if (c.TryGotoNext(MoveType.After,
 			i => i.MatchLdsfld<MoreSlugcatsEnums.SlugcatStatsName>("Artificer"),
 			i => i.MatchCall(out var method) && method.Name.Contains("op_Inequality"),
 			i => i.Match(OpCodes.Brfalse_S),
-			i => i.MatchLdloc(10));
-		c.Emit(OpCodes.Ldarg_0);
-		c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
-			=> self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void || re);
-
-		c2.GotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible."));
-		c2.Emit(OpCodes.Ldarg_0);
-		c2.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
+			i => i.MatchLdloc(10)))
 		{
-			if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void &&
-				OracleConversation.pickInterruptMessages.Length >
-				self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1)
-			{
-				return OracleConversation.pickInterruptMessages[
-					self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1];
-			}
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
+                => self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void || re);
+        }
+		else LogExErr("failed to match comparison to artificer");
 
-			return str;
-		});
+
 	}
 
     public static class OracleConversation

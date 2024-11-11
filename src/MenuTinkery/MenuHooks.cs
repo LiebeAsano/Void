@@ -3,6 +3,7 @@ using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -22,7 +23,7 @@ internal static class MenuHooks
 	{
 		//when voidcat is dead, those hide useless hud
 		On.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += HideKarmaAndFoodSplitterAndAddText;
-		On.HUD.FoodMeter.CharSelectUpdate += HideFoodPips;
+		//On.HUD.FoodMeter.CharSelectUpdate += HideFoodPips;
 		On.Menu.SlugcatSelectMenu.SlugcatPageContinue.GrafUpdate += MakeTextScroll;
 		On.Menu.MenuScene.BuildScene += StatisticsSceneReplacement;
 		//dictates to RW whether void is unlocked or not
@@ -116,12 +117,23 @@ internal static class MenuHooks
 			&& menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save
 			&& (save.GetVoidCatDead() || save.GetEndingEncountered()))
 		{
-			if (!(save.GetVoidCatDead() || save.GetEndingEncountered())) return;
 			var hud = self.hud;
-			hud.parts.Remove(hud.karmaMeter);
-			hud.karmaMeter = null;
-			hud.parts.Remove(hud.foodMeter);
-			hud.foodMeter = null;
+			//deleting things from manifesting is prone to null reference exceptions, game definitely doesn't think they don't exist
+			//so to counter it we just stop stuff we don't need from rendering
+			List<FNode> thingsToNotRender = [hud.karmaMeter.darkFade,
+				hud.karmaMeter.karmaSprite,
+				hud.karmaMeter.glowSprite,
+				hud.foodMeter.darkFade,
+				hud.foodMeter.lineSprite];
+			hud.foodMeter.circles.ForEach(circle =>
+			{
+				thingsToNotRender.Add(circle.gradient);
+				thingsToNotRender.Add(circle.circles[0].sprite);
+				thingsToNotRender.Add(circle.circles[1].sprite);
+			});
+			thingsToNotRender.ForEach(thingNotToRender => hud.fContainers[1].RemoveChild(thingNotToRender));
+
+
 			int amountOfPageBreaks = TextIfDead.Count((f) => f == '\n');
 			float VerticalOffset = 0f;
 			if (amountOfPageBreaks > 1)

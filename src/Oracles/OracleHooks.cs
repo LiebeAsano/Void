@@ -142,7 +142,7 @@ static class OracleHooks
 			var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
 				? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
 				: -1;
-            LogExInf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+            loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
 
 			switch (miscData.SSaiConversationsHad)
 			{
@@ -161,6 +161,26 @@ static class OracleHooks
 				case 5 when miscData.SLOracleState.playerEncountersWithMark - saveState.GetEncountersWithMark() <= 0:
 					{
 						self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+						break;
+					}
+				case 6:
+					{
+						//check whether any player in room has LW-void pearl in hands or stomach
+						if(self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom => 
+							playerInOracleRoom.grasps.Any(grasp =>
+								grasp is not null 
+								&& grasp.grabbed is DataPearl pearl
+								&& pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+							|| (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
+								&& absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+						{
+							
+						}
+						else
+						{
+							self.dialogBox.Interrupt("I need the pearl, now.", 80);
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        }
 						break;
 					}
 				case > 10:

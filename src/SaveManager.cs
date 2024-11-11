@@ -42,8 +42,8 @@ public static class SaveManager
 	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
 	#region oracle data
 	private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
-	private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
-	private const string moonPearlsEaten = uniqueprefix + "MoonPearlsEaten";
+    private const string encountersWithMark = uniqueprefix + "EncountersWithMark";
+    private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
 	private const string VisitedFP6times = uniqueprefix + "visitedFP6times";
 	#region last meet
 	public static int GetLastMeetCycles(this SaveState save)
@@ -57,8 +57,19 @@ public static class SaveManager
 		return cycles;
 	}
 	public static void SetLastMeetCycles(this SaveState save, int cycles) => save.miscWorldSaveData.GetSlugBaseData().Set(lastMeetCycles, cycles);
-	#endregion
-	public static int GetPebblesPearlsEaten(this SaveState save)
+    public static int GetEncountersWithMark(this SaveState save)
+    {
+        var data = save.miscWorldSaveData.GetSlugBaseData();
+        if (!data.TryGet(encountersWithMark, out int cycles))
+        {
+            cycles = 0;
+            data.Set(encountersWithMark, 0);
+        }
+        return cycles;
+    }
+    public static void SetEncountersWithMark(this SaveState save, int cycles) => save.miscWorldSaveData.GetSlugBaseData().Set(encountersWithMark, cycles);
+    #endregion
+    public static int GetPebblesPearlsEaten(this SaveState save)
 	{
 		var data = save.miscWorldSaveData.GetSlugBaseData();
 		if (!data.TryGet(pebblesPearlsEaten, out int eatenPearlsAmount))
@@ -69,18 +80,6 @@ public static class SaveManager
 		return eatenPearlsAmount;
 	}
 	public static void SetPebblesPearlsEaten(this SaveState save, int amount) => save.miscWorldSaveData.GetSlugBaseData().Set(pebblesPearlsEaten, amount);
-
-	public static int GetMoonPearlsEaten(this SaveState save)
-	{
-		var data = save.miscWorldSaveData.GetSlugBaseData();
-		if (!data.TryGet(moonPearlsEaten, out int eatenPearlsAmount))
-		{
-			eatenPearlsAmount = 0;
-			data.Set(moonPearlsEaten, 0);
-		}
-		return eatenPearlsAmount;
-	}
-	public static void SetMoonPearlsEaten(this SaveState save, int amount) => save.miscWorldSaveData.GetSlugBaseData().Set(moonPearlsEaten, amount);
 	#endregion
 
 	public static bool GetVoidCatDead(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;

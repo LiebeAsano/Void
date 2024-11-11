@@ -51,7 +51,7 @@ class _Plugin : BaseUnityPlugin
 				DrawSprites.Hook();
 				PlayerSpawnManager.ApplyHooks();
 				PermadeathConditions.Hook();
-				Oracles.OracleHooks.Hook();
+				Oracles._OracleMeta.Hook();
 				KarmaHooks.Hook();
 				RoomHooks.Hook();
 				MenuTinkery._MenuMeta.Startup();
@@ -60,7 +60,7 @@ class _Plugin : BaseUnityPlugin
 				_GhostFeaturesMeta.Hook();
 				_Karma11FeaturesMeta.Hook();
 				_Karma11FoundationMeta.Hook();
-				PlayerMechanics._PlayerMechanicsMeta.Hook();
+				_PlayerMechanicsMeta.Hook();
 				_MiscMeta.Hook();
 				OptionInterface._OIMeta.Initialize();
 

@@ -266,7 +266,7 @@ namespace VoidTemplate.PlayerMechanics
             BodyChunk body_chunk_0 = player.bodyChunks[0];
             BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl && body_chunk_1.pos.y > body_chunk_0.pos.y + 14)
+            if (player.bodyMode == BodyModeIndexExtension.CeilCrawl && body_chunk_1.pos.y > body_chunk_0.pos.y + 10)
             {
                 player.bodyChunks[1].collideWithTerrain = false;
             }

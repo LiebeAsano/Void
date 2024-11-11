@@ -4,7 +4,10 @@ using MoreSlugcats;
 using System;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 using VoidTemplate.Useful;
+using static UnityEngine.Mesh;
+using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.VoidEnums.ConversationID;
 
 namespace VoidTemplate.Oracles;
@@ -13,55 +16,19 @@ static class OracleHooks
 {
 	public static void Hook()
 	{
-		On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
+        On.Oracle.ctor += Oracle_ctor;
+        On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
 		On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
 		On.SSOracleBehavior.PebblesConversation.AddEvents += PebblesConversation_AddEvents;
-		On.SLOracleBehaviorHasMark.InitateConversation += SLOracleBehaviorHasMark_InitateConversation;
-		On.SLOracleBehaviorHasMark.MoonConversation.AddEvents += AddEventsByID;
-		IL.SSOracleBehavior.Update += SSOracleBehavior_Update;
+		On.SSOracleBehavior.Update += OnSSOracleBehavior_Update;
+		IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
 	}
-	private static void Logerr(object e) => _Plugin.logger.LogError(e);
-	private static void Loginf(object e) => _Plugin.logger.LogInfo(e);
-	#region Moon look up conversation
-	/// <summary>
-	/// This thing checks the ID that conversation gets when it is created and looks up file in {anymod}/text/RainWorldLastWishMoonConversations/{ID}.txt
-	/// Use >> to split linger time and string
-	/// Example: "   5>>I am not sure what this means!   "
-	/// </summary>
-	#region immutable
-	private static readonly Conversation.ID[] modSpecificConversations = [Moon_VoidConversation];
+
+    #region immutable
+    private static readonly Conversation.ID[] modSpecificConversations = [Moon_VoidConversation];
+    public static SSOracleBehavior.Action MeetVoid_Init = new("MeetVoid_Init", true);
+    public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
 	#endregion
-	private static (int, string) ParseLine(string line)
-	{
-		string[] res = line.Split(new string[] { ">>" }, StringSplitOptions.None);
-		if (res.Length != 2) Logerr($"the line \"{line}\" was invalid for parsing (splitting with '>>' resulted in non-two array)");
-		if (!int.TryParse(res[0], out int value)) Logerr($"the line \"{line}\" has invalid int number before '>>'");
-		return (value, res[1]);
-	}
-	private static void AddEventsByID(On.SLOracleBehaviorHasMark.MoonConversation.orig_AddEvents orig, SLOracleBehaviorHasMark.MoonConversation self)
-	{
-		orig(self);
-		if (Array.Exists(modSpecificConversations, x => self.id == x) || Array.Exists(OracleConversation.MoonVoidConversation, x => self.id == x)) //if id is from this mod
-		{
-			string path = AssetManager.ResolveFilePath("text/RainWorldLastWishMoonConversations/" + self.id + ".txt"); //look it up in our specific folder
-			if (File.Exists(path))
-			{
-				string[] lines = File.ReadAllLines(path);
-				Array.ForEach(lines, line =>
-				{
-					var q = ParseLine(line);
-					self.events.Add(new Conversation.TextEvent(self, 0, Utils.TranslateStringComplex(q.Item2), q.Item1));
-				});
-			}
-			else Logerr($"the path '{path}' has no existing file. No events were loaded.");
-		}
-	}
-	#endregion
-	public static SSOracleBehavior.Action MeetVoid_Init = new("MeetVoid_Init", true);
-	public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
-
-
-
 
 	public static void EatPearlsInterrupt(this SSOracleBehavior self)
 	{
@@ -91,90 +58,6 @@ static class OracleHooks
 			savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
 		}
 
-	}
-
-	public static class OracleConversation
-	{
-		public static Conversation.ID[] PebbleVoidConversation;
-		public static Conversation.ID[] MoonVoidConversation;
-
-		public static int[] cycleLingers = [0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0];
-		public static int[] MooncycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-
-		static OracleConversation()
-		{
-            PebbleVoidConversation = new Conversation.ID[11];
-			for (int i = 0; i < PebbleVoidConversation.Length; i++)
-                PebbleVoidConversation[i] = new($"pebblevoidconversation_{i + 1}", true);
-			MoonVoidConversation = new Conversation.ID[11];
-			for (int i = 0; i < MoonVoidConversation.Length; i++)
-				MoonVoidConversation[i] = new($"moonvoidconversation_{i + 1}", true);
-		}
-
-		public static string[] pickInterruptMessages =
-        [
-            "Yes, help yourself. They are not edible.",
-			"You seem to like pearls.",
-			"Are you listening to me?",
-			"You need to stop being distracted by pearls.",
-			"Are you trying my patience?",
-			"I will tell you about this pearls another time.",
-			"Yes... this pearl contains data about my structure.",
-			"Strange... This pearl shouldn't be here.",
-			"This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.",
-			"You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.",
-			"I wish I could just teach you how to read them..."
-		];
-
-		public static string[] eatInterruptMessages =
-        [
-            "I'm not sure you can stomach pearl.",
-			". . .",
-			"Do you really eat them?",
-			"Little creature. You shouldn't eat pearls.",
-			"You must stop right now.",
-			"I'm warning you for the last time."
-		];
-
-		public static string[] eatInterruptMessages6Step =
-        [
-            "I'm not sure you can stomach pearl.",
-			". . .",
-			"Do you really eat them?",
-			"Little creature. You shouldn't eat pearls.",
-			"Can you stop dissolving my pearls?",
-			"You just ate something more valuable than you can imagine.",
-			"This pearl that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I can't get it back.",
-			"Considering that your body weight does not change, this means that all the objects you eat are simply dissolved by the void fluid.",
-			"Although if to assume that all the water in your body has been displaced by the void fluid, its concentration is still insufficient to dissolve objects so fast.",
-			"Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.",
-			"I would never have thought that such wasteful use of pearls could bring me closer to understanding the nature of the void sea.",
-            "Eat as much as you want, from now on I will no longer store important information here in your presence."
-        ];
-
-
-
-	}
-
-	private static void SLOracleBehaviorHasMark_InitateConversation(On.SLOracleBehaviorHasMark.orig_InitateConversation orig, SLOracleBehaviorHasMark self)
-	{
-		if (!self.State.SpeakingTerms)
-		{
-			self.dialogBox.NewMessage("...", 10);
-			return;
-		}
-		if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void &&
-			self.State.playerEncountersWithMark <= 0)
-		{
-			if (self.State.playerEncounters < 0)
-			{
-				self.State.playerEncounters = 0;
-			}
-			if (self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length) 
-				self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
-			return;
-		}
-		orig(self);
 	}
 
 	private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
@@ -213,7 +96,7 @@ static class OracleHooks
 		}
 	}
 
-	private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
+    private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
 	{
 		if (nextAction == MeetVoid_Init)
 		{
@@ -261,32 +144,29 @@ static class OracleHooks
 			var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
 				? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
 				: -1;
-			Loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+            LogExInf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
 
 			switch (miscData.SSaiConversationsHad)
 			{
-				case 0:
+                case 0:
 					{
 						miscData.SSaiConversationsHad++;
-						self.NewAction(SSOracleBehavior.Action.General_GiveMark);
-						self.afterGiveMarkAction = MeetVoid_Init;
+                        self.afterGiveMarkAction = MeetVoid_Init;
+                        self.NewAction(SSOracleBehavior.Action.General_GiveMark);
                         self.SlugcatEnterRoomReaction(); 
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
                         break;
 					}
-				case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
-
-				case < 5 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
-				case 5 when miscData.SLOracleState.playerEncountersWithMark <= 0:
+				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() > 0:
+                case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
+				case 5 when miscData.SLOracleState.playerEncountersWithMark - saveState.GetEncountersWithMark() <= 0:
 					{
 						self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
 					}
-				case > 5 when saveState.cycleNumber - saveState.GetLastMeetCycles() < OracleConversation.cycleLingers[miscData.SSaiConversationsHad]:
 				case > 10:
 					{
-						//Maybe changed
 						self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
 						break;
 					}
@@ -304,9 +184,11 @@ static class OracleHooks
 								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
 							}
 						}
-						if (miscData.SSaiConversationsHad == 5)
+                        if (miscData.SSaiConversationsHad == 4)
+                            saveState.SetEncountersWithMark(miscData.SLOracleState.playerEncountersWithMark);
+                        if (miscData.SSaiConversationsHad == 5)
 							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
-						break;
+                        break;
 					}
 			}
 		}
@@ -315,48 +197,46 @@ static class OracleHooks
 			orig(self);
 		}
 	}
-
-
-	public class SSOracleVoidBehavior : SSOracleBehavior.ConversationBehavior
-	{
-		public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.PebbleVoidConversation[times - 1])
+    private static void Oracle_ctor(On.Oracle.orig_ctor orig, Oracle self, AbstractPhysicalObject abstractPhysicalObject, Room room)
+    {
+        orig(self, abstractPhysicalObject, room);
+		if (self.ID == Oracle.OracleID.SL)
 		{
-			if (ModManager.MMF && owner.oracle.room.game.IsStorySession
-							   && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked &&
-							   oracle.room.world.rainCycle.timer > oracle.room.world.rainCycle.cycleLength / 4)
-			{
-				oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
-				oracle.room.world.rainCycle.dayNightCounter = 0;
-			}
+			if (room.game.session is StoryGameSession && (room.game.session as StoryGameSession).saveState.saveStateNumber == VoidEnums.SlugcatID.Void
+				&& (room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap == 10)
+				self.oracleBehavior = new SLOracleBehaviorHasMark(self);
+		}
+    }
 
+    private static void OnSSOracleBehavior_Update(On.SSOracleBehavior.orig_Update orig, SSOracleBehavior self, bool eu)
+    {
+		orig(self, eu);
+		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void)
+		{
+            var saveState = self.oracle.room.game.GetStorySession.saveState;
+            var miscData = saveState.miscWorldSaveData;
+
+            if (self.conversation == null || self.conversation.slatedForDeletion || self.conversation.events == null)
+            {
+				if (miscData.SSaiConversationsHad < 5)
+				{
+                    self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                }
+				else
+				{
+                    self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                }
+                self.UnlockShortcuts();
+			}
+			else
+			{
+                self.LockShortcuts();
+            }
 
 		}
 
-		public override void Update()
-		{
-			base.Update();
-			if (owner.conversation == null || owner.conversation.slatedForDeletion == true ||
-				owner.conversation.events == null)
-			{
-				owner.UnlockShortcuts();
-				owner.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-				owner.getToWorking = 1f;
-			}
-		}
-
-		public override void NewAction(SSOracleBehavior.Action oldAction, SSOracleBehavior.Action newAction)
-		{
-			if (newAction == MeetVoid_Init && owner.conversation == null)
-			{
-				owner.InitateConversation(OracleConversation.PebbleVoidConversation[MeetTimes - 1], this);
-				base.NewAction(oldAction, newAction);
-			}
-
-		}
-
-		int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
 	}
-	private static void SSOracleBehavior_Update(ILContext il)
+    private static void ILSSOracleBehavior_Update(ILContext il)
 	{
 		ILCursor c = new ILCursor(il);
 		ILCursor c2 = new ILCursor(il);
@@ -385,4 +265,105 @@ static class OracleHooks
 		});
 	}
 
+    public static class OracleConversation
+    {
+        public static Conversation.ID[] PebbleVoidConversation;
+        public static Conversation.ID[] MoonVoidConversation;
+
+        public static int[] cycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        public static int[] MooncycleLingers = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+        static OracleConversation()
+        {
+            PebbleVoidConversation = new Conversation.ID[11];
+            for (int i = 0; i < PebbleVoidConversation.Length; i++)
+                PebbleVoidConversation[i] = new($"pebblevoidconversation_{i + 1}", true);
+            MoonVoidConversation = new Conversation.ID[11];
+            for (int i = 0; i < MoonVoidConversation.Length; i++)
+                MoonVoidConversation[i] = new($"moonvoidconversation_{i + 1}", true);
+        }
+
+        public static string[] pickInterruptMessages =
+        [
+            "Yes, help yourself. They are not edible.",
+            "You seem to like pearls.",
+            "Are you listening to me?",
+            "You need to stop being distracted by pearls.",
+            "Are you trying my patience?",
+            "I will tell you about this pearls another time.",
+            "Yes... this pearl contains data about my structure.",
+            "Strange... This pearl shouldn't be here.",
+            "This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.",
+            "You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.",
+            "I wish I could just teach you how to read them..."
+        ];
+
+        public static string[] eatInterruptMessages =
+        [
+            "I'm not sure you can stomach pearl.",
+            ". . .",
+            "Do you really eat them?",
+            "Little creature. You shouldn't eat pearls.",
+            "You must stop right now.",
+            "I'm warning you for the last time."
+        ];
+
+        public static string[] eatInterruptMessages6Step =
+        [
+            "I'm not sure you can stomach pearl.",
+            ". . .",
+            "Do you really eat them?",
+            "Little creature. You shouldn't eat pearls.",
+            "Can you stop dissolving my pearls?",
+            "You just ate something more valuable than you can imagine.",
+            "This pearl that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I can't get it back.",
+            "Considering that your body weight does not change, this means that all the objects you eat are simply dissolved by the void fluid.",
+            "Although if to assume that all the water in your body has been displaced by the void fluid, its concentration is still insufficient to dissolve objects so fast.",
+            "Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.",
+            "I would never have thought that such wasteful use of pearls could bring me closer to understanding the nature of the void sea.",
+            "Eat as much as you want, from now on I will no longer store important information here in your presence."
+        ];
+
+
+
+    }
+    public class SSOracleVoidBehavior : SSOracleBehavior.ConversationBehavior
+    {
+        public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.PebbleVoidConversation[times - 1])
+        {
+            if (ModManager.MMF && owner.oracle.room.game.IsStorySession
+                               && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked &&
+                               oracle.room.world.rainCycle.timer > oracle.room.world.rainCycle.cycleLength / 4)
+            {
+                oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
+                oracle.room.world.rainCycle.dayNightCounter = 0;
+            }
+
+
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (owner.conversation == null || owner.conversation.slatedForDeletion == true ||
+                owner.conversation.events == null)
+            {
+                owner.UnlockShortcuts();
+                owner.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                owner.getToWorking = 1f;
+            }
+        }
+
+        public override void NewAction(SSOracleBehavior.Action oldAction, SSOracleBehavior.Action newAction)
+        {
+            if (newAction == MeetVoid_Init && owner.conversation == null)
+            {
+                owner.InitateConversation(OracleConversation.PebbleVoidConversation[MeetTimes - 1], this);
+                base.NewAction(oldAction, newAction);
+            }
+
+        }
+
+        int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
+    }
 }

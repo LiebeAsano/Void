@@ -11,9 +11,15 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures
 {
+    internal class GhostPingControlData
+    {
+        public string playerLastUpdateRegion = "";
+        public bool ghostPingStaged = false;
+    }
+
     internal static class MSGhostForTheVoid
     {
-        private static ConditionalWeakTable<Player, string> playerLastUpdateRegion = new();
+        private static ConditionalWeakTable<Player, GhostPingControlData> ghostPingControlDataCWT = new();
 
         public static void Hook()
         {
@@ -52,11 +58,17 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
                 && self.room.world.region.name == "MS"
                 && TheVoidCanMeetMSGhost(self.room.world) && !HasMetMSGhost(storyGameSession.saveState.deathPersistentSaveData))
             {
-                string lastUpdateRegion = playerLastUpdateRegion.GetValue(self, player => player.room.world.region.name);
-                if (self.room.world.region.name != lastUpdateRegion)
+                GhostPingControlData ghostPingControlData = ghostPingControlDataCWT.GetValue(self, (player) => new GhostPingControlData() { playerLastUpdateRegion = player.room.world.region.name });
+
+                if (self.room.world.region.name != ghostPingControlData.playerLastUpdateRegion)
                 {
-                    playerLastUpdateRegion.Remove(self);
-                    playerLastUpdateRegion.Add(self, self.room.world.region.name);
+                    ghostPingControlData.playerLastUpdateRegion = self.room.world.region.name;
+                    ghostPingControlData.ghostPingStaged = true;
+                }
+
+                if (ghostPingControlData.ghostPingStaged && !self.room.IsGateRoom())
+                {
+                    ghostPingControlData.ghostPingStaged = false;
                     self.room.AddObject(new GhostPing(self.room));
                 }
             }
@@ -66,7 +78,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
         {
             orig(self, abstractCreature, world);
 
-            playerLastUpdateRegion.Add(self, world.region?.name);
+            ghostPingControlDataCWT.Add(self, new GhostPingControlData() { playerLastUpdateRegion = world.region?.name });
         }
 
         private static void ShelterDoor_Update(On.ShelterDoor.orig_Update orig, ShelterDoor self, bool eu)

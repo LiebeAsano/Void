@@ -4,11 +4,9 @@ using MoreSlugcats;
 using System;
 using System.IO;
 using System.Linq;
-using UnityEngine;
-using VoidTemplate.Useful;
-using static UnityEngine.Mesh;
 using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.VoidEnums.ConversationID;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.Oracles;
 

@@ -161,12 +161,12 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
-				case 1 when !saveState.GetVoidMeetMoon():
+				/*case 1 when !saveState.GetVoidMeetMoon():
 					{
                         self.dialogBox.Interrupt("GET OUT, now.", 80);
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
-					}
+					}*/
 				case 2:
 					{
 						//check whether any player in room has LW-void pearl in hands or stomach

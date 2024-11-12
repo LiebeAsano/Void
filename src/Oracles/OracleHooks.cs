@@ -248,9 +248,9 @@ static class OracleHooks
                 var amountOfPreviousMeetings = self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1;
                 if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
                 && amountOfPreviousMeetings > 0
-                && amountOfPreviousMeetings - 1 < OracleConversation.pickInterruptMessages.Length)
+                && amountOfPreviousMeetings < OracleConversation.pickInterruptMessages.Length)
                 {
-                    return OracleConversation.pickInterruptMessages[amountOfPreviousMeetings - 1];
+                    return OracleConversation.pickInterruptMessages[amountOfPreviousMeetings];
                 }
                 return str;
             });

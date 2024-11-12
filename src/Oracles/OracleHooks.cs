@@ -8,6 +8,8 @@ using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.VoidEnums.ConversationID;
 using static VoidTemplate.SaveManager;
 using UnityEngine;
+using System.Collections.Generic;
+using RWCustom;
 
 namespace VoidTemplate.Oracles;
 
@@ -136,6 +138,7 @@ static class OracleHooks
 		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
 			&& self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
 		{
+            if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;
 			var saveState = self.oracle.room.game.GetStorySession.saveState;
 			var miscData = saveState.miscWorldSaveData;
 			var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
@@ -197,7 +200,6 @@ static class OracleHooks
 						if (self.action != MeetVoid_Init)
 						{
 							saveState.SetLastMeetCycles(saveState.cycleNumber);
-							if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;
 							if (self.currSubBehavior.ID != VoidTalk)
 							{
 								miscData.SSaiConversationsHad++;

@@ -7,6 +7,7 @@ using System.Linq;
 using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.VoidEnums.ConversationID;
 using static VoidTemplate.SaveManager;
+using UnityEngine;
 
 namespace VoidTemplate.Oracles;
 
@@ -18,7 +19,6 @@ static class OracleHooks
         On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
 		On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
 		On.SSOracleBehavior.PebblesConversation.AddEvents += PebblesConversation_AddEvents;
-		On.SSOracleBehavior.Update += OnSSOracleBehavior_Update;
 		IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
 	}
 
@@ -117,7 +117,6 @@ static class OracleHooks
 
 			if (subBehavior == null)
 			{
-                self.LockShortcuts();
                 subBehavior = new SSOracleVoidBehavior(self,
 					self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad);
 				self.allSubBehaviors.Add(subBehavior);
@@ -156,14 +155,19 @@ static class OracleHooks
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
                         break;
 					}
-				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() > 0:
-                case 2 when saveState.deathPersistentSaveData.karmaCap < 4:
-				case 5 when miscData.SLOracleState.playerEncountersWithMark - saveState.GetEncountersWithMark() <= 0:
+				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
 					{
-						self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        self.dialogBox.Interrupt("GET OUT, right now.", 80);
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+						break;
+                    }
+				case 1 when !saveState.GetVoidMeetMoon():
+					{
+                        self.dialogBox.Interrupt("GET OUT, now.", 80);
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
 					}
-				case 6:
+				case 2:
 					{
 						//check whether any player in room has LW-void pearl in hands or stomach
 						if(self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom => 
@@ -174,8 +178,8 @@ static class OracleHooks
 							|| (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
 								&& absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
 						{
-							
-						}
+                            self.dialogBox.Interrupt("Good boy.", 80);
+                        }
 						else
 						{
 							self.dialogBox.Interrupt("I need the pearl, now.", 80);
@@ -202,7 +206,7 @@ static class OracleHooks
 								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
 							}
 						}
-                        if (miscData.SSaiConversationsHad == 4)
+                        if (miscData.SSaiConversationsHad == 0)
                             saveState.SetEncountersWithMark(miscData.SLOracleState.playerEncountersWithMark);
                         if (miscData.SSaiConversationsHad == 5)
 							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
@@ -226,34 +230,6 @@ static class OracleHooks
 		}
     }
 
-    private static void OnSSOracleBehavior_Update(On.SSOracleBehavior.orig_Update orig, SSOracleBehavior self, bool eu)
-    {
-		orig(self, eu);
-		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void)
-		{
-            var saveState = self.oracle.room.game.GetStorySession.saveState;
-            var miscData = saveState.miscWorldSaveData;
-
-            if (self.conversation == null || self.conversation.slatedForDeletion || self.conversation.events == null)
-            {
-				if (miscData.SSaiConversationsHad < 5)
-				{
-                    self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-                }
-				else
-				{
-                    self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-                }
-                self.UnlockShortcuts();
-			}
-			else
-			{
-                self.LockShortcuts();
-            }
-
-		}
-
-	}
     private static void ILSSOracleBehavior_Update(ILContext il)
 	{
 		ILCursor c = new ILCursor(il);
@@ -386,6 +362,10 @@ static class OracleHooks
                 owner.UnlockShortcuts();
                 owner.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
                 owner.getToWorking = 1f;
+            }
+            else
+            {
+                owner.LockShortcuts();
             }
         }
 

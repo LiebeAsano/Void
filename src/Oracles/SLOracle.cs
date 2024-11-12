@@ -21,8 +21,7 @@ internal static class SLOracle
         var saveState = self.oracle.room.game.GetStorySession.saveState;
         var miscData = saveState.miscWorldSaveData;
 
-        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void &&
-            self.State.playerEncountersWithMark <= 0)
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
             if (self.State.playerEncounters < 0)
             {
@@ -32,7 +31,7 @@ internal static class SLOracle
             {
                 case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() > 0:
                 /*case 5 when  :
-					{
+					{ 
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
                         self.State.playerEncountersWithMark++;
                         break;
@@ -43,10 +42,8 @@ internal static class SLOracle
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
                         self.State.playerEncountersWithMark++;
                         self.oracle.room.PlaySound(SoundID.SL_AI_Pain_1, self.oracle.firstChunk);
-                        if (miscData.SSaiConversationsHad == 4)
-                        {
-                            saveState.SetEncountersWithMark(self.State.playerEncountersWithMark);
-                        }
+                        if (miscData.SSaiConversationsHad == 1)
+                            saveState.SetVoidMeetMoon(true);
                         break;
                     }
             }

@@ -305,36 +305,36 @@ static class OracleHooks
             "Are you trying my patience?",
             "I will tell you about this pearls another time.",
             "Yes... this pearl contains data about my structure.",
-            "Strange... This pearl shouldn't be here.",
-            "This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.",
+            "Strange... This pearl should not be here.",
+            "This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilization.",
             "You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.",
-            "I wish I could just teach you how to read them..."
+            "I wish I could just teach you how to read them so you would stop bothering me about little things like that."
         ];
 
         public static string[] eatInterruptMessages =
         [
-            "I'm not sure you can stomach pearl.",
+            "I am not sure you can stomach pearl.",
             ". . .",
             "Do you really eat them?",
-            "Little creature. You shouldn't eat pearls.",
+            "Little creature, you should not eat pearls.",
             "You must stop right now.",
-            "I'm warning you for the last time."
+            "I am warning you for the last time."
         ];
 
         public static string[] eatInterruptMessages6Step =
         [
-            "I'm not sure you can stomach pearl.",
+            "I am not sure you can stomach pearl.",
             ". . .",
             "Do you really eat them?",
-            "Little creature. You shouldn't eat pearls.",
+            "Little creature, you should not eat pearls.",
             "Can you stop dissolving my pearls?",
             "You just ate something more valuable than you can imagine.",
-            "This pearl that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I can't get it back.",
-            "Considering that your body weight does not change, this means that all the objects you eat are simply dissolved by the void fluid.",
-            "Although if to assume that all the water in your body has been displaced by the void fluid, its concentration is still insufficient to dissolve objects so fast.",
+            "These pearls that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I cannot get it back.",
+            "Considering that your body weight does not change, this means that all the objects you eat are dissolved by the void fluid.",
+            "If to assume that all the water in your body has been displaced by the void fluid,<LINE>its concentration is still insufficient to dissolve objects in such a short period of time.",
             "Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.",
-            "I would never have thought that such wasteful use of pearls could bring me closer to understanding the nature of the void sea.",
-            "Eat as much as you want, from now on I will no longer store important information here in your presence."
+            "I would never have thought that such wasteful use of pearls would bring me closer to understanding the nature of the void sea.",
+            "Eat as much as you want, from now I will no longer store important information here in your presence."
         ];
 
 

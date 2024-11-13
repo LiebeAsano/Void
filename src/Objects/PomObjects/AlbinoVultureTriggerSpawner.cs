@@ -88,7 +88,7 @@ namespace VoidTemplate.Objects.PomObjects
             _Plugin.logger.LogDebug("Triggered");
 
             WorldCoordinate worldSpawnCoordinate = room.GetWorldCoordinate(PlacedObject.pos + SpawnPoint);
-            AbstractCreature abstractVultureCreature = new(room.world, StaticWorld.GetCreatureTemplate("Vulture"), null, worldSpawnCoordinate, room.game.GetNewID())
+            AbstractCreature abstractVultureCreature = new(room.world, StaticWorld.GetCreatureTemplate("King Vulture"), null, worldSpawnCoordinate, room.game.GetNewID())
             {
                 saveCreature = false
             };

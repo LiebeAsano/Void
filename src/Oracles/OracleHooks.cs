@@ -146,13 +146,13 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
-				/*case 1 when !saveState.GetVoidMeetMoon():
+				case 3 when !saveState.GetVoidMeetMoon():
 					{
                         self.dialogBox.Interrupt("GET OUT, now.", 80);
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
-					}*/
-				case 2:
+					}
+				case 4:
 					{
 						//check whether any player in room has LW-void pearl in hands or stomach
 						if(self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom => 
@@ -172,7 +172,47 @@ static class OracleHooks
                         }
 						break;
 					}
-				case > 10:
+                case 5:
+                    {
+                        //check whether any player in room has LW-void pearl in hands or stomach
+                        if (self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom =>
+                            playerInOracleRoom.grasps.Any(grasp =>
+                                grasp is not null
+                                && grasp.grabbed is DataPearl pearl
+                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                            || (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
+                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+                        {
+                            self.dialogBox.Interrupt("Good boy.", 80);
+                        }
+                        else
+                        {
+                            self.dialogBox.Interrupt("I need the pearl, now.", 80);
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        }
+                        break;
+                    }
+                case 6:
+                    {
+                        //check whether any player in room has LW-void pearl in hands or stomach
+                        if (self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom =>
+                            playerInOracleRoom.grasps.Any(grasp =>
+                                grasp is not null
+                                && grasp.grabbed is DataPearl pearl
+                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                            || (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
+                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+                        {
+                            self.dialogBox.Interrupt("Good boy.", 80);
+                        }
+                        else
+                        {
+                            self.dialogBox.Interrupt("I need the pearl, now.", 80);
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        }
+                        break;
+                    }
+                case > 10:
 					{
 						self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
 						break;

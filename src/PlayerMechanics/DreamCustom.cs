@@ -56,21 +56,6 @@ public static class DreamCustom
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
 						break;
 					}
-				case >= 8:
-					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidSea);
-						break;
-					}
-				case >= 6:
-					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidBody);
-						break;
-					}
-				case >= 4:
-					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.NSH);
-						break;
-					}
 				default:
 					{
 						if (currentRegion == "SB")

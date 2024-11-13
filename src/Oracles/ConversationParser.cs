@@ -14,6 +14,7 @@ internal static class ConversationParser
 			foreach(string line in File.ReadAllLines(path))
 			{
 				var split = line.Split([" : "], System.StringSplitOptions.None);
+				
 				switch(split.Length)
 				{
 					//three segments are always text
@@ -21,7 +22,7 @@ internal static class ConversationParser
 						{
 							
 							conversation.events.Add(new Conversation.TextEvent(conversation, int.Parse(split[0]),
-							split[1].TranslateStringComplex(), int.Parse(split[2])));
+							split[1].TranslateString(), int.Parse(split[2])));
 							break;
 						}
 					case 2:
@@ -35,11 +36,11 @@ internal static class ConversationParser
 							{
 								if (int.TryParse(split[0], out int startingnumber))
 								{
-									conversation.events.Add(new Conversation.TextEvent(conversation, startingnumber, split[1].TranslateStringComplex(), 0));
+									conversation.events.Add(new Conversation.TextEvent(conversation, startingnumber, split[1].TranslateString(), 0));
 								}
 								else if (int.TryParse(split[1], out int endingnumber))
 								{
-									conversation.events.Add(new Conversation.TextEvent(conversation, 0, split[0].TranslateStringComplex(), endingnumber));
+									conversation.events.Add(new Conversation.TextEvent(conversation, 0, split[0].TranslateString(), endingnumber));
 								}
 								else ErrorIntoLogsAndDialogue(conversation, result, "couldn't parse line: \"" + line + "\"");
 							}
@@ -47,7 +48,7 @@ internal static class ConversationParser
 						}
 					case 1:
 						{
-                            conversation.events.Add(new Conversation.TextEvent(conversation, 0, split[0], 0));
+                            conversation.events.Add(new Conversation.TextEvent(conversation, 0, split[0].TranslateString(), 0));
                             break;
 						}
 					default:

@@ -63,7 +63,6 @@ static class OracleHooks
 	private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
 	{
 		orig(self);
-
 		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
 		{
 			if (!self.owner.playerEnteredWithMark)
@@ -75,24 +74,7 @@ static class OracleHooks
 
             if (self.owner.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                 path = AssetManager.ResolveFilePath($"text/oracle/pebble11/{self.id.value.ToLower()}.txt");
-
-            if (File.Exists(path))
-			{
-				foreach (var line in File.ReadAllLines(path))
-				{
-					var split = LocalizationTranslator.ConsolidateLineInstructions(line);
-					if (split.Length == 3)
-						self.events.Add(new Conversation.TextEvent(self, int.Parse(split[0]),
-							self.Translate(split[1]), int.Parse(split[2])));
-					else
-						self.events.Add(new Conversation.TextEvent(self, 0, self.Translate(line), 0));
-				}
-			}
-			else
-			{
-				self.events.Add(new Conversation.TextEvent(self, 0,
-					$"text/oracle/{self.id.value.ToLower()}.txt can't find!", 0));
-			}
+			ConversationParser.GetConversationEvents(self, path);
 		}
 	}
 

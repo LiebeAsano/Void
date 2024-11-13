@@ -30,6 +30,37 @@ class _Plugin : BaseUnityPlugin
 	{
 		logger = Logger;
 		On.RainWorld.OnModsInit += RainWorld_OnModsInit;
+		On.RainWorld.OnModsDisabled += delegate (On.RainWorld.orig_OnModsDisabled orig, RainWorld self, ModManager.Mod[] newlyDisabledMods)
+	{
+    	orig.Invoke(self, newlyDisabledMods);
+    	for (int i = 0; i < newlyDisabledMods.Length; i++)
+    	{
+        
+            	if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.Mimicstarfish))
+            	{
+                	MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.Mimicstarfish);
+            	}
+				if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.Outspector))
+				{
+					MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.Outspector);
+				}
+				if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.OutspectorB))
+				{
+					MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.OutspectorB);
+				}
+				CreatureTemplateType.UnregisterValues();
+            	SandboxUnlockID.UnregisterValues();
+            	return;
+        
+    	}
+	};
+
+	Content.Register(
+   [
+		new MimicstarfishCritob(),
+		new OutspectorCritob(),
+		new OutspectorBCritob()
+   ]);
 	}
 
 	private static bool ModLoaded;

@@ -35,11 +35,11 @@ internal static class ConversationParser
 							{
 								if (int.TryParse(split[0], out int startingnumber))
 								{
-									conversation.events.Add(new Conversation.TextEvent(conversation, startingnumber, split[0], 0));
+									conversation.events.Add(new Conversation.TextEvent(conversation, startingnumber, split[1].TranslateStringComplex(), 0));
 								}
 								else if (int.TryParse(split[1], out int endingnumber))
 								{
-									conversation.events.Add(new Conversation.TextEvent(conversation, 0, split[0], endingnumber));
+									conversation.events.Add(new Conversation.TextEvent(conversation, 0, split[0].TranslateStringComplex(), endingnumber));
 								}
 								else ErrorIntoLogsAndDialogue(conversation, result, "couldn't parse line: \"" + line + "\"");
 							}

@@ -43,18 +43,32 @@ You need to stop being distracted by pearls.|Тебе нужно переста�
 Are you trying my patience?|Ты испытываешь моё терпение?
 I will tell you about this pearls another time.|Я расскажу тебе об этих жемчужинах в другой раз.
 Yes... this pearl contains data about my structure.|Да... это жемчужина содержит данные о моей структуре.
-Strange... This pearl shouldn't be here.|Странно... Этой жемчужины здесь быть не должно.
-This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilizations.|Эта жемчужина, созданная многими поколениями, содержит в себе истории, технологии и мысли давно ушедших цивилизаций.
+Strange... This pearl should not be here.|Странно... Этой жемчужины здесь быть не должно.
+This pearl made by many generations, it contains the stories, technologies and thoughts of long-gone civilization.|Эта жемчужина, созданная многими поколениями, содержит в себе истории, технологии и мысли давно ушедшей цивилизации.
 You may notice that this pearl is slightly faded, unfortunately, even in them, information is not eternal.|Ты можешь заметить, что эта жемчужина слегка выцвела, к сожалению, даже в них информация не вечна.
-I wish I could just teach you how to read them...|Жаль, что я не могу просто научить тебя их читать...
+I wish I could just teach you how to read them so you would stop bothering me about little things like that.|Жаль, что я не могу просто научить тебя их читать, чтобы ты перестал беспокоить меня по подобным мелочам.
 
 //EATING PEARLS
 
-I'm not sure you can stomach pearl.|Я не уверен, что ты cможешь переварить жемчужину.
+I am not sure you can stomach pearl.|Я не уверен, что ты cможешь переварить жемчужину.
 Do you really eat them?|Ты действительно их ешь?
-Little creature. You shouldn't eat pearls.|Зверёк. Тебе не следует есть жемчуги.
+Little creature, you should not eat pearls.|Зверёк, тебе не следует есть жемчужины.
 You must stop right now.|Ты должен прекратить прямо сейчас.
-I'm warning you for the last time.|Я предупреждаю тебя в последний раз.
+I am warning you for the last time.|Я предупреждаю тебя в последний раз.
+
+//EATING PEARLS 6 STEPS
+
+I am not sure you can stomach pearl.|Я не уверен, что ты cможешь переварить жемчужину.
+Do you really eat them?|Ты действительно их ешь?
+Little creature, you should not eat pearls.|Зверёк, тебе не следует есть жемчужины.
+Can you stop dissolving my pearls?|Ты можешь перестать растворять мои жемчужины?
+You just ate something more valuable than you can imagine.|Ты только что съел нечто более ценное, чем ты можешь себе представить.
+These pearls that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I cannot get it back.|Эти жемчужины, что ты проглотил, они пропадают без следа или просто становятся частью тебя? В любом случае, я уже не смогу их вернуть.
+Considering that your body weight did not change, this means that all the objects you eat are dissolved by the void fluid.|Учитывая, что вес твоего теля не изменился, это указывает на то, что все съеденные тобой предметы растворяются пустотной жидкостью.
+If to assume that all the water in your body has been displaced by the void fluid,<LINE>its concentration is still insufficient to dissolve objects in such a short period of time.|Если предположить, что вся вода в твоём теле была вытеснена пустотной жидкостью,<LINE>её концентрация всё ещё недостаточна для растворения предметов за такой короткий промежуток времени.
+Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.|Наблюдая за тобой, я могу предположить, что твоё тело незримо связано с пустотным морем, но одна эта мысль лишь вызывает ещё больше вопросов.
+I would never have thought that such wasteful use of pearls would bring me closer to understanding the nature of the void sea.|Я бы никогда не подумал, что такое расточительное использование жемчужин приблизит меня к пониманию природы пустотного моря.
+Eat as much as you want, from now I will no longer store important information here in your presence.|Ешь столько, сколько пожелаешь, с этого момента я больше не буду хранить здесь важную информацию в твоём присутствии.
 
 //FIVE PEBBLES
 

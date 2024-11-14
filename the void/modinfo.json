@@ -4,6 +4,6 @@
 	"version": "0.14.1",
 	"authors": "Liebe Asano",
 	"description": "",
-	"requirements": ["moreslugcats", "slime-cubed.slugbase", "crs", "regionkit", "pom"],
-	"requirements_names": ["More Slugcats Expansion", "SlugBase", "Custom Regions Support", "RegionKit", "Placed Objects Manager"]
+	"requirements": ["moreslugcats", "slime-cubed.slugbase", "crs", "regionkit", "pom", "fisobs"],
+	"requirements_names": ["More Slugcats Expansion", "SlugBase", "Custom Regions Support", "RegionKit", "Placed Objects Manager", "Fisobs"]
 }

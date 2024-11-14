@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Security.Permissions;
 using UnityEngine;
-using VoidTemplate.Creatures;
 using VoidTemplate.Misc;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;

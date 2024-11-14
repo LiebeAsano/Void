@@ -77,7 +77,7 @@ internal static class CycleEnd
 	//mutable
 	private static int timer = 0;
 	private static bool timerStarted;
-#warning todo: move this to permadeath conditions
+//#warning todo: move this to permadeath conditions
 	private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
 	{
 		orig(self);

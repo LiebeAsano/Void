@@ -12,7 +12,7 @@ internal static class DLLindigestion
         On.MoreSlugcats.StowawayBug.Eat += StowawayBugEat;
     }
 
-#warning todo: move from async
+// todo: move from async
 
     private static async void StowawayBugEat(On.MoreSlugcats.StowawayBug.orig_Eat orig, MoreSlugcats.StowawayBug self, bool eu)
     {

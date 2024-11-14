@@ -11,7 +11,7 @@ internal static class LeechIndigestion
 		On.Leech.Attached += OnLeechAttached;
 	}
 
-#warning todo: move from async
+//#warning todo: move from async
 	private static async void OnLeechAttached(On.Leech.orig_Attached orig, Leech self)
 	{
 		orig(self);

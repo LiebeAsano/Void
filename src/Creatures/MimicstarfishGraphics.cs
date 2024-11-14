@@ -41,6 +41,7 @@ namespace VoidTemplate;
             this.cullRange = 1400f;
             Random.State state = Random.state;
             Random.InitState(this.daddy.graphicsSeed);
+            int num = 0;
             int num2 = 0;
             starlegGraphics = new MimicstarfishGraphics.StarLegGraphic[star.tentacles.Length];
             for (int i = 0; i < this.legGraphics.Length; i++)
@@ -550,7 +551,7 @@ namespace VoidTemplate;
 
             public Color whiteCamoColor = new Color(0f, 0f, 0f);
             public Color whitePickUpColor;
-            public float showDominance = 0;
+            public float showDominance;
             public float whiteDominanceHue;
             public int whiteGlitchFit;
             public struct Bumpo
@@ -717,7 +718,7 @@ namespace VoidTemplate;
         public float whiteCamoColorAmountDrag = 1f;
 
         public Color whitePickUpColor;
-        public float showDominance = 0;
+        public float showDominance;
         public float whiteDominanceHue;
         public int whiteGlitchFit;
        

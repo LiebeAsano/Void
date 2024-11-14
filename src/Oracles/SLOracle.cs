@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.Oracles.OracleHooks;
-using UnityEngine;
 
 namespace VoidTemplate.Oracles;
 
@@ -15,17 +14,6 @@ internal static class SLOracle
         On.SLOracleBehaviorHasMark.InitateConversation += SLOracleBehaviorHasMark_InitateConversation;
         On.SLOracleBehaviorHasMark.Update += SLOracleBehaviorHasMark_Update;
         On.SLOracleBehaviorHasMark.MoonConversation.AddEvents += MoonConversation_AddEvents;
-        On.SLOracleBehaviorHasMark.SpecialEvent += SLOracleBehaviorHasMark_SpecialEvent;
-    }
-
-    private static void SLOracleBehaviorHasMark_SpecialEvent(On.SLOracleBehaviorHasMark.orig_SpecialEvent orig, SLOracleBehaviorHasMark self, string eventName)
-    {
-        orig(self, eventName);
-        if (eventName == "PainVoice")
-        {
-            self.oracle.room.PlaySound(SoundID.SL_AI_Pain_1, self.oracle.firstChunk);
-        }
-        Debug.Log("eventName" + eventName);
     }
 
     private static void SLOracleBehaviorHasMark_InitateConversation(On.SLOracleBehaviorHasMark.orig_InitateConversation orig, SLOracleBehaviorHasMark self)
@@ -41,26 +29,26 @@ internal static class SLOracle
             }
             switch (self.State.playerEncountersWithMark)
             {
-                case > 0 when saveState.cycleNumber - saveState.GetEncountersWithMark() > 0:
-                    {
-                        break;
-                    }
+                case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() > 0:
                 /*case 5 when  :
 					{ 
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
                         self.State.playerEncountersWithMark++;
                         break;
-                    }*/
+                    }*/ 
                 default:
                     {
-                        saveState.SetEncountersWithMark(saveState.cycleNumber);
+                        saveState.SetLastMeetCycles(saveState.cycleNumber);
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
                         self.State.playerEncountersWithMark++;
+                        self.oracle.room.PlaySound(SoundID.SL_AI_Pain_1, self.oracle.firstChunk);
                         if (miscData.SSaiConversationsHad == 1)
                             saveState.SetVoidMeetMoon(true);
                         break;
                     }
             }
+            if (self.State.playerEncountersWithMark < OracleConversation.MoonVoidConversation.Length)
+                self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
             return;
         }
         orig(self);

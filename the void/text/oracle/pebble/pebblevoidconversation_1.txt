@@ -1,5 +1,5 @@
 ...is it reaching you?
-0 : It was pretty dangerous to implant a mark in you.<LINE>Something doesn't allow me to analyze your body. : 50
+0 : It was pretty dangerous to implant a mark in you.<LINE> Something doesn't allow me to analyze your body. : 50
 0 : There is no information about you in my database. : 30
 But as I thought, your body structure is similar to the purpose organism that I have already met.
 50 : You are a very interesting instance... : 50

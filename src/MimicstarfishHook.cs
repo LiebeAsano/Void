@@ -37,10 +37,8 @@ namespace VoidTemplate
                     {
                         if (self.eatObjects[i].chunk.owner is Creature)
                         {
-
                             self.AI.tracker.ForgetCreature((self.eatObjects[i].chunk.owner as Creature).abstractCreature);
-                            Player player = self.eatObjects[i].chunk.owner as Player;
-                            if (player != null)
+                            if (self.eatObjects[i].chunk.owner is Player player)
                             {
                                 player.PermaDie();
                             }
@@ -131,7 +129,7 @@ namespace VoidTemplate
         }
         public static readonly ConditionalWeakTable<DaddyGraphics, Color[]> daddyColors = new ConditionalWeakTable<global::DaddyGraphics, Color[]>();
 
-        public static int digestingCounter;
+        public static int digestingCounter = 0;
         public class EatObject
         {
             public EatObject(BodyChunk chunk, float distance)
@@ -151,12 +149,12 @@ namespace VoidTemplate
 
 
         public static float whiteCamoColorAmountDrag = 1f;
-        public static MimicstarfishGraphics owners;
-        public static Color whiteCamoColor;
+        public static MimicstarfishGraphics owners = null;
+        //public static Color whiteCamoColor;
         public static float whiteCamoColorAmount = -1f;
-        public static Color whitePickUpColor;
-        public static float showDominance;
-        public static float whiteDominanceHue;
-        public static int whiteGlitchFit;
+        //public static Color whitePickUpColor;
+        public static float showDominance = 0;
+        public static float whiteDominanceHue = 0;
+        //public static int whiteGlitchFit;
     }
 }

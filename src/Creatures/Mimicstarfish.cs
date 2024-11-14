@@ -47,18 +47,18 @@ namespace VoidTemplate;
             Random.InitState(abstractCreature.ID.RandomSeed);
             this.graphicsSeed = Random.Range(0, int.MaxValue);
             float num = this.SizeClass ? 12f : 8f;
-            int num2 = 8;
-            int num3 = 7;
+            //int num2 = 8;
+            //int num3 = 7;
             if (ModManager.MSC && abstractCreature.superSizeMe)
             {
-                num2 = 16;
-                num3 = 11;
+                //num2 = 16;
+                //num3 = 11;
                 num = 18f;
             }
             else if (this.HDmode)
             {
-                num2 = 6;
-                num3 = 6;
+                //num2 = 6;
+                //num3 = 6;
                 num = 4f;
             }
             base.bodyChunks = new BodyChunk[Random.Range(3, 3)];
@@ -105,8 +105,8 @@ namespace VoidTemplate;
                     num7++;
                 }
             }
-            int num9 = 13;
-            int num10 = 10;
+            //int num9 = 13;
+            //int num10 = 10;
             float num11 = 400f;
             
             float num12;
@@ -272,7 +272,7 @@ namespace VoidTemplate;
                 }
             }
 
-            int num = 0;
+            //int num = 0;
             for (int m = 0; m < this.tentacles.Length; m++)
             {
                 if (ModManager.MSC)

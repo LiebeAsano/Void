@@ -87,6 +87,6 @@ namespace VoidTemplate.Creatures
 
         public override void LoadResources(RainWorld rainWorld) { }
 
-        public override CreatureTemplate.Type? ArenaFallback() => MoreSlugcatsEnums.CreatureTemplateType.Inspector;
+        public override CreatureTemplate.Type ArenaFallback() => MoreSlugcatsEnums.CreatureTemplateType.Inspector;
     }
 }

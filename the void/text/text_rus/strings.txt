@@ -73,7 +73,7 @@ Eat as much as you want, from now I will no longer store important information h
 //FIVE PEBBLES
 
 ...is it reaching you?|...ты понимаешь меня?
-It was pretty dangerous to implant a mark in you. Something doesn't allow me to analyze your body.|Было довольно опасно вживлять в тебя метку. Что-то не позволяет мне проанализировать твое тело.
+It was pretty dangerous to implant a mark in you.<LINE>Something doesn't allow me to analyze your body.|Было довольно опасно вживлять в тебя метку. Что-то не позволяет мне проанализировать твое тело.
 There is no information about you in my database.|В моей базе данных нет никакой информации о тебе.
 But as I thought, your body structure is similar to the purpose organism that I have already met.|Но, как я и думал, строение твоего тела схоже с целевым организмом, который я уже встречал.
 You are a very interesting instance...|Ты очень интересный экземпляр...

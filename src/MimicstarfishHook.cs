@@ -131,7 +131,7 @@ namespace VoidTemplate
         }
         public static readonly ConditionalWeakTable<DaddyGraphics, Color[]> daddyColors = new ConditionalWeakTable<global::DaddyGraphics, Color[]>();
 
-        public static int digestingCounter;
+        //public static int digestingCounter;
         public class EatObject
         {
             public EatObject(BodyChunk chunk, float distance)
@@ -151,12 +151,12 @@ namespace VoidTemplate
 
 
         public static float whiteCamoColorAmountDrag = 1f;
-        public static MimicstarfishGraphics owners;
-        public static Color whiteCamoColor;
+        //public static MimicstarfishGraphics owners;
+        //public static Color whiteCamoColor;
         public static float whiteCamoColorAmount = -1f;
-        public static Color whitePickUpColor;
-        public static float showDominance;
-        public static float whiteDominanceHue;
-        public static int whiteGlitchFit;
+        //public static Color whitePickUpColor;
+        public static float showDominance = 0;
+        public static float whiteDominanceHue = 0;
+        public static int whiteGlitchFit = 0;
     }
 }

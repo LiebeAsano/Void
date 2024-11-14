@@ -39,7 +39,7 @@ namespace VoidTemplate.Creatures
 
             public OutspectorAI AI;
 
-            private ProjectionCircle projectionCircle;
+            //private ProjectionCircle projectionCircle;
 
             private LightSource myLight;
 
@@ -59,15 +59,15 @@ namespace VoidTemplate.Creatures
 
             public int stuckCounter;
 
-            private Vector2 stuckPos;
+            //private Vector2 stuckPos;
 
-            private int notFollowingPathToCurrentGoalCounter;
+            //private int notFollowingPathToCurrentGoalCounter;
 
             public float squeezeFac;
 
             private bool squeeze;
 
-            private Vector2 moveDirection;
+            //private Vector2 moveDirection;
 
             public Tentacle[] heads;
 

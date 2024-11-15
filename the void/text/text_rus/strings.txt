@@ -31,7 +31,7 @@ Simplified hunger|Упрощённый голод
 Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
 Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
-Disables permadeath for Void, but also closes access to the true ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к истинной концовке
+Disables permadeath for Void, but also closes access to the secret ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к секретной концовке
 Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
 
 //PICK INTERRUPT MESSAGES
@@ -90,5 +90,11 @@ She's a short distance to the east of here. If the little beast has accomplished
 
 //LOOKS TO THE MOON
 
+You are here again. Do you want to show me something?|Ты снова здесь. Хочешь мне что-то показать?
+Your return pleases me. What secrets of this world have you revealed this time?|Я рада твоему возвращению. Какие тайны этого мира ты раскрыл в этот раз?
+You are back. In your eyes, I see a reflection of our changing world.|Ты вернулся. В твоих глазах я вижу отражение нашего меняющегося мира.
+Little creature, what brought you to me again?|Маленькое создание, что снова привело тебя ко мне?
+Oh, is that you? Did you come back to learn something new?|О, это ты? Ты вернулся, чтобы узнать что-то новое?
 
-
+I am sorry, friend, but I cannot remember of any new stories I can tell you.|Мне жаль, дружок, но я не могу вспомнить ни одной новой истории, которую могла бы тебе расскать.
+I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.|Мне неловко просить тебя, но не мог бы ты попросить у Пяти Галек ещё один нейрон, я думаю, он не будет против.

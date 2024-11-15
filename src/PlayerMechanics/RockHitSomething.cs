@@ -39,8 +39,10 @@ internal static class RockHitSomething
 					"Inspector",
 					"TerrorLongLegs",
 					"AquaCenti",
-					"StowawayBug"
-			];
+					"StowawayBug",
+                    "Mimicstarfish",
+                    "Outspector"
+            ];
 
 			if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)
 			{

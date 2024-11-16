@@ -53,6 +53,10 @@ namespace VoidTemplate.Objects.PomObjects
                 {
                     IsActive = !triggerWasFired;
                 }
+                else
+                {
+                    IsActive = true;
+                }
             }
         }
 

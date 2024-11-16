@@ -54,7 +54,7 @@
 		"back_spear": false,
 		"can_maul": true,
 		"perma_unlock_gates": false,
-		"maul_damage": 2.5,
+		"maul_damage": 3,
 		"karma": 10,
 		"karma_cap": 10,
 		"the_mark": true,

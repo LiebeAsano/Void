@@ -35,6 +35,7 @@ public static class _PlayerMechanicsMeta
 		SaintKarmaImmunity.Hook();
 		SpearmasterAntiMechanic.Hook();
 		SwallowObjects.Hook();
+		ThrowObject.Hook();
 
 	}
 }

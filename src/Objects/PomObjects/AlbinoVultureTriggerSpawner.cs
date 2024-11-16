@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SlugBase.SaveData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,10 +18,12 @@ namespace VoidTemplate.Objects.PomObjects
         }
 
         private static ConditionalWeakTable<AbstractCreature, SpawnedVultureData> SpawnedVultureDataCWT = new();
-        private static Dictionary<string, bool> VultureSpawnedThisCycleByRooms { get; } = new Dictionary<string, bool>();
+        //private static Dictionary<string, bool> VultureSpawnedThisCycleByRooms { get; } = new Dictionary<string, bool>();
 
         private const string TRIGGER_AREA_DATA_KEY = "Trigger Area";
         private const string SPAWN_POINT_DATA_KEY = "Spawn Point";
+
+        private const string SAVEDATA_TRIGGER_WAS_FIRED_KEY = "TheVoid:AlbinoVultureTriggerWasFired";
 
         internal static ManagedField[] managedFields = [
             new Vector2Field(TRIGGER_AREA_DATA_KEY, new(100, 0), Vector2Field.VectorReprType.circle),
@@ -30,17 +33,26 @@ namespace VoidTemplate.Objects.PomObjects
         private ManagedData ManagedData { get; }
         private PlacedObject PlacedObject { get; }
 
+        private bool IsActive { get; set; }
+
         public Vector2 TriggerAreaRadiusEndpoint => ManagedData.GetValue<Vector2>(TRIGGER_AREA_DATA_KEY);
         public Vector2 SpawnPoint => ManagedData.GetValue<Vector2>(SPAWN_POINT_DATA_KEY);
 
         public AlbinoVultureTriggerSpawner(Room room, PlacedObject pObj)
         {
+            IsActive = false;
+
             ManagedData = (ManagedData)pObj.data;
             PlacedObject = pObj;
-            
-            if (room.abstractRoom.firstTimeRealized)
+
+            if (room.game.session is StoryGameSession storyGameSession)
             {
-                VultureSpawnedThisCycleByRooms[room.abstractRoom.name] = false;
+                SlugBaseSaveData slugBaseSaveData = storyGameSession.saveState.miscWorldSaveData.GetSlugBaseData();
+
+                if (slugBaseSaveData.TryGet(SAVEDATA_TRIGGER_WAS_FIRED_KEY, out bool triggerWasFired))
+                {
+                    IsActive = !triggerWasFired;
+                }
             }
         }
 
@@ -62,7 +74,7 @@ namespace VoidTemplate.Objects.PomObjects
 
         public override void Update(bool eu)
         {
-            if (VultureSpawnedThisCycleByRooms[room.abstractRoom.name])
+            if (!IsActive)
             {
                 return;
             }
@@ -83,7 +95,13 @@ namespace VoidTemplate.Objects.PomObjects
 
         private void SpawnVulture()
         {
-            VultureSpawnedThisCycleByRooms[room.abstractRoom.name] = true;
+            IsActive = false;
+
+            if (room.game.session is StoryGameSession storyGameSession)
+            {
+                SlugBaseSaveData slugBaseSaveData = storyGameSession.saveState.miscWorldSaveData.GetSlugBaseData();
+                slugBaseSaveData.Set(SAVEDATA_TRIGGER_WAS_FIRED_KEY, true);
+            }
 
             _Plugin.logger.LogDebug("Triggered");
 

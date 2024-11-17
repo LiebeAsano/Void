@@ -3,9 +3,11 @@ THE VOID|ПУСТОТНЫЙ
 Void|Пустотный
 An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.|Разъярённый и голодный хищник вырывается из пустотного моря.<LINE>Балансируя между жизнью и смертью, зверь ищет своё новое место в этом мире.
 Clear the game as Hunter to unlock.|Чтобы открыть, пройди игру за Охотника.
-You have enough strength to climb the walls.|У тебя достаточно сил, чтобы взбираться на стены.
-Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
+Your body is unstable, and each of your deaths brings you closer to getting out of the cycle.|Твоё тело нестабильно, и каждая твоя смерть приближает тебя к выходу из цикла.
+But you have enough strength to get out of here.|Но у тебя достаточно сил, чтобы выбраться отсюда.
 Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай кнопки 'Направления' и 'Вверх', чтобы взобраться на стену.
+Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
+And your abilities continue to improve.|А твои способности продолжают совершенствоваться.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречёна вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Ты должен исполнить последнее желание того, кто дал тебе второй шанс.
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового.

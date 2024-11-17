@@ -18,8 +18,7 @@ internal static class ThrowObject
     {
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Void
         && self.bodyMode == BodyModeIndexExtension.CeilCrawl
-        && self.input[0].x == 0
-        && !self.input[0].jmp)
+        && self.input[0].jmp)
         {
             Creature.Grasp[] grasps = self.grasps;
             object obj = grasps?[grasp]?.grabbed;
@@ -29,10 +28,28 @@ internal static class ThrowObject
                 for (int i = 0; i < weapon.bodyChunks.Length; i++)
                 {
                     BodyChunk bodyChunk = weapon.bodyChunks[i];
-                    bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(0, -1) * 10f;
-                    bodyChunk.vel = new Vector2(0, -1) * 40f;
+                    if (self.input[0].x == 0)
+                    {
+                        bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(0, -1) * 10f;
+                        bodyChunk.vel = new Vector2(0, -1) * 40f;
+                    }
+                    else if (self.input[0].x > 0)
+                    {
+                        bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(1, -1) * 10f;
+                        bodyChunk.vel = new Vector2(0.71f, -0.71f) * 40f;
+                    }
+                    else if (self.input[0].x < 0)
+                    {
+                        bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(-1, -1) * 10f;
+                        bodyChunk.vel = new Vector2(-0.71f, -0.71f) * 40f;
+                    }
                 }
-                weapon.setRotation = new Vector2?(new Vector2(0, -1));
+                if (self.input[0].x == 0)
+                    weapon.setRotation = new Vector2?(new Vector2(0, -1));
+                else if (self.input[0].x > 0)
+                    weapon.setRotation = new Vector2?(new Vector2(1, -1));
+                else if (self.input[0].x < 0)
+                    weapon.setRotation = new Vector2?(new Vector2(-1, -1));
             }
         }
         else

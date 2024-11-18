@@ -1,3 +1,3 @@
-0 : Hi, Slugcat!2 : 50
+0 : Hi, Slugcat!2 : 60
 SPECEVENT : MoonVoice
-0 : How are you?2 : 50
+0 : How are you?2 : 60

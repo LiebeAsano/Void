@@ -15,9 +15,22 @@ internal static class SLOracle
     public static void Hook()
     {
         On.SLOracleBehaviorHasMark.InitateConversation += SLOracleBehaviorHasMark_InitateConversation;
+        On.SLOracleBehaviorHasMark.TalkToDeadPlayer += SLOracleBehaviorHasMark_TalkToDeadPlayer;
+        On.SLOracleBehaviorHasMark.InterruptRain += SLOracleBehaviorHasMark_InterruptRain;
+        On.SLOracleBehaviorHasMark.InterruptPlayerHoldNeuron += SLOracleBehaviorHasMark_InterruptPlayerHoldNeuron;
+        On.SLOracleBehaviorHasMark.InterruptPlayerLeavingMessage += SLOracleBehaviorHasMark_InterruptPlayerLeavingMessage;
+        On.SLOracleBehaviorHasMark.InterruptPlayerAnnoyingMessage += SLOracleBehaviorHasMark_InterruptPlayerAnnoyingMessage;
+        On.SLOracleBehaviorHasMark.ResumePausedConversation += SLOracleBehaviorHasMark_ResumePausedConversation;
+        On.SLOracleBehaviorHasMark.PlayerReleaseNeuron += SLOracleBehaviorHasMark_PlayerReleaseNeuron;
+        On.SLOracleBehaviorHasMark.PlayerAnnoyingWhenNotTalking += SLOracleBehaviorHasMark_PlayerAnnoyingWhenNotTalking;
+        On.SLOracleBehaviorHasMark.PlayerPutItemOnGround += SLOracleBehaviorHasMark_PlayerPutItemOnGround;
+        On.SLOracleBehaviorHasMark.PlayerInterruptByTakingItem += SLOracleBehaviorHasMark_PlayerInterruptByTakingItem;
+        On.SLOracleBehaviorHasMark.PlayerHoldingSSNeuronsGreeting += SLOracleBehaviorHasMark_PlayerHoldingSSNeuronsGreeting;
+        On.SLOracleBehaviorHasMark.AlreadyDiscussedItem += SLOracleBehaviorHasMark_AlreadyDiscussedItem;
         On.SLOracleBehaviorHasMark.Update += SLOracleBehaviorHasMark_Update;
         On.SLOracleBehaviorHasMark.MoonConversation.AddEvents += MoonConversation_AddEvents;
         On.SLOracleBehaviorHasMark.SpecialEvent += SLOracleBehaviorHasMark_SpecialEvent;
+
     }
 
     private static void SLOracleBehaviorHasMark_InitateConversation(On.SLOracleBehaviorHasMark.orig_InitateConversation orig, SLOracleBehaviorHasMark self)
@@ -25,7 +38,7 @@ internal static class SLOracle
         var saveState = self.oracle.room.game.GetStorySession.saveState;
         var miscData = saveState.miscWorldSaveData;
 
-        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void && self.State.likesPlayer >= 0)
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void && self.State.GetOpinion != SLOrcacleState.PlayerOpinion.Dislikes)
         {
             if (self.State.playerEncounters < 0)
             {
@@ -35,97 +48,49 @@ internal static class SLOracle
             {
                 case > 0 when saveState.cycleNumber - saveState.GetEncountersWithMark() <= 0:
                     {
-                        SoundID randomTalk = SoundID.SL_AI_Talk_1;
                         switch (UnityEngine.Random.Range(0, 4))
                         {
                             case 0:
-                                self.dialogBox.Interrupt("You are here again. Do you want to show me something?".TranslateString(), 50);
-                                randomTalk = SoundID.SL_AI_Talk_1;
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt("You are here again. Do you want to show me something?".TranslateString(), 60);
                                 break;
                             case 1:
-                                self.dialogBox.Interrupt("Your return pleases me. What secrets of this world have you revealed this time?".TranslateString(), 50);
-                                randomTalk = SoundID.SL_AI_Talk_2;
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt("Your return pleases me. What secrets of this world have you revealed this time?".TranslateString(), 60);
                                 break;
                             case 2:
-                                self.dialogBox.Interrupt("You are back. In your eyes, I see a reflection of our changing world.".TranslateString(), 50);
-                                randomTalk = SoundID.SL_AI_Talk_3;
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt("You are back. In your eyes, I see a reflection of our changing world.".TranslateString(), 60);
                                 break;
                             case 3:
-                                self.dialogBox.Interrupt("Little creature, what brought you to me again?".TranslateString(), 50);
-                                randomTalk = SoundID.SL_AI_Talk_4;
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt("<CapPlayerName>, what brought you to me again?".TranslateString(), 60);
                                 break;
                             case 4:
-                                self.dialogBox.Interrupt("Oh, is that you? Did you come back to learn something new?".TranslateString(), 50);
-                                randomTalk = SoundID.SL_AI_Talk_5;
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt("Oh, is that you? Did you come back to learn something new?".TranslateString(), 60);
                                 break;
-                        }
-                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        {
-                            self.AirVoice(randomTalk);
                         }
                         break;
                     }
                 case 4 when self.State.neuronsLeft < 6:
 					{
-                        self.dialogBox.Interrupt("I am sorry, friend, but I cannot remember of any new stories I can tell you.".TranslateString(), 50);
-                        SoundID randomTalk = SoundID.SL_AI_Talk_1;
-                        switch (UnityEngine.Random.Range(0, 4))
-                        {
-                            case 0:
-                                randomTalk = SoundID.SL_AI_Talk_1;
-                                break;
-                            case 1:
-                                randomTalk = SoundID.SL_AI_Talk_2;
-                                break;
-                            case 2:
-                                randomTalk = SoundID.SL_AI_Talk_3;
-                                break;
-                            case 3:
-                                randomTalk = SoundID.SL_AI_Talk_4;
-                                break;
-                            case 4:
-                                randomTalk = SoundID.SL_AI_Talk_5;
-                                break;
-                        }
-                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        {
-                            self.AirVoice(randomTalk);
-                        }
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt("I am sorry, <CapPlayerName>, but I cannot remember of any new stories I can tell you.".TranslateString(), 60);
+                        self.State.playerEncountersWithMark--;
                         break;
                     }
                 case 8 when self.State.neuronsLeft < 7:
                     {
-                        self.dialogBox.Interrupt("I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.".TranslateString(), 50);
-                        SoundID randomTalk = SoundID.SL_AI_Talk_1;
-                        switch (UnityEngine.Random.Range(0, 4))
-                        {
-                            case 0:
-                                randomTalk = SoundID.SL_AI_Talk_1;
-                                break;
-                            case 1:
-                                randomTalk = SoundID.SL_AI_Talk_2;
-                                break;
-                            case 2:
-                                randomTalk = SoundID.SL_AI_Talk_3;
-                                break;
-                            case 3:
-                                randomTalk = SoundID.SL_AI_Talk_4;
-                                break;
-                            case 4:
-                                randomTalk = SoundID.SL_AI_Talk_5;
-                                break;
-                        }
-                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        {
-                            self.AirVoice(randomTalk);
-                        }
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt("I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.".TranslateString(), 60);
+                        self.State.playerEncountersWithMark--;
                         break;
                     }
                 default:
                     {
                         saveState.SetEncountersWithMark(saveState.cycleNumber);
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
-                        self.State.playerEncountersWithMark++;
                         if (miscData.SSaiConversationsHad == 1)
                             saveState.SetVoidMeetMoon(true);
                         break;
@@ -136,317 +101,876 @@ internal static class SLOracle
             orig(self);
     }
 
-    private static void SLOracleBehaviorHasMark_Update(On.SLOracleBehaviorHasMark.orig_Update orig, SLOracleBehaviorHasMark self, bool eu)
+    private static void SLOracleBehaviorHasMark_TalkToDeadPlayer(On.SLOracleBehaviorHasMark.orig_TalkToDeadPlayer orig, SLOracleBehaviorHasMark self)
     {
         if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
+            if (!self.deadTalk && self.oracle.room.ViewedByAnyCamera(self.oracle.firstChunk.pos, 0f))
             {
-                if (ModManager.MSC && self.SingularityProtest())
+                if (self.State.neuronsLeft > 3)
                 {
-                    self.currentConversation?.Destroy();
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("..."), 60);
+                    self.dialogBox.NewMessage(self.Translate("<CapPlayerName>, are you okay?"), 60);
+                    self.dialogBox.NewMessage(self.Translate("..."), 120);
+                    self.dialogBox.NewMessage(self.Translate("Oh..."), 60);
                 }
                 else
                 {
-                    self.protest = false;
+                    self.dialogBox.Interrupt(self.Translate("..."), 60);
                 }
-                self.Update(eu);
-                if (!self.oracle.Consious || self.stillWakingUp)
-                {
-                    self.oracle.room.socialEventRecognizer.ownedItemsOnGround.Clear();
-                    self.holdingObject = null;
-                    self.moveToAndPickUpItem = null;
-                    return;
-                }
-                if (self.player != null && self.hasNoticedPlayer)
-                {
-                    if (ModManager.MMF && self.player.dead)
-                    {
-                        TalkToDeadPlayer(self);
-                    }
-                    if (self.movementBehavior != SLOracleBehavior.MovementBehavior.Meditate && self.movementBehavior != SLOracleBehavior.MovementBehavior.ShowMedia)
-                    {
-                        self.lookPoint = self.player.DangerPos;
-                    }
-                    if (self.sayHelloDelay < 0 && ((ModManager.MSC && self.oracle.room.game.StoryCharacter == MoreSlugcatsEnums.SlugcatStatsName.Saint) || self.oracle.room.world.rainCycle.TimeUntilRain + self.oracle.room.world.rainCycle.pause > 2000))
-                    {
-                        self.sayHelloDelay = 30;
-                    }
-                    else
-                    {
-                        if (self.sayHelloDelay > 0)
-                        {
-                            self.sayHelloDelay--;
-                        }
-                        if (self.sayHelloDelay == 1)
-                        {
-                            self.InitateConversation();
-                            if (!self.conversationAdded && self.oracle.room.game.session is StoryGameSession)
-                            {
-                                SLOrcacleState sloracleState = (self.oracle.room.game.session as StoryGameSession).saveState.miscWorldSaveData.SLOracleState;
-                                int num = sloracleState.playerEncounters;
-                                sloracleState.playerEncounters = num + 1;
-                                SLOrcacleState sloracleState2 = (self.oracle.room.game.session as StoryGameSession).saveState.miscWorldSaveData.SLOracleState;
-                                num = sloracleState2.playerEncountersWithMark;
-                                sloracleState2.playerEncountersWithMark = num + 1;
-                                if (ModManager.MSC && self.oracle.room.game.GetStorySession.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Rivulet && (self.oracle.room.game.session as StoryGameSession).saveState.miscWorldSaveData.SLOracleState.playerEncounters == 1 && self.oracle.room.world.overseersWorldAI != null)
-                                {
-                                    self.oracle.room.world.overseersWorldAI.DitchDirectionGuidance();
-                                }
-                                Custom.Log(
-                                [
-                            "player encounter with SL AI logged"
-                                ]);
-                                self.conversationAdded = true;
-                            }
-                        }
-                    }
-                    if (self.player.room != self.oracle.room || self.player.DangerPos.x < 1016f)
-                    {
-                        self.playerLeavingCounter++;
-                    }
-                    else
-                    {
-                        self.playerLeavingCounter = 0;
-                    }
-                    if (self.player.room == self.oracle.room && Custom.DistLess(self.player.mainBodyChunk.pos, self.oracle.firstChunk.pos, 100f) && !Custom.DistLess(self.player.mainBodyChunk.lastPos, self.player.mainBodyChunk.pos, 1f))
-                    {
-                        self.playerAnnoyingCounter++;
-                    }
-                    else
-                    {
-                        self.playerAnnoyingCounter--;
-                    }
-                    self.playerAnnoyingCounter = Custom.IntClamp(self.playerAnnoyingCounter, 0, 150);
-                    bool flag = false;
-                    for (int i = 0; i < self.player.grasps.Length; i++)
-                    {
-                        if (self.player.grasps[i] != null && self.player.grasps[i].grabbed is SLOracleSwarmer)
-                        {
-                            flag = true;
-                        }
-                    }
-                    if (!self.State.SpeakingTerms && self.currentConversation != null)
-                    {
-                        self.currentConversation.Destroy();
-                    }
-                    if (!self.rainInterrupt && self.player.room == self.oracle.room && self.oracle.room.world.rainCycle.TimeUntilRain < 1600 && self.oracle.room.world.rainCycle.pause < 1)
-                    {
-                            self.InterruptRain();
-                            self.rainInterrupt = true;
-                            self.currentConversation?.Destroy();
-                    }
-                    if (flag)
-                    {
-                        if (self.currentConversation != null)
-                        {
-                            if (!self.currentConversation.paused || self.pauseReason != SLOracleBehaviorHasMark.PauseReason.GrabNeuron)
-                            {
-                                self.currentConversation.paused = true;
-                                self.pauseReason = SLOracleBehaviorHasMark.PauseReason.GrabNeuron;
-                                self.InterruptPlayerHoldNeuron();
-                            }
-                        }
-                        else if (!self.playerHoldingNeuronNoConvo)
-                        {
-                            self.playerHoldingNeuronNoConvo = true;
-                            self.InterruptPlayerHoldNeuron();
-                        }
-                    }
-                    if (self.currentConversation != null)
-                    {
-                        self.playerHoldingNeuronNoConvo = false;
-                        self.playerIsAnnoyingWhenNoConversation = false;
-                        if (self.currentConversation.slatedForDeletion)
-                        {
-                            self.currentConversation = null;
-                        }
-                        else
-                        {
-                            if (self.playerLeavingCounter > 10)
-                            {
-                                if (!self.currentConversation.paused)
-                                {
-                                    self.currentConversation.paused = true;
-                                    self.pauseReason = SLOracleBehaviorHasMark.PauseReason.Leave;
-                                    self.InterruptPlayerLeavingMessage();
-                                }
-                            }
-                            else if (self.playerAnnoyingCounter > 80 && !self.oracle.room.game.IsMoonActive())
-                            {
-                                if (!self.currentConversation.paused)
-                                {
-                                    self.currentConversation.paused = true;
-                                    self.pauseReason = SLOracleBehaviorHasMark.PauseReason.Annoyance;
-                                    self.InterruptPlayerAnnoyingMessage();
-                                }
-                            }
-                            else if (self.currentConversation.paused)
-                            {
-                                if (self.resumeConversationAfterCurrentDialoge)
-                                {
-                                    if (self.dialogBox.messages.Count == 0)
-                                    {
-                                        self.currentConversation.paused = false;
-                                        self.resumeConversationAfterCurrentDialoge = false;
-                                        self.currentConversation.RestartCurrent();
-                                    }
-                                }
-                                else if ((self.pauseReason == SLOracleBehaviorHasMark.PauseReason.Leave && self.player.room == self.oracle.room && self.player.DangerPos.x > 1036f) || (self.pauseReason == SLOracleBehaviorHasMark.PauseReason.Annoyance && self.playerAnnoyingCounter == 0) || (self.pauseReason == SLOracleBehaviorHasMark.PauseReason.GrabNeuron && !flag))
-                                {
-                                    self.resumeConversationAfterCurrentDialoge = true;
-                                    self.ResumePausedConversation();
-                                }
-                            }
-                            self.currentConversation.Update();
-                        }
-                    }
-                    else if (self.State.SpeakingTerms)
-                    {
-                        if (self.playerHoldingNeuronNoConvo && !flag)
-                        {
-                            self.playerHoldingNeuronNoConvo = false;
-                            self.PlayerReleaseNeuron();
-                        }
-                        else if (self.playerAnnoyingCounter > 80 && !self.playerIsAnnoyingWhenNoConversation && !self.oracle.room.game.IsMoonActive())
-                        {
-                            self.playerIsAnnoyingWhenNoConversation = true;
-                            self.PlayerAnnoyingWhenNotTalking();
-                        }
-                        else if (self.playerAnnoyingCounter < 10 && self.playerIsAnnoyingWhenNoConversation)
-                        {
-                            self.playerIsAnnoyingWhenNoConversation = false;
-                            if (self.State.annoyances == 1)
-                            {
-                                if (self.State.neuronsLeft == 3)
-                                {
-                                    self.dialogBox.Interrupt("...thank you.", 7);
-                                }
-                                else if (self.State.neuronsLeft > 3)
-                                {
-                                    self.dialogBox.Interrupt(self.Translate("Thank you."), 7);
-                                }
-                            }
-                        }
-                    }
-                }
-                if ((ModManager.MSC || (!self.DamagedMode && self.State.SpeakingTerms)) && self.holdingObject == null && self.reelInSwarmer == null && self.moveToAndPickUpItem == null)
-                {
-                    for (int j = 0; j < self.oracle.room.socialEventRecognizer.ownedItemsOnGround.Count; j++)
-                    {
-                        if (Custom.DistLess(self.oracle.room.socialEventRecognizer.ownedItemsOnGround[j].item.firstChunk.pos, self.oracle.firstChunk.pos, 100f) && self.WillingToInspectItem(self.oracle.room.socialEventRecognizer.ownedItemsOnGround[j].item))
-                        {
-                            bool flag2 = true;
-                            for (int k = 0; k < self.pickedUpItemsThisRealization.Count; k++)
-                            {
-                                if (self.pickedUpItemsThisRealization[k] == self.oracle.room.socialEventRecognizer.ownedItemsOnGround[j].item.abstractPhysicalObject.ID)
-                                {
-                                    flag2 = false;
-                                    break;
-                                }
-                            }
-                            if (flag2)
-                            {
-                                self.moveToAndPickUpItem = self.oracle.room.socialEventRecognizer.ownedItemsOnGround[j].item;
-                                self.currentConversation?.Destroy();
-                                self.currentConversation = null;
-                                self.PlayerPutItemOnGround();
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (self.moveToAndPickUpItem != null)
-                {
-                    self.moveToItemDelay++;
-                    if (!self.WillingToInspectItem(self.moveToAndPickUpItem) || self.moveToAndPickUpItem.grabbedBy.Count > 0)
-                    {
-                        self.moveToAndPickUpItem = null;
-                    }
-                    else if ((self.moveToItemDelay > 40 && Custom.DistLess(self.moveToAndPickUpItem.firstChunk.pos, self.oracle.firstChunk.pos, 40f)) || (self.moveToItemDelay < 20 && !Custom.DistLess(self.moveToAndPickUpItem.firstChunk.lastPos, self.moveToAndPickUpItem.firstChunk.pos, 5f) && Custom.DistLess(self.moveToAndPickUpItem.firstChunk.pos, self.oracle.firstChunk.pos, 20f)))
-                    {
-                        self.GrabObject(self.moveToAndPickUpItem);
-                        self.moveToAndPickUpItem = null;
-                    }
-                }
-                else
-                {
-                    self.moveToItemDelay = 0;
-                }
-                if (self.player != null)
-                {
-                    int l = 0;
-                    while (l < self.player.grasps.Length)
-                    {
-                        if (self.player.grasps[l] != null && self.player.grasps[l].grabbed is SLOracleSwarmer)
-                        {
-                            self.protest = true;
-                            self.holdKnees = false;
-                            self.oracle.bodyChunks[0].vel += Custom.RNV() * self.oracle.health * UnityEngine.Random.value;
-                            self.oracle.bodyChunks[1].vel += Custom.RNV() * self.oracle.health * UnityEngine.Random.value * 2f;
-                            self.protestCounter += 0.045454547f;
-                            self.lookPoint = self.oracle.bodyChunks[0].pos + Custom.PerpendicularVector(self.oracle.bodyChunks[1].pos, self.oracle.bodyChunks[0].pos) * Mathf.Sin(self.protestCounter * 3.1415927f * 2f) * 145f;
-                            if (UnityEngine.Random.value < 0.033333335f)
-                            {
-                                self.armsProtest = !self.armsProtest;
-                                break;
-                            }
-                            break;
-                        }
-                        else
-                        {
-                            l++;
-                        }
-                    }
-                }
-                if (!self.protest)
-                {
-                    self.armsProtest = false;
-                }
-                if (self.holdingObject != null)
-                {
-                    self.describeItemCounter++;
-                    if (!self.protest && (self.currentConversation == null || !self.currentConversation.paused) && self.movementBehavior != SLOracleBehavior.MovementBehavior.Meditate && self.movementBehavior != SLOracleBehavior.MovementBehavior.ShowMedia)
-                    {
-                        self.lookPoint = self.holdingObject.firstChunk.pos + Custom.DirVec(self.oracle.firstChunk.pos, self.holdingObject.firstChunk.pos) * 100f;
-                    }
-                    if (self.holdingObject is not SSOracleSwarmer && self.describeItemCounter > 40 && self.currentConversation == null)
-                    {
-                        if (ModManager.MMF && self.throwAwayObjects)
-                        {
-                            self.holdingObject.firstChunk.vel = new Vector2(-5f + (float)UnityEngine.Random.Range(-8, -11), 8f + (float)UnityEngine.Random.Range(1, 3));
-                            self.oracle.room.PlaySound(SoundID.Slugcat_Throw_Rock, self.oracle.firstChunk);
-                        }
-                        self.holdingObject = null;
-                        return;
-                    }
-                }
-                else
-                {
-                    self.describeItemCounter = 0;
-                }
+                self.deadTalk = true;
             }
         }
         else
-            orig(self, eu);
+        {
+            orig(self);
+        }
     }
 
-    public static void TalkToDeadPlayer(SLOracleBehaviorHasMark self)
+    private static void SLOracleBehaviorHasMark_InterruptRain(On.SLOracleBehaviorHasMark.orig_InterruptRain orig, SLOracleBehaviorHasMark self)
     {
-        if (!self.deadTalk && self.oracle.room.ViewedByAnyCamera(self.oracle.firstChunk.pos, 0f))
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
-            if (self.State.neuronsLeft > 3)
+            switch (self.State.neuronsLeft)
             {
-                self.dialogBox.Interrupt(self.Translate("..."), 60);
+                case 2:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("...rain..."), 5);
+                    self.dialogBox.NewMessage(self.Translate("run"), 10);
+                    break;
+                case 3:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt("...", 5);
+                    self.dialogBox.NewMessage(self.Translate("...rain... coming... Go!"), 10);
+                    return;
+                case 4:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt("...", 5);
+                    self.dialogBox.NewMessage(self.Translate("Rain... You better go. I will be fine."), 10);
+                    return;
+                default:
+                    if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Dislikes)
+                    {
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("The rain is coming. If you stay, you will drown. Now, leave me alone."), 5);
+                        if (ModManager.MSC && self.CheckSlugpupsInRoom())
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.NewMessage(self.Translate("Take your offspring with you."), 10);
+                            return;
+                        }
+                        if (ModManager.MMF && self.CheckStrayCreatureInRoom() != CreatureTemplate.Type.StandardGroundCreature)
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.NewMessage(self.Translate("Take your pet with you."), 10);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt("...", 5);
+                        self.dialogBox.NewMessage(self.Translate("I think the rain is approaching."), 20);
+                        self.dialogBox.NewMessage(self.Translate("You better go, <PlayerName>! I will be fine.<LINE>It's not pleasant, but I have been through it before."), 0);
+                        if (ModManager.MSC && self.CheckSlugpupsInRoom())
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.NewMessage(self.Translate("Keep your family safe!"), 10);
+                            return;
+                        }
+                        if (ModManager.MMF && self.CheckStrayCreatureInRoom() != CreatureTemplate.Type.StandardGroundCreature)
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.NewMessage(self.Translate("Keep your friend safe!"), 10);
+                            return;
+                        }
+                    }
+                    break;
+            }
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_InterruptPlayerHoldNeuron(On.SLOracleBehaviorHasMark.orig_InterruptPlayerHoldNeuron orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (ModManager.MSC && self.oracle.room.game.GetStorySession.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Rivulet && self.oracle.room.game.IsMoonActive())
+            {
+                float value = UnityEngine.Random.value;
                 MoonVoice(self);
-                self.dialogBox.NewMessage(self.Translate("<CapPlayerName>, are you okay?"), 60);
-                self.dialogBox.NewMessage(self.Translate("..."), 120);
-                self.dialogBox.NewMessage(self.Translate("Oh..."), 60);
+                if (value <= 0.25f)
+                {
+                    self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("No, please, release it!") : self.Translate("NO! ... no. Let it go, please."), 10);
+                }
+                else if (value <= 0.5f)
+                {
+                    self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("Wait, that's not food!") : self.Translate("not... edible, please."), 10);
+                }
+                else if (value <= 0.75f)
+                {
+                    self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("What are you doing? Stop!") : self.Translate("stop, don... don't!"), 10);
+                }
+                else
+                {
+                    self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("Please, don't touch those!") : self.Translate("LET GO! p please"), 10);
+                }
+                if (!self.DamagedMode)
+                {
+                    value = UnityEngine.Random.value;
+                    if (value <= 0.33f)
+                    {
+                        self.dialogBox.NewMessage(self.Translate("Despite some power to my facility being restored, those are still crucial to my survival!"), 10);
+                    }
+                    else if (value <= 0.67f)
+                    {
+                        self.dialogBox.NewMessage(self.Translate("Those are the only memories I have left. I will cease functioning without them."), 10);
+                    }
+                    else
+                    {
+                        self.dialogBox.NewMessage(self.Translate("Your intention was to help me, was it not? Then please don't play with those!"), 10);
+                    }
+                }
+                self.State.InfluenceLike(-0.1f);
+            }
+            else if (self.State.totalInterruptions >= 5 || self.State.hasToldPlayerNotToEatNeurons)
+            {
+                MoonVoice(self);
+                self.NoLongerOnSpeakingTerms();
+                self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("NO! I will...not speak to you...") : self.Translate("Release that, and leave. I will not speak to you any more."), 10);
             }
             else
             {
-                self.dialogBox.Interrupt(self.Translate("..."), 60);
+                MoonVoice(self);
+                self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("NO! ... no. Let it go, please.") : self.Translate("No, please, release it!"), 10);
+                self.dialogBox.NewMessage(self.DamagedMode ? self.Translate("...please...") : self.Translate("If you eat it or leave with it, I will die. I beg you."), 10);
+                self.State.InfluenceLike(-0.2f);
             }
-            self.deadTalk = true;
+            self.State.hasToldPlayerNotToEatNeurons = true;
+            SLOrcacleState state = self.State;
+            int num = state.annoyances;
+            state.annoyances = num + 1;
+            SLOrcacleState state2 = self.State;
+            num = state2.totalInterruptions;
+            state2.totalInterruptions = num + 1;
+            self.State.increaseLikeOnSave = false;
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_InterruptPlayerLeavingMessage(On.SLOracleBehaviorHasMark.orig_InterruptPlayerLeavingMessage orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (self.State.totalInterruptions >= 5 && (!ModManager.MMF || self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Dislikes))
+            {
+                self.NoLongerOnSpeakingTerms();
+                if (self.State.totalInterruptions == 5)
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("...don't... come back.") : self.Translate("Please don't come back."), 10);
+                }
+            }
+            else if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Dislikes)
+            {
+                switch (self.State.leaves)
+                {
+                    case 0:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("...leaving now? Don't... return.") : self.Translate("Oh, leaving. Please don't come back."), 10);
+                        break;
+                    case 1:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("...yes... leave.") : self.Translate("Leaving again."), 10);
+                        break;
+                    case 2:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("This... time... don't... come back.") : self.Translate("You're leaving yet again. This time, stay away."), 10);
+                        break;
+                    case 3:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("Again? ... just, go.") : self.Translate("Yes, there you go. This is ridiculous."), 10);
+                        break;
+                    case 4:
+                        MoonVoice(self);
+                        self.NoLongerOnSpeakingTerms();
+                        self.dialogBox.Interrupt(self.DamagedMode ? "..." : self.Translate("I don't know what to say. Never come back, creature!"), 10);
+                        break;
+                }
+            }
+            else
+            {
+                switch (self.State.leaves)
+                {
+                    case 0:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate("Oh... You are leaving."), 10);
+                        if (!self.DamagedMode)
+                        {
+                            self.currentConversation.ForceAddMessage(self.Translate("Good bye, I suppose..."), 10);
+                        }
+                        break;
+                    case 1:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("again... leaving...") : self.Translate("There you go again."), 10);
+                        break;
+                    case 2:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.DamagedMode ? "..." : self.Translate("Yet again leaving."), 10);
+                        break;
+                    default:
+                        if (!self.DamagedMode)
+                        {
+                            switch (UnityEngine.Random.Range(0, 6))
+                            {
+                                case 0:
+                                    MoonVoice(self);
+                                    self.currentConversation.Interrupt(self.Translate("Yes, there you go."), 10);
+                                    break;
+                                case 1:
+                                    MoonVoice(self);
+                                    self.currentConversation.Interrupt(self.Translate("Again."), 10);
+                                    break;
+                                case 2:
+                                    MoonVoice(self);
+                                    self.currentConversation.Interrupt(self.Translate("*sigh*"), 10);
+                                    break;
+                                case 3:
+                                    MoonVoice(self);
+                                    self.currentConversation.Interrupt(self.Translate("..."), 10);
+                                    break;
+                                case 4:
+                                    MoonVoice(self);
+                                    self.currentConversation.Interrupt(self.Translate("This again."), 10);
+                                    break;
+                                default:
+                                    MoonVoice(self);
+                                    self.currentConversation.Interrupt(self.Translate("<CapPlayerName>... Never mind."), 10);
+                                    break;
+                            }
+                        }
+                        break;
+                }
+            }
+            if (!ModManager.MMF)
+            {
+                self.State.InfluenceLike(-0.05f);
+            }
+            SLOrcacleState state = self.State;
+            int num = state.leaves;
+            state.leaves = num + 1;
+            SLOrcacleState state2 = self.State;
+            num = state2.totalInterruptions;
+            state2.totalInterruptions = num + 1;
+            self.State.increaseLikeOnSave = false;
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_InterruptPlayerAnnoyingMessage(On.SLOracleBehaviorHasMark.orig_InterruptPlayerAnnoyingMessage orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (!ModManager.MMF && self.State.totalInterruptions >= 5)
+            {
+                self.NoLongerOnSpeakingTerms();
+                if (self.State.totalInterruptions == 5)
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("I will...not speak to you...") : self.Translate("I will not speak to you any more."), 10);
+                }
+            }
+            else if (self.State.annoyances == 0)
+            {
+                MoonVoice(self);
+                self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("...please... be still...") : self.Translate("Please. Be still for a moment."), 10);
+            }
+            else if (self.State.annoyances == 1)
+            {
+                MoonVoice(self);
+                self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("...stop...") : self.Translate("Please stop it!"), 10);
+            }
+            else if (self.State.neuronsLeft > 3 && !self.DamagedMode)
+            {
+                switch (UnityEngine.Random.Range(0, 6))
+                {
+                    case 0:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate("<CapPlayerName>! Stay still and listen."), 10);
+                        break;
+                    case 1:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate(ModManager.MMF ? "Calm down!" : "I won't talk to you if you continue like this."), 10);
+                        break;
+                    case 2:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate("Why should I tolerate this?"), 10);
+                        break;
+                    case 3:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate("STOP!"), 10);
+                        break;
+                    case 4:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate("This again."), 10);
+                        break;
+                    default:
+                        MoonVoice(self);
+                        self.currentConversation.Interrupt(self.Translate("Leave me alone!"), 10);
+                        break;
+                }
+            }
+            if (!ModManager.MMF)
+            {
+                self.State.InfluenceLike(-0.2f);
+            }
+            SLOrcacleState state = self.State;
+            int num = state.annoyances;
+            state.annoyances = num + 1;
+            SLOrcacleState state2 = self.State;
+            num = state2.totalInterruptions;
+            state2.totalInterruptions = num + 1;
+            self.State.increaseLikeOnSave = false;
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_ResumePausedConversation(On.SLOracleBehaviorHasMark.orig_ResumePausedConversation orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (self.pauseReason == SLOracleBehaviorHasMark.PauseReason.Annoyance)
+            {
+                if (self.State.annoyances < 3)
+                {
+                    MoonVoice(self);
+                    self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("Thank... you.") : self.Translate("Thank you."), 5);
+                }
+            }
+            else if (self.pauseReason == SLOracleBehaviorHasMark.PauseReason.Leave)
+            {
+                if (self.State.leaves == 1)
+                {
+                    MoonVoice(self);
+                    self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("You... are back.") : self.Translate("And you are back."), 10);
+                }
+                else if (self.State.leaves == 2)
+                {
+                    MoonVoice(self);
+                    self.currentConversation.Interrupt(self.DamagedMode ? self.Translate("And...back.") : self.Translate("Back again."), 10);
+                }
+                else if (!self.DamagedMode)
+                {
+                    MoonVoice(self);
+                    self.currentConversation.Interrupt(self.Translate("Here again."), 10);
+                }
+            }
+            else if (self.pauseReason == SLOracleBehaviorHasMark.PauseReason.GrabNeuron)
+            {
+                self.PlayerReleaseNeuron();
+            }
+            if (self.State.totalInterruptions == 1)
+            {
+                MoonVoice(self);
+                self.currentConversation.ForceAddMessage(self.DamagedMode ? self.Translate("I...said...") : self.Translate("As I was saying..."), 10);
+                return;
+            }
+            if (self.State.totalInterruptions == 2)
+            {
+                MoonVoice(self);
+                self.currentConversation.ForceAddMessage(self.DamagedMode ? self.Translate("Tried to say... to you...") : self.Translate("As I tried to say to you..."), 10);
+                return;
+            }
+            if (self.State.totalInterruptions == 3)
+            {
+                MoonVoice(self);
+                self.currentConversation.ForceAddMessage(self.DamagedMode ? self.Translate("Stay! ... Still...") : self.Translate("Little creature, why don't you stay calm and listen?"), 10);
+                self.currentConversation.ForceAddMessage(self.DamagedMode ? self.Translate("And...listen!") : self.Translate("As I tried to say to you..."), 10);
+                return;
+            }
+            if (self.State.totalInterruptions != 4)
+            {
+                if (self.State.totalInterruptions == 5)
+                {
+                    if (self.DamagedMode)
+                    {
+                        MoonVoice(self);
+                        self.currentConversation.ForceAddMessage(self.Translate("I am... too tired."), 10);
+                        self.currentConversation.ForceAddMessage(self.Translate("Stop doing... this, or I... will not speak... to you again."), 10);
+                        return;
+                    }
+                    self.currentConversation.ForceAddMessage(self.Translate("If you behave like this, why should I talk to you?"), 10);
+                    MoonVoice(self);
+                    self.currentConversation.ForceAddMessage(self.Translate("You come here, but you can't be respectful enough to listen to me.<LINE>Will you listen this time?"), 0);
+                    MoonVoice(self);
+                    self.currentConversation.ForceAddMessage(self.Translate("Look at me. The only thing I have to offer is my words.<LINE>If you come here, I must assume you want me to speak? So then would you PLEASE listen?<LINE>If not, you are welcome to leave me alone."), 0);
+                    MoonVoice(self);
+                    self.currentConversation.ForceAddMessage(self.Translate("Now if you'll let me, I will try to say this again."), 0);
+                }
+                return;
+            }
+            if (self.DamagedMode)
+            {
+                MoonVoice(self);
+                self.currentConversation.ForceAddMessage(self.Translate("And...now you expect me to... talk again?"), 10);
+                return;
+            }
+            MoonVoice(self);
+            self.currentConversation.ForceAddMessage(self.Translate("And now you expect me to continue speaking?"), 10);
+            if (self.State.neuronsLeft < 5)
+            {
+                MoonVoice(self);
+                self.currentConversation.ForceAddMessage(self.Translate("First you hurt me, then you come back to annoy me.<LINE>I wish I knew what was going on in that little head of yours."), 0);
+            }
+            MoonVoice(self);
+            self.currentConversation.ForceAddMessage(self.Translate("Let us try again - not that it has worked well before. I was saying..."), 10);
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_PlayerReleaseNeuron(On.SLOracleBehaviorHasMark.orig_PlayerReleaseNeuron orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (!ModManager.MSC || !(self.oracle.room.game.GetStorySession.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Rivulet) || !self.oracle.room.game.IsMoonActive())
+            {
+                if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Dislikes)
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("...don't... do that.") : self.Translate("Never do that again. Or just kill me quickly. Whichever way."), 5);
+                }
+                else if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("Thank... you.") : self.Translate("Thank you. I must ask you... Don't do that again."), 5);
+                }
+                else
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("Please... don't do... that.") : self.Translate("I must ask you... Don't do that again."), 5);
+                }
+                MoonVoice(self);
+                self.dialogBox.NewMessage(self.DamagedMode ? self.Translate("I... won't speak to you... if you do that.") : self.Translate("<CapPlayerName>, if you do that, I will not speak to you any more."), 10);
+                return;
+            }
+            float value = UnityEngine.Random.value;
+            if (value <= 0.33f)
+            {
+                MoonVoice(self);
+                self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("Thank you. I must ask you... Don't do that again.") : self.Translate("...don't... do that."), 10);
+                return;
+            }
+            if (value <= 0.67f)
+            {
+                MoonVoice(self);
+                self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("Please, don't scare me like that. I don't appreciate it.") : self.Translate("Leave me... alone."), 10);
+                return;
+            }
+            MoonVoice(self);
+            self.dialogBox.Interrupt((!self.DamagedMode) ? self.Translate("Those aren't toys, <PlayerName>. I cannot trust anyone with them.") : self.Translate("...don't... trust you."), 10);
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_PlayerAnnoyingWhenNotTalking(On.SLOracleBehaviorHasMark.orig_PlayerAnnoyingWhenNotTalking orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (!ModManager.MMF && self.State.annoyances >= 5)
+            {
+                self.NoLongerOnSpeakingTerms();
+                if (self.State.annoyances == 5)
+                {
+                    if (self.State.neuronsLeft > 3)
+                    {
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("I will not speak to you any more."), 10);
+                    }
+                    else if (self.State.neuronsLeft > 1)
+                    {
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("I will...not speak to you..."), 10);
+                    }
+                }
+            }
+            else if (self.State.annoyances == 0)
+            {
+                MoonVoice(self);
+                self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("...stop...") : self.Translate("<CapPlayerName>... Please settle down."), 10);
+            }
+            else if (self.State.annoyances == 1)
+            {
+                MoonVoice(self);
+                self.dialogBox.Interrupt(self.DamagedMode ? self.Translate("no...") : self.Translate("Please stop it!"), 10);
+            }
+            else if (self.State.neuronsLeft > 3 && !self.DamagedMode)
+            {
+                switch (UnityEngine.Random.Range(0, 6))
+                {
+                    case 0:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Why are you doing this?"), 10);
+                        break;
+                    case 1:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Please!"), 10);
+                        break;
+                    case 2:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Why should I tolerate this?"), 10);
+                        break;
+                    case 3:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("STOP!"), 10);
+                        break;
+                    case 4:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("This again."), 10);
+                        break;
+                    default:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Leave me alone!"), 10);
+                        break;
+                }
+            }
+            if (!ModManager.MMF)
+            {
+                self.State.InfluenceLike(-0.2f);
+            }
+            SLOrcacleState state = self.State;
+            int annoyances = state.annoyances;
+            state.annoyances = annoyances + 1;
+            self.State.increaseLikeOnSave = false;
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_PlayerPutItemOnGround(On.SLOracleBehaviorHasMark.orig_PlayerPutItemOnGround orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (ModManager.MSC && self.RejectDiscussItem())
+            {
+                return;
+            }
+            switch (self.State.totalItemsBrought)
+            {
+                case 0:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("What is that?"), 10);
+                    return;
+                case 1:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("Another gift?"), 10);
+                    if (self.State.GetOpinion != SLOrcacleState.PlayerOpinion.Dislikes)
+                    {
+                        self.dialogBox.NewMessage(self.Translate("I will take a look."), 10);
+                        return;
+                    }
+                    break;
+                case 2:
+                    if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                    {
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Oh, what is that, <PlayerName>?"), 10);
+                        return;
+                    }
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("What is that, <PlayerName>?"), 10);
+                    return;
+                case 3:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("Yet another gift?"), 10);
+                    return;
+                default:
+                    switch (UnityEngine.Random.Range(0, 11))
+                    {
+                        case 0:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Something new you want me to look at, <PlayerName>?"), 10);
+                            return;
+                        case 1:
+                            MoonVoice(self);
+                            if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                            {
+                                self.dialogBox.Interrupt(self.Translate("Another gift for me?"), 10);
+                            }
+                            self.dialogBox.NewMessage(self.Translate("I will take a look."), 10);
+                            return;
+                        case 2:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Oh, what is that, <PlayerName>?"), 10);
+                            return;
+                        case 3:
+                            if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                            {
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt(self.Translate("Yet another gift? You're quite curious, <PlayerName>!"), 10);
+                                return;
+                            }
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Yet another thing?"), 10);
+                            self.dialogBox.NewMessage(self.Translate("Your curiosity seems boundless, <PlayerName>."), 10);
+                            return;
+                        case 4:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Another thing you want me to look at?"), 10);
+                            return;
+                        case 5:
+                            if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                            {
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt(self.Translate("Oh... I will look at it."), 10);
+                                return;
+                            }
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Something new you want me to look at,<LINE>I suppose, <PlayerName>?"), 10);
+                            return;
+                        case 6:
+                            if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                            {
+                                MoonVoice(self);
+                                self.dialogBox.Interrupt(self.Translate("Oh... Of course I will take a look"), 10);
+                                return;
+                            }
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Oh... I will take a look"), 10);
+                            return;
+                        case 7:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("You want me to take a look at that?"), 10);
+                            return;
+                        case 8:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Oh... Should I look at that?"), 10);
+                            return;
+                        case 9:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("A gift for me, <PlayerName>?"), 10);
+                            return;
+                        default:
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("A new gift for me, <PlayerName>?"), 10);
+                            break;
+                    }
+                    break;
+            }
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_PlayerInterruptByTakingItem(On.SLOracleBehaviorHasMark.orig_PlayerInterruptByTakingItem orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (self.throwAwayObjects)
+            {
+                if (UnityEngine.Random.value < 0.25f)
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("Stop it! Go away!"), 30);
+                }
+                else
+                {
+                    self.dialogBox.Interrupt(self.Translate("..."), 10);
+                }
+                SLOrcacleState state = self.State;
+                int totalInterruptions = state.totalInterruptions;
+                state.totalInterruptions = totalInterruptions + 1;
+                return;
+            }
+            if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Dislikes)
+            {
+                if (UnityEngine.Random.value < 0.5f)
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("Yes, take it and leave me alone."), 10);
+                }
+                else
+                {
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("And now you're taking it, apparently."), 10);
+                }
+            }
+            else
+            {
+                switch (UnityEngine.Random.Range(0, 4))
+                {
+                    case 0:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Oh... Never mind, I suppose."), 10);
+                        break;
+                    case 1:
+                        if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Oh, you want it back?"), 10);
+                        }
+                        else
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("And now you're taking it back."), 10);
+                        }
+                        break;
+                    case 2:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Want it back, <PlayerName>?"), 10);
+                        break;
+                    default:
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Oh..."), 10);
+                        self.dialogBox.NewMessage(self.Translate("Yes, you're welcome to have it back."), 10);
+                        break;
+                }
+            }
+            if (self.currentConversation != null)
+            {
+                self.currentConversation.Destroy();
+                self.currentConversation = null;
+                SLOrcacleState state2 = self.State;
+                int totalInterruptions = state2.totalInterruptions;
+                state2.totalInterruptions = totalInterruptions + 1;
+            }
+        }
+        else
+            orig(self);
+    }
+
+    private static void SLOracleBehaviorHasMark_PlayerHoldingSSNeuronsGreeting(On.SLOracleBehaviorHasMark.orig_PlayerHoldingSSNeuronsGreeting orig, SLOracleBehaviorHasMark self)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            switch (self.State.neuronsLeft)
+            {
+                case 0:
+                    break;
+                case 1:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt("...", 40);
+                    return;
+                case 2:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("...oh... to... save me?"), 20);
+                    return;
+                case 3:
+                    MoonVoice(self);
+                    self.dialogBox.Interrupt(self.Translate("You... brought that... for me?"), 20);
+                    return;
+                default:
+                    if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Dislikes)
+                    {
+                        if (UnityEngine.Random.value < 0.5f)
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("You are bringing a neuron. Is it to taunt me?"), 30);
+                            return;
+                        }
+                        self.dialogBox.Interrupt(self.Translate("A neuron."), 30);
+                        return;
+                    }
+                    else
+                    {
+                        bool flag = self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes;
+                        int num = UnityEngine.Random.Range(0, 1);
+                        if (num == 0)
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("That... That is for me?"), 10);
+                            return;
+                        }
+                        if (num == 1)
+                        {
+                            MoonVoice(self);
+                            self.dialogBox.Interrupt(self.Translate("Hello" + (flag ? "!" : ".")), 10);
+                            self.dialogBox.NewMessage(self.Translate("That... Oh, thank you."), 10);
+                            return;
+                        }
+                        MoonVoice(self);
+                        self.dialogBox.Interrupt(self.Translate("Ah... <PlayerName>, a neuron from Pebbles?"), 30);
+                    }
+                    break;
+            }
+        }
+        else
+            orig(self);
+    }
+    private static void SLOracleBehaviorHasMark_AlreadyDiscussedItem(On.SLOracleBehaviorHasMark.orig_AlreadyDiscussedItem orig, SLOracleBehaviorHasMark self, bool pearl)
+    {
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            string text;
+            if (pearl)
+            {
+                int num = UnityEngine.Random.Range(0, 2);
+                if (num != 0)
+                {
+                    if (num != 1)
+                    {
+                        text = self.Translate("This one again, <PlayerName>?");
+                    }
+                    else
+                    {
+                        text = self.Translate("This one I've already read to you, <PlayerName>.");
+                    }
+                }
+                else
+                {
+                    text = self.Translate("Oh, I have already read this one to you, <PlayerName>.");
+                }
+            }
+            else
+            {
+                int num = UnityEngine.Random.Range(0, 2);
+                if (num != 0)
+                {
+                    if (num != 1)
+                    {
+                        text = self.Translate("<CapPlayerName>, this one again?");
+                    }
+                    else
+                    {
+                        text = self.Translate("I've told you about this one, <PlayerName>.");
+                    }
+                }
+                else
+                {
+                    text = self.Translate("I think we have already talked about this one, <PlayerName>.");
+                }
+            }
+            MoonVoice(self);
+            if (self.currentConversation != null)
+            {
+                self.currentConversation.Interrupt(text, 10);
+                return;
+            }
+            self.dialogBox.Interrupt(text, 10);
+        }
+        else
+            orig(self, pearl);
+    }
+
+    private static void SLOracleBehaviorHasMark_Update(On.SLOracleBehaviorHasMark.orig_Update orig, SLOracleBehaviorHasMark self, bool eu)
+    {
+        orig(self, eu);
+        if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (self.player == null && self.hasNoticedPlayer)
+            {
+                self.TalkToDeadPlayer();
+            }
+            if (self.holdingObject != null && self.describeItemCounter % 80 == 0)
+            {
+                MoonVoice(self);
+            }
         }
     }
 
@@ -473,29 +997,7 @@ internal static class SLOracle
         orig(self, eventName);
         if (eventName == "MoonVoice")
         {
-            SoundID randomTalk = SoundID.SL_AI_Talk_1;
-            switch (UnityEngine.Random.Range(0, 4))
-            {
-                case 0:
-                    randomTalk = SoundID.SL_AI_Talk_1;
-                    break;
-                case 1:
-                    randomTalk = SoundID.SL_AI_Talk_2;
-                    break;
-                case 2:
-                    randomTalk = SoundID.SL_AI_Talk_3;
-                    break;
-                case 3:
-                    randomTalk = SoundID.SL_AI_Talk_4;
-                    break;
-                case 4:
-                    randomTalk = SoundID.SL_AI_Talk_5;
-                    break;
-            }
-            if (self.currentConversation != null && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-            {
-                self.AirVoice(randomTalk);
-            }
+            MoonVoice(self);
         }
     }
     
@@ -520,7 +1022,7 @@ internal static class SLOracle
                 randomTalk = SoundID.SL_AI_Talk_5;
                 break;
         }
-        if (self.currentConversation != null && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
         {
             self.AirVoice(randomTalk);
         }

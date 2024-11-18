@@ -1,3 +1,4 @@
+SPECEVENT : MoonVoice
 0 : Hi, Slugcat! : 50
 SPECEVENT : MoonVoice
 0 : How are you? : 50

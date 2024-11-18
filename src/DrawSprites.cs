@@ -170,7 +170,7 @@ internal class DrawSprites
 						string face = "VoidCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-					}
+					} 
 					else
 					{
 						string face = "Void-";

@@ -49,7 +49,21 @@ namespace VoidTemplate;
                 starlegGraphics[i] = new MimicstarfishGraphics.StarLegGraphic(this, i, num2);
                 num2 += this.starlegGraphics[i].sprite;
             }
-           
+            this.deadLegs = new DaddyGraphics.DaddyDeadLeg[0];
+            this.totalDeadLegSprites = num2 - this.totalLegSprites;
+            DaddyGraphics.DaddyDangleTube.Connection connection = this.GenerateDangleCon(Random.value < 0.5f);
+            DaddyGraphics.DaddyDangleTube.Connection connection2 = this.GenerateDangleCon(connection.chunk != null);
+            this.danglers = new DaddyGraphics.DaddyDangleTube[0];
+       
+            this.totalDanglers = num2 - this.totalLegSprites - this.totalDeadLegSprites;
+            this.chunksRotats = new float[this.daddy.bodyChunks.Length, 2];
+            this.eyes = new DaddyGraphics.Eye[this.daddy.bodyChunks.Length];
+            for (int m = 0; m < this.daddy.bodyChunks.Length; m++)
+            {
+                this.chunksRotats[m, 0] = Random.value * 360f;
+                this.chunksRotats[m, 1] = Random.value;
+                this.eyes[m] = new DaddyGraphics.Eye(this, m);
+            }
         }
         public override void Update()
         {

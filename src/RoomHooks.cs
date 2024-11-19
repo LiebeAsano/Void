@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Kittehface.Build;
+using System.Linq;
 using VoidTemplate.Objects;
 using static VoidTemplate.Useful.Utils;
 
@@ -47,7 +48,8 @@ namespace VoidTemplate
 				{
 					self.AddObject(new CeilingClimbTutorial(self,
 					[
-						new("Your body is strong enough to climb on any surface.", 0, 444)
+						new("Your body is strong enough to climb on any surface.", 0, 444),
+						new("And your abilities continue to improve.", 0, 444)
 					]));
 				}
 				switch (self.abstractRoom.name)

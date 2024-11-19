@@ -15,8 +15,6 @@ namespace VoidTemplate
         {
 
             On.DaddyGraphics.DaddyTubeGraphic.ApplyPalette += OnApplyPalette;
-            On.DaddyGraphics.DaddyDeadLeg.Update += OnUpdate;
-            On.DaddyGraphics.DaddyDangleTube.Update += OnUpdates;
             On.DaddyLongLegs.Eat += OnEat;
 
 
@@ -63,40 +61,9 @@ namespace VoidTemplate
 
 
         }
-        private static void OnUpdate(On.DaddyGraphics.DaddyDeadLeg.orig_Update orig, DaddyGraphics.DaddyDeadLeg self)
-        {
-
-
-            if (self.owner.daddy.Template.type == CreatureTemplateType.Mimicstarfish)
-            {
-
-                return;
-
-            }
-
-            orig.Invoke(self);
-
-        }
-        private static void OnUpdates(On.DaddyGraphics.DaddyDangleTube.orig_Update orig, DaddyGraphics.DaddyDangleTube self)
-        {
-
-
-            if (self.owner.daddy.Template.type == CreatureTemplateType.Mimicstarfish)
-            {
-
-                return;
-
-            }
-
-            orig.Invoke(self);
-
-
-        }
+        
 
        
-       
-      
-
 
 
         private static void OnApplyPalette(On.DaddyGraphics.DaddyTubeGraphic.orig_ApplyPalette orig, global::DaddyGraphics.DaddyTubeGraphic self, global::RoomCamera.SpriteLeaser sLeaser, global::RoomCamera rCam, global::RoomPalette palette)

@@ -3,9 +3,11 @@ THE VOID|ПУСТОТНЫЙ
 Void|Пустотный
 An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.|Разъярённый и голодный хищник вырывается из пустотного моря.<LINE>Балансируя между жизнью и смертью, зверь ищет своё новое место в этом мире.
 Clear the game as Hunter to unlock.|Чтобы открыть, пройди игру за Охотника.
-You have enough strength to climb the walls.|У тебя достаточно сил, чтобы взбираться на стены.
-Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
+Your body is unstable, and each of your deaths brings you closer to getting out of the cycle.|Твоё тело нестабильно, и каждая твоя смерть приближает тебя к выходу из цикла.
+But you have enough strength to get out of here.|Но у тебя достаточно сил, чтобы выбраться отсюда.
 Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай кнопки 'Направления' и 'Вверх', чтобы взобраться на стену.
+Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
+And your abilities continue to improve.|А твои способности продолжают совершенствоваться.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречёна вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Ты должен исполнить последнее желание того, кто дал тебе второй шанс.
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового.
@@ -31,7 +33,7 @@ Simplified hunger|Упрощённый голод
 Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
 Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
-Disables permadeath for Void, but also closes access to the true ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к истинной концовке
+Disables permadeath for Void, but also closes access to the secret ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к секретной концовке
 Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
 
 //PICK INTERRUPT MESSAGES
@@ -90,5 +92,11 @@ She's a short distance to the east of here. If the little beast has accomplished
 
 //LOOKS TO THE MOON
 
+You are here again. Do you want to show me something?|Ты снова здесь. Хочешь мне что-то показать?
+Your return pleases me. What secrets of this world have you revealed this time?|Я рада твоему возвращению. Какие тайны этого мира ты раскрыл в этот раз?
+You are back. In your eyes, I see a reflection of our changing world.|Ты вернулся. В твоих глазах я вижу отражение нашего меняющегося мира.
+Little creature, what brought you to me again?|Маленькое создание, что снова привело тебя ко мне?
+Oh, is that you? Did you come back to learn something new?|О, это ты? Ты вернулся, чтобы узнать что-то новое?
 
-
+I am sorry, friend, but I cannot remember of any new stories I can tell you.|Мне жаль, дружок, но я не могу вспомнить ни одной новой истории, которую могла бы тебе расскать.
+I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.|Мне неловко просить тебя, но не мог бы ты попросить у Пяти Галек ещё один нейрон, я думаю, он не будет против.

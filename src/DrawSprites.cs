@@ -163,12 +163,14 @@ internal class DrawSprites
 
 				else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 				{
-					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG 
+						&& self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
+						&& body_chunk_0.pos.y <= body_chunk_1.pos.y + 5)
 					{
 						string face = "VoidCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-					}
+					} 
 					else
 					{
 						string face = "Void-";

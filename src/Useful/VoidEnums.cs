@@ -156,10 +156,26 @@ public static class VoidEnums
 	{
 		public static void Register()
 		{
-			Moon_VoidConversation = new("Moon_VoidConversation", true);
+			LWRot = new("LW-rot");
+			LWVoid = new("LW-void");
+			LWSlugcat = new("LW-slugcat");
+			LRDissertation = new("LR_pearl_dissertation");
+			LRArchiveRequest = new("LR_archive_request");
+			LRSecret = new("LR_secret");
 		}
-		public static Conversation.ID Moon_VoidConversation;
-	}
+		public static Conversation.ID LWRot;
+        public static Conversation.ID LWVoid;
+        public static Conversation.ID LWSlugcat;
+        public static Conversation.ID LRDissertation;
+        public static Conversation.ID LRArchiveRequest;
+        public static Conversation.ID LRSecret;
+		public static Conversation.ID[] PearlConversations => [LWRot,
+		LWVoid,
+		LWSlugcat,
+		LRDissertation,
+		LRArchiveRequest,
+		LRSecret];
+    }
 	public static class RoomNames
 	{
 		public const string EndingRoomName = "SB_LWA01";

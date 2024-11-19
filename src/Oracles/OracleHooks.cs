@@ -25,7 +25,6 @@ static class OracleHooks
 	}
 
     #region immutable
-    private static readonly Conversation.ID[] modSpecificConversations = [Moon_VoidConversation];
     public static SSOracleBehavior.Action MeetVoid_Init = new("MeetVoid_Init", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
 	#endregion
@@ -65,7 +64,8 @@ static class OracleHooks
 		orig(self);
 		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
 		{
-			if (!self.owner.playerEnteredWithMark)
+#warning may be elegible for deletion
+            if (!self.owner.playerEnteredWithMark)
 				self.events.Add(new Conversation.TextEvent(self, 0, ". . .", 0));
 			else
 				self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));

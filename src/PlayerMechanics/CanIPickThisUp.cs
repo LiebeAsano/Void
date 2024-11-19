@@ -89,8 +89,9 @@ internal static class CanIPickThisUp
                 {
                     if (obj is Player targetPlayer && targetPlayer.slugcatStats.name == VoidEnums.SlugcatID.Void && targetPlayer.bodyMode != Player.BodyModeIndex.Crawl)
                         return false;
-                    else
+                    else if (obj is Player player2 && player2.bodyMode == Player.BodyModeIndex.Crawl)
                         return true;
+                    else return orig;
                 }
                 else
                     return orig;

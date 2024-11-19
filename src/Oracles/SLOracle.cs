@@ -48,7 +48,7 @@ internal static class SLOracle
             {
                 case > 0 when saveState.cycleNumber - saveState.GetEncountersWithMark() <= 0:
                     {
-                        switch (UnityEngine.Random.Range(0, 4))
+                        switch (UnityEngine.Random.Range(0, 5))
                         {
                             case 0:
                                 MoonVoice(self);
@@ -324,7 +324,7 @@ internal static class SLOracle
                     default:
                         if (!self.DamagedMode)
                         {
-                            switch (UnityEngine.Random.Range(0, 6))
+                            switch (UnityEngine.Random.Range(0, 5))
                             {
                                 case 0:
                                     MoonVoice(self);
@@ -880,7 +880,7 @@ internal static class SLOracle
                     else
                     {
                         bool flag = self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes;
-                        int num = UnityEngine.Random.Range(0, 1);
+                        int num = UnityEngine.Random.Range(0, 2);
                         if (num == 0)
                         {
                             MoonVoice(self);
@@ -910,7 +910,7 @@ internal static class SLOracle
             string text;
             if (pearl)
             {
-                int num = UnityEngine.Random.Range(0, 2);
+                int num = UnityEngine.Random.Range(0, 3);
                 if (num != 0)
                 {
                     if (num != 1)
@@ -929,7 +929,7 @@ internal static class SLOracle
             }
             else
             {
-                int num = UnityEngine.Random.Range(0, 2);
+                int num = UnityEngine.Random.Range(0, 3);
                 if (num != 0)
                 {
                     if (num != 1)
@@ -967,7 +967,8 @@ internal static class SLOracle
             {
                 self.TalkToDeadPlayer();
             }
-            if (self.holdingObject != null && self.describeItemCounter % 80 == 0)
+            int randomTime = UnityEngine.Random.Range(200, 401);
+            if (self.holdingObject != null && self.describeItemCounter % randomTime == 0)
             {
                 MoonVoice(self);
             }
@@ -1004,7 +1005,7 @@ internal static class SLOracle
     private static void MoonVoice(SLOracleBehaviorHasMark self)
     {
         SoundID randomTalk = SoundID.SL_AI_Talk_1;
-        switch (UnityEngine.Random.Range(0, 4))
+        switch (UnityEngine.Random.Range(0, 5))
         {
             case 0:
                 randomTalk = SoundID.SL_AI_Talk_1;

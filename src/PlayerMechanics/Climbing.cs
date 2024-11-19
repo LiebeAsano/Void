@@ -14,78 +14,81 @@ namespace VoidTemplate.PlayerMechanics
 		{
             On.Player.WallJump += Player_UpdateWallJump;
             On.Player.UpdateBodyMode += Player_UpdateBodyMode;
+			On.Player.Update += Player_Update;
         }
 
-        private static float lastWallJumpTime = 0f;
+        private static float num = 5f;
+        private static float currentTime = 0f;
+        private static float currentTimeWall = 0f;
+
+        private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+        {
+			orig(self, eu);
+			currentTime++;
+            if (currentTime % 80 == 0)
+            {
+                num++;
+                num = Math.Min(5, num);
+				currentTime = 0;
+            }
+			if (self.bodyMode != Player.BodyModeIndex.WallClimb)
+				currentTimeWall = 0;
+        }
+
         private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
         {
             if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
             {
-                float currentTime = Time.time;
+
+				float bonus = num / 5;
 
                 BodyChunk body_chunk_0 = self.bodyChunks[0];
                 BodyChunk body_chunk_1 = self.bodyChunks[1];
 
                 if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
 				{
-                    float num = Mathf.Lerp(1f, 1.15f, self.Adrenaline);
 
-                    if (self.exhausted)
-                    {
-                        num *= 1f - 0.5f * self.aerobicLevel;
-                    }
+					self.bodyChunks[0].vel.y = 11f;
+					self.bodyChunks[1].vel.y = 11f;
 
-                    self.bodyChunks[0].vel.y = 11f * num;
-                    self.bodyChunks[1].vel.y = 11f * num;
+					self.bodyChunks[0].vel.x = 5f * -self.input[0].x;
+					self.bodyChunks[1].vel.x = 5f * -self.input[0].x;
 
-                    self.bodyChunks[0].vel.x = 5f * -self.input[0].x;
-                    self.bodyChunks[1].vel.x = 5f * -self.input[0].x;
+					self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
+					self.standing = true;
+					self.jumpBoost = 0;
+					self.jumpStun = 0;
 
-                    self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
-                    self.standing = true;
-                    self.jumpBoost = 0;
-                    self.jumpStun = 0;
-
-                    self.canWallJump = 0;
-
-                    lastWallJumpTime = currentTime;
+					self.canWallJump = 0;
 
                     return;
-                }
+				}
 				else if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y > 0 && self.input[0].jmp)
 				{
-					if (currentTime - lastWallJumpTime > 2f)
-					{
-						float num = Mathf.Lerp(1f, 1.15f, self.Adrenaline);
 
-						if (self.exhausted)
-						{
-							num *= 1f - 0.5f * self.aerobicLevel;
-						}
+					self.bodyChunks[0].vel.y = 10f * bonus;
+					self.bodyChunks[1].vel.y = 10f * bonus;
 
-						self.bodyChunks[0].vel.y = 10f * num;
-						self.bodyChunks[1].vel.y = 10f * num;
+					self.bodyChunks[0].vel.x = 7f * -self.input[0].x;
+					self.bodyChunks[1].vel.x = 7f * -self.input[0].x;
 
-						self.bodyChunks[0].vel.x = 7f * -self.input[0].x;
-						self.bodyChunks[1].vel.x = 7f * -self.input[0].x;
+					self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
+					self.standing = true;
+					self.jumpBoost = 0;
+					self.jumpStun = 0;
 
-						self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
-						self.standing = true;
-						self.jumpBoost = 0;
-						self.jumpStun = 0;
+					self.canWallJump = 0;
 
-						self.canWallJump = 0;
+                    num--;
 
-						lastWallJumpTime = currentTime;
+                    num = Math.Max(0, num);
 
-						return;
-					}
-                    else return;
+                    return;
 				}
             }
             orig(self, direction);
         }
-
+		 
         private static bool KarmaCap_Check(Player self)
 		{
 			return self.IsVoid() && self.KarmaCap > 3;
@@ -366,10 +369,16 @@ namespace VoidTemplate.PlayerMechanics
 			player.canJump = 1;
 			player.standing = true;
 
-            if (player.input[0].y < 0 && player.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y && flipTimer == -1)
-            {
-                flipTimer = 0;
-            }
+			currentTimeWall++;
+
+			if (currentTimeWall > 9)
+			{
+				if (player.input[0].y < 0 && player.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y && flipTimer == -1)
+				{
+					flipTimer = 0;
+					currentTimeWall = 0;
+                }
+			}
 
             if (player.input[0].x != 0)
 			{

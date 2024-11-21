@@ -1013,11 +1013,14 @@ internal static class SLOracle
                         //oh my god DataPearl ctor takes in world but does nothing with it
                         var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, self.oracle.room.world);
                         self.holdingObject = hoveringPearl;
+                        pearl.abstractPhysicalObject.realizedObject = hoveringPearl;
+                        hoveringPearl.bodyChunks[0].pos = pearl.bodyChunks[0].pos;
                         hoveringPearl.hoverPos = self.oracle.firstChunk.pos + new Vector2(-40f, 5f);
                         hoveringPearl.OnPearlTaken += () =>
                         {
                             self.dialogBox.Interrupt("aw...", 200);
                         };
+                        self.oracle.room.AddObject(hoveringPearl);
                     }
                     else logerr("attempting event HoverPearl while moon is not holding pearl");
                     break;

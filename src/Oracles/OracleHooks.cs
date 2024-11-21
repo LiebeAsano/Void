@@ -64,7 +64,7 @@ static class OracleHooks
 		orig(self);
 		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
 		{
-#warning may be elegible for deletion
+    //#warning may be elegible for deletion
             if (!self.owner.playerEnteredWithMark)
 				self.events.Add(new Conversation.TextEvent(self, 0, ". . .", 0));
 			else

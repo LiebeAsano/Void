@@ -21,6 +21,7 @@ internal class VoidOptionInterface : global::OptionInterface
 			(cfgSaintArenaSpears, MediumGrey),
 			]);
 		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: [
+			(cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, MediumGrey),
 			(cfgNoPermaDeath, CheatingColor),
 			(cfgForceUnlockCampaign, CheatingColor)

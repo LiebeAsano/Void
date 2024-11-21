@@ -219,6 +219,7 @@ internal static class SLOracle
                 }
                 if (!self.DamagedMode)
                 {
+                    MoonVoice(self);
                     value = UnityEngine.Random.value;
                     if (value <= 0.33f)
                     {
@@ -504,6 +505,7 @@ internal static class SLOracle
                         self.currentConversation.ForceAddMessage(self.Translate("Stop doing... this, or I... will not speak... to you again."), 10);
                         return;
                     }
+                    MoonVoice(self);
                     self.currentConversation.ForceAddMessage(self.Translate("If you behave like this, why should I talk to you?"), 10);
                     MoonVoice(self);
                     self.currentConversation.ForceAddMessage(self.Translate("You come here, but you can't be respectful enough to listen to me.<LINE>Will you listen this time?"), 0);
@@ -968,7 +970,7 @@ internal static class SLOracle
                 self.TalkToDeadPlayer();
             }
             int randomTime = UnityEngine.Random.Range(200, 401);
-            if (self.holdingObject != null && self.describeItemCounter % randomTime == 0)
+            if (self.holdingObject != null && self.describeItemCounter % randomTime == 0 && !VoidEnums.ConversationID.PearlConversations.Contains(self.currentConversation.id))
             {
                 MoonVoice(self);
             }

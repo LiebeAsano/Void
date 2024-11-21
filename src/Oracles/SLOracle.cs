@@ -998,10 +998,32 @@ internal static class SLOracle
     private static void SLOracleBehaviorHasMark_SpecialEvent(On.SLOracleBehaviorHasMark.orig_SpecialEvent orig, SLOracleBehaviorHasMark self, string eventName)
     {
         orig(self, eventName);
-        if (eventName == "MoonVoice")
+        switch(eventName)
         {
-            MoonVoice(self);
+            case "MoonVoice":
+                {
+                    MoonVoice(self);
+                    break;
+                }
+            case "HoverPearl":
+                {
+                    if (self.holdingObject is DataPearl pearl)
+                    {
+                        pearl.slatedForDeletetion = true;
+                        //oh my god DataPearl ctor takes in world but does nothing with it
+                        var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, self.oracle.room.world);
+                        self.holdingObject = hoveringPearl;
+                        hoveringPearl.hoverPos = self.oracle.firstChunk.pos + new Vector2(-40f, 5f);
+                        hoveringPearl.OnPearlTaken += () =>
+                        {
+                            self.dialogBox.Interrupt("aw...", 200);
+                        };
+                    }
+                    else logerr("attempting event HoverPearl while moon is not holding pearl");
+                    break;
+                }
         }
+        
     }
     
     private static void MoonVoice(SLOracleBehaviorHasMark self)

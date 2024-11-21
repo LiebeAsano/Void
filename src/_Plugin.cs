@@ -17,10 +17,10 @@ using VoidTemplate.PlayerMechanics.Karma11Foundation;
 
 namespace VoidTemplate;
 
-[BepInPlugin(MOD_ID, "Void", "13.1.1")]
+[BepInPlugin(MOD_ID, "Void", "0.17.2")]
 class _Plugin : BaseUnityPlugin
 {
-	private const string MOD_ID = "void.liebeasano";
+	private const string MOD_ID = "void.lwteam";
 
 	/// <summary>
 	/// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs

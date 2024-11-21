@@ -32,7 +32,7 @@ static class OracleHooks
 	public static void EatPearlsInterrupt(this SSOracleBehavior self)
 	{
 		if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
-		if (self.conversation != null)
+		if (self.conversation != null && self.action != SSOracleBehavior.Action.ThrowOut_ThrowOut)
 		{
 			self.conversation.paused = true;
 			self.restartConversationAfterCurrentDialoge = true;
@@ -42,15 +42,13 @@ static class OracleHooks
 		if (amountOfEatenPearls == 6
 		&& self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 6)
 		{
-
-			self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+            self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
 			self.getToWorking = 1f;
-
-
 		}
 		else if (amountOfEatenPearls < 12)
 		{
-			self.dialogBox.Interrupt(self.Translate(
+            PebbleVoice(self);
+            self.dialogBox.Interrupt(self.Translate(
 				self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
 					? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
 					: OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
@@ -65,10 +63,8 @@ static class OracleHooks
 		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
 		{
     //#warning may be elegible for deletion
-            if (!self.owner.playerEnteredWithMark)
-				self.events.Add(new Conversation.TextEvent(self, 0, ". . .", 0));
-			else
-				self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
+          
+			self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
 
 			var path = AssetManager.ResolveFilePath($"text/oracle/pebble/{self.id.value.ToLower()}.txt");
 
@@ -121,7 +117,7 @@ static class OracleHooks
 			&& self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
 		{
             if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;
-			var saveState = self.oracle.room.game.GetStorySession.saveState;
+            var saveState = self.oracle.room.game.GetStorySession.saveState;
 			var miscData = saveState.miscWorldSaveData;
 			var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
 				? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
@@ -142,19 +138,63 @@ static class OracleHooks
 					}
 				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
 					{
-                        self.dialogBox.Interrupt("GET OUT, right now.", 80);
+                        if (!saveState.GetVoidMeetMoon())
+                        {
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+						    break;
+                        }
+                        else
+                        {
+                            self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                            break;
+                        }
+                    }
+				case 3 when !saveState.GetVoidMeetMoon():
+                    {
+                        switch (UnityEngine.Random.Range(0, 3))
+                        {
+                            case 0:
+                                self.dialogBox.Interrupt("Come back as soon as you complete my request.".TranslateString(), 60);
+                                break;
+                            case 1:
+                                self.dialogBox.Interrupt("I do not see the right records in your mark. Do not worry me about nothing.".TranslateString(), 60);
+                                break;
+                            case 2:
+                                self.dialogBox.Interrupt("Have you already visited Looks to the Moon?".TranslateString(), 60);
+                                self.dialogBox.Interrupt(". . .".TranslateString(), 60);
+                                self.dialogBox.Interrupt("Get out, leave me alone.".TranslateString(), 60);
+                                break;
+
+                        }
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
-				case 3 when !saveState.GetVoidMeetMoon():
+                case 4:
+                    {
+                        if (self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5)
+                        {
+                            self.dialogBox.Interrupt("You should not have done that.".TranslateString(), 60);
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+                            self.getToWorking = 1f;
+                        }
+                        else
+                        {
+                            if (self.action != MeetVoid_Init)
+                            {
+                                saveState.SetLastMeetCycles(saveState.cycleNumber);
+                                if (self.currSubBehavior.ID != VoidTalk)
+                                {
+                                    miscData.SSaiConversationsHad++;
+                                    self.NewAction(MeetVoid_Init);
+                                    self.SlugcatEnterRoomReaction();
+                                    self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case 5:
 					{
-                        self.dialogBox.Interrupt("GET OUT, now.", 80);
-                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-						break;
-					}
-				case 4:
-					{
-						//check whether any player in room has LW-void pearl in hands or stomach
 						if(self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom => 
 							playerInOracleRoom.grasps.Any(grasp =>
 								grasp is not null 
@@ -172,16 +212,16 @@ static class OracleHooks
                         }
 						break;
 					}
-                case 5:
+                case 6:
                     {
                         //check whether any player in room has LW-void pearl in hands or stomach
                         if (self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom =>
                             playerInOracleRoom.grasps.Any(grasp =>
                                 grasp is not null
                                 && grasp.grabbed is DataPearl pearl
-                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))
                             || (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
-                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))))
                         {
                             self.dialogBox.Interrupt("Good boy.", 80);
                         }
@@ -192,16 +232,16 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 6:
+                case 7:
                     {
                         //check whether any player in room has LW-void pearl in hands or stomach
                         if (self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom =>
                             playerInOracleRoom.grasps.Any(grasp =>
                                 grasp is not null
                                 && grasp.grabbed is DataPearl pearl
-                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-slugcat"))
                             || (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
-                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-slugcat"))))
                         {
                             self.dialogBox.Interrupt("Good boy.", 80);
                         }
@@ -230,10 +270,6 @@ static class OracleHooks
 								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
 							}
 						}
-                        if (miscData.SSaiConversationsHad == 0)
-                            saveState.SetEncountersWithMark(miscData.SLOracleState.playerEncountersWithMark);
-                        if (miscData.SSaiConversationsHad == 5)
-							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
                         break;
 					}
 			}
@@ -274,6 +310,7 @@ static class OracleHooks
                 {
                     return OracleConversation.pickInterruptMessages[amountOfPreviousMeetings];
                 }
+                PebbleVoice(self);
                 return str;
             });
         }
@@ -404,5 +441,44 @@ static class OracleHooks
         }
 
         int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
+    }
+    private static void PebbleVoice(SSOracleBehavior self)
+    {
+        SoundID randomTalk = SoundID.SS_AI_Talk_1;
+        switch (UnityEngine.Random.Range(0, 5))
+        {
+            case 0:
+                randomTalk = SoundID.SS_AI_Talk_1;
+                break;
+            case 1:
+                randomTalk = SoundID.SS_AI_Talk_2;
+                break;
+            case 2:
+                randomTalk = SoundID.SS_AI_Talk_3;
+                break;
+            case 3:
+                randomTalk = SoundID.SS_AI_Talk_4;
+                break;
+            case 4:
+                randomTalk = SoundID.SS_AI_Talk_5;
+                break;
+        }
+        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+        {
+            self.AirVoice(randomTalk);
+        }
+    }
+}
+
+public static class OracleExtensionMethods
+{
+    public static void AirVoice(this SSOracleBehavior self, SoundID line)
+    {
+        if (self.voice != null)
+        {
+            self.voice.currentSoundObject?.Stop();
+            self.voice.Destroy();
+        }
+        self.voice = self.oracle.room.PlaySound(line, self.oracle.firstChunk);
     }
 }

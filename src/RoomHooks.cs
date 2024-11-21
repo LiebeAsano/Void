@@ -48,8 +48,8 @@ namespace VoidTemplate
 				{
 					self.AddObject(new CeilingClimbTutorial(self,
 					[
-						new("Your body is strong enough to climb on any surface.", 0, 444),
-						new("And your abilities continue to improve.", 0, 444)
+						new("Your body is strong enough to climb on any surface.", 0, 333),
+						new("Your abilities also continue to improve", 0, 333)
 					]));
 				}
 				switch (self.abstractRoom.name)

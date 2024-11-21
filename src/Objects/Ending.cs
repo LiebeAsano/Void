@@ -6,7 +6,7 @@ internal class Ending : UpdatableAndDeletable
 {
 	#region immutable
 	const int DelayTreshold = 1 * Utils.TicksPerSecond;
-	static Vector2 expectedPositionOfTrigger = new Vector2(300, 280);
+	static Vector2 expectedPositionOfTrigger = new Vector2(350, 280);
 	const int triggerRadius = 160;
 	const int timeToMoveCamera = 9 * Utils.TicksPerSecond;
 	/// <summary>

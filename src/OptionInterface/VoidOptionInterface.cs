@@ -17,8 +17,9 @@ internal class VoidOptionInterface : global::OptionInterface
 		base.Initialize();
 		Tabs = [new OpTab(this, "blahblahblah")];
 		Tabs[0].GenerateBlock("~ Arena ~".TranslateStringComplex(), new Vector2(50, 550), options: [
-			(cfgSaintArenaAscension, MediumGrey),
-			(cfgSaintArenaSpears, MediumGrey),
+            (cfgSaintArenaSpears, MediumGrey),
+            (cfgSaintArenaAscension, MediumGrey),
+			(cfgArenaAscensionStun, MediumGrey)
 			]);
 		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: [
 			(cfgGamepadController, MediumGrey),

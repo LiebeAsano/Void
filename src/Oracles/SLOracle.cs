@@ -1010,8 +1010,9 @@ internal static class SLOracle
                     if (self.holdingObject is DataPearl pearl)
                     {
                         pearl.slatedForDeletetion = true;
+                        var roomref = self.oracle.room;
                         //oh my god DataPearl ctor takes in world but does nothing with it
-                        var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, self.oracle.room.world);
+                        var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
                         self.holdingObject = hoveringPearl;
                         pearl.abstractPhysicalObject.realizedObject = hoveringPearl;
                         hoveringPearl.bodyChunks[0].pos = pearl.bodyChunks[0].pos;
@@ -1020,7 +1021,8 @@ internal static class SLOracle
                         {
                             self.dialogBox.Interrupt("aw...", 200);
                         };
-                        self.oracle.room.AddObject(hoveringPearl);
+                        roomref.AddObject(hoveringPearl);
+                        hoveringPearl.PlaceInRoom(roomref);
                     }
                     else logerr("attempting event HoverPearl while moon is not holding pearl");
                     break;

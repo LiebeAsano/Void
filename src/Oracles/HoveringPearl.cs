@@ -22,10 +22,14 @@ internal class HoveringPearl : DataPearl
     public override void Update(bool eu)
     {
         base.Update(eu);
-        if(Carried && !lastCarried)
+        if(Carried 
+            && !lastCarried 
+            && hoverPos != null)
         {
             hoverPos = null;
             OnPearlTaken?.Invoke();
+            beatScale = 0f;
+            gravity = 0.9f;
         }
         lastCarried = Carried;
         if (hoverPos != null)
@@ -33,11 +37,6 @@ internal class HoveringPearl : DataPearl
             firstChunk.vel *= Custom.LerpMap(firstChunk.vel.magnitude, 1f, 6f, 0.999f, 0.9f);
             firstChunk.vel += Vector2.ClampMagnitude(hoverPos.Value - firstChunk.pos, 100f) / 100f * 0.4f;
             gravity = 0f;
-        }
-        else
-        {
-            beatScale = 0f;
-            gravity = 0.9f;
         }
     }
 

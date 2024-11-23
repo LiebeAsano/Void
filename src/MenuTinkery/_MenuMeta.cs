@@ -8,6 +8,6 @@ public static class _MenuMeta
 		SelectScreenScenes.Hook();
 		DreamAssociatedSound.Startup();
         MenuStatisticsSound.Hook();
-
+		PermaDeathScreen.Hook();
     }
 }

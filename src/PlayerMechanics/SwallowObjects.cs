@@ -12,14 +12,14 @@ internal static class SwallowObjects
 		On.Player.SwallowObject += Player_SwallowObject;
 	}
 
-	private static readonly HashSet<Type> HalfFoodObjects =
-		[
+	private static readonly HashSet<Type> HalfFoodObjects = new HashSet<Type>
+		{
 			typeof(Hazer),
 			typeof(VultureGrub),
-		];
+		};
 
-	private static readonly HashSet<Type> QuarterFoodObjects =
-	[
+	private static readonly HashSet<Type> QuarterFoodObjects = new HashSet<Type>
+	{
 		typeof(WaterNut),
 		typeof(FirecrackerPlant),
 		typeof(FlyLure),
@@ -28,17 +28,17 @@ internal static class SwallowObjects
 		typeof(FlyLure),
 		typeof(BubbleGrass),
 		typeof(Lantern),
-	];
+	};
 
-	private static readonly HashSet<Type> FullPinFoodObjects =
-	[
+	private static readonly HashSet<Type> FullPinFoodObjects = new HashSet<Type>
+	{
 		typeof(SporePlant),
-		];
+	};
 
-	private static readonly HashSet<Type> TwoFullPinFoodObjects =
-	[
+	private static readonly HashSet<Type> TwoFullPinFoodObjects = new HashSet<Type>
+	{
 		typeof(NeedleEgg),
-		];
+	};
 
 	private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
 	{

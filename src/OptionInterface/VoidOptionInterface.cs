@@ -15,16 +15,16 @@ internal class VoidOptionInterface : global::OptionInterface
 	public override void Initialize()
 	{
 		base.Initialize();
-		Tabs = [new OpTab(this, "blahblahblah")];
-		Tabs[0].GenerateBlock("~ Arena ~".TranslateStringComplex(), new Vector2(50, 550), options: [
+		Tabs = new OpTab[] { new OpTab(this, "blahblahblah") };
+		Tabs[0].GenerateBlock("~ Arena ~".TranslateStringComplex(), new Vector2(50, 550), options: new (ConfigurableBase, Color)[] {
 			(cfgSaintArenaAscension, MediumGrey),
 			(cfgSaintArenaSpears, MediumGrey),
-			]);
-		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: [
+			});
+		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: new (ConfigurableBase, Color)[] {
 			(cfgSimpleFood, MediumGrey),
 			(cfgNoPermaDeath, CheatingColor),
 			(cfgForceUnlockCampaign, CheatingColor)
-			]);
+		});
 	}
 
 

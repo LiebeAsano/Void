@@ -97,9 +97,9 @@ namespace VoidTemplate.PlayerMechanics
 			BodyChunk body_chunk_0 = player.bodyChunks[0];
 			BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-			Vector2[] directions = [
+			Vector2[] directions = new Vector2[]{
 			new Vector2(0, 1)
-			];
+			};
 
 			foreach (var direction in directions)
 			{

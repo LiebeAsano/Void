@@ -45,10 +45,10 @@ namespace VoidTemplate
 				SaveState saveState = self.game.GetStorySession.saveState;
 				if (!saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
 				{
-					self.AddObject(new CeilingClimbTutorial(self,
-					[
+					self.AddObject(new CeilingClimbTutorial(self,new CeilingClimbTutorial.Message[]
+					{
 						new("Your body is strong enough to climb on any surface.", 0, 444)
-					]));
+					}));
 				}
 				switch (self.abstractRoom.name)
 				{

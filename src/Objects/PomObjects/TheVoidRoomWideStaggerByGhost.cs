@@ -21,7 +21,7 @@ namespace VoidTemplate.Objects.PomObjects
         [IntegerField("MaxDurationFrames", 0, int.MaxValue, 20, ControlType.text, "Maximal Duration")]
         public int MaximalDuration;
 
-        public TheVoidRoomWideStaggerByGhostData(PlacedObject owner) : base(owner, [])
+        public TheVoidRoomWideStaggerByGhostData(PlacedObject owner) : base(owner, null)
         {
         }
     }

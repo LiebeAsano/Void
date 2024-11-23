@@ -18,7 +18,7 @@ internal static class RockHitSomething
 		{
 			string creatureTypeName = creature.Template.type.ToString();
 
-			string[] excludedCreatureTypes = [
+			string[] excludedCreatureTypes = new string[] {
 					"Vulture",
 					"BrotherLongLegs",
 					"DaddyLongLegs",
@@ -40,7 +40,7 @@ internal static class RockHitSomething
 					"TerrorLongLegs",
 					"AquaCenti",
 					"StowawayBug"
-			];
+			};
 
 			if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)
 			{

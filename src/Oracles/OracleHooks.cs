@@ -40,7 +40,7 @@ static class OracleHooks
 		var savestate = self.oracle.room.game.GetStorySession.saveState;
 		var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
 		if (amountOfEatenPearls == 6
-		&& self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 6)
+		&& !savestate.GetVoidMeetMoon())
 		{
             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
 			self.getToWorking = 1f;
@@ -162,7 +162,7 @@ static class OracleHooks
                             case 2:
                                 self.dialogBox.Interrupt("Have you already visited Looks to the Moon?".TranslateString(), 60);
                                 self.dialogBox.Interrupt(". . .".TranslateString(), 60);
-                                self.dialogBox.Interrupt("Get out, leave me alone.".TranslateString(), 60);
+                                self.dialogBox.Interrupt("Get out and leave me alone.".TranslateString(), 60);
                                 break;
 
                         }
@@ -201,14 +201,17 @@ static class OracleHooks
 								&& grasp.grabbed is DataPearl pearl
 								&& pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
 							|| (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
-								&& absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+								&& absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void")) || 
+                                self.oracle.room.updateList.Exists(x => x is DataPearl pearl2 
+                                && pearl2.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
+
 						{
                             self.dialogBox.Interrupt("Good boy.", 80);
                         }
 						else
 						{
 							self.dialogBox.Interrupt("I need the pearl, now.", 80);
-                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                            self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                         }
 						break;
 					}
@@ -221,34 +224,16 @@ static class OracleHooks
                                 && grasp.grabbed is DataPearl pearl
                                 && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))
                             || (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
-                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))))
+                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot")) ||
+                                self.oracle.room.updateList.Exists(x => x is DataPearl pearl2 
+                                && pearl2.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))))
                         {
                             self.dialogBox.Interrupt("Good boy.", 80);
                         }
                         else
                         {
                             self.dialogBox.Interrupt("I need the pearl, now.", 80);
-                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-                        }
-                        break;
-                    }
-                case 7:
-                    {
-                        //check whether any player in room has LW-void pearl in hands or stomach
-                        if (self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom =>
-                            playerInOracleRoom.grasps.Any(grasp =>
-                                grasp is not null
-                                && grasp.grabbed is DataPearl pearl
-                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-slugcat"))
-                            || (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
-                                && absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-slugcat"))))
-                        {
-                            self.dialogBox.Interrupt("Good boy.", 80);
-                        }
-                        else
-                        {
-                            self.dialogBox.Interrupt("I need the pearl, now.", 80);
-                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                            self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                         }
                         break;
                     }

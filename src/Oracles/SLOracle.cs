@@ -7,6 +7,8 @@ using static VoidTemplate.Oracles.OracleHooks;
 using UnityEngine;
 using MoreSlugcats;
 using RWCustom;
+using System.Diagnostics.Eventing.Reader;
+using System.Threading.Tasks;
 
 namespace VoidTemplate.Oracles;
 
@@ -27,6 +29,8 @@ internal static class SLOracle
         On.SLOracleBehaviorHasMark.PlayerInterruptByTakingItem += SLOracleBehaviorHasMark_PlayerInterruptByTakingItem;
         On.SLOracleBehaviorHasMark.PlayerHoldingSSNeuronsGreeting += SLOracleBehaviorHasMark_PlayerHoldingSSNeuronsGreeting;
         On.SLOracleBehaviorHasMark.AlreadyDiscussedItem += SLOracleBehaviorHasMark_AlreadyDiscussedItem;
+        On.SLOracleBehaviorHasMark.MoonConversation.PearlIntro += MoonConversation_PearlIntro;
+        On.SLOracleBehaviorHasMark.MoonConversation.PebblesPearl += MoonConversation_PebblesPearl;
         On.SLOracleBehaviorHasMark.Update += SLOracleBehaviorHasMark_Update;
         On.SLOracleBehaviorHasMark.MoonConversation.AddEvents += MoonConversation_AddEvents;
         On.SLOracleBehaviorHasMark.SpecialEvent += SLOracleBehaviorHasMark_SpecialEvent;
@@ -960,6 +964,168 @@ internal static class SLOracle
             orig(self, pearl);
     }
 
+    private static void MoonConversation_PearlIntro(On.SLOracleBehaviorHasMark.MoonConversation.orig_PearlIntro orig, SLOracleBehaviorHasMark.MoonConversation self)
+    {
+        if (self.myBehavior.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (self.myBehavior is SLOracleBehaviorHasMark self2)
+            {
+                if (self.myBehavior.isRepeatedDiscussion)
+                {
+                    self.events.Add(new Conversation.TextEvent(self, 0, self.myBehavior.AlreadyDiscussedItemString(true), 10));
+                    return;
+                }
+                if (self.myBehavior.oracle.ID != Oracle.OracleID.SS)
+                {
+                    switch (self.State.totalPearlsBrought + self.State.miscPearlCounter)
+                    {
+                        case 0:
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Ah, you would like me to read this?"), 10));
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("It's a bit dusty, but I will do my best. Hold on..."), 10));
+                            return;
+                        case 1:
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Another pearl! You want me to read this one too? Just a moment..."), 10));
+                            return;
+                        case 2:
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("And yet another one! I will read it to you."), 10));
+                            return;
+                        case 3:
+                            if (ModManager.MSC && self.myBehavior.oracle.ID == MoreSlugcatsEnums.OracleID.DM)
+                            {
+                                self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Another? Let us see... to be honest, I'm as curious to see it as you are."), 10));
+                                return;
+                            }
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Another? You're no better than the scavengers!"), 10));
+                            if (self.State.GetOpinion == SLOrcacleState.PlayerOpinion.Likes)
+                            {
+                                self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let us see... to be honest, I'm as curious to see it as you are."), 10));
+                                return;
+                            }
+                            break;
+                        default:
+                            switch (UnityEngine.Random.Range(0, 5))
+                            {
+                                case 0:
+                                    break;
+                                case 1:
+                                    if (ModManager.MSC && self.myBehavior.oracle.ID == MoreSlugcatsEnums.OracleID.DM)
+                                    {
+                                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Oh? What have you found this time? Let's see what it says..."), 10));
+                                        return;
+                                    }
+                                    MoonVoice(self2);
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("The scavengers must be jealous of you, finding all these"), 10));
+                                    return;
+                                case 2:
+                                    MoonVoice(self2);
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Here we go again, little archeologist. Let's read your pearl."), 10));
+                                    return;
+                                case 3:
+                                    MoonVoice(self2);
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("... You're getting quite good at this you know. A little archeologist beast.<LINE>Now, let's see what it says."), 10));
+                                    return;
+                                default:
+                                    MoonVoice(self2);
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("And yet another one! I will read it to you."), 10));
+                                    return;
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (self.State.totalPearlsBrought + self.State.miscPearlCounter)
+                    {
+                        case 0:
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Ah, you have found me something to read?"), 10));
+                            return;
+                        case 1:
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Have you found something else for me to read?"), 10));
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let us take a look."), 10));
+                            return;
+                        case 2:
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("I am surprised you have found so many of these."), 10));
+                            return;
+                        case 3:
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Where do you find all of these?"), 10));
+                            MoonVoice(self2);
+                            self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("I wonder, just how much time has passed since some of these were written."), 10));
+                            return;
+                        default:
+                            switch (UnityEngine.Random.Range(0, 5))
+                            {
+                                case 0:
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let us see what you have found."), 10));
+                                    return;
+                                case 1:
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Ah. Have you found something new?"), 10));
+                                    return;
+                                case 2:
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("What is this?"), 10));
+                                    return;
+                                case 3:
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Is that something new? Allow me to see."), 10));
+                                    return;
+                                default:
+                                    self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let us see if there is anything important written on this."), 10));
+                                    break;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        else
+            orig (self);
+
+    }
+
+    private static void MoonConversation_PebblesPearl(On.SLOracleBehaviorHasMark.MoonConversation.orig_PebblesPearl orig, SLOracleBehaviorHasMark.MoonConversation self)
+    {
+        if (self.myBehavior.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        {
+            if (self.myBehavior is SLOracleBehaviorHasMark self2)
+            {
+                switch (UnityEngine.Random.Range(0, 5))
+                {
+                    case 0:
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("You would like me to read this?"), 10));
+                        MoonVoice(self2);
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("It's still warm... this was in use recently."), 10));
+                        break;
+                    case 1:
+                        MoonVoice(self2);
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("A pearl... This one is crystal clear - it was used just recently."), 10));
+                        break;
+                    case 2:
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Would you like me to read this pearl?"), 10));
+                        MoonVoice(self2);
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Strange... it seems to have been used not too long ago."), 10));
+                        break;
+                    case 3:
+                        MoonVoice(self2);
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("This pearl has been written to just now!"), 10));
+                        break;
+                    default:
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let's see... A pearl..."), 10));
+                        MoonVoice(self2);
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("And this one is fresh! It was not long ago this data was written to it!"), 10));
+                        break;
+                }
+                self.LoadEventsFromFile((ModManager.MSC && self.myBehavior.oracle.ID == MoreSlugcatsEnums.OracleID.DM) ? 168 : 40, true, (self.myBehavior is SLOracleBehaviorHasMark && (self.myBehavior as SLOracleBehaviorHasMark).holdingObject != null) ? (self.myBehavior as SLOracleBehaviorHasMark).holdingObject.abstractPhysicalObject.ID.RandomSeed : UnityEngine.Random.Range(0, 100000));
+            }
+        }
+        else
+            orig(self);
+    }
+
     private static void SLOracleBehaviorHasMark_Update(On.SLOracleBehaviorHasMark.orig_Update orig, SLOracleBehaviorHasMark self, bool eu)
     {
         orig(self, eu);
@@ -998,14 +1164,14 @@ internal static class SLOracle
     private static void SLOracleBehaviorHasMark_SpecialEvent(On.SLOracleBehaviorHasMark.orig_SpecialEvent orig, SLOracleBehaviorHasMark self, string eventName)
     {
         orig(self, eventName);
-        switch(eventName)
+        switch (eventName)
         {
             case "MoonVoice":
                 {
                     MoonVoice(self);
                     break;
                 }
-            case "HoverPearl":
+            /*case "HoverPearl":
                 {
                     if (self.holdingObject is DataPearl pearl)
                     {
@@ -1026,11 +1192,19 @@ internal static class SLOracle
                     }
                     else logerr("attempting event HoverPearl while moon is not holding pearl");
                     break;
-                }
+                }*/
+            /*case "AsyncHover":
+                {
+                    if (self.holdingObject is DataPearl pearl)
+                    {
+                        var roomref = self.oracle.room;
+                        var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
+                        hoveringPearl.AnyncHover(pearl, hoveringPearl);
+                    }
+                    break;
+                }*/
         }
-        
     }
-    
     private static void MoonVoice(SLOracleBehaviorHasMark self)
     {
         SoundID randomTalk = SoundID.SL_AI_Talk_1;
@@ -1057,5 +1231,4 @@ internal static class SLOracle
             self.AirVoice(randomTalk);
         }
     }
-
 }

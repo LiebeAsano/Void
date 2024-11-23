@@ -1,9 +1,5 @@
 ﻿using RWCustom;
-using SlugBase.DataTypes;
 using System;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using UnityEngine;
 
 namespace VoidTemplate.Oracles;
@@ -71,11 +67,4 @@ internal class HoveringPearl : DataPearl
             room.PlaySound(SoundID.SS_AI_Marble_Hit_Floor, firstChunk, false, Custom.LerpMap(speed, 0f, 8f, 0.2f, 1f), 1f);
         }
     }
-
-    public async void AnyncHover(DataPearl pearl, HoveringPearl hoveringPearl)
-    {
-        await Task.Delay(15000);
-        hoveringPearl.hoverPos = null;
-    }
-
 }

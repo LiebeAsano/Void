@@ -27,18 +27,15 @@ internal static class SpearmasterAntiMechanic
 		}
 	}
 
-    private static bool Spear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
-    {
-        if (result.obj is Player victim
-            && victim.IsVoid()
-            && self.Spear_NeedleCanFeed()
-            && self.thrownBy is Player thrower)
-        {
-            if (!deathMarks.TryGetValue(thrower, out _))
-            {
-                deathMarks.Add(thrower, new(self.room.game.clock));
-            }
-        }
-        return orig(self, result, eu);
-    }
+	private static bool Spear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
+	{
+		if (result.obj is Player victim
+			&& victim.IsVoid()
+			&& self.Spear_NeedleCanFeed()
+			&& self.thrownBy is Player thrower)
+		{
+			deathMarks.Add(thrower, new(self.room.game.clock));
+		}
+		return orig(self, result, eu);
+	}
 }

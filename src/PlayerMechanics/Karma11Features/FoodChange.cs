@@ -1,6 +1,7 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
+using VoidTemplate.MenuTinkery;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
@@ -73,7 +74,6 @@ internal static class FoodChange
 		{
 			self.slugcatStats.foodToHibernate = self.Malnourished ? 9 : 6;
 			self.slugcatStats.maxFood = 9;
-
-		}
-	}
+        }
+    }
 }

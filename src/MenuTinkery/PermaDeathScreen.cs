@@ -21,8 +21,6 @@ internal static class PermaDeathScreen
 		//make the empty karma symbol not turn red in the end of permadeath animation
 		//and also not pulsate
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
-		//for debug purposes. press H to go to game over screen
-		On.RainWorldGame.Update += RainWorldGame_Update;
 	}
 
 	static bool IsPlummetingScreen(this KarmaLadder karmaLadder) => karmaLadder.karmaSymbols[0].sprites[karmaLadder.karmaSymbols[0].KarmaSprite].element.name.Contains("blank");

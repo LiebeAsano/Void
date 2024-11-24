@@ -1,29 +1,21 @@
-﻿using MonoMod.RuntimeDetour;
+﻿namespace VoidTemplate.MenuTinkery;
 using Music;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static IL.Menu.MenuScene;
-
-namespace VoidTemplate.MenuTinkery;
 
 internal static class MenuStatisticsSound
 {
-	static Dictionary<string, SoundID> StatisticSoundMap;
+	static Dictionary<string, string> StatisticSoundMap;
 	public static void Hook()
 	{
 		On.Menu.StoryGameStatisticsScreen.GetDataFromGame += GetDataFromGame_Update;
 		On.Menu.KarmaLadderScreen.Singal += KarmaLadderScreen_Singal;
-
-		StatisticSoundMap = new()
+        StatisticSoundMap = new()
 		{
-			{ "Static_Death_Void",  VoidEnums.SoundID.StaticDeathSound },
-			{ "Static_Death_Void11",  VoidEnums.SoundID.StaticDeathSound11 },
-			{ "Static_End_Scene_Void", VoidEnums.SoundID.StaticEndSound },
-			{ "Static_End_Scene_Void11", VoidEnums.SoundID.StaticEndSound11 },
+			{ "Static_Death_Void",  "Static_Death_Sound" },
+			{ "Static_Death_Void11",  "Static_Death_Sound11" },
+			{ "Static_End_Scene_Void", "Static_End_Sound" },
+			{ "Static_End_Scene_Void11", "Static_End_Sound11" },
 		};
 	}
 
@@ -33,7 +25,7 @@ internal static class MenuStatisticsSound
 		if ((message == "CONTINUE"
 			|| message == "EXIT")
 			&& self.manager.musicPlayer is MusicPlayer p
-			&& StatisticSoundMap.Values.Any(value => value.value == p.song.name))
+			&& StatisticSoundMap.Values.Any(value => value == p.song.name))
 		{
 			p.song.FadeOut(20f);
 		}
@@ -48,7 +40,7 @@ internal static class MenuStatisticsSound
 			if (StatisticSoundMap.Keys.Contains(currentScene)
 				&& self.manager.musicPlayer is MusicPlayer player)
 			{
-				player.song = new(player, StatisticSoundMap[currentScene].value, MusicPlayer.MusicContext.Menu);
+				player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu);
 				player.song.playWhenReady = true;
 
 			}

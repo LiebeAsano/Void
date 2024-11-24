@@ -18,15 +18,15 @@ internal static class PermaDeathScreen
 		On.Menu.KarmaLadder.GoToKarma += KarmaLadder_GoToKarma;
 		//fetch empty karma
 		On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
-
+		//make the empty karma symbol not turn red in the end of permadeath animation
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
 		//#warning WIP
-        //IL.Menu.KarmaLadder.NewPhase += KarmaLadder_NewPhase;
+		//IL.Menu.KarmaLadder.NewPhase += KarmaLadder_NewPhase;
 		//for debug purposes. press H to go to game over screen
 		//On.RainWorldGame.Update += RainWorldGame_Update;
 	}
 
-    private static void KarmaLadder_NewPhase(MonoMod.Cil.ILContext il)
+	private static void KarmaLadder_NewPhase(MonoMod.Cil.ILContext il)
 	{
 		ILCursor c = new(il);
 		ILLabel skipSoundPlay = c.DefineLabel();
@@ -74,15 +74,21 @@ internal static class PermaDeathScreen
 		return orig(small, k);
 	}
 
-    private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
-    {
-		// delete red impulse
-		if (self.displayKarma == new IntVector2(-1, 0))
-			self.pulsateCounter = 0;
-        orig(self, timeStacker);
-    }
+	private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
+	{
+		orig(self, timeStacker);
+		if (self.displayKarma == new IntVector2(0, 0))
+		{
+			var color = Color.white;
+			self.sprites[self.RingSprite].color = color;
+			self.sprites[self.KarmaSprite].color = color;
+			self.sprites[self.LineSprite].color = color;
+			self.sprites[self.GlowSprite(0)].color = color;
+			self.sprites[self.GlowSprite(1)].color = color;
+		}
+	}
 
-    private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
+	private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
 	{
 		var screen = menu as KarmaLadderScreen;
 		bool needInsert = false;
@@ -103,25 +109,18 @@ internal static class PermaDeathScreen
 				new Vector2(0f, 0f), self.containers[self.MainContainer],
 				self.containers[self.FadeCircleContainer], new IntVector2(-1, 0));
 
-            //removing the ring surrounding empty karma
-            zeroKarma.sprites[zeroKarma.KarmaSprite].color = new Color(1f, 1f, 1f);
-            zeroKarma.sprites[zeroKarma.LineSprite].color = new Color(1f, 1f, 1f);
-            zeroKarma.sprites[zeroKarma.RingSprite].color = new Color(1f, 1f, 1f);
-            zeroKarma.sprites[zeroKarma.GlowSprite(0)].color = new Color(1f, 1f, 1f);
-            zeroKarma.sprites[zeroKarma.GlowSprite(1)].color = new Color(1f, 1f, 1f);
-
-            self.karmaSymbols.Insert(0, zeroKarma);
-			self.subObjects.Add(self.karmaSymbols[0]);
-			self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].MoveBehindOtherNode(
+			self.karmaSymbols.Insert(0, zeroKarma);
+			self.subObjects.Add(zeroKarma);
+			zeroKarma.sprites[zeroKarma.KarmaSprite].MoveBehindOtherNode(
 				self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
-			self.karmaSymbols[0].sprites[self.karmaSymbols[0].RingSprite].MoveBehindOtherNode(
+			zeroKarma.sprites[zeroKarma.RingSprite].MoveBehindOtherNode(
 				self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
-			self.karmaSymbols[0].sprites[self.karmaSymbols[0].LineSprite].MoveBehindOtherNode(
+			zeroKarma.sprites[zeroKarma.LineSprite].MoveBehindOtherNode(
 				self.karmaSymbols[1].sprites[self.karmaSymbols[1].KarmaSprite]);
 
-			self.karmaSymbols[0].sprites[self.karmaSymbols[0].GlowSprite(0)].MoveBehindOtherNode(
+			zeroKarma.sprites[zeroKarma.GlowSprite(0)].MoveBehindOtherNode(
 				self.karmaSymbols[1].sprites[self.karmaSymbols[1].GlowSprite(0)]);
-			self.karmaSymbols[0].sprites[self.karmaSymbols[0].GlowSprite(1)].MoveBehindOtherNode(
+			zeroKarma.sprites[zeroKarma.GlowSprite(1)].MoveBehindOtherNode(
 				self.karmaSymbols[1].sprites[self.karmaSymbols[1].GlowSprite(0)]);
 			foreach (var symbol in self.karmaSymbols)
 				symbol.displayKarma.x++;

@@ -19,34 +19,14 @@ internal static class PermaDeathScreen
 		//fetch empty karma
 		On.HUD.KarmaMeter.KarmaSymbolSprite += KarmaMeter_KarmaSymbolSprite;
 		//make the empty karma symbol not turn red in the end of permadeath animation
+		//and also not pulsate
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
-		//#warning WIP
-		//IL.Menu.KarmaLadder.NewPhase += KarmaLadder_NewPhase;
 		//for debug purposes. press H to go to game over screen
-		//On.RainWorldGame.Update += RainWorldGame_Update;
+		On.RainWorldGame.Update += RainWorldGame_Update;
 	}
 
-	private static void KarmaLadder_NewPhase(MonoMod.Cil.ILContext il)
-	{
-		ILCursor c = new(il);
-		ILLabel skipSoundPlay = c.DefineLabel();
-		if (c.TryGotoNext(MoveType.After,
-			x => x.MatchLdsfld(typeof(SoundID).GetField(nameof(SoundID.MENU_Karma_Ladder_Reselect)))))
-		{
-			//moving past soundID play call
-			c.Index++;
-			c.MarkLabel(skipSoundPlay);
-		}
-		else LogExErr("failed to find reselection. skipping defining label");
-		if (c.TryGotoPrev(MoveType.Before,
-			x => x.MatchLdarg(0)))
-		{
-			c.Emit(OpCodes.Ldarg, 0);
-			c.EmitDelegate<Predicate<KarmaLadder>>((KarmaLadder self) => self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].element.name.Contains("blank"));
-			c.Emit(OpCodes.Brtrue, skipSoundPlay);
-		}
-		else LogExErr("it shouldn't be possible to miss ldarg0 but somehoww you did it.");
-	}
+	static bool IsPlummetingScreen(this KarmaLadder karmaLadder) => karmaLadder.karmaSymbols[0].sprites[karmaLadder.karmaSymbols[0].KarmaSprite].element.name.Contains("blank");
+
 
 	private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
 	{
@@ -61,7 +41,7 @@ internal static class PermaDeathScreen
 	private static void KarmaLadder_GoToKarma(On.Menu.KarmaLadder.orig_GoToKarma orig, KarmaLadder self, int newGoalKarma, bool displayMetersOnRest)
 	{
 		orig(self, newGoalKarma, displayMetersOnRest);
-		if (self.karmaSymbols[0].sprites[self.karmaSymbols[0].KarmaSprite].element.name.Contains("blank"))
+		if (self.IsPlummetingScreen())
 		{
 			self.movementShown = true;
 			self.showEndGameMetersCounter = 85;
@@ -77,8 +57,9 @@ internal static class PermaDeathScreen
 	private static void KarmaSymbol_GrafUpdate(On.Menu.KarmaLadder.KarmaSymbol.orig_GrafUpdate orig, KarmaLadder.KarmaSymbol self, float timeStacker)
 	{
 		orig(self, timeStacker);
-		if (self.displayKarma == new IntVector2(0, 0))
+		if (self.displayKarma == new IntVector2(0, 0) && self.parent.IsPlummetingScreen())
 		{
+			self.pulsateCounter = 0;
 			var color = Color.white;
 			self.sprites[self.RingSprite].color = color;
 			self.sprites[self.KarmaSprite].color = color;

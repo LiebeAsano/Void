@@ -7,8 +7,13 @@ public static class ColdImmunityPatch
 	{
 		On.Creature.HypothermiaUpdate += static (orig, self) =>
 		{
-			orig(self);
-			if (self is Player p && p.IsVoid()) p.Hypothermia = 0;
+            if (self is Player p && p.IsVoid())
+            {
+                p.Hypothermia = 0;
+                p.HypothermiaExposure = 0f;
+                return;
+            }
+            orig(self);
 		};
 		On.Creature.HypothermiaBodyContactWarmup += static (orig, self, otherself, other) =>
 		{

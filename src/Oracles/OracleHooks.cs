@@ -10,6 +10,7 @@ using static VoidTemplate.SaveManager;
 using UnityEngine;
 using System.Collections.Generic;
 using RWCustom;
+using static VoidTemplate.Oracles.OracleHooks;
 
 namespace VoidTemplate.Oracles;
 
@@ -26,10 +27,13 @@ static class OracleHooks
 
     #region immutable
     public static SSOracleBehavior.Action MeetVoid_Init = new("MeetVoid_Init", true);
+    public static SSOracleBehavior.Action MeetVoid_Curious = new("MeetVoid_Curious", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
-	#endregion
+    public static SSOracleBehavior.SubBehavior.SubBehavID VoidScan = new("VoidScan", true);
+    public static List<ProjectedImage> Void_projectImages = new List<ProjectedImage>();
+    #endregion
 
-	public static void EatPearlsInterrupt(this SSOracleBehavior self)
+    public static void EatPearlsInterrupt(this SSOracleBehavior self)
 	{
 		if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
 		if (self.conversation != null && self.action != SSOracleBehavior.Action.ThrowOut_ThrowOut)
@@ -76,40 +80,41 @@ static class OracleHooks
 
     private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
 	{
-		if (nextAction == MeetVoid_Init)
-		{
-			self.inActionCounter = 0;
-			self.action = nextAction;
-			if (self.currSubBehavior.ID == VoidTalk)
-			{
-				self.currSubBehavior.Activate(self.action, nextAction);
-				return;
-			}
-			SSOracleBehavior.SubBehavior subBehavior = null;
-			for (int i = 0; i < self.allSubBehaviors.Count; i++)
-			{
-				if (self.allSubBehaviors[i].ID == VoidTalk)
-				{
-					subBehavior = self.allSubBehaviors[i];
-					break;
-				}
-			}
+        if (nextAction == MeetVoid_Init || nextAction == MeetVoid_Curious)
+        {
+            self.inActionCounter = 0;
+            self.action = nextAction;
+            if (self.currSubBehavior.ID == VoidTalk)
+            {
+                self.currSubBehavior.Activate(self.action, nextAction);
+                return;
+            }
 
-			if (subBehavior == null)
-			{
-                subBehavior = new SSOracleVoidBehavior(self,
-					self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad);
-				self.allSubBehaviors.Add(subBehavior);
-			}
-			subBehavior.Activate(self.action, nextAction);
-			self.currSubBehavior.Deactivate();
-			self.currSubBehavior = subBehavior;
-		}
-		else
-		{
-			orig(self, nextAction);
-		}
-	}
+            SSOracleBehavior.SubBehavior subBehavior = null;
+            for (int i = 0; i < self.allSubBehaviors.Count; i++)
+            {
+                if (self.allSubBehaviors[i].ID == VoidTalk)
+                {
+                    subBehavior = self.allSubBehaviors[i];
+                    break;
+                }
+            }
+
+            if (subBehavior == null)
+            {
+                subBehavior = new SSOracleMeetVoid_CuriousBehavior(self, self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad);
+            }
+            self.allSubBehaviors.Add(subBehavior);
+
+            subBehavior.Activate(self.action, nextAction);
+            self.currSubBehavior.Deactivate();
+            self.currSubBehavior = subBehavior;
+        }
+        else
+        {
+            orig(self, nextAction);
+        }
+    }
 
 	private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
 	{
@@ -130,7 +135,7 @@ static class OracleHooks
 					{
 						miscData.SSaiConversationsHad++;
                         self.afterGiveMarkAction = MeetVoid_Init;
-                        self.NewAction(SSOracleBehavior.Action.General_GiveMark);
+                        self.NewAction(MeetVoid_Curious);
                         self.SlugcatEnterRoomReaction(); 
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
@@ -453,6 +458,362 @@ static class OracleHooks
             self.AirVoice(randomTalk);
         }
     }
+}
+
+public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBehavior
+{
+    public static SSOracleBehavior.Action MeetVoid_Talking = new SSOracleBehavior.Action("MeetVoid_Talking", true);
+    public static SSOracleBehavior.Action MeetVoid_Texting = new SSOracleBehavior.Action("MeetVoid_Texting", true);
+    public static SSOracleBehavior.Action MeetVoid_FirstImages = new SSOracleBehavior.Action("MeetVoid_FirstImages", true);
+    public static SSOracleBehavior.Action MeetVoid_SecondCurious = new SSOracleBehavior.Action("MeetVoid_SecondCurious", true);
+    int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
+
+    public ChunkSoundEmitter voice
+    {
+        get
+        {
+            return this.owner.voice;
+        }
+        set
+        {
+            this.owner.voice = value;
+        }
+    }
+
+    public SSOracleMeetVoid_CuriousBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.PebbleVoidConversation[times - 1])
+    {
+        this.chatLabel = new OracleChatLabel(owner);
+        this.showMediaPos = new Vector2(400f, 300f);
+        this.oracle.room.AddObject(this.chatLabel);
+        this.chatLabel.Hide();
+        if (ModManager.MMF && owner.oracle.room.game.IsStorySession && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked && base.oracle.room.world.rainCycle.timer > base.oracle.room.world.rainCycle.cycleLength / 4)
+        {
+            base.oracle.room.world.rainCycle.timer = this.oracle.room.world.rainCycle.cycleLength / 4;
+            base.oracle.room.world.rainCycle.dayNightCounter = 0;
+        }
+    }
+
+    public override void Update()
+    {
+        if (base.player == null)
+        {
+            return;
+        }
+        this.owner.LockShortcuts();
+        this.owner.getToWorking = 0f;
+
+        if (base.action == MeetVoid_Curious)
+        {
+            if (inActionCounter < 360)
+                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+            else
+                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
+            if (inActionCounter > 360)
+            {
+                this.owner.NewAction(MeetVoid_Talking);
+                //UnityEngine.Debug.Log("MeetVoid_Talking");
+                return;
+            }
+        }
+        else if (base.action == MeetVoid_Talking)
+        {
+            this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+            if (!this.CurrentlyCommunicating && this.communicationPause > 0)
+            {
+                this.communicationPause--;
+            }
+            if (!this.CurrentlyCommunicating && this.communicationPause < 1)
+            {
+                if (this.communicationIndex >= 4)
+                {
+                    this.owner.NewAction(MeetVoid_Texting);
+                    //UnityEngine.Debug.Log("MeetVoid_Texting");
+                }
+                else if (this.owner.allStillCounter > 20)
+                {
+                    this.NextCommunication();
+                    //UnityEngine.Debug.Log("Next Commu");
+                }
+            }
+            if (!this.CurrentlyCommunicating)
+            {
+                this.owner.nextPos += Custom.RNV();
+                return;
+            }
+        }
+        else
+        {
+            if (base.action == MeetVoid_Texting)
+            {
+                base.movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
+                if (base.oracle.graphicsModule != null)
+                {
+                    (base.oracle.graphicsModule as OracleGraphics).halo.connectionsFireChance = 0f;
+                }
+                if (!this.CurrentlyCommunicating && this.communicationPause > 0)
+                {
+                    this.communicationPause--;
+                }
+                if (!this.CurrentlyCommunicating && this.communicationPause < 1)
+                {
+                    if (this.communicationIndex >= 6)
+                    {
+                        this.owner.NewAction(MeetVoid_FirstImages);
+                        //UnityEngine.Debug.Log("MeetVoid_FirstImages");
+                    }
+                    else if (this.owner.allStillCounter > 20)
+                    {
+                        this.NextCommunication();
+                        this.communicationPause = 150;
+                    }
+                }
+                return;
+            }
+            if (base.action == MeetVoid_FirstImages)
+            {
+                base.movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
+                if (this.communicationPause > 0)
+                {
+                    this.communicationPause--;
+                }
+
+                if (inActionCounter > 150 && this.communicationPause < 1)
+                {
+                    if (base.action == MeetVoid_FirstImages && this.communicationIndex >= 3)
+                    {
+                        this.owner.NewAction(MeetVoid_SecondCurious);
+                        //UnityEngine.Debug.Log("MeetVoid_SecondCurious");
+                    }
+                    else
+                    {
+                        this.NextCommunication();
+                    }
+                }
+                if (this.showImage != null)
+                {
+                    this.showImage.setPos = new Vector2?(this.showMediaPos);
+                }
+                if (UnityEngine.Random.value < 0.0333333351f)
+                {
+                    this.idealShowMediaPos += Custom.RNV() * UnityEngine.Random.value * 30f;
+                    this.showMediaPos += Custom.RNV() * UnityEngine.Random.value * 30f;
+                    return;
+                }
+            }
+            else if (base.action == MeetVoid_SecondCurious)
+            {
+                base.movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
+                if (inActionCounter == 80)
+                {
+                    Custom.Log(new string[]
+                    {
+                        "extra talk"
+                    });
+                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_5, base.oracle.firstChunk);
+                    this.voice.requireActiveUpkeep = true;
+                }
+                if (inActionCounter > 240)
+                {
+                    this.owner.NewAction(SSOracleBehavior.Action.General_GiveMark);
+                    this.owner.afterGiveMarkAction = MeetVoid_Init;
+                }
+                return;
+            }
+        }
+
+        if (owner.conversation != null && owner.conversation.slatedForDeletion == true)
+        {
+            owner.UnlockShortcuts();
+            owner.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+            owner.getToWorking = 1f;
+        }
+    }
+
+    public override void NewAction(SSOracleBehavior.Action oldAction, SSOracleBehavior.Action newAction)
+    {
+        base.NewAction(oldAction, newAction);
+        if (oldAction == MeetVoid_Texting)
+        {
+            this.chatLabel.Hide();
+        }
+        if ((oldAction == MeetVoid_FirstImages) && this.showImage != null)
+        {
+            this.showImage.Destroy();
+            this.showImage = null;
+        }
+        if (newAction == MeetVoid_Curious)
+        {
+            this.owner.investigateAngle = Mathf.Lerp(-70f, 70f, UnityEngine.Random.value);
+            this.owner.invstAngSpeed = Mathf.Lerp(0.4f, 0.8f, UnityEngine.Random.value) * ((UnityEngine.Random.value < 0.5f) ? -1f : 1f);
+            return;
+        }
+        if (newAction == MeetVoid_Texting)
+        {
+            this.communicationPause = 170;
+            this.chatLabel.pos = this.showMediaPos;
+            this.chatLabel.lastPos = this.showMediaPos;
+            return;
+        }
+        if (newAction == MeetVoid_Init && owner.conversation == null)
+        {
+            owner.InitateConversation(OracleConversation.PebbleVoidConversation[MeetTimes - 1], this);
+        }
+    }
+
+    public override void Deactivate()
+    {
+        this.chatLabel.Hide();
+        if (this.showImage != null)
+        {
+            this.showImage.Destroy();
+        }
+        this.voice = null;
+        base.Deactivate();
+    }
+
+    private void NextCommunication()
+    {
+        Custom.Log(new string[]
+        {
+            string.Format("New com att: {0} {1}", base.action, this.communicationIndex)
+        });
+        //UnityEngine.Debug.Log("NextCommu");
+        if (base.action == MeetVoid_Talking)
+        {
+            switch (this.communicationIndex)
+            {
+                case 0:
+                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
+                    this.voice.requireActiveUpkeep = true;
+                    this.communicationPause = 10;
+                    break;
+                case 1:
+                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_2, base.oracle.firstChunk);
+                    this.voice.requireActiveUpkeep = true;
+                    this.communicationPause = 70;
+                    break;
+                case 2:
+                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
+                    this.voice.requireActiveUpkeep = true;
+                    break;
+                case 3:
+                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_4, base.oracle.firstChunk);
+                    this.voice.requireActiveUpkeep = true;
+                    this.communicationPause = 140;
+                    break;
+            }
+        }
+        else if (base.action == MeetVoid_Texting)
+        {
+            this.chatLabel.NewPhrase(this.communicationIndex);
+        }
+        else if (base.action == MeetVoid_FirstImages)
+        {
+            if (this.showImage != null)
+            {
+                this.showImage.Destroy();
+            }
+
+            switch (this.communicationIndex)
+            {
+                case 0:
+                    this.showImage = base.oracle.myScreen.AddImage("aiimg1_void");
+                    this.communicationPause = 380;
+                    break;
+                case 1:
+                    this.showImage = base.oracle.myScreen.AddImage("aiimg2_void");
+                    this.communicationPause = 290;
+                    break;
+                case 2:
+                    this.showImage = base.oracle.myScreen.AddImage(new List<string>
+                    {
+                        "void_glyphs_3",
+                        "void_glyphs_5"
+                    }, 30);
+                    this.communicationPause = 330;
+                    break;
+            }
+
+            if (this.showImage != null)
+            {
+                base.oracle.room.PlaySound(SoundID.SS_AI_Image, 0f, 1f, 1f);
+                this.showImage.lastPos = this.showMediaPos;
+                this.showImage.pos = this.showMediaPos;
+                this.showImage.lastAlpha = 0f;
+                this.showImage.alpha = 0f;
+                this.showImage.setAlpha = new float?(1f);
+            }
+        }
+        this.communicationIndex++;
+    }
+
+    public void ShowMediaMovementBehavior()
+    {
+        if (base.player != null)
+        {
+            this.owner.lookPoint = base.player.DangerPos;
+        }
+        Vector2 vector = new Vector2(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
+        if (this.owner.CommunicatePosScore(vector) + 40f < this.owner.CommunicatePosScore(this.owner.nextPos) && !Custom.DistLess(vector, this.owner.nextPos, 30f))
+        {
+            this.owner.SetNewDestination(vector);
+        }
+        this.consistentShowMediaPosCounter += (int)Custom.LerpMap(Vector2.Distance(this.showMediaPos, this.idealShowMediaPos), 0f, 200f, 1f, 10f);
+        vector = new Vector2(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
+        if (this.ShowMediaScore(vector) + 40f < this.ShowMediaScore(this.idealShowMediaPos))
+        {
+            this.idealShowMediaPos = vector;
+            this.consistentShowMediaPosCounter = 0;
+        }
+        vector = this.idealShowMediaPos + Custom.RNV() * UnityEngine.Random.value * 40f;
+        if (this.ShowMediaScore(vector) + 20f < this.ShowMediaScore(this.idealShowMediaPos))
+        {
+            this.idealShowMediaPos = vector;
+            this.consistentShowMediaPosCounter = 0;
+        }
+        if (this.consistentShowMediaPosCounter > 300)
+        {
+            this.showMediaPos = Vector2.Lerp(this.showMediaPos, this.idealShowMediaPos, 0.1f);
+            this.showMediaPos = Custom.MoveTowards(this.showMediaPos, this.idealShowMediaPos, 10f);
+        }
+    }
+
+    private float ShowMediaScore(Vector2 tryPos)
+    {
+        if (base.oracle.room.GetTile(tryPos).Solid || base.player == null)
+        {
+            return float.MaxValue;
+        }
+        float num = Mathf.Abs(Vector2.Distance(tryPos, base.player.DangerPos) - 250f);
+        num -= Math.Min((float)base.oracle.room.aimap.getTerrainProximity(tryPos), 9f) * 30f;
+        num -= Vector2.Distance(tryPos, this.owner.nextPos) * 0.5f;
+        for (int i = 0; i < base.oracle.arm.joints.Length; i++)
+        {
+            num -= Mathf.Min(Vector2.Distance(tryPos, base.oracle.arm.joints[i].pos), 100f) * 10f;
+        }
+        if (base.oracle.graphicsModule != null)
+        {
+            for (int j = 0; j < (base.oracle.graphicsModule as OracleGraphics).umbCord.coord.GetLength(0); j += 3)
+            {
+                num -= Mathf.Min(Vector2.Distance(tryPos, (base.oracle.graphicsModule as OracleGraphics).umbCord.coord[j, 0]), 100f);
+            }
+        }
+        return num;
+    }
+
+    public override bool CurrentlyCommunicating
+    {
+        get
+        {
+            return base.CurrentlyCommunicating || this.voice != null || (base.action == SSOracleBehavior.Action.MeetWhite_Texting && !this.chatLabel.finishedShowingMessage) || this.showImage != null;
+        }
+    }
+
+    public ProjectedImage showImage;
+    public Vector2 idealShowMediaPos;
+    public Vector2 showMediaPos;
+    public int consistentShowMediaPosCounter;
+    public OracleChatLabel chatLabel;
 }
 
 public static class OracleExtensionMethods

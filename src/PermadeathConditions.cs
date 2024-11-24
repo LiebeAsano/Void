@@ -106,7 +106,6 @@ static class PermadeathConditions
 			self.GetStorySession.saveState.redExtraCycles = true;
 			SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.manager.menuSetup, false);
 			save.SetVoidCatDead(true);
-			KarmaHooks.ForceFailed = true;
 			if (ModManager.CoopAvailable)
 			{
 				int num = 0;

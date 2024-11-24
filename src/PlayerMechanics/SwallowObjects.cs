@@ -61,7 +61,7 @@ internal static class SwallowObjects
 
 					if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
 					{
-						if (self.Karma != 10)
+						if (self.KarmaCap != 10)
 						{
 							self.objectInStomach.Destroy();
 							self.objectInStomach = null;
@@ -84,7 +84,7 @@ internal static class SwallowObjects
 
 					if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
 					{
-						if (self.Karma != 10)
+						if (self.KarmaCap != 10)
 						{
 							self.objectInStomach.Destroy();
 							self.objectInStomach = null;
@@ -130,7 +130,7 @@ internal static class SwallowObjects
 
 					if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
 					{
-						if (self.Karma != 10)
+						if (self.KarmaCap != 10)
 						{
 							self.objectInStomach.Destroy();
 							self.objectInStomach = null;
@@ -158,7 +158,7 @@ internal static class SwallowObjects
 
 					return;
 				}
-				else if (self.Karma != 10)
+				else if (self.KarmaCap != 10)
                 {
 					if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl && hasMark &&
                         self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))

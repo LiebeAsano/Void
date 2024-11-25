@@ -9,5 +9,6 @@ public static class _MenuMeta
 		DreamAssociatedSound.Startup();
         MenuStatisticsSound.Hook();
 		PermaDeathScreen.Hook();
+		StopContinueButtonWhenAboutToDie.Hook();
     }
 }

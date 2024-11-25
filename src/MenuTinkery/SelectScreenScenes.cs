@@ -44,7 +44,8 @@ internal static class SelectScreenScenes
 			self.GetSaveGameData(self.slugcatPageIndex) != null &&
 			self.GetSaveGameData(self.slugcatPageIndex).redsExtraCycles)
 		{
-			self.startButton.menuLabel.text = self.Translate("STATISTICS");
+			var text = self.restartChecked ? "NEW GAME" : "STATISTICS";
+			self.startButton.menuLabel.text = self.Translate(text);
 		}
 		else
 			orig(self);

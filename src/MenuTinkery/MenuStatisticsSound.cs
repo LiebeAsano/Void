@@ -25,6 +25,7 @@ internal static class MenuStatisticsSound
 		if ((message == "CONTINUE"
 			|| message == "EXIT")
 			&& self.manager.musicPlayer is MusicPlayer p
+			&& p.song is not null
 			&& StatisticSoundMap.Values.Any(value => value == p.song.name))
 		{
 			p.song.FadeOut(20f);

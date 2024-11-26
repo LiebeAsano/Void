@@ -38,14 +38,32 @@ public static class SaveManager
 		return KarmaTokenAmount;
 	}
 
-	public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
+    private const string CycleToken = uniqueprefix + "CycleToken";
+
+    public static void SetCycleToken(this SaveState save, int amount) => save.deathPersistentSaveData.GetSlugBaseData().Set(CycleToken, amount);
+
+    public static int GetCycleToken(this SaveState save)
+    {
+        return save.deathPersistentSaveData.GetCycleToken();
+    }
+    public static int GetCycleToken(this DeathPersistentSaveData save)
+    {
+        var data = save.GetSlugBaseData();
+        if (!data.TryGet(CycleToken, out int CycleTokenAmount))
+        {
+            CycleTokenAmount = 10;
+            data.Set(CycleToken, 10);
+        }
+        return CycleTokenAmount;
+    }
+    public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
 
 	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
+
 	#region oracle data
 	private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
     private const string encountersWithMark = uniqueprefix + "EncountersWithMark";
     private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
-	private const string VisitedFP6times = uniqueprefix + "visitedFP6times";
 	#region last meet
 	public static int GetLastMeetCycles(this SaveState save)
 	{

@@ -9,6 +9,6 @@
 	],
 	"idle_depths": [ 2.8 ],
 	"select_menu_pos": [0, 0],
-	 "mark_pos": [-4000, -180],
-	"slugcat_depth": 3.5
+	"mark_pos": [-4000, -180],
+	"slugcat_depth": 3
 }

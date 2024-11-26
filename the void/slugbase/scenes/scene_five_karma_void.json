@@ -6,10 +6,10 @@
 		{ "name": "back", "pos": [433,250], "depth": 9, "shader": "Basic" },
 		{ "name": "ceil", "pos": [433,250], "depth": 3, "shader": "Basic" },
 		{ "name": "void", "pos": [433,250], "depth": 3, "shader": "Basic" },
-		{ "name": "front", "pos": [408,237], "depth": 2, "shader": "Basic" }
+		{ "name": "front", "pos": [408,232], "depth": 2, "shader": "Basic" }
 	],
-	"idle_depths": [ 2.8 ],
+	"idle_depths": [ 3 ],
 	"select_menu_pos": [0, 0],
-	 "mark_pos": [-4000, -180],
-	"slugcat_depth": 3.5
+	"mark_pos": [-2000, -4000],
+	"slugcat_depth": 3
 }

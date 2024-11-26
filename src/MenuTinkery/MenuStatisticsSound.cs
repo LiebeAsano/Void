@@ -9,11 +9,11 @@ internal static class MenuStatisticsSound
 	public static void Hook()
 	{
 		On.Menu.StoryGameStatisticsScreen.GetDataFromGame += GetDataFromGame_Update;
-		On.Menu.KarmaLadderScreen.Singal += KarmaLadderScreen_Singal;
+		//On.Menu.KarmaLadderScreen.Singal += KarmaLadderScreen_Singal;
         StatisticSoundMap = new()
 		{
-			{ "Static_Death_Void",  "Static_Death_Sound" },
-			{ "Static_Death_Void11",  "Static_Death_Sound11" },
+			{ "Static_Death_Void",  "StaticDeathSound" },
+			{ "Static_Death_Void11",  "StaticDeathSound11" },
 			{ "Static_End_Scene_Void", "Static_End_Sound" },
 			{ "Static_End_Scene_Void11", "Static_End_Sound11" },
 		};
@@ -41,10 +41,12 @@ internal static class MenuStatisticsSound
 			if (StatisticSoundMap.Keys.Contains(currentScene)
 				&& self.manager.musicPlayer is MusicPlayer player)
 			{
-				player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu);
-				player.song.playWhenReady = true;
+                player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu)
+                {
+                    playWhenReady = true
+                };
 
-			}
+            }
 		}
 		orig(self, package);
 	}

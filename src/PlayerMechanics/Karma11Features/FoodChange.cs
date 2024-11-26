@@ -10,8 +10,8 @@ internal static class FoodChange
 {
 	public static void Hook()
 	{
-		On.Player.Update += Player_Update;
-		IL.ShelterDoor.DoorClosed += ShelterDoor_DoorClosed;
+        On.StoryGameSession.ctor += StoryGameSession_ctor;
+        IL.ShelterDoor.DoorClosed += ShelterDoor_DoorClosed;
 		IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctor;
 	}
 
@@ -27,8 +27,7 @@ internal static class FoodChange
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<int, SlugcatStats.Name, Menu.SlugcatSelectMenu.SlugcatPageContinue, int>>((int origRess, SlugcatStats.Name name, Menu.SlugcatSelectMenu.SlugcatPageContinue slugcatPageContinue) =>
 			{
-				bool hasMark = slugcatPageContinue.HasMark;
-                if (name == VoidEnums.SlugcatID.Void && (slugcatPageContinue.saveGameData.karmaCap == 10 || hasMark)) return 6;
+                if (name == VoidEnums.SlugcatID.Void && slugcatPageContinue.saveGameData.karmaCap == 10) return 6;
 				return origRess;
 			});
 		}
@@ -48,8 +47,7 @@ internal static class FoodChange
 			c.EmitDelegate<Func<int, ShelterDoor, int>>((int orig, ShelterDoor self) =>
 			{
                 var game = self.room.game;
-                bool hasMark = game.IsStorySession && (game.GetStorySession.saveState.deathPersistentSaveData.theMark);
-                if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void && ((self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10 || hasMark))
+                if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void && (self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10)
 				{
 					return 6;
 				}
@@ -58,22 +56,20 @@ internal static class FoodChange
 		}
 		else LogExErr("failed to locate slugcatfoodmeter call in shelterdoor closing. expect mismatch between food requirements and success of hybernation");
 	}
-	/// <summary>
-	/// replaces main menu food requirements
-	/// </summary>
-	/// <param name="orig"></param>
-	/// <param name="self"></param>
-	/// <param name="saveStateNumber"></param>
-	/// <param name="game"></param>
-	private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
-	{
-		orig(self, eu);
-        var game = self.abstractCreature.world.game;
-        bool hasMark = game.IsStorySession && (game.GetStorySession.saveState.deathPersistentSaveData.theMark);
-        if (self.IsVoid() && (self.KarmaCap == 10 || hasMark))
-		{
-			self.slugcatStats.foodToHibernate = self.Malnourished ? 9 : 6;
-			self.slugcatStats.maxFood = 9;
+    /// <summary>
+    /// replaces main menu food requirements
+    /// </summary>
+    /// <param name="orig"></param>
+    /// <param name="self"></param>
+    /// <param name="saveStateNumber"></param>
+    /// <param name="game"></param>
+    private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+    {
+		orig(self, saveStateNumber, game);
+        if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void && self.saveState.deathPersistentSaveData.karma == 10)
+        {
+            self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
+            self.characterStats.maxFood = 9;
         }
     }
 }

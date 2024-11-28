@@ -493,9 +493,7 @@ static class OracleHooks
             if (owner.conversation == null || owner.conversation.slatedForDeletion == true ||
                 owner.conversation.events == null)
             {
-                owner.UnlockShortcuts();
-                owner.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-                owner.getToWorking = 1f;
+                this.SSOracleVoidCommonConvoEnd();
             }
             else
             {
@@ -714,9 +712,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
 
         if (owner.conversation != null && owner.conversation.slatedForDeletion == true)
         {
-            owner.UnlockShortcuts();
-            owner.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-            owner.getToWorking = 1f;
+            this.SSOracleVoidCommonConvoEnd();
         }
     }
 

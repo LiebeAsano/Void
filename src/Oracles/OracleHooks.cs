@@ -198,6 +198,7 @@ static class OracleHooks
                                     self.NewAction(MeetVoid_Init);
                                     self.SlugcatEnterRoomReaction();
                                     self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                                    self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                                 }
                             }
                         }
@@ -234,7 +235,7 @@ static class OracleHooks
                         }
 						break;
 					}
-                case 1:
+                case 6:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
                         {
@@ -629,6 +630,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             if (base.action == MeetVoid_Texting)
             {
                 base.movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
+                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                 if (base.oracle.graphicsModule != null)
                 {
                     (base.oracle.graphicsModule as OracleGraphics).halo.connectionsFireChance = 0f;
@@ -655,6 +657,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             if (base.action == MeetVoid_FirstImages)
             {
                 base.movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
+                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                 if (this.communicationPause > 0)
                 {
                     this.communicationPause--;
@@ -694,19 +697,22 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     });
                     this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_5, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.dialogBox.Interrupt("Bad boy.", 80);
+                    {
+                        this.dialogBox.Interrupt(". . .".TranslateString(), 60);
+                        this.dialogBox.Interrupt("I can see by your face that you understand me.".TranslateString(), 60);
+                    }
                     this.voice.requireActiveUpkeep = true;
                 }
                 if (inActionCounter > 240)
                 {
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                         this.owner.NewAction(SSOracleBehavior.Action.General_GiveMark);
-                    if (this.owner.conversation != null && this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    if (this.owner.conversation != null)
                     {
-                        this.owner.NewAction(this.owner.afterGiveMarkAction);
                         this.owner.conversation.paused = false;
-                        this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                     }
+                    this.owner.NewAction(this.owner.afterGiveMarkAction);
+                    this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                 }
                 return;
             }
@@ -773,27 +779,37 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                 case 0:
                     this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.dialogBox.Interrupt("Good boy.", 80);
+                    {
+                        this.dialogBox.Interrupt("Did someone send a messenger to me?".TranslateString(), 60);
+                    }
                     this.voice.requireActiveUpkeep = true;
                     this.communicationPause = 10;
                     break;
                 case 1:
                     this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_2, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.dialogBox.Interrupt("Good boy.", 80);
+                    {
+                        this.dialogBox.Interrupt("It does not have a mark.".TranslateString(), 30);
+                        this.dialogBox.NewMessage("It is just another pest was able to get into my structure.".TranslateString(), 30);
+                    }
                     this.voice.requireActiveUpkeep = true;
                     this.communicationPause = 70;
                     break;
                 case 2:
                     this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.dialogBox.Interrupt("Good boy.", 80);
+                    {
+                        this.dialogBox.Interrupt("You look unnatural.".TranslateString(), 60);
+                        this.dialogBox.NewMessage("What happened to you? There are clear signs of external interference here.".TranslateString(), 60);
+                    }
                     this.voice.requireActiveUpkeep = true;
                     break;
                 case 3:
                     this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_4, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.dialogBox.Interrupt("Good boy.", 80);
+                    {
+                        this.dialogBox.Interrupt("A rather strange creature.".TranslateString(), 60);
+                    }
                     this.voice.requireActiveUpkeep = true;
                     this.communicationPause = 140;
                     break;
@@ -826,6 +842,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                 case 2:
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                     {
+                        this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
                         this.showImage = base.oracle.myScreen.AddImage(new List<string>
                         {
                             "void_glyphs_3",
@@ -834,11 +851,14 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     }
                     else
                     {
+                        this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
                         this.showImage = base.oracle.myScreen.AddImage(new List<string>
                         {
                             "void_glyphs_4",
                             "void_glyphs_5"
                         }, 30);
+                        this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
+                        this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment...".TranslateString(), 60);
                     }
                     this.communicationPause = 330;
                     break;

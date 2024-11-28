@@ -1171,7 +1171,7 @@ internal static class SLOracle
                     MoonVoice(self);
                     break;
                 }
-            /*case "HoverPearl":
+            case "HoverPearl":
                 {
                     if (self.holdingObject is DataPearl pearl)
                     {
@@ -1187,19 +1187,18 @@ internal static class SLOracle
                         {
                             self.dialogBox.Interrupt("aw...", 200);
                         };
-                        roomref.AddObject(hoveringPearl);
                         hoveringPearl.PlaceInRoom(roomref);
                     }
                     else logerr("attempting event HoverPearl while moon is not holding pearl");
                     break;
-                }*/
+                }
             /*case "AsyncHover":
                 {
                     if (self.holdingObject is DataPearl pearl)
                     {
                         var roomref = self.oracle.room;
                         var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
-                        hoveringPearl.AnyncHover(pearl, hoveringPearl);
+                        hoveringPearl.AnyncHover(16000);
                     }
                     break;
                 }*/

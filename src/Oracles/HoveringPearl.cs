@@ -72,10 +72,10 @@ internal class HoveringPearl : DataPearl
         }
     }
 
-    public async void AnyncHover(DataPearl pearl, HoveringPearl hoveringPearl)
+    public async void AsyncHover(int delay)
     {
-        await Task.Delay(15000);
-        hoveringPearl.hoverPos = null;
+        await Task.Delay(delay);
+        hoverPos = null;
     }
 
 }

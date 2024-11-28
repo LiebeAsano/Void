@@ -360,6 +360,50 @@ static class OracleHooks
                     self.NewAction(SSOracleBehavior.Action.General_GiveMark);
                     break;
                 }
+            case "GrabPearl":
+                {
+                    //searches for first pearl that is of needed type and takes it out of hands. The original pearl is deleted immediately, but we replace it with a hovering pearl
+                    DataPearl? pearl = self.oracle.room.updateList.FirstOrDefault(x => x is DataPearl pearl
+                    && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void")) as DataPearl;
+                    if(pearl == null)
+                    {
+                        self.conversation.Destroy();
+                        self.dialogBox.Interrupt("You didn't even bring the pearl i asked for. I almost thought you have brains.".TranslateString(), 500);
+                        return;
+                    }
+                    pearl.AllGraspsLetGoOfThisObject(true);
+                    pearl.slatedForDeletetion = true;
+                    var roomref = self.oracle.room;
+                    //oh my god DataPearl ctor takes in world but does nothing with it
+                    var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
+                    pearl.abstractPhysicalObject.realizedObject = hoveringPearl;
+                    hoveringPearl.bodyChunks[0].pos = pearl.bodyChunks[0].pos;
+                    hoveringPearl.hoverPos = roomref.MiddleOfTile(roomref.Width/2, roomref.Height/2);
+                    hoveringPearl.OnPearlTaken += () =>
+                    {
+                        self.dialogBox.Interrupt("Nope, it's not for you".TranslateString(), 200);
+                        DestroyPearl(self, hoveringPearl);
+                    };
+                    hoveringPearl.OnWaitCompleted += () =>
+                    {
+                        DestroyPearl(self, hoveringPearl);
+                    };
+                    hoveringPearl.PlaceInRoom(roomref);
+                    hoveringPearl.AsyncWait(2000);
+                    break;
+                }
+        }
+        void DestroyPearl(OracleBehavior oracleBehavior, DataPearl pearl)
+        {
+            pearl.slatedForDeletetion = true;
+            pearl.AbstractPearl.Destroy();
+            for (int num8 = 0; num8 < 5; num8++)
+            {
+                oracleBehavior.oracle.room.AddObject(new Spark(pearl.firstChunk.pos, Custom.RNV(), Color.white, null, 16, 24));
+            }
+            oracleBehavior.oracle.room.AddObject(new Explosion.ExplosionLight(pearl.firstChunk.pos, 150f, 1f, 8, Color.white));
+            oracleBehavior.oracle.room.AddObject(new ShockWave(pearl.firstChunk.pos, 60f, 0.1f, 8, false));
+            oracleBehavior.oracle.room.PlaySound(SoundID.Snail_Pop, pearl.firstChunk, false, 1f, 1.5f + UnityEngine.Random.value * 0.5f);
         }
     }
 

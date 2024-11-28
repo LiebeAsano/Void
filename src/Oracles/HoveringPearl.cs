@@ -22,6 +22,7 @@ internal class HoveringPearl : DataPearl
     float beatScale;
     public Vector2? hoverPos;
     public event Action OnPearlTaken;
+    public event Action OnWaitCompleted;
 
     public override void Update(bool eu)
     {
@@ -76,6 +77,11 @@ internal class HoveringPearl : DataPearl
     {
         await Task.Delay(delay);
         hoverPos = null;
+    }
+    public async void AsyncWait(int delay)
+    {
+        await Task.Delay(delay);
+        OnWaitCompleted.Invoke();
     }
 
 }

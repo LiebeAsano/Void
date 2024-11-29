@@ -235,7 +235,7 @@ static class OracleHooks
                         }
 						break;
 					}
-                case 6:
+                case 1:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
                         {
@@ -287,10 +287,10 @@ static class OracleHooks
 							if (self.currSubBehavior.ID != VoidTalk)
 							{
 								miscData.SSaiConversationsHad++;
-								self.NewAction(MeetVoid_Init);
                                 self.SlugcatEnterRoomReaction();
 								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-							}
+                                self.NewAction(MeetVoid_Init);
+                            }
 						}
                         break;
 					}
@@ -394,7 +394,8 @@ static class OracleHooks
                     break;
                 }
         }
-        void DestroyPearl(OracleBehavior oracleBehavior, DataPearl pearl)
+
+        static void DestroyPearl(OracleBehavior oracleBehavior, DataPearl pearl)
         {
             pearl.slatedForDeletetion = true;
             pearl.AbstractPearl.Destroy();
@@ -753,7 +754,8 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     {
                         this.owner.conversation.paused = false;
                     }
-                    this.owner.NewAction(this.owner.afterGiveMarkAction);
+                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                        this.owner.NewAction(this.owner.afterGiveMarkAction);
                     this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                 }
                 return;
@@ -985,7 +987,6 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
     public int consistentShowMediaPosCounter;
     public OracleChatLabel chatLabel;
 }
-
 public static class OracleExtensionMethods
 {
     public static void AirVoice(this SSOracleBehavior self, SoundID line)

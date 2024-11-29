@@ -16,6 +16,7 @@ internal static class SLOracle
 {
     public static void Hook()
     {
+        On.Oracle.ctor += Oracle_ctor;
         On.SLOracleBehaviorHasMark.InitateConversation += SLOracleBehaviorHasMark_InitateConversation;
         On.SLOracleBehaviorHasMark.TalkToDeadPlayer += SLOracleBehaviorHasMark_TalkToDeadPlayer;
         On.SLOracleBehaviorHasMark.InterruptRain += SLOracleBehaviorHasMark_InterruptRain;
@@ -35,6 +36,17 @@ internal static class SLOracle
         On.SLOracleBehaviorHasMark.MoonConversation.AddEvents += MoonConversation_AddEvents;
         On.SLOracleBehaviorHasMark.SpecialEvent += SLOracleBehaviorHasMark_SpecialEvent;
 
+    }
+
+    private static void Oracle_ctor(On.Oracle.orig_ctor orig, Oracle self, AbstractPhysicalObject abstractPhysicalObject, Room room)
+    {
+        orig(self, abstractPhysicalObject, room);
+        if (self.ID == Oracle.OracleID.SL)
+        {
+            if (room.game.session is StoryGameSession && (room.game.session as StoryGameSession).saveState.saveStateNumber == VoidEnums.SlugcatID.Void
+                && (room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap == 10)
+                self.oracleBehavior = new SLOracleBehaviorHasMark(self);
+        }
     }
 
     private static void SLOracleBehaviorHasMark_InitateConversation(On.SLOracleBehaviorHasMark.orig_InitateConversation orig, SLOracleBehaviorHasMark self)

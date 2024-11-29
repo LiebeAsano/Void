@@ -244,7 +244,7 @@ static class OracleHooks
                                 saveState.SetLastMeetCycles(saveState.cycleNumber);
                                 if (self.currSubBehavior.ID != VoidTalk)
                                 {
-                                    self.inspectPearl = abstractRotPearl.realizedObject as DataPearl;
+                                    GrabDataPearlAndDestroyIt(self, abstractRotPearl.realizedObject as DataPearl);
                                     miscData.SSaiConversationsHad++;
                                     self.NewAction(MeetVoid_Init);
                                     //self.StartItemConversation(datapearl);
@@ -363,37 +363,43 @@ static class OracleHooks
                 }
             case "GrabPearl":
                 {
-                    //searches for first pearl that is of needed type and takes it out of hands. The original pearl is deleted immediately, but we replace it with a hovering pearl
                     DataPearl? pearl = self.oracle.room.updateList.FirstOrDefault(x => x is DataPearl pearl
                     && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void")) as DataPearl;
-                    if(pearl == null)
-                    {
-                        self.conversation.Destroy();
-                        self.dialogBox.Interrupt("You didn't even bring the pearl i asked for. I almost thought you have brains.".TranslateString(), 500);
-                        return;
-                    }
-                    pearl.AllGraspsLetGoOfThisObject(true);
-                    pearl.slatedForDeletetion = true;
-                    var roomref = self.oracle.room;
-                    //oh my god DataPearl ctor takes in world but does nothing with it
-                    var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
-                    pearl.abstractPhysicalObject.realizedObject = hoveringPearl;
-                    hoveringPearl.bodyChunks[0].pos = pearl.bodyChunks[0].pos;
-                    hoveringPearl.hoverPos = roomref.MiddleOfTile(roomref.Width/2, roomref.Height/2);
-                    hoveringPearl.OnPearlTaken += () =>
-                    {
-                        self.dialogBox.Interrupt("Nope, it's not for you".TranslateString(), 200);
-                        DestroyPearl(self, hoveringPearl);
-                    };
-                    hoveringPearl.OnWaitCompleted += () =>
-                    {
-                        DestroyPearl(self, hoveringPearl);
-                    };
-                    hoveringPearl.PlaceInRoom(roomref);
-                    hoveringPearl.AsyncWait(2000);
+                    GrabDataPearlAndDestroyIt(self, pearl);
                     break;
                 }
         }
+
+
+    }
+    static void GrabDataPearlAndDestroyIt(SSOracleBehavior self, DataPearl? pearl)
+    {
+        //kill realized pearl, replace with a custom one seamlessly
+        if (pearl == null)
+        {
+            self.conversation.Destroy();
+            self.dialogBox.Interrupt("You didn't even bring the pearl i asked for. I almost thought you have brains.".TranslateString(), 500);
+            return;
+        }
+        pearl.AllGraspsLetGoOfThisObject(true);
+        pearl.slatedForDeletetion = true;
+        var roomref = self.oracle.room;
+        //oh my god DataPearl ctor takes in world but does nothing with it
+        var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
+        pearl.abstractPhysicalObject.realizedObject = hoveringPearl;
+        hoveringPearl.bodyChunks[0].pos = pearl.bodyChunks[0].pos;
+        hoveringPearl.hoverPos = roomref.MiddleOfTile(roomref.Width / 2, roomref.Height / 2);
+        hoveringPearl.OnPearlTaken += () =>
+        {
+            self.dialogBox.Interrupt("Nope, it's not for you".TranslateString(), 200);
+            DestroyPearl(self, hoveringPearl);
+        };
+        hoveringPearl.OnWaitCompleted += () =>
+        {
+            DestroyPearl(self, hoveringPearl);
+        };
+        hoveringPearl.PlaceInRoom(roomref);
+        hoveringPearl.AsyncWait(2000);
 
         static void DestroyPearl(OracleBehavior oracleBehavior, DataPearl pearl)
         {

@@ -39,7 +39,7 @@ internal class HoveringPearl : DataPearl
         lastCarried = Carried;
         if (hoverPos != null)
         {
-            firstChunk.vel *= Custom.LerpMap(firstChunk.vel.magnitude, 1f, 6f, 0.999f, 0.9f);
+            firstChunk.vel *= Custom.LerpMap(firstChunk.vel.magnitude, 1f, 6f, 0.99f, 0.8f);
             firstChunk.vel += Vector2.ClampMagnitude(hoverPos.Value - firstChunk.pos, 100f) / 100f * 0.4f;
             gravity = 0f;
         }

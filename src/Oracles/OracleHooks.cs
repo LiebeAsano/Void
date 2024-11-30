@@ -235,7 +235,7 @@ static class OracleHooks
                         }
 						break;
 					}
-                case 1:
+                case 6:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
                         {
@@ -287,10 +287,12 @@ static class OracleHooks
 							if (self.currSubBehavior.ID != VoidTalk)
 							{
 								miscData.SSaiConversationsHad++;
+								self.NewAction(MeetVoid_Init);
+                                if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                    self.NewAction(self.afterGiveMarkAction);
                                 self.SlugcatEnterRoomReaction();
 								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-                                self.NewAction(MeetVoid_Init);
-                            }
+							}
 						}
                         break;
 					}
@@ -345,7 +347,7 @@ static class OracleHooks
             }
         }
     }
-
+#nullable enable
     private static void SSOracleBehavior_SpecialEvent(On.SSOracleBehavior.orig_SpecialEvent orig, SSOracleBehavior self, string eventName)
     {
         orig(self, eventName);
@@ -369,9 +371,10 @@ static class OracleHooks
                     break;
                 }
         }
-
-
     }
+#nullable disable
+
+#nullable enable
     static void GrabDataPearlAndDestroyIt(SSOracleBehavior self, DataPearl? pearl)
     {
         //kill realized pearl, replace with a custom one seamlessly
@@ -399,7 +402,7 @@ static class OracleHooks
             DestroyPearl(self, hoveringPearl);
         };
         hoveringPearl.PlaceInRoom(roomref);
-        hoveringPearl.AsyncWait(2000);
+        hoveringPearl.AsyncWait(15000);
 
         static void DestroyPearl(OracleBehavior oracleBehavior, DataPearl pearl)
         {
@@ -414,7 +417,7 @@ static class OracleHooks
             oracleBehavior.oracle.room.PlaySound(SoundID.Snail_Pop, pearl.firstChunk, false, 1f, 1.5f + UnityEngine.Random.value * 0.5f);
         }
     }
-
+#nullable disable
     private static void ILSSOracleBehavior_Update(ILContext il)
 	{
 		ILCursor c = new ILCursor(il);
@@ -905,7 +908,6 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                             "void_glyphs_4",
                             "void_glyphs_5"
                         }, 30);
-                        this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
                         this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment...".TranslateString(), 60);
                     }
                     this.communicationPause = 330;

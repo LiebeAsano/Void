@@ -22,7 +22,7 @@ public static class _OIMeta
         OptionAccessors.cfgSaintArenaAscension = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaAscension", true, new ConfigurableInfo("Allows Saint to use ascension mechanic in arena", tags: "Saint ascension"));
 		OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
         OptionAccessors.cfgArenaAscensionStun = voidOI.config.Bind<bool>(uniqueprefix + "ArenaAscensionStun", false, new ConfigurableInfo("Saint's ascension stuns instead of kills", tags: "Ascension stuns"));
-        OptionAccessors.cfgGamepadController = voidOI.config.Bind<bool>(uniqueprefix + "GamepadController", false, new ConfigurableInfo("Makes easier to climb the ceiling using a gamepad. Hold down 'Jump' + 'Pick up' to ceiling climb", tags: "Gamepad controller"));
+        OptionAccessors.cfgGamepadController = voidOI.config.Bind<bool>(uniqueprefix + "GamepadController", false, new ConfigurableInfo("Makes easier to climb the ceiling using a gamepad. Press 'Jump' + 'Pick up' to ceiling climb", tags: "Gamepad controller"));
         OptionAccessors.cfgSimpleFood = voidOI.config.Bind<bool>(uniqueprefix + "SimpleFood", false, new ConfigurableInfo("Gives you whole pips when eating food instead of half pips", tags: "Simplified hunger"));
 //#warning to be implemented
 		OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void, but also closes access to the secret ending", tags: "Disable permadeath"));

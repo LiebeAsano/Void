@@ -7,6 +7,7 @@ public static class _MenuMeta
 		MenuHooks.Hook();
 		SelectScreenScenes.Hook();
 		DreamAssociatedSound.Startup();
+		JollyMenu.Hook();
         MenuStatisticsSound.Hook();
 		PermaDeathScreen.Hook();
 		StopContinueButtonWhenAboutToDie.Hook();

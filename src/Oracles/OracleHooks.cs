@@ -206,35 +206,30 @@ static class OracleHooks
                     }
                 case 5:
 					{
-						if(self.oracle.room.PlayersInRoom.Exists(playerInOracleRoom => 
-							playerInOracleRoom.grasps.Any(grasp =>
-								grasp is not null 
-								&& grasp.grabbed is DataPearl pearl && saveState.deathPersistentSaveData.karmaCap != 10
-                                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void")) ||
-                                (playerInOracleRoom.objectInStomach is DataPearl.AbstractDataPearl absPearl
-								&& absPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void")) || 
-                                self.oracle.room.updateList.Exists(x => x is DataPearl pearl2 
-                                && pearl2.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))))
-
-						{
+                        if (VoidPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractVoidPearl)
+                        {
                             if (self.action != MeetVoid_Init)
                             {
                                 saveState.SetLastMeetCycles(saveState.cycleNumber);
                                 if (self.currSubBehavior.ID != VoidTalk)
                                 {
+                                    GrabDataPearlAndDestroyIt(self, abstractVoidPearl.realizedObject as DataPearl);
                                     miscData.SSaiConversationsHad++;
                                     self.NewAction(MeetVoid_Init);
+                                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                        self.NewAction(self.afterGiveMarkAction);
+                                    //self.StartItemConversation(datapearl);
                                     self.SlugcatEnterRoomReaction();
                                     self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                                 }
                             }
                         }
-						else
-						{
+                        else
+                        {
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                         }
-						break;
-					}
+                        break;
+                    }
                 case 6:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
@@ -247,6 +242,8 @@ static class OracleHooks
                                     GrabDataPearlAndDestroyIt(self, abstractRotPearl.realizedObject as DataPearl);
                                     miscData.SSaiConversationsHad++;
                                     self.NewAction(MeetVoid_Init);
+                                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                        self.NewAction(self.afterGiveMarkAction);
                                     //self.StartItemConversation(datapearl);
                                     self.SlugcatEnterRoomReaction();
                                     self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
@@ -314,12 +311,38 @@ static class OracleHooks
         foreach (UpdatableAndDeletable UAD in room.updateList)
         {
             if (UAD is DataPearl pearl
-                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))
                 return pearl.AbstractPearl;
         }
         return null;
 
         static DataPearl.AbstractDataPearl? PlayersRotPearl(Player p)
+        {
+            foreach (var grasp in p.grasps)
+            {
+                if (grasp != null
+                    && grasp.grabbed is DataPearl pearl
+                    && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))
+                    return pearl.AbstractPearl;
+            }
+            return null;
+        }
+    }
+    public static DataPearl.AbstractDataPearl? VoidPearl(Room room)
+    {
+        foreach (Player p in room.PlayersInRoom)
+        {
+            if (PlayersVoidPearl(p) is DataPearl.AbstractDataPearl pearl) return pearl;
+        }
+        foreach (UpdatableAndDeletable UAD in room.updateList)
+        {
+            if (UAD is DataPearl pearl
+                && pearl.AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                return pearl.AbstractPearl;
+        }
+        return null;
+
+        static DataPearl.AbstractDataPearl? PlayersVoidPearl(Player p)
         {
             foreach (var grasp in p.grasps)
             {
@@ -381,7 +404,6 @@ static class OracleHooks
         if (pearl == null)
         {
             self.conversation.Destroy();
-            self.dialogBox.Interrupt("You didn't even bring the pearl i asked for. I almost thought you have brains.".TranslateString(), 500);
             return;
         }
         pearl.AllGraspsLetGoOfThisObject(true);
@@ -394,7 +416,7 @@ static class OracleHooks
         hoveringPearl.hoverPos = roomref.MiddleOfTile(roomref.Width / 2, roomref.Height / 2);
         hoveringPearl.OnPearlTaken += () =>
         {
-            self.dialogBox.Interrupt("Nope, it's not for you".TranslateString(), 200);
+            self.dialogBox.Interrupt("Good try, but it is not for you".TranslateString(), 200);
             DestroyPearl(self, hoveringPearl);
         };
         hoveringPearl.OnWaitCompleted += () =>

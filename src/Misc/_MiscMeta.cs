@@ -7,5 +7,7 @@ internal static class _MiscMeta
 		Ctor.Hook();
 		ForbidenDrone.Hook();
 		EngageInMovement.Hook();
-	}
+        Expedition.Hook();
+
+    }
 }

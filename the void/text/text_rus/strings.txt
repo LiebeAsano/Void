@@ -9,9 +9,9 @@ Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай
 Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
 Your abilities also continue to improve.|Твои способности также продолжают развиваться.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречёна вечно переживать свои последние циклы.
-The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You must fulfill the last wish of the one who gave you a second chance.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Ты должен исполнить последнее желание того, кто дал тебе второй шанс.
+The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left.|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Тебя не покидает чувство, что осталось лишь последнее желание.
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового.
-The void sea no longer shackles you, and your past is left behind.<LINE>What else has this vast world prepared for you?|Пустотное море больше не сковывает тебя, а твоё прошлое осталось позади.<LINE>Что ещё приготовил для тебя этот необъятный мир?
+The void sea no longer shackles you, and your past is left behind.<LINE>You are ready to make new journeys and explore this vast world.|Пустотное море больше не сковывает тебя, а твоё прошлое осталось позади.<LINE>Ты готов отправится к новым странствиям и исследовать этот необъятный мир.
 
 //REGIONS
 

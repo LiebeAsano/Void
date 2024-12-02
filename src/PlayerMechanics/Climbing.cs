@@ -13,10 +13,10 @@ internal static class Climbing
 {
 	public static void Hook()
 	{
-            On.Player.WallJump += Player_UpdateWallJump;
-            On.Player.UpdateBodyMode += Player_UpdateBodyMode;
+        On.Player.WallJump += Player_UpdateWallJump;
+        On.Player.UpdateBodyMode += Player_UpdateBodyMode;
 		On.Player.Update += Player_Update;
-        }
+    }
 
         private static float num = 5f;
         private static float currentTime = 0f;
@@ -46,7 +46,7 @@ internal static class Climbing
                 BodyChunk body_chunk_0 = self.bodyChunks[0];
                 BodyChunk body_chunk_1 = self.bodyChunks[1];
 
-                if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
+            if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
 			{
 
 				self.bodyChunks[0].vel.y = 11f;
@@ -70,8 +70,8 @@ internal static class Climbing
 				self.bodyChunks[0].vel.y = 10f * bonus;
 				self.bodyChunks[1].vel.y = 10f * bonus;
 
-				self.bodyChunks[0].vel.x = 7f * -self.input[0].x;
-				self.bodyChunks[1].vel.x = 7f * -self.input[0].x;
+				self.bodyChunks[0].vel.x = 8f * -self.input[0].x;
+				self.bodyChunks[1].vel.x = 8f * -self.input[0].x;
 
 				self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
 				self.standing = true;
@@ -529,8 +529,8 @@ public static class PlayerExtensions
 public class PlayerState
 {
 	public bool IsCeilCrawling { get; set; } = false;
-        public bool IsWallCrawling { get; set; } = true;
-        public float CeilCrawlStartTime { get; set; } = 0f;
+    public bool IsWallCrawling { get; set; } = true;
+    public float CeilCrawlStartTime { get; set; } = 0f;
 }
 
 /*public class PlayerRoomChecker

@@ -1,0 +1,3 @@
+[MERGE]
+Room_Attr: UW_LWH01: Overseer-Avoid,DropBug-Forbidden,
+[ENDMERGE]

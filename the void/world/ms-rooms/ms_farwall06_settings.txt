@@ -1,0 +1,4 @@
+Palette: 35
+EffectColorB: 6
+Effects: Darkness-0.4485281-690.1937-424.1083, LightBurn-0.4407947-694.4625-483.1594, Moth-0.7037247-954.1844-483.1989, ElectricDeath-0-1003.275-362.9625, 
+FadePalette: 13, 0.193331

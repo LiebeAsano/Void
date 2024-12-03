@@ -1,0 +1,7 @@
+Template: MS_SettingsTemplate_Sewers
+DangerType: Flood
+RainIntensity: 0.1029438
+Palette: 37
+Effects: WaterDepth-0-20-20, SilenceWater-0-22.88541-79.80209, 
+PlacedObjects: LightFixture><171.1735><560.1791><RedLight~17.32051~-10~81, LightFixture><875.9167><589.5261><RedLight~17.32051~-10~32, 
+FadePalette: 51, 0.9125227

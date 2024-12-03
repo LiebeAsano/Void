@@ -1,0 +1,13 @@
+DangerType: FloodAndRain
+CeilingDrips: 0
+WaveSpeed: 0.4331901
+WaveLength: 0.7957613
+WaveAmplitude: 0.003640461
+SecondWaveLength: 1
+SecondWaveAmplitude: 0.0001
+Palette: 35
+EffectColorB: 6
+Effects: Darkness-0.6056041-1052.326-359.3656, ElectricDeath-0.1005329-1050.943-267.6271, GreenSparks-0.28613-1068.69-193.5958, ZeroGSpecks-1-1054.46-140.9479, 
+AmbientSounds: OMNI><AM_IND-ElectricHum03.ogg><765.5545><267.5077><0.3066685><1, 
+FadePalette: 13, 0.1546649
+WetTerrain: OFF

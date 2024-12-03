@@ -1,0 +1,15 @@
+Template: MS_SettingsTemplate_Sewers
+CeilingDrips: 0.5
+RainIntensity: 0.3349417
+WaveSpeed: 0.4984688
+WaveLength: 0.9818709
+WaveAmplitude: 0.002147847
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+RandomItemDensity: 0.8015966
+RandomItemSpearChance: 0.2618657
+Palette: 37
+EffectColorA: 12
+Effects: Ant-0.4098619-173.675-31.38333, SilenceWater-0-275.4531-133.8729, WaterDepth-0.0541342-540.7875-278.9708, 
+PlacedObjects: CGDrySpot><509.0273><341.3889><100~50~3007.729^-524.6605~True~None, LightBeam><168.0788><202.7632><-142.2916~538.7323~-49.64374~547.9813~370.1167~162.2124~626.4462~265.648~0.4~0~0~1~None~0~0, LightSource><1823.872><536.4698><1~EffectColor1~98.8927~57.31256~50~86.60254~1~0~None~0~0, LightSource><1936.342><524.4406><1~EffectColor1~98.8927~57.31256~50~86.60254~1~0~None~0~0, LightFixture><679.1935><98.28772><RedLight~-311.3733~66.12603~100, LightSource><135.8095><715.6808><1~White~19.92084~106.4032~50~86.60254~1~0~None~0~0, LightFixture><1247.902><286.8135><RedLight~-311.3733~66.12603~72, LightFixture><1632.801><599.8552><RedLight~-311.3733~66.12603~72, LightFixture><816.7583><571.3968><RedLight~-311.3733~66.12603~72, LightFixture><2089.025><196.5631><RedLight~-311.3733~66.12603~72, LightFixture><2408.519><644.679><RedLight~-311.3733~66.12603~72, DangleFruit><2872.49><450.2692><0~0~3~5, DangleFruit><2937.253><427.4128><0~0~3~5, DangleFruit><2977.428><453.8308><0~0~3~5, ReliableSpear><270.2563><123.7895><, ReliableSpear><319.0162><100.2367><, ReliableSpear><384.8593><107.5775><, ReliableSpear><198.4422><119.94><, ReliableSpear><251.0951><112.369><, ReliableSpear><227.1706><122.3636><, 
+FadePalette: 51, 0.9202557, 0.951189, 0.9666553

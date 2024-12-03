@@ -1,0 +1,19 @@
+Template: NONE
+DangerType: Blizzard
+CeilingDrips: 0
+WaveSpeed: 0.4872081
+WaveLength: 0.9634367
+WaveAmplitude: 0.009616673
+SecondWaveLength: 1
+SecondWaveAmplitude: 0.0001
+Clouds: 0.326087
+Grime: 0.3586957
+Palette: 13
+EffectColorA: 2
+EffectColorB: 6
+Effects: Fog-0.5326087-20-20, BorderPushBack-1-22-70, RockFlea-0.1956522-24-130, WaterGlowworm-0.1521739-286-19, ElectricDeath-0-286-74, Coldness-1-281-134, Dustpuffs-1-284-186, 
+PlacedObjects: NoLeviathanStrandingZone><296.7502><602.6769><300~-48, NoLeviathanStrandingZone><224.5385><1428.289><556.7114~-18, NoLeviathanStrandingZone><1115.59><1699.747><215~-2, NoLeviathanStrandingZone><2325.606><1849.793><-229~12, NoLeviathanStrandingZone><2715.276><1869.268><257~16, SnowSource><415.4277><2028.157><Radial~-519~-335~-149~-398.3975~0.7934783~1, SnowSource><1164.108><1962.846><Radial~319~-448~110~-75.39746~0.7826087~1, SnowSource><2527.983><1898.725><Radial~-496~-549~61~9.602539~0.7608696~1, BigJellyFish><1754.995><1671.327><0~100, GoldToken><2662.006><1982.48><-26~-91~-327.7906~91.82916~0~MS~~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0~0, DeadTokenStalk><2708.285><1918.127><13~-52, DeadTokenStalk><2685.434><1936.275><-20.44275~-46, DeadTokenStalk><2605.213><1955.211><2~-62, DevToken><2377.836><1977.999><24~-94~-302.6979~-104.5495~0~Default~~0~0~0~1~0~0~0~1~0~0~0~1~0~0~0~1~0~0~0~1~0~0~0~1, SnowSource><1698.772><3410.986><Radial~466.0052~173.2802~50~86.60254~0.6442712~0, SnowSource><1009.562><3297.407><Radial~466.0052~173.2802~50~86.60254~0.6442712~0, SnowSource><505.428><3411.952><Radial~466.0052~173.2802~50~86.60254~0.6442712~0, SnowSource><1697.542><2800.422><Radial~466.0052~173.2802~50~86.60254~0.6442712~0, SnowSource><1017.388><2492.36><Radial~466.0052~173.2802~50~86.60254~0.6442712~0, SnowSource><504.0053><2646.035><Radial~366.4011~36.68018~50~86.60254~0.358141~0, SnowSource><1597.226><2064.033><Radial~366.4011~36.68018~50~86.60254~0.358141~0, GlowWeed><713.667><938.3557><251.8562~65.45416~2~3, GlowWeed><762.6835><856.1861><251.8562~65.45416~2~3, GlowWeed><1104.897><979.9366><251.8562~65.45416~2~3, GlowWeed><1743.786><1004.108><251.8562~65.45416~2~3, GlowWeed><1676.91><932.9631><251.8562~65.45416~2~3, 
+AmbientSounds: OMNI><AM_ENV-LightWind.ogg><865.944><653.4514><0.6446991><1, OMNI><AM_WAT-Sea01.ogg><690.0419><656.5544><0.1927304><1, SPOT><AM_WAT-Lakeside.ogg><733.4498><200.5079><0.4891304><1><2475.45><1652.508><-553.3553><-331.3553><0><1, 
+Triggers: PreRegionBump<tA>event<tB>MusicEvent<eA>songName<eB>RW_75 - Onto A New Dawn<eA>vol<eB>0.2021737<eA>prio<eB>0.5<eA>mxThrt<eB>1<eA>loop<eB>0<eA>droneTol<eB>0<eA>rooms<eB>-1<eA>rest<eB>5<eA>fadeIn<eB>0<eA>oneSongPerCycle<eB>0<eA>stopAtDeath<eB>0<eA>stopAtGate<eB>0<tA>multiUse<tB>0<tA>toCycle<tB>-1<tA>fromCycle<tB>0<tA>delay<tB>0<tA>panPos<tB>773.5847<tB>467.8874<tA>fireChance<tB>1<tA>entrance<tB>-1<tA>karma<tB>0<tA>slugcats<tB>, 
+FadePalette: 0, 0.5543478, 0.5543478, 0.5543478, 0.4565217, 0.4347826, 0.4456522, 0.4456522, 0.4456522, 0.4456522, 0.4456522, 0.4456522
+WetTerrain: OFF

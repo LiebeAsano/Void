@@ -1,0 +1,12 @@
+Template: NONE
+CeilingDrips: 0.5077332
+RainIntensity: 1
+Clouds: 0.8042566
+Grime: 0.1056044
+Palette: 35
+EffectColorA: 12
+EffectColorB: 6
+Effects: LightBurn-0.2010642-789.7979-404.1875, Moth-0.502661-782.0115-341.6188, Darkness-0.1005322-798.3354-475.3333, RockFlea-0.4021275-783.3948-536.5187, 
+PlacedObjects: DangleFruit><292.8274><679.4034><0~0~3~5, DangleFruit><370.0906><725.9279><21.34375~130.9083~3~5, DangleFruit><242.3049><725.2188><27.03546~181.4219~3~4, ReliableSpear><680.6459><117.4567><, ReliableSpear><713.6465><140.643><, ReliableSpear><758.442><158.7406><, ReliableSpear><125.692><655.4798><, ReliableSpear><363.3586><621.3654><, ReliableSpear><403.8893><651.6455><, ReliableSpear><219.5966><1029.979><, ReliableSpear><118.2714><1062.919><, ReliableSpear><678.6736><1677.843><, ReliableSpear><733.6704><1683.475><, 
+AmbientSounds: SPOT><AM_IND-ElectricHum03.ogg><734.0419><267.7722><0.5773322><1><675.9745><914.1484><124.7227><-75.90849><0><0.06906725, OMNI><AM_ENV-LightWind.ogg><1143.649><672.2106><0.8840014><1, OMNI><SO_WAT-LilDrips.ogg><848.9186><544.7003><0.9072007><1, SPOT><AM_WIN-HowlingWnd.ogg><496.7569><358.2778><1><1><766.6716><171.6268><-20.41486><-28.95222><0><0.04586726, 
+FadePalette: 13, 0.2087973, 0.1314651, 0.07733254

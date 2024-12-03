@@ -87,6 +87,7 @@ internal static class SLOracle
                                 self.dialogBox.Interrupt("Oh, is that you? Did you come back to learn something new?".TranslateString(), 60);
                                 break;
                         }
+                        self.State.playerEncountersWithMark--;
                         break;
                     }
                 case 4 when self.State.neuronsLeft < 6:

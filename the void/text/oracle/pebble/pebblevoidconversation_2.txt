@@ -1,6 +1,7 @@
-0 : ..still alive. I didn't expect this outcome. Apparently you are able to delay your death. : 15
-I would be interested in exploring your body, but my state don't let me do something like this...
-The fact that you came back to me again suggests that you're lost.
-You might be looking for a friend of mine. Her name is Looks to the Moon, her state much worse then mine.
-She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.
-0 : Tell her I'm sorry... : 50
+0 : ...still alive. I did not expect this outcome. : 60
+0 : . . . : 60
+0 : Your health indicators are still at the same critical level as in the last cycle. One step away from death you continue to live. : 60
+0 : Do you delay your death? I will set your mark to collect data about your condition. Probably it helps me find the answer to another problem.: 60
+0 : You do not have to do anything, just come back to me after a few cycles. : 60
+0 : Otherwise, it will only be easier for me if you do not return.: 60
+0 : Now get out of here, I do not need another great problem that does not have a solution. : 60

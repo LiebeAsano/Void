@@ -45,7 +45,14 @@ internal static class JollyMenu
 		var playerclass = self.JollyOptions(self.index).playerClass;
 		if(playerclass is not null && playerclass == VoidEnums.SlugcatID.Void)
 		{
-			result = "void_" + "pup_off";
+			if (RWCustom.Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM && RWCustom.Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO)
+			{
+                result = "void_" + "pup_off";
+            }
+			else
+			{
+                result = "void2_" + "pup_off";
+            }
 		}
 		return result;
 	}
@@ -53,7 +60,9 @@ internal static class JollyMenu
 	private static Color PlayerGraphics_JollyFaceColorMenu(On.PlayerGraphics.orig_JollyFaceColorMenu orig, SlugcatStats.Name slugName, SlugcatStats.Name reference, int playerNumber)
 	{
 		var res = orig(slugName, reference, playerNumber);
-		if (slugName == VoidEnums.SlugcatID.Void && RWCustom.Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM)
+		if (slugName == VoidEnums.SlugcatID.Void && RWCustom.Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM 
+			&& (RWCustom.Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO
+            || RWCustom.Custom.rainWorld.options.jollyColorMode == Options.JollyColorMode.AUTO && playerNumber == 0))
 		{
 			res = new Color(1f, 0.87f, 0f);
 		}

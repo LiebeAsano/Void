@@ -147,11 +147,15 @@ static class OracleHooks
 					{
                         if (!saveState.GetVoidMeetMoon())
                         {
+                            if(self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						    break;
                         }
                         else
                         {
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                             break;
                         }
@@ -175,6 +179,8 @@ static class OracleHooks
                                 self.dialogBox.Interrupt("Get out and leave me alone.".TranslateString(), 60);
                                 break;
                         }
+                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            self.NewAction(self.afterGiveMarkAction);
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
@@ -184,6 +190,8 @@ static class OracleHooks
                         {
                             PebbleVoice(self);
                             self.dialogBox.Interrupt("You should not have done that.".TranslateString(), 60);
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
                             self.getToWorking = 1f;
                         }
@@ -196,9 +204,10 @@ static class OracleHooks
                                 {
                                     miscData.SSaiConversationsHad++;
                                     self.NewAction(MeetVoid_Init);
+                                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                        self.NewAction(self.afterGiveMarkAction);
                                     self.SlugcatEnterRoomReaction();
                                     self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-                                    self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                                 }
                             }
                         }
@@ -226,6 +235,8 @@ static class OracleHooks
                         }
                         else
                         {
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                         }
                         break;
@@ -252,6 +263,8 @@ static class OracleHooks
                         }
                         else
                         {
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
                         }
                         break;
@@ -265,6 +278,8 @@ static class OracleHooks
                             {
                                 miscData.SSaiConversationsHad++;
                                 self.NewAction(MeetVoid_Init);
+                                if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                    self.NewAction(self.afterGiveMarkAction);
                                 self.SlugcatEnterRoomReaction();
                                 self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                             }
@@ -273,7 +288,9 @@ static class OracleHooks
                     }
                 case > 10:
 					{
-						self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            self.NewAction(self.afterGiveMarkAction);
+                        self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
 						break;
 					}
 				default:

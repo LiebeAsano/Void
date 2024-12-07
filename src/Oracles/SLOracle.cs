@@ -108,7 +108,7 @@ internal static class SLOracle
                     {
                         saveState.SetEncountersWithMark(saveState.cycleNumber);
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
-                        if (miscData.SSaiConversationsHad == 1)
+                        if (miscData.SSaiConversationsHad == 3)
                             saveState.SetVoidMeetMoon(true);
                         break;
                     }

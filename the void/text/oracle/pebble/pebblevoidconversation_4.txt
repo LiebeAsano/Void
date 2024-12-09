@@ -1,6 +1,10 @@
-0 : ..still alive. I didn't expect this outcome. Apparently you are able to delay your death. : 15
-I would be interested in exploring your body, but my state don't let me do something like this...
-The fact that you came back to me again suggests that you're lost.
-You might be looking for a friend of mine. Her name is Looks to the Moon, her state much worse then mine.
-She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.
-0 : Tell her I'm sorry... : 50
+0 : . . . : 60
+0 : I am astonished at your audacity. Are you looking for death in my room? : 60
+0 : Why are you always being followed by an NSH's overseer? Why is he so interested in you? : 60
+0 : . . . : 180
+0 : Oh... it is you... To be precise, what is left of you. : 60
+0 : Were you able to complete your mission, little creature? : 120
+0 : Apparently, you do not understand what I mean. : 60
+0 : I will refine your mark so that it can record conversations. Go to the east, my friend, Look to the Moon, is there, I hope she is able to speak. : 60
+0 : Then come back to me, there is a possibility, I can find a solution to your desperate situation. : 60
+0 : Now leave me alone for your sake, I have more work to do. : 60

@@ -79,21 +79,7 @@ Eat as much as you want, from now I will no longer store important information h
 
 //FIVE PEBBLES
 
-...is it reaching you?|...ты понимаешь меня?
-It was pretty dangerous to implant a mark in you. Something doesn't allow me to analyze your body.|Было довольно опасно вживлять в тебя метку. Что-то не позволяет мне проанализировать твое тело.
-There is no information about you in my database.|В моей базе данных нет никакой информации о тебе.
-But as I thought, your body structure is similar to the purpose organism that I have already met.|Но, как я и думал, строение твоего тела схоже с целевым организмом, который я уже встречал.
-You are a very interesting instance...|Ты очень интересный экземпляр...
-I don't have proper medical equipment so there's no point in killing you to study your body.|У меня нет надлежащего медицинского оборудования, так что убивать тебя, чтобы изучить твоё тело, не имеет никакого смысла.
-But based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me.|Но основывайсь на полученных данных, я полагаю, что ты каким-то образом взаимодействовал с пустотной жидкостью. Удивительно, что ты смог добраться до меня.  
-In any case, I can't help you with anything. You came to me too late.|В любом случае, я ничем не могу тебе помочь. Ты пришёл ко мне слишком поздно.
-You have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone.|Тебе осталось жить меньше цикла, так что проведи оставшееся время с максимальной пользой. А пока оставь меня в покое. 
 
-..still alive. I didn't expect this outcome. Apparently you are able to delay your death.|..все ещё жив. Я не ожидал такого исхода. Очевидно, ты как-то смог отсрочить свою смерть.
-I would be interested in exploring your body, but my state don't let me do something like this...|Я заинтересован в иследовании твоего тела, но моё нынешнее состояние не позволит заниматься подобным...
-The fact that you came back to me again suggests that you're lost.|То, что ты снова вернулся ко мне, говорит о том, что ты заблудился. Возможно, ты ищешь мою подругу.
-You might be looking for a friend of mine. Her name is Looks to the Moon, her state much worse then mine.|Ее зовут Смотрящая на Луну, ее состояние гораздо хуже моего.
-She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.|Она находится на небольшом расстоянии к востоку отсюда. Если маленький зверек справился со своей миссией, возможно, она поможет тебе найти то, что ты ищешь.
 
 //LOOKS TO THE MOON
 

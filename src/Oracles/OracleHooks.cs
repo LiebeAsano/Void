@@ -81,7 +81,7 @@ static class OracleHooks
 	}
 
     private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
-	{
+    {
         if (nextAction == MeetVoid_Init || nextAction == MeetVoid_Curious)
         {
             self.inActionCounter = 0;
@@ -160,7 +160,7 @@ static class OracleHooks
                             break;
                         }
                     }
-				case 3 when !saveState.GetVoidMeetMoon():
+                case 4 when !saveState.GetVoidMeetMoon():
                     {
                         switch (UnityEngine.Random.Range(0, 3))
                         {
@@ -176,7 +176,7 @@ static class OracleHooks
                                 PebbleVoice(self);
                                 self.dialogBox.Interrupt("Have you already visited Looks to the Moon?".TranslateString(), 60);
                                 self.dialogBox.Interrupt(". . .".TranslateString(), 60);
-                                self.dialogBox.Interrupt("Get out and leave me alone.".TranslateString(), 60);
+                                self.dialogBox.Interrupt("Leave me alone.".TranslateString(), 60);
                                 break;
                         }
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
@@ -184,7 +184,7 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
-                case 4:
+                case 5:
                     {
                         if (self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5)
                         {
@@ -213,7 +213,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 5:
+                case 6:
 					{
                         if (VoidPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractVoidPearl)
                         {
@@ -241,7 +241,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 6:
+                case 7:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
                         {
@@ -269,7 +269,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 7:
+                case 8:
                     {
                         if (self.action != MeetVoid_Init)
                         {
@@ -396,11 +396,6 @@ static class OracleHooks
             case "PebbleVoice":
                 {
                     PebbleVoice(self);
-                    break;
-                }
-            case "KarmaVoid":
-                {
-                    self.NewAction(SSOracleBehavior.Action.General_GiveMark);
                     break;
                 }
             case "GrabPearl":

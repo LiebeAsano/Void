@@ -14,8 +14,8 @@ internal static class MenuStatisticsSound
 		{
 			{ "Static_Death_Void",  "StaticDeathSound" },
 			{ "Static_Death_Void11",  "StaticDeathSound11" },
-			{ "Static_End_Scene_Void", "Static_End_Sound" },
-			{ "Static_End_Scene_Void11", "Static_End_Sound11" },
+			{ "Static_End_Scene_Void", "StaticEndSound" },
+			{ "Static_End_Scene_Void11", "StaticEndSound11" },
 		};
 	}
 

@@ -1,9 +1,9 @@
 0 : ...is it reaching you? : 60
-0 : What a disgusting and horrible structure you have. I was sure if implanting the mark would kill you.: 60
+0 : What a disgusting and horrible structure you have. I was sure if implanting the mark would kill you. : 60
 0 : But you are still alive, so your brain is intact or at least partially intact... : 60
-0 : You may have come to me for help, but my medical equipment has been out of order for a long time. For the same reason there is no point in killing you to study your body.: 60
+0 : You may have come to me for help, but my medical equipment has been out of order for a long time. For the same reason there is no point in killing you to study your body. : 60
 0 : . . . : 120
 60 : As I thought, your body structure is similar to the purpose organism that I have already met. : 60
 0 : Based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me. : 60
-0 : In any case, I can't help you with anything. You came to me too late. : 60
+0 : In any case, I cannot help you with anything. You came to me too late. : 60
 0 : Supposedly you have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone. : 60

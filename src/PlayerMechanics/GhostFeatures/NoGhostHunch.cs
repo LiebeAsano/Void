@@ -17,7 +17,9 @@ internal static class NoGhostHunch
     {
         orig(self);
         GhostHunch? hunch = null;
-        if (self.updateList.Exists(x =>
+        if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void
+            && self.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
+            && self.updateList.Exists(x =>
         {
             if (x is GhostHunch h)
             {

@@ -45,8 +45,7 @@ static class OracleHooks
 		}
 		var savestate = self.oracle.room.game.GetStorySession.saveState;
 		var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
-		if (amountOfEatenPearls == 6
-		&& !savestate.GetVoidMeetMoon())
+		if (amountOfEatenPearls == 6 && !savestate.GetVoidMeetMoon())
 		{
             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
 			self.getToWorking = 1f;
@@ -55,8 +54,8 @@ static class OracleHooks
 		{
             PebbleVoice(self);
             self.dialogBox.Interrupt(self.Translate(
-				self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 6
-					? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
+                savestate.GetVoidMeetMoon()
+                    ? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
 					: OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
 			savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
 		}
@@ -157,8 +156,42 @@ static class OracleHooks
                             if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                 self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                            miscData.SSaiConversationsHad--;
                             break;
                         }
+                    }
+                case 1 when self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10:
+                    {
+                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            self.NewAction(self.afterGiveMarkAction);
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        break;
+                    }
+                case 2:
+                    {
+                        if (saveState.cycleNumber - saveState.GetLastMeetCycles() > 2)
+                        {
+                            if (self.action != MeetVoid_Init)
+                            {
+                                saveState.SetLastMeetCycles(saveState.cycleNumber);
+                                if (self.currSubBehavior.ID != VoidTalk)
+                                {
+                                    miscData.SSaiConversationsHad++;
+                                    self.NewAction(MeetVoid_Init);
+                                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                        self.NewAction(self.afterGiveMarkAction);
+                                    self.SlugcatEnterRoomReaction();
+                                    self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                self.NewAction(self.afterGiveMarkAction);
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        }
+                        break;
                     }
                 case 4 when !saveState.GetVoidMeetMoon():
                     {
@@ -175,8 +208,8 @@ static class OracleHooks
                             case 2:
                                 PebbleVoice(self);
                                 self.dialogBox.Interrupt("Have you already visited Looks to the Moon?".TranslateString(), 60);
-                                self.dialogBox.Interrupt(". . .".TranslateString(), 60);
-                                self.dialogBox.Interrupt("Leave me alone.".TranslateString(), 60);
+                                self.dialogBox.NewMessage(". . .".TranslateString(), 60);
+                                self.dialogBox.NewMessage("Leave me alone.".TranslateString(), 60);
                                 break;
                         }
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
@@ -184,7 +217,7 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
-                case 5:
+                case 4:
                     {
                         if (self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5)
                         {
@@ -213,7 +246,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 6:
+                case 5:
 					{
                         if (VoidPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractVoidPearl)
                         {
@@ -238,10 +271,11 @@ static class OracleHooks
                             if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                 self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                            miscData.SSaiConversationsHad--;
                         }
                         break;
                     }
-                case 7:
+                case 6:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
                         {
@@ -266,10 +300,11 @@ static class OracleHooks
                             if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                 self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                            miscData.SSaiConversationsHad--;
                         }
                         break;
                     }
-                case 8:
+                case 7:
                     {
                         if (self.action != MeetVoid_Init)
                         {
@@ -277,7 +312,7 @@ static class OracleHooks
                             if (self.currSubBehavior.ID != VoidTalk)
                             {
                                 miscData.SSaiConversationsHad++;
-                                self.NewAction(MeetVoid_Init);
+                                self.NewAction(MeetVoid_Curious);
                                 if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                     self.NewAction(self.afterGiveMarkAction);
                                 self.SlugcatEnterRoomReaction();
@@ -636,6 +671,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
     public static SSOracleBehavior.Action MeetVoid_Texting = new SSOracleBehavior.Action("MeetVoid_Texting", true);
     public static SSOracleBehavior.Action MeetVoid_FirstImages = new SSOracleBehavior.Action("MeetVoid_FirstImages", true);
     public static SSOracleBehavior.Action MeetVoid_SecondCurious = new SSOracleBehavior.Action("MeetVoid_SecondCurious", true);
+    public static SSOracleBehavior.Action MeetVoid_Heal = new SSOracleBehavior.Action("MeetVoid_Heal", true);
     int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
 
     public ChunkSoundEmitter voice
@@ -674,6 +710,11 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
 
         if (base.action == MeetVoid_Curious)
         {
+            if (this.owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad == 8)
+            {
+                this.owner.NewAction(MeetVoid_Heal);
+                return;
+            }
             if (inActionCounter < 360)
                 this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
             else
@@ -785,7 +826,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
                         this.dialogBox.Interrupt(". . .".TranslateString(), 60);
-                        this.dialogBox.Interrupt("I can see by your face that you understand me.".TranslateString(), 60);
+                        this.dialogBox.NewMessage("I can see by your face that you understand me.".TranslateString(), 60);
                     }
                     this.voice.requireActiveUpkeep = true;
                 }
@@ -800,6 +841,104 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                         this.owner.NewAction(this.owner.afterGiveMarkAction);
                     this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+                }
+                return;
+            }
+            else if (base.action == MeetVoid_Heal)
+            {
+                bool flag2 = ModManager.MSC && this.oracle.room.game.StoryCharacter == MoreSlugcatsEnums.SlugcatStatsName.Spear && this.oracle.ID == Oracle.OracleID.SS;
+                    this.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+                if ((this.inActionCounter > 30 && this.inActionCounter < 300) || (ModManager.MSC && this.oracle.ID == MoreSlugcatsEnums.OracleID.DM))
+                {
+                    if (this.inActionCounter < 300)
+                    {
+                        this.player.Stun(20);
+                    }
+                    Vector2 b = Vector2.ClampMagnitude(this.oracle.room.MiddleOfTile(24, 14) - this.player.mainBodyChunk.pos, 40f) / 40f * 2.8f * Mathf.InverseLerp(30f, 160f, (float)this.inActionCounter);
+
+                    this.player.mainBodyChunk.vel += b;
+                }
+                if (this.inActionCounter == 30)
+                {
+                    this.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Telekenisis, 0f, 1f, 1f);
+                }
+                if (flag2 && this.inActionCounter > 30 && this.inActionCounter < 300)
+                {
+                    (this.player.graphicsModule as PlayerGraphics).bodyPearl.visible = true;
+                    (this.player.graphicsModule as PlayerGraphics).bodyPearl.globalAlpha = Mathf.Lerp(0f, 1f, (float)this.inActionCounter / 300f);
+                }
+                if (this.inActionCounter == 300)
+                {
+                    this.player.AddFood(9);
+                    if (!ModManager.MSC || this.oracle.ID != MoreSlugcatsEnums.OracleID.DM)
+                    {
+                        this.player.mainBodyChunk.vel += Custom.RNV() * 10f;
+                        this.player.bodyChunks[1].vel += Custom.RNV() * 10f;
+                    }
+                    if (this.oracle.room.game.StoryCharacter == SlugcatStats.Name.Red)
+                    {
+                        this.oracle.room.game.GetStorySession.saveState.redExtraCycles = true;
+                        if (this.oracle.room.game.cameras[0].hud != null)
+                        {
+                            if (this.oracle.room.game.cameras[0].hud.textPrompt != null)
+                            {
+                                this.oracle.room.game.cameras[0].hud.textPrompt.cycleTick = 0;
+                            }
+                            if (this.oracle.room.game.cameras[0].hud.map != null && this.oracle.room.game.cameras[0].hud.map.cycleLabel != null)
+                            {
+                                this.oracle.room.game.cameras[0].hud.map.cycleLabel.UpdateCycleText();
+                            }
+                        }
+                        if (ModManager.CoopAvailable)
+                        {
+                            foreach (AbstractCreature abstractCreature in this.oracle.room.game.AlivePlayers)
+                            {
+                                if (abstractCreature.Room == this.oracle.room.abstractRoom) 
+                                {
+                                    Player player2 = abstractCreature.realizedCreature as Player;
+                                    if (player2 != null)
+                                    {
+                                        RedsIllness redsIllness = player2.redsIllness;
+                                        if (redsIllness != null)
+                                        {
+                                            redsIllness.GetBetter();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Custom.Log(new string[]
+                            {
+                            "PEBBLES HAS ALREADY GIVEN RED ONE KARMA CAP STEP"
+                            });
+                        }
+                    }
+                    if (!flag2)
+                    {
+                        (this.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma = (this.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+                        for (int num2 = 0; num2 < this.oracle.room.game.cameras.Length; num2++)
+                        {
+                            if (this.oracle.room.game.cameras[num2].hud.karmaMeter != null)
+                            {
+                                this.oracle.room.game.cameras[num2].hud.karmaMeter.UpdateGraphic();
+                            }
+                        }
+                    }
+                    for (int num4 = 0; num4 < 20; num4++)
+                    {
+                        this.oracle.room.AddObject(new Spark(this.player.mainBodyChunk.pos, Custom.RNV() * UnityEngine.Random.value * 40f, new Color(1f, 1f, 1f), null, 30, 120));
+                    }
+                    if (!flag2)
+                    {
+                        this.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, 0f, 1f, 1f);
+                    }
+                }
+                if (this.inActionCounter > 300 && this.player.graphicsModule != null && !flag2)
+                {
+                    (this.player.graphicsModule as PlayerGraphics).markAlpha = Mathf.Max((this.player.graphicsModule as PlayerGraphics).markAlpha, Mathf.InverseLerp(500f, 300f, (float)this.inActionCounter));
+                    this.owner.NewAction(this.owner.afterGiveMarkAction);
                 }
                 return;
             }

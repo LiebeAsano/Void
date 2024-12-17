@@ -1,6 +1,9 @@
-0 : ..still alive. I didn't expect this outcome. Apparently you are able to delay your death. : 15
-I would be interested in exploring your body, but my state don't let me do something like this...
-The fact that you came back to me again suggests that you're lost.
-You might be looking for a friend of mine. Her name is Looks to the Moon, her state much worse then mine.
-She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.
-0 : Tell her I'm sorry... : 50
+240 : At least she is conscious... : 60
+0 : In a way, I am grateful to you. : 60
+0 : Now I have to fulfill my part...  : 180
+0 : A more detailed analysis of your "parasite" suggests that it has the beginnings of a gene-repairing mechanism. : 60
+0 : Which theoretically will allow you to heal your body indefinitely. : 120
+0 : But I have already said, I do not have the medical equipment for that anymore. There will be a different approach. : 60
+0 : First of all, I need research records on the void liquid. Similar research have been carried out at mining sites, particularly in the Pipeyard region. : 60
+0 : The pearls with the necessary data should have been located in the underground western part of the region. : 60
+0 : Bring me at least one to continue my work. Now go and do not waste my time. : 60

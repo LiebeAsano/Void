@@ -2,7 +2,7 @@
 0 : I had hoped that the problem would resolve itself, but apparently it has not. : 60
 0 : The mark is slightly damaged, but the data is still intact. : 180
 0 : It is quite interesting... : 120
-0 : Half your vital organs are missing and a parasite takes their place? : 60
-0 : Although it is more like a forced symbiosis. It replaces the cells dissolved in the void liquid. : 60
+0 : Half your vital organs are missing and a tumor takes their place? : 60
+0 : Although it is more like a symbiosis between organisms. It replaces the cells dissolved in the void liquid. : 60
 0 : Even such a decision has its limits, sooner or later your genes will be permanently damaged and you will not wake up in the next cycle. : 60
 0 : I have found out what I wanted, now get lost, I have spent too much time on you already. : 60

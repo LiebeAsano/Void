@@ -16,8 +16,10 @@ internal class Warp : UpdatableAndDeletable
 	{
 		ManagedField[] exposedFields = [
 			defaultVectorField,
-			new StringField(targetRoomName, "SS_D08")
-			];
+			new StringField(targetRoomName, "SS_D08"),
+			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
+            new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time")
+            ];
 		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
 		WarpDestination.Register();
 	}
@@ -25,6 +27,8 @@ internal class Warp : UpdatableAndDeletable
 	#region exposed data IDs
 	const string triggerZone = "trigger zone";
 	const string targetRoomName = "TargetRoomName";
+	const string timeToFadeIn = "timetofadein";
+	const string timeToFadeOut = "timetofadeout";
 	#endregion
 
 	public Warp(Room room, PlacedObject pobj)
@@ -38,6 +42,8 @@ internal class Warp : UpdatableAndDeletable
 	Vector2[] TriggerZone => POMUtils.AddRealPosition(data.GetValue<Vector2[]>(triggerZone), placedObject.pos);
 	string TargetRoom => data.GetValue<string>(targetRoomName);
 	string Acronym => TargetRoom.Split('_')[0];
+	float TimeToFadeIn => data.GetValue<float>(timeToFadeIn);
+	float TimeToFadeOut => data.GetValue<float>(timeToFadeOut);
 	#endregion
 
 
@@ -72,7 +78,7 @@ internal class Warp : UpdatableAndDeletable
 				{
 					state = State.fadein;
 					room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
-					fadeOut = new FadeOut(room, Color.black, duration: 60f, fadeIn: false);
+					fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);
 					room.AddObject(fadeOut);
 
 					threadedLoading = new(this, room, Acronym);
@@ -97,10 +103,11 @@ internal class Warp : UpdatableAndDeletable
 					worldLoader = null;
 					AbstractRoom destinationRoom = WorldLoaded(overWorld);
 
+					room.updateList.Remove(this);
 					destinationRoom.realizedRoom.AddObject(this);
 					room = destinationRoom.realizedRoom;
 
-					fadeOut = new FadeOut(room, Color.black, 60f, true);
+					fadeOut = new FadeOut(room, Color.black, TimeToFadeOut, true);
 					room.AddObject(fadeOut);
 					state = State.awaitingPOMLoad;
 				}

@@ -321,7 +321,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case > 10:
+                case > 7:
 					{
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);

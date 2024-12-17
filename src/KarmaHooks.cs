@@ -1,4 +1,5 @@
-﻿using Menu;
+﻿using Fisobs;
+using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
@@ -19,8 +20,10 @@ namespace VoidTemplate
 			On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 			//echoes think void is at max karma and treat him as hunter
 			IL.World.SpawnGhost += KarmaReqTinker;
-			//reset savestate
-			On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
+
+			On.GhostWorldPresence.SpawnGhost += GhostWorldPresence_SpawnGhost;
+            //reset savestate
+            On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
 
 			//IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctorIL;
 		}
@@ -76,7 +79,15 @@ namespace VoidTemplate
 			}
 		}
 
-		private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
+        private static bool GhostWorldPresence_SpawnGhost(On.GhostWorldPresence.orig_SpawnGhost orig, GhostWorldPresence.GhostID ghostID, int karma, int karmaCap, int ghostPreviouslyEncountered, bool playingAsRed)
+        {
+            if (karmaCap == 10)
+                return false;
+            var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
+            return re;
+        }
+
+        private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
 		{
 			orig(self, package);
 			MenuScene.SceneID sceneID = null;
@@ -111,9 +122,9 @@ namespace VoidTemplate
 			}
 		}
 
+		
 
-
-		/*private static void SlugcatPageContinue_ctorIL(ILContext il)
+        /*private static void SlugcatPageContinue_ctorIL(ILContext il)
 		{
 			try
 			{
@@ -153,6 +164,6 @@ namespace VoidTemplate
 				Debug.LogException(e);
 			}
 		}*/
-	}
+    }
 
 }

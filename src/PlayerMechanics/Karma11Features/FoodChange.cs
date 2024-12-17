@@ -1,4 +1,5 @@
-﻿using Mono.Cecil.Cil;
+﻿using DevInterface;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
 using VoidTemplate.MenuTinkery;
@@ -24,10 +25,16 @@ internal static class FoodChange
 			x => x.MatchLdfld<RWCustom.IntVector2>("y")))
 		{
 			c.Emit(OpCodes.Ldarg, 4);
-			c.Emit(OpCodes.Ldarg_0);
-			c.EmitDelegate<Func<int, SlugcatStats.Name, Menu.SlugcatSelectMenu.SlugcatPageContinue, int>>((int origRess, SlugcatStats.Name name, Menu.SlugcatSelectMenu.SlugcatPageContinue slugcatPageContinue) =>
+            c.Emit(OpCodes.Ldarg_0);
+            c.Emit(OpCodes.Ldarg, 1);
+            c.EmitDelegate((int origRess, SlugcatStats.Name name, Menu.SlugcatSelectMenu.SlugcatPageContinue slugcatPageContinue, Menu.Menu menu) =>
 			{
-                if (name == VoidEnums.SlugcatID.Void && slugcatPageContinue.saveGameData.karmaCap == 10) return 6;
+                if (name == VoidEnums.SlugcatID.Void
+				&& (slugcatPageContinue.saveGameData.karmaCap == 10
+				|| menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save && save.miscWorldSaveData.SSaiConversationsHad >= 8))
+				{
+                    return 6;
+                }
 				return origRess;
 			});
 		}
@@ -47,7 +54,9 @@ internal static class FoodChange
 			c.EmitDelegate<Func<int, ShelterDoor, int>>((int orig, ShelterDoor self) =>
 			{
                 var game = self.room.game;
-                if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void && (self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10)
+                if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void 
+				&& ((self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10 
+				|| self.room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8))
 				{
 					return 6;
 				}
@@ -66,7 +75,7 @@ internal static class FoodChange
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
 		orig(self, saveStateNumber, game);
-        if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void && self.saveState.deathPersistentSaveData.karma == 10)
+        if (saveStateNumber == VoidEnums.SlugcatID.Void && (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 8))
         {
             self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
             self.characterStats.maxFood = 9;

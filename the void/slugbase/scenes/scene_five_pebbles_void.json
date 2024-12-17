@@ -6,6 +6,7 @@
 		{ "name": "back", "pos": [408,237], "depth": 4, "shader": "Basic" },
 		{ "name": "screen", "pos": [408,237], "depth": 3, "shader": "Basic" },
 		{ "name": "pebbles", "pos": [408,237], "depth": 3, "shader": "Basic" },
+		{ "name": "pearls2", "pos": [408,237], "depth": 2.2, "shader": "Basic" },
 		{ "name": "pearls", "pos": [408,237], "depth": 1.8, "shader": "Basic" },
 		{ "name": "void", "pos": [408,237], "depth": 2.5, "shader": "Basic" },
 		{ "name": "front", "pos": [408,237], "depth": 2, "shader": "Basic" }

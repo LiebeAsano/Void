@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using MoreSlugcats;
 using System;
-using MoreSlugcats;
-using UnityEngine;
-using static VoidTemplate.Useful.POMUtils;
-using static Pom.Pom;
-using VoidTemplate.Useful;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using UnityEngine;
+using VoidTemplate.Useful;
+using static Pom.Pom;
+using static VoidTemplate.Useful.POMUtils;
 
 namespace VoidTemplate.Objects.PomObjects;
 
@@ -37,13 +37,13 @@ internal class Warp : UpdatableAndDeletable
 	#region exposed fields
 	Vector2[] TriggerZone => POMUtils.AddRealPosition(data.GetValue<Vector2[]>(triggerZone), placedObject.pos);
 	string TargetRoom => data.GetValue<string>(targetRoomName);
-	string acronym => TargetRoom.Split('_')[0];
+	string Acronym => TargetRoom.Split('_')[0];
 	#endregion
 
 
 	#region runtime variables
-	PlacedObject placedObject;
-	ManagedData data;
+	readonly PlacedObject placedObject;
+	readonly ManagedData data;
 	private FadeOut fadeOut;
 	private State state = State.awaiting;
 	//vanilla worldloading happens during a few ticks, and then immediately changes world
@@ -74,8 +74,8 @@ internal class Warp : UpdatableAndDeletable
 					room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
 					fadeOut = new FadeOut(room, Color.black, duration: 60f, fadeIn: false);
 					room.AddObject(fadeOut);
-					
-					threadedLoading = new(this, room, acronym);
+
+					threadedLoading = new(this, room, Acronym);
 					thread = new Thread(new ThreadStart(threadedLoading.Load));
 					thread.Start();
 				}
@@ -126,7 +126,7 @@ internal class Warp : UpdatableAndDeletable
 						{
 							foreach (var bodyChunk in players[i].realizedCreature.bodyChunks)
 							{
-								bodyChunk.pos = warpDestination.pos + new Vector2(i * 20f, 0f);
+								bodyChunk.pos = warpDestination.Pos + new Vector2(i * 20f, 0f);
 							}
 						}
 					}
@@ -162,7 +162,7 @@ internal class Warp : UpdatableAndDeletable
 			{
 				world.GetAbstractRoom(absPly.pos).RemoveEntity(absPly);
 				absPly.world = world2;
-				WorldCoordinate worldCoordinate = new WorldCoordinate(abstractRoom2.index, 10, 10, -1);
+				WorldCoordinate worldCoordinate = new(abstractRoom2.index, 10, 10, -1);
 				absPly.pos = worldCoordinate;
 				abstractRoom2.AddEntity(absPly);
 				if (absPly.realizedCreature is Player p
@@ -221,18 +221,11 @@ internal class Warp : UpdatableAndDeletable
 		}
 	}
 
-	class ThreadedLoading
+	class ThreadedLoading(Warp warp, Room room, string targetRegionAcronym)
 	{
-		private readonly Room room;
-		private readonly Warp warp;
-		private readonly string acronym;
-
-		public ThreadedLoading(Warp warp, Room room, string targetRegionAcronym)
-		{
-			acronym = targetRegionAcronym;
-			this.room = room;
-			this.warp = warp;
-		}
+		private readonly Room room = room;
+		private readonly Warp warp = warp;
+		private readonly string acronym = targetRegionAcronym;
 
 		public void Load()
 		{
@@ -263,7 +256,7 @@ internal class Warp : UpdatableAndDeletable
 		{
 			pobj = pObj;
 		}
-		PlacedObject pobj;
-		public Vector2 pos => pobj.pos;
+		readonly PlacedObject pobj;
+		public Vector2 Pos => pobj.pos;
 	}
 }

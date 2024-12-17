@@ -9,6 +9,7 @@
 			KarmaLadderNonRefillCapIncrease.Hook();
 			UpdateIL.Hook();
 			MSGhostForTheVoid.Hook();
+			NoGhostFlakes.Hook();
 		}
 	}
 }

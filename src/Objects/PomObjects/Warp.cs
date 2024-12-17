@@ -1,4 +1,7 @@
-﻿using MoreSlugcats;
+﻿using Expedition;
+using Kittehface.Framework20;
+using Menu;
+using MoreSlugcats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +21,11 @@ internal class Warp : UpdatableAndDeletable
 			defaultVectorField,
 			new StringField(targetRoomName, "SS_D08"),
 			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
-            new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time")
-            ];
+			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time")
+			];
 		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
 		WarpDestination.Register();
+		
 	}
 
 	#region exposed data IDs
@@ -220,6 +224,9 @@ internal class Warp : UpdatableAndDeletable
 					world2.rainCycle.maxPreTimer = 0;
 				}
 			}
+
+			if(!world2.activeRooms.Contains(abstractRoom2.realizedRoom)) world2.activeRooms.Add(abstractRoom2.realizedRoom);
+
 			if (ModManager.MMF)
 			{
 				GC.Collect();

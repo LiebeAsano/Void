@@ -16,18 +16,37 @@ internal static class NoGhostHunch
     private static void Room_Loaded(On.Room.orig_Loaded orig, Room self)
     {
         orig(self);
-        GhostHunch? hunch = null;
-        if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void
-            && self.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
-            && self.updateList.Exists(x =>
+
+        if (self.game == null)
         {
-            if (x is GhostHunch h)
+            return;
+        }
+
+        var storySession = self.game.GetStorySession;
+        if (storySession == null || storySession.saveState == null ||
+            storySession.saveState.deathPersistentSaveData == null)
+        {
+            return;
+        }
+
+        if (self.updateList == null)
+        {
+            return;
+        }
+
+        GhostHunch? hunch = null;
+
+        if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void
+            && storySession.saveState.deathPersistentSaveData.karmaCap == 10
+            && self.updateList.Exists(x =>
             {
-                hunch = h;
-                return true;
-            }
-            return false;
-        }))
+                if (x is GhostHunch h)
+                {
+                    hunch = h;
+                    return true;
+                }
+                return false;
+            }))
         {
             self.updateList.Remove(hunch);
         }

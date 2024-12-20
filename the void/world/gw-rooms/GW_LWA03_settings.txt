@@ -5,4 +5,5 @@ RandomItemDensity: 0.7783966
 Palette: 9
 EffectColorA: 6
 EffectColorB: 3
+PlacedObjects: ExitSymbolHidden><728.761><528.4227><, 
 FadePalette: 8, 0.3015964

@@ -7,8 +7,10 @@
 			ConversationPath.Hook();
 			EncounterIL.Hook();
 			KarmaLadderNonRefillCapIncrease.Hook();
-			UpdateIL.Hook();
 			MSGhostForTheVoid.Hook();
+			NoGhostFlakes.Hook();
+			NoGhostHunch.Hook();
+			UpdateIL.Hook();
 		}
 	}
 }

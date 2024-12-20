@@ -118,6 +118,7 @@ class _Plugin : BaseUnityPlugin
 		Objects.PomObjects.TheVoidRoomWideStaggerByGhost.Register();
 		Objects.PomObjects.AlbinoVultureTriggerSpawner.Register();
         Objects.PomObjects.VultureTriggerSpawner.Register();
+		Objects.PomObjects.Warp.Register();
     }
 
 	// Load any resources, such as sprites or sounds

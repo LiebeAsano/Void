@@ -1,9 +1,14 @@
-﻿using System;
+﻿using Expedition;
+using Kittehface.Framework20;
+using Menu;
+using MoreSlugcats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -52,124 +57,7 @@ internal static class ThrowObject
                     weapon.setRotation = new Vector2?(new Vector2(-1, -1));
             }
         }
-        else if (self.slugcatStats.name == VoidEnums.SlugcatID.Void
-                 && self.bodyMode == Player.BodyModeIndex.WallClimb)
-        {
-            Creature.Grasp[] grasps = self.grasps;
-            object obj = grasps?[grasp]?.grabbed;
-            orig(self, grasp, eu);
-            if (obj is Weapon weapon)
-            {
-                for (int i = 0; i < weapon.bodyChunks.Length; i++)
-                {
-                    BodyChunk bodyChunk = weapon.bodyChunks[i];
-                    if (self.input[0].y == 0)
-                    {
-                        if (self.input[0].x > 0)
-                        {
-                            if (self.input[0].pckp)
-                            {
-                                bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(1, 0) * 10f;
-                                bodyChunk.vel = new Vector2(1, 0) * 40f;
-                            }
-                            else
-                            {
-                                bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(-1, 0) * 10f;
-                                bodyChunk.vel = new Vector2(-1, 0) * 40f;
-                            }
-                        }
-                        else if (self.input[0].x < 0)
-                        {
-                            if (self.input[0].pckp)
-                            {
-                                bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(-1, 0) * 10f;
-                                bodyChunk.vel = new Vector2(-1, 0) * 40f;
-                            }
-                            else
-                            {
-                                bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(1, 0) * 10f;
-                                bodyChunk.vel = new Vector2(1, 0) * 40f;
-                            }
-                        }
-
-                    } 
-                    else if (self.input[0].y > 0)
-                    {
-                        if (self.input[0].x > 0)
-                        {
-                            bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(-0.71f, 0.71f) * 10f;
-                            bodyChunk.vel = new Vector2(-0.71f, 0.71f) * 40f;
-                        } 
-                        else
-                        {
-                            bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(0.71f, 0.71f) * 10f;
-                            bodyChunk.vel = new Vector2(0.71f, 0.71f) * 40f;
-                        }
-                    }
-                    else if (self.input[0].y < 0)
-                    {
-                        if (self.input[0].x > 0)
-                        {
-                            bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(-0.71f, -0.71f) * 10f;
-                            bodyChunk.vel = new Vector2(-0.71f, -0.71f) * 40f;
-                        }
-                        else
-                        {
-                            bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(0.71f, -0.71f) * 10f;
-                            bodyChunk.vel = new Vector2(0.71f, -0.71f) * 40f;
-                        }
-                    }
-                }
-                if (self.input[0].y == 0)
-                {
-                    if (self.input[0].x > 0)
-                    {
-                        if (self.input[0].pckp)
-                        {
-                            weapon.setRotation = new Vector2?(new Vector2(1, 0));
-                        }
-                        else
-                        {
-                            weapon.setRotation = new Vector2?(new Vector2(-1, 0));
-                        }
-                    }
-                    else if (self.input[0].x < 0)
-                    {
-                        if (self.input[0].pckp)
-                        {
-                            weapon.setRotation = new Vector2?(new Vector2(-1, 0));
-                        }
-                        else
-                        {
-                            weapon.setRotation = new Vector2?(new Vector2(1, 0));
-                        }
-                    }
-                }
-                else if (self.input[0].y > 0)
-                {
-                    if (self.input[0].x > 0)
-                    {
-                        weapon.setRotation = new Vector2?(new Vector2(-1, 1));
-                    }
-                    else
-                    {
-                        weapon.setRotation = new Vector2?(new Vector2(1, 1));
-                    }
-                }
-                else if (self.input[0].y < 0)
-                {
-                    if (self.input[0].x > 0)
-                    {
-                        weapon.setRotation = new Vector2?(new Vector2(-1, -1));
-                    }
-                    else
-                    {
-                        weapon.setRotation = new Vector2?(new Vector2(1, -1));
-                    }
-                }
-            }
-        }
-        else
+        else 
             orig(self, grasp, eu);
     }
 }

@@ -1,0 +1,8 @@
+Template: NONE
+Clouds: 1
+Grime: 0.2629298
+RandomItemDensity: 0.7783966
+Palette: 9
+EffectColorA: 6
+EffectColorB: 3
+FadePalette: 8, 0.3015964

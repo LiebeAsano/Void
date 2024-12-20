@@ -1,0 +1,9 @@
+Template: NONE
+Clouds: 0.9021739
+Grime: 0
+RandomItemDensity: 0.6304348
+Palette: 9
+EffectColorA: 3
+EffectColorB: 3
+PlacedObjects: Corruption><146.1999><400.4939><14~119, Corruption><162.8151><485.4237><0~100, Corruption><235.198><511.528><0~100, Corruption><186.4949><313.9499><0~100, CorruptionTube><156.8145><532.5607><155~-258, CorruptionTube><268.8217><273.1593><-4~307, CorruptionTube><1181><1121><-395~220, Corruption><861><1303><0~100, Corruption><1007><1285><0~100, Corruption><1098><1187><0~100, CorruptionTube><914.9688><1351><228~-279, Corruption><359><176><116~115, Corruption><616><86><116~115, Corruption><1150><1054><0~100, 
+FadePalette: 8, 0.3586957, 0.3586957

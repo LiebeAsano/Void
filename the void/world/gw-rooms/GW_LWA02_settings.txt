@@ -1,0 +1,7 @@
+Template: NONE
+Clouds: 1
+Grime: 0
+RandomItemDensity: 0
+Palette: 9
+PlacedObjects: Corruption><1075.699><465.1><17.07507~128.4584, 
+FadePalette: 8, 0.3479959

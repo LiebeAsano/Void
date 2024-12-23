@@ -1144,10 +1144,10 @@ internal static class SLOracle
         orig(self, eu);
         if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
-            if (self.player == null && self.hasNoticedPlayer)
+            /*if (self.player == null && self.hasNoticedPlayer)
             {
                 self.TalkToDeadPlayer();
-            }
+            }*/
             int randomTime = UnityEngine.Random.Range(200, 401);
             if (self.holdingObject != null && self.describeItemCounter % randomTime == 0 && !VoidEnums.ConversationID.PearlConversations.Contains(self.currentConversation.id))
             {

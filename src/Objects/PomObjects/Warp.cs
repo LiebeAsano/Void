@@ -189,8 +189,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		{
 			case State.awaiting:
 				if (room.PlayersInRoom.Any(realizedPlayerInRoom => realizedPlayerInRoom is not null
-				&& PositionWithinPoly(TriggerZone, realizedPlayerInRoom.mainBodyChunk.pos) 
-				&& realizedPlayerInRoom.KarmaCap >= 4))
+				&& PositionWithinPoly(TriggerZone, realizedPlayerInRoom.mainBodyChunk.pos)))
 				{
 					room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
 					fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);

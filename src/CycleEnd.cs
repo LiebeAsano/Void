@@ -61,14 +61,6 @@ internal static class CycleEnd
 	private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
 	{
 		orig(self);
-		if (timerStarted) timer++;
-		if (timer > timeToWait)
-		{
-			self.GoToStarveScreen();
-			timerStarted = false;
-			timer = 0;
-		}
-
 	}
 
 	//immutable

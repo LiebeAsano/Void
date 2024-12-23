@@ -136,6 +136,7 @@ static class OracleHooks
 					{
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
                         miscData.SSaiConversationsHad++;
+                        saveState.SetLastMeetCycles(saveState.cycleNumber);
                         self.afterGiveMarkAction = MeetVoid_Init;
                         self.NewAction(MeetVoid_Curious);
                         self.SlugcatEnterRoomReaction();
@@ -144,6 +145,12 @@ static class OracleHooks
 					}
 				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
 					{
+                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                        {
+                            self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+                            self.getToWorking = 1f;
+                            break;
+                        }
                         if (!saveState.GetVoidMeetMoon())
                         {
                             if(self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
@@ -162,9 +169,8 @@ static class OracleHooks
                     }
                 case 1 when self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10:
                     {
-                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                            self.NewAction(self.afterGiveMarkAction);
-                        self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+                        self.getToWorking = 1f;
                         break;
                     }
                 case 2:
@@ -331,7 +337,7 @@ static class OracleHooks
 				default:
 					{
 						if (self.action != MeetVoid_Init)
-						{
+						{ 
 							saveState.SetLastMeetCycles(saveState.cycleNumber);
 							if (self.currSubBehavior.ID != VoidTalk)
 							{

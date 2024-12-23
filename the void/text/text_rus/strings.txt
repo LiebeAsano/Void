@@ -80,6 +80,31 @@ Eat as much as you want, from now I will no longer store important information h
 
 //FIVE PEBBLES
 
+//Case 0
+
+Did someone send a messenger to me?|Неужели кто-то прислал ко мне посыльного?
+It does not have a mark.|На нем нет метки.
+It is just another pest was able to get into my structure.|Это просто еще один вредитель, который смог проникнуть в мою структуру.
+You look unnatural.|Ты выглядишь неестественно.
+What happened to you? There are clear signs of external interference here.|Что с тобой случилось? Очевидно, что здесь явные признаки чужого вмешательства.
+A rather strange creature.|Довольно странное существо.
+Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment...|Три... четыре спирали. Гены скручены в сверхплотную структуру. Эта форма практически невосприимчива к воздействию внешней среды...
+I can see by your face that you understand me.|По твоей морде, я вижу, что ты понимаешь меня.
+Is this someone's evil joke?|Это чья-то злая шутка?
+The purposed organism that has adapted to the void fluid and uses it instead of blood...|Целевой организм, что приспособился к пустотной жидкости и использует её вместо крови...
+I was once again reminded of the meaninglessness of my existence...|Мне лишний раз напомнили о бессмысленности моего существования...
+Do not come back to me anymore or you will meet your death in this room.|Не попадайся мне больше на глаза, иначе ты встретишь свою смерть в этой комнате.
+...is it reaching you?|...понимаешь меня?
+What a disgusting and horrible structure you have. I was sure if implanting the mark would kill you.|Какая же у тебя отвратительное и ужасное строение. Я был уверен, что вживление метки убьёт тебя.
+But you are still alive, so your brain is intact or at least partially intact...|Но ты ещё жив, а это значит, что твой мозг цел или, по крайней мере, частично цел...
+You may have come to me for help, but my medical equipment has been out of order for a long time. For the same reason there is no point in killing you to study your body.|Возможно, ты пришёл ко мне за помощью, но моё медицинское оборудование уже давно вышло из строя. По этой же причине нет смысла убивать тебя, чтобы изучить твоё тело.
+As I thought, your body structure is similar to the purpose organism that I have already met.|Как я и думал, структура твоего тела схожа с целевым организмом, который я уже встречал ранее.
+Based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me.|Основываясь на имеющихся данных, я могу предположить, что ты каким-то образом взаимодействовал с пустотной жидкостью. Удивительно, что ты смог добраться до меня.
+In any case, I cannot help you with anything. You came to me too late.|В любом случае, я ничем не могу тебе помочь. Ты пришёл ко мне слишком поздно.
+Supposedly you have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone.|Предположительно, тебе осталось жить меньше цикла, так что проведи оставшееся время по максимуму. А пока оставь меня в покое.
+
+//Case 1
+
 
 
 //LOOKS TO THE MOON

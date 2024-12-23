@@ -17,7 +17,7 @@ internal static class ExtendedLungs
         {
             if (self.saveState.deathPersistentSaveData.karma != 10)
             {
-                int karma = self.saveState.deathPersistentSaveData.karma;
+                int karma = self.saveState.deathPersistentSaveData.karmaCap;
 
                 float baseLungAirConsumption = 1.0f;
                 float reducePerKarma = 0.07f;

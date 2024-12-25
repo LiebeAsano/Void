@@ -16,9 +16,9 @@ internal static class Climbing
 		On.Player.WallJump += Player_UpdateWallJump;
 		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
 		On.Player.Update += Player_Update;
-	}
+    }
 
-	private static float stamina = 5f;
+    private static float stamina = 5f;
 	private static float currentTime = 0f;
 	private static float currentTimeWall = 0f;
 
@@ -49,8 +49,8 @@ internal static class Climbing
 			if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
 			{
 
-				self.bodyChunks[0].vel.y = 11f;
-				self.bodyChunks[1].vel.y = 11f;
+				self.bodyChunks[0].vel.y = 0f;
+				self.bodyChunks[1].vel.y = 0f;
 
 				self.bodyChunks[0].vel.x = 5f * -self.input[0].x;
 				self.bodyChunks[1].vel.x = 5f * -self.input[0].x;

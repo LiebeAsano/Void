@@ -2,8 +2,8 @@
 0 : In a way, I am grateful to you. : 60
 0 : Now I have to fulfill my part...  : 180
 0 : A more detailed analysis of your "parasite" suggests that it has the beginnings of a gene-repairing mechanism. : 60
-0 : Which theoretically will allow you to heal your body indefinitely. : 120
+0 : Which theoretically will allow you to recover your body indefinitely. : 120
 0 : But I have already said, I do not have the medical equipment for that anymore. There will be a different approach. : 60
 0 : First of all, I need research records on the void liquid. Similar research have been carried out at mining sites, particularly in the Pipeyard. : 60
 0 : The pearls with the necessary data should have been located in the underground western part of the region. : 60
-0 : Bring me at least one to continue my work. Now go and do not waste my time. : 60
+0 : Bring me at least one to continue my work. Go right away and do not waste my time. : 60

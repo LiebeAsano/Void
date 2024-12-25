@@ -81,7 +81,7 @@ Eat as much as you want, from now I will no longer store important information h
 //FIVE PEBBLES
 
 //Case 0
-
+Good try, but it is not for you.|Хорошая попытка, но это не для тебя.
 Did someone send a messenger to me?|Неужели кто-то прислал ко мне посыльного?
 It does not have a mark.|На нем нет метки.
 It is just another pest was able to get into my structure.|Это просто еще один вредитель, который смог проникнуть в мою структуру.
@@ -101,11 +101,80 @@ You may have come to me for help, but my medical equipment has been out of order
 As I thought, your body structure is similar to the purpose organism that I have already met.|Как я и думал, структура твоего тела схожа с целевым организмом, который я уже встречал ранее.
 Based on the data available I assume you interacted with the void fluid in some way. Surprisingly you was able to get to me.|Основываясь на имеющихся данных, я могу предположить, что ты каким-то образом взаимодействовал с пустотной жидкостью. Удивительно, что ты смог добраться до меня.
 In any case, I cannot help you with anything. You came to me too late.|В любом случае, я ничем не могу тебе помочь. Ты пришёл ко мне слишком поздно.
-Supposedly you have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone.|Предположительно, тебе осталось жить меньше цикла, так что проведи оставшееся время по максимуму. А пока оставь меня в покое.
+Supposedly you have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone.|Предположительно, тебе осталось жить меньше цикла, так что проведи оставшееся время с пользой. А пока оставь меня в покое.
 
 //Case 1
 
+...still alive. I did not expect this outcome.|...всё ещё жив. Я не ожидал такого исхода.
+Your health indicators are still at the same critical level as in the last cycle. One step away from death you continue to live.|Твои показатели здоровья всё ещё на том же критическом уровне, что и в прошлом цикле. Находясь в шаге от смерти, ты всё равно продолжаешь жить.
+Do you delay your death? I will set your mark to collect data about your condition. Probably it helps me find the answer to another problem.|Ты откладываешь свою смерть? Я настрою твою метку, чтобы собрать данные о твоём состоянии. Возможно, это поможет мне найти решение другой проблемы.
+You do not have to do anything, just come back to me after a few cycles.|Тебе ничего не нужно делать, просто вернись ко мне через несколько циклов.
+Otherwise, it will only be easier for me if you do not return.|С другой стороны, мне будет только легче, если ты не вернёшься.
+Now get out of here, I do not need another great problem that does not have a solution.|А теперь убирайся отсюда, мне не нужна ещё одна великая задача, что не имеет решения.
 
+//Case 2
+
+It is you again.|Это снова ты.
+I had hoped that the problem would resolve itself, but apparently it has not.|Я надеялся, что проблема разрешится сама собой, но, видимо, это не так.
+The mark is slightly damaged, but the data is still intact.|Метка слегка повреждена, но данные ещё целы.
+It is quite interesting...|Это довольно интересно...
+Half your vital organs are missing and a tumor takes their place?|Половина жизненно важных огранов отсутствует, а их место занимает опухоль?
+Although it is more like a symbiosis between organisms. It replaces the cells dissolved in the void liquid.|Хотя это больше похоже на симбиоз между организмами. Оно заменяет клетки, растворенные пустотной жидкостью.
+Even such a decision has its limits, sooner or later your genes will be permanently damaged and you will not wake up in the next cycle.|Даже у такого решения есть свои пределы, рано или поздно твои гены будут окончательно повреждены, и ты уже не проснёшься в следующем цикле.
+I have found out what I wanted, now get lost, I have spent too much time on you already.|Я выяснил то, что хотел, теперь проваливай, я и так потратил на тебя слишком много времени.
+
+//Case 3
+
+I am astonished at your audacity. Are you looking for death in my room?|Я поражён твоей наглостью. Ты ищешь смерть в моей комнате?
+Why are you always being followed by an NSH's overseer? Why is he so interested in you?|Почему за тобой постоянно следит наблюдатель НЗЗ? Почему он так заинтересован в тебе?
+Oh... it is you... To be precise, what is left of you.|О... это ты... Если быть точнее, то что осталось от тебя.
+Were you able to complete your mission, little creature?|Ты смог завершить свою миссию, маленькое существо?
+Apparently, you do not understand what I mean.|Очевидно, что ты не понимаешь о чём я.
+I will refine your mark so that it can record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak.|Я улучшу твою метку, чтобы она могла записывать разговоры. Отправляйся на восток, Смотрящая на Луну находится там, надеюсь она способна хотя бы говорить.
+Then come back to me, there is a possibility, I can find a solution to your desperate situation.|Затем возвращайся ко мне, существует вероятность, что я смогу найти решение из твоей безвыходной ситуации.
+Now leave me alone for your sake, I have more work to do.|А сейчас оставь меня в покое для твоего же блага, у меня ещё много работы.
+
+// Case 4
+
+Come back as soon as you complete my request.|Возвращайся, как только выполнишь мою просьбу.
+I do not see the right records in your mark. Do not worry me about nothing.|Я не вижу в твоей метке нужных записей. Не беспокой меня по пустякам.
+Have you already visited Looks to the Moon?|Ты уже посетил Смотрящую на Луну?
+Leave me alone.|Оставь меня в покое.
+You should not have done that.|Тебе не следовало этого делать.
+At least she is conscious...|По крайней мере, она в сознании...
+In a way, I am grateful to you.|В каком-то смысле я благодарен тебе.
+Now I have to fulfill my part...|Теперь мне следовало бы выполнить свою часть...
+A more detailed analysis of your "parasite" suggests that it has the beginnings of a gene-repairing mechanism.|Более детальный анализ твоего "паразита" позволяет предположить, что в неё есть зачатки механизма восстановления генов.
+Which theoretically will allow you to recover your body indefinitely.|Что теоретически позволило бы тебе восстанавливать тело не ограниченое количество раз.
+But I have already said, I do not have the medical equipment for that anymore. There will be a different approach.|Но как я уже говорил, у меня больше нету медицинского оборудования для подобных операций. Здесь будет иной подход.
+First of all, I need research records on the void liquid. Similar research have been carried out at mining sites, particularly in the Pipeyard.|Прежде всего, мне нужны записи исследований с пустотной жидкостью. Подобные исследования проводились в местах добычи, в частности в Трубной Базе.
+The pearls with the necessary data should have been located in the underground western part of the region.|Жемчужины с необходимыми данными должны были находиться в подземной западной части региона.
+Bring me at least one to continue my work. Go right away and do not waste my time.|Принеси мне хотя бы одну, чтобы я мог продолжить работу. Иди прямо сейчас и не трать моё время.
+
+//Case 5
+
+Is that what I think it is?|Это то, о чём я думаю?
+Excellent, you really are a good messenger.|Превосходно, ты действительно хороший посыльщик.
+Strangely enough, your structure is very similar to the disease that I was exposed to.|Как ни странно, твоя структура очень схожа с болезнью, что я был подвержен.
+I never would have thought that I had anything in common with you...|Никогда бы не подумал, что у меня есть что-то общее с тобой...
+Anyway, I need another pearl. It stores data about an unfortunate development.|В любом случае, мне нужна ещё одна жемчужина. Она содержит в себе данные о неудачное разработке.
+The problem is that it was washed away along with other samples, its approximate location is the Garbage Wastes.|Проблема в том, что её смыло вместе с другими образцами, и её примерное местонахождение - Мусорная Свалка.
+You should be careful, my samples have an aggressive form of behavior...|Будь осторожен, мои образцы имеют агрессивную форму поведения...
+
+//Case 6
+
+I recognise this colour... there is a serious crack in the pearl.|Я узнаю этот цвет... в жемчужине есть серьёзная трещина.
+It will take time to recover the corrupted data, but these records will also help me to slow down the infection of my structure.|На восстановление повреждённых данных потребуется время, но эти записи помогут мне замедлить заражение моей структуры.
+Are you still here?|Ты всё ещё здесь?
+Come back another time, I need to be alone to finish the preparations.|Приходи в другой раз, мне нужно побыть одному, чтобы закончить приготовления.
+
+//Case 7
+
+Are you feeling better? Changes can become apparent over time.|Ты чувствуешь себя лучше? Изменения могут проявить себя со временем.
+In any case, I have done everything I can.|В любом случае, я сделал все, что мог.
+You are free, probably really free, unlike me...|Ты свободен, по настоящему свободен, в отличии от меня...
+If you wish to leave my complex, head west through the Farm Arrays, your skills will allow you to climb over the Retaining Wall with out problems.|Если ты хочешь покинуть мой комплекс, отправляйся на запад через Массивы Ферм, твои навыки легко позволят тебе перелезть Подпорную Стену.
+And if you visit NSH, warn him that his next messenger will be killed on the spot, I am losing my patience talking to rats.|И если ты посетишь НЗЗ, то предупреди его, что следующий посыльник будет убит на месте, я теряю терпение, разговаривая с крысами.
 
 //LOOKS TO THE MOON
 

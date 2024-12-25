@@ -469,7 +469,7 @@ static class OracleHooks
         hoveringPearl.hoverPos = roomref.MiddleOfTile(roomref.Width / 2, roomref.Height / 2);
         hoveringPearl.OnPearlTaken += () =>
         {
-            self.dialogBox.Interrupt("Good try, but it is not for you".TranslateString(), 200);
+            self.dialogBox.Interrupt("Good try, but it is not for you.".TranslateString(), 200);
             DestroyPearl(self, hoveringPearl);
         };
         hoveringPearl.OnWaitCompleted += () =>

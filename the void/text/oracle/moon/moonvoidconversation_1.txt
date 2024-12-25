@@ -1,4 +1,5 @@
-SPECEVENT : MoonVoice
-0 : Hi, Slugcat! : 60
-SPECEVENT : MoonVoice
-0 : How are you? : 60
+0 : Oh, <CapPlayerName>, you are back! : 60
+0 : You have got a mark of communication. : 60
+0 : Did Five Pebbles give it to you? He is sick, you can probably tell by the way he's acting. : 120
+0 : But I am glad to have a companion. It can be very lonely here, although sometimes I hear someone scavenging in the rubbish. : 120
+0 : You can bring me different things, I might tell you something interesting about them. : 60

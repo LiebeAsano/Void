@@ -1,0 +1,16 @@
+Template: NONE
+DangerType: Flood
+WaveSpeed: 0.5
+WaveLength: 0.75
+WaveAmplitude: 0.04898623
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 1
+Grime: 0.3015959
+RandomItemDensity: 0.7783966
+Palette: 9
+EffectColorA: 6
+EffectColorB: 3
+PlacedObjects: ExitSymbolHidden><728.761><528.4227><, 
+AmbientSounds: OMNI><SO_WAT-LilDrips.ogg><730.6702><517.3748><0.5><1, OMNI><SO_WAT-MoreDrips.ogg><729.5092><502.0742><0.5><1, SPOT><SO_WAT-OpenFlow.ogg><728.3544><488.3657><0.5><1><998.2375><131.8615><-236.6982><81.32385><0><0.2933317, 
+FadePalette: 8, 0.3015964

@@ -7,7 +7,7 @@ SecondWaveLength: 0.1666667
 SecondWaveAmplitude: 0
 Clouds: 0
 Grime: 0
-BkgDroneVolume: 0
+BkgDroneVolume: 0.3015966
 RandomItemDensity: 0.7087976
 RandomItemSpearChance: 0.3082654
 Palette: 10

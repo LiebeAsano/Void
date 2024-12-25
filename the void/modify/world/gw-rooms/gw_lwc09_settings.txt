@@ -1,0 +1,19 @@
+[FIND]BlueToken><863.2708><548.6937><44~-71~-153~59~1~BrotherLongLegs~,
+[REPLACE]BlueToken><863.2708><548.6937><44~-71~-159~73~1~BrotherLongLegs~Rivulet|Saint~0~0~0,
+[FIND]Filter><329.0305><1289.552><18~-30~90~-39~White|Yellow,
+[REPLACE]Filter><329.0305><1289.552><18~-30~90~-39~White|Yellow|Rivulet|Saint,
+[FIND]Filter><793.3508><1248.173><-28~-61~-371~-50~White|Yellow,
+[REPLACE]Filter><793.3508><1248.173><-28~-61~-324~-100~White|Yellow|Rivulet|Saint,
+[FIND]Filter><830.889><1014.334><-34~8~-413~138~White|Yellow,
+[REPLACE]Filter><830.889><1014.334><-34~8~-400~45~White|Yellow|Rivulet|Saint,
+[FIND]Filter><466.4263><1426.655><39~-34~0~0~White|Yellow,
+[REPLACE]Filter><466.4263><1426.655><39~-34~65~22~White|Yellow|Rivulet|Saint,
+[MERGE]
+DangerType: Flood
+WaveSpeed: 0.386858
+WaveLength: 0.943429
+WaveAmplitude: 8.000606E-05
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+PlacedObjects: Corruption><542.9359><1987.576><58~119, Filter><531.0568><1984.78><-11~62~0~0~White|Yellow|Red|Rivulet|Saint|Gourmand, Corruption><949.1567><1571.876><164~58, Filter><923.084><1554.318><0~100~-319~-25~White|Yellow|Red|Rivulet|Saint|Gourmand, Corruption><326.6599><1749.38><0~100, Filter><310.497><1752.2><2~46~0~0~White|Yellow|Red|Rivulet|Saint|Gourmand, Corruption><592.1983><593.9739><280~282, Filter><572.4374><564.69><0~100~-13~-128~White|Yellow|Red|Rivulet|Saint|Gourmand, 
+[ENDMERGE]

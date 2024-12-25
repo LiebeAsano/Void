@@ -1,3 +1,6 @@
+[FIND]playerGuideOverseerSpawnChance: 0.0
+[REPLACE]playerGuideOverseerSpawnChance: 1.0
+
 [MERGE]
-Room_Attr: UW_LWH01: Overseer-Avoid,DropBug-Forbidden,
+Room_Attr: UW_LWH01: Overseer-Like, DropBug-Forbidden,
 [ENDMERGE]

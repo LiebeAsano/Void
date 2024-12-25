@@ -1,0 +1,12 @@
+Template: GW_SettingsTemplate_Inside
+WaveSpeed: 0.5011479
+WaveLength: 0.9994261
+WaveAmplitude: 0.02000164
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.9087859
+Grime: 0.2757363
+BkgDroneVolume: 0.3093298
+PlacedObjects: CorruptionDarkness><436.4982><408.1185><46.24481~103.5573, Corruption><426.88><513.9431><28.45831~146.9563, CorruptionTube><371.3104><339.8808><108.853~-33.75421, ShelterBhvrSpawnPosition><113.8019><390.358><, ShelterBhvrManager><663.8651><321.3116><97.15417~5.889587~False~False~4~False~3~6~20~40~60~120~120~120~False, 
+AmbientSounds: OMNI><SO_WAT-LilDrips.ogg><789.8949><259.2565><0.5><1, SPOT><SO_SFX-Corrosion.ogg><738.642><550.0369><0.5><1><431.7692><478.8275><-35.35534><-35.35534><0><0.2391981, SPOT><SO_WAT-OpenFlow.ogg><491.8556><258.7694><0.5><1><150.1212><194.6746><-35.35534><-35.35534><0><0.2391988, OMNI><Mech Basic.wav><421.6149><382.0219><0.159737><1, 
+FadePalette: 8, 0.203476

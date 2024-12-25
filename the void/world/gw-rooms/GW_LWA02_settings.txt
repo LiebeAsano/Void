@@ -1,0 +1,14 @@
+Template: NONE
+DangerType: Flood
+WaveSpeed: 0.4984041
+WaveLength: 0.7860658
+WaveAmplitude: 0.0486683
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 1
+Grime: 0.3015969
+RandomItemDensity: 0
+Palette: 9
+PlacedObjects: Corruption><1075.699><465.1><17.07507~128.4584, 
+AmbientSounds: OMNI><SO_WAT-LilDrips.ogg><745.9103><519.8499><0.5><1, OMNI><SO_WAT-MoreDrips.ogg><747.0562><445.9063><0.5><1, SPOT><AM_WIN_Hilltop.ogg><741.5043><182.3571><0.5><1><543.3271><360.2374><-94.4064><-73.77411><0><0.1, SPOT><SO_WAT-OpenFlow.ogg><740.6865><51.55614><0.5><1><593.7344><224.4561><-181.2043><-59.54492><0><0.1, SPOT><SO_WAT-LightFlow.ogg><737.0016><305.033><0.7010644><1><598.587><376.1944><-178.3584><-153.4574><0><0.1, 
+FadePalette: 8, 0.3479959

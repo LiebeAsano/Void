@@ -1,0 +1,17 @@
+Template: NONE
+DangerType: Flood
+WaveSpeed: 0.5
+WaveLength: 0.75
+WaveAmplitude: 0.03256608
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.9021739
+Grime: 0.3170634
+BkgDroneVolume: 0.3015963
+RandomItemDensity: 0.6304348
+Palette: 9
+EffectColorA: 3
+EffectColorB: 3
+PlacedObjects: Corruption><146.1999><400.4939><14~119, Corruption><162.8151><485.4237><0~100, Corruption><235.198><511.528><0~100, Corruption><186.4949><313.9499><0~100, CorruptionTube><156.8145><532.5607><155~-258, CorruptionTube><268.8217><273.1593><-4~307, CorruptionTube><1181><1121><-395~220, Corruption><861><1303><0~100, Corruption><1007><1285><0~100, Corruption><1098><1187><0~100, CorruptionTube><914.9688><1351><228~-279, Corruption><359><176><116~115, Corruption><616><86><116~115, Corruption><1150><1054><0~100, 
+AmbientSounds: OMNI><SO_WAT-LilDrips.ogg><724.9348><517.3905><0.5><1, OMNI><SO_WAT-MoreDrips.ogg><725.119><445.1144><0.5><1, OMNI><SO_WAT-RunningWater.ogg><726.2106><373.9489><0.159737><1, OMNI><waterGurgleLOOP1.wav><725.6508><303.3636><0.5><1, SPOT><SO_WAT-OpenFlow.ogg><399.3077><439.421><0.7165309><1><495.4298><401.3075><-415.2741><-137.8054><0><0.3861283, SPOT><SO_WAT-TubWater.ogg><412.29><599.5198><0.5><1><208.1764><1358.286><-85.15741><-110.0584><0><0.1, SPOT><SO_WAT-TubWater.ogg><412.7305><580.5128><0.5><1><209.3284><1090.269><-100.8095><-79.46576><0><0.1, SPOT><SO_WAT-TubWater.ogg><410.3947><557.9269><0.5><1><202.0123><822.302><-91.56055><-100.8095><0><0.1, SPOT><SO_WAT-TapWater.ogg><818.4396><171.9587><0.5><1><715.353><913.3387><-68.0824><-75.19701><0><0.1, SPOT><SO_WAT-TapWater.ogg><823.9601><142.4517><0.5><1><719.4506><1140.98><-92.98352><-85.8689><0><0.1, SPOT><SO_WAT-Splashes.ogg><340.9633><242.7084><0.4690671><1><617.0842><586.8209><-77.33142><-60.96783><0><0.1, SPOT><SO_WAT-Splashes.ogg><337.9916><222.4694><0.5><1><244.1541><459.8631><-80.88866><-52.43039><0><0.1, SPOT><AM_WIN-NiceWnd.ogg><746.2905><518.9105><0.5><1><342.2572><1276.254><-176.2241><-197.5679><0><0.1, SPOT><AM_WIN-NiceWnd.ogg><741.2623><520.9542><0.5><1><973.2727><1069.841><-170.5324><-115.0387><0><0.1, 
+FadePalette: 8, 0.3586957, 0.3586957

@@ -1,6 +1,4 @@
-0 : ..still alive. I didn't expect this outcome. Apparently you are able to delay your death. : 15
-I would be interested in exploring your body, but my state don't let me do something like this...
-The fact that you came back to me again suggests that you're lost.
-You might be looking for a friend of mine. Her name is Looks to the Moon, her state much worse then mine.
-She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.
-0 : Tell her I'm sorry... : 50
+0 : Oh, it is you. : 60
+0 : How are you, <CapPlayerName>? You look hungry. I am sorry, but I do not have anything to feed you. : 120
+0 : I wish you a successful hunt, I would not want my only companion to starve to death. : 60
+0 : Come back when you feel better, I will try to tell you an interesting story. : 120

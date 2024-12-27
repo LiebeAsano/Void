@@ -156,10 +156,20 @@ static class PermadeathConditions
 		RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
 		if (rainWorld != null
 			&& rainWorld.processManager is ProcessManager manager
-			&& manager.currentMainLoop is RainWorldGame game
-			&& VoidSpecificGameOverCondition(game))
-			SetVoidCatDeadTrue(game);
-
+			&& manager.currentMainLoop is RainWorldGame game)
+		{
+			if (VoidSpecificGameOverCondition(game))
+			{
+                SetVoidCatDeadTrue(game);
+            }
+			if (game.GetStorySession.saveState.GetKarmaToken() > 0
+				&& game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+			{
+                var savestate = game.GetStorySession.saveState;
+                savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+				savestate.SessionEnded(game, false, false);
+            }
+        }
 	}
 	private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
 	{
@@ -173,6 +183,12 @@ static class PermadeathConditions
 	{
 		orig(self);
 		if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond) SetVoidCatDeadTrue(self);
+		if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond)
+		{
+            var savestate = self.world.game.GetStorySession.saveState;
+            session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+            savestate.SessionEnded(self.world.game, false, false);
+        }
 	}
 	private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
 	{

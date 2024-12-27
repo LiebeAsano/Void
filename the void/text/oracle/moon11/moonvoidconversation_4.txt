@@ -1,6 +1,6 @@
-0 : ..still alive. I didn't expect this outcome. Apparently you are able to delay your death. : 15
-I would be interested in exploring your body, but my state don't let me do something like this...
-The fact that you came back to me again suggests that you're lost.
-You might be looking for a friend of mine. Her name is Looks to the Moon, her state much worse then mine.
-She's a short distance to the east of here. If the little beast has accomplished his mission,<LINE> perhaps she can help you find what you've been looking for.
-0 : Tell her I'm sorry... : 50
+0 : Hi, <CapPlayerName>! Or have I already said that? : 60
+0 : As I remember, I promised to tell you an interesting story. : 60
+0 : I think you realise I was not always in this state. When I was built, I was already conscious,<LINE>I was taught social skills, instilled with new knowledge and generally treated with care. : 120
+0 : I liked being visited several times per cycle, I felt needed... : 180
+0 : But that was so long ago, now I just wish the Five Pebbles would get better. : 120
+0 : Do you have something interesting to show me? : 60

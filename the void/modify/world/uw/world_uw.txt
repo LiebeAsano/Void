@@ -10,5 +10,20 @@ UW_LWH01 : UW_C07, UW_A12
 END ROOMS
 CREATURES
 (Void)OFFSCREEN : 0-KingVulture-3
+(Void)UW_I01 : 5-Cyan-2, 6-Cyan-2
+(Void)UW_J01 : 3-Cyan, 4-Cyan, 5-Cyan, 6-Cyan-2
+(Void)UW_E03 : 8-White-{Mean:1.0}, 3-SpitterSpider, 4-SpitterSpider-2, 5-SpitterSpider, 6-SpitterSpider, 7-SpitterSpider, 9-SpitterSpider
+(Void)UW_D02 : 3-White-{Mean:1.0}, 4-SpitterSpider
+(Void)UW_E02 : 3-SpitterSpider, 4-SpitterSpider, 6-White-{Mean:1.0}
+(Void)UW_D03 : 2-Cyan-2, 3-SpitterSpider
+(Void)UW_D04 : 4-Dropbug, 3-Dropbug, 5-Tube, 6-Tube, 7-Tube
+(Void)LINEAGE : UW_D02 : 4 : Dropbug-0.5, White-{Mean:1.0}-0
+(Void)UW_J02 : 5-Daddy, 16-Cyan, 19-Cyan, 17-Cyan, 13-Tube, 14-Tube
+(Void)UW_E04 : 3-White, 6-Tube, 7-Tube
+(Void)UW_D06 : 3-Tube
+(Void)UW_C04 : 3-White-{Mean:0.7}
+(Void)UW_A09 : 4-White-{Mean:0.7}
+(Void)LINEAGE : UW_D07 : 4 : NONE-0.4, Dropbug-0
+(Void)UW_D01 : 2-Dropbug
 END CREATURES
 [ENDMERGE]

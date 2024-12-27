@@ -90,7 +90,12 @@ internal static class SLOracle
                         self.State.playerEncountersWithMark--;
                         break;
                     }
-                case 4 when self.State.neuronsLeft < 6:
+                case 4:
+                    {
+                        saveState.SetEncountersWithMark(saveState.cycleNumber);
+                        break;
+                    }
+                /*case 4 when self.State.neuronsLeft < 6:
 					{
                         MoonVoice(self);
                         self.dialogBox.Interrupt("I am sorry, <CapPlayerName>, but I cannot remember of any new stories I can tell you.".TranslateString(), 60);
@@ -103,7 +108,7 @@ internal static class SLOracle
                         self.dialogBox.Interrupt("I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.".TranslateString(), 60);
                         self.State.playerEncountersWithMark--;
                         break;
-                    }
+                    }*/
                 default:
                     {
                         saveState.SetEncountersWithMark(saveState.cycleNumber);
@@ -1109,27 +1114,27 @@ internal static class SLOracle
                 switch (UnityEngine.Random.Range(0, 5))
                 {
                     case 0:
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("You would like me to read this?"), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("You would like me to read this?"), 60));
                         MoonVoice(self2);
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("It's still warm... this was in use recently."), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("It's still warm... this was in use recently."), 120));
                         break;
                     case 1:
                         MoonVoice(self2);
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("A pearl... This one is crystal clear - it was used just recently."), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("A pearl... This one is crystal clear - it was used just recently."), 120));
                         break;
                     case 2:
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Would you like me to read this pearl?"), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Would you like me to read this pearl?"), 60));
                         MoonVoice(self2);
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Strange... it seems to have been used not too long ago."), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Strange... it seems to have been used not too long ago."), 120));
                         break;
                     case 3:
                         MoonVoice(self2);
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("This pearl has been written to just now!"), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("This pearl has been written to just now!"), 120));
                         break;
                     default:
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let's see... A pearl..."), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("Let's see... A pearl..."), 60));
                         MoonVoice(self2);
-                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("And this one is fresh! It was not long ago this data was written to it!"), 10));
+                        self.events.Add(new Conversation.TextEvent(self, 0, self.Translate("And this one is fresh! It was not long ago this data was written to it!"), 120));
                         break;
                 }
                 self.LoadEventsFromFile((ModManager.MSC && self.myBehavior.oracle.ID == MoreSlugcatsEnums.OracleID.DM) ? 168 : 40, true, (self.myBehavior is SLOracleBehaviorHasMark && (self.myBehavior as SLOracleBehaviorHasMark).holdingObject != null) ? (self.myBehavior as SLOracleBehaviorHasMark).holdingObject.abstractPhysicalObject.ID.RandomSeed : UnityEngine.Random.Range(0, 100000));

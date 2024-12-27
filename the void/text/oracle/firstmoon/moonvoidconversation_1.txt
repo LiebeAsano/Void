@@ -1,7 +1,6 @@
 0 : Hi, <CapPlayerName>. : 60
 0 : What are you? You look pretty weird. : 60
-0 : Have you seen my friend? He looks just like you. : 60
-0 : But I am not sure anymore... : 120
+0 : Have you seen my friend? He looks just like you, but I am not sure... : 120
 0 : Do you have a mark of communication? Did the Five Pebbles give it to you or did you come from faraway lands? : 120
-0 : But I'm glad I have a companion. It can be very lonely here, although sometimes I hear someone scavenging in the rubbish. : 120
+0 : But I am glad I have a companion. It can be very lonely here, although sometimes I hear someone scavenging in the rubbish. : 120
 0 : You can bring me different things, I might tell you something interesting about them. : 60

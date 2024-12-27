@@ -1,6 +1,6 @@
 SPECEVENT : MoonVoice
 0 : Hi... : 60
-0 : Your harmony is missing... : 60
+0 : Your attunement is missing... : 60
 SPECEVENT : MoonVoice
 0 : Do you understand me without a mark of communication? : 60
 SPECEVENT : MoonVoice
@@ -10,4 +10,3 @@ SPECEVENT : MoonVoice
 0 : . . . : 60
 SPECEVENT : MoonVoice
 0 : You must be very curious to come here. Bring the pearls to me, I can read them to you. : 120
-

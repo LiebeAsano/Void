@@ -1,3 +1,5 @@
-0 : Hi, Slugcat!2 : 50
-SPECEVENT : MoonVoice
-0 : How are you?2 : 50
+0 : Hi, <CapPlayerName>, you are back! : 60
+0 : I am not imagining it and you really do have four eyes. : 60
+0 : It is very amusing. Creatures generally need more eyes to better determine the distance to their prey. : 60
+0 : They also find it easier to navigate through space. So you are a predator? : 120
+0 : I am glad you do not find me tasty. <CapPlayerName>, please do not bring your prey here, I do not like to watch violence. : 120

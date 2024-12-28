@@ -1,15 +1,15 @@
 {
-  "Title": "Rain world: Last Wish",
+  "Title": "Rain world: Last Wish (WIP)",
   "Description": "",
-  "ID": "void.liebeasano",
-  "Version": "13.3.1",
+  "ID": "LW team",
+  "Version": "21.1.0",
   "TargetGameVersion": "v1.9.06",
   "Requirements": "moreslugcats,slime-cubed.slugbase",
   "RequirementNames": "More Slugcats Expansion,SlugBase",
   "Authors": "Liebe Asano",
   "Visibility": "Unlisted",
   "Tags": [],
-  "WorkshopID": 3343761227,
+  "WorkshopID": 3358126976,
   "UploadFilesOnly": true,
-  "UploadThumbnail": false
+  "UploadThumbnail": true
 }

@@ -173,7 +173,7 @@ static class OracleHooks
                         self.getToWorking = 1f;
                         break;
                     }
-                case 2:
+                case 3:
                     {
                         if (saveState.cycleNumber - saveState.GetLastMeetCycles() > 2)
                         {
@@ -268,6 +268,7 @@ static class OracleHooks
                                         self.NewAction(self.afterGiveMarkAction);
                                     //self.StartItemConversation(datapearl);
                                     self.SlugcatEnterRoomReaction();
+                                    saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
                                     self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                                 }
                             }
@@ -940,11 +941,19 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     {
                         this.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, 0f, 1f, 1f);
                     }
+                
                 }
                 if (this.inActionCounter > 300 && this.player.graphicsModule != null && !flag2)
                 {
                     (this.player.graphicsModule as PlayerGraphics).markAlpha = Mathf.Max((this.player.graphicsModule as PlayerGraphics).markAlpha, Mathf.InverseLerp(500f, 300f, (float)this.inActionCounter));
-                    this.owner.NewAction(this.owner.afterGiveMarkAction);
+                }
+                if (this.inActionCounter > 360)
+                {
+                    if (this.owner.conversation != null)
+                    {
+                        this.owner.conversation.paused = false;
+                    }
+                    this.owner.NewAction(MeetVoid_Init);
                 }
                 return;
             }

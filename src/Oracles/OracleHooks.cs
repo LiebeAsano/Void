@@ -595,8 +595,8 @@ static class OracleHooks
             "These pearls that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I cannot get it back.",
             "Considering that your body weight does not change, this means that all the objects you eat are dissolved by the void fluid.",
             "If to assume that all the water in your body has been displaced by the void fluid,<LINE>its concentration is still insufficient to dissolve objects in such a short period of time.",
-            "Watching you, I can assume that your body is invisibly connected to the void sea, but this thought alone raises even more questions.",
-            "I would never have thought that such wasteful use of pearls would bring me closer to understanding the nature of the void sea.",
+            "Watching you, I can assume that your body is invisibly connected to the Void Sea, but this thought alone raises even more questions.",
+            "I would never have thought that such wasteful use of pearls would bring me closer to understanding the nature of the Void Sea.",
             "Eat as much as you want, from now I will no longer store important information here in your presence."
         ];
 

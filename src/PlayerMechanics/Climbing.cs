@@ -1,6 +1,7 @@
 ﻿using RWCustom;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.OptionInterface;
@@ -309,9 +310,11 @@ internal static class Climbing
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 		player.canJump = 1;
 		player.standing = true;
-
-		float climbSpeed = 1f;
-
+		float climbSpeed = 1f + 0.05f * player.KarmaCap;
+		if (player.KarmaCap == 10)
+		{
+			climbSpeed = 1.5f;
+        }
 		if (!player.input[0].jmp)
 			if (body_chunk_0.pos.x > body_chunk_1.pos.x && player.input[0].x < 0)
 				climbSpeed = -0.25f;
@@ -352,14 +355,21 @@ internal static class Climbing
 			}
 
 			body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
-
-			if (player.input[0].jmp && player.input[0].x != 0)
+			float minusone = 0.05f * player.KarmaCap;
+            float minustwo = 0.16f * player.KarmaCap;
+			if (player.KarmaCap == 10)
 			{
-				float jumpForceX = 0;
+				minusone = 0.5f;
+				minustwo = 1.6f;
+
+            }
+            if (player.input[0].jmp && player.input[0].x != 0)
+			{
+				float jumpForceX;
 				if (gamepadController && player.input[0].y <= 0)
-					jumpForceX = -8.0f * climbSpeed * player.input[0].x;
+					jumpForceX = (-8f + minustwo) * climbSpeed * player.input[0].x;
 				else
-					jumpForceX = -3.4f * climbSpeed * player.input[0].x;
+					jumpForceX = (-3.4f + minusone) * climbSpeed * player.input[0].x;
 				body_chunk_1.vel.x = Custom.LerpAndTick(body_chunk_1.vel.x, jumpForceX, 0.3f, 1f);
 			}
 
@@ -430,10 +440,15 @@ internal static class Climbing
 				body_chunk_0.vel.y += player.gravity;
 				body_chunk_1.vel.y += player.gravity;
 
+				float bonus = 1f + (0.025f * player.KarmaCap);
+
+				if (player.KarmaCap == 10)
+					bonus = 1.25f;
+
 				if (body_chunk_0.pos.y > body_chunk_1.pos.y)
 				{
-					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f, 0.3f);
-					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f, 0.3f);
+					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
+					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
 				}
 				else
 				{

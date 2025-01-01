@@ -67,7 +67,7 @@ internal static class MenuHooks
 		if (slugcatNumber == VoidEnums.SlugcatID.Void && SlugBase.SlugBaseCharacter.TryGet(slugcatNumber, out var character))
 		{
 			character.Description = (menu as SlugcatSelectMenu).SlugcatUnlocked(slugcatNumber) ?
-				"An enraged and hungry predator escapes from the void sea.<LINE>Balancing between life and death, the beast seeks its new place in this world."
+				"An enraged and hungry predator escapes from the Void Sea.<LINE>Balancing between life and death, the beast seeks its new place in this world."
 				: "Clear the game as Hunter to unlock.";
 		}
 		orig(self, menu, owner, pageIndex, slugcatNumber);

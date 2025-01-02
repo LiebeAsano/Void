@@ -11,6 +11,7 @@ public static class _PlayerMechanicsMeta
 		CanBeSwallowed.Hook();
 		CanIPickThisUp.Hook();
 		СanMaul.Hook();
+		CentipedeResist.Hook();
 		Climbing.Hook();
 		ColdImmunityPatch.Hook();
 		DontBiteMimic.Hook();

@@ -43,7 +43,7 @@ internal static class CentipedeResist
             {
                 if (shockObj is Creature)
                 {
-                    self.Stun(120);
+                    self.Stun(60);
                     self.room.AddObject(new CreatureSpasmer(self, false, self.stun));
                     self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
                     (shockObj as Creature).Stun(240);
@@ -89,11 +89,129 @@ internal static class CentipedeResist
                 {
                     self.Die();
                 }
+                else if (shockObj.TotalMass * 2 < self.TotalMass)
+                {
+                    int NumberDeath = (shockObj as Player).KarmaCap;
+                    int RandomDeath = UnityEngine.Random.Range(0, 20);
+                    if (NumberDeath < 5)
+                    {
+                        if (RandomDeath > 4)
+                        {
+                            (shockObj as Creature).Die();
+                            self.Stun(60);
+                            self.room.AddObject(new CreatureSpasmer(self, false, self.stun));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                        else
+                        {
+                            (shockObj as Creature).Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                            (shockObj as Creature).LoseAllGrasps();
+                            self.Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(self, false, self.stun));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                    }
+                    if (NumberDeath == 6)
+                    {
+                        if (RandomDeath > 7)
+                        {
+                            (shockObj as Creature).Die();
+                            self.Stun(60);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                        else
+                        {
+                            (shockObj as Creature).Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                            (shockObj as Creature).LoseAllGrasps();
+                            self.Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                    }
+                    if (NumberDeath == 7)
+                    {
+                        if (RandomDeath > 9)
+                        {
+                            (shockObj as Creature).Die();
+                            self.Stun(60);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), (shockObj as Creature).mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                        else
+                        {
+                            (shockObj as Creature).Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                            (shockObj as Creature).LoseAllGrasps();
+                            self.Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                    }
+                    if (NumberDeath == 8)
+                    {
+                        if (RandomDeath > 11)
+                        {
+                            (shockObj as Creature).Die();
+                            self.Stun(60);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), (shockObj as Creature).mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                        else
+                        {
+                            (shockObj as Creature).Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                            (shockObj as Creature).LoseAllGrasps();
+                            self.Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                    }
+                    if (NumberDeath == 9)
+                    {
+                        if (RandomDeath > 13)
+                        {
+                            (shockObj as Creature).Die();
+                            self.Stun(60);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), (shockObj as Creature).mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                        else
+                        {
+                            (shockObj as Creature).Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                            (shockObj as Creature).LoseAllGrasps();
+                            self.Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                    }
+                    if (NumberDeath == 10)
+                    {
+                        if (RandomDeath > 15)
+                        {
+                            (shockObj as Creature).Die();
+                            self.Stun(60);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), (shockObj as Creature).mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                        else
+                        {
+                            (shockObj as Creature).Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                            (shockObj as Creature).LoseAllGrasps();
+                            self.Stun(120);
+                            self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
+                        }
+                    }
+                    return;
+                }
                 else if (shockObj.TotalMass < self.TotalMass)
                 {
                     int NumberDeath = (shockObj as Player).KarmaCap;
-                    if ((shockObj as Player).KarmaCap == 10)
-                        NumberDeath = 9;
                     int RandomDeath = UnityEngine.Random.Range(0, 10);
                     if (NumberDeath < 5)
                     {
@@ -189,6 +307,15 @@ internal static class CentipedeResist
                             self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
                             self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
                         }
+                    }
+                    if (NumberDeath == 10)
+                    {
+                        (shockObj as Creature).Stun(120);
+                        self.room.AddObject(new CreatureSpasmer(shockObj as Creature, false, (shockObj as Creature).stun));
+                        (shockObj as Creature).LoseAllGrasps();
+                        self.Stun(120);
+                        self.room.AddObject(new CreatureSpasmer(self, true, (int)Mathf.Lerp(70f, 120f, self.size)));
+                        self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Electric, 1f, 200f);
                     }
                     return;
                 }

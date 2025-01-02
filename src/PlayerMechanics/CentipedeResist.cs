@@ -87,7 +87,8 @@ internal static class CentipedeResist
             {
                 if (self.Small)
                 {
-                    self.Die();
+                    self.Stun(60);
+                    (shockObj as Creature).LoseAllGrasps();
                 }
                 else if (shockObj.TotalMass * 2 < self.TotalMass)
                 {

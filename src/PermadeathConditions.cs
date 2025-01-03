@@ -145,7 +145,7 @@ static class PermadeathConditions
 				}
 			}
 			var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-			if (player.KarmaCap == 10) savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+            if (player.KarmaCap == 10) savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
 			save.SetVoidCatDead(true);
 			save.redExtraCycles = true;
 			game.rainWorld.progression.SaveWorldStateAndProgression(false);
@@ -175,7 +175,9 @@ static class PermadeathConditions
 	{
 		return rainWorldGame.session is StoryGameSession session
 			&& session.characterStats.name == VoidEnums.SlugcatID.Void
-			&& (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath || session.saveState.GetKarmaToken() == 0)
+			&& (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath 
+			|| session.saveState.GetKarmaToken() == 0
+			|| session.saveState.cycleNumber <= 0 && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
 			&& !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}
 

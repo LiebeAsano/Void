@@ -323,6 +323,7 @@ static class OracleHooks
                                 if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                     self.NewAction(self.afterGiveMarkAction);
                                 self.SlugcatEnterRoomReaction();
+                                saveState.cycleNumber = 0;
                                 self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                             }
                         }

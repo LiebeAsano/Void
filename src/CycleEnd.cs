@@ -24,8 +24,13 @@ internal static class CycleEnd
 			self.GoToDeathScreen();
 			return;
 		}
-		orig(self, malnourished);
-	}
+        if (self.IsVoidWorld() && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && self.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
+        {
+            self.GetStorySession.saveState.cycleNumber -= 2;
+        }
+        orig(self, malnourished);
+
+    }
 
 	private static void ShelterDoor_Update(MonoMod.Cil.ILContext il)
 	{

@@ -26,7 +26,8 @@ public static class _PlayerMechanicsMeta
 		HealthSpear.Hook();
 		HeavyCarry.Hook();
 		KarmaFlowerChanges.Initiate();
-		MalnourishmentDeath.Hook();
+		LizardResist.Hook();
+        MalnourishmentDeath.Hook();
 		NoForceSleep.Hook();
 		NoVisualMalnourishment.Hook();
 		PunishNonPermaDeath.Hook();

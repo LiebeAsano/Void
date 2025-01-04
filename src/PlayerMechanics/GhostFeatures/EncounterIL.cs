@@ -67,7 +67,11 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 			{
 				self.deathPersistentSaveData.karmaCap = 10;
 			}
-		}
+            else
+            {
+                self.cycleNumber += 5;
+            }
+        }
 
 		private static int KarmaRefillControl(int unmodifiedNewKarma, SaveState self, GhostWorldPresence.GhostID ghostID)
 		{

@@ -31,21 +31,22 @@ internal static class UIExtensions
 		opTab.AddItems([opCheckBox, opLabel]);
 	}
 
+	private static int sizeOfTab = 60;
 	private static void GenerateColoredIntField(this OpTab opTab, Configurable<int> configurable, Vector2 pos,
 		Color color)
 	{
-		OpUpdown opUpdown = new OpUpdown(configurable, pos, 40)
+		
+		OpUpdown opUpdown = new OpUpdown(configurable, pos, sizeOfTab)
 		{
 			description = configurable.info.description.TranslateStringComplex()
 		};
-		OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
+		OpLabel opLabel = new(pos: pos + new Vector2(sizeOfTab, -3),
 			size: new Vector2(240f, 30f),
 			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "")
 			.TranslateStringComplex(),
 			FLabelAlignment.Left);
 		opUpdown.colorEdge = color;
-		opUpdown.colorFill = color;
-		opUpdown.colorEdge = color;
+		opUpdown.colorText = color;
 		opTab.AddItems([opUpdown, opLabel]);
 
 	}

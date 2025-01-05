@@ -14,19 +14,7 @@ internal static class UIExtensions
 	/// <param name="opTab"></param>
 	/// <param name="configurable"></param>
 	/// <param name="pos"></param>
-	public static void GenerateCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos)
-	{
-		OpCheckBox opCheckBox = new OpCheckBox(configurable, pos)
-		{
-			description = configurable.info.description.TranslateStringComplex()
-		};
-		OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
-			size: new Vector2(240f, 30f),
-			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "").TranslateStringComplex(),
-			FLabelAlignment.Left);
-		opTab.AddItems([opCheckBox, opLabel]);
-	}
-	public static void GenerateColoredCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos, Color color)
+	private static void GenerateColoredCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos, Color color)
 	{
 		OpCheckBox opCheckBox = new OpCheckBox(configurable, pos)
 		{
@@ -40,7 +28,25 @@ internal static class UIExtensions
 		opLabel.color = color;
 		opTab.AddItems([opCheckBox, opLabel]);
 	}
-	public static void GenerateBigText(this OpTab opTab, string text, Vector2 pos)
+
+	private static void GenerateColoredIntField(this OpTab opTab, Configurable<int> configurable, Vector2 pos, Color color)
+	{
+		OpUpdown opUpdown = new OpUpdown(configurable, pos, 40)
+		{
+			description = configurable.info.description.TranslateStringComplex()
+		};
+		OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
+			size: new Vector2(240f, 30f),
+			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "").TranslateStringComplex(),
+			FLabelAlignment.Left);
+		opUpdown.colorEdge = color;
+		opUpdown.colorFill = color;
+		opUpdown.colorEdge = color;
+		opTab.AddItems([opUpdown, opLabel]);
+
+	}
+
+	static void GenerateBigText(this OpTab opTab, string text, Vector2 pos)
 	{
 		OpLabel opLabel = new(pos: pos,
 			text: text,
@@ -69,10 +75,14 @@ internal static class UIExtensions
 			{
 				opTab.GenerateColoredCheckbox(boolcfg, startingPosition - new Vector2(0, offset), configColorPair.Item2);
 			}
+			else if (configColorPair.Item1 is Configurable<int> intcfg)
+			{
+				opTab.GenerateColoredIntField(intcfg, startingPosition - new Vector2(0, offset), configColorPair.Item2);
+			}
 			else throw new NotImplementedException($"Generating OI block failed due to unsupported configurable type passed in. The passed config is {configColorPair.Item1.key}" +
-				$" and its type is {configColorPair.Item1.GetType()}");
+			                                 $" and its type is {configColorPair.Item1.GetType()}");}
 
-			offset += marginBetweenVerticalElements;
+		offset += marginBetweenVerticalElements;
 		}
 	}
-}
+

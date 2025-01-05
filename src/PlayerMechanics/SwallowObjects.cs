@@ -200,29 +200,13 @@ internal static class SwallowObjects
                 || (self.input[0].x == 0 && self.input[0].y == 0 && !self.input[0].jmp && !self.input[0].thrw) 
                 || (ModManager.MMF && self.input[0].x == 0 && self.input[0].y == 1 && !self.input[0].jmp && !self.input[0].thrw 
                 && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam))) 
-                && (self.mainBodyChunk.submersion < 0.5f || self.isRivulet);
+                && (self.mainBodyChunk.submersion < 0.5f);
             bool flag2 = false;
             bool flag3 = false;
             self.craftingObject = false;
             int num = -1;
             int num2 = -1;
             bool flag4 = false;
-            if (ModManager.MSC && !self.input[0].pckp && self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)
-            {
-                PlayerGraphics.TailSpeckles tailSpecks = (self.graphicsModule as PlayerGraphics).tailSpecks;
-                if (tailSpecks.spearProg > 0f)
-                {
-                    tailSpecks.setSpearProgress(Mathf.Lerp(tailSpecks.spearProg, 0f, 0.05f));
-                    if (tailSpecks.spearProg < 0.025f)
-                    {
-                        tailSpecks.setSpearProgress(0f);
-                    }
-                }
-                else
-                {
-                    self.smSpearSoundReady = false;
-                }
-            }
             if (self.input[0].pckp && !self.input[1].pckp && self.switchHandsProcess == 0f && !self.isSlugpup)
             {
                 bool flag5 = self.grasps[0] != null || self.grasps[1] != null;
@@ -295,7 +279,7 @@ internal static class SwallowObjects
                     }
                     num8++;
                 }
-                if ((num5 == -1 || (self.FoodInStomach >= self.MaxFoodInStomach && !(self.grasps[num5].grabbed is KarmaFlower) && !(self.grasps[num5].grabbed is Mushroom))) && (self.objectInStomach == null || self.CanPutSpearToBack || self.CanPutSlugToBack))
+                if ((num5 == -1 || (self.FoodInStomach >= self.MaxFoodInStomach && self.grasps[num5].grabbed is not KarmaFlower && self.grasps[num5].grabbed is not Mushroom)) && (self.objectInStomach == null || self.CanPutSpearToBack || self.CanPutSlugToBack))
                 {
                     int num9 = 0;
                     while (num7 < 0 && num4 < 0 && num6 < 0 && num9 < 2)
@@ -430,7 +414,7 @@ internal static class SwallowObjects
                 }
             }
             int num11 = 0;
-            if (ModManager.MMF && (self.grasps[0] == null || !(self.grasps[0].grabbed is Creature)) && self.grasps[1] != null && self.grasps[1].grabbed is Creature)
+            if (ModManager.MMF && (self.grasps[0] == null || self.grasps[0].grabbed is not Creature) && self.grasps[1] != null && self.grasps[1].grabbed is Creature)
             {
                 num11 = 1;
             }
@@ -455,10 +439,10 @@ internal static class SwallowObjects
                     {
                         self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
                         self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                         "Mauled target"
-                        });
+                        ]);
                         if (!(self.grasps[num11].grabbed as Creature).dead)
                         {
                             for (int num12 = UnityEngine.Random.Range(8, 14); num12 >= 0; num12--)
@@ -487,10 +471,10 @@ internal static class SwallowObjects
                 }
                 if (self.grasps[num11] != null && self.grasps[num11].grabbed is Creature && (self.grasps[num11].grabbed as Creature).Consious && !self.IsCreatureLegalToHoldWithoutStun(self.grasps[num11].grabbed as Creature))
                 {
-                    Custom.Log(new string[]
-                    {
+                    Custom.Log(
+                    [
                     "Lost hold of live mauling target"
-                    });
+                    ]);
                     self.maulTimer = 0;
                     self.wantToPickUp = 0;
                     self.ReleaseGrasp(num11);
@@ -541,7 +525,7 @@ internal static class SwallowObjects
                 {
                     if (ModManager.MSC)
                     {
-                        if (num5 <= -1 || self.grasps[num5] == null || !(self.grasps[num5].grabbed is GooieDuck) || (self.grasps[num5].grabbed as GooieDuck).bites != 6 || self.timeSinceSpawned % 2 == 0)
+                        if (num5 <= -1 || self.grasps[num5] == null || self.grasps[num5].grabbed is not GooieDuck || (self.grasps[num5].grabbed as GooieDuck).bites != 6 || self.timeSinceSpawned % 2 == 0)
                         {
                             self.eatCounter--;
                         }
@@ -567,7 +551,7 @@ internal static class SwallowObjects
                 {
                     (self.grasps[num2].grabbed as JokeRifle).ReloadRifle(self.grasps[num].grabbed);
                     BodyChunk mainBodyChunk = self.mainBodyChunk;
-                    mainBodyChunk.vel.y = mainBodyChunk.vel.y + 4f;
+                    mainBodyChunk.vel.y += 4f;
                     self.room.PlaySound(SoundID.Gate_Clamp_Lock, self.mainBodyChunk, false, 0.5f, 3f + UnityEngine.Random.value);
                     AbstractPhysicalObject abstractPhysicalObject = self.grasps[num].grabbed.abstractPhysicalObject;
                     self.ReleaseGrasp(num);
@@ -711,7 +695,7 @@ internal static class SwallowObjects
             {
                 if (ModManager.MSC && MMF.cfgOldTongue.Value && self.grasps[0] == null && self.grasps[1] == null && self.SaintTongueCheck())
                 {
-                    Vector2 vector2 = new Vector2((float)self.flipDirection, 0.7f);
+                    Vector2 vector2 = new((float)self.flipDirection, 0.7f);
                     Vector2 normalized = vector2.normalized;
                     if (self.input[0].y > 0)
                     {
@@ -828,7 +812,7 @@ internal static class SwallowObjects
                     if (num20 > -1)
                     {
                         self.wantToPickUp = 0;
-                        if (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Artificer || !(self.grasps[num20].grabbed is Scavenger))
+                        if (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Artificer || self.grasps[num20].grabbed is not Scavenger)
                         {
                             self.pyroJumpDropLock = 0;
                         }
@@ -856,7 +840,7 @@ internal static class SwallowObjects
                         if (ModManager.MSC && self.room != null && self.room.game.IsStorySession && self.room.game.GetStorySession.saveState.wearingCloak && self.AI == null)
                         {
                             self.room.game.GetStorySession.saveState.wearingCloak = false;
-                            AbstractConsumable abstractConsumable = new AbstractConsumable(self.room.game.world, MoreSlugcatsEnums.AbstractObjectType.MoonCloak, null, self.room.GetWorldCoordinate(self.mainBodyChunk.pos), self.room.game.GetNewID(), -1, -1, null);
+                            AbstractConsumable abstractConsumable = new(self.room.game.world, MoreSlugcatsEnums.AbstractObjectType.MoonCloak, null, self.room.GetWorldCoordinate(self.mainBodyChunk.pos), self.room.game.GetNewID(), -1, -1, null);
                             self.room.abstractRoom.AddEntity(abstractConsumable);
                             abstractConsumable.pos = self.abstractCreature.pos;
                             abstractConsumable.RealizeInRoom();
@@ -876,19 +860,19 @@ internal static class SwallowObjects
                 {
                     if (self.pickUpCandidate is Spear && self.CanPutSpearToBack && ((self.grasps[0] != null && self.Grabability(self.grasps[0].grabbed) >= Player.ObjectGrabability.BigOneHand) || (self.grasps[1] != null && self.Grabability(self.grasps[1].grabbed) >= Player.ObjectGrabability.BigOneHand) || (self.grasps[0] != null && self.grasps[1] != null)))
                     {
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                         "spear straight to back"
-                        });
+                        ]);
                         self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Init, self.mainBodyChunk);
                         self.spearOnBack.SpearToBack(self.pickUpCandidate as Spear);
                     }
                     else if (self.CanPutSlugToBack && self.pickUpCandidate is Player && (!(self.pickUpCandidate as Player).dead || self.CanIPutDeadSlugOnBack(self.pickUpCandidate as Player)) && ((self.grasps[0] != null && (self.Grabability(self.grasps[0].grabbed) > Player.ObjectGrabability.BigOneHand || self.grasps[0].grabbed is Player)) || (self.grasps[1] != null && (self.Grabability(self.grasps[1].grabbed) > Player.ObjectGrabability.BigOneHand || self.grasps[1].grabbed is Player)) || (self.grasps[0] != null && self.grasps[1] != null) || self.bodyMode == Player.BodyModeIndex.Crawl))
                     {
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                         "slugpup/player straight to back"
-                        });
+                        ]);
                         self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Init, self.mainBodyChunk);
                         self.slugOnBack.SlugToBack(self.pickUpCandidate as Player);
                     }
@@ -942,10 +926,10 @@ internal static class SwallowObjects
                                         }
                                         else
                                         {
-                                            Custom.LogWarning(new string[]
-                                            {
+                                            Custom.LogWarning(
+                                            [
                                             string.Format("Item theft room mismatch? {0}", self.pickUpCandidate.grabbedBy[num28].grabbed.abstractPhysicalObject)
-                                            });
+                                            ]);
                                         }
                                         self.pickUpCandidate.grabbedBy[num28].grabber.ReleaseGrasp(self.pickUpCandidate.grabbedBy[num28].graspUsed);
                                     }

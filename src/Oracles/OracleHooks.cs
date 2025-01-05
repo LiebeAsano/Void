@@ -173,32 +173,6 @@ static class OracleHooks
                         self.getToWorking = 1f;
                         break;
                     }
-                case 3:
-                    {
-                        if (saveState.cycleNumber - saveState.GetLastMeetCycles() > 2)
-                        {
-                            if (self.action != MeetVoid_Init)
-                            {
-                                saveState.SetLastMeetCycles(saveState.cycleNumber);
-                                if (self.currSubBehavior.ID != VoidTalk)
-                                {
-                                    miscData.SSaiConversationsHad++;
-                                    self.NewAction(MeetVoid_Init);
-                                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                                        self.NewAction(self.afterGiveMarkAction);
-                                    self.SlugcatEnterRoomReaction();
-                                    self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                                self.NewAction(self.afterGiveMarkAction);
-                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-                        }
-                        break;
-                    }
                 case 4 when !saveState.GetVoidMeetMoon():
                     {
                         switch (UnityEngine.Random.Range(0, 3))

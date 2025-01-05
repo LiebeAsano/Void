@@ -14,7 +14,8 @@ internal static class UIExtensions
 	/// <param name="opTab"></param>
 	/// <param name="configurable"></param>
 	/// <param name="pos"></param>
-	private static void GenerateColoredCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos, Color color)
+	private static void GenerateColoredCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos,
+		Color color)
 	{
 		OpCheckBox opCheckBox = new OpCheckBox(configurable, pos)
 		{
@@ -22,14 +23,16 @@ internal static class UIExtensions
 		};
 		OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
 			size: new Vector2(240f, 30f),
-			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "").TranslateStringComplex(),
+			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "")
+			.TranslateStringComplex(),
 			FLabelAlignment.Left);
 		opCheckBox.colorEdge = color;
 		opLabel.color = color;
 		opTab.AddItems([opCheckBox, opLabel]);
 	}
 
-	private static void GenerateColoredIntField(this OpTab opTab, Configurable<int> configurable, Vector2 pos, Color color)
+	private static void GenerateColoredIntField(this OpTab opTab, Configurable<int> configurable, Vector2 pos,
+		Color color)
 	{
 		OpUpdown opUpdown = new OpUpdown(configurable, pos, 40)
 		{
@@ -37,7 +40,8 @@ internal static class UIExtensions
 		};
 		OpLabel opLabel = new(pos: pos + new Vector2(30, -3),
 			size: new Vector2(240f, 30f),
-			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "").TranslateStringComplex(),
+			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "")
+			.TranslateStringComplex(),
 			FLabelAlignment.Left);
 		opUpdown.colorEdge = color;
 		opUpdown.colorFill = color;
@@ -56,6 +60,7 @@ internal static class UIExtensions
 	}
 
 	const int marginBetweenVerticalElements = 30;
+
 	/// <summary>
 	/// Generates block of big label and config parameters. Starting point - top left part of rectangle, label gets additional offset
 	/// </summary>
@@ -65,7 +70,8 @@ internal static class UIExtensions
 	/// <param name="labelHorizontalOffset"></param>
 	/// <param name="options"></param>
 	/// <exception cref="NotImplementedException"></exception>
-	public static void GenerateBlock(this OpTab opTab, string label, Vector2 startingPosition, int labelHorizontalOffset = 10, params (ConfigurableBase, Color)[] options)
+	public static void GenerateBlock(this OpTab opTab, string label, Vector2 startingPosition,
+		int labelHorizontalOffset = 10, params (ConfigurableBase, Color)[] options)
 	{
 		opTab.GenerateBigText(label, startingPosition + new Vector2(labelHorizontalOffset, 0));
 		int offset = marginBetweenVerticalElements;
@@ -73,16 +79,19 @@ internal static class UIExtensions
 		{
 			if (configColorPair.Item1 is Configurable<bool> boolcfg)
 			{
-				opTab.GenerateColoredCheckbox(boolcfg, startingPosition - new Vector2(0, offset), configColorPair.Item2);
+				opTab.GenerateColoredCheckbox(boolcfg, startingPosition - new Vector2(0, offset),
+					configColorPair.Item2);
 			}
 			else if (configColorPair.Item1 is Configurable<int> intcfg)
 			{
 				opTab.GenerateColoredIntField(intcfg, startingPosition - new Vector2(0, offset), configColorPair.Item2);
 			}
-			else throw new NotImplementedException($"Generating OI block failed due to unsupported configurable type passed in. The passed config is {configColorPair.Item1.key}" +
-			                                 $" and its type is {configColorPair.Item1.GetType()}");}
+			else
+				throw new NotImplementedException(
+					$"Generating OI block failed due to unsupported configurable type passed in. The passed config is {configColorPair.Item1.key}" +
+					$" and its type is {configColorPair.Item1.GetType()}");
 
-		offset += marginBetweenVerticalElements;
+			offset += marginBetweenVerticalElements;
 		}
 	}
-
+}

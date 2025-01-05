@@ -12,6 +12,7 @@ public static class OptionAccessors
     public static bool GamepadController => cfgGamepadController.Value;
     public static bool PermaDeath => !cfgNoPermaDeath.Value;
 	public static bool ForceUnlockCampaign => cfgForceUnlockCampaign.Value;
+    public static int PermaDeathCycle => cfgPermaDeathCycle.Value;
     #endregion
 
     #region configs
@@ -22,5 +23,7 @@ public static class OptionAccessors
     internal static Configurable<bool> cfgSimpleFood;
 	internal static Configurable<bool> cfgNoPermaDeath;
 	internal static Configurable<bool> cfgForceUnlockCampaign;
-	#endregion
+    internal static Configurable<int> cfgPermaDeathCycle;
+
+    #endregion
 }

@@ -25,7 +25,8 @@ internal class VoidOptionInterface : global::OptionInterface
 			(cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, MediumGrey),
 			(cfgNoPermaDeath, CheatingColor),
-			(cfgForceUnlockCampaign, CheatingColor)
+			(cfgForceUnlockCampaign, CheatingColor),
+			(cfgPermaDeathCycle, CheatingColor)
 			]);
 	}
 

@@ -98,14 +98,14 @@ static class PermadeathConditions
 	private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
 	{
 
-		if (self.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void && !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
+		if (self.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void 
+		    && !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
 		{
 			if (self.manager.upcomingProcess != null) return;
 
 			self.manager.musicPlayer?.FadeOutAllSongs(20f);
 			self.GetStorySession.saveState.redExtraCycles = true;
-			SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.manager.menuSetup, false);
-			save.SetVoidCatDead(true);
+			self.GetStorySession.saveState.SetVoidCatDead(true);
 			if (ModManager.CoopAvailable)
 			{
 				int num = 0;

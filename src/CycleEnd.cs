@@ -71,9 +71,6 @@ internal static class CycleEnd
 	//immutable
 	private const int timeToWait = Utils.TicksPerSecond * 3;
 
-	//mutable
-	private static int timer = 0;
-	private static bool timerStarted;
 //#warning todo: move this to permadeath conditions
 	private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
 	{

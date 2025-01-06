@@ -13,6 +13,7 @@ public static class OptionAccessors
     public static bool PermaDeath => !cfgNoPermaDeath.Value;
 	public static bool ForceUnlockCampaign => cfgForceUnlockCampaign.Value;
     public static int PermaDeathCycle => cfgPermaDeathCycle.Value;
+    public static int EchoDeathCycle => cfgEchoDeathCycle.Value;
     #endregion
 
     #region configs
@@ -24,6 +25,7 @@ public static class OptionAccessors
 	internal static Configurable<bool> cfgNoPermaDeath;
 	internal static Configurable<bool> cfgForceUnlockCampaign;
     internal static Configurable<int> cfgPermaDeathCycle;
+    internal static Configurable<int> cfgEchoDeathCycle;
 
     #endregion
 }

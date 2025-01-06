@@ -28,6 +28,7 @@ public static class _OIMeta
 		OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void, but also closes access to the secret ending", tags: "Disable permadeath"));
 		OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete as Hunter to play this mod", tags: "Unlock campaign"));
 		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 10, new ConfigurableInfo("", new ConfigAcceptableRange<int>(1, 99),tags: "Perma death cycles"));
-		
+        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 5, new ConfigurableInfo("", new ConfigAcceptableRange<int>(1, 99), tags: "Echo death cycles"));
+
     }
 }

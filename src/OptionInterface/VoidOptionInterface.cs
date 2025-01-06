@@ -26,8 +26,9 @@ internal class VoidOptionInterface : global::OptionInterface
 			(cfgSimpleFood, MediumGrey),
 			(cfgNoPermaDeath, CheatingColor),
 			(cfgForceUnlockCampaign, CheatingColor),
-			(cfgPermaDeathCycle, CheatingColor)
-			]);
+			(cfgPermaDeathCycle, CheatingColor),
+            (cfgEchoDeathCycle, CheatingColor)
+            ]);
 	}
 
 

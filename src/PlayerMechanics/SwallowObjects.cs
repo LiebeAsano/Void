@@ -210,10 +210,6 @@ internal static class SwallowObjects
             if (self.input[0].pckp && !self.input[1].pckp && self.switchHandsProcess == 0f && !self.isSlugpup)
             {
                 bool flag5 = self.grasps[0] != null || self.grasps[1] != null;
-                if (self.grasps[0] != null && (self.Grabability(self.grasps[0].grabbed) == Player.ObjectGrabability.TwoHands || self.Grabability(self.grasps[0].grabbed) == Player.ObjectGrabability.Drag))
-                {
-                    flag5 = false;
-                }
                 if (flag5)
                 {
                     if (self.switchHandsCounter == 0)

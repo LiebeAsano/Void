@@ -31,7 +31,7 @@ internal static class UIExtensions
 		opTab.AddItems([opCheckBox, opLabel]);
 	}
 
-	private static int sizeOfTab = 60;
+	private const int sizeOfTab = 60;
 	private static void GenerateColoredIntField(this OpTab opTab, Configurable<int> configurable, Vector2 pos,
 		Color color)
 	{
@@ -40,12 +40,13 @@ internal static class UIExtensions
 		{
 			description = configurable.info.description.TranslateStringComplex()
 		};
-		OpLabel opLabel = new(pos: pos + new Vector2(sizeOfTab, -3),
+		OpLabel opLabel = new(pos: pos + new Vector2(sizeOfTab + 6, -1),
 			size: new Vector2(240f, 30f),
 			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "")
 			.TranslateStringComplex(),
 			FLabelAlignment.Left);
-		opUpdown.colorEdge = color;
+        opLabel.color = color;
+        opUpdown.colorEdge = color;
 		opUpdown.colorText = color;
 		opTab.AddItems([opUpdown, opLabel]);
 
@@ -85,7 +86,8 @@ internal static class UIExtensions
 			}
 			else if (configColorPair.Item1 is Configurable<int> intcfg)
 			{
-				opTab.GenerateColoredIntField(intcfg, startingPosition - new Vector2(0, offset), configColorPair.Item2);
+				offset += 5;
+                opTab.GenerateColoredIntField(intcfg, startingPosition - new Vector2(0, offset), configColorPair.Item2);
 			}
 			else
 				throw new NotImplementedException(

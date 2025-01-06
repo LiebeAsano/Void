@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
-using static VoidTemplate.VoidEnums;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -20,8 +19,7 @@ internal static class HeavyCarry
     {
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            var crit = obj as Creature;
-            if (obj is Player) return false;
+            if (self.TotalMass > obj.TotalMass) return false;
         }
         return orig(self, obj);
     }

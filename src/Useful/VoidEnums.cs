@@ -13,6 +13,7 @@ public static class VoidEnums
 		SlugcatID.Register();
 		ProcessID.Register();
 	}
+
 	public static class SceneID
 	{
 		public static void Register()

@@ -15,6 +15,14 @@ internal static class Utils
 	public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 	public static string TranslateString(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str);
 
+    public static bool IsViy(SaveState saveState)
+    {
+        if (saveState.GetVoidCatDead() && saveState.deathPersistentSaveData.karmaCap == 10)
+        {
+            return true;
+        }
+        return false;
+    }
 
     public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void;
 	public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;

@@ -52,25 +52,28 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 				}
 
                 c2.Emit(OpCodes.Ldarg_1);
-                c2.EmitDelegate(KarmaCapTo10ForVoidMSGhost);
+                c2.EmitDelegate(HandleVoidGhostEncounter);
             }
 			else
 			{
-				logerr("Failed to match for ghost encounter karma update. Void will fail to receive karma cap of 10 from MS Ghost.");
+				logerr("Failed to match for ghost encounter karma update. Void will fail to receive karma cap of 10 from MS Ghost and extra cycles from other ghosts.");
 			}
 		}
 
-		private static void KarmaCapTo10ForVoidMSGhost(SaveState self, GhostWorldPresence.GhostID ghostId)
+		private static void HandleVoidGhostEncounter(SaveState saveState, GhostWorldPresence.GhostID ghostId)
 		{
-			if (self.saveStateNumber == VoidEnums.SlugcatID.Void
-				&& ghostId == MoreSlugcatsEnums.GhostID.MS)
+			if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 			{
-				self.deathPersistentSaveData.karmaCap = 10;
+				if (ghostId == MoreSlugcatsEnums.GhostID.MS)
+				{
+					saveState.deathPersistentSaveData.karmaCap = 10;
+					//saveState.cycleNumber = 0;
+				}
+				else
+				{
+					saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + VoidCycleLimit.EXTRA_CYCLES_PER_GHOST);
+				}
 			}
-            else
-            {
-                self.cycleNumber += 5;
-            }
         }
 
 		private static int KarmaRefillControl(int unmodifiedNewKarma, SaveState self, GhostWorldPresence.GhostID ghostID)

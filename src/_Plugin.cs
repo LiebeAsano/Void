@@ -94,6 +94,7 @@ class _Plugin : BaseUnityPlugin
 				_Karma11FoundationMeta.Hook();
 				_PlayerMechanicsMeta.Hook();
 				_MiscMeta.Hook();
+				VoidCycleLimit.Hook();
 				OptionInterface._OIMeta.Initialize();
 
 				RegisterPOMObjects();

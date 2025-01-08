@@ -177,7 +177,7 @@ static class PermadeathConditions
 			&& session.characterStats.name == VoidEnums.SlugcatID.Void
 			&& (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath 
 			|| session.saveState.GetKarmaToken() == 0
-			|| session.saveState.cycleNumber <= 0 && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
+			|| session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
 			&& !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}
 

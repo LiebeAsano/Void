@@ -12,6 +12,7 @@ public static class SaveManager
 	public const string endingDone = uniqueprefix + "EndingDone";
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
     private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
+    public const string voidExtraCycles = uniqueprefix + "ExtraCycles";
 
     public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
 	public static void SetTeleportationDone(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(teleportationDone, value);
@@ -107,6 +108,8 @@ public static class SaveManager
     public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
     public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
 	public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);
+	public static int GetVoidExtraCycles(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(voidExtraCycles, out int extraCycles) ? extraCycles : 0;
+	public static void SetVoidExtraCycles(this SaveState save, int value) => save.deathPersistentSaveData.GetSlugBaseData().Set(voidExtraCycles, value);
 
 	#region Dreams scheduled/shown
 	private const string dream = "Dream";

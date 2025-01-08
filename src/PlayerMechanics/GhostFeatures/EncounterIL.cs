@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using VoidTemplate.OptionInterface;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures
@@ -71,7 +72,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 				}
 				else
 				{
-					saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + VoidCycleLimit.EXTRA_CYCLES_PER_GHOST);
+					saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + OptionAccessors.EchoDeathCycle);
 				}
 			}
         }

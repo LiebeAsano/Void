@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VoidTemplate.OptionInterface;
 using static HUD.Map;
 using static Menu.SlugcatSelectMenu;
 
@@ -14,12 +15,11 @@ namespace VoidTemplate
 {
     internal static class VoidCycleLimit
     {
-        public const int BASE_CYCLE_LIMIT = 10;
         public const int EXTRA_CYCLES_PER_GHOST = 5;
 
         public static int GetVoidCycleLimit(SaveState saveState)
         {
-            return BASE_CYCLE_LIMIT + saveState.GetVoidExtraCycles();
+            return OptionAccessors.PermaDeathCycle + saveState.GetVoidExtraCycles();
         }
 
         public static bool GetCycleLimitLifted(SaveState saveState)

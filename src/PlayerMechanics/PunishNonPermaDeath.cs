@@ -20,7 +20,7 @@ internal static class PunishNonPermaDeath
 			&& player.IsVoid())
 			{
 				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-				if (!OptionAccessors.PermaDeath)
+				if (!OptionAccessors.PermaDeath || OptionAccessors.PermaDeathCycle != 10 || OptionAccessors.EchoDeathCycle != 5)
 				{
 					savestate.SetPunishNonPermaDeath(true);
 				}

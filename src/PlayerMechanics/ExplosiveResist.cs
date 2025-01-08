@@ -19,8 +19,8 @@ internal static class ExplosiveResist
         if (self is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void && type == Creature.DamageType.Explosion)
         {
             int Karma = player.KarmaCap;
-            float StunResist = 1f - 0.05f * Karma;
-            float DamageResist = 1f - 0.05f * Karma;
+            float StunResist = 1f - 0.035f * Karma;
+            float DamageResist = 1f - 0.035f * Karma;
             stunBonus *= StunResist;
             damage *= DamageResist;
         }

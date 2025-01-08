@@ -173,6 +173,14 @@ static class OracleHooks
                         self.getToWorking = 1f;
                         break;
                     }
+                case 1:
+                    {
+                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            self.NewAction(self.afterGiveMarkAction);
+                        self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                        miscData.SSaiConversationsHad--;
+                        break;
+                    }
                 case 4 when !saveState.GetVoidMeetMoon():
                     {
                         switch (UnityEngine.Random.Range(0, 3))

@@ -17,7 +17,7 @@ internal static class Utils
 
     public static bool IsViy(SaveState saveState)
     {
-        if (saveState.GetVoidCatDead() && saveState.deathPersistentSaveData.karmaCap == 10)
+		if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void && saveState.GetVoidCatDead() && saveState.deathPersistentSaveData.karmaCap == 10)
         {
             return true;
         }

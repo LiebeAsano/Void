@@ -447,7 +447,7 @@ internal static class SwallowObjects
                             }
                             Creature creature = self.grasps[num11].grabbed as Creature;
                             creature.SetKillTag(self.abstractCreature);
-                            creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, 1f, 15f);
+                            creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, 2.5f, 50f);
                             creature.stun = 5;
                             if (creature.abstractCreature.creatureTemplate.type == MoreSlugcatsEnums.CreatureTemplateType.Inspector)
                             {

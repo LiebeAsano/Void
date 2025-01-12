@@ -89,6 +89,8 @@ internal static class CanIPickThisUp
                 {
                     if (obj is Player targetPlayer && targetPlayer.slugcatStats.name == VoidEnums.SlugcatID.Void)
                         return false;
+                    else if (obj is Player && player.abstractCreature.world.game.session is StoryGameSession session && IsViy(session.saveState))
+                        return true;
                     else if (obj is Player player2 && player2.bodyMode == Player.BodyModeIndex.Crawl && !player2.room.game.IsArenaSession)
                         return true;
                     else return orig;

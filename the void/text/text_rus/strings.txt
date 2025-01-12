@@ -41,6 +41,10 @@ Gives you whole pips when eating food instead of half pips|При употреб
 Makes easier to climb the ceiling using a gamepad. Press 'Jump' + 'Pick up' to ceiling climb|Упрощает лазание по потолку используя геймпад. Нажмите 'Прыжок' + 'Взять', чтобы лазать по потолку
 Disables permadeath for Void, but also closes access to the secret ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к секретной концовке
 Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
+Void Cycles|Циклы Пустотного
+Void Bonus Cycles|Бонусные Циклы Пустотного
+Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending|Изменить количество циклов, с которыми начинает кампанию Пустотный, но изменение значения также закроет доступ к секретной концовке
+Changes the amount of bonus cycles Void can receive from the echo, but changing the value will also close access to the secret ending|Изменить количество бонусных циклов, которые может получить Пустотный от отголоска, но изменение значения также закроет доступ к секретной концовке
 
 //PICK INTERRUPT MESSAGES
 

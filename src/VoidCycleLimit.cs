@@ -15,8 +15,6 @@ namespace VoidTemplate
 {
     internal static class VoidCycleLimit
     {
-        public const int EXTRA_CYCLES_PER_GHOST = 5;
-
         public static int GetVoidCycleLimit(SaveState saveState)
         {
             return OptionAccessors.PermaDeathCycle + saveState.GetVoidExtraCycles();

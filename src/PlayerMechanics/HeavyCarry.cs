@@ -19,7 +19,7 @@ internal static class HeavyCarry
     {
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            if (obj is Player player)
+            if (obj is Player)
             {
                 return false;
             }

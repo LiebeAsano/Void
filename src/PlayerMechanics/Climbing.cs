@@ -149,7 +149,7 @@ internal static class Climbing
 		return isSolid_0 || isSolid_1;
 	}
 
-	private static readonly float CeilCrawlDuration = 0.3f;
+	private static readonly float CeilCrawlDuration = 0.2f;
 
 	private static int flipTimer = -1;
 	private const int ticksToFlip = 10;
@@ -251,7 +251,7 @@ internal static class Climbing
 			player.bodyMode = BodyModeIndexExtension.CeilCrawl;
 			UpdateBodyMode_CeilCrawl(player, state);
 			state.IsCeilCrawling = true;
-			state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.15f;
+			state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.05f;
 		}
 		else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && (player.input[0].y > 0 || gamepadController) &&
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||

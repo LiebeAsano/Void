@@ -1,5 +1,6 @@
 ﻿using System;
 using VoidTemplate.Useful;
+using static VoidTemplate.VoidEnums;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -7,27 +8,27 @@ internal static class ExtendedLungs
 {
 	public static void Hook()
 	{
-		On.StoryGameSession.ctor += StoryGameSession_ctor;
-	}
+		On.Player.Update += Player_Update;
+    }
 
-    private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+    private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
     {
-        orig(self, saveStateNumber, game);
-        if (saveStateNumber == VoidEnums.SlugcatID.Void)
+        orig(self, eu);
+        if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            if (self.saveState.deathPersistentSaveData.karma != 10)
+            if (self.KarmaCap != 10)
             {
-                int karma = self.saveState.deathPersistentSaveData.karmaCap;
+                int karma = self.KarmaCap;
 
                 float baseLungAirConsumption = 1.0f;
                 float reducePerKarma = 0.07f;
                 float newLungCapacity = baseLungAirConsumption - (reducePerKarma * (karma + 1));
 
-                self.characterStats.lungsFac = newLungCapacity;
+                self.slugcatStats.lungsFac = newLungCapacity;
 
             }
             else
-                self.characterStats.lungsFac = 0.2f;
+                self.slugcatStats.lungsFac = 0.2f;
         }
     }
 }

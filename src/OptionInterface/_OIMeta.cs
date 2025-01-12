@@ -27,8 +27,8 @@ public static class _OIMeta
 //#warning to be implemented
 		OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void, but also closes access to the secret ending", tags: "Disable permadeath"));
 		OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete as Hunter to play this mod", tags: "Unlock campaign"));
-		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 10, new ConfigurableInfo("", new ConfigAcceptableRange<int>(1, 99),tags: "Perma death cycles"));
-        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 5, new ConfigurableInfo("", new ConfigAcceptableRange<int>(1, 99), tags: "Echo death cycles"));
+		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 15, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99),tags: "Void Cycles"));
+        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 5, new ConfigurableInfo("Changes the amount of bonus cycles Void can receive from the echo, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99), tags: "Void Bonus Cycles"));
 
     }
 }

@@ -22,7 +22,7 @@ internal static class Utils
 	           && saveState.GetVoidCatDead() 
 	           && saveState.deathPersistentSaveData.karmaCap == 10;
     }
-    public static bool IsViy(SlugcatSelectMenu.SaveGameData saveGameData) => saveGameData.karmaCap == 10 && saveGameData.redsExtraCycles;
+    public static bool IsViy(SlugcatSelectMenu.SaveGameData saveGameData) => saveGameData is not null && saveGameData.karmaCap == 10 && saveGameData.redsExtraCycles;
     public static bool IsAliveViy(SlugcatSelectMenu.SaveGameData saveGameData) => IsViy(saveGameData) && !saveGameData.redsDeath;
     public static bool IsDeadViy(SlugcatSelectMenu.SaveGameData saveGameData) => IsViy(saveGameData) && saveGameData.redsDeath;
     

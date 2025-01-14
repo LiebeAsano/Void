@@ -40,7 +40,7 @@ internal static class SelectScreenScenes
 	private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
 	{
 		if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == VoidEnums.SlugcatID.Void &&
-			self.GetSaveGameData(self.slugcatPageIndex) is var saveGameData &&
+			self.GetSaveGameData(self.slugcatPageIndex) is SlugcatSelectMenu.SaveGameData saveGameData &&
 			IsViy(saveGameData))
 		{
 			string text = "LAST WISH ERROR: unknown viy state";

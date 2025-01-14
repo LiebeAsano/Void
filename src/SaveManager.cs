@@ -1,4 +1,5 @@
-﻿using SlugBase.SaveData;
+﻿using System.Collections;
+using SlugBase.SaveData;
 
 namespace VoidTemplate;
 
@@ -12,8 +13,13 @@ public static class SaveManager
 	public const string endingDone = uniqueprefix + "EndingDone";
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
     private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
-    public const string voidExtraCycles = uniqueprefix + "ExtraCycles";
+    private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
+	private const string hasHadFirstCycleAsViy = uniqueprefix + "ViyFirstCycle";
 
+
+	public static bool GetViyFirstCycle(this SaveState saveState) =>
+		saveState.miscWorldSaveData.GetSlugBaseData().TryGet(hasHadFirstCycleAsViy, out bool h) && h;
+	public static void SetViyFirstCycle(this SaveState saveState, bool value) => saveState.miscWorldSaveData.GetSlugBaseData().Set(hasHadFirstCycleAsViy, value);
     public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
 	public static void SetTeleportationDone(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(teleportationDone, value);
 

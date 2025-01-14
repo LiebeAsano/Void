@@ -1,6 +1,7 @@
 ﻿using Menu;
 using static VoidTemplate.VoidEnums.SceneID;
 using static VoidTemplate.VoidEnums.SlugcatID;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -10,10 +11,8 @@ internal static class SelectScreenScenes
 	{
 		On.Menu.MenuScene.BuildScene += CustomSelectScene;
 
-		On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
 		On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
 	}
-	private static void loginf(object e) => _Plugin.logger.LogInfo(e);
 
 	private static void CustomSelectScene(On.Menu.MenuScene.orig_BuildScene orig, Menu.MenuScene self)
 	{
@@ -41,27 +40,20 @@ internal static class SelectScreenScenes
 	private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
 	{
 		if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == VoidEnums.SlugcatID.Void &&
-			self.GetSaveGameData(self.slugcatPageIndex) != null &&
-			self.GetSaveGameData(self.slugcatPageIndex).redsExtraCycles)
+			self.GetSaveGameData(self.slugcatPageIndex) is var saveGameData &&
+			IsViy(saveGameData))
 		{
-			var text = self.restartChecked ? "NEW GAME" : "STATISTICS";
+			string text = "LAST WISH ERROR: unknown viy state";
+			if (self.restartChecked) text = "NEW GAME";
+			else if (IsAliveViy(saveGameData)) text = "CONTINUE";
+			else if (IsDeadViy(saveGameData)) text = "STATISTICS";
+			
 			self.startButton.menuLabel.text = self.Translate(text);
 		}
 		else
 			orig(self);
 	}
-	private static void SlugcatSelectMenu_ContinueStartedGame(On.Menu.SlugcatSelectMenu.orig_ContinueStartedGame orig, Menu.SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
-	{
-		if (storyGameCharacter == VoidEnums.SlugcatID.Void && self.saveGameData[storyGameCharacter].redsExtraCycles)
-		{
-			self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
-			self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
-			self.PlaySound(SoundID.MENU_Switch_Page_Out);
-			return;
-		}
-		orig(self, storyGameCharacter);
 
-	}
 
 
 }

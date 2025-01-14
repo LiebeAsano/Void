@@ -4,6 +4,7 @@ public static class _MenuMeta
 	public static void Startup()
 	{
 		DisablePassage.Hook();
+		InitGame.Hook();
 		MenuHooks.Hook();
 		SelectScreenScenes.Hook();
 		DreamAssociatedSound.Startup();

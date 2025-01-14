@@ -3,6 +3,7 @@ using MonoMod.Cil;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Menu;
 using UnityEngine;
 
 namespace VoidTemplate.Useful;
@@ -17,12 +18,14 @@ internal static class Utils
 
     public static bool IsViy(SaveState saveState)
     {
-		if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void && saveState.GetVoidCatDead() && saveState.deathPersistentSaveData.karmaCap == 10)
-        {
-            return true;
-        }
-        return false;
+	    return saveState.saveStateNumber == VoidEnums.SlugcatID.Void 
+	           && saveState.GetVoidCatDead() 
+	           && saveState.deathPersistentSaveData.karmaCap == 10;
     }
+    public static bool IsViy(SlugcatSelectMenu.SaveGameData saveGameData) => saveGameData.karmaCap == 10 && saveGameData.redsExtraCycles;
+    public static bool IsAliveViy(SlugcatSelectMenu.SaveGameData saveGameData) => IsViy(saveGameData) && !saveGameData.redsDeath;
+    public static bool IsDeadViy(SlugcatSelectMenu.SaveGameData saveGameData) => IsViy(saveGameData) && saveGameData.redsDeath;
+    
 
     public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void;
 	public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;

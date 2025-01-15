@@ -2,6 +2,7 @@
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
+using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -97,9 +98,8 @@ static class PermadeathConditions
 
 	private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
 	{
-
-		if (self.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void 
-		    && !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
+		if (self.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void
+			&& !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
 		{
 			if (self.manager.upcomingProcess != null) return;
 
@@ -175,7 +175,8 @@ static class PermadeathConditions
 	{
 		return rainWorldGame.session is StoryGameSession session
 			&& session.characterStats.name == VoidEnums.SlugcatID.Void
-			&& (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath 
+			&& !IsViy(session.saveState)
+            && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
 			|| session.saveState.GetKarmaToken() == 0
 			|| session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
 			&& !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);

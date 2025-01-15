@@ -16,7 +16,7 @@ public static class InitGame
 		//reset need to set starting room when playing as viy after first cycle is over
 		On.RainWorldGame.Win += RainWorldGameOnWin;
 	}
-	private const string startingRoom = "HI_C04";
+	private const string startingRoom = "SH_S10";
 
 	private static void RainWorldGameOnWin(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
 	{

@@ -290,6 +290,114 @@ internal class DrawSprites
 					}
 				}
 			}
+			else if (self.player.room.game.IsArenaSession)
+			{
+                if (sprite.element.name.StartsWith("Head"))
+                {
+
+                    if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+                    {
+						if (!self.player.input[0].jmp)
+						{
+
+							string head = "VoidDCeil-";
+							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+
+						}
+						else
+						{
+
+							string head = "Void-";
+							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+
+						}
+                    }
+                    else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+                    {
+						if (!self.player.input[0].jmp)
+						{
+
+							string head = "VoidCeil-";
+							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+						}
+						else
+						{
+
+							string head = "Void-";
+							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+						}
+                    }
+                }
+                if (sprite.element.name.StartsWith("Face"))
+                {
+                    BodyChunk body_chunk_0 = self.player.bodyChunks[0];
+                    BodyChunk body_chunk_1 = self.player.bodyChunks[1];
+
+                    if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                    {
+						if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+						{
+
+							string face = "VoidDCeil-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+
+						}
+						else
+						{
+
+							string face = "Void-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+
+						}
+                    }
+
+                    else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                    {
+						if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG
+							&& self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
+							&& body_chunk_0.pos.y <= body_chunk_1.pos.y + 5)
+						{
+
+							string face = "VoidCeil-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						}
+						else
+						{
+
+							string face = "Void-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						}
+                    }
+
+                    else
+                    {
+						if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
+							self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned ||
+							self.player.bodyMode == Player.BodyModeIndex.Crawl)
+						{
+							string face = "Void-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						}
+						else
+						{
+
+							string face = "VoidDown-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+
+						}
+                    }
+                }
+            }
 		}
 	}
 

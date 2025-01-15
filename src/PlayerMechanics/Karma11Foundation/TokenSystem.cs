@@ -9,7 +9,8 @@ internal static class TokenSystem
 		{
 			if (self.IsStorySession
 				&& self.GetStorySession.saveState is SaveState saveState
-				&& saveState.deathPersistentSaveData.karma == 10)
+				&& saveState.deathPersistentSaveData.karma == 10
+				&& !IsViy(saveState))
 			{
 				int karmaTokensAmount = saveState.GetKarmaToken();
 				karmaTokensAmount--;

@@ -40,6 +40,6 @@ public static class _PlayerMechanicsMeta
 		SpearmasterAntiMechanic.Hook();
 		SwallowObjects.Hook();
 		ThrowObject.Hook();
-
+		ViyMaul.Hook();
 	}
 }

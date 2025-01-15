@@ -90,7 +90,7 @@ internal static class CycleEnd
 				&& session.characterStats.name == VoidEnums.SlugcatID.Void
 				&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
 				{
-					if ((session.saveState.deathPersistentSaveData.karma == 0 && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();
+					if ((session.saveState.deathPersistentSaveData.karma == 0 && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0 && !Utils.IsViy(savestate)) game.GoToRedsGameOver();
 
 					//else timerStarted = true;
 				}

@@ -20,13 +20,13 @@ public static class InitGame
 
 	private static void RainWorldGameOnWin(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
 	{
-		orig(self, malnourished);
-		if (self.GetStorySession is StoryGameSession storySession
-		    && storySession.saveStateNumber == VoidEnums.SlugcatID.Void
-		    && !storySession.saveState.GetViyFirstCycle())
-		{
-			storySession.saveState.SetViyFirstCycle(true);
-		}
+        if (self.GetStorySession is StoryGameSession storySession
+            && storySession.saveStateNumber == VoidEnums.SlugcatID.Void
+            && !storySession.saveState.GetViyFirstCycle() && IsViy(storySession.saveState))
+        {
+            storySession.saveState.SetViyFirstCycle(true);
+        }
+        orig(self, malnourished);
 	}
 	
 /// <summary>
@@ -57,8 +57,10 @@ public static class InitGame
 			Menu.SlugcatSelectMenu.SaveGameData saveGameData = self.saveGameData[storyGameCharacter];
 			if (IsAliveViy(saveGameData))
 			{
-				orig(self, storyGameCharacter);
-			}
+                self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
+                self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
+                self.PlaySound(SoundID.MENU_Switch_Page_Out);
+            }
 			else if (IsDeadViy(saveGameData))
 			{
 				self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);

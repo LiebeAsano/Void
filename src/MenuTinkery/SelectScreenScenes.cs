@@ -45,7 +45,7 @@ internal static class SelectScreenScenes
 		{
 			string text = "LAST WISH ERROR: unknown viy state";
 			if (self.restartChecked) text = "NEW GAME";
-			else if (IsAliveViy(saveGameData)) text = "CONTINUE";
+			else if (IsAliveViy(saveGameData)) text = "STATISTICS";
 			else if (IsDeadViy(saveGameData)) text = "STATISTICS";
 			
 			self.startButton.menuLabel.text = self.Translate(text);

@@ -55,13 +55,15 @@ public static class InitGame
 		if (storyGameCharacter == VoidEnums.SlugcatID.Void)
 		{
 			Menu.SlugcatSelectMenu.SaveGameData saveGameData = self.saveGameData[storyGameCharacter];
-			if (IsAliveViy(saveGameData))
+            RainWorld rainWorld = self.manager.rainWorld;
+            SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.manager.menuSetup, false);
+            if (save.GetVoidCatDead() && IsViy(save))
 			{
                 self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
                 self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
                 self.PlaySound(SoundID.MENU_Switch_Page_Out);
             }
-			else if (IsDeadViy(saveGameData))
+			else if (save.GetVoidCatDead())
 			{
 				self.redSaveState = self.manager.rainWorld.progression.GetOrInitiateSaveState(storyGameCharacter, null, self.manager.menuSetup, false);
 				self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);

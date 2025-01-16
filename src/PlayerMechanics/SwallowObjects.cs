@@ -71,13 +71,15 @@ internal static class SwallowObjects
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            self.AddQuarterFood();
+                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                                self.AddQuarterFood();
                         }
                         else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            self.AddQuarterFood();
+                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                                self.AddQuarterFood();
                         }
                     }
 
@@ -140,25 +142,27 @@ internal static class SwallowObjects
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (OptionInterface.OptionAccessors.SimpleFood)
-                                self.AddFood(1);
-                            else
-                            {
-                                self.AddQuarterFood();
-                                self.AddQuarterFood();
-                            }
+                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                                if (OptionInterface.OptionAccessors.SimpleFood)
+                                    self.AddFood(1);
+                                else
+                                {
+                                    self.AddQuarterFood();
+                                    self.AddQuarterFood();
+                                }
                         }
                         else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (OptionInterface.OptionAccessors.SimpleFood)
+                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                                if (OptionInterface.OptionAccessors.SimpleFood)
                                 self.AddFood(1);
-                            else
-                            {
-                                self.AddQuarterFood();
-                                self.AddQuarterFood();
-                            }
+                                else
+                                {
+                                    self.AddQuarterFood();
+                                    self.AddQuarterFood();
+                                }
                         }
                     }
 

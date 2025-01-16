@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
 internal static class GraspSave
 {
-	const int secondsToStunOnK10 = 30;
+	const int secondsToStunViy = 10;
+    const int secondsToStunOnK10 = 30;
 	const int secondsToStunBelowK10 = 45;
 
 
@@ -41,7 +43,9 @@ internal static class GraspSave
 
 	static int TicksUntilStun(Player p)
 	{
-		return TicksPerSecond * (p.KarmaCap == 10 ? secondsToStunOnK10 : secondsToStunBelowK10);
+		if (IsViy(p.room.game.GetStorySession.saveState))
+			return TicksPerSecond * secondsToStunViy;
+		else return TicksPerSecond * (p.KarmaCap == 10 ? secondsToStunOnK10 : secondsToStunBelowK10);
 	}
 
 	static ConditionalWeakTable<AbstractCreature, ConditionalWeakTable<AbstractCreature, StrongBox<int>>> grabbers = new();

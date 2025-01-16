@@ -62,7 +62,7 @@ internal static class Grabability
 
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
 	{
-		if (self.IsVoid() &&(obj is PoleMimic || obj is TentaclePlant))
+		if (self.IsVoid() && (obj is PoleMimic || obj is TentaclePlant))
 			return Player.ObjectGrabability.CantGrab;
 		return orig(self, obj);
 	}

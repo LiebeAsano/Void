@@ -1,4 +1,5 @@
 ﻿using RWCustom;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features
 {
@@ -23,21 +24,39 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 				if (OptionInterface.OptionAccessors.SimpleFood)
 				{
 					string objectId = eatenobject.ToString();
-
 					if (objectId is "Fly" or "DangleFruit" or "WaterNut" or
 						"SlimeMold" or "SSOracleSwarmer" or "MoreSlugcats.GooieDuck" or
 						"MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
 						"MoreSlugcats.Seed")
 					{
-						return orig(slugcatIndex, eatenobject);
+                        if (Utils.IsViy(session.game.GetStorySession.saveState))
+						{
+                            return 0;
+                        }
+						else
+							return orig(slugcatIndex, eatenobject);
 					}
 					else
 					{
 						return orig(slugcatIndex, eatenobject) * 2;
 					}
 				}
-				return orig(slugcatIndex, eatenobject);
-			}
+				else if (Utils.IsViy(session.game.GetStorySession.saveState))
+				{
+                    string objectId = eatenobject.ToString();
+                    if (objectId is "Fly" or "DangleFruit" or "WaterNut" or
+						"SlimeMold" or "SSOracleSwarmer" or "MoreSlugcats.GooieDuck" or
+						"MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
+						"MoreSlugcats.Seed")
+					{
+                        return 0;
+                    }
+                }
+                else
+				{
+					return orig(slugcatIndex, eatenobject);
+				}
+            }
 			return orig(slugcatIndex, eatenobject);
 		}
 

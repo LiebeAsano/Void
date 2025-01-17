@@ -17,60 +17,25 @@ internal static class Climbing
 	{
 		On.Player.WallJump += Player_UpdateWallJump;
 		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
-		On.Player.Update += Player_Update;
     }
 
     private static float stamina = 5f;
 	private static float currentTime = 0f;
 	private static float currentTimeWall = 0f;
 
-	private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
-	{
-		orig(self, eu);
-		currentTime++;
-		if (currentTime % 80 == 0)
-		{
-			stamina++;
-			stamina = Math.Min(5, stamina);
-			currentTime = 0;
-		}
-		if (self.bodyMode != Player.BodyModeIndex.WallClimb)
-			currentTimeWall = 0;
-	}
-
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
 	{
 		if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
 		{
 
-			float bonus = stamina / 5;
-
 			BodyChunk body_chunk_0 = self.bodyChunks[0];
 			BodyChunk body_chunk_1 = self.bodyChunks[1];
 
-			if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
+			if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y > 0 && self.input[0].jmp)
 			{
 
-				self.bodyChunks[0].vel.y = 0f;
-				self.bodyChunks[1].vel.y = 0f;
-
-				self.bodyChunks[0].vel.x = 5f * -self.input[0].x;
-				self.bodyChunks[1].vel.x = 5f * -self.input[0].x;
-
-				self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
-				self.standing = true;
-				self.jumpBoost = 0;
-				self.jumpStun = 0;
-
-				self.canWallJump = 0;
-
-				return;
-			}
-			else if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y > 0 && self.input[0].jmp)
-			{
-
-				self.bodyChunks[0].vel.y = 10f * bonus;
-				self.bodyChunks[1].vel.y = 10f * bonus;
+				self.bodyChunks[0].vel.y = 10f;
+				self.bodyChunks[1].vel.y = 10f;
 
 				self.bodyChunks[0].vel.x = 8f * -self.input[0].x;
 				self.bodyChunks[1].vel.x = 8f * -self.input[0].x;
@@ -82,13 +47,19 @@ internal static class Climbing
 
 				self.canWallJump = 0;
 
-				stamina--;
-
-				stamina = Math.Max(0, stamina);
-
 				return;
 			}
-		}
+			else if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
+            {
+                self.standing = true;
+                self.jumpBoost = 0;
+                self.jumpStun = 0;
+
+                self.canWallJump = 0;
+
+                return;
+            }
+        }
 		orig(self, direction);
 	}
 

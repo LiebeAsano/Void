@@ -290,7 +290,7 @@ internal class DrawSprites
 					}
 				}
 			}
-			else if (self.player.room.game.IsArenaSession)
+			else
 			{
                 if (sprite.element.name.StartsWith("Head"))
                 {

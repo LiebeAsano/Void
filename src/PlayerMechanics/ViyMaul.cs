@@ -14,13 +14,13 @@ internal static class ViyMaul
 {
     public static void Hook()
     {
-        //On.Player.CanMaulCreature += Player_CanMaulCreature;
+        On.Player.CanMaulCreature += Player_CanMaulCreature;
         On.Player.Grabability += Player_Grabability;
     }
 
     private static bool Player_CanMaulCreature(On.Player.orig_CanMaulCreature orig, Player self, Creature crit)
     {
-        if (Utils.IsViy(self.room.game.GetStorySession.saveState))
+        if (self.room.game.IsStorySession && Utils.IsViy(self.room.game.GetStorySession.saveState))
         {
             bool critStun = !crit.Stunned || crit.Stunned;
             if (crit != null && !crit.dead && ((crit is not IPlayerEdible) || crit is Centipede && !(crit as Centipede).Edible) && critStun)
@@ -34,7 +34,7 @@ internal static class ViyMaul
 
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {
-        if (Utils.IsViy(self.room.game.GetStorySession.saveState))
+        if (self.room.game.IsStorySession && Utils.IsViy(self.room.game.GetStorySession.saveState))
         {
             if (obj is Player
                 || obj is Fly

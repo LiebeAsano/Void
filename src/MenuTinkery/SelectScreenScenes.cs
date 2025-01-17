@@ -40,13 +40,13 @@ internal static class SelectScreenScenes
 	private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
 	{
 		if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == VoidEnums.SlugcatID.Void &&
-			self.GetSaveGameData(self.slugcatPageIndex) is SlugcatSelectMenu.SaveGameData saveGameData &&
-			IsViy(saveGameData))
+			self.GetSaveGameData(self.slugcatPageIndex) is SlugcatSelectMenu.SaveGameData saveGameData)
 		{
-			string text = "LAST WISH ERROR: unknown viy state";
+            RainWorld rainWorld = self.manager.rainWorld;
+            SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.manager.menuSetup, false);
+            string text = "CONTINUE";
 			if (self.restartChecked) text = "NEW GAME";
-			else if (IsAliveViy(saveGameData)) text = "STATISTICS";
-			else if (IsDeadViy(saveGameData)) text = "STATISTICS";
+			else if (save.GetVoidCatDead()) text = "STATISTICS";
 			
 			self.startButton.menuLabel.text = self.Translate(text);
 		}

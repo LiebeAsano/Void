@@ -44,8 +44,8 @@ internal static class DLLindigestion
 				&& player.IsVoid()
 				&& player.dead)
 			{
-				await Task.Delay(3000);
-				DestroyBody(player);
+                DestroyBody(player);
+                await Task.Delay(3000);
 				self.Die();
 				FinishEating(self);
 				return;

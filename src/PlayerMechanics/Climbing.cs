@@ -1,4 +1,5 @@
-﻿using RWCustom;
+﻿using Newtonsoft.Json.Linq;
+using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -158,7 +159,9 @@ internal static class Climbing
 	public static int gamepadTimer = 0;
 	public static int gamepadTimer2 = 0;
 
-	private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
+    private static readonly ConditionalWeakTable<Player, StrongBox<int>> rightLeft = new();
+
+    private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 	{
 		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void)
 		{
@@ -201,17 +204,18 @@ internal static class Climbing
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-		int RightLeft;
+		if (!rightLeft.TryGetValue(player, out var rightLeftStrongBox))
+			rightLeft.Add(player, new(0));
 
 		if (flipTimer > -1)
 		{
 			if (player.input[0].x < 0)
-				RightLeft = 1;
+                rightLeftStrongBox.Value = 1;
 			else
-				RightLeft = -1;
+                rightLeftStrongBox.Value = -1;
 
 			player.bodyMode = Player.BodyModeIndex.ZeroG;
-			body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer) / ((float)ticksToFlip) * 180 * RightLeft) * 17;
+			body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer) / ((float)ticksToFlip) * 180 * rightLeftStrongBox.Value) * 17;
 			flipTimer++;
 			if (flipTimer == ticksToFlip)
 			{

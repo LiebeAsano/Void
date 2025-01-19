@@ -43,9 +43,7 @@ internal static class GraspSave
 
 	static int TicksUntilStun(Player p)
 	{
-		if (IsViy(p.room.game.GetStorySession.saveState))
-			return TicksPerSecond * secondsToStunViy;
-		else return TicksPerSecond * (p.KarmaCap == 10 ? secondsToStunOnK10 : secondsToStunBelowK10);
+		return TicksPerSecond * (p.KarmaCap == 10 ? secondsToStunOnK10 : secondsToStunBelowK10);
 	}
 
 	static ConditionalWeakTable<AbstractCreature, ConditionalWeakTable<AbstractCreature, StrongBox<int>>> grabbers = new();

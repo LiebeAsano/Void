@@ -129,7 +129,7 @@ static class PermadeathConditions
 		orig(self);
 	}
 	#region GameOverConditions
-	private static void SetVoidCatDeadTrue(RainWorldGame game)
+	public static void SetVoidCatDeadTrue(RainWorldGame game)
 	{
 		if (game.StoryCharacter == VoidEnums.SlugcatID.Void
 			&& game.IsStorySession
@@ -178,8 +178,9 @@ static class PermadeathConditions
 			&& !IsViy(session.saveState)
             && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
 			|| session.saveState.GetKarmaToken() == 0
-			|| session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
-			&& !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
+			|| session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8
+			|| session.saveState.miscWorldSaveData.SSaiConversationsHad < 8 && session.saveState.miscWorldSaveData.SSaiConversationsHad > 3 && session.saveState.GetPunishFromPebble())
+            && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}
 
 	private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)

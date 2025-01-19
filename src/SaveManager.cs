@@ -9,8 +9,9 @@ public static class SaveManager
 	private const string teleportationDone = uniqueprefix + "TeleportationDone";
 	private const string messageShown = uniqueprefix + "MessageShown";
 	private const string punishDeath = uniqueprefix + "NonPermaDeath";
+    private const string punishPebble = uniqueprefix + "PunishFromPebble";
 
-	public const string endingDone = uniqueprefix + "EndingDone";
+    public const string endingDone = uniqueprefix + "EndingDone";
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
     private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
     private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
@@ -67,8 +68,12 @@ public static class SaveManager
 
 	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
 
-	#region oracle data
-	private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
+    public static bool GetPunishFromPebble(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishPebble, out bool choose) && choose;
+
+    public static void SetPunishFromPebble(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishPebble, value);
+
+    #region oracle data
+    private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
     private const string encountersWithMark = uniqueprefix + "EncountersWithMark";
     private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
 	#region last meet

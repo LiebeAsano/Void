@@ -26,6 +26,7 @@ public static class _PlayerMechanicsMeta
 		GraspSave.Hook();
 		HealthSpear.Hook();
 		HeavyCarry.Hook();
+		JellyResist.Hook();
 		JumpUnderWater.Hook();
 		KarmaFlowerChanges.Initiate();
 		LizardResist.Hook();

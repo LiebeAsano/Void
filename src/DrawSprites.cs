@@ -289,7 +289,29 @@ internal class DrawSprites
 						}
 					}
 				}
-			}
+				if (sprite.element.name.StartsWith("pixel"))
+				{
+                    sLeaser.sprites[11].scale = 1f;
+                    if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+                    {
+                        string pixel = "VoidR-";
+                        if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
+                    }
+                    else if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 2)
+                    {
+                        string pixel = "VoidS-";
+                        if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
+                    }
+					else
+					{
+                        string pixel = "Void-";
+                        if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
+                            sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
+                    }
+                }
+            }
 			else
 			{
                 if (sprite.element.name.StartsWith("Head"))

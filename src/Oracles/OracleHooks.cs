@@ -205,33 +205,33 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
+                case >= 4 when self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5 && saveState.GetVoidMeetMoon():
+                    {
+                        PebbleVoice(self);
+                        self.dialogBox.Interrupt("You should not have done that.".TranslateString(), 60);
+                        if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            self.NewAction(self.afterGiveMarkAction);
+                        self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+                        saveState.SetPunishFromPebble(true);
+                        self.getToWorking = 1f;
+                        break;
+                    }
                 case 4:
                     {
-                        if (self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5)
+                        if (self.action != MeetVoid_Init)
                         {
-                            PebbleVoice(self);
-                            self.dialogBox.Interrupt("You should not have done that.".TranslateString(), 60);
-                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                                self.NewAction(self.afterGiveMarkAction);
-                            self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
-                            self.getToWorking = 1f;
-                        }
-                        else
-                        {
-                            if (self.action != MeetVoid_Init)
+                            saveState.SetLastMeetCycles(saveState.cycleNumber);
+                            if (self.currSubBehavior.ID != VoidTalk)
                             {
-                                saveState.SetLastMeetCycles(saveState.cycleNumber);
-                                if (self.currSubBehavior.ID != VoidTalk)
-                                {
-                                    miscData.SSaiConversationsHad++;
-                                    self.NewAction(MeetVoid_Init);
-                                    if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                                        self.NewAction(self.afterGiveMarkAction);
-                                    self.SlugcatEnterRoomReaction();
-                                    self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-                                }
+                                miscData.SSaiConversationsHad++;
+                                self.NewAction(MeetVoid_Init);
+                                if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                                    self.NewAction(self.afterGiveMarkAction);
+                                self.SlugcatEnterRoomReaction();
+                                self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                             }
                         }
+                        
                         break;
                     }
                 case 5:

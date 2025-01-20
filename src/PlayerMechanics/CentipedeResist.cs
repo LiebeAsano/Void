@@ -39,6 +39,7 @@ internal static class CentipedeResist
                 shockObj.bodyChunks[k].vel += Custom.RNV() * 6f * UnityEngine.Random.value;
                 shockObj.bodyChunks[k].pos += Custom.RNV() * 6f * UnityEngine.Random.value;
             }
+
             if (self.AquaCenti)
             {
                 if (shockObj is Creature)

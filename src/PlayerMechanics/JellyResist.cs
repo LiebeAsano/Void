@@ -16,33 +16,40 @@ namespace VoidTemplate.PlayerMechanics
     {
         public static void Hook()
         {
-            //IL.JellyFish.Update += JellyFish_Update;
+            IL.JellyFish.Update += JellyFish_Update;
         }
 
         private static void JellyFish_Update(ILContext il)
         {
             ILCursor c = new(il);
+            ILLabel label = c.DefineLabel();
 
             if (c.TryGotoNext(MoveType.After, x => x.MatchIsinst<Creature>(), x => x.MatchBrfalse(out _)))
             {
                 c.Emit(OpCodes.Ldarg_0);
-                c.Emit(OpCodes.Ldfld, typeof(BodyChunk).GetField("owner", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public));
-                c.Emit(OpCodes.Ldfld, typeof(JellyFish).GetField("latchOnToBodyChunks", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic));
-
-                c.EmitDelegate<Func<object, bool>>(owner =>
+                c.Emit(OpCodes.Ldloc_2);
+                c.EmitDelegate<Func<JellyFish, int, bool>>((self, chunk) =>
                 {
-                    if (owner is Player player)
+                    if (self.latchOnToBodyChunks[chunk].owner is Player player)
                     {
-                        return player.slugcatStats.name != VoidEnums.SlugcatID.Void;
+                        return player.slugcatStats.name == VoidEnums.SlugcatID.Void;
                     }
-                    return true;
+                    return false;
                 });
 
-                c.Emit(OpCodes.Brtrue, c.Next.Next);
+                c.Emit(OpCodes.Brtrue, label);
             }
             else
             {
-                logerr("&Failed to find the proper place to insert IL code, Jelly Update");
+                LogExErr("&Failed to find the proper place to insert IL code, Jelly Update");
+            }
+            if (c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<Creature>("Stun")))
+            {
+                c.MarkLabel(label);
+            }
+            else
+            {
+                LogExErr("&Failed to find the proper place to insert IL code Creature Stun, Jelly Update");
             }
         }
     }

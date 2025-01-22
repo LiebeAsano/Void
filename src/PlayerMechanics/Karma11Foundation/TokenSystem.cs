@@ -16,7 +16,7 @@ internal static class TokenSystem
 				karmaTokensAmount--;
 				saveState.SetKarmaToken(karmaTokensAmount);
 				Karma11Symbol.currentKarmaTokens = (ushort)karmaTokensAmount;
-				if (karmaTokensAmount < 0) self.GoToRedsGameOver();
+				if (karmaTokensAmount <= 0) self.GoToRedsGameOver();
 			}
 			orig(self); //orig contains saving file to disk, so it must be called after changing token amount
 		};

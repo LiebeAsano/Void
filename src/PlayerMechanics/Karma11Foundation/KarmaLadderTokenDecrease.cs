@@ -117,7 +117,7 @@ internal static class KarmaLadderTokenDecrease
 		bool customLogic = false;
 		if (self.IsVoidStoryCampaign()
 			&& self.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
-			&& self.GetStorySession.saveState.GetKarmaToken() > 0)
+			&& self.GetStorySession.saveState.GetKarmaToken() >= 0)
 		{
 			customLogic = true;
 			self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.TokenDecrease);

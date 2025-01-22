@@ -17,6 +17,7 @@ namespace VoidTemplate.PlayerMechanics
         public static void Hook()
         {
             IL.JellyFish.Update += JellyFish_Update;
+            On.JellyFish.Collide += JellyFish_Collide;
         }
 
         private static void JellyFish_Update(ILContext il)
@@ -52,5 +53,18 @@ namespace VoidTemplate.PlayerMechanics
                 LogExErr("&Failed to find the proper place to insert IL code Creature Stun, Jelly Update");
             }
         }
+
+        private static void JellyFish_Collide(On.JellyFish.orig_Collide orig, JellyFish self, PhysicalObject otherObject, int myChunk, int otherChunk)
+        {
+            if (otherObject is Player player && player != self.thrownBy && player.slugcatStats.name == VoidEnums.SlugcatID.Void && self.Electric)
+            {
+                self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, self.firstChunk.pos);
+                self.room.AddObject(new Explosion.ExplosionLight(self.firstChunk.pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
+                return;
+            }
+            orig(self, otherObject, myChunk, otherChunk);
+        }
+
+
     }
 }

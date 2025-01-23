@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.Useful;
 
-namespace VoidTemplate.PlayerMechanics;
+namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
 internal static class ViyMaul
 {
@@ -23,7 +23,7 @@ internal static class ViyMaul
         if (self.abstractCreature.Room.world.game.IsStorySession && Utils.IsViy(self.abstractCreature.Room.world.game.GetStorySession.saveState))
         {
             bool critStun = !crit.Stunned || crit.Stunned;
-            if (crit != null && !crit.dead && ((crit is not IPlayerEdible) || crit is Centipede && !(crit as Centipede).Edible) && critStun)
+            if (crit != null && !crit.dead && (crit is not IPlayerEdible || crit is Centipede && !(crit as Centipede).Edible) && critStun)
             {
                 crit.Stun(10);
                 return true;

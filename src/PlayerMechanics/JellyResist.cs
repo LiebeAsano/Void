@@ -17,6 +17,7 @@ namespace VoidTemplate.PlayerMechanics
         public static void Hook()
         {
             IL.JellyFish.Update += JellyFish_Update;
+            On.JellyFish.Update += OnJellyFish_Update;
             On.JellyFish.Collide += JellyFish_Collide;
         }
 
@@ -54,12 +55,24 @@ namespace VoidTemplate.PlayerMechanics
             }
         }
 
+        public static int cooldown = 0;
+        private static void OnJellyFish_Update(On.JellyFish.orig_Update orig, JellyFish self, bool eu)
+        {
+            orig(self, eu);
+            cooldown++;
+            cooldown = Math.Min(100, cooldown);
+        }
+
         private static void JellyFish_Collide(On.JellyFish.orig_Collide orig, JellyFish self, PhysicalObject otherObject, int myChunk, int otherChunk)
         {
             if (otherObject is Player player && player != self.thrownBy && player.slugcatStats.name == VoidEnums.SlugcatID.Void && self.Electric)
             {
-                self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, self.firstChunk.pos);
-                self.room.AddObject(new Explosion.ExplosionLight(self.firstChunk.pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
+                if (cooldown == 100)
+                {
+                    self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, self.firstChunk.pos);
+                    self.room.AddObject(new Explosion.ExplosionLight(self.firstChunk.pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
+                    cooldown = 0;
+                }
                 return;
             }
             orig(self, otherObject, myChunk, otherChunk);

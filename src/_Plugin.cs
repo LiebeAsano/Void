@@ -11,6 +11,7 @@ using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.PlayerMechanics.Karma11Foundation;
+using VoidTemplate.PlayerMechanics.ViyMechanics;
 using VoidTemplate.Useful;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -94,6 +95,7 @@ class _Plugin : BaseUnityPlugin
 				_Karma11FoundationMeta.Hook();
 				_PlayerMechanicsMeta.Hook();
 				_MiscMeta.Hook();
+				_ViyMechanicsMeta.Hook();
 				VoidCycleLimit.Hook();
 				OptionInterface._OIMeta.Initialize();
 

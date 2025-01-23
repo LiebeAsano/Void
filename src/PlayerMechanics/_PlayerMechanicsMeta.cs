@@ -1,5 +1,6 @@
 ﻿using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.PlayerMechanics.Karma11Foundation;
+using VoidTemplate.PlayerMechanics.ViyMechanics;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -42,6 +43,5 @@ public static class _PlayerMechanicsMeta
 		SpearmasterAntiMechanic.Hook();
 		SwallowObjects.Hook();
 		ThrowObject.Hook();
-		ViyMaul.Hook();
 	}
 }

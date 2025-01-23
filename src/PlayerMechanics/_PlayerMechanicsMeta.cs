@@ -20,6 +20,7 @@ public static class _PlayerMechanicsMeta
 		DreamCustom.Hook();
 		DreamManager.Hook();
 		EdibleChanges.Hook();
+		ElectricSpearResist.Hook();
 		ExplosiveResist.Hook();
 		ExtendedLungs.Hook();
 		Grabability.Hook();

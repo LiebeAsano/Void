@@ -175,7 +175,6 @@ static class PermadeathConditions
 	{
 		return rainWorldGame.session is StoryGameSession session
 			&& session.characterStats.name == VoidEnums.SlugcatID.Void
-			&& !IsViy(session.saveState)
             && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
 			|| session.saveState.GetKarmaToken() == 0
 			|| session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 8

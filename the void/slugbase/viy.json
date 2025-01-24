@@ -1,6 +1,6 @@
 {	"id": "Viy",
 	"name": "The Viy",
-	"description": "An enraged and hungry predator escapes from the Void Sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.",
+	"description": "Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.",
 	"features": {
 		"color": "000000",
 		"custom_colors": [
@@ -55,8 +55,8 @@
 		"can_maul": true,
 		"perma_unlock_gates": false,
 		"maul_damage": 3,
-		"karma": 2,
-		"karma_cap": 2,
+		"karma": 10,
+		"karma_cap": 10,
 		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": true,
@@ -65,10 +65,10 @@
 		"cycle_length_min": 6,
 		"cycle_length_max": 13,
 		"food_min": 9,
-		"food_max": 9,
-		"world_state": ["Void","Red"],
+		"food_max": 12,
+		"world_state": ["Viy","Void","Red"],
 		"timeline_after": "Red",
-		"start_room": "SB_A14",
+		"start_room": "SH_S10",
 		"diet": {
 			"base": "White",
 			"corpses": 0.5,

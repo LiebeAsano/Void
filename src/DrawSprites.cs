@@ -106,320 +106,140 @@ internal class DrawSprites
 
 							tail.UVvertices[i] = uv;
 						}
-					}
-                }
-                if (sprite.element.name.StartsWith("Head"))
-				{
 
-					if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-					{
-						if (!self.player.input[0].jmp)
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string head = "ViyDCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-							else
-							{
-								string head = "VoidDCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-						}
-						else
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string head = "Viy-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-							else
-							{
-								string head = "Void-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-						}
-					}
-					else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-					{
-						if (!self.player.input[0].jmp)
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string head = "ViyCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-							else
-							{
-								string head = "VoidCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-						}
-						else
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string head = "Viy-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-							else
-							{
-								string head = "Void-";
-								if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-							}
-						}
-					}
-				}
-				if (sprite.element.name.StartsWith("Face"))
-				{
-                    BodyChunk body_chunk_0 = self.player.bodyChunks[0];
-					BodyChunk body_chunk_1 = self.player.bodyChunks[1];
-
-					if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
-					{
-						if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string face = "ViyDCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-							else
-							{
-								string face = "VoidDCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-						}
-						else
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string face = "Viy-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-							else
-							{
-								string face = "Void-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-						}
-					}
-
-					else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
-					{
-						if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG
-							&& self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
-							&& body_chunk_0.pos.y <= body_chunk_1.pos.y + 5)
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string face = "ViyCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-							else
-							{
-								string face = "VoidCeil-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-						}
-						else
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string face = "Viy-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-							else
-							{
-								string face = "Void-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-						}
-					}
-
-					else
-					{
-						if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
-							self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned ||
-							self.player.bodyMode == Player.BodyModeIndex.Crawl)
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string face = "Viy-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-							else
-							{
-								string face = "Void-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-						}
-						else
-						{
-							if (Utils.IsViy(session.saveState))
-							{
-								string face = "ViyDown-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-							else
-							{
-								string face = "VoidDown-";
-								if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-									sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-							}
-						}
 					}
 				}
 				if (sprite.element.name.StartsWith("pixel"))
 				{
-                    sLeaser.sprites[11].scale = 1f;
-                    if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
-                    {
-                        string pixel = "VoidR-";
-                        if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
-                            sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
-                    }
-                    else if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 2)
-                    {
-                        string pixel = "VoidS-";
-                        if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
-                            sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
-                    }
+					sLeaser.sprites[11].scale = 1f;
+					if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+					{
+						string pixel = "VoidR-";
+						if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
+					}
+					else if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 2)
+					{
+						string pixel = "VoidS-";
+						if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
+					}
 					else
 					{
-                        string pixel = "Void-";
-                        if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
-                            sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
-                    }
-                }
-            }
-			else
+						string pixel = "Void-";
+						if (Futile.atlasManager.DoesContainElementWithName(pixel + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(pixel + sprite.element.name);
+					}
+				}
+			}
+			if (sprite.element.name.StartsWith("Head"))
 			{
-                if (sprite.element.name.StartsWith("Head"))
-                {
 
-                    if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-                    {
-						if (!self.player.input[0].jmp)
-						{
+				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+				{
+					if (!self.player.input[0].jmp)
+					{
 
-							string head = "VoidDCeil-";
-							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+						string head = "VoidDCeil-";
+						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+						sprite.scale = 1.5f;
+					}
+					else
+					{
 
-						}
-						else
-						{
+						string head = "Void-";
+						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 
-							string head = "Void-";
-							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+					}
+				}
+				else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+				{
+					if (!self.player.input[0].jmp)
+					{
+						string head = "VoidCeil-";
+						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
+					}
+					else
+					{
 
-						}
-                    }
-                    else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-                    {
-						if (!self.player.input[0].jmp)
-						{
+						string head = "Void-";
+						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
 
-							string head = "VoidCeil-";
-							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-						}
-						else
-						{
+					}
+				}
+			}
+			if (sprite.element.name.StartsWith("Face"))
+			{
+				BodyChunk body_chunk_0 = self.player.bodyChunks[0];
+				BodyChunk body_chunk_1 = self.player.bodyChunks[1];
 
-							string head = "Void-";
-							if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-						}
-                    }
-                }
-                if (sprite.element.name.StartsWith("Face"))
-                {
-                    BodyChunk body_chunk_0 = self.player.bodyChunks[0];
-                    BodyChunk body_chunk_1 = self.player.bodyChunks[1];
+				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+				{
+					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+					{
 
-                    if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
-                    {
-						if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-						{
+						string face = "VoidDCeil-";
+						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 
-							string face = "VoidDCeil-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+					}
+					else
+					{
 
-						}
-						else
-						{
+						string face = "Void-";
+						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 
-							string face = "Void-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+					}
+				}
 
-						}
-                    }
+				else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+				{
+					if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG
+						&& self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
+						&& body_chunk_0.pos.y <= body_chunk_1.pos.y + 5)
+					{
 
-                    else if (IsTouchingCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
-                    {
-						if (!self.player.input[0].jmp && self.player.bodyMode != Player.BodyModeIndex.ZeroG
-							&& self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
-							&& body_chunk_0.pos.y <= body_chunk_1.pos.y + 5)
-						{
+						string face = "VoidCeil-";
+						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 
-							string face = "VoidCeil-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-						else
-						{
+					}
+					else
+					{
 
-							string face = "Void-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-                    }
+						string face = "Void-";
+						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 
-                    else
-                    {
-						if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
-							self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned ||
-							self.player.bodyMode == Player.BodyModeIndex.Crawl)
-						{
-							string face = "Void-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-						}
-						else
-						{
+					}
+				}
+				else
+				{
+					if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y || self.player.bodyMode == Player.BodyModeIndex.ZeroG ||
+						self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned ||
+						self.player.bodyMode == Player.BodyModeIndex.Crawl)
+					{
 
-							string face = "VoidDown-";
-							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						string face = "Void-";
+						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
 
-						}
-                    }
-                }
-            }
+					}
+					else
+					{
+
+						string face = "VoidDown-";
+						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+
+					}
+				}
+			}
 		}
 	}
 
@@ -434,7 +254,7 @@ internal class DrawSprites
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-		if (player.IsVoid())
+		if (player.IsVoid() || player.IsViy())
 		{
 
 			timeSinceLastForceUpdate += Time.deltaTime;

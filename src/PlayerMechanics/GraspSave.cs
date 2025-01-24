@@ -27,8 +27,8 @@ internal static class GraspSave
 			{
 				if (grasp != null
 				&& grasp.grabbed is Player playerInGrasp
-				&& playerInGrasp.IsVoid()
-				&& grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
+				&& (playerInGrasp.IsVoid() || playerInGrasp.IsViy())
+                && grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
 				{
 					timerOfBeingGrasped.Value++;
 					if (timerOfBeingGrasped.Value > TicksUntilStun(playerInGrasp))
@@ -43,6 +43,11 @@ internal static class GraspSave
 
 	static int TicksUntilStun(Player p)
 	{
+		if (p.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+		{
+			return TicksPerSecond * secondsToStunViy;
+
+        }
 		return TicksPerSecond * (p.KarmaCap == 10 ? secondsToStunOnK10 : secondsToStunBelowK10);
 	}
 

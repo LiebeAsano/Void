@@ -22,10 +22,10 @@ internal static class Utils
 	           && saveState.GetVoidCatDead() 
 	           && saveState.deathPersistentSaveData.karmaCap == 10;
     }
-    public static bool IsViy(SlugcatSelectMenu.SaveGameData saveGameData) => saveGameData is not null && saveGameData.karmaCap == 10 && saveGameData.redsExtraCycles;
     
     public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void;
-	public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;
+    public static bool IsViy(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Viy;
+    public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;
 	public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
 			&& !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
 	public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;

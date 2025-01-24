@@ -232,3 +232,6 @@ Do you have something interesting to show me?|У тебя есть что-то �
 
 I am sorry, friend, but I cannot remember of any new stories I can tell you.|Мне жаль, дружок, но я не могу вспомнить ни одной новой истории, которую могла бы тебе расскать.
 I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.|Мне неловко просить тебя, но не мог бы ты попросить у Пяти Галек ещё один нейрон, я думаю, он не будет против.
+
+The Viy|Вий
+THE VIY|ВИЙ

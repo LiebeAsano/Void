@@ -1,0 +1,88 @@
+{	"id": "Viy",
+	"name": "The Viy",
+	"description": "An enraged and hungry predator escapes from the Void Sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.",
+	"features": {
+		"color": "000000",
+		"custom_colors": [
+			{
+				"name": "Body",
+				"story": "000001"
+
+			},
+			{
+				"name": "Eyes",
+				"story": "ffdd00",
+				"arena": [ "ffffff", "ffdd00", "ee3366", "7700dd" ]
+			}
+		],
+		
+		"weight": [1.2, 1.0],
+		"tunnel_speed": [1.25, 0.8],
+		"climb_speed": [1.25, 0.8],
+		"walk_speed": [1.25, 0.8],
+		"throw_skill": [2, 0],
+		"lung_capacity": 1.0,
+		"crouch_stealth": [0.66, 1.0],
+		"loudness": [0.66, 1.0],
+		"alignments": {
+			"Lizards": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Scavengers": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Cicadas ": {
+				"like": -0.15,
+				"locked": false
+			},
+			"GarbageWorms": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Deer": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Jetfish": {
+				"like": -0.15,
+				"locked": false
+			}
+		},
+		"auto_grab_batflies": false,
+		"back_spear": false,
+		"can_maul": true,
+		"perma_unlock_gates": false,
+		"maul_damage": 3,
+		"karma": 2,
+		"karma_cap": 2,
+		"the_mark": false,
+		"the_glow": true,
+		"has_dreams": true,
+		"expedition_enabled": true,
+		"guide_overseer": 2,
+		"cycle_length_min": 6,
+		"cycle_length_max": 13,
+		"food_min": 9,
+		"food_max": 9,
+		"world_state": ["Void","Red"],
+		"timeline_after": "Red",
+		"start_room": "SB_A14",
+		"diet": {
+			"base": "White",
+			"corpses": 0.5,
+			"meat": 0.5,
+			"plants": 0.25,
+			"overrides": {
+				"Fly" : 0.25
+			}
+		},
+		"title_card": "Void_Title_Card",
+		"sleep_scene": "Sleep_Void",
+		"select_menu_scene": "karma_death_void_karma11",
+		"death_scene": "Death_Void",
+		"starve_scene": "Death_Void",
+		"intro_slideshow": "Void_Intro"
+	}
+}

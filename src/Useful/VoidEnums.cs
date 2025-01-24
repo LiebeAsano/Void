@@ -175,9 +175,11 @@ public static class VoidEnums
 		public static void Register()
 		{
 			Void = new("Void");
+			Viy = new("Viy");
 		}
 		public static SlugcatStats.Name Void;
-	}
+        public static SlugcatStats.Name Viy;
+    }
 
 	public static class ProcessID
 	{

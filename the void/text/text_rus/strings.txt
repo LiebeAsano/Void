@@ -162,7 +162,7 @@ Is that what I think it is?|Это то, о чём я думаю?
 Excellent, you really are a good messenger.|Превосходно, ты действительно хороший посыльщик.
 Strangely enough, your structure is very similar to the disease that I was exposed to.|Как ни странно, твоя структура очень схожа с болезнью, что я был подвержен.
 I never would have thought that I had anything in common with you...|Никогда бы не подумал, что у меня есть что-то общее с тобой...
-Anyway, I need another pearl. It stores data about an unfortunate development.|В любом случае, мне нужна ещё одна жемчужина. Она содержит в себе данные о неудачное разработке.
+Anyway, I need another pearl. It stores data about an unfortunate development.|В любом случае, мне нужна ещё одна жемчужина. Она содержит в себе данные о неудачной разработке.
 The problem is that it was washed away along with other samples, its approximate location is the Garbage Wastes.|Проблема в том, что её смыло вместе с другими образцами, и её примерное местонахождение - Мусорная Свалка.
 You should be careful, my samples have an aggressive form of behavior...|Будь осторожен, мои образцы имеют агрессивную форму поведения...
 

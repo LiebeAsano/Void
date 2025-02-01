@@ -23,7 +23,7 @@ internal static class Climbing
 
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
 	{
-		if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
+		if (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
 		{
 
 			BodyChunk body_chunk_0 = self.bodyChunks[0];
@@ -63,7 +63,7 @@ internal static class Climbing
 
 	private static bool KarmaCap_Check(Player self)
 	{
-		return self.IsVoid() && self.KarmaCap > 3;
+		return self.IsVoid() && self.KarmaCap > 3 || self.IsViy();
 	}
 
 
@@ -132,7 +132,7 @@ internal static class Climbing
 
     private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 	{
-		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void)
+		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy)
 		{
 			orig(player);
 			return;
@@ -284,7 +284,7 @@ internal static class Climbing
 		player.canJump = 1;
 		player.standing = true;
 		float climbSpeed = 1f + 0.05f * player.KarmaCap;
-		if (player.KarmaCap == 10)
+		if (player.KarmaCap == 10 || player.IsViy())
 		{
 			climbSpeed = 1.5f;
         }
@@ -330,7 +330,7 @@ internal static class Climbing
 			body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
 			float minusone = 0.05f * player.KarmaCap;
             float minustwo = 0.16f * player.KarmaCap;
-			if (player.KarmaCap == 10)
+			if (player.KarmaCap == 10 || player.IsViy())
 			{
 				minusone = 0.5f;
 				minustwo = 1.6f;
@@ -415,7 +415,7 @@ internal static class Climbing
 
 				float bonus = 1f + (0.025f * player.KarmaCap);
 
-				if (player.KarmaCap == 10)
+				if (player.KarmaCap == 10 || player.IsViy())
 					bonus = 1.25f;
 
 				if (body_chunk_0.pos.y > body_chunk_1.pos.y)

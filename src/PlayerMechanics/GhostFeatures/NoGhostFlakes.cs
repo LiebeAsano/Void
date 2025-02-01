@@ -10,7 +10,7 @@ public static class NoGhostFlakes
     private static void RoomOnNowViewed(On.Room.orig_NowViewed orig, Room self)
     {
         orig(self);
-        if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void
+        if ((self.game.StoryCharacter == VoidEnums.SlugcatID.Void || self.game.StoryCharacter == VoidEnums.SlugcatID.Viy)
             && self.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
         {
             foreach (UpdatableAndDeletable updatableAndDeletable in self.updateList)

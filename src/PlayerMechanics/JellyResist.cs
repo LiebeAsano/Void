@@ -34,7 +34,7 @@ namespace VoidTemplate.PlayerMechanics
                 {
                     if (self.latchOnToBodyChunks[chunk].owner is Player player)
                     {
-                        return player.slugcatStats.name == VoidEnums.SlugcatID.Void;
+                        return player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy;
                     }
                     return false;
                 });
@@ -65,7 +65,7 @@ namespace VoidTemplate.PlayerMechanics
 
         private static void JellyFish_Collide(On.JellyFish.orig_Collide orig, JellyFish self, PhysicalObject otherObject, int myChunk, int otherChunk)
         {
-            if (otherObject is Player player && player != self.thrownBy && player.slugcatStats.name == VoidEnums.SlugcatID.Void && self.Electric)
+            if (otherObject is Player player && player != self.thrownBy && (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy) && self.Electric)
             {
                 if (cooldown == 100)
                 {

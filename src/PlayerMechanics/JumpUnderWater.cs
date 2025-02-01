@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -18,9 +19,13 @@ internal static class JumpUnderWater
 
     private static void Player_UpdateAnimation(On.Player.orig_UpdateAnimation orig, Player self)
     {
-        if (self.animation == Player.AnimationIndex.DeepSwim && self.slugcatStats.name == VoidEnums.SlugcatID.Void)
+        if (self.animation == Player.AnimationIndex.DeepSwim && (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy))
         {
             int karmaCap = self.KarmaCap;
+            if (self.IsViy())
+            {
+                karmaCap = 10;
+            }
             self.dynamicRunSpeed[0] = 0f;
             self.dynamicRunSpeed[1] = 0f;
             if (self.grasps[0] != null && self.grasps[0].grabbed is JetFish && (self.grasps[0].grabbed as JetFish).Consious)

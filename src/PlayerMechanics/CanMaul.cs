@@ -49,9 +49,9 @@ internal static class СanMaul
                 {
                     if (grasp != null
                         && grasp.grabbed is Player playerInGrasp
-                        && playerInGrasp.IsVoid()
+                        && (playerInGrasp.IsVoid() || playerInGrasp.IsViy())
                         && creature is Player player 
-                        && player.slugcatStats.name != VoidEnums.SlugcatID.Void)
+                        && player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy)
                     {
                         creature.Stun(TicksPerSecond * 5);
                     }

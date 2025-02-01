@@ -23,7 +23,7 @@ internal static class DontBiteMimic
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
 			{
-				if (self.IsVoid() &&
+				if ((self.IsVoid() || self.IsViy()) &&
 					self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
 					return false;
 				return re;

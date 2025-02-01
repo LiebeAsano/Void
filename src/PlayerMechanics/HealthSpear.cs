@@ -3,6 +3,7 @@ using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
@@ -57,6 +58,10 @@ namespace VoidTemplate.PlayerMechanics
 		}
 		*/
 
+        const float SecondsForDelayedDeath = 1f;
+        static int TicksForDelayedDeath => (int)(SecondsForDelayedDeath * TicksPerSecond);
+        static readonly ConditionalWeakTable<Player, StrongBox<int>> deathMarks = new();
+
         private static bool Spear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
         {
             if (result.obj is Player player && (player.IsViy() || player.IsVoid()))
@@ -64,6 +69,15 @@ namespace VoidTemplate.PlayerMechanics
                 if (result.obj == null)
                 {
                     return false;
+                }
+                if ((player.IsVoid() || player.IsViy())
+                    && self.Spear_NeedleCanFeed()
+                    && self.thrownBy is Player thrower)
+                {
+                    if (!deathMarks.TryGetValue(thrower, out _))
+                    {
+                        deathMarks.Add(thrower, new(self.room.game.clock));
+                    }
                 }
                 bool flag = false;
                 if (self.abstractPhysicalObject.world.game.IsArenaSession && self.abstractPhysicalObject.world.game.GetArenaGameSession.GameTypeSetup.spearHitScore != 0 && self.thrownBy != null && self.thrownBy is Player && result.obj is Creature)
@@ -147,6 +161,11 @@ namespace VoidTemplate.PlayerMechanics
         private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
+            if (deathMarks.TryGetValue(self, out var deathMark))
+            {
+                if (self.room?.game is RainWorldGame game && (game.clock - deathMark.Value) > TicksForDelayedDeath)
+                    self.Die();
+            }
             if (self.IsViy())
             {
                 self.playerState.permanentDamageTracking -= 0.0025f;

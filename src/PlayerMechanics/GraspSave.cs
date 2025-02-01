@@ -55,7 +55,7 @@ internal static class GraspSave
 	private static void Player_Grabbed(On.Player.orig_Grabbed orig, Player self, Creature.Grasp grasp)
 	{
 		orig(self, grasp);
-		if (self.IsVoid())
+		if (self.IsVoid() || self.IsViy())
 		{
 			ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbedVoidsTimers;
 			if (!grabbers.TryGetValue(grasp.grabber.abstractCreature, out grabbedVoidsTimers))

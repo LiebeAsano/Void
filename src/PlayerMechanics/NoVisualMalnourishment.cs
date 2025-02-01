@@ -12,7 +12,7 @@ internal static class NoVisualMalnourishment
 	private static void PlayerGraphics_ctor(On.PlayerGraphics.orig_ctor orig, PlayerGraphics self, PhysicalObject ow)
 	{
 		orig(self, ow);
-		if (self.player.IsVoid())
+		if (self.player.IsVoid() || self.player.IsViy())
 			self.malnourished = 0f;
 	}
 }

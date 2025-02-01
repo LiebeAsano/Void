@@ -67,7 +67,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 		// Does the skip internally to avoid tainting IL for other matches. Leaves a flag on eval stack to decide which branch to follow.
 		private static bool SkipMoveToPreGhostEncounterMax(KarmaLadder self)
 		{
-			return (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Void;
+			return (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Void || (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Viy;
 		}
 
 		private static int TargetGoToKarma(int unmodifiedGoToKarma, KarmaLadder self)

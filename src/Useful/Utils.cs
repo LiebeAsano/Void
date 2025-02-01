@@ -15,13 +15,6 @@ internal static class Utils
 	public static void logerr(object e) => _Plugin.logger.LogError(e);
 	public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 	public static string TranslateString(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str);
-
-    public static bool IsViy(SaveState saveState)
-    {
-	    return saveState.saveStateNumber == VoidEnums.SlugcatID.Void 
-	           && saveState.GetVoidCatDead() 
-	           && saveState.deathPersistentSaveData.karmaCap == 10;
-    }
     
     public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void;
     public static bool IsViy(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Viy;

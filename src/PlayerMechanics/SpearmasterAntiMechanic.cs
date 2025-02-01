@@ -29,8 +29,8 @@ internal static class SpearmasterAntiMechanic
 
     private static bool Spear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
     {
-        if (result.obj is Player victim
-            && victim.IsVoid()
+        if (result.obj is Player player
+            && (player.IsVoid() || player.IsViy())
             && self.Spear_NeedleCanFeed()
             && self.thrownBy is Player thrower)
         {

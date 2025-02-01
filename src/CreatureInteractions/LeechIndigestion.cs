@@ -18,7 +18,7 @@ internal static class LeechIndigestion
 
 		if (Array.Exists(self.grasps, grasp => grasp is not null 
 		&& grasp.grabbed is Player player
-		&& player.IsVoid() 
+		&& (player.IsVoid() || player.IsViy()) 
 		&& self != null 
 		&& self.room != null))
 		{

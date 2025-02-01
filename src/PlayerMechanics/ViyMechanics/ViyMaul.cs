@@ -14,7 +14,9 @@ internal static class ViyMaul
 {
     public static void Hook()
     {
+        //On.Player.SlugcatGrab += Player_SlugcatGrab;
         On.Player.CanMaulCreature += Player_CanMaulCreature;
+        On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         On.Player.Grabability += Player_Grabability;
     }
 
@@ -32,12 +34,20 @@ internal static class ViyMaul
         return orig(self, crit);
     }
 
+    private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)
+    {
+        if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        {
+            return true;
+        }
+        return orig(self, grabCheck);
+    }
+
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
         {
-            if (obj is Player
-                || obj is Fly
+            if (obj is Fly
                 || obj is Hazer
                 || obj is PoleMimic
                 || obj is Snail
@@ -65,7 +75,7 @@ internal static class ViyMaul
                 }
                 else
                 {
-                    if (obj is Creature)
+                    if (obj is Creature && self.dontGrabStuff < 1 && obj != self)
                     {
                         return Player.ObjectGrabability.Drag;
                     }

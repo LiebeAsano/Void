@@ -19,8 +19,6 @@ internal static class Climbing
 		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
     }
 
-    private static float stamina = 5f;
-	private static float currentTime = 0f;
 	private static float currentTimeWall = 0f;
 
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)

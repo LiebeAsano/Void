@@ -16,7 +16,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 
 			if (Custom.rainWorld.processManager.currentMainLoop is RainWorldGame game &&
 				game.session is StoryGameSession session &&
-				session.characterStats.name == VoidEnums.SlugcatID.Void)
+				(session.characterStats.name == VoidEnums.SlugcatID.Void || session.characterStats.name == VoidEnums.SlugcatID.Viy))
 			{
 
 				bool hasMark = game.IsStorySession && game.GetStorySession.saveState.deathPersistentSaveData.theMark;
@@ -29,7 +29,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 						"MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
 						"MoreSlugcats.Seed")
 					{
-                        if (Utils.IsViy(session.game.GetStorySession.saveState))
+                        if (session.characterStats.name == VoidEnums.SlugcatID.Viy)
 						{
                             return 0;
                         }
@@ -41,7 +41,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 						return orig(slugcatIndex, eatenobject) * 2;
 					}
 				}
-				else if (Utils.IsViy(session.game.GetStorySession.saveState))
+				else if (session.characterStats.name == VoidEnums.SlugcatID.Viy)
 				{
                     string objectId = eatenobject.ToString();
                     if (objectId is "Fly" or "DangleFruit" or "WaterNut" or

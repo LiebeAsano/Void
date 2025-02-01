@@ -1,6 +1,9 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MoreSlugcats;
+using RWCustom;
 using System;
+using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
@@ -9,10 +12,12 @@ namespace VoidTemplate.PlayerMechanics
 	{
 		public static void Hook()
 		{
-			IL.Spear.HitSomething += Spear_HitSomething;
-		}
+			//IL.Spear.HitSomething += Spear_HitSomething;
+            On.Spear.HitSomething += Spear_HitSomething;
+            On.Player.Update += Player_Update;
+        }
 
-		public static void Spear_HitSomething(ILContext il)
+        /*public static void Spear_HitSomething(ILContext il)
 		{
 			ILCursor c = new(il);
 			//Creature.Violence(1 <OR .9 IF VOID>);
@@ -24,7 +29,9 @@ namespace VoidTemplate.PlayerMechanics
 				c.EmitDelegate<Func<float, Spear, SharedPhysics.CollisionResult, float>>((float orig, Spear self, SharedPhysics.CollisionResult result) =>
 				{
 					if (self.thrownBy is Scavenger && result.obj is Player p && p.IsVoid()) return 0.9f;
-					return orig;
+					if (self.thrownBy is Creature && result.obj is Player p2 && p2.IsViy()) return 0.4f;
+
+                    return orig;
 				});
 			}
 			else
@@ -40,6 +47,7 @@ namespace VoidTemplate.PlayerMechanics
 				{
 					if (p.IsVoid() && p.KarmaCap == 10)
 						return 1.25;
+					else if (p.IsViy()) return 2.5;
 					else
 						return orig;
 				});
@@ -47,5 +55,106 @@ namespace VoidTemplate.PlayerMechanics
 			else
 				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for permanent damage tracking failed");
 		}
-	}
+		*/
+
+        private static bool Spear_HitSomething(On.Spear.orig_HitSomething orig, Spear self, SharedPhysics.CollisionResult result, bool eu)
+        {
+            if (result.obj is Player player && (player.IsViy() || player.IsVoid()))
+            {
+                if (result.obj == null)
+                {
+                    return false;
+                }
+                bool flag = false;
+                if (self.abstractPhysicalObject.world.game.IsArenaSession && self.abstractPhysicalObject.world.game.GetArenaGameSession.GameTypeSetup.spearHitScore != 0 && self.thrownBy != null && self.thrownBy is Player && result.obj is Creature)
+                {
+                    flag = true;
+                    if ((result.obj as Creature).State is HealthState && ((result.obj as Creature).State as HealthState).health <= 0f)
+                    {
+                        flag = false;
+                    }
+                    else if (!((result.obj as Creature).State is HealthState) && (result.obj as Creature).State.dead)
+                    {
+                        flag = false;
+                    }
+                }
+                if (result.obj is Creature)
+                {
+                    if (!ModManager.MSC || !(result.obj is Player) || (result.obj as Creature).SpearStick(self, Mathf.Lerp(0.55f, 0.62f, UnityEngine.Random.value), result.chunk, result.onAppendagePos, self.firstChunk.vel))
+                    {
+                        float num = self.spearDamageBonus;
+                        if (self.bugSpear)
+                        {
+                            num *= 3f;
+                        }
+                        if (player.IsViy())
+                        {
+                            (result.obj as Creature).Violence(self.firstChunk, new Vector2?(self.firstChunk.vel * self.firstChunk.mass * 2f), result.chunk, result.onAppendagePos, Creature.DamageType.Stab, num, 0f);
+                        }
+                        if (player.IsVoid())
+                        {
+                            (result.obj as Creature).Violence(self.firstChunk, new Vector2?(self.firstChunk.vel * self.firstChunk.mass * 2f), result.chunk, result.onAppendagePos, Creature.DamageType.Stab, num, 20f);
+                        }
+                        if (ModManager.MSC && result.obj is Player)
+                        {
+                            if (player.IsVoid())
+                            {
+                                player.playerState.permanentDamageTracking += (double)(num / player.Template.baseDamageResistance);
+                            }
+                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10)
+                            {
+                                player.Die();
+                            }
+                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && player.KarmaCap == 10)
+                            {
+                                player.Die();
+                            }
+                            else if (player.playerState.permanentDamageTracking >= 2.5 && player.IsViy())
+                            {
+                                player.Die();
+                            }
+                        }
+                    }
+                }
+                else if (result.chunk != null)
+                {
+                    result.chunk.vel += self.firstChunk.vel * self.firstChunk.mass / result.chunk.mass;
+                }
+                else if (result.onAppendagePos != null)
+                {
+                    (result.obj as PhysicalObject.IHaveAppendages).ApplyForceOnAppendage(result.onAppendagePos, self.firstChunk.vel * self.firstChunk.mass);
+                }
+                if (result.obj is Creature && (result.obj as Creature).SpearStick(self, Mathf.Lerp(0.55f, 0.62f, UnityEngine.Random.value), result.chunk, result.onAppendagePos, self.firstChunk.vel))
+                {
+                    Creature creature = result.obj as Creature;
+                    self.room.PlaySound(SoundID.Spear_Stick_In_Creature, self.firstChunk);
+                    self.LodgeInCreature(result, eu);
+                    if (flag)
+                    {
+                        self.abstractPhysicalObject.world.game.GetArenaGameSession.PlayerLandSpear(self.thrownBy as Player, self.stuckInObject as Creature);
+                    }
+                    return true;
+                }
+                self.room.PlaySound(SoundID.Spear_Bounce_Off_Creauture_Shell, self.firstChunk);
+                self.vibrate = 20;
+                self.ChangeMode(Weapon.Mode.Free);
+                self.firstChunk.vel = self.firstChunk.vel * -0.5f + Custom.DegToVec(UnityEngine.Random.value * 360f) * Mathf.Lerp(0.1f, 0.4f, UnityEngine.Random.value) * self.firstChunk.vel.magnitude;
+                self.SetRandomSpin();
+                return false;
+            }
+            return orig(self, result, eu);
+        }
+        private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+        {
+            orig(self, eu);
+            if (self.IsViy())
+            {
+                self.playerState.permanentDamageTracking -= 0.0025f;
+                if (self.playerState.permanentDamageTracking < 0)
+                {
+                    self.playerState.permanentDamageTracking = 0;
+                }
+            }
+        }
+    }
 }

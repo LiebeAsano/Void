@@ -23,7 +23,7 @@ internal static class CanIPickThisUp
     private static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
 	{
         var result = orig(self, obj);
-        if (self.slugcatStats.name != VoidEnums.SlugcatID.Void) return result;
+        if (self.slugcatStats.name != VoidEnums.SlugcatID.Void && self.slugcatStats.name != VoidEnums.SlugcatID.Viy) return result;
         int heavyObjectsCount = 0;
         foreach (var grasp in self.grasps) if (grasp?.grabbed != null && self.Grabability(grasp.grabbed) == Player.ObjectGrabability.Drag) heavyObjectsCount++;
         if (heavyObjectsCount == 1 && obj is Spear) return true;
@@ -34,7 +34,7 @@ internal static class CanIPickThisUp
 
 	public static bool Player_CanIPickThisSpear(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
 	{
-		if (self.IsVoid())
+		if (self.IsVoid() || self.IsViy())
 		{
 			bool canPick = true;
 			foreach (var grasp in self.grasps)
@@ -58,12 +58,12 @@ internal static class CanIPickThisUp
 			return;
         }
 
-        if (self.owner.slugcatStats.name == VoidEnums.SlugcatID.Void)
+        if (self.owner.slugcatStats.name == VoidEnums.SlugcatID.Void || self.owner.slugcatStats.name == VoidEnums.SlugcatID.Viy)
 		{
             return;
         }
 
-        if (player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+        if (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy)
         {
             return;
         }
@@ -85,11 +85,11 @@ internal static class CanIPickThisUp
 
             c.EmitDelegate<Func<bool, Player, PhysicalObject, bool>>((orig, player, obj) =>
             {
-                if (player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+                if (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy)
                 {
                     if (obj is Player targetPlayer && targetPlayer.slugcatStats.name == VoidEnums.SlugcatID.Void)
                         return false;
-                    else if (obj is Player && player.abstractCreature.world.game.session is StoryGameSession session && IsViy(session.saveState))
+                    else if (obj is Creature && player.IsViy())
                         return true;
                     else if (obj is Player player2 && player2.bodyMode == Player.BodyModeIndex.Crawl && !player2.room.game.IsArenaSession)
                         return true;

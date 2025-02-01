@@ -50,7 +50,7 @@ internal static class SwallowObjects
     {
         AbstractPhysicalObject abstractGrabbed = self.grasps[grasp]?.grabbed?.abstractPhysicalObject;
 
-        if (self.IsVoid())
+        if (self.IsVoid() || self.IsViy())
         {
             var grabbed = self.grasps[grasp]?.grabbed;
 
@@ -71,14 +71,14 @@ internal static class SwallowObjects
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                            if (!self.IsViy())
                                 self.AddQuarterFood();
                         }
                         else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                            if (!self.IsViy())
                                 self.AddQuarterFood();
                         }
                     }
@@ -142,7 +142,7 @@ internal static class SwallowObjects
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                            if (!self.IsViy())
                                 if (OptionInterface.OptionAccessors.SimpleFood)
                                     self.AddFood(1);
                                 else
@@ -155,7 +155,7 @@ internal static class SwallowObjects
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (!Utils.IsViy(self.abstractCreature.world.game.GetStorySession.saveState))
+                            if (!self.IsViy())
                                 if (OptionInterface.OptionAccessors.SimpleFood)
                                 self.AddFood(1);
                                 else
@@ -192,7 +192,7 @@ internal static class SwallowObjects
 
     private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
     {
-        if (self.SlugCatClass == VoidEnums.SlugcatID.Void)
+        if (self.SlugCatClass == VoidEnums.SlugcatID.Void || self.SlugCatClass == VoidEnums.SlugcatID.Viy)
         {
             self.spearOnBack?.Update(eu);
             if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugOnBack != null)

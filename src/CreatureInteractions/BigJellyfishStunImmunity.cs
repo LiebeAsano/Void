@@ -28,7 +28,7 @@ internal class BigJellyfishStunImmunity
             c.Emit(OpCodes.Ldarg_0);
             c.Emit(OpCodes.Ldloc, 16);
             c.EmitDelegate<Func<BigJellyFish, int, bool>>((BigJellyFish jellyfish, int inspectedGrasp) =>
-            jellyfish.latchOnToBodyChunks[inspectedGrasp].owner is Player p && p.IsVoid());
+            jellyfish.latchOnToBodyChunks[inspectedGrasp].owner is Player p && (p.IsVoid() || p.IsViy()));
             c.Emit(OpCodes.Brtrue, label);
         }
         else LogExErr("failed to find place checking for creature stun in IL; void will be unintentionally vulnerable to MSC big jellyfish");

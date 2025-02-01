@@ -17,7 +17,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
 
         private static void Player_ThrowObject(On.Player.orig_ThrowObject orig, Player self, int grasp, bool eu)
         {
-            if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy && self.grasps[grasp].grabbed is Spear)
+            if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy && self.grasps[grasp].grabbed is Weapon)
             {
 
                 IntVector2 intVector = new(self.ThrowDirection, 0);

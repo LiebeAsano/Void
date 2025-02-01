@@ -44,7 +44,7 @@ internal static class SaintKarmaImmunity
 			var label2 = c.DefineLabel();
 			c.Emit(OpCodes.Dup);
 			c.EmitDelegate<Func<Creature, bool>>((self) =>
-				self is Player player && (player.IsVoid() || player.room.game.IsArenaSession && OptionAccessors.ArenaAscensionStun));
+				self is Player player && (player.IsVoid() || player.IsViy() || player.room.game.IsArenaSession && OptionAccessors.ArenaAscensionStun));
 			c.Emit(OpCodes.Brtrue_S, label);
 			c.GotoNext(MoveType.After,
 				i => i.MatchCallvirt<Creature>("Die"));
@@ -54,7 +54,7 @@ internal static class SaintKarmaImmunity
 			c.Emit(OpCodes.Ldloc, 18);
 			c.EmitDelegate((PhysicalObject PhysicalObject) =>
 			{
-				if (PhysicalObject is Player p && (p.IsVoid() || p.room.game.IsArenaSession && OptionAccessors.ArenaAscensionStun))
+				if (PhysicalObject is Player p && (p.IsVoid() || p.IsViy() || p.room.game.IsArenaSession && OptionAccessors.ArenaAscensionStun))
 				{
 					p.Stun(TicksPerSecond * 5);
 				}

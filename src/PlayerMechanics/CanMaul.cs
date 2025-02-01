@@ -25,7 +25,7 @@ internal static class СanMaul
 
     private static bool CanMaulCreatureHook(On.Player.orig_CanMaulCreature orig, Player self, Creature crit)
     {
-        if (crit is Player && !crit.dead && self != null && self.slugcatStats.name == VoidEnums.SlugcatID.Void)
+        if (crit is Player && !crit.dead && self != null && (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy))
         {
             return true;
         }

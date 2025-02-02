@@ -12,6 +12,7 @@ internal static class ViyTail
 		On.PlayerGraphics.ctor += PlayerGraphics_ctor;
 	}
 
+	const int amountOfTailSegments = 6;
 	const float tailChunkFirstRadius = 8f;
 	const float tailChunkLastRadius = 2f;
 	const float tailChunkFirstConnectionRadius = 2f;
@@ -31,7 +32,7 @@ internal static class ViyTail
 				bodypartslist.Remove(tailsegment);
 			}
 
-			self.tail = new TailSegment[6];
+			self.tail = new TailSegment[amountOfTailSegments];
 			var tail = self.tail;
 			for(int i = 0; i < tail.Length; i++)
 			{

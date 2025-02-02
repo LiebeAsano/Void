@@ -1,5 +1,8 @@
 ﻿using System.Collections;
+using System.IO;
+using Newtonsoft.Json;
 using SlugBase.SaveData;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate;
 
@@ -114,13 +117,20 @@ public static class SaveManager
 	#endregion
 
 	public static bool GetVoidCatDead(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
-	public static void SetVoidCatDead(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
+	public static void SetVoidCatDead(this SaveState save, bool value)
+	{
+		save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
+		ExternalSaveData.SetVoidDead(true);
+	}
     public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
     public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
     public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
 	public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);
 	public static int GetVoidExtraCycles(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(voidExtraCycles, out int extraCycles) ? extraCycles : 0;
 	public static void SetVoidExtraCycles(this SaveState save, int value) => save.deathPersistentSaveData.GetSlugBaseData().Set(voidExtraCycles, value);
+
+
+
 
 	#region Dreams scheduled/shown
 	private const string dream = "Dream";
@@ -182,4 +192,41 @@ public static class SaveManager
 	}
 	#endregion
 
+	public static class ExternalSaveData
+	{
+#nullable enable
+		static string ModDirectory => ModManager.ActiveMods.Find(x => x.id == "void.lwteam").path;
+		const string SaveFolder = "SaveData";
+		static string pathToSaves => Path.Combine(ModDirectory, SaveFolder);
+        private static string FullPathOfSaveProperty(string id) => Path.Combine(ModDirectory, pathToSaves, id + ".json");
+        private static T GetData<T>(string id, T defaultValue)
+        {
+            string path = FullPathOfSaveProperty(id);
+            if (File.Exists(path))
+            {
+                string rawData = File.ReadAllText(path);
+                T? obj = JsonConvert.DeserializeObject<T>(rawData);
+				if (obj is null) return defaultValue;
+                return obj;
+            }
+            else
+			{ 
+				return defaultValue;
+            }
+        }
+        private static void SetData<T>(string id, T value)
+        {
+            string path = FullPathOfSaveProperty(id);
+            string rawData = JsonConvert.SerializeObject(value);
+            File.WriteAllText(path, rawData);
+        }
+
+		private const string VoidDead = "voiddead";
+
+		public static bool GetVoidDead => GetData(VoidDead, false);
+		public static void SetVoidDead(bool state) => SetData(VoidDead, state);
+
+    }
+	
+	
 }

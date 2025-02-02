@@ -120,7 +120,7 @@ public static class SaveManager
 	public static void SetVoidCatDead(this SaveState save, bool value)
 	{
 		save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
-		ExternalSaveData.SetVoidDead(true);
+		ExternalSaveData.SetVoidDead(value);
 	}
     public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
     public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);

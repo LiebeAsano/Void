@@ -1,4 +1,6 @@
 ﻿using RWCustom;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.Useful;
@@ -13,7 +15,8 @@ internal class DrawSprites
 		On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
 		On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawTail;
 	}
-	private static bool IsTouchingCeiling(Player player)
+
+    private static bool IsTouchingCeiling(Player player)
 	{
 		if (player.room is not null)
 		{
@@ -73,8 +76,6 @@ internal class DrawSprites
 		}
 		return false;
 	}
-
-	const int tailSpriteIndex = 2;
 	private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
 	{
 		orig(self, sLeaser, rCam, timeStacker, camPos);
@@ -85,11 +86,42 @@ internal class DrawSprites
 			{
 				if (session.saveState.deathPersistentSaveData.karmaCap == 10)
 				{
-					if (sLeaser.sprites[tailSpriteIndex] is TriangleMesh tail)
+					if (sLeaser.sprites[2] is TriangleMesh tail)
 					{
-						tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
+                        tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
 						tail.color = new(1f, 0.86f, 0f);
-						for (var i = tail.vertices.Length - 1; i >= 0; i--)
+						/*
+                        Vector2 vector = Vector2.Lerp(self.drawPositions[0, 1], self.drawPositions[0, 0], timeStacker);
+                        Vector2 vector2 = Vector2.Lerp(self.drawPositions[1, 1], self.drawPositions[1, 0], timeStacker);
+                        Vector2 vector4 = (vector2 * 3f + vector) / 4f;
+						Array.Resize(ref self.tail, self.tail.Length + 1);
+                        float d2 = 0f;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            Vector2 vector5 = Vector2.Lerp(self.tail[i].lastPos, self.tail[i].pos, timeStacker);
+                            Vector2 normalized = (vector5 - vector4).normalized;
+                            Vector2 a = Custom.PerpendicularVector(normalized);
+                            float d3 = Vector2.Distance(vector5, vector4) / 5f;
+                            if (i == 0)
+                            {
+                                d3 = 0f;
+                            }
+
+                            (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4, vector4 - a * d2 * 1.5f + normalized * d3 - camPos);
+                            (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 1, vector4 + a * d2 * 1.5f + normalized * d3 - camPos);
+                            if (i < 3)
+                            {
+                                (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 2, vector5 - a * self.tail[i].StretchedRad * 1.5f - normalized * d3 - camPos);
+                                (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 3, vector5 + a * self.tail[i].StretchedRad * 1.5f - normalized * d3 - camPos);
+                            }
+                            else
+                            {
+                                (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 2, vector5 - camPos);
+                            }
+                            vector4 = vector5;
+                        }
+						*/
+                        for (var i = tail.vertices.Length - 1; i >= 0; i--)
 						{
 							var perc = i / 2 / (float)(tail.vertices.Length / 2);
 
@@ -143,7 +175,7 @@ internal class DrawSprites
 						string head = "VoidDCeil-";
 						if (Futile.atlasManager.DoesContainElementWithName(head + sprite.element.name))
 							sprite.element = Futile.atlasManager.GetElementWithName(head + sprite.element.name);
-						sprite.scale = 1.5f;
+						//sprite.scale = 1.5f;
 					}
 					else
 					{
@@ -172,7 +204,8 @@ internal class DrawSprites
 					}
 				}
 			}
-			if (sprite.element.name.StartsWith("Face"))
+			if (sprite.element.name.StartsWith("Face")
+				)
 			{
 				BodyChunk body_chunk_0 = self.player.bodyChunks[0];
 				BodyChunk body_chunk_1 = self.player.bodyChunks[1];

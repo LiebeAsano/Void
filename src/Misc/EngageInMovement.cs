@@ -39,7 +39,6 @@ internal static class EngageInMovement
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-		// Логика для лазания по потолку
 		if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 		{
 

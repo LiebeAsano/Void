@@ -40,7 +40,6 @@ public static class _PlayerMechanicsMeta
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();
 		SaintKarmaImmunity.Hook();
-		SpearmasterAntiMechanic.Hook();
 		SwallowObjects.Hook();
 		ThrowObject.Hook();
 	}

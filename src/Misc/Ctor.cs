@@ -14,7 +14,7 @@ internal static class Ctor
 		orig(player, abstract_creature, world);
 		if (world.game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.Void)
 			player.slugcatStats.foodToHibernate = session.characterStats.foodToHibernate;
-		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void) return;
+		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy) return;
 		player.Add_Attached_Fields();
 	}
 }

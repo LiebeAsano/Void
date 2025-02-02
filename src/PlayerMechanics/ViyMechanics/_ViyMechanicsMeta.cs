@@ -12,6 +12,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
         {
             ViyMaul.Hook();
             ViyResists.Hook();
+            ViyTail.Hook();
             ViyThrowSpear.Hook();
         }
     }

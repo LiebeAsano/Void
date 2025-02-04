@@ -1,3 +1,4 @@
+using HUD;
 using UnityEngine;
 
 namespace VoidTemplate.Objects;
@@ -7,22 +8,24 @@ namespace VoidTemplate.Objects;
 /// </summary>
 public class KarmaRotator : UpdatableAndDeletable
 {
-	private readonly FSprite karmaSprite;
+	
+	private FSprite karmaSprite => karmaMeter.karmaSprite;
 	private readonly int ticksToRotate;
 	private readonly float rotationDegrees;
+    private readonly KarmaMeter karmaMeter;
 
 
-	/// <param name="room">room that takes the role of updater. should be slugcat room</param> 
-	/// <param name="secondsToRotate">how many seconds it would take to rotate karma</param>
-	/// <param name="rotationDegrees">how many degrees the rotation would use</param>
-	public KarmaRotator(Room room, float secondsToRotate = 3f, float rotationDegrees = 72f) : this(room, room.game.cameras[0].hud, secondsToRotate, rotationDegrees)
+    /// <param name="room">room that takes the role of updater. should be slugcat room</param> 
+    /// <param name="secondsToRotate">how many seconds it would take to rotate karma</param>
+    /// <param name="rotationDegrees">how many degrees the rotation would use</param>
+    public KarmaRotator(Room room, float secondsToRotate = 3f, float rotationDegrees = 72f) : this(room, room.game.cameras[0].hud, secondsToRotate, rotationDegrees)
 	{}
 	private KarmaRotator(Room room, HUD.HUD hud, float secondsToRotate, float rotationDegrees)
 	{
 		//RW works at 40 ticks per second
 		this.ticksToRotate = (int)(secondsToRotate * 40);
 		this.rotationDegrees = rotationDegrees;
-		this.karmaSprite = hud.karmaMeter.karmaSprite;
+		this.karmaMeter = hud.karmaMeter;
 		this.room = room;
 		room.AddObject(this);
 	}
@@ -49,6 +52,7 @@ public class KarmaRotator : UpdatableAndDeletable
 		if (lifetimeTicks > ticksToRotate)
 		{
 			slatedForDeletetion = true;
-		}
+            karmaMeter.reinforceAnimation = 0;
+        }
 	}
 }

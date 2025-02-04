@@ -196,7 +196,7 @@ public static class SaveManager
 	{
 #nullable enable
 		static string ModDirectory => ModManager.ActiveMods.Find(x => x.id == "void.lwteam").path;
-		const string SaveFolder = "SaveData";
+		const string SaveFolder = "savedata";
 		static string pathToSaves => Path.Combine(ModDirectory, SaveFolder);
         private static string FullPathOfSaveProperty(string id) => Path.Combine(ModDirectory, pathToSaves, id + ".json");
         private static T GetData<T>(string id, T defaultValue)

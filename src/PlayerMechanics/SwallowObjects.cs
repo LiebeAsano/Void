@@ -81,6 +81,12 @@ internal static class SwallowObjects
                             if (!self.IsViy())
                                 self.AddQuarterFood();
                         }
+                        if (self.room.game.IsArenaSession && !self.IsViy())
+                        {
+                            self.objectInStomach.Destroy();
+                            self.objectInStomach = null;
+                            self.AddFood(1);
+                        }
                     }
 
                     return;
@@ -96,7 +102,7 @@ internal static class SwallowObjects
                         {
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
-                            if (OptionInterface.OptionAccessors.SimpleFood)
+                            if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
                                 self.AddFood(2);
                             else
                                 self.AddFood(1);
@@ -123,7 +129,7 @@ internal static class SwallowObjects
                     {
                         self.objectInStomach.Destroy();
                         self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood)
+                        if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
                             self.AddFood(4);
                         else
                             self.AddFood(2);
@@ -143,7 +149,7 @@ internal static class SwallowObjects
                             self.objectInStomach.Destroy();
                             self.objectInStomach = null;
                             if (!self.IsViy())
-                                if (OptionInterface.OptionAccessors.SimpleFood)
+                                if (OptionInterface.OptionAccessors.SimpleFood || self.room.game.IsArenaSession)
                                     self.AddFood(1);
                                 else
                                 {
@@ -451,6 +457,10 @@ internal static class SwallowObjects
                             }
                             Creature creature = self.grasps[num11].grabbed as Creature;
                             creature.SetKillTag(self.abstractCreature);
+                            if (creature is Lizard && self.IsViy())
+                            {
+                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, 2.5f, 50f);
+                            }
                             creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, 2.5f, 50f);
                             creature.stun = 5;
                             if (creature.abstractCreature.creatureTemplate.type == MoreSlugcatsEnums.CreatureTemplateType.Inspector)

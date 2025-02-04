@@ -13,7 +13,7 @@ internal static class CanBeSwallowed
 	{
 		if (self.IsVoid())
 		{
-			return testObj is not Creature && testObj is not Spear && testObj is not VultureMask || orig(self, testObj);
+			return testObj is not Creature && testObj is not Spear && testObj is not VultureMask || testObj is Player || orig(self, testObj);
 		}
 		return orig(self, testObj);
 	}

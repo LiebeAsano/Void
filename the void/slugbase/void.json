@@ -2,7 +2,7 @@
 	"name": "The Void",
 	"description": "An enraged and hungry predator escapes from the Void Sea.<LINE>Balancing between life and death, the beast seeks its new place in this world.",
 	"features": {
-		"color": "000000",
+		"color": "000001",
 		"custom_colors": [
 			{
 				"name": "Body",
@@ -55,8 +55,8 @@
 		"can_maul": true,
 		"perma_unlock_gates": false,
 		"maul_damage": 3,
-		"karma": 2,
-		"karma_cap": 2,
+		"karma": 10,
+		"karma_cap": 10,
 		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": true,

@@ -82,7 +82,8 @@ internal class DrawSprites
 		if (!self.player.IsVoid()) return;
 		foreach (var sprite in sLeaser.sprites)
 		{
-			if (self.player.abstractCreature.world.game.session is StoryGameSession session)
+
+            if (self.player.abstractCreature.world.game.session is StoryGameSession session)
 			{
 				if (session.saveState.deathPersistentSaveData.karmaCap == 10)
 				{
@@ -330,7 +331,7 @@ internal class DrawSprites
 
 		orig(self, sLeaser, rCam, timeStacker, camPos);
 
-		if (player.IsVoid() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+		if ((player.IsVoid() || player.IsViy()) && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
 			player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
 		{
 			sLeaser.sprites[4].isVisible = false;

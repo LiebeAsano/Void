@@ -25,17 +25,6 @@ internal static class PermaDeathScreen
 
 	static bool IsPlummetingScreen(this KarmaLadder karmaLadder) => karmaLadder.karmaSymbols[0].sprites[karmaLadder.karmaSymbols[0].KarmaSprite].element.name.Contains("blank");
 
-
-	private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
-	{
-		orig(self);
-		if (Input.GetKey(KeyCode.H))
-		{
-			self.GetStorySession.saveState.redExtraCycles = true;
-			self.GoToRedsGameOver();
-		}
-	}
-
 	private static void KarmaLadder_GoToKarma(On.Menu.KarmaLadder.orig_GoToKarma orig, KarmaLadder self, int newGoalKarma, bool displayMetersOnRest)
 	{
 		orig(self, newGoalKarma, displayMetersOnRest);

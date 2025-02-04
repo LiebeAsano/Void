@@ -63,11 +63,6 @@ internal static class CycleEnd
 		else _Plugin.logger.LogError($"IL hook starting at CycleEnd:41, shelter door update, starve logic tinker, failed to apply");
 	}
 
-	private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
-	{
-		orig(self);
-	}
-
 	//immutable
 	private const int timeToWait = Utils.TicksPerSecond * 3;
 

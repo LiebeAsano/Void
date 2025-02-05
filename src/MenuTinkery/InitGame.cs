@@ -10,7 +10,7 @@ public static class InitGame
 	public static void Hook()
 	{
 		//statistics screen if viy is dead
-		//On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
+		On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
 		//set room to start if viy and playing first time
 		//On.StoryGameSession.ctor += StoryGameSessionOnctor;
 		//reset need to set starting room when playing as viy after first cycle is over

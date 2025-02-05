@@ -11,7 +11,7 @@ internal static class SelectScreenScenes
 	{
 		On.Menu.MenuScene.BuildScene += CustomSelectScene;
 
-		//On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
+		On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
 	}
 
 	private static void CustomSelectScene(On.Menu.MenuScene.orig_BuildScene orig, Menu.MenuScene self)

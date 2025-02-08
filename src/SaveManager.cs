@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 using Newtonsoft.Json;
 using SlugBase.SaveData;
@@ -120,7 +121,7 @@ public static class SaveManager
 	public static void SetVoidCatDead(this SaveState save, bool value)
 	{
 		save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
-		ExternalSaveData.SetVoidDead(value);
+		ExternalSaveData.VoidDead = value;
 	}
     public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
     public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
@@ -195,37 +196,74 @@ public static class SaveManager
 	public static class ExternalSaveData
 	{
 #nullable enable
-		static string ModDirectory => ModManager.ActiveMods.Find(x => x.id == "void.lwteam").path;
-		const string SaveFolder = "savedata";
-		static string pathToSaves => Path.Combine(ModDirectory, SaveFolder);
-        private static string FullPathOfSaveProperty(string id) => Path.Combine(ModDirectory, pathToSaves, id + ".json");
-        private static T GetData<T>(string id, T defaultValue)
+		const string SaveFolder = "ModSaveData";
+		static string PathToSaves()
+		{
+            string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "LastWish");
+			Directory.CreateDirectory(path);
+			return path;
+		}
+        private static string FullPathOfSaveProperty(string id) => Path.Combine(PathToSaves(), id + ".json");
+		/// <summary>
+		/// Fetches a single entry associated with saveslot from save folder using ID.
+		/// </summary>
+		/// <typeparam name="T">Type of value being fetched</typeparam>
+		/// <param name="id">ID of fetched stored value</param>
+		/// <param name="defaultValue">Returned value in case it doesn't exist</param>
+		/// <param name="saveslot">Saveslot to fetch data for</param>
+		/// <returns></returns>
+        private static T GetData<T>(string id, T defaultValue, ushort? saveslot = null)
         {
+			ushort slot = saveslot ?? (ushort)RWCustom.Custom.rainWorld.options.saveSlot;
             string path = FullPathOfSaveProperty(id);
-            if (File.Exists(path))
-            {
-                string rawData = File.ReadAllText(path);
-                T? obj = JsonConvert.DeserializeObject<T>(rawData);
-				if (obj is null) return defaultValue;
-                return obj;
-            }
-            else
-			{ 
-				return defaultValue;
-            }
+			if (!File.Exists(path)) return defaultValue;
+			string rawData = File.ReadAllText(path);
+			T[]? dataPerSave = JsonConvert.DeserializeObject<T[]>(rawData);
+			if(dataPerSave is null
+				|| slot >= dataPerSave.Length
+				|| slot < 0) return defaultValue;
+			return dataPerSave[slot];
         }
-        private static void SetData<T>(string id, T value)
+		/// <summary>
+		/// Sets data for specified saveslot, ignores saveslot number below 0 (expedition/safari)
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="id"></param>
+		/// <param name="value"></param>
+		/// <param name="saveslot">Optional saveslot number for which this should be set</param>
+        private static void SetData<T>(string id, T value, ushort? saveslot = null)
         {
+            ushort slot = saveslot ?? (ushort)RWCustom.Custom.rainWorld.options.saveSlot;
+            if (slot < 0) return;
             string path = FullPathOfSaveProperty(id);
-            string rawData = JsonConvert.SerializeObject(value);
+			T[]? dataPerSave = null;
+
+			if (File.Exists(path))
+                dataPerSave = JsonConvert.DeserializeObject<T[]>(File.ReadAllText(path));
+
+            if (dataPerSave is null)
+            {
+                dataPerSave = new T[slot + 1];
+            }
+            else if (slot >= dataPerSave.Length)
+            {
+                Array.Resize(ref dataPerSave, slot + 1);
+            }
+
+            dataPerSave[slot] = value;
+
+            string rawData = JsonConvert.SerializeObject(dataPerSave);
             File.WriteAllText(path, rawData);
         }
 
-		private const string VoidDead = "voiddead";
 
-		public static bool GetVoidDead => GetData(VoidDead, false);
-		public static void SetVoidDead(bool state) => SetData(VoidDead, state);
 
+		private const string VoidDeadString = "voiddead";
+		public static bool VoidDead
+		{
+			get => GetData(VoidDeadString, false);
+			set => SetData(VoidDeadString, value);
+		}
     }
 	
 	

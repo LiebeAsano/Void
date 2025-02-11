@@ -118,11 +118,7 @@ public static class SaveManager
 	#endregion
 
 	public static bool GetVoidCatDead(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
-	public static void SetVoidCatDead(this SaveState save, bool value)
-	{
-		save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
-		ExternalSaveData.VoidDead = value;
-	}
+	public static void SetVoidCatDead(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
     public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
     public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
     public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
@@ -196,10 +192,10 @@ public static class SaveManager
 	public static class ExternalSaveData
 	{
 #nullable enable
-		const string SaveFolder = "ModSaveData";
+		const string SaveFolder = "modsavedata";
 		static string PathToSaves()
 		{
-            string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "LastWish");
+            string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "lastwish");
 			Directory.CreateDirectory(path);
 			return path;
 		}

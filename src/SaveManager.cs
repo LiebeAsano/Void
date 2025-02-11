@@ -197,7 +197,7 @@ public static class SaveManager
 	public static class ExternalSaveData
 	{
 #nullable enable
-		const string SaveFolder = "ModSaveData";
+		const string SaveFolder = "modsavedata";
 		static string PathToSaves()
 		{
 			string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "LastWish");

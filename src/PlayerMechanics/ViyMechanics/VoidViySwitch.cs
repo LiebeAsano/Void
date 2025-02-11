@@ -10,7 +10,7 @@ internal static class VoidViySwitch
     private static void SlugcatSelectMenu_SetSlugcatColorOrder(On.Menu.SlugcatSelectMenu.orig_SetSlugcatColorOrder orig, Menu.SlugcatSelectMenu self)
     {
         orig(self);
-        bool voidDead = SaveManager.ExternalSaveData.GetVoidDead;
+        bool voidDead = SaveManager.ExternalSaveData.VoidDead;
         if(voidDead)
         {
             self.slugcatColorOrder.Remove(VoidEnums.SlugcatID.Void);

@@ -2,6 +2,8 @@
 using static VoidTemplate.VoidEnums.SceneID;
 using static VoidTemplate.VoidEnums.SlugcatID;
 using static VoidTemplate.Useful.Utils;
+using Newtonsoft.Json.Linq;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -26,7 +28,8 @@ internal static class SelectScreenScenes
 			&& page2.slugcatNumber == Void)
 		{
 			SaveState save = RWCustom.Custom.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
-			if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
+			ExternalSaveData.VoidDead = save.GetVoidCatDead(); 
+            if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
 			else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
 			else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = SelectEnding11Scene;
 			else if (save.deathPersistentSaveData.karmaCap == 10) self.sceneID = SelectKarma11Scene;

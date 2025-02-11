@@ -49,8 +49,8 @@ internal static class JumpUnderWater
                     }
                     self.swimCycle = 2.7f;
                     Vector2 vector = Custom.DirVec(self.bodyChunks[1].pos, self.bodyChunks[0].pos);
-                    self.bodyChunks[0].vel += vector * 3f * 0.2f * karmaCap * num2;
-                    self.airInLungs -= 0.2f - 0.02f * karmaCap * num2;
+                    self.bodyChunks[0].vel += vector * 3f * 0.2f * karmaCap;
+                    self.airInLungs -= (0.2f - 0.02f * karmaCap) * num2;
                 }
                 else
                 {

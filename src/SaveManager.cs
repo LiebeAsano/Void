@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using SlugBase.SaveData;
@@ -13,19 +14,19 @@ public static class SaveManager
 	private const string teleportationDone = uniqueprefix + "TeleportationDone";
 	private const string messageShown = uniqueprefix + "MessageShown";
 	private const string punishDeath = uniqueprefix + "NonPermaDeath";
-    private const string punishPebble = uniqueprefix + "PunishFromPebble";
+	private const string punishPebble = uniqueprefix + "PunishFromPebble";
 
-    public const string endingDone = uniqueprefix + "EndingDone";
+	public const string endingDone = uniqueprefix + "EndingDone";
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
-    private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
-    private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
+	private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
+	private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
 	private const string hasHadFirstCycleAsViy = uniqueprefix + "ViyFirstCycle";
 
 
 	public static bool GetViyFirstCycle(this SaveState saveState) =>
 		saveState.miscWorldSaveData.GetSlugBaseData().TryGet(hasHadFirstCycleAsViy, out bool h) && h;
 	public static void SetViyFirstCycle(this SaveState saveState, bool value) => saveState.miscWorldSaveData.GetSlugBaseData().Set(hasHadFirstCycleAsViy, value);
-    public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
+	public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
 	public static void SetTeleportationDone(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(teleportationDone, value);
 
 	public static bool GetMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(messageShown, out bool shown) && shown;
@@ -50,36 +51,36 @@ public static class SaveManager
 		return KarmaTokenAmount;
 	}
 
-    private const string CycleToken = uniqueprefix + "CycleToken";
+	private const string CycleToken = uniqueprefix + "CycleToken";
 
-    public static void SetCycleToken(this SaveState save, int amount) => save.deathPersistentSaveData.GetSlugBaseData().Set(CycleToken, amount);
+	public static void SetCycleToken(this SaveState save, int amount) => save.deathPersistentSaveData.GetSlugBaseData().Set(CycleToken, amount);
 
-    public static int GetCycleToken(this SaveState save)
-    {
-        return save.deathPersistentSaveData.GetCycleToken();
-    }
-    public static int GetCycleToken(this DeathPersistentSaveData save)
-    {
-        var data = save.GetSlugBaseData();
-        if (!data.TryGet(CycleToken, out int CycleTokenAmount))
-        {
-            CycleTokenAmount = 10;
-            data.Set(CycleToken, 10);
-        }
-        return CycleTokenAmount;
-    }
-    public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
+	public static int GetCycleToken(this SaveState save)
+	{
+		return save.deathPersistentSaveData.GetCycleToken();
+	}
+	public static int GetCycleToken(this DeathPersistentSaveData save)
+	{
+		var data = save.GetSlugBaseData();
+		if (!data.TryGet(CycleToken, out int CycleTokenAmount))
+		{
+			CycleTokenAmount = 10;
+			data.Set(CycleToken, 10);
+		}
+		return CycleTokenAmount;
+	}
+	public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
 
 	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
 
-    public static bool GetPunishFromPebble(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishPebble, out bool choose) && choose;
+	public static bool GetPunishFromPebble(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishPebble, out bool choose) && choose;
 
-    public static void SetPunishFromPebble(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishPebble, value);
+	public static void SetPunishFromPebble(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishPebble, value);
 
-    #region oracle data
-    private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
-    private const string encountersWithMark = uniqueprefix + "EncountersWithMark";
-    private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
+	#region oracle data
+	private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
+	private const string encountersWithMark = uniqueprefix + "EncountersWithMark";
+	private const string pebblesPearlsEaten = uniqueprefix + "PebblesPearlsEaten";
 	#region last meet
 	public static int GetLastMeetCycles(this SaveState save)
 	{
@@ -92,19 +93,19 @@ public static class SaveManager
 		return cycles;
 	}
 	public static void SetLastMeetCycles(this SaveState save, int cycles) => save.miscWorldSaveData.GetSlugBaseData().Set(lastMeetCycles, cycles);
-    public static int GetEncountersWithMark(this SaveState save)
-    {
-        var data = save.miscWorldSaveData.GetSlugBaseData();
-        if (!data.TryGet(encountersWithMark, out int cycles))
-        {
-            cycles = 0;
-            data.Set(encountersWithMark, 0);
-        }
-        return cycles;
-    }
-    public static void SetEncountersWithMark(this SaveState save, int cycles) => save.miscWorldSaveData.GetSlugBaseData().Set(encountersWithMark, cycles);
-    #endregion
-    public static int GetPebblesPearlsEaten(this SaveState save)
+	public static int GetEncountersWithMark(this SaveState save)
+	{
+		var data = save.miscWorldSaveData.GetSlugBaseData();
+		if (!data.TryGet(encountersWithMark, out int cycles))
+		{
+			cycles = 0;
+			data.Set(encountersWithMark, 0);
+		}
+		return cycles;
+	}
+	public static void SetEncountersWithMark(this SaveState save, int cycles) => save.miscWorldSaveData.GetSlugBaseData().Set(encountersWithMark, cycles);
+	#endregion
+	public static int GetPebblesPearlsEaten(this SaveState save)
 	{
 		var data = save.miscWorldSaveData.GetSlugBaseData();
 		if (!data.TryGet(pebblesPearlsEaten, out int eatenPearlsAmount))
@@ -123,9 +124,9 @@ public static class SaveManager
 		save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
 		ExternalSaveData.VoidDead = value;
 	}
-    public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
-    public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
-    public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
+	public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
+	public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
+	public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
 	public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);
 	public static int GetVoidExtraCycles(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(voidExtraCycles, out int extraCycles) ? extraCycles : 0;
 	public static void SetVoidExtraCycles(this SaveState save, int value) => save.deathPersistentSaveData.GetSlugBaseData().Set(voidExtraCycles, value);
@@ -199,11 +200,11 @@ public static class SaveManager
 		const string SaveFolder = "ModSaveData";
 		static string PathToSaves()
 		{
-            string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "LastWish");
+			string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "LastWish");
 			Directory.CreateDirectory(path);
 			return path;
 		}
-        private static string FullPathOfSaveProperty(string id) => Path.Combine(PathToSaves(), id + ".json");
+		private static string FullPathOfSaveProperty(string id) => Path.Combine(PathToSaves(), id + ".json");
 		/// <summary>
 		/// Fetches a single entry associated with saveslot from save folder using ID.
 		/// </summary>
@@ -212,18 +213,18 @@ public static class SaveManager
 		/// <param name="defaultValue">Returned value in case it doesn't exist</param>
 		/// <param name="saveslot">Saveslot to fetch data for</param>
 		/// <returns></returns>
-        private static T GetData<T>(string id, T defaultValue, ushort? saveslot = null)
-        {
-			ushort slot = saveslot ?? (ushort)RWCustom.Custom.rainWorld.options.saveSlot;
-            string path = FullPathOfSaveProperty(id);
+		private static T GetData<T>(string id, T defaultValue, int? saveslot = null)
+		{
+			int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
+			string path = FullPathOfSaveProperty(id);
 			if (!File.Exists(path)) return defaultValue;
 			string rawData = File.ReadAllText(path);
-			T[]? dataPerSave = JsonConvert.DeserializeObject<T[]>(rawData);
-			if(dataPerSave is null
-				|| slot >= dataPerSave.Length
-				|| slot < 0) return defaultValue;
-			return dataPerSave[slot];
-        }
+			Dictionary<int, T>? dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(rawData);
+			if (dataPerSave is null
+				|| !dataPerSave.TryGetValue(slot, out T result))
+				return defaultValue;
+			return result;
+		}
 		/// <summary>
 		/// Sets data for specified saveslot, ignores saveslot number below 0 (expedition/safari)
 		/// </summary>
@@ -231,30 +232,25 @@ public static class SaveManager
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		/// <param name="saveslot">Optional saveslot number for which this should be set</param>
-        private static void SetData<T>(string id, T value, ushort? saveslot = null)
-        {
-            ushort slot = saveslot ?? (ushort)RWCustom.Custom.rainWorld.options.saveSlot;
-            if (slot < 0) return;
-            string path = FullPathOfSaveProperty(id);
-			T[]? dataPerSave = null;
+		private static void SetData<T>(string id, T value, int? saveslot = null)
+		{
+			int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
+			string path = FullPathOfSaveProperty(id);
+			Dictionary<int, T>? dataPerSave = null;
 
 			if (File.Exists(path))
-                dataPerSave = JsonConvert.DeserializeObject<T[]>(File.ReadAllText(path));
+				dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(File.ReadAllText(path));
 
-            if (dataPerSave is null)
-            {
-                dataPerSave = new T[slot + 1];
-            }
-            else if (slot >= dataPerSave.Length)
-            {
-                Array.Resize(ref dataPerSave, slot + 1);
-            }
+			if (dataPerSave is null)
+			{
+				dataPerSave = new();
+			}
 
-            dataPerSave[slot] = value;
+			dataPerSave[slot] = value;
 
-            string rawData = JsonConvert.SerializeObject(dataPerSave);
-            File.WriteAllText(path, rawData);
-        }
+			string rawData = JsonConvert.SerializeObject(dataPerSave);
+			File.WriteAllText(path, rawData);
+		}
 
 
 
@@ -264,7 +260,7 @@ public static class SaveManager
 			get => GetData(VoidDeadString, false);
 			set => SetData(VoidDeadString, value);
 		}
-    }
-	
-	
+	}
+
+
 }

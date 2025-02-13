@@ -42,6 +42,7 @@ public class KarmaRotator : UpdatableAndDeletable
 	public override void Update(bool eu)
 	{
 		base.Update(eu);
+		if (lifetimeTicks == 0) karmaMeter.reinforceAnimation = 0;
 		//normalizing lifetime progression
 		float progress = lifetimeTicks / (float)ticksToRotate;
 		//getting fancy curve that dictates rotation progression
@@ -52,7 +53,7 @@ public class KarmaRotator : UpdatableAndDeletable
 		if (lifetimeTicks > ticksToRotate)
 		{
 			slatedForDeletetion = true;
-            karmaMeter.reinforceAnimation = 0;
+			karmaSprite.rotation = 0;
         }
 	}
 }

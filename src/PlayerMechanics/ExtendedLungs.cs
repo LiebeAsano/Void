@@ -1,6 +1,5 @@
 ﻿using System;
 using VoidTemplate.Useful;
-using static VoidTemplate.VoidEnums;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -29,6 +28,18 @@ internal static class ExtendedLungs
             }
             else
                 self.slugcatStats.lungsFac = 0.2f;
+        }
+        if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        {
+            if (!Utils.IsViyStoryCampaign(self.room.game))
+            {
+                self.slugcatStats.lungsFac = 0f;
+            }
+            else
+            {
+
+                self.slugcatStats.lungsFac = 0.2f;
+            }
         }
     }
 }

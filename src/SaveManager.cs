@@ -200,7 +200,7 @@ public static class SaveManager
 		const string SaveFolder = "modsavedata";
 		static string PathToSaves()
 		{
-			string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "LastWish");
+			string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "lastwish");
 			Directory.CreateDirectory(path);
 			return path;
 		}

@@ -7,6 +7,7 @@ public static class PlayerSpawnManager
 	public static void ApplyHooks()
 	{
 		On.Player.Update += Player_Update;
+		//On.RainWorldGame.Update += RainWorldGame_Update;
 	}
 
 	private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
@@ -66,5 +67,15 @@ public static class PlayerSpawnManager
 		}
 	}
 
-	#endregion
+    static bool prevPressed = false;
+    private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
+    {
+        orig(self);
+        if (Input.GetKey(KeyCode.H) && !prevPressed)
+        {
+            _ = new VoidTemplate.Objects.KarmaRotator(self.Players[0].Room.realizedRoom);
+        }
+        prevPressed = Input.GetKey(KeyCode.H);
+    }
+    #endregion
 }

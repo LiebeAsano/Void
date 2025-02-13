@@ -219,7 +219,13 @@ public static class SaveManager
 			string path = FullPathOfSaveProperty(id);
 			if (!File.Exists(path)) return defaultValue;
 			string rawData = File.ReadAllText(path);
-			Dictionary<int, T>? dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(rawData);
+			Dictionary<int, T>? dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(rawData, new JsonSerializerSettings
+			{
+				Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+				{
+                    args.ErrorContext.Handled = true;
+                }
+			});
 			if (dataPerSave is null
 				|| !dataPerSave.TryGetValue(slot, out T result))
 				return defaultValue;
@@ -239,7 +245,13 @@ public static class SaveManager
 			Dictionary<int, T>? dataPerSave = null;
 
 			if (File.Exists(path))
-				dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(File.ReadAllText(path));
+				dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(File.ReadAllText(path), new JsonSerializerSettings
+                {
+                    Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                });
 
 			if (dataPerSave is null)
 			{

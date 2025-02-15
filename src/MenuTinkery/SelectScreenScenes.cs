@@ -28,7 +28,8 @@ internal static class SelectScreenScenes
 			&& page2.slugcatNumber == Void)
 		{
 			SaveState save = RWCustom.Custom.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
-			ExternalSaveData.VoidDead = save.GetVoidCatDead(); 
+			ExternalSaveData.VoidDead = save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10;
+			ExternalSaveData.VoidKarma11 = page2.saveGameData.karmaCap == 10;
             if (save.GetVoidCatDead() && page2.saveGameData.karmaCap == 10) self.sceneID = KarmaDeath11;
 			else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
 			else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = SelectEnding11Scene;

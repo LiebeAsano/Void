@@ -123,7 +123,7 @@ public static class SaveManager
 	{
 		save.miscWorldSaveData.GetSlugBaseData().Set(voidCatDead, value);
 		ExternalSaveData.VoidDead = value;
-	}
+    }
 	public static bool GetVoidMeetMoon(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMeetMoon, out bool dead) && dead;
 	public static void SetVoidMeetMoon(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMeetMoon, value);
 	public static bool GetEndingEncountered(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(endingDone, out bool done) && done;
@@ -272,7 +272,15 @@ public static class SaveManager
 			get => GetData(VoidDeadString, false);
 			set => SetData(VoidDeadString, value);
 		}
-	}
+
+		private const string VoidKarma11String = "voidkarma11";
+        public static bool VoidKarma11
+        {
+            get => GetData(VoidKarma11String, false);
+            set => SetData(VoidKarma11String, value);
+        }
+
+    }
 
 
 }

@@ -5,6 +5,7 @@ using RWCustom;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
@@ -29,9 +30,7 @@ namespace VoidTemplate.PlayerMechanics
 				c.Emit(OpCodes.Ldarg_1);
 				c.EmitDelegate<Func<float, Spear, SharedPhysics.CollisionResult, float>>((float orig, Spear self, SharedPhysics.CollisionResult result) =>
 				{
-					if (self.thrownBy is Scavenger && result.obj is Player p && p.IsVoid()) return 0.9f;
-					if (self.thrownBy is Creature && result.obj is Player p2 && p2.IsViy()) return 0.4f;
-
+					if ((self.thrownBy is Scavenger || self.thrownBy is Player) && result.obj is Player p && p.IsVoid() && (p.KarmaCap == 10 || ExternalSaveData.VoidKarma11)) return 0.9f;
                     return orig;
 				});
 			}
@@ -46,17 +45,15 @@ namespace VoidTemplate.PlayerMechanics
 				c.Emit(OpCodes.Ldloc_3);
 				c.EmitDelegate<Func<double, Player, double>>((double orig, Player p) =>
 				{
-					if (p.IsVoid() && p.KarmaCap == 10)
+					if (p.IsVoid() && (p.KarmaCap == 10 || ExternalSaveData.VoidKarma11))
 						return 1.25;
-					else if (p.IsViy()) return 2.5;
 					else
 						return orig;
 				});
 			}
 			else
 				logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(HealthSpear)}.{nameof(Spear_HitSomething)}: match for permanent damage tracking failed");
-		}
-		*/
+		}*/
 
         const float SecondsForDelayedDeath = 1f;
         static int TicksForDelayedDeath => (int)(SecondsForDelayedDeath * TicksPerSecond);

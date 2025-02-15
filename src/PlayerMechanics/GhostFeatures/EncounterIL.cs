@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VoidTemplate.OptionInterface;
+using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures
@@ -68,8 +69,8 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 				if (ghostId == MoreSlugcatsEnums.GhostID.MS)
 				{
 					saveState.deathPersistentSaveData.karmaCap = 10;
-					//saveState.cycleNumber = 0;
-				}
+					ExternalSaveData.VoidKarma11 = true;
+                }
 				else
 				{
 					saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + OptionAccessors.EchoDeathCycle);

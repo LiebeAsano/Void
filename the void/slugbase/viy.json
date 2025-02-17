@@ -79,7 +79,7 @@
 			}
 		},
 		"title_card": "Void_Title_Card",
-		"sleep_scene": "Sleep_Void",
+		"sleep_scene": "sleep_viy",
 		"select_menu_scene": "karma_death_void_karma11",
 		"death_scene": "Death_Void",
 		"starve_scene": "Death_Void",

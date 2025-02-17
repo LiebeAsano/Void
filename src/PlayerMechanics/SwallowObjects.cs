@@ -15,6 +15,7 @@ internal static class SwallowObjects
     public static void Hook()
     {
         On.Player.SwallowObject += Player_SwallowObject;
+        On.Player.Regurgitate += Player_Regurgitate;
         On.Player.GrabUpdate += Player_GrabUpdate;
     }
 
@@ -62,117 +63,49 @@ internal static class SwallowObjects
             {
                 if (QuarterFoodObjects.Contains(grabbed.GetType()))
                 {
-
-                    orig(self, grasp);
-
-                    if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                    {
-                        if (self.KarmaCap != 10)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            if (!self.IsViy())
-                                self.AddQuarterFood();
-                        }
-                        else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            if (!self.IsViy())
-                                self.AddQuarterFood();
-                        }
-                        if (self.room.game.IsArenaSession && !self.IsViy())
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            self.AddFood(1);
-                        }
-                    }
-
+                    HandleQuarterFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
                 else if (FullPinFoodObjects.Contains(grabbed.GetType()))
                 {
-
-                    orig(self, grasp);
-
-                    if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                    {
-                        if (self.KarmaCap != 10)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
-                                self.AddFood(2);
-                            else
-                                self.AddFood(1);
-                        }
-                        else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            if (OptionInterface.OptionAccessors.SimpleFood)
-                                self.AddFood(2);
-                            else
-                                self.AddFood(1);
-                        }
-                    }
-
+                    HandleFullPinFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
                 else if (TwoFullPinFoodObjects.Contains(grabbed.GetType()))
                 {
-
-                    orig(self, grasp);
-
-                    if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                    {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
-                            self.AddFood(4);
-                        else
-                            self.AddFood(2);
-                    }
-
+                    HandleTwoFullPinFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
                 else if (HalfFoodObjects.Contains(grabbed.GetType()))
                 {
-
+                    HandleHalfFood(orig, self, grasp, abstractGrabbed);
+                    return;
+                }
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                {
                     orig(self, grasp);
 
-                    if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-                    {
-                        if (self.KarmaCap != 10)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            if (!self.IsViy())
-                                if (OptionInterface.OptionAccessors.SimpleFood || self.room.game.IsArenaSession)
-                                    self.AddFood(1);
-                                else
-                                {
-                                    self.AddQuarterFood();
-                                    self.AddQuarterFood();
-                                }
-                        }
-                        else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                        {
-                            self.objectInStomach.Destroy();
-                            self.objectInStomach = null;
-                            if (!self.IsViy())
-                                if (OptionInterface.OptionAccessors.SimpleFood)
-                                self.AddFood(1);
-                                else
-                                {
-                                    self.AddQuarterFood();
-                                    self.AddQuarterFood();
-                                }
-                        }
-                    }
+                    game.GetStorySession.saveState.SetVoidPearlSwallowed(true);
+
+                    self.objectInStomach.Destroy();
+                    self.objectInStomach = null;
 
                     return;
+                }
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))
+                {
+                    orig(self, grasp);
+
+                    game.GetStorySession.saveState.SetRotPearlSwallowed(true);
+
+                    self.objectInStomach.Destroy();
+                    self.objectInStomach = null;
+
+                    return;
+                }
+                else if (grasp < 0 || self.grasps[grasp] == null)
+                {
+
                 }
                 else if (self.KarmaCap != 10)
                 {
@@ -196,6 +129,134 @@ internal static class SwallowObjects
         orig(self, grasp);
     }
 
+    private static void HandleQuarterFood(On.Player.orig_SwallowObject orig, Player self, int grasp, AbstractPhysicalObject abstractGrabbed)
+    {
+        orig(self, grasp);
+
+        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
+        {
+            if (self.KarmaCap != 10)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                if (!self.IsViy())
+                    self.AddQuarterFood();
+            }
+            else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                if (!self.IsViy())
+                    self.AddQuarterFood();
+            }
+            if (self.room.game.IsArenaSession && !self.IsViy())
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                self.AddFood(1);
+            }
+        }
+    }
+
+    private static void HandleFullPinFood(On.Player.orig_SwallowObject orig, Player self, int grasp, AbstractPhysicalObject abstractGrabbed)
+    {
+        orig(self, grasp);
+
+        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
+        {
+            if (self.KarmaCap != 10)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                    self.AddFood(2);
+                else
+                    self.AddFood(1);
+            }
+            else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                if (OptionInterface.OptionAccessors.SimpleFood)
+                    self.AddFood(2);
+                else
+                    self.AddFood(1);
+            }
+        }
+    }
+
+    private static void HandleTwoFullPinFood(On.Player.orig_SwallowObject orig, Player self, int grasp, AbstractPhysicalObject abstractGrabbed)
+    {
+        orig(self, grasp);
+
+        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
+        {
+            self.objectInStomach.Destroy();
+            self.objectInStomach = null;
+            if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                self.AddFood(4);
+            else
+                self.AddFood(2);
+        }
+    }
+
+    private static void HandleHalfFood(On.Player.orig_SwallowObject orig, Player self, int grasp, AbstractPhysicalObject abstractGrabbed)
+    {
+        orig(self, grasp);
+
+        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
+        {
+            if (self.KarmaCap != 10)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                if (!self.IsViy())
+                    if (OptionInterface.OptionAccessors.SimpleFood || self.room.game.IsArenaSession)
+                        self.AddFood(1);
+                    else
+                    {
+                        self.AddQuarterFood();
+                        self.AddQuarterFood();
+                    }
+            }
+            else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+                if (!self.IsViy())
+                    if (OptionInterface.OptionAccessors.SimpleFood)
+                        self.AddFood(1);
+                    else
+                    {
+                        self.AddQuarterFood();
+                        self.AddQuarterFood();
+                    }
+            }
+        }
+    }
+
+    public class AbstractVoidPearl : DataPearl.AbstractDataPearl
+    {
+        public AbstractVoidPearl(World world, PhysicalObject realizedObject, WorldCoordinate pos, EntityID ID, int originRoom, int placedObjectIndex, PlacedObject.ConsumableObjectData consumableData) : base(world, VoidEnums.AbstractObjectTypeID.LWVoid, realizedObject, pos, ID, originRoom, placedObjectIndex, consumableData, VoidEnums.PearlID.LWVoid)
+        {
+        }
+    }
+
+    private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
+    {
+
+        var game = self.abstractCreature.world.game;
+
+        if (self.SlugCatClass == VoidEnums.SlugcatID.Void)
+        {
+            if (game.GetStorySession.saveState.GetVoidPearlSwallowed())
+            {
+                self.objectInStomach = new AbstractVoidPearl(self.room.world, null, self.room.GetWorldCoordinate(self.mainBodyChunk.pos), self.room.game.GetNewID(), -1, -1, null);
+                game.GetStorySession.saveState.SetVoidPearlSwallowed(false);
+            }
+        }
+        orig(self);
+    }
     private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
     {
         if (self.SlugCatClass == VoidEnums.SlugcatID.Void || self.SlugCatClass == VoidEnums.SlugcatID.Viy)
@@ -592,18 +653,18 @@ internal static class SwallowObjects
                 else if (!ModManager.MMF || self.input[0].y == 0 || self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
                 {
                     self.swallowAndRegurgitateCounter++;
-                    if ((self.objectInStomach != null || self.isGourmand || (ModManager.MSC && self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)) && self.swallowAndRegurgitateCounter > 110)
+                    if ((self.objectInStomach != null || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110)
                     {
                         bool flag6 = false;
-                        if (self.isGourmand && self.objectInStomach == null)
+                        if (self.IsVoid() && self.objectInStomach == null)
                         {
                             flag6 = true;
                         }
-                        if (!flag6 || (flag6 && self.FoodInStomach >= 1))
+                        if (!flag6 || (flag6 && self.FoodInStomach >= 9))
                         {
                             if (flag6)
                             {
-                                self.SubtractFood(1);
+                                self.SubtractFood(9);
                             }
                             self.Regurgitate();
                         }

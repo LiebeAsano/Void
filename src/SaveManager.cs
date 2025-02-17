@@ -131,11 +131,19 @@ public static class SaveManager
 	public static int GetVoidExtraCycles(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(voidExtraCycles, out int extraCycles) ? extraCycles : 0;
 	public static void SetVoidExtraCycles(this SaveState save, int value) => save.deathPersistentSaveData.GetSlugBaseData().Set(voidExtraCycles, value);
 
+    //Pearls
 
+    private const string voidPearlSwallowed = uniqueprefix + "VoidPearlSwallowed";
+    private const string rotPearlSwallowed = uniqueprefix + "RotPearlSwallowed";
 
+    public static bool GetVoidPearlSwallowed(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidPearlSwallowed, out bool voidpearl) && voidpearl;
+    public static void SetVoidPearlSwallowed(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidPearlSwallowed, value);
 
-	#region Dreams scheduled/shown
-	private const string dream = "Dream";
+    public static bool GetRotPearlSwallowed(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(rotPearlSwallowed, out bool rotpearl) && rotpearl;
+    public static void SetRotPearlSwallowed(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(rotPearlSwallowed, value);
+
+    #region Dreams scheduled/shown
+    private const string dream = "Dream";
 	public enum Dream
 	{
 		None,

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -56,7 +57,7 @@ internal static class CentipedeResist
             if (self.Red)
             {
                 int RandomDeath = UnityEngine.Random.Range(0, 2);
-                if ((shockObj as Player).KarmaCap == 10)
+                if ((shockObj as Player).KarmaCap == 10 || ExternalSaveData.VoidKarma11)
                 {
                     if (RandomDeath == 0)
                     {
@@ -94,6 +95,10 @@ internal static class CentipedeResist
                 else if (shockObj.TotalMass * 2 < self.TotalMass)
                 {
                     int NumberDeath = (shockObj as Player).KarmaCap;
+                    if (ExternalSaveData.VoidKarma11)
+                    {
+                        NumberDeath = 10;
+                    }
                     int RandomDeath = UnityEngine.Random.Range(0, 20);
                     if (NumberDeath < 5)
                     {
@@ -214,6 +219,10 @@ internal static class CentipedeResist
                 else if (shockObj.TotalMass < self.TotalMass)
                 {
                     int NumberDeath = (shockObj as Player).KarmaCap;
+                    if (ExternalSaveData.VoidKarma11)
+                    {
+                        NumberDeath = 10;
+                    }
                     int RandomDeath = UnityEngine.Random.Range(0, 10);
                     if (NumberDeath < 5)
                     {

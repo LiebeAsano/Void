@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -19,6 +20,10 @@ internal static class ExplosiveResist
         if (self is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void && type == Creature.DamageType.Explosion)
         {
             int Karma = player.KarmaCap;
+            if (ExternalSaveData.VoidKarma11)
+            {
+                Karma = 10;
+            }
             float StunResist = 1f - 0.035f * Karma;
             float DamageResist = 1f - 0.035f * Karma;
             stunBonus *= StunResist;

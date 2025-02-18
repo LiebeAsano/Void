@@ -3,6 +3,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
 using VoidTemplate.MenuTinkery;
+using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
@@ -56,7 +57,8 @@ internal static class FoodChange
                 var game = self.room.game;
                 if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void 
 				&& ((self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10 
-				|| self.room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8))
+				|| self.room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+				|| ExternalSaveData.VoidKarma11)
 				{
 					return 6;
 				}
@@ -75,7 +77,7 @@ internal static class FoodChange
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
 		orig(self, saveStateNumber, game);
-        if (saveStateNumber == VoidEnums.SlugcatID.Void && (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 8))
+        if (saveStateNumber == VoidEnums.SlugcatID.Void && (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 8 || ExternalSaveData.VoidKarma11))
         {
             self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
             self.characterStats.maxFood = 9;

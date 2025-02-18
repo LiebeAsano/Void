@@ -112,11 +112,11 @@ namespace VoidTemplate.PlayerMechanics
                             {
                                 player.playerState.permanentDamageTracking += (double)(num / player.Template.baseDamageResistance);
                             }
-                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10)
+                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
                             {
                                 player.Die();
                             }
-                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && player.KarmaCap == 10)
+                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && (player.KarmaCap == 10 || ExternalSaveData.VoidKarma11))
                             {
                                 player.Die();
                             }

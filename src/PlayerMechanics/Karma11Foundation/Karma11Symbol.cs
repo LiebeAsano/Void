@@ -37,7 +37,7 @@ internal static class Karma11Symbol
 	private static SaveState PlayerProgression_GetOrInitiateSaveState(On.PlayerProgression.orig_GetOrInitiateSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber, RainWorldGame game, ProcessManager.MenuSetup setup, bool saveAsDeathOrQuit)
 	{
 		SaveState result = orig(self, saveStateNumber, game, setup, saveAsDeathOrQuit);
-		if (saveStateNumber == SlugcatID.Void)
+		if (saveStateNumber == SlugcatID.Void || saveStateNumber == SlugcatID.Viy)
 		{
 			currentKarmaTokens = (ushort)result.GetKarmaToken();
         }

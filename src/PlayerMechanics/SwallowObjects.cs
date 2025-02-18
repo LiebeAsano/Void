@@ -8,6 +8,7 @@ using UnityEngine;
 using VoidTemplate.Oracles;
 using VoidTemplate.Useful;
 using static MonoMod.InlineRT.MonoModRule;
+using static VoidTemplate.SaveManager;
 namespace VoidTemplate.PlayerMechanics;
 
 internal static class SwallowObjects
@@ -81,7 +82,7 @@ internal static class SwallowObjects
                     HandleHalfFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
-                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void") && self.KarmaCap != 10)
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void") && self.KarmaCap != 10 && !self.IsViy() && !ExternalSaveData.VoidKarma11)
                 {
                     orig(self, grasp);
 
@@ -92,7 +93,7 @@ internal static class SwallowObjects
 
                     return;
                 }
-                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot") && self.KarmaCap != 10)
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot") && self.KarmaCap != 10 && !self.IsViy() && !ExternalSaveData.VoidKarma11)
                 {
                     orig(self, grasp);
 
@@ -103,7 +104,7 @@ internal static class SwallowObjects
 
                     return;
                 }
-                else if (self.KarmaCap != 10)
+                else if (self.KarmaCap != 10 && !self.IsViy() && !ExternalSaveData.VoidKarma11)
                 {
                     if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl && hasMark &&
                         self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
@@ -131,7 +132,7 @@ internal static class SwallowObjects
 
         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
         {
-            if (self.KarmaCap != 10)
+            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
@@ -160,7 +161,7 @@ internal static class SwallowObjects
 
         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
         {
-            if (self.KarmaCap != 10)
+            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
@@ -202,7 +203,7 @@ internal static class SwallowObjects
 
         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
         {
-            if (self.KarmaCap != 10)
+            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;

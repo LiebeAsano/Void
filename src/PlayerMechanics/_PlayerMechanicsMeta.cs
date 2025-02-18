@@ -42,5 +42,6 @@ public static class _PlayerMechanicsMeta
 		SaintKarmaImmunity.Hook();
 		SwallowObjects.Hook();
 		ThrowObject.Hook();
+		VoidViolence.Hook();
 	}
 }

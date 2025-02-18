@@ -5,6 +5,7 @@ using UnityEngine;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.Useful;
 using static Room;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate;
 
@@ -165,10 +166,69 @@ internal class DrawSprites
 					}
 				}
 			}
-			if (sprite.element.name.StartsWith("Head"))
+            if (ExternalSaveData.VoidKarma11)
+            {
+                if (sLeaser.sprites[2] is TriangleMesh tail)
+                {
+                    tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
+                    tail.color = new(1f, 0.86f, 0f);
+                    /*
+                    Vector2 vector = Vector2.Lerp(self.drawPositions[0, 1], self.drawPositions[0, 0], timeStacker);
+                    Vector2 vector2 = Vector2.Lerp(self.drawPositions[1, 1], self.drawPositions[1, 0], timeStacker);
+                    Vector2 vector4 = (vector2 * 3f + vector) / 4f;
+                    Array.Resize(ref self.tail, self.tail.Length + 1);
+                    float d2 = 0f;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Vector2 vector5 = Vector2.Lerp(self.tail[i].lastPos, self.tail[i].pos, timeStacker);
+                        Vector2 normalized = (vector5 - vector4).normalized;
+                        Vector2 a = Custom.PerpendicularVector(normalized);
+                        float d3 = Vector2.Distance(vector5, vector4) / 5f;
+                        if (i == 0)
+                        {
+                            d3 = 0f;
+                        }
+
+                        (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4, vector4 - a * d2 * 1.5f + normalized * d3 - camPos);
+                        (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 1, vector4 + a * d2 * 1.5f + normalized * d3 - camPos);
+                        if (i < 3)
+                        {
+                            (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 2, vector5 - a * self.tail[i].StretchedRad * 1.5f - normalized * d3 - camPos);
+                            (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 3, vector5 + a * self.tail[i].StretchedRad * 1.5f - normalized * d3 - camPos);
+                        }
+                        else
+                        {
+                            (sLeaser.sprites[2] as TriangleMesh).MoveVertice(i * 4 + 2, vector5 - camPos);
+                        }
+                        vector4 = vector5;
+                    }
+                    */
+                    for (var i = tail.vertices.Length - 1; i >= 0; i--)
+                    {
+                        var perc = i / 2 / (float)(tail.vertices.Length / 2);
+
+                        Vector2 uv;
+                        if (i % 2 == 0)
+                            uv = new Vector2(perc, 0f);
+                        else if (i < tail.vertices.Length - 1)
+                            uv = new Vector2(perc, 1f);
+                        else
+                            uv = new Vector2(1f, 0f);
+
+                        uv.x = Mathf.Lerp(tail.element.uvBottomLeft.x, tail.element.uvTopRight.x, uv.x);
+                        uv.y = Mathf.Lerp(tail.element.uvBottomLeft.y, tail.element.uvTopRight.y, uv.y);
+
+                        tail.UVvertices[i] = uv;  
+                    }
+
+                }
+            }
+            if (sprite.element.name.StartsWith("Head"))
 			{
 
-				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+                sprite.color = new(0f, 0f, 0.005f);
+
+                if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl && self.player.bodyMode != Player.BodyModeIndex.ZeroG && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
 				{
 					if (!self.player.input[0].jmp)
 					{
@@ -205,10 +265,15 @@ internal class DrawSprites
 					}
 				}
 			}
-			if (sprite.element.name.StartsWith("Face")
-				)
+			if (sprite.element.name.StartsWith("Face"))
 			{
-				BodyChunk body_chunk_0 = self.player.bodyChunks[0];
+
+                if (Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM && Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO)
+                {
+                    sprite.color = new(1f, 0.86f, 0f);
+                }
+
+                BodyChunk body_chunk_0 = self.player.bodyChunks[0];
 				BodyChunk body_chunk_1 = self.player.bodyChunks[1];
 
 				if (IsTouchingDiagonalCeiling(self.player) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
@@ -274,7 +339,27 @@ internal class DrawSprites
 					}
 				}
 			}
-		}
+            if (sprite.element.name.StartsWith("PlayerArm"))
+			{
+                sprite.color = new(0f, 0f, 0.005f);
+            }
+            if (sprite.element.name.StartsWith("OnTopOfTerrainHand"))
+			{
+                sprite.color = new(0f, 0f, 0.005f);
+            }
+            if (sprite.element.name.StartsWith("Body"))
+			{
+                sprite.color = new(0f, 0f, 0.005f);
+            }
+            if (sprite.element.name.StartsWith("Hips"))
+			{
+                sprite.color = new(0f, 0f, 0.005f);
+            }
+            if (sprite.element.name.StartsWith("Legs"))
+			{
+                sprite.color = new(0f, 0f, 0.005f);
+            }
+        }
 	}
 
 

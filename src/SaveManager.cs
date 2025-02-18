@@ -45,30 +45,22 @@ public static class SaveManager
 		var data = save.GetSlugBaseData();
 		if (!data.TryGet(KarmaToken, out int KarmaTokenAmount))
 		{
-			KarmaTokenAmount = 10;
-			data.Set(KarmaToken, 10);
+			if (ExternalSaveData.VoidDead && ExternalSaveData.VoidKarma11)
+			{
+                KarmaTokenAmount = 0;
+                data.Set(KarmaToken, 0);
+            }
+			else
+			{
+                KarmaTokenAmount = 10;
+                data.Set(KarmaToken, 10);
+            }
 		}
 		return KarmaTokenAmount;
 	}
 
 	private const string CycleToken = uniqueprefix + "CycleToken";
 
-	public static void SetCycleToken(this SaveState save, int amount) => save.deathPersistentSaveData.GetSlugBaseData().Set(CycleToken, amount);
-
-	public static int GetCycleToken(this SaveState save)
-	{
-		return save.deathPersistentSaveData.GetCycleToken();
-	}
-	public static int GetCycleToken(this DeathPersistentSaveData save)
-	{
-		var data = save.GetSlugBaseData();
-		if (!data.TryGet(CycleToken, out int CycleTokenAmount))
-		{
-			CycleTokenAmount = 10;
-			data.Set(CycleToken, 10);
-		}
-		return CycleTokenAmount;
-	}
 	public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
 
 	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);

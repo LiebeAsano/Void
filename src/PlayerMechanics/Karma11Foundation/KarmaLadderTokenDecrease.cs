@@ -115,8 +115,8 @@ internal static class KarmaLadderTokenDecrease
 	private static void RainWorldGame_GoToDeathScreen(On.RainWorldGame.orig_GoToDeathScreen orig, RainWorldGame self)
 	{
 		bool customLogic = false;
-		if (self.IsVoidStoryCampaign()
-			&& self.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
+		if ((self.IsVoidStoryCampaign() || self.IsViyStoryCampaign())
+            && self.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10
 			&& self.GetStorySession.saveState.GetKarmaToken() >= 0)
 		{
 			customLogic = true;

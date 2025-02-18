@@ -33,15 +33,6 @@ public static class PlayerSpawnManager
 				self.animation = Player.AnimationIndex.StandUp;
 			}
 		}
-		if (self.room is Room playerRoom2
-			&& playerRoom2.game.IsStorySession
-			&& playerRoom2.game.GetStorySession.saveStateNumber == VoidEnums.SlugcatID.Viy
-			&& playerRoom2.game.GetStorySession.saveState is SaveState save2
-			&& !save2.GetTeleportationDone())
-		{
-            save2.SetTeleportationDone(true);
-			save2.SetKarmaToken(0);
-        }
     }
 
 	#region minor helper functions

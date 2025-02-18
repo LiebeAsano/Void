@@ -81,7 +81,7 @@ internal static class SwallowObjects
                     HandleHalfFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
-                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void"))
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void") && self.KarmaCap != 10)
                 {
                     orig(self, grasp);
 
@@ -92,7 +92,7 @@ internal static class SwallowObjects
 
                     return;
                 }
-                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot"))
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot") && self.KarmaCap != 10)
                 {
                     orig(self, grasp);
 
@@ -102,10 +102,6 @@ internal static class SwallowObjects
                     self.objectInStomach = null;
 
                     return;
-                }
-                else if (grasp < 0 || self.grasps[grasp] == null)
-                {
-
                 }
                 else if (self.KarmaCap != 10)
                 {
@@ -235,13 +231,6 @@ internal static class SwallowObjects
         }
     }
 
-    public class AbstractVoidPearl : DataPearl.AbstractDataPearl
-    {
-        public AbstractVoidPearl(World world, PhysicalObject realizedObject, WorldCoordinate pos, EntityID ID, int originRoom, int placedObjectIndex, PlacedObject.ConsumableObjectData consumableData) : base(world, VoidEnums.AbstractObjectTypeID.LWVoid, realizedObject, pos, ID, originRoom, placedObjectIndex, consumableData, VoidEnums.PearlID.LWVoid)
-        {
-        }
-    }
-
     private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
     {
 
@@ -251,8 +240,15 @@ internal static class SwallowObjects
         {
             if (game.GetStorySession.saveState.GetVoidPearlSwallowed())
             {
-                self.objectInStomach = new AbstractVoidPearl(self.room.world, null, self.room.GetWorldCoordinate(self.mainBodyChunk.pos), self.room.game.GetNewID(), -1, -1, null);
+                self.objectInStomach = new DataPearl.AbstractDataPearl(self.room.world, AbstractPhysicalObject.AbstractObjectType.DataPearl, null, new WorldCoordinate(self.room.abstractRoom.index, -1, -1, 0), self.room.game.GetNewID(), -1, -1, null, new DataPearl.AbstractDataPearl.DataPearlType("LW-void", false));
                 game.GetStorySession.saveState.SetVoidPearlSwallowed(false);
+                self.SaintStagger(720);
+            }
+            else if (game.GetStorySession.saveState.GetRotPearlSwallowed())
+            {
+                self.objectInStomach = new DataPearl.AbstractDataPearl(self.room.world, AbstractPhysicalObject.AbstractObjectType.DataPearl, null, new WorldCoordinate(self.room.abstractRoom.index, -1, -1, 0), self.room.game.GetNewID(), -1, -1, null, new DataPearl.AbstractDataPearl.DataPearlType("LW-rot", false));
+                game.GetStorySession.saveState.SetRotPearlSwallowed(false);
+                self.SaintStagger(720);
             }
         }
         orig(self);
@@ -404,7 +400,7 @@ internal static class SwallowObjects
                     {
                         self.spearOnBack.increment = true;
                     }
-                    else if ((num7 > -1 || self.objectInStomach != null || self.isGourmand) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
+                    else if ((num7 > -1 || self.objectInStomach != null || self.IsVoid()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
                     {
                         flag3 = true;
                     }
@@ -660,11 +656,11 @@ internal static class SwallowObjects
                         {
                             flag6 = true;
                         }
-                        if (!flag6 || (flag6 && self.FoodInStomach >= 9))
+                        if (!flag6 || (flag6 && self.FoodInStomach >= 3))
                         {
                             if (flag6)
                             {
-                                self.SubtractFood(9);
+                                self.SubtractFood(3);
                             }
                             self.Regurgitate();
                         }

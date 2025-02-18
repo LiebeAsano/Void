@@ -13,8 +13,6 @@ public static class VoidEnums
 		ConversationID.Register();
 		SlugcatID.Register();
 		ProcessID.Register();
-		PearlID.Register();
-        AbstractObjectTypeID.Register();
     }
 
 	public static class SceneID
@@ -192,26 +190,4 @@ public static class VoidEnums
 		}
 		public static ProcessManager.ProcessID TokenDecrease;
 	}
-
-	public static class PearlID
-	{
-        public static void Register()
-		{
-			LWVoid = new("LW-void", true);
-            LWRot = new("LW-rot", true);
-        }
-		public static DataPearl.AbstractDataPearl.DataPearlType LWVoid;
-        public static DataPearl.AbstractDataPearl.DataPearlType LWRot;
-    }
-
-    public static class AbstractObjectTypeID
-    {
-        public static void Register()
-        {
-            LWVoid = new("LW-void", true);
-            LWRot = new("LW-rot", true);
-        }
-        public static AbstractPhysicalObject.AbstractObjectType LWVoid;
-        public static AbstractPhysicalObject.AbstractObjectType LWRot;
-    }
 }

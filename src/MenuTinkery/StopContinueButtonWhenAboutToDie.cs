@@ -32,7 +32,7 @@ internal static class StopContinueButtonWhenAboutToDie
 	private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, Menu.SleepAndDeathScreen self, Menu.KarmaLadderScreen.SleepDeathScreenDataPackage package)
 	{
 		orig(self, package);
-		if(package.characterStats.name == VoidEnums.SlugcatID.Void 
+		if(package.characterStats.name == VoidEnums.SlugcatID.Void
 			&& self.karma.x == 1
 			&& self.IsDeathScreen)
 		{

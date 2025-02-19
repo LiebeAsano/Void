@@ -29,11 +29,11 @@ public static class AntiSpiderStun
 			{
 				if (maggot.stuckInChunk.owner is Player p && (p.IsVoid() || p.IsViy()))
 				{
-					if (p.IsViy())
-					{
-                        return (int)((float)orig * 0);
-                    }
 					var karma = p.KarmaCap;
+					if (SaveManager.ExternalSaveData.VoidKarma11)
+					{
+                        return (int)((float)orig * 0.1f);
+                    }
 					return (int)((float)orig * (1f - 0.09f * karma));
 				}
 				return orig;

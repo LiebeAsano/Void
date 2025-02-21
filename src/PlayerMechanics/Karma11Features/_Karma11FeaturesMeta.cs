@@ -6,6 +6,7 @@ internal static class _Karma11FeaturesMeta
 	{
 		EatMeatUpdate.Hook();
 		FoodChange.Hook();
+		Karma11Update.Hook();
 		NourishmentOfObjectEaten.Hook();
 	}
 }

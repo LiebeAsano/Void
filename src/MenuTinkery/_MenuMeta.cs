@@ -10,7 +10,8 @@ public static class _MenuMeta
 		DreamAssociatedSound.Startup();
 		JollyMenu.Hook();
         MenuStatisticsSound.Hook();
-		PermaDeathScreen.Hook();
+		MenuTitle.Hook();
+        PermaDeathScreen.Hook();
 		StopContinueButtonWhenAboutToDie.Hook();
     }
 }

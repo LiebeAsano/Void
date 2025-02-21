@@ -14,37 +14,38 @@ internal static class VoidViySwitch
 		On.Menu.SlugcatSelectMenu.SetSlugcatColorOrder += SlugcatSelectMenu_SetSlugcatColorOrder;
 	}
 
-	private static void SlugcatSelectMenu_SetSlugcatColorOrder(On.Menu.SlugcatSelectMenu.orig_SetSlugcatColorOrder orig, Menu.SlugcatSelectMenu self)
-	{
-		orig(self);
+    private static void SlugcatSelectMenu_SetSlugcatColorOrder(On.Menu.SlugcatSelectMenu.orig_SetSlugcatColorOrder orig, Menu.SlugcatSelectMenu self)
+    {
+        orig(self);
 
-		bool voidDead = SaveManager.ExternalSaveData.VoidDead;
-		bool voidKarma11 = SaveManager.ExternalSaveData.VoidKarma11;
+        bool voidDead = SaveManager.ExternalSaveData.VoidDead;
+        bool voidKarma11 = SaveManager.ExternalSaveData.VoidKarma11;
 
         self.slugcatColorOrder.RemoveAll(slugcat => slugcat == VoidEnums.SlugcatID.Void || slugcat == VoidEnums.SlugcatID.Viy);
 
+        int indexOfHunter = self.slugcatColorOrder.IndexOf(SlugcatStats.Name.Red);
+        if (indexOfHunter >= 0)
+        {
+            if (voidDead && voidKarma11)
+            {
+                self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Viy);
+            }
+            else
+            {
+                self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Void);
+            }
+        }
 
-		int indexOfHunter = self.slugcatColorOrder.IndexOf(SlugcatStats.Name.Red);
+        var selectedSlugcat = self.manager.rainWorld.progression.miscProgressionData.currentlySelectedSinglePlayerSlugcat;
+        int newIndex = self.slugcatColorOrder.IndexOf(selectedSlugcat);
 
-		if (indexOfHunter >= 0)
-		{
-			if (voidDead && voidKarma11)
-			{
-				self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Viy);
-			}
-			else
-			{
-				self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Void);
-			}
-		}
-
-		var selectedSlugcat = self.manager.rainWorld.progression.miscProgressionData.currentlySelectedSinglePlayerSlugcat;
-
-		if (!self.slugcatColorOrder.Contains(selectedSlugcat) && self.slugcatColorOrder.Count > 0
-			|| self.slugcatPageIndex < 0
-			|| self.slugcatPageIndex >= self.slugcatColorOrder.Count)
-		{
-			self.slugcatPageIndex = 0;
-		}
-	}
+        if (newIndex >= 0)
+        {
+            self.slugcatPageIndex = newIndex;
+        }
+        else
+        {
+            self.slugcatPageIndex = 0;
+        }
+    }
 }

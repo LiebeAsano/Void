@@ -63,7 +63,7 @@ internal static class PermaDeathScreen
 
 		if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
-			if ((screen.saveState.redExtraCycles) && screen.saveState.deathPersistentSaveData.karmaCap != 10)
+			if (screen.saveState.redExtraCycles && screen.saveState.deathPersistentSaveData.karmaCap != 10)
 			{
 				screen.ID = MoreSlugcatsEnums.ProcessID.KarmaToMinScreen;
 				needInsert = true;

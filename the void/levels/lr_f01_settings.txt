@@ -1,0 +1,11 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+Clouds: 0
+Grime: 0.1005322
+Palette: 24
+Effects: ZeroG-1-1018.888-330.9073, ZeroGSpecks-0.2087976-1016.042-280.3937, CorruptionSpores-0.05413254-1015.33-227.7458, SSSwarmers-0.1546644-1016.753-385.6896, LightBurn-0.1391973-1008.216-169.4063, 
+FadePalette: 33, 0, 0.157078, 0.5026603, 0, 0, 0
+WetTerrain: OFF

@@ -1,6 +1,7 @@
 Template: NONE
 DangerType: None
 Grime: 0
+BkgDroneVolume: 0
 RandomItemDensity: 0.6005319
 RandomItemSpearChance: 0.308265
 Palette: 23

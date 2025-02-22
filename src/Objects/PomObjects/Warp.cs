@@ -85,6 +85,28 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
                     p.room.RemoveObject(p);
                     p.PlaceInRoom(abstractRoom2.realizedRoom);
                     if (p.objectInStomach is not null) p.objectInStomach.world = world2;
+
+                    for(int i = 0; i < p.grasps.Length; i++)
+					{
+						var grasp = p.grasps[i];
+						if (grasp is null) continue;
+						if (grasp.grabbed is Creature)
+						{
+							p.grasps[i] = null;
+						}
+						else
+						{
+							var item = grasp.grabbed;
+							item.room.RemoveObject(item);
+							item.PlaceInRoom(abstractRoom2.realizedRoom);
+							var abstractItem = item.abstractPhysicalObject;
+							abstractItem.Room.RemoveEntity(abstractItem);
+							abstractItem.world = world2;
+							abstractItem.pos = worldCoordinate;
+							abstractRoom2.AddEntity(abstractItem);
+						
+						}
+					}
                 }
             }
 

@@ -145,7 +145,7 @@ static class PermadeathConditions
 				}
 			}
 			var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-            if (player.KarmaCap == 10) savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+            if (player.KarmaCap == 10) savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 2));
 			save.SetVoidCatDead(true);
 			save.redExtraCycles = true;
 			game.rainWorld.progression.SaveWorldStateAndProgression(false);
@@ -166,7 +166,7 @@ static class PermadeathConditions
 				&& game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
 			{
                 var savestate = game.GetStorySession.saveState;
-                savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+                savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 2));
 				savestate.SessionEnded(game, false, false);
             }
         }
@@ -190,7 +190,7 @@ static class PermadeathConditions
 		if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond)
 		{
             var savestate = self.world.game.GetStorySession.saveState;
-            session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+            session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 2));
             savestate.SessionEnded(self.world.game, false, false);
         }
 	}

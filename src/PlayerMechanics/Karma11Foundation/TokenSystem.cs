@@ -13,7 +13,7 @@ internal static class TokenSystem
                 && self.IsVoidStoryCampaign())
 			{
 				int karmaTokensAmount = saveState.GetKarmaToken();
-				karmaTokensAmount--;
+				karmaTokensAmount -= 2;
 				saveState.SetKarmaToken(karmaTokensAmount);
 				Karma11Symbol.currentKarmaTokens = (ushort)karmaTokensAmount;
 				if (karmaTokensAmount < 0) self.GoToRedsGameOver();

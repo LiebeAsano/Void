@@ -24,11 +24,13 @@ public static class _PlayerMechanicsMeta
 		ElectricSpearResist.Hook();
 		ExplosiveResist.Hook();
 		ExtendedLungs.Hook();
+		FastCrawl.Hook();
 		Grabability.Hook();
 		GraspSave.Hook();
 		HealthSpear.Hook();
 		HeavyCarry.Hook();
-		JellyResist.Hook();
+        ImmuneToFallDamage.Hook();
+        JellyResist.Hook();
 		JumpUnderWater.Hook();
 		KarmaFlowerChanges.Initiate();
 		LizardResist.Hook();
@@ -37,6 +39,7 @@ public static class _PlayerMechanicsMeta
 		NoVisualMalnourishment.Hook();
 		PunishNonPermaDeath.Hook();
 		RockHitSomething.Hook();
+		CrawlJump.Hook();
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();
 		SaintKarmaImmunity.Hook();

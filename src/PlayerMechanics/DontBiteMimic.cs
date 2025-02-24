@@ -3,6 +3,7 @@ using MonoMod.Cil;
 using System;
 using UnityEngine;
 using VoidTemplate.Useful;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -18,16 +19,23 @@ internal static class DontBiteMimic
 		try
 		{
 			ILCursor c = new(il);
-			c.GotoNext(MoveType.After,
-				i => i.MatchCallvirt<ClimbableVinesSystem>("VineCurrentlyClimbable"));
-			c.Emit(OpCodes.Ldarg_0);
-			c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
+
+			if (c.TryGotoNext(MoveType.After,
+				i => i.MatchCallvirt<ClimbableVinesSystem>("VineCurrentlyClimbable")))
 			{
-				if ((self.IsVoid() || self.IsViy()) &&
-					self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
-					return false;
-				return re;
-			});
+				c.Emit(OpCodes.Ldarg_0);
+				c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
+				{
+					if ((self.IsVoid() || self.IsViy()) &&
+						self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
+						return false;
+					return re;
+				});
+			}
+			else
+			{
+                LogExErr("&IL.Player.UpdateAnimation += DontBite_Mimic error IL Hook");
+            }
 		}
 		catch (Exception e)
 		{

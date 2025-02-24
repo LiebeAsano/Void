@@ -11,7 +11,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery
 {
-    internal class MenuTitle
+    internal static class MenuTitle
     {
         public static void Hook()
         {
@@ -59,7 +59,7 @@ namespace VoidTemplate.MenuTinkery
                     }
                     else
                     {
-                        return "VoidMainTitleBevel";
+                        return "VoidMainTitleShadow";
                     }
                 });
             }

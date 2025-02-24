@@ -34,7 +34,7 @@ internal static class SaintKarmaImmunity
 			//    if victim is the void stun for 5 seconds
 			//    label2>
 			//}
-			c.GotoNext(MoveType.After,
+			c.TryGotoNext(MoveType.After,
 				i => i.MatchLdcI4(1),
 				i => i.MatchStloc(15),
 				i => i.MatchLdloc(18),
@@ -46,7 +46,7 @@ internal static class SaintKarmaImmunity
 			c.EmitDelegate<Func<Creature, bool>>((self) =>
 				self is Player player && (player.IsVoid() || player.IsViy() || player.room.game.IsArenaSession && OptionAccessors.ArenaAscensionStun));
 			c.Emit(OpCodes.Brtrue_S, label);
-			c.GotoNext(MoveType.After,
+			c.TryGotoNext(MoveType.After,
 				i => i.MatchCallvirt<Creature>("Die"));
 			c.Emit(OpCodes.Br, label2);
 			c.MarkLabel(label);

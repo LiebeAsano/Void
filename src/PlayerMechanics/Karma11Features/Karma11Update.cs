@@ -12,15 +12,15 @@ internal static class Karma11Update
 {
     public static void Hook()
     {
-        On.StoryGameSession.ctor += StoryGameSession_ctor;
+        On.Player.ctor += Player_ctor;
     }
 
-    private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
-        orig(self, saveStateNumber, game);
-        if (saveStateNumber == VoidEnums.SlugcatID.Void && game.IsVoidStoryCampaign())
+        orig(self, abstractCreature, world);
+        if (self.IsVoid())
         {
-            if (self.saveState.deathPersistentSaveData.karma == 10)
+            if (self.KarmaCap == 10)
             {
                 ExternalSaveData.VoidKarma11 = true;
             }

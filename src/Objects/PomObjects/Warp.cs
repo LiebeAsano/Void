@@ -1,7 +1,4 @@
-﻿using Expedition;
-using Kittehface.Framework20;
-using Menu;
-using MoreSlugcats;
+﻿using MoreSlugcats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,6 +83,14 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
                     p.PlaceInRoom(abstractRoom2.realizedRoom);
                     
                     if (p.objectInStomach is not null) p.objectInStomach.world = world2;
+
+                    foreach (Creature.Grasp grasp in p.grasps)
+                    {
+                        if(grasp is not null)
+						{
+							abstractRoom2.AddEntity(grasp.grabbed.abstractPhysicalObject);
+						}
+                    }
                 }
             }
 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.Useful;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -22,7 +23,7 @@ internal static class JumpUnderWater
         if (self.animation == Player.AnimationIndex.DeepSwim && (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy))
         {
             int karmaCap = self.KarmaCap;
-            if (self.IsViy())
+            if (self.IsViy() || ExternalSaveData.VoidKarma11)
             {
                 karmaCap = 10;
             }

@@ -280,6 +280,12 @@ public static class SaveManager
             set => SetData(VoidKarma11String, value);
         }
 
+        private const string ViyLungExtendedString = "viylungextended";
+        public static bool ViyLungExtended
+        {
+            get => GetData(ViyLungExtendedString, false);
+            set => SetData(ViyLungExtendedString, value);
+        }
     }
 
 

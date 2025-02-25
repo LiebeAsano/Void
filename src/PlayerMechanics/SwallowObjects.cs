@@ -18,7 +18,10 @@ internal static class SwallowObjects
         On.Player.SwallowObject += Player_SwallowObject;
         On.Player.Regurgitate += Player_Regurgitate;
         On.Player.GrabUpdate += Player_GrabUpdate;
+        On.SlugcatHand.Update += SlugcatHand_Update;
     }
+
+
 
     private static readonly HashSet<Type> HalfFoodObjects =
         [
@@ -115,9 +118,6 @@ internal static class SwallowObjects
 
                     orig(self, grasp);
 
-                    self.objectInStomach.Destroy();
-                    self.objectInStomach = null;
-
                     return;
                 }
             }
@@ -132,14 +132,7 @@ internal static class SwallowObjects
 
         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
         {
-            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
-            {
-                self.objectInStomach.Destroy();
-                self.objectInStomach = null;
-                if (!self.IsViy())
-                    self.AddQuarterFood();
-            }
-            else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+            if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
@@ -161,20 +154,11 @@ internal static class SwallowObjects
 
         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
         {
-            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+            if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
                 if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
-                    self.AddFood(2);
-                else
-                    self.AddFood(1);
-            }
-            else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-            {
-                self.objectInStomach.Destroy();
-                self.objectInStomach = null;
-                if (OptionInterface.OptionAccessors.SimpleFood)
                     self.AddFood(2);
                 else
                     self.AddFood(1);
@@ -203,25 +187,12 @@ internal static class SwallowObjects
 
         if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
         {
-            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+            if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
                 if (!self.IsViy())
                     if (OptionInterface.OptionAccessors.SimpleFood || self.room.game.IsArenaSession)
-                        self.AddFood(1);
-                    else
-                    {
-                        self.AddQuarterFood();
-                        self.AddQuarterFood();
-                    }
-            }
-            else if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-            {
-                self.objectInStomach.Destroy();
-                self.objectInStomach = null;
-                if (!self.IsViy())
-                    if (OptionInterface.OptionAccessors.SimpleFood)
                         self.AddFood(1);
                     else
                     {
@@ -243,13 +214,11 @@ internal static class SwallowObjects
             {
                 self.objectInStomach = new DataPearl.AbstractDataPearl(self.room.world, AbstractPhysicalObject.AbstractObjectType.DataPearl, null, new WorldCoordinate(self.room.abstractRoom.index, -1, -1, 0), self.room.game.GetNewID(), -1, -1, null, new DataPearl.AbstractDataPearl.DataPearlType("LW-void", false));
                 game.GetStorySession.saveState.SetVoidPearlSwallowed(false);
-                self.SaintStagger(720);
             }
             else if (game.GetStorySession.saveState.GetRotPearlSwallowed())
             {
                 self.objectInStomach = new DataPearl.AbstractDataPearl(self.room.world, AbstractPhysicalObject.AbstractObjectType.DataPearl, null, new WorldCoordinate(self.room.abstractRoom.index, -1, -1, 0), self.room.game.GetNewID(), -1, -1, null, new DataPearl.AbstractDataPearl.DataPearlType("LW-rot", false));
                 game.GetStorySession.saveState.SetRotPearlSwallowed(false);
-                self.SaintStagger(720);
             }
         }
         orig(self);
@@ -263,11 +232,11 @@ internal static class SwallowObjects
             {
                 self.slugOnBack.Update(eu);
             }
-            bool flag = ((self.input[0].y != 0 && self.input[0].x == 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl) 
-                || (self.input[0].x != 0 && self.input[0].y == 0 && self.bodyMode == Player.BodyModeIndex.WallClimb) 
-                || (self.input[0].x == 0 && self.input[0].y == 0 && !self.input[0].jmp && !self.input[0].thrw) 
-                || (ModManager.MMF && self.input[0].x == 0 && self.input[0].y == 1 && !self.input[0].jmp && !self.input[0].thrw 
-                && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam))) 
+            bool flag = ((self.input[0].y != 0 && self.input[0].x == 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                || (self.input[0].x != 0 && self.input[0].y == 0 && self.bodyMode == Player.BodyModeIndex.WallClimb)
+                || (self.input[0].x == 0 && self.input[0].y == 0 && !self.input[0].jmp && !self.input[0].thrw)
+                || (ModManager.MMF && self.input[0].x == 0 && self.input[0].y == 1 && !self.input[0].jmp && !self.input[0].thrw
+                && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam)))
                 && (self.mainBodyChunk.submersion < 0.5f);
             bool flag2 = false;
             bool flag3 = false;
@@ -612,7 +581,7 @@ internal static class SwallowObjects
                     self.eatCounter++;
                 }
             }
-            if (flag4 && self.input[0].y == 0 )
+            if (flag4 && self.input[0].y == 0)
             {
                 self.reloadCounter++;
                 if (self.reloadCounter > 40)
@@ -649,56 +618,86 @@ internal static class SwallowObjects
                 }
                 else if (!ModManager.MMF || self.input[0].y == 0 || self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
                 {
-                    self.swallowAndRegurgitateCounter++;
-                    if ((self.objectInStomach != null || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110)
+                    bool pearllore = false;
+                    if (self.abstractCreature.world.game.GetStorySession is not null)
                     {
-                        bool flag6 = false;
-                        if (self.IsVoid() && self.objectInStomach == null)
+                        var saveState = self.abstractCreature.world.game.GetStorySession.saveState;
+                        if (saveState.GetRotPearlSwallowed() || saveState.GetVoidPearlSwallowed())
                         {
-                            flag6 = true;
+                            pearllore = true;
                         }
-                        if (!flag6 || (flag6 && self.FoodInStomach >= 3))
-                        {
-                            if (flag6)
-                            {
-                                self.SubtractFood(3);
-                            }
-                            self.Regurgitate();
-                        }
-                        else
-                        {
-                            self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
-                            self.Stun(30);
-                        }
-                        if (self.spearOnBack != null)
-                        {
-                            self.spearOnBack.interactionLocked = true;
-                        }
-                        if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugOnBack != null)
-                        {
-                            self.slugOnBack.interactionLocked = true;
-                        }
-                        self.swallowAndRegurgitateCounter = 0;
                     }
-                    else if (self.objectInStomach == null && self.swallowAndRegurgitateCounter > 90)
+                    self.swallowAndRegurgitateCounter++;
+                    for (int num14 = 0; num14 < 2; num14++)
                     {
-                        for (int num13 = 0; num13 < 2; num13++)
+
+                        if (self.IsVoid() && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearllore))
                         {
-                            if (self.grasps[num13] != null && self.CanBeSwallowed(self.grasps[num13].grabbed))
+                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
                             {
-                                self.bodyChunks[0].pos += Custom.DirVec(self.grasps[num13].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;
-                                self.SwallowObject(num13);
-                                if (self.spearOnBack != null)
+                                if (self.KarmaCap == 10 || ExternalSaveData.VoidKarma11 || (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11 && self.FoodInStomach >= 3))
                                 {
-                                    self.spearOnBack.interactionLocked = true;
+                                    if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+                                    {
+                                        self.SubtractFood(1);
+                                        self.SaintStagger(240);
+                                    }
+                                    self.Regurgitate();
                                 }
-                                if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugOnBack != null)
+                                else
                                 {
-                                    self.slugOnBack.interactionLocked = true;
+                                    self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
+                                    self.Stun(60);
                                 }
-                                self.swallowAndRegurgitateCounter = 0;
-                                (self.graphicsModule as PlayerGraphics).swallowing = 20;
-                                break;
+                            }
+                            else
+                            {
+                                if (self.KarmaCap == 10 || ExternalSaveData.VoidKarma11 || (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11 && self.FoodInStomach >= 3))
+                                {
+                                    if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+                                    {
+                                        self.SubtractFood(3);
+                                        self.SaintStagger(720);
+                                    }
+                                    self.Regurgitate();
+
+                                }
+                                else
+                                {
+                                    self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
+                                    self.Stun(60);
+                                }
+                            }
+                            if (self.spearOnBack != null)
+                            {
+                                self.spearOnBack.interactionLocked = true;
+                            }
+                            if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugOnBack != null)
+                            {
+                                self.slugOnBack.interactionLocked = true;
+                            }
+                            self.swallowAndRegurgitateCounter = 0;
+                        }
+                        else if (self.swallowAndRegurgitateCounter > 90)
+                        {
+                            for (int num13 = 0; num13 < 2; num13++)
+                            {
+                                if (self.grasps[num13] != null && self.CanBeSwallowed(self.grasps[num13].grabbed))
+                                {
+                                    self.bodyChunks[0].pos += Custom.DirVec(self.grasps[num13].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;
+                                    self.SwallowObject(num13);
+                                    if (self.spearOnBack != null)
+                                    {
+                                        self.spearOnBack.interactionLocked = true;
+                                    }
+                                    if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugOnBack != null)
+                                    {
+                                        self.slugOnBack.interactionLocked = true;
+                                    }
+                                    self.swallowAndRegurgitateCounter = 0;
+                                    (self.graphicsModule as PlayerGraphics).swallowing = 20;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1028,6 +1027,48 @@ internal static class SwallowObjects
         else
         {
             orig(self, eu);
+        }
+    }
+    private static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)
+    {
+        orig(self);
+
+        if (self.owner.owner is Player player && player.IsVoid())
+        {
+            if (player.swallowAndRegurgitateCounter > 10)
+            {
+                int num3 = -1;
+                int num4 = 0;
+
+                while (num3 < 0 && num4 < 2)
+                {
+                    if (player.grasps[num4] != null && player.CanBeSwallowed(player.grasps[num4].grabbed))
+                    {
+                        num3 = num4;
+                    }
+                    num4++;
+                }
+
+                if (num3 == self.limbNumber || player.craftingObject)
+                {
+                    float num5 = Mathf.InverseLerp(10f, 90f, player.swallowAndRegurgitateCounter);
+
+                    if (num5 < 0.5f)
+                    {
+                        self.relativeHuntPos *= Mathf.Lerp(0.9f, 0.7f, num5 * 2f);
+                        self.relativeHuntPos.y += Mathf.Lerp(2f, 4f, num5 * 2f);
+                        self.relativeHuntPos.x *= Mathf.Lerp(1f, 1.2f, num5 * 2f);
+                    }
+                    else
+                    {
+                        (self.owner as PlayerGraphics).blink = 5;
+                        self.relativeHuntPos = new Vector2(0f, -4f) + Custom.RNV() * 2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5);
+
+                        (self.owner as PlayerGraphics).head.vel += Custom.RNV() * 2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5);
+                        player.bodyChunks[0].vel += Custom.RNV() * 0.2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5);
+                    }
+                }
+            }
         }
     }
 }

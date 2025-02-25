@@ -9,6 +9,7 @@ internal static class ExtendedLungs
 	public static void Hook()
 	{
 		On.Player.Update += Player_Update;
+        On.PlayerGraphics.Update += PlayerGraphics_Update;
     }
 
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
@@ -32,15 +33,30 @@ internal static class ExtendedLungs
         }
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
         {
-            if (!Utils.IsViyStoryCampaign(self.room.game))
+            if (ExternalSaveData.ViyLungExtended)
             {
-                self.slugcatStats.lungsFac = 0f;
+                self.slugcatStats.lungsFac = 0.0f;
             }
-            else
+            else if (Utils.IsViyStoryCampaign(self.abstractCreature.world.game))
             {
-
+                int random = UnityEngine.Random.Range(0, 10000);
+                if (random == 0)
+                {
+                    _ = new Objects.KarmaRotator(self.abstractCreature.Room.realizedRoom);
+                    ExternalSaveData.ViyLungExtended = true;
+                }
                 self.slugcatStats.lungsFac = 0.2f;
             }
+        }
+    }
+
+    private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
+    {
+        orig(self);
+        if (self.player.IsViy() && ExternalSaveData.ViyLungExtended)
+        {
+            self.breath = 0f;
+            self.lastBreath = 0f;
         }
     }
 }

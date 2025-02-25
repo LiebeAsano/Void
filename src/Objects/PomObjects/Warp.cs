@@ -71,11 +71,14 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 
             foreach (AbstractCreature absPly in overWorld.game.Players)
             {
-                world.GetAbstractRoom(absPly.pos).RemoveEntity(absPly);
-                absPly.world = world2;
                 WorldCoordinate worldCoordinate = new(abstractRoom2.index, 10, 10, -1);
-                absPly.pos = worldCoordinate;
-                abstractRoom2.AddEntity(absPly);
+
+				absPly.world.GetAbstractRoom(absPly.pos).RemoveEntity(absPly);
+                absPly.world = world2;
+				absPly.pos = worldCoordinate;
+				absPly.world.GetAbstractRoom(worldCoordinate).AddEntity(absPly);
+
+
                 if (absPly.realizedCreature is Player p
                     && p.room is not null)
                 {
@@ -88,7 +91,11 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
                     {
                         if(grasp is not null)
 						{
-							abstractRoom2.AddEntity(grasp.grabbed.abstractPhysicalObject);
+							var APO = grasp.grabbed.abstractPhysicalObject;
+							APO.world.GetAbstractRoom(APO.pos).RemoveEntity(APO);
+							APO.world = world2;
+							APO.pos = worldCoordinate;
+							APO.world.GetAbstractRoom (worldCoordinate).AddEntity(APO);
 						}
                     }
                 }

@@ -286,6 +286,14 @@ public static class SaveManager
             get => GetData(ViyLungExtendedString, false);
             set => SetData(ViyLungExtendedString, value);
         }
+
+        private const string ViyPoisonImmuneString = "viypoisonimmune";
+        public static bool ViyPoisonImmune
+        {
+            get => GetData(ViyPoisonImmuneString, false);
+            set => SetData(ViyPoisonImmuneString, value);
+        }
+
     }
 
 

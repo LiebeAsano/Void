@@ -370,7 +370,7 @@ internal static class SwallowObjects
                     {
                         self.spearOnBack.increment = true;
                     }
-                    else if ((num7 > -1 || self.objectInStomach != null || self.IsVoid()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
+                    else if ((num7 > -1 || self.objectInStomach != null || self.IsVoid() || self.IsViy()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
                     {
                         flag3 = true;
                     }
@@ -601,7 +601,7 @@ internal static class SwallowObjects
             {
                 self.reloadCounter = 0;
             }
-            if (ModManager.MMF && self.mainBodyChunk.submersion >= 0.5f)
+            if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f || ExternalSaveData.ViyLungExtended && self.IsViy()))
             {
                 flag3 = false;
             }
@@ -631,7 +631,7 @@ internal static class SwallowObjects
                     for (int num14 = 0; num14 < 2; num14++)
                     {
 
-                        if (self.IsVoid() && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearllore))
+                        if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearllore))
                         {
                             if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
                             {
@@ -1033,7 +1033,7 @@ internal static class SwallowObjects
     {
         orig(self);
 
-        if (self.owner.owner is Player player && player.IsVoid())
+        if (self.owner.owner is Player player && (player.IsVoid() || player.IsViy()))
         {
             if (player.swallowAndRegurgitateCounter > 10)
             {

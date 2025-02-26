@@ -36,9 +36,12 @@ internal static class ViyViolence
             }
             float Damage = damage / self.Template.baseDamageResistance;
             float Stun = (damage * 30f + stunBonus) / self.Template.baseStunResistance;
-            if (source.owner is Spear && type == Creature.DamageType.Stab || source.owner is Rock)
+            if (source is not null)
             {
-                Stun = 0f;
+                if (source.owner is Spear && type == Creature.DamageType.Stab || source.owner is Rock)
+                {
+                    Stun = 0f;
+                }
             }
             if (self.State is HealthState)
             {

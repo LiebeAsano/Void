@@ -39,7 +39,11 @@ internal static class ExtendedLungs
             }
             else if (Utils.IsViyStoryCampaign(self.abstractCreature.world.game))
             {
-                int random = UnityEngine.Random.Range(0, 10000);
+                int random = 1;
+                if (self.mainBodyChunk.submersion >= 1f)
+                {
+                    random = UnityEngine.Random.Range(0, 20000);
+                }
                 if (random == 0)
                 {
                     _ = new Objects.KarmaRotator(self.abstractCreature.Room.realizedRoom);

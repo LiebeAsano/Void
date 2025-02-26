@@ -4,17 +4,17 @@ namespace VoidTemplate.Misc;
 
 internal static class Ctor
 {
-	public static void Hook()
-	{
-		On.Player.ctor += Player_Ctor;
-	}
+    public static void Hook()
+    {
+        On.Player.ctor += Player_Ctor;
+    }
 
-	private static void Player_Ctor(On.Player.orig_ctor orig, Player player, AbstractCreature abstract_creature, World world)
-	{
-		orig(player, abstract_creature, world);
-		if (world.game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.Void)
-			player.slugcatStats.foodToHibernate = session.characterStats.foodToHibernate;
-		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy) return;
-		player.Add_Attached_Fields();
-	}
+    private static void Player_Ctor(On.Player.orig_ctor orig, Player player, AbstractCreature abstract_creature, World world)
+    {
+        orig(player, abstract_creature, world);
+        if (world.game.session is StoryGameSession session && session.characterStats.name == VoidEnums.SlugcatID.Void)
+            player.slugcatStats.foodToHibernate = session.characterStats.foodToHibernate;
+        if (player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy) return;
+        player.Add_Attached_Fields();
+    }
 }

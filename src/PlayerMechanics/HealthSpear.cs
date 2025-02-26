@@ -1,8 +1,4 @@
-﻿using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using MoreSlugcats;
-using RWCustom;
-using System;
+﻿using RWCustom;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static VoidTemplate.SaveManager;
@@ -10,11 +6,11 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
 {
-	internal static class HealthSpear
-	{
-		public static void Hook()
-		{
-			//IL.Spear.HitSomething += Spear_HitSomething;
+    internal static class HealthSpear
+    {
+        public static void Hook()
+        {
+            //IL.Spear.HitSomething += Spear_HitSomething;
             On.Spear.HitSomething += Spear_HitSomething;
             On.Player.Update += Player_Update;
         }
@@ -84,14 +80,14 @@ namespace VoidTemplate.PlayerMechanics
                     {
                         flag = false;
                     }
-                    else if (!((result.obj as Creature).State is HealthState) && (result.obj as Creature).State.dead)
+                    else if ((result.obj as Creature).State is not HealthState && (result.obj as Creature).State.dead)
                     {
                         flag = false;
                     }
                 }
                 if (result.obj is Creature)
                 {
-                    if (!ModManager.MSC || !(result.obj is Player) || (result.obj as Creature).SpearStick(self, Mathf.Lerp(0.55f, 0.62f, UnityEngine.Random.value), result.chunk, result.onAppendagePos, self.firstChunk.vel))
+                    if (!ModManager.MSC || result.obj is not Player || (result.obj as Creature).SpearStick(self, Mathf.Lerp(0.55f, 0.62f, UnityEngine.Random.value), result.chunk, result.onAppendagePos, self.firstChunk.vel))
                     {
                         float num = self.spearDamageBonus;
                         if (self.bugSpear)
@@ -110,7 +106,7 @@ namespace VoidTemplate.PlayerMechanics
                         {
                             if (player.IsVoid())
                             {
-                                player.playerState.permanentDamageTracking += (double)(num / player.Template.baseDamageResistance);
+                                player.playerState.permanentDamageTracking += num / player.Template.baseDamageResistance;
                             }
                             if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
                             {
@@ -149,7 +145,7 @@ namespace VoidTemplate.PlayerMechanics
                 self.room.PlaySound(SoundID.Spear_Bounce_Off_Creauture_Shell, self.firstChunk);
                 self.vibrate = 20;
                 self.ChangeMode(Weapon.Mode.Free);
-                self.firstChunk.vel = self.firstChunk.vel * -0.5f + Custom.DegToVec(UnityEngine.Random.value * 360f) * Mathf.Lerp(0.1f, 0.4f, UnityEngine.Random.value) * self.firstChunk.vel.magnitude;
+                self.firstChunk.vel = (self.firstChunk.vel * -0.5f) + (Custom.DegToVec(UnityEngine.Random.value * 360f) * Mathf.Lerp(0.1f, 0.4f, UnityEngine.Random.value) * self.firstChunk.vel.magnitude);
                 self.SetRandomSpin();
                 return false;
             }

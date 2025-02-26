@@ -1,50 +1,46 @@
-﻿using VoidTemplate.PlayerMechanics.Karma11Features;
-using VoidTemplate.PlayerMechanics.Karma11Foundation;
-using VoidTemplate.PlayerMechanics.ViyMechanics;
-
-namespace VoidTemplate.PlayerMechanics;
+﻿namespace VoidTemplate.PlayerMechanics;
 
 public static class _PlayerMechanicsMeta
 {
-	public static void Hook()
-	{
+    public static void Hook()
+    {
 
-		CanBeSwallowed.Hook();
-		CanIPickThisUp.Hook();
-		СanMaul.Hook();
-		CentipedeResist.Hook();
-		Climbing.Hook();
-		ColdImmunityPatch.Hook();
-		DontBiteMimic.Hook();
-		DontEatVoid.Hook();
-		DreamManager.RegisterMaps();
-		DreamCustom.Hook();
-		DreamManager.Hook();
-		EdibleChanges.Hook();
-		ElectricSpearResist.Hook();
-		ExplosiveResist.Hook();
-		ExtendedLungs.Hook();
-		FastCrawl.Hook();
-		Grabability.Hook();
-		GraspSave.Hook();
-		HealthSpear.Hook();
-		HeavyCarry.Hook();
+        CanBeSwallowed.Hook();
+        CanIPickThisUp.Hook();
+        СanMaul.Hook();
+        CentipedeResist.Hook();
+        Climbing.Hook();
+        ColdImmunityPatch.Hook();
+        DontBiteMimic.Hook();
+        DontEatVoid.Hook();
+        DreamManager.RegisterMaps();
+        DreamCustom.Hook();
+        DreamManager.Hook();
+        EdibleChanges.Hook();
+        ElectricSpearResist.Hook();
+        ExplosiveResist.Hook();
+        ExtendedLungs.Hook();
+        FastCrawl.Hook();
+        Grabability.Hook();
+        GraspSave.Hook();
+        HealthSpear.Hook();
+        HeavyCarry.Hook();
         ImmuneToFallDamage.Hook();
         JellyResist.Hook();
-		JumpUnderWater.Hook();
-		KarmaFlowerChanges.Initiate();
-		LizardResist.Hook();
+        JumpUnderWater.Hook();
+        KarmaFlowerChanges.Initiate();
+        LizardResist.Hook();
         MalnourishmentDeath.Hook();
-		NoForceSleep.Hook();
-		NoVisualMalnourishment.Hook();
-		PunishNonPermaDeath.Hook();
-		RockHitSomething.Hook();
-		CrawlJump.Hook();
-		SaintArenaKarma.Hook();
-		SaintArenaSpears.Hook();
-		SaintKarmaImmunity.Hook();
-		SwallowObjects.Hook();
-		ThrowObject.Hook();
-		VoidViolence.Hook();
-	}
+        NoForceSleep.Hook();
+        NoVisualMalnourishment.Hook();
+        PunishNonPermaDeath.Hook();
+        RockHitSomething.Hook();
+        CrawlJump.Hook();
+        SaintArenaKarma.Hook();
+        SaintArenaSpears.Hook();
+        SaintKarmaImmunity.Hook();
+        SwallowObjects.Hook();
+        ThrowObject.Hook();
+        VoidViolence.Hook();
+    }
 }

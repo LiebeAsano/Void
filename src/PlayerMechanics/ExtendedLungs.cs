@@ -1,14 +1,13 @@
-﻿using System;
-using VoidTemplate.Useful;
+﻿using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
 internal static class ExtendedLungs
 {
-	public static void Hook()
-	{
-		On.Player.Update += Player_Update;
+    public static void Hook()
+    {
+        On.Player.Update += Player_Update;
         On.PlayerGraphics.Update += PlayerGraphics_Update;
     }
 

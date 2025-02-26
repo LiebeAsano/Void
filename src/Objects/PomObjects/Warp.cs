@@ -13,43 +13,43 @@ namespace VoidTemplate.Objects.PomObjects;
 
 internal class Warp : UpdatableAndDeletable
 {
-	public static void Register()
-	{
-		ManagedField[] exposedFields = [
-			defaultVectorField,
-			new StringField(targetRoomName, "SS_D08"),
-			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
-			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time")
-			];
-		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
-		WarpDestination.Register();
-        On.OverWorld.Update += OverWorld_Update; //since we are doing index based 
-	}
-
-	//Swapping the world directly from UAD yields a side effect:
-	//RWG
-	//for (int m = this.world.activeRooms.Count - 1; m >= 0; m--)
-	//{
-	//		this.world.activeRooms[m].Update();
-	//		this.world.activeRooms[m].PausedUpdate();
-	//}
-	//
-	//where world => this.overworld.world
-	//so when one swaps worlds from within UAD, update index stays
-	//but the number of active rooms drops
-	//which leads to index out of range
-	static ConditionalWeakTable<OverWorld, StrongBox<(WorldLoader, Warp, string)>> customLoader = new();
-private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld self)
+    public static void Register()
     {
-		orig(self);
-		if(customLoader.TryGetValue(self, out var loader))
-		{
+        ManagedField[] exposedFields = [
+            defaultVectorField,
+            new StringField(targetRoomName, "SS_D08"),
+            new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
+            new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time")
+            ];
+        RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
+        WarpDestination.Register();
+        On.OverWorld.Update += OverWorld_Update; //since we are doing index based 
+    }
+
+    //Swapping the world directly from UAD yields a side effect:
+    //RWG
+    //for (int m = this.world.activeRooms.Count - 1; m >= 0; m--)
+    //{
+    //		this.world.activeRooms[m].Update();
+    //		this.world.activeRooms[m].PausedUpdate();
+    //}
+    //
+    //where world => this.overworld.world
+    //so when one swaps worlds from within UAD, update index stays
+    //but the number of active rooms drops
+    //which leads to index out of range
+    static ConditionalWeakTable<OverWorld, StrongBox<(WorldLoader, Warp, string)>> customLoader = new();
+    private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld self)
+    {
+        orig(self);
+        if (customLoader.TryGetValue(self, out var loader))
+        {
 
             AbstractRoom absRoom = WorldLoaded(self, loader.Value);
-			loader.Value.Item2.OnRoomChange(absRoom);
-			customLoader.Remove(self);
-			GC.Collect();
-		}
+            loader.Value.Item2.OnRoomChange(absRoom);
+            customLoader.Remove(self);
+            GC.Collect();
+        }
 
 
         //if you dare to use this method, be aware that players realize at (10;10) coordinate
@@ -73,10 +73,10 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
             {
                 WorldCoordinate worldCoordinate = new(abstractRoom2.index, 10, 10, -1);
 
-				absPly.world.GetAbstractRoom(absPly.pos).RemoveEntity(absPly);
+                absPly.world.GetAbstractRoom(absPly.pos).RemoveEntity(absPly);
                 absPly.world = world2;
-				absPly.pos = worldCoordinate;
-				absPly.world.GetAbstractRoom(worldCoordinate).AddEntity(absPly);
+                absPly.pos = worldCoordinate;
+                absPly.world.GetAbstractRoom(worldCoordinate).AddEntity(absPly);
 
 
                 if (absPly.realizedCreature is Player p
@@ -84,19 +84,19 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
                 {
                     p.room.RemoveObject(p);
                     p.PlaceInRoom(abstractRoom2.realizedRoom);
-                    
+
                     if (p.objectInStomach is not null) p.objectInStomach.world = world2;
 
                     foreach (Creature.Grasp grasp in p.grasps)
                     {
-                        if(grasp is not null)
-						{
-							var APO = grasp.grabbed.abstractPhysicalObject;
-							APO.world.GetAbstractRoom(APO.pos).RemoveEntity(APO);
-							APO.world = world2;
-							APO.pos = worldCoordinate;
-							APO.world.GetAbstractRoom (worldCoordinate).AddEntity(APO);
-						}
+                        if (grasp is not null)
+                        {
+                            var APO = grasp.grabbed.abstractPhysicalObject;
+                            APO.world.GetAbstractRoom(APO.pos).RemoveEntity(APO);
+                            APO.world = world2;
+                            APO.pos = worldCoordinate;
+                            APO.world.GetAbstractRoom(worldCoordinate).AddEntity(APO);
+                        }
                     }
                 }
             }
@@ -153,128 +153,128 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 
     #region exposed data IDs
     const string triggerZone = "trigger zone";
-	const string targetRoomName = "TargetRoomName";
-	const string timeToFadeIn = "timetofadein";
-	const string timeToFadeOut = "timetofadeout";
-	#endregion
+    const string targetRoomName = "TargetRoomName";
+    const string timeToFadeIn = "timetofadein";
+    const string timeToFadeOut = "timetofadeout";
+    #endregion
 
-	public Warp(Room room, PlacedObject pobj)
-	{
-		this.room = room;
-		placedObject = pobj;
-		data = placedObject.data as ManagedData;
-	}
+    public Warp(Room room, PlacedObject pobj)
+    {
+        this.room = room;
+        placedObject = pobj;
+        data = placedObject.data as ManagedData;
+    }
 
-	#region exposed fields
-	Vector2[] TriggerZone => POMUtils.AddRealPosition(data.GetValue<Vector2[]>(triggerZone), placedObject.pos);
-	string TargetRoom => data.GetValue<string>(targetRoomName);
-	string Acronym => TargetRoom.Split('_')[0];
-	float TimeToFadeIn => data.GetValue<float>(timeToFadeIn);
-	float TimeToFadeOut => data.GetValue<float>(timeToFadeOut);
-	#endregion
+    #region exposed fields
+    Vector2[] TriggerZone => POMUtils.AddRealPosition(data.GetValue<Vector2[]>(triggerZone), placedObject.pos);
+    string TargetRoom => data.GetValue<string>(targetRoomName);
+    string Acronym => TargetRoom.Split('_')[0];
+    float TimeToFadeIn => data.GetValue<float>(timeToFadeIn);
+    float TimeToFadeOut => data.GetValue<float>(timeToFadeOut);
+    #endregion
 
 
-	#region runtime variables
-	readonly PlacedObject placedObject;
-	readonly ManagedData data;
-	private FadeOut fadeOut;
-	private State state = State.awaiting;
-	//vanilla worldloading happens during a few ticks, and then immediately changes world
-	//so i want to load world prematurely and only utilize it afterwards
-	private WorldLoader worldLoader;
-	private Thread thread;
-	private ThreadedLoading threadedLoading;
+    #region runtime variables
+    readonly PlacedObject placedObject;
+    readonly ManagedData data;
+    private FadeOut fadeOut;
+    private State state = State.awaiting;
+    //vanilla worldloading happens during a few ticks, and then immediately changes world
+    //so i want to load world prematurely and only utilize it afterwards
+    private WorldLoader worldLoader;
+    private Thread thread;
+    private ThreadedLoading threadedLoading;
 
-	enum State
-	{
-		awaiting,
-		fadein,
-		awaitingWorld,
-		awaitingTransition,
-		awaitingPOMLoad,
-		over
-	}
-	#endregion
-	public override void Update(bool eu)
-	{
-		base.Update(eu);
-		switch (state)
-		{
-			case State.awaiting:
-				if (room.PlayersInRoom.Any(realizedPlayerInRoom => realizedPlayerInRoom is not null
-				&& PositionWithinPoly(TriggerZone, realizedPlayerInRoom.mainBodyChunk.pos)))
-				{
-					room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
-					fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);
-					room.AddObject(fadeOut);
-					threadedLoading = new(this, room, Acronym);
-					thread = new Thread(new ThreadStart(threadedLoading.Load));
-					thread.Start();
-					state = State.fadein;
-				}
-				break;
+    enum State
+    {
+        awaiting,
+        fadein,
+        awaitingWorld,
+        awaitingTransition,
+        awaitingPOMLoad,
+        over
+    }
+    #endregion
+    public override void Update(bool eu)
+    {
+        base.Update(eu);
+        switch (state)
+        {
+            case State.awaiting:
+                if (room.PlayersInRoom.Any(realizedPlayerInRoom => realizedPlayerInRoom is not null
+                && PositionWithinPoly(TriggerZone, realizedPlayerInRoom.mainBodyChunk.pos)))
+                {
+                    room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
+                    fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);
+                    room.AddObject(fadeOut);
+                    threadedLoading = new(this, room, Acronym);
+                    thread = new Thread(new ThreadStart(threadedLoading.Load));
+                    thread.Start();
+                    state = State.fadein;
+                }
+                break;
 
-			case State.fadein:
-				if (fadeOut.fade >= 1f)
-				{
-					state = State.awaitingWorld;
-				}
-				break;
+            case State.fadein:
+                if (fadeOut.fade >= 1f)
+                {
+                    state = State.awaitingWorld;
+                }
+                break;
 
-			case State.awaitingWorld:
-				if (worldLoader is not null
-					&& worldLoader.ReturnWorld() is not null)
-				{
-					OverWorld overWorld = room.game.overWorld;
-					customLoader.Add(overWorld, new((worldLoader, this, TargetRoom)));
-					worldLoader = null;
-					state = State.awaitingTransition;
-				}
-				break;
+            case State.awaitingWorld:
+                if (worldLoader is not null
+                    && worldLoader.ReturnWorld() is not null)
+                {
+                    OverWorld overWorld = room.game.overWorld;
+                    customLoader.Add(overWorld, new((worldLoader, this, TargetRoom)));
+                    worldLoader = null;
+                    state = State.awaitingTransition;
+                }
+                break;
 
-			case State.awaitingTransition:
-				break;
+            case State.awaitingTransition:
+                break;
 
-			case State.awaitingPOMLoad:
+            case State.awaitingPOMLoad:
 
-				WarpDestination warpDestination = null;
-				if (room.updateList.Exists(UAD =>
-				{
-					if (UAD is WarpDestination wDest)
-					{
-						warpDestination = wDest;
-						return true;
-					}
-					return false;
-				}))
-				{
-					List<AbstractCreature> players = room.game.Players;
-					for (short i = 0; i < players.Count; i++)
-					{
-						if (players[i].realizedCreature is not null)
-						{
-							foreach (var bodyChunk in players[i].realizedCreature.bodyChunks)
-							{
-								bodyChunk.pos = warpDestination.Pos + new Vector2(i * 20f, 0f);
-							}
-						}
-					}
+                WarpDestination warpDestination = null;
+                if (room.updateList.Exists(UAD =>
+                {
+                    if (UAD is WarpDestination wDest)
+                    {
+                        warpDestination = wDest;
+                        return true;
+                    }
+                    return false;
+                }))
+                {
+                    List<AbstractCreature> players = room.game.Players;
+                    for (short i = 0; i < players.Count; i++)
+                    {
+                        if (players[i].realizedCreature is not null)
+                        {
+                            foreach (var bodyChunk in players[i].realizedCreature.bodyChunks)
+                            {
+                                bodyChunk.pos = warpDestination.Pos + new Vector2(i * 20f, 0f);
+                            }
+                        }
+                    }
 
-					foreach (var camera in room.game.cameras)
-					{
-						camera.GetCameraBestIndex();
-					}
+                    foreach (var camera in room.game.cameras)
+                    {
+                        camera.GetCameraBestIndex();
+                    }
 
-					state = State.over;
-					slatedForDeletetion = true;
-				}
-				break;
-		}
-		
-		
-	}
-	public void OnRoomChange(AbstractRoom destinationRoom)
-	{
+                    state = State.over;
+                    slatedForDeletetion = true;
+                }
+                break;
+        }
+
+
+    }
+    public void OnRoomChange(AbstractRoom destinationRoom)
+    {
         room.updateList.Remove(this);
         destinationRoom.realizedRoom.AddObject(this);
         room = destinationRoom.realizedRoom;
@@ -284,42 +284,42 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
         state = State.awaitingPOMLoad;
     }
 
-	class ThreadedLoading(Warp warp, Room room, string targetRegionAcronym)
-	{
-		private readonly Room room = room;
-		private readonly Warp warp = warp;
-		private readonly string acronym = targetRegionAcronym;
+    class ThreadedLoading(Warp warp, Room room, string targetRegionAcronym)
+    {
+        private readonly Room room = room;
+        private readonly Warp warp = warp;
+        private readonly string acronym = targetRegionAcronym;
 
-		public void Load()
-		{
-			WorldLoader worldLoader = new(game: room.game,
-						playerCharacter: room.game.GetStorySession.characterStats.name,
-						singleRoomWorld: false,
-						//this may be wrong, maybe there is no need to wrap
-						worldName: Region.GetProperRegionAcronym(room.game.StoryCharacter, acronym),
+        public void Load()
+        {
+            WorldLoader worldLoader = new(game: room.game,
+                        playerCharacter: room.game.GetStorySession.characterStats.name,
+                        singleRoomWorld: false,
+                        //this may be wrong, maybe there is no need to wrap
+                        worldName: Region.GetProperRegionAcronym(room.game.StoryCharacter, acronym),
 
-						region: room.game.overWorld.GetRegion(acronym),
-						setupValues: room.game.setupValues);
-			worldLoader.NextActivity();
-			while (!worldLoader.Finished)
-			{
-				worldLoader.Update();
-			}
-			warp.worldLoader = worldLoader;
-		}
-	}
+                        region: room.game.overWorld.GetRegion(acronym),
+                        setupValues: room.game.setupValues);
+            worldLoader.NextActivity();
+            while (!worldLoader.Finished)
+            {
+                worldLoader.Update();
+            }
+            warp.worldLoader = worldLoader;
+        }
+    }
 
-	class WarpDestination : UpdatableAndDeletable
-	{
-		public static void Register()
-		{
-			RegisterFullyManagedObjectType([], typeof(WarpDestination), "Warp Destination", "The Void");
-		}
-		public WarpDestination(Room room, PlacedObject pObj)
-		{
-			pobj = pObj;
-		}
-		readonly PlacedObject pobj;
-		public Vector2 Pos => pobj.pos;
-	}
+    class WarpDestination : UpdatableAndDeletable
+    {
+        public static void Register()
+        {
+            RegisterFullyManagedObjectType([], typeof(WarpDestination), "Warp Destination", "The Void");
+        }
+        public WarpDestination(Room room, PlacedObject pObj)
+        {
+            pobj = pObj;
+        }
+        readonly PlacedObject pobj;
+        public Vector2 Pos => pobj.pos;
+    }
 }

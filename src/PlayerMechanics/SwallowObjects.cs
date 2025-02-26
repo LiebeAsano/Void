@@ -1,5 +1,4 @@
-﻿using MonoMod.Cil;
-using MoreSlugcats;
+﻿using MoreSlugcats;
 using RWCustom;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,6 @@ using System.Linq;
 using UnityEngine;
 using VoidTemplate.Oracles;
 using VoidTemplate.Useful;
-using static MonoMod.InlineRT.MonoModRule;
 using static VoidTemplate.SaveManager;
 namespace VoidTemplate.PlayerMechanics;
 
@@ -61,7 +59,7 @@ internal static class SwallowObjects
 
             var game = self.abstractCreature.world.game;
 
-            bool hasMark = game.IsStorySession && (game.GetStorySession.saveState.deathPersistentSaveData.theMark);
+            bool hasMark = game.IsStorySession && game.GetStorySession.saveState.deathPersistentSaveData.theMark;
 
             if (grabbed != null)
             {
@@ -344,7 +342,7 @@ internal static class SwallowObjects
                         {
                             num10++;
                         }
-                        if (num10 > 1 && num10 < 10)
+                        if (num10 is > 1 and < 10)
                         {
                             self.PickupPressed();
                         }
@@ -480,7 +478,7 @@ internal static class SwallowObjects
                         {
                             for (int num12 = UnityEngine.Random.Range(8, 14); num12 >= 0; num12--)
                             {
-                                self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[num11].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[num11].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(self.grasps[num11].grabbed.firstChunk.pos, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
+                                self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[num11].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + (self.grasps[num11].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value), (Custom.RNV() * 6f * UnityEngine.Random.value) + (Custom.DirVec(self.grasps[num11].grabbed.firstChunk.pos, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value) + (Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f), false));
                             }
                             Creature creature = self.grasps[num11].grabbed as Creature;
                             creature.SetKillTag(self.abstractCreature);
@@ -556,7 +554,7 @@ internal static class SwallowObjects
             }
             self.eatMeat = Custom.IntClamp(self.eatMeat - 1, 0, 50);
             self.maulTimer = Custom.IntClamp(self.maulTimer - 1, 0, 20);
-            if (!ModManager.MMF || self.input[0].y == 0 || self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            if (!ModManager.MMF || self.input[0].y == 0 || (self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl))
             {
                 if (flag2 && self.eatCounter > 0)
                 {
@@ -601,7 +599,7 @@ internal static class SwallowObjects
             {
                 self.reloadCounter = 0;
             }
-            if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f || ExternalSaveData.ViyLungExtended && self.IsViy()))
+            if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f || (ExternalSaveData.ViyLungExtended && self.IsViy())))
             {
                 flag3 = false;
             }
@@ -616,7 +614,7 @@ internal static class SwallowObjects
                         self.swallowAndRegurgitateCounter = 0;
                     }
                 }
-                else if (!ModManager.MMF || self.input[0].y == 0 || self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
+                else if (!ModManager.MMF || self.input[0].y == 0 || (self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl))
                 {
                     bool pearllore = false;
                     if (self.abstractCreature.world.game.GetStorySession is not null)
@@ -762,13 +760,13 @@ internal static class SwallowObjects
             {
                 if (ModManager.MSC && MMF.cfgOldTongue.Value && self.grasps[0] == null && self.grasps[1] == null && self.SaintTongueCheck())
                 {
-                    Vector2 vector2 = new((float)self.flipDirection, 0.7f);
+                    Vector2 vector2 = new(self.flipDirection, 0.7f);
                     Vector2 normalized = vector2.normalized;
                     if (self.input[0].y > 0)
                     {
                         normalized = new Vector2(0f, 1f);
                     }
-                    normalized = (normalized + self.mainBodyChunk.vel.normalized * 0.2f).normalized;
+                    normalized = (normalized + (self.mainBodyChunk.vel.normalized * 0.2f)).normalized;
                     self.tongue.Shoot(normalized);
                     self.wantToThrow = 0;
                 }
@@ -1062,7 +1060,7 @@ internal static class SwallowObjects
                     else
                     {
                         (self.owner as PlayerGraphics).blink = 5;
-                        self.relativeHuntPos = new Vector2(0f, -4f) + Custom.RNV() * 2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5);
+                        self.relativeHuntPos = new Vector2(0f, -4f) + (Custom.RNV() * 2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
 
                         (self.owner as PlayerGraphics).head.vel += Custom.RNV() * 2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5);
                         player.bodyChunks[0].vel += Custom.RNV() * 0.2f * UnityEngine.Random.value * Mathf.InverseLerp(0.5f, 1f, num5);

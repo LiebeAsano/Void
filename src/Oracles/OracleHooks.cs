@@ -1,32 +1,28 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
-using System;
-using System.IO;
-using System.Linq;
-using static VoidTemplate.Useful.Utils;
-using static VoidTemplate.VoidEnums.ConversationID;
-using static VoidTemplate.SaveManager;
-using UnityEngine;
-using System.Collections.Generic;
 using RWCustom;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using static VoidTemplate.Oracles.OracleHooks;
-using System.Data.SqlTypes;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.Oracles;
 
 static class OracleHooks
 {
-	public static void Hook()
-	{
+    public static void Hook()
+    {
         On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
-		On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
+        On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
         On.SSOracleBehavior.SpecialEvent += SSOracleBehavior_SpecialEvent;
         On.SSOracleBehavior.PebblesConversation.AddEvents += PebblesConversation_AddEvents;
         On.SSOracleBehavior.ThrowOutBehavior.Update += ThrowOutBehavior_Update;
         On.SSOracleBehavior.Update += SSOralceBehavior_Update;
         IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
-	}
+    }
 
     private static void SSOralceBehavior_Update(On.SSOracleBehavior.orig_Update orig, SSOracleBehavior self, bool eu)
     {
@@ -55,7 +51,7 @@ static class OracleHooks
                                 }
                                 self.oracle.room.AddObject(new Explosion.ExplosionLight(weapon.firstChunk.pos, 150f, 1f, 8, Color.white));
                                 self.oracle.room.AddObject(new ShockWave(weapon.firstChunk.pos, 60f, 0.1f, 8, false));
-                                self.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, weapon.firstChunk, false, 1f, 1.5f + UnityEngine.Random.value * 0.5f);
+                                self.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, weapon.firstChunk, false, 1f, 1.5f + (UnityEngine.Random.value * 0.5f));
                             }
                         }
                         bool flag3 = false;
@@ -67,8 +63,8 @@ static class OracleHooks
                         }
                         if (self.inspectPearl == null && (self.conversation == null || flag3) && physicalObject is DataPearl && (physicalObject as DataPearl).grabbedBy.Count == 0 && ((physicalObject as DataPearl).AbstractPearl.dataPearlType != DataPearl.AbstractDataPearl.DataPearlType.PebblesPearl || (self.oracle.ID == MoreSlugcatsEnums.OracleID.DM && ((physicalObject as DataPearl).AbstractPearl as PebblesPearl.AbstractPebblesPearl).color >= 0)) && !self.readDataPearlOrbits.Contains((physicalObject as DataPearl).AbstractPearl) && flag4 && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark && !self.talkedAboutThisSession.Contains(physicalObject.abstractPhysicalObject.ID))
                         {
-                            self.inspectPearl = (physicalObject as DataPearl);
-                            if (!(self.inspectPearl is SpearMasterPearl) || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
+                            self.inspectPearl = physicalObject as DataPearl;
+                            if (self.inspectPearl is not SpearMasterPearl || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
                             {
                                 Custom.Log(new string[]
                                 {
@@ -106,7 +102,7 @@ static class OracleHooks
                 float num10 = Custom.Dist(self.oracle.arm.cornerPositions[0], self.oracle.arm.cornerPositions[2]) * 0.4f;
                 if (Custom.Dist(self.baseIdeal, self.oracle.arm.cornerPositions[num9]) >= num10)
                 {
-                    self.baseIdeal = self.oracle.arm.cornerPositions[num9] + (self.baseIdeal - self.oracle.arm.cornerPositions[num9]).normalized * num10;
+                    self.baseIdeal = self.oracle.arm.cornerPositions[num9] + ((self.baseIdeal - self.oracle.arm.cornerPositions[num9]).normalized * num10);
                 }
             }
             if (self.currSubBehavior.LowGravity >= 0f)
@@ -131,52 +127,52 @@ static class OracleHooks
     public static SSOracleBehavior.Action MeetVoid_Curious = new("MeetVoid_Curious", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidScan = new("VoidScan", true);
-    public static List<ProjectedImage> Void_projectImages = new List<ProjectedImage>();
+    public static List<ProjectedImage> Void_projectImages = [];
     #endregion
 
     public static void EatPearlsInterrupt(this SSOracleBehavior self)
-	{
-		if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
-		if (self.conversation != null && self.action != SSOracleBehavior.Action.ThrowOut_ThrowOut)
-		{
-			self.conversation.paused = true;
-			self.restartConversationAfterCurrentDialoge = true;
-		}
-		var savestate = self.oracle.room.game.GetStorySession.saveState;
-		var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
-		if (amountOfEatenPearls == 6 && !savestate.GetVoidMeetMoon())
-		{
+    {
+        if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
+        if (self.conversation != null && self.action != SSOracleBehavior.Action.ThrowOut_ThrowOut)
+        {
+            self.conversation.paused = true;
+            self.restartConversationAfterCurrentDialoge = true;
+        }
+        var savestate = self.oracle.room.game.GetStorySession.saveState;
+        var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
+        if (amountOfEatenPearls == 6 && !savestate.GetVoidMeetMoon())
+        {
             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
-			self.getToWorking = 1f;
-		}
-		else if (amountOfEatenPearls < 12)
-		{
+            self.getToWorking = 1f;
+        }
+        else if (amountOfEatenPearls < 12)
+        {
             PebbleVoice(self);
             self.dialogBox.Interrupt(self.Translate(
                 savestate.GetVoidMeetMoon()
                     ? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
-					: OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
-			savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
-		}
+                    : OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
+            savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
+        }
 
-	}
+    }
 
-	private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
-	{
-		orig(self);
-		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
-		{
-    //#warning may be elegible for deletion
-          
-			self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
+    private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
+    {
+        orig(self);
+        if (OracleConversation.PebbleVoidConversation.Contains(self.id))
+        {
+            //#warning may be elegible for deletion
 
-			var path = AssetManager.ResolveFilePath($"text/oracle/pebble/{self.id.value.ToLower()}.txt");
+            self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
+
+            var path = AssetManager.ResolveFilePath($"text/oracle/pebble/{self.id.value.ToLower()}.txt");
 
             if (self.owner.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                 path = AssetManager.ResolveFilePath($"text/oracle/pebble11/{self.id.value.ToLower()}.txt");
-			ConversationParser.GetConversationEvents(self, path);
-		}
-	}
+            ConversationParser.GetConversationEvents(self, path);
+        }
+    }
 
     private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
     {
@@ -216,23 +212,23 @@ static class OracleHooks
         }
     }
 
-	private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
-	{
-		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
-			&& self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
-		{
+    private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
+    {
+        if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
+            && self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
+        {
             if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;
             var saveState = self.oracle.room.game.GetStorySession.saveState;
-			var miscData = saveState.miscWorldSaveData;
-			var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
-				? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
-				: -1;
+            var miscData = saveState.miscWorldSaveData;
+            var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
+                ? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
+                : -1;
             loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
 
-			switch (miscData.SSaiConversationsHad)
-			{
+            switch (miscData.SSaiConversationsHad)
+            {
                 case 0:
-					{
+                    {
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Pebble);
                         miscData.SSaiConversationsHad++;
                         saveState.SetLastMeetCycles(saveState.cycleNumber);
@@ -241,9 +237,9 @@ static class OracleHooks
                         self.SlugcatEnterRoomReaction();
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                         break;
-					}
-				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
-					{
+                    }
+                case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
+                    {
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                         {
                             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
@@ -252,10 +248,10 @@ static class OracleHooks
                         }
                         if (!saveState.GetVoidMeetMoon())
                         {
-                            if(self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                 self.NewAction(self.afterGiveMarkAction);
                             self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-						    break;
+                            break;
                         }
                         else
                         {
@@ -302,7 +298,7 @@ static class OracleHooks
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-						break;
+                        break;
                     }
                 case >= 4 when self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5 && saveState.GetVoidMeetMoon():
                     {
@@ -330,11 +326,11 @@ static class OracleHooks
                                 self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                             }
                         }
-                        
+
                         break;
                     }
                 case 5:
-					{
+                    {
                         if (VoidPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractVoidPearl)
                         {
                             if (self.action != MeetVoid_Init)
@@ -410,34 +406,34 @@ static class OracleHooks
                         break;
                     }
                 case > 7:
-					{
+                    {
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);
                         self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-						break;
-					}
-				default:
-					{
-						if (self.action != MeetVoid_Init)
-						{ 
-							saveState.SetLastMeetCycles(saveState.cycleNumber);
-							if (self.currSubBehavior.ID != VoidTalk)
-							{
-								miscData.SSaiConversationsHad++;
-								self.NewAction(MeetVoid_Init);
+                        break;
+                    }
+                default:
+                    {
+                        if (self.action != MeetVoid_Init)
+                        {
+                            saveState.SetLastMeetCycles(saveState.cycleNumber);
+                            if (self.currSubBehavior.ID != VoidTalk)
+                            {
+                                miscData.SSaiConversationsHad++;
+                                self.NewAction(MeetVoid_Init);
                                 if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                     self.NewAction(self.afterGiveMarkAction);
                                 self.SlugcatEnterRoomReaction();
-								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-							}
-						}
+                                self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                            }
+                        }
                         break;
-					}
-			}
-		}
-		else
-		{
-			orig(self);
+                    }
+            }
+        }
+        else
+        {
+            orig(self);
         }
     }
 
@@ -501,8 +497,8 @@ static class OracleHooks
         orig(self);
         if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
-            if (self.owner is SSOracleBehavior self2 && 
-               (self.owner.throwOutCounter == 700 || 
+            if (self.owner is SSOracleBehavior self2 &&
+               (self.owner.throwOutCounter == 700 ||
                 self.owner.throwOutCounter == 980 ||
                 self.owner.throwOutCounter == 1530))
             {
@@ -571,13 +567,13 @@ static class OracleHooks
             }
             oracleBehavior.oracle.room.AddObject(new Explosion.ExplosionLight(pearl.firstChunk.pos, 150f, 1f, 8, Color.white));
             oracleBehavior.oracle.room.AddObject(new ShockWave(pearl.firstChunk.pos, 60f, 0.1f, 8, false));
-            oracleBehavior.oracle.room.PlaySound(SoundID.Snail_Pop, pearl.firstChunk, false, 1f, 1.5f + UnityEngine.Random.value * 0.5f);
+            oracleBehavior.oracle.room.PlaySound(SoundID.Snail_Pop, pearl.firstChunk, false, 1f, 1.5f + (UnityEngine.Random.value * 0.5f));
         }
     }
 #nullable disable
     private static void ILSSOracleBehavior_Update(ILContext il)
-	{
-		ILCursor c = new ILCursor(il);
+    {
+        ILCursor c = new(il);
 
         // this.dialogBox.Interrupt(this.Translate("Yes, help yourself. They are not edible." < OR PICK ONE OF CUSTOM INTERRUPT LINES AFTER 1ST MEET>), 10);
         if (c.TryGotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible.")))
@@ -585,9 +581,9 @@ static class OracleHooks
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Func<string, SSOracleBehavior, string>>((str, self) =>
             {
-				//SSAIConversationsHad is assigned the moment oracle sees player.
-				//so the actual number is ConversationsHad - 1
-				//and counting from second time, need another -1 to map meetings 1, 2, 3... to indexes 0, 1, 2...
+                //SSAIConversationsHad is assigned the moment oracle sees player.
+                //so the actual number is ConversationsHad - 1
+                //and counting from second time, need another -1 to map meetings 1, 2, 3... to indexes 0, 1, 2...
                 var amountOfPreviousMeetings = self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad - 1;
                 if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
                 && amountOfPreviousMeetings > 0
@@ -601,26 +597,26 @@ static class OracleHooks
         }
         else LogExErr("failed to match eating string");
         //else if (!ModManager.MSC
-		//|| (this.oracle.ID == Oracle.OracleID.SS
-		//	&& this.oracle.room.game.StoryCharacter != MoreSlugcatsEnums.SlugcatStatsName.Artificer <OR VOID>
-		//	&& !flag2))
+        //|| (this.oracle.ID == Oracle.OracleID.SS
+        //	&& this.oracle.room.game.StoryCharacter != MoreSlugcatsEnums.SlugcatStatsName.Artificer <OR VOID>
+        //	&& !flag2))
         //{
         //    (this.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap = 9;
         //}
         if (c.TryGotoNext(MoveType.After,
-			i => i.MatchLdsfld<MoreSlugcatsEnums.SlugcatStatsName>("Artificer"),
-			i => i.MatchCall(out var method) && method.Name.Contains("op_Inequality"),
-			i => i.Match(OpCodes.Brfalse_S),
-			i => i.MatchLdloc(10)))
-		{
+            i => i.MatchLdsfld<MoreSlugcatsEnums.SlugcatStatsName>("Artificer"),
+            i => i.MatchCall(out var method) && method.Name.Contains("op_Inequality"),
+            i => i.Match(OpCodes.Brfalse_S),
+            i => i.MatchLdloc(10)))
+        {
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Func<bool, SSOracleBehavior, bool>>((re, self)
                 => self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void || re);
         }
-		else LogExErr("failed to match comparison to artificer");
+        else LogExErr("failed to match comparison to artificer");
 
 
-	}
+    }
 
     public static class OracleConversation
     {
@@ -755,11 +751,11 @@ static class OracleHooks
 
 public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBehavior
 {
-    public static SSOracleBehavior.Action MeetVoid_Talking = new SSOracleBehavior.Action("MeetVoid_Talking", true);
-    public static SSOracleBehavior.Action MeetVoid_Texting = new SSOracleBehavior.Action("MeetVoid_Texting", true);
-    public static SSOracleBehavior.Action MeetVoid_FirstImages = new SSOracleBehavior.Action("MeetVoid_FirstImages", true);
-    public static SSOracleBehavior.Action MeetVoid_SecondCurious = new SSOracleBehavior.Action("MeetVoid_SecondCurious", true);
-    public static SSOracleBehavior.Action MeetVoid_Heal = new SSOracleBehavior.Action("MeetVoid_Heal", true);
+    public static SSOracleBehavior.Action MeetVoid_Talking = new("MeetVoid_Talking", true);
+    public static SSOracleBehavior.Action MeetVoid_Texting = new("MeetVoid_Texting", true);
+    public static SSOracleBehavior.Action MeetVoid_FirstImages = new("MeetVoid_FirstImages", true);
+    public static SSOracleBehavior.Action MeetVoid_SecondCurious = new("MeetVoid_SecondCurious", true);
+    public static SSOracleBehavior.Action MeetVoid_Heal = new("MeetVoid_Heal", true);
     int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
 
     public ChunkSoundEmitter voice
@@ -935,14 +931,14 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             else if (base.action == MeetVoid_Heal)
             {
                 bool flag2 = ModManager.MSC && this.oracle.room.game.StoryCharacter == MoreSlugcatsEnums.SlugcatStatsName.Spear && this.oracle.ID == Oracle.OracleID.SS;
-                    this.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+                this.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                 if ((this.inActionCounter > 30 && this.inActionCounter < 300) || (ModManager.MSC && this.oracle.ID == MoreSlugcatsEnums.OracleID.DM))
                 {
                     if (this.inActionCounter < 300)
                     {
                         this.player.Stun(20);
                     }
-                    Vector2 b = Vector2.ClampMagnitude(this.oracle.room.MiddleOfTile(24, 14) - this.player.mainBodyChunk.pos, 40f) / 40f * 2.8f * Mathf.InverseLerp(30f, 160f, (float)this.inActionCounter);
+                    Vector2 b = Vector2.ClampMagnitude(this.oracle.room.MiddleOfTile(24, 14) - this.player.mainBodyChunk.pos, 40f) / 40f * 2.8f * Mathf.InverseLerp(30f, 160f, inActionCounter);
 
                     this.player.mainBodyChunk.vel += b;
                 }
@@ -953,7 +949,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                 if (flag2 && this.inActionCounter > 30 && this.inActionCounter < 300)
                 {
                     (this.player.graphicsModule as PlayerGraphics).bodyPearl.visible = true;
-                    (this.player.graphicsModule as PlayerGraphics).bodyPearl.globalAlpha = Mathf.Lerp(0f, 1f, (float)this.inActionCounter / 300f);
+                    (this.player.graphicsModule as PlayerGraphics).bodyPearl.globalAlpha = Mathf.Lerp(0f, 1f, inActionCounter / 300f);
                 }
                 if (this.inActionCounter == 300)
                 {
@@ -981,16 +977,12 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                         {
                             foreach (AbstractCreature abstractCreature in this.oracle.room.game.AlivePlayers)
                             {
-                                if (abstractCreature.Room == this.oracle.room.abstractRoom) 
+                                if (abstractCreature.Room == this.oracle.room.abstractRoom)
                                 {
-                                    Player player2 = abstractCreature.realizedCreature as Player;
-                                    if (player2 != null)
+                                    if (abstractCreature.realizedCreature is Player player2)
                                     {
                                         RedsIllness redsIllness = player2.redsIllness;
-                                        if (redsIllness != null)
-                                        {
-                                            redsIllness.GetBetter();
-                                        }
+                                        redsIllness?.GetBetter();
                                     }
                                 }
                             }
@@ -1008,10 +1000,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                         (this.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma = (this.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
                         for (int num2 = 0; num2 < this.oracle.room.game.cameras.Length; num2++)
                         {
-                            if (this.oracle.room.game.cameras[num2].hud.karmaMeter != null)
-                            {
-                                this.oracle.room.game.cameras[num2].hud.karmaMeter.UpdateGraphic();
-                            }
+                            this.oracle.room.game.cameras[num2].hud.karmaMeter?.UpdateGraphic();
                         }
                     }
                     for (int num4 = 0; num4 < 20; num4++)
@@ -1022,11 +1011,11 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     {
                         this.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, 0f, 1f, 1f);
                     }
-                
+
                 }
                 if (this.inActionCounter > 300 && this.player.graphicsModule != null && !flag2)
                 {
-                    (this.player.graphicsModule as PlayerGraphics).markAlpha = Mathf.Max((this.player.graphicsModule as PlayerGraphics).markAlpha, Mathf.InverseLerp(500f, 300f, (float)this.inActionCounter));
+                    (this.player.graphicsModule as PlayerGraphics).markAlpha = Mathf.Max((this.player.graphicsModule as PlayerGraphics).markAlpha, Mathf.InverseLerp(500f, 300f, inActionCounter));
                 }
                 if (this.inActionCounter > 360)
                 {
@@ -1141,10 +1130,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
         }
         else if (base.action == MeetVoid_FirstImages)
         {
-            if (this.showImage != null)
-            {
-                this.showImage.Destroy();
-            }
+            this.showImage?.Destroy();
 
             switch (this.communicationIndex)
             {
@@ -1163,20 +1149,20 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                     {
                         this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
-                        this.showImage = base.oracle.myScreen.AddImage(new List<string>
-                        {
+                        this.showImage = base.oracle.myScreen.AddImage(
+                        [
                             "void_glyphs_3",
                             "void_glyphs_5"
-                        }, 30);
+                        ], 30);
                     }
                     else
                     {
                         this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
-                        this.showImage = base.oracle.myScreen.AddImage(new List<string>
-                        {
+                        this.showImage = base.oracle.myScreen.AddImage(
+                        [
                             "void_glyphs_4",
                             "void_glyphs_5"
-                        }, 30);
+                        ], 30);
                         this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment...".TranslateString(), 60);
                     }
                     this.communicationPause = 330;
@@ -1202,7 +1188,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
         {
             this.owner.lookPoint = base.player.DangerPos;
         }
-        Vector2 vector = new Vector2(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
+        Vector2 vector = new(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
         if (this.owner.CommunicatePosScore(vector) + 40f < this.owner.CommunicatePosScore(this.owner.nextPos) && !Custom.DistLess(vector, this.owner.nextPos, 30f))
         {
             this.owner.SetNewDestination(vector);
@@ -1214,7 +1200,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             this.idealShowMediaPos = vector;
             this.consistentShowMediaPosCounter = 0;
         }
-        vector = this.idealShowMediaPos + Custom.RNV() * UnityEngine.Random.value * 40f;
+        vector = this.idealShowMediaPos + (Custom.RNV() * UnityEngine.Random.value * 40f);
         if (this.ShowMediaScore(vector) + 20f < this.ShowMediaScore(this.idealShowMediaPos))
         {
             this.idealShowMediaPos = vector;
@@ -1234,7 +1220,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             return float.MaxValue;
         }
         float num = Mathf.Abs(Vector2.Distance(tryPos, base.player.DangerPos) - 250f);
-        num -= Math.Min((float)base.oracle.room.aimap.getTerrainProximity(tryPos), 9f) * 30f;
+        num -= Math.Min(base.oracle.room.aimap.getTerrainProximity(tryPos), 9f) * 30f;
         num -= Vector2.Distance(tryPos, this.owner.nextPos) * 0.5f;
         for (int i = 0; i < base.oracle.arm.joints.Length; i++)
         {

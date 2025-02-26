@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using MoreSlugcats;
 using RWCustom;
-using MoreSlugcats;
+using System.Collections.Generic;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace VoidTemplate.Creatures
@@ -14,13 +10,13 @@ namespace VoidTemplate.Creatures
     {
         public class Behavior : ExtEnum<Behavior>
         {
-            public static readonly Behavior Idle = new Behavior("Idle", register: true);
+            public static readonly Behavior Idle = new("Idle", register: true);
 
-            public static readonly Behavior Hunt = new Behavior("Hunt", register: true);
+            public static readonly Behavior Hunt = new("Hunt", register: true);
 
-            public static readonly Behavior EscapeRain = new Behavior("EscapeRain", register: true);
+            public static readonly Behavior EscapeRain = new("EscapeRain", register: true);
 
-            public static readonly Behavior InspectArea = new Behavior("InspectArea", register: true);
+            public static readonly Behavior InspectArea = new("InspectArea", register: true);
 
             public Behavior(string value, bool register = false)
                 : base(value, register)
@@ -80,7 +76,7 @@ namespace VoidTemplate.Creatures
             behavior = Behavior.Idle;
             goalPos = myOutspectorB.mainBodyChunk.pos;
             newIdlePosCounter = 1;
-            AllHeadGoals = new List<Vector2>();
+            AllHeadGoals = [];
             AIHeadGoals = new Vector2[OutspectorB.headCount()];
             creatureLooker = new CreatureLooker(this, base.tracker, myOutspectorB, 0.2f, 20);
         }
@@ -305,7 +301,7 @@ namespace VoidTemplate.Creatures
                             }
                             else
                             {
-                                if (myOutspectorB.heads[num2].Tip.vel.magnitude < 1f || myOutspectorB.heads[num2].Tip.vel.magnitude > 4f)
+                                if (myOutspectorB.heads[num2].Tip.vel.magnitude is < 1f or > 4f)
                                 {
                                     myOutspectorB.heads[num2].Tip.vel *= 1.2f;
                                     myOutspectorB.heads[num2].Tip.vel += new Vector2(Random.Range(-18, 18), Random.Range(-18, 18));
@@ -333,7 +329,7 @@ namespace VoidTemplate.Creatures
                                     num4 = 10f;
                                 }
 
-                                if (!flag && !myOutspectorB.room.RayTraceTilesForTerrain((int)(realizedCreature2.firstChunk.pos.x / 20f), (int)(realizedCreature2.firstChunk.pos.y / 20f), (int)(realizedCreature2.firstChunk.pos.x + realizedCreature2.firstChunk.vel.x * 3f / 20f), (int)(realizedCreature2.firstChunk.pos.y + realizedCreature2.firstChunk.vel.y * 3f / 20f)) && (realizedCreature2.firstChunk.vel.magnitude > 50f || (Random.value < 0.5f && Mathf.DeltaAngle(Custom.VecToDeg(realizedCreature2.firstChunk.vel), target) < num4 && realizedCreature2.firstChunk.vel.magnitude > 30f)))
+                                if (!flag && !myOutspectorB.room.RayTraceTilesForTerrain((int)(realizedCreature2.firstChunk.pos.x / 20f), (int)(realizedCreature2.firstChunk.pos.y / 20f), (int)(realizedCreature2.firstChunk.pos.x + (realizedCreature2.firstChunk.vel.x * 3f / 20f)), (int)(realizedCreature2.firstChunk.pos.y + (realizedCreature2.firstChunk.vel.y * 3f / 20f))) && (realizedCreature2.firstChunk.vel.magnitude > 50f || (Random.value < 0.5f && Mathf.DeltaAngle(Custom.VecToDeg(realizedCreature2.firstChunk.vel), target) < num4 && realizedCreature2.firstChunk.vel.magnitude > 30f)))
                                 {
                                     currentRelationship.intensity = 0f;
                                     myOutspectorB.headWantToGrabChunk[num2] = null;
@@ -505,7 +501,7 @@ namespace VoidTemplate.Creatures
                     newIdlePosCounter--;
                     if (newIdlePosCounter < 1 || !base.pathFinder.CoordinateReachableAndGetbackable(base.pathFinder.GetDestination))
                     {
-                        WorldCoordinate worldCoordinate = new WorldCoordinate(creature.pos.room, Random.Range(0, myOutspectorB.room.TileWidth), Random.Range(0, myOutspectorB.room.TileHeight), -1);
+                        WorldCoordinate worldCoordinate = new(creature.pos.room, Random.Range(0, myOutspectorB.room.TileWidth), Random.Range(0, myOutspectorB.room.TileHeight), -1);
                         if (base.pathFinder.CoordinateReachableAndGetbackable(worldCoordinate))
                         {
                             creature.abstractAI.SetDestination(worldCoordinate);
@@ -628,7 +624,7 @@ namespace VoidTemplate.Creatures
                     num *= 1.7f;
                 }
 
-                a = Mathf.Lerp(a, num, (500f - (float)creatureLooker.lookCreature.TicksSinceSeen) / 500f);
+                a = Mathf.Lerp(a, num, (500f - creatureLooker.lookCreature.TicksSinceSeen) / 500f);
             }
 
             for (int i = 0; i < OutspectorB.headCount(); i++)
@@ -695,7 +691,7 @@ namespace VoidTemplate.Creatures
 
             for (int i = 0; i < posamount; i++)
             {
-                WorldCoordinate worldCoordinate = new WorldCoordinate(myOutspectorB.room.abstractRoom.index, Random.Range(0, myOutspectorB.room.TileWidth), Random.Range(0, myOutspectorB.room.TileHeight), -1);
+                WorldCoordinate worldCoordinate = new(myOutspectorB.room.abstractRoom.index, Random.Range(0, myOutspectorB.room.TileWidth), Random.Range(0, myOutspectorB.room.TileHeight), -1);
                 if (!myOutspectorB.room.GetTile(worldCoordinate.Tile).Solid)
                 {
                     AllHeadGoals.Add(worldCoordinate.Tile.ToVector2() * 20f);
@@ -709,7 +705,7 @@ namespace VoidTemplate.Creatures
             {
                 for (int i = 0; i < posamount; i++)
                 {
-                    WorldCoordinate worldCoordinate = new WorldCoordinate(myOutspectorB.room.abstractRoom.index, Random.Range(zapCoil.rect.left - 30, zapCoil.rect.right + 30), Random.Range(zapCoil.rect.bottom - 30, zapCoil.rect.top + 30), -1);
+                    WorldCoordinate worldCoordinate = new(myOutspectorB.room.abstractRoom.index, Random.Range(zapCoil.rect.left - 30, zapCoil.rect.right + 30), Random.Range(zapCoil.rect.bottom - 30, zapCoil.rect.top + 30), -1);
                     if (myOutspectorB.room.IsPositionInsideBoundries(worldCoordinate.Tile) && !myOutspectorB.room.GetTile(worldCoordinate.Tile).Solid)
                     {
                         AllHeadGoals.Add(worldCoordinate.Tile.ToVector2() * 20f);
@@ -723,7 +719,7 @@ namespace VoidTemplate.Creatures
                 {
                     for (int j = 0; j < posamount; j++)
                     {
-                        WorldCoordinate worldCoordinate2 = new WorldCoordinate(myOutspectorB.room.abstractRoom.index, (int)Random.Range(placedObject.pos.x - 60f, placedObject.pos.x + 60f), (int)Random.Range(placedObject.pos.y - 60f, placedObject.pos.y + 60f), -1);
+                        WorldCoordinate worldCoordinate2 = new(myOutspectorB.room.abstractRoom.index, (int)Random.Range(placedObject.pos.x - 60f, placedObject.pos.x + 60f), (int)Random.Range(placedObject.pos.y - 60f, placedObject.pos.y + 60f), -1);
                         if (myOutspectorB.room.IsPositionInsideBoundries(worldCoordinate2.Tile) && !myOutspectorB.room.GetTile(worldCoordinate2.Tile).Solid)
                         {
                             AllHeadGoals.Add(worldCoordinate2.Tile.ToVector2() * 20f);
@@ -739,7 +735,7 @@ namespace VoidTemplate.Creatures
 
                     for (int k = 0; k < posamount; k++)
                     {
-                        WorldCoordinate worldCoordinate3 = new WorldCoordinate(myOutspectorB.room.abstractRoom.index, (int)Random.Range(placedObject.pos.x - 80f, placedObject.pos.x + 80f), (int)Random.Range(placedObject.pos.y - 80f, placedObject.pos.y + 80f), -1);
+                        WorldCoordinate worldCoordinate3 = new(myOutspectorB.room.abstractRoom.index, (int)Random.Range(placedObject.pos.x - 80f, placedObject.pos.x + 80f), (int)Random.Range(placedObject.pos.y - 80f, placedObject.pos.y + 80f), -1);
                         if (myOutspectorB.room.IsPositionInsideBoundries(worldCoordinate3.Tile) && !myOutspectorB.room.GetTile(worldCoordinate3.Tile).Solid)
                         {
                             AllHeadGoals.Add(worldCoordinate3.Tile.ToVector2() * 20f);

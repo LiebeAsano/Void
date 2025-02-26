@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Fisobs.Creatures;
+﻿using DevInterface;
 using Fisobs.Core;
+using Fisobs.Creatures;
 using Fisobs.Sandbox;
-using static PathCost.Legality;
-using UnityEngine;
-using DevInterface;
-using RWCustom;
 using MoreSlugcats;
+using System.Collections.Generic;
+using UnityEngine;
+using static PathCost.Legality;
 
 namespace VoidTemplate.Creatures
 {

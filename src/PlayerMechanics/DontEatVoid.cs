@@ -5,22 +5,22 @@ namespace VoidTemplate.PlayerMechanics;
 
 internal static class DontEatVoid
 {
-	public static void Hook()
-	{
-		On.Player.EatMeatUpdate += DontEat_Void;
-	}
+    public static void Hook()
+    {
+        On.Player.EatMeatUpdate += DontEat_Void;
+    }
 
-	private static void DontEat_Void(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
-	{
-		orig(self, graspIndex);
-		if (self.eatMeat != 50 || self.IsVoid() || self.IsViy()) return;
-		Array.ForEach(self.grasps, grasp =>
-		{
-			if (grasp != null
-			&& grasp.grabbed is Player prey
-			&& (prey.IsVoid() || prey.IsViy()))
-				self.Die();
+    private static void DontEat_Void(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
+    {
+        orig(self, graspIndex);
+        if (self.eatMeat != 50 || self.IsVoid() || self.IsViy()) return;
+        Array.ForEach(self.grasps, grasp =>
+        {
+            if (grasp != null
+            && grasp.grabbed is Player prey
+            && (prey.IsVoid() || prey.IsViy()))
+                self.Die();
 
-		});
-	}
+        });
+    }
 }

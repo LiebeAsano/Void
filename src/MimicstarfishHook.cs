@@ -1,10 +1,6 @@
 ﻿using RWCustom;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace VoidTemplate
@@ -22,9 +18,9 @@ namespace VoidTemplate
 
         private static void OnEat(On.DaddyLongLegs.orig_Eat orig, global::DaddyLongLegs self, bool eu)
         {
-            
-                orig(self, eu);
-            
+
+            orig(self, eu);
+
             if (self.Template.type == CreatureTemplateType.Mimicstarfish)
             {
 
@@ -61,9 +57,9 @@ namespace VoidTemplate
 
 
         }
-        
 
-       
+
+
 
 
         private static void OnApplyPalette(On.DaddyGraphics.DaddyTubeGraphic.orig_ApplyPalette orig, global::DaddyGraphics.DaddyTubeGraphic self, global::RoomCamera.SpriteLeaser sLeaser, global::RoomCamera rCam, global::RoomPalette palette)
@@ -77,7 +73,7 @@ namespace VoidTemplate
                 color = new Color(1f, 0.8f, 0.8f);
                 for (int i = 0; i < (sLeaser.sprites[self.firstSprite] as TriangleMesh).vertices.Length; i++)
                 {
-                    float floatPos = Mathf.InverseLerp(0.3f, 1f, (float)i / (float)((sLeaser.sprites[self.firstSprite] as TriangleMesh).vertices.Length - 1));
+                    float floatPos = Mathf.InverseLerp(0.3f, 1f, i / (float)((sLeaser.sprites[self.firstSprite] as TriangleMesh).vertices.Length - 1));
                     (sLeaser.sprites[self.firstSprite] as TriangleMesh).verticeColors[i] = Color.Lerp(color, Custom.HSL2RGB(Custom.WrappedRandomVariation(1f, .48f, .15f), .8f, Custom.ClampedRandomVariation(.86f, .72f, .43f)), self.OnTubeEffectColorFac(floatPos));
                 }
                 int num = 0;
@@ -86,7 +82,7 @@ namespace VoidTemplate
                     sLeaser.sprites[self.firstSprite + 1 + j].color = Color.Lerp(color, Custom.HSL2RGB(Custom.WrappedRandomVariation(1f, .48f, .15f), .8f, Custom.ClampedRandomVariation(.86f, .72f, .43f)), self.OnTubeEffectColorFac(self.bumps[j].pos.y));
                     if (self.bumps[j].eyeSize > 0f)
                     {
-                        sLeaser.sprites[self.firstSprite + 1 + self.bumps.Length + num].color = (self.owner.colorClass ? self.owner.EffectColor : color);
+                        sLeaser.sprites[self.firstSprite + 1 + self.bumps.Length + num].color = self.owner.colorClass ? self.owner.EffectColor : color;
                         num++;
                     }
                 }
@@ -94,7 +90,7 @@ namespace VoidTemplate
 
 
         }
-        public static readonly ConditionalWeakTable<DaddyGraphics, Color[]> daddyColors = new ConditionalWeakTable<global::DaddyGraphics, Color[]>();
+        public static readonly ConditionalWeakTable<DaddyGraphics, Color[]> daddyColors = new();
 
         public static int digestingCounter = 0;
         public class EatObject

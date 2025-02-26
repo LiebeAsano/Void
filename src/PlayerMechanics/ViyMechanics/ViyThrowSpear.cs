@@ -1,10 +1,5 @@
 ﻿using MoreSlugcats;
 using RWCustom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics
 {
@@ -38,7 +33,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
                 }
                 self.Blink(15);
 
-                self.dontGrabStuff = (self.isNPC ? 45 : 15);
+                self.dontGrabStuff = self.isNPC ? 45 : 15;
                 if (self.graphicsModule != null)
                 {
                     (self.graphicsModule as PlayerGraphics).LookAtObject(self.grasps[grasp].grabbed);

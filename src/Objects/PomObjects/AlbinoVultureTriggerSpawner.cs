@@ -1,10 +1,6 @@
 ﻿using SlugBase.SaveData;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using static Pom.Pom;
 
@@ -82,11 +78,11 @@ namespace VoidTemplate.Objects.PomObjects
             {
                 return;
             }
-            
+
             foreach (Creature alivePlayerCreature in room.game.AlivePlayers.
                 Select(crit => crit.realizedCreature))
             {
-                foreach(BodyChunk bodyChunk in alivePlayerCreature.bodyChunks)
+                foreach (BodyChunk bodyChunk in alivePlayerCreature.bodyChunks)
                 {
                     if (IsRoomPointInsideTrigger(bodyChunk.pos))
                     {

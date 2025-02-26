@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
@@ -35,17 +30,17 @@ internal static class ViyViolence
                 }
             }
             float Damage = damage / self.Template.baseDamageResistance;
-            float Stun = (damage * 30f + stunBonus) / self.Template.baseStunResistance;
+            float Stun = ((damage * 30f) + stunBonus) / self.Template.baseStunResistance;
             if (source is not null)
             {
-                if (source.owner is Spear && type == Creature.DamageType.Stab || source.owner is Rock)
+                if ((source.owner is Spear && type == Creature.DamageType.Stab) || source.owner is Rock)
                 {
                     Stun = 0f;
                 }
             }
             if (self.State is HealthState)
             {
-                Stun *= 1.5f + Mathf.InverseLerp(0.5f, 0f, (self.State as HealthState).health) * UnityEngine.Random.value;
+                Stun *= 1.5f + (Mathf.InverseLerp(0.5f, 0f, (self.State as HealthState).health) * UnityEngine.Random.value);
             }
             if (type.Index != -1)
             {
@@ -60,11 +55,11 @@ internal static class ViyViolence
             }
             if (ModManager.MSC)
             {
-                if (self.room != null && self.room.world.game.IsArenaSession && self.room.world.game.GetArenaGameSession.chMeta != null && self.room.world.game.GetArenaGameSession.chMeta.resistMultiplier > 0f && !(self is Player))
+                if (self.room != null && self.room.world.game.IsArenaSession && self.room.world.game.GetArenaGameSession.chMeta != null && self.room.world.game.GetArenaGameSession.chMeta.resistMultiplier > 0f && self is not Player)
                 {
                     Damage /= self.room.world.game.GetArenaGameSession.chMeta.resistMultiplier;
                 }
-                if (self.room != null && self.room.world.game.IsArenaSession && self.room.world.game.GetArenaGameSession.chMeta != null && self.room.world.game.GetArenaGameSession.chMeta.invincibleCreatures && !(self is Player))
+                if (self.room != null && self.room.world.game.IsArenaSession && self.room.world.game.GetArenaGameSession.chMeta != null && self.room.world.game.GetArenaGameSession.chMeta.invincibleCreatures && self is not Player)
                 {
                     Damage = 0f;
                 }

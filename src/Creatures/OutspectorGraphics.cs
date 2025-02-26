@@ -1,6 +1,4 @@
-﻿using System;
-using CoralBrain;
-using MoreSlugcats;
+﻿using CoralBrain;
 using RWCustom;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,7 +16,7 @@ namespace VoidTemplate.Creatures
             }
             this.cullRange = 300f;
             this.JawAngleWiggler = new float[Outspector.headCount()];
-            this.mycelia = new Mycelium[(int)(5f + 5f * this.myOutspector.room.world.game.SeededRandom(this.myOutspector.abstractCreature.ID.RandomSeed))];
+            this.mycelia = new Mycelium[(int)(5f + (5f * this.myOutspector.room.world.game.SeededRandom(this.myOutspector.abstractCreature.ID.RandomSeed)))];
             this.blinks = new float[Outspector.headCount()];
             this.wingBodyParts = new GenericBodyPart[(this.myOutspector.State as Outspector.OutspectorState).Wingnumber];
             for (int j = 0; j < this.wingBodyParts.Length; j++)
@@ -28,9 +26,11 @@ namespace VoidTemplate.Creatures
             this.wingBodyPartDistance = 75f;
             for (int k = 0; k < this.mycelia.GetLength(0); k++)
             {
-                this.mycelia[k] = new Mycelium(this.myOutspector.neuronSystem, this, k, Mathf.Lerp(120f, 300f, this.myOutspector.room.world.game.SeededRandom(this.myOutspector.abstractCreature.ID.RandomSeed + k)), this.myOutspector.mainBodyChunk.pos);
-                this.mycelia[k].useStaticCulling = false;
-                this.mycelia[k].color = this.myOutspector.bodyColor;
+                this.mycelia[k] = new Mycelium(this.myOutspector.neuronSystem, this, k, Mathf.Lerp(120f, 300f, this.myOutspector.room.world.game.SeededRandom(this.myOutspector.abstractCreature.ID.RandomSeed + k)), this.myOutspector.mainBodyChunk.pos)
+                {
+                    useStaticCulling = false,
+                    color = this.myOutspector.bodyColor
+                };
                 this.bodyRotation = 0f;
             }
         }
@@ -63,12 +63,14 @@ namespace VoidTemplate.Creatures
             this.wingflapCounters = new float[this.SpritesTotal_wings];
             for (int j = 0; j < this.SpritesTotal_wings; j++)
             {
-                sLeaser.sprites[this.SpritesBegin_wings + j] = new FSprite("CicadaWingA", true);
-                sLeaser.sprites[this.SpritesBegin_wings + j].anchorX = 0f;
-                sLeaser.sprites[this.SpritesBegin_wings + j].scaleX = Mathf.Lerp(3.6f, 5f, this.myOutspector.room.world.game.SeededRandom(this.myOutspector.abstractCreature.ID.RandomSeed));
-                sLeaser.sprites[this.SpritesBegin_wings + j].scaleY = 0.8f;
-                sLeaser.sprites[this.SpritesBegin_wings + j].alpha = 0.3f;
-                sLeaser.sprites[this.SpritesBegin_wings + j].shader = rCam.room.game.rainWorld.Shaders["CicadaWing"];
+                sLeaser.sprites[this.SpritesBegin_wings + j] = new FSprite("CicadaWingA", true)
+                {
+                    anchorX = 0f,
+                    scaleX = Mathf.Lerp(3.6f, 5f, this.myOutspector.room.world.game.SeededRandom(this.myOutspector.abstractCreature.ID.RandomSeed)),
+                    scaleY = 0.8f,
+                    alpha = 0.3f,
+                    shader = rCam.room.game.rainWorld.Shaders["CicadaWing"]
+                };
             }
             int num = 0;
             for (int k = 0; k < Outspector.headCount(); k++)
@@ -76,23 +78,35 @@ namespace VoidTemplate.Creatures
                 for (int l = 0; l < this.SpritesTotal_singlehead(); l++)
                 {
                     this.ropeGraphics[k].InitiateSprites(sLeaser, rCam, this.SpritesBegin_heads + num);
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 1] = new FSprite("Circle20", true);
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 1].scale = 0.75f;
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 2] = new FSprite("FlyWing", true);
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 2].anchorY = 0f;
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 2].scaleY = 1.5f;
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 3] = new FSprite("FlyWing", true);
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 3].anchorY = 0f;
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 3].scaleY = 1.5f;
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 4] = new FSprite("FlyWing", true);
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 4].anchorY = 0f;
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 5] = new FSprite("FlyWing", true);
-                    sLeaser.sprites[this.SpritesBegin_heads + num + 5].anchorY = 0f;
+                    sLeaser.sprites[this.SpritesBegin_heads + num + 1] = new FSprite("Circle20", true)
+                    {
+                        scale = 0.75f
+                    };
+                    sLeaser.sprites[this.SpritesBegin_heads + num + 2] = new FSprite("FlyWing", true)
+                    {
+                        anchorY = 0f,
+                        scaleY = 1.5f
+                    };
+                    sLeaser.sprites[this.SpritesBegin_heads + num + 3] = new FSprite("FlyWing", true)
+                    {
+                        anchorY = 0f,
+                        scaleY = 1.5f
+                    };
+                    sLeaser.sprites[this.SpritesBegin_heads + num + 4] = new FSprite("FlyWing", true)
+                    {
+                        anchorY = 0f
+                    };
+                    sLeaser.sprites[this.SpritesBegin_heads + num + 5] = new FSprite("FlyWing", true)
+                    {
+                        anchorY = 0f
+                    };
                 }
                 num += this.SpritesTotal_singlehead();
-                sLeaser.sprites[this.SpritesBegin_Eye(k)] = new FSprite("Circle20", true);
-                sLeaser.sprites[this.SpritesBegin_Eye(k)].scaleY = 0.625f;
-                sLeaser.sprites[this.SpritesBegin_Eye(k)].scaleX = 0.45f;
+                sLeaser.sprites[this.SpritesBegin_Eye(k)] = new FSprite("Circle20", true)
+                {
+                    scaleY = 0.625f,
+                    scaleX = 0.45f
+                };
             }
             this.AddToContainer(sLeaser, rCam, null);
             base.InitiateSprites(sLeaser, rCam);
@@ -112,13 +126,13 @@ namespace VoidTemplate.Creatures
                 sLeaser.sprites[i].isVisible = !this.mycelia[i].culled;
             }
             Color bodyColor = this.myOutspector.bodyColor;
-            HSLColor hslcolor = new HSLColor(0.2f, 0.2f, 0.4f);
+            HSLColor hslcolor = new(0.2f, 0.2f, 0.4f);
             this.wingColor = Color.Lerp(bodyColor, hslcolor.rgb, 0.4f);
             this.wingColor.a = 0.2f;
             for (int j = 0; j < this.SpritesTotal_wings; j++)
             {
-                Vector2 b = Custom.DegToVec(360f / (float)this.SpritesTotal_wings * (float)j + this.bodyRotation) * this.wingBodyPartDistance;
-                float num = 360f / (float)this.wingBodyParts.Length * (float)j;
+                Vector2 b = Custom.DegToVec((360f / SpritesTotal_wings * j) + this.bodyRotation) * this.wingBodyPartDistance;
+                float num = 360f / wingBodyParts.Length * j;
                 sLeaser.sprites[this.SpritesBegin_wings + j].x = pos.x - camPos.x;
                 sLeaser.sprites[this.SpritesBegin_wings + j].y = pos.y - camPos.y;
                 sLeaser.sprites[this.SpritesBegin_wings + j].color = this.wingColor;
@@ -138,7 +152,7 @@ namespace VoidTemplate.Creatures
             {
                 sLeaser.sprites[l].x = pos.x - camPos.x;
                 sLeaser.sprites[l].y = pos.y - camPos.y;
-                sLeaser.sprites[l].scale = 1.3f + Mathf.Sin(this.myOutspector.lightpulse + (float)l / (float)l) / 4f;
+                sLeaser.sprites[l].scale = 1.3f + (Mathf.Sin(this.myOutspector.lightpulse + (l / (float)l)) / 4f);
                 sLeaser.sprites[l].color = this.myOutspector.bodyColor;
             }
             int num3 = 0;
@@ -172,7 +186,7 @@ namespace VoidTemplate.Creatures
                 if ((this.myOutspector.State as Outspector.OutspectorState).headHealth[m] > 0f)
                 {
                     sLeaser.sprites[this.SpritesBegin_Eye(m)].scaleX = Mathf.Lerp(Mathf.Lerp(sLeaser.sprites[this.SpritesBegin_Eye(m)].scaleX, Mathf.Lerp(0.525f, 0.225f, this.myOutspector.anger), 0.15f), 0.1f, this.blinks[m]);
-                    sLeaser.sprites[this.SpritesBegin_Eye(m)].scaleX = Mathf.Lerp(sLeaser.sprites[this.SpritesBegin_Eye(m)].scaleX, 0.25f + Mathf.Sin((float)this.myOutspector.blind) / 4f, Mathf.InverseLerp(0f, 500f, (float)this.myOutspector.blind));
+                    sLeaser.sprites[this.SpritesBegin_Eye(m)].scaleX = Mathf.Lerp(sLeaser.sprites[this.SpritesBegin_Eye(m)].scaleX, 0.25f + (Mathf.Sin(myOutspector.blind) / 4f), Mathf.InverseLerp(0f, 500f, myOutspector.blind));
                 }
                 else
                 {
@@ -225,8 +239,8 @@ namespace VoidTemplate.Creatures
             }
             for (int i = 0; i < this.wingBodyParts.Length; i++)
             {
-                Vector2 a = Custom.DegToVec(360f / (float)this.SpritesTotal_wings * (float)i + this.bodyRotation) * this.wingBodyPartDistance;
-                this.wingBodyParts[i].ConnectToPoint(this.myOutspector.firstChunk.pos, this.wingBodyPartDistance, false, 0.3f, this.myOutspector.firstChunk.vel + a / 3f, 0.25f, 0.1f);
+                Vector2 a = Custom.DegToVec((360f / SpritesTotal_wings * i) + this.bodyRotation) * this.wingBodyPartDistance;
+                this.wingBodyParts[i].ConnectToPoint(this.myOutspector.firstChunk.pos, this.wingBodyPartDistance, false, 0.3f, this.myOutspector.firstChunk.vel + (a / 3f), 0.25f, 0.1f);
                 if (Vector2.Distance(this.myOutspector.firstChunk.pos, this.wingBodyParts[i].pos) > this.wingBodyPartDistance * 1.1f || this.OwnerRoom.aimap.getAItile(this.myOutspector.firstChunk.pos).narrowSpace)
                 {
                     this.wingBodyParts[i].pos = this.myOutspector.firstChunk.pos;
@@ -259,7 +273,7 @@ namespace VoidTemplate.Creatures
                 if ((this.myOutspector.State as Outspector.OutspectorState).headHealth[k] <= 0f)
                 {
                     this.JawAngleWiggler[k] += Random.value * 0.01f;
-                    this.JawAngle[k] = Mathf.Lerp(this.JawAngle[k], this.JawAngle[k] + Mathf.Sin(this.JawAngleWiggler[k]) * 1.2f, 0.1f);
+                    this.JawAngle[k] = Mathf.Lerp(this.JawAngle[k], this.JawAngle[k] + (Mathf.Sin(this.JawAngleWiggler[k]) * 1.2f), 0.1f);
                 }
                 else
                 {
@@ -278,13 +292,13 @@ namespace VoidTemplate.Creatures
                 {
                     for (int l = 0; l < 15; l++)
                     {
-                        int num = (int)Random.Range(0f, (float)this.myOutspector.heads[k].tChunks.Length);
+                        int num = (int)Random.Range(0f, myOutspector.heads[k].tChunks.Length);
                         this.myOutspector.room.AddObject(new OverseerEffect(this.myOutspector.heads[k].tChunks[num].pos, Custom.RNV() * Random.value * 0.1f, this.myOutspector.bodyColor, Mathf.Lerp(200f, 15f, this.myOutspector.dying), Mathf.Lerp(1.5f, 0.1f, this.myOutspector.dying)));
                     }
                     for (int m = 0; m < 8; m++)
                     {
-                        int num2 = (int)Random.Range(0f, (float)this.myOutspector.heads[k].tChunks.Length);
-                        this.myOutspector.room.AddObject(new Spark(this.myOutspector.heads[k].tChunks[num2].pos, this.myOutspector.mainBodyChunk.vel * 0.5f + Custom.RNV() * 14f * Random.value, this.myOutspector.bodyColor, null, 14, 21));
+                        int num2 = (int)Random.Range(0f, myOutspector.heads[k].tChunks.Length);
+                        this.myOutspector.room.AddObject(new Spark(this.myOutspector.heads[k].tChunks[num2].pos, (this.myOutspector.mainBodyChunk.vel * 0.5f) + (Custom.RNV() * 14f * Random.value), this.myOutspector.bodyColor, null, 14, 21));
                     }
                 }
             }
@@ -318,14 +332,8 @@ namespace VoidTemplate.Creatures
             {
                 if (this.mycelia[i].system != this.myOutspector.neuronSystem)
                 {
-                    if (this.mycelia[i].system != null)
-                    {
-                        this.mycelia[i].system.mycelia.Remove(this.mycelia[i]);
-                    }
-                    if (this.myOutspector.neuronSystem != null)
-                    {
-                        this.myOutspector.neuronSystem.mycelia.Add(this.mycelia[i]);
-                    }
+                    this.mycelia[i].system?.mycelia.Remove(this.mycelia[i]);
+                    this.myOutspector.neuronSystem?.mycelia.Add(this.mycelia[i]);
                     this.mycelia[i].system = this.myOutspector.neuronSystem;
                 }
             }
@@ -404,7 +412,7 @@ namespace VoidTemplate.Creatures
 
         private float findWingFlapIntensity(int wing, Vector2 inputvec)
         {
-            float num = 360f / (float)this.SpritesTotal_wings * (float)wing;
+            float num = 360f / SpritesTotal_wings * wing;
             return Mathf.InverseLerp(0f, 180f, Mathf.DeltaAngle(num + this.bodyRotation, inputvec.GetAngle())) * inputvec.magnitude;
         }
 
@@ -433,7 +441,7 @@ namespace VoidTemplate.Creatures
 
         public int SpritesBegin_SingleNeck(int index)
         {
-            return this.SpritesBegin_heads + this.SpritesTotal_singlehead() * index;
+            return this.SpritesBegin_heads + (this.SpritesTotal_singlehead() * index);
         }
 
         public int SpritesTotal_singlehead()
@@ -443,7 +451,7 @@ namespace VoidTemplate.Creatures
 
         public int SpritesBegin_Eye(int index)
         {
-            return this.SpritesBegin_heads + this.SpritesTotal_singlehead() * index + (this.SpritesTotal_singlehead() - 1);
+            return this.SpritesBegin_heads + (this.SpritesTotal_singlehead() * index) + (this.SpritesTotal_singlehead() - 1);
         }
 
         private float RadOfSegment(float f, float timeStacker)
@@ -494,10 +502,10 @@ namespace VoidTemplate.Creatures
             {
                 Vector2 vector = this.owner.myOutspector.mainBodyChunk.pos;
                 vector += Custom.DirVec(Vector2.Lerp(this.segments[1].lastPos, this.segments[1].pos, timeStacker), vector) * 1f;
-                float a = this.owner.RadOfSegment(0f, timeStacker) * 1.7f + 2f;
+                float a = (this.owner.RadOfSegment(0f, timeStacker) * 1.7f) + 2f;
                 for (int i = 0; i < this.segments.Length; i++)
                 {
-                    float f = (float)i / (float)(this.segments.Length - 1);
+                    float f = i / (float)(this.segments.Length - 1);
                     Vector2 vector2 = Vector2.Lerp(this.segments[i].lastPos, this.segments[i].pos, timeStacker);
                     if (i >= this.segments.Length - 1)
                     {
@@ -508,13 +516,13 @@ namespace VoidTemplate.Creatures
                         vector2 = Vector2.Lerp(this.segments[i + 1].lastPos, this.segments[i + 1].pos, timeStacker);
                     }
                     Vector2 a2 = Custom.PerpendicularVector((vector - vector2).normalized);
-                    float num = this.owner.RadOfSegment(f, timeStacker) * 1.7f + 2f;
+                    float num = (this.owner.RadOfSegment(f, timeStacker) * 1.7f) + 2f;
                     (sLeaser.sprites[this.spriteOffset] as TriangleMesh).color = this.owner.myOutspector.bodyColor;
                     (sLeaser.sprites[this.spriteOffset] as TriangleMesh).alpha = this.owner.myOutspector.lightpulse;
-                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice(i * 4, vector - a2 * Mathf.Lerp(a, num, 0.5f) - camPos);
-                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice(i * 4 + 1, vector + a2 * Mathf.Lerp(a, num, 0.5f) - camPos);
-                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice(i * 4 + 2, vector2 - a2 * num - camPos);
-                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice(i * 4 + 3, vector2 + a2 * num - camPos);
+                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice(i * 4, vector - (a2 * Mathf.Lerp(a, num, 0.5f)) - camPos);
+                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice((i * 4) + 1, vector + (a2 * Mathf.Lerp(a, num, 0.5f)) - camPos);
+                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice((i * 4) + 2, vector2 - (a2 * num) - camPos);
+                    (sLeaser.sprites[this.spriteOffset] as TriangleMesh).MoveVertice((i * 4) + 3, vector2 + (a2 * num) - camPos);
                     vector = vector2;
                     a = num;
                 }
@@ -534,23 +542,23 @@ namespace VoidTemplate.Creatures
 
             public Vector2 OnTubePos(Vector2 pos, float timeStacker)
             {
-                Vector2 p = this.OneDimensionalTubePos(pos.y - 1f / (float)this.segments.Length, timeStacker);
-                Vector2 p2 = this.OneDimensionalTubePos(pos.y + 1f / (float)this.segments.Length, timeStacker);
-                return this.OneDimensionalTubePos(pos.y, timeStacker) + Custom.PerpendicularVector(Custom.DirVec(p, p2)) * pos.x;
+                Vector2 p = this.OneDimensionalTubePos(pos.y - (1f / segments.Length), timeStacker);
+                Vector2 p2 = this.OneDimensionalTubePos(pos.y + (1f / segments.Length), timeStacker);
+                return this.OneDimensionalTubePos(pos.y, timeStacker) + (Custom.PerpendicularVector(Custom.DirVec(p, p2)) * pos.x);
             }
 
             public Vector2 OnTubeDir(float floatPos, float timeStacker)
             {
-                Vector2 p = this.OneDimensionalTubePos(floatPos - 1f / (float)this.segments.Length, timeStacker);
-                Vector2 p2 = this.OneDimensionalTubePos(floatPos + 1f / (float)this.segments.Length, timeStacker);
+                Vector2 p = this.OneDimensionalTubePos(floatPos - (1f / segments.Length), timeStacker);
+                Vector2 p2 = this.OneDimensionalTubePos(floatPos + (1f / segments.Length), timeStacker);
                 return Custom.DirVec(p, p2);
             }
 
             public Vector2 OneDimensionalTubePos(float floatPos, float timeStacker)
             {
-                int num = Custom.IntClamp(Mathf.FloorToInt(floatPos * (float)(this.segments.Length - 1)), 0, this.segments.Length - 1);
+                int num = Custom.IntClamp(Mathf.FloorToInt(floatPos * (this.segments.Length - 1)), 0, this.segments.Length - 1);
                 int num2 = Custom.IntClamp(num + 1, 0, this.segments.Length - 1);
-                float t = Mathf.InverseLerp((float)num, (float)num2, floatPos * (float)(this.segments.Length - 1));
+                float t = Mathf.InverseLerp(num, num2, floatPos * (this.segments.Length - 1));
                 return Vector2.Lerp(Vector2.Lerp(this.segments[num].lastPos, this.segments[num2].lastPos, t), Vector2.Lerp(this.segments[num].pos, this.segments[num2].pos, t), timeStacker);
             }
 
@@ -559,7 +567,7 @@ namespace VoidTemplate.Creatures
                 this.spriteOffset = sproffset;
                 sLeaser.sprites[this.spriteOffset] = TriangleMesh.MakeLongMesh(this.segments.Length, false, false);
                 sLeaser.sprites[this.spriteOffset].shader = rCam.game.rainWorld.Shaders["OverseerZip"];
-                sLeaser.sprites[this.spriteOffset].alpha = 0.7f + 0.1f * Random.value;
+                sLeaser.sprites[this.spriteOffset].alpha = 0.7f + (0.1f * Random.value);
             }
 
             public OutspectorHeadRopeGraphics(OutspectorGraphics owner, int head) : base(40)

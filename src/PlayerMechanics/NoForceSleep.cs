@@ -5,15 +5,15 @@ namespace VoidTemplate.PlayerMechanics;
 
 internal static class NoForceSleep
 {
-	public static void Hook()
-	{
-		On.Player.Update += NoForceSleep_Update;
-	}
+    public static void Hook()
+    {
+        On.Player.Update += NoForceSleep_Update;
+    }
 
-	private static void NoForceSleep_Update(On.Player.orig_Update orig, Player self, bool eu)
-	{
-		orig(self, eu);
-		if (self.IsVoid() && self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
-			self.forceSleepCounter = 0;
-	}
+    private static void NoForceSleep_Update(On.Player.orig_Update orig, Player self, bool eu)
+    {
+        orig(self, eu);
+        if (self.IsVoid() && self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+            self.forceSleepCounter = 0;
+    }
 }

@@ -1,16 +1,4 @@
-﻿using Expedition;
-using Kittehface.Framework20;
-using Menu;
-using MoreSlugcats;
-using RWCustom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.Diagnostics;
-using static VoidTemplate.Useful.Utils;
+﻿using UnityEngine;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -37,17 +25,17 @@ internal static class ThrowObject
                     BodyChunk bodyChunk = weapon.bodyChunks[i];
                     if (self.input[0].x == 0)
                     {
-                        bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(0, -1) * 10f;
+                        bodyChunk.pos = self.mainBodyChunk.pos + (new Vector2(0, -1) * 10f);
                         bodyChunk.vel = new Vector2(0, -1) * 40f;
                     }
                     else if (self.input[0].x > 0)
                     {
-                        bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(1, -1) * 10f;
+                        bodyChunk.pos = self.mainBodyChunk.pos + (new Vector2(1, -1) * 10f);
                         bodyChunk.vel = new Vector2(0.71f, -0.71f) * 40f;
                     }
                     else if (self.input[0].x < 0)
                     {
-                        bodyChunk.pos = self.mainBodyChunk.pos + new Vector2(-1, -1) * 10f;
+                        bodyChunk.pos = self.mainBodyChunk.pos + (new Vector2(-1, -1) * 10f);
                         bodyChunk.vel = new Vector2(-0.71f, -0.71f) * 40f;
                     }
                 }

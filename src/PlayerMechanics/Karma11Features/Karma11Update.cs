@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VoidTemplate.Useful;
+﻿using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;

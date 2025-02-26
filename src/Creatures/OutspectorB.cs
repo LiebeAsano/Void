@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using CoralBrain;
-using RWCustom;
+﻿using CoralBrain;
 using MoreSlugcats;
+using RWCustom;
+using System.Collections.Generic;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace VoidTemplate.Creatures
@@ -123,8 +119,10 @@ namespace VoidTemplate.Creatures
                     return Color.black;
                 }
                 Vector3 vector = Custom.RGB2HSL(OwneriteratorColor);
-                HSLColor hSLColor = new HSLColor(vector.x, vector.y, vector.z);
-                hSLColor.saturation = 0.9f;
+                HSLColor hSLColor = new(vector.x, vector.y, vector.z)
+                {
+                    saturation = 0.9f
+                };
                 hSLColor.hue += room.world.game.SeededRandom(base.abstractCreature.ID.RandomSeed + 20) / 20f;
                 return hSLColor.rgb;
             }
@@ -200,17 +198,19 @@ namespace VoidTemplate.Creatures
             headCuriosityFocus = new PhysicalObject[headCount()];
             headGrabChunk = new BodyChunk[headCount()];
             headWantToGrabChunk = new BodyChunk[headCount()];
-            appendages = new List<Appendage>();
-            DangerousThrowLocations = new List<Vector2>();
-            antiStrandingZones = new List<PlacedObject>();
+            appendages = [];
+            DangerousThrowLocations = [];
+            antiStrandingZones = [];
             for (int i = 0; i < heads.Length; i++)
             {
-                heads[i] = new Tentacle(this, base.mainBodyChunk, 300f);
-                heads[i].tProps = new Tentacle.TentacleProps(stiff: false, rope: true, shorten: true, 0.5f, 0f, 0.5f, 0.05f, 0.05f, 2.2f, 12f, 1f / 3f, 5f, 15, 60, 12, 20);
-                heads[i].tChunks = new Tentacle.TentacleChunk[8];
+                heads[i] = new Tentacle(this, base.mainBodyChunk, 300f)
+                {
+                    tProps = new Tentacle.TentacleProps(stiff: false, rope: true, shorten: true, 0.5f, 0f, 0.5f, 0.05f, 0.05f, 2.2f, 12f, 1f / 3f, 5f, 15, 60, 12, 20),
+                    tChunks = new Tentacle.TentacleChunk[8]
+                };
                 for (int j = 0; j < heads[i].tChunks.Length; j++)
                 {
-                    heads[i].tChunks[j] = new Tentacle.TentacleChunk(heads[i], j, (float)(j + 1) / (float)heads[i].tChunks.Length, Mathf.Lerp(3f, 5f, (float)j / (float)(heads[i].tChunks.Length - 1)));
+                    heads[i].tChunks[j] = new Tentacle.TentacleChunk(heads[i], j, (j + 1) / (float)heads[i].tChunks.Length, Mathf.Lerp(3f, 5f, j / (float)(heads[i].tChunks.Length - 1)));
                 }
                 heads[i].stretchAndSqueeze = 0.1f;
                 appendages.Add(new Appendage(this, i, heads[i].tChunks.Length));
@@ -230,7 +230,7 @@ namespace VoidTemplate.Creatures
             }
             else
             {
-                squeezeFac = Mathf.Max(0f, squeezeFac - 1f / 30f);
+                squeezeFac = Mathf.Max(0f, squeezeFac - (1f / 30f));
             }
             if (squeezeFac > 0.8f)
             {
@@ -245,16 +245,16 @@ namespace VoidTemplate.Creatures
             myLight.HardSetPos(base.mainBodyChunk.pos);
             mySuperGlow.HardSetPos(base.mainBodyChunk.pos);
             lightpulse += 0.03f;
-            float num = 6f + Mathf.Sin(AI.AttentionGrabberTimer * 4f) * 6f * AI.AttentionGrabberTimer / (float)attentionDelayMax;
+            float num = 6f + (Mathf.Sin(AI.AttentionGrabberTimer * 4f) * 6f * AI.AttentionGrabberTimer / attentionDelayMax);
             float num2 = Mathf.InverseLerp(1f, 0.8f, squeezeFac);
-            myLight.HardSetRad(210f + num + 20f * Mathf.Sin(lightpulse) + 1900f * dying);
-            myLight.HardSetAlpha((0.9f + Mathf.Sin(lightpulse) / 10f) * num2 + dying);
-            mySuperGlow.HardSetRad(50f + num + 10f * Mathf.Sin(lightpulse) + 90f * dying);
+            myLight.HardSetRad(210f + num + (20f * Mathf.Sin(lightpulse)) + (1900f * dying));
+            myLight.HardSetAlpha(((0.9f + (Mathf.Sin(lightpulse) / 10f)) * num2) + dying);
+            mySuperGlow.HardSetRad(50f + num + (10f * Mathf.Sin(lightpulse)) + (90f * dying));
             mySuperGlow.HardSetAlpha(num2 + dying);
             for (int k = 0; k < headCount(); k++)
             {
-                headlights[k].HardSetRad(60f + 10f * Mathf.Sin(lightpulse + (float)k) - 1f * dying);
-                headlights[k].HardSetAlpha(0.23f * num2 + dying);
+                headlights[k].HardSetRad(60f + (10f * Mathf.Sin(lightpulse + k)) - (1f * dying));
+                headlights[k].HardSetAlpha((0.23f * num2) + dying);
                 Vector2 lastPos = heads[k].tChunks[heads[k].tChunks.Length - 2].lastPos;
                 Vector2 lastPos2 = heads[k].Tip.lastPos;
                 Vector2 vector = Custom.DegToVec(Custom.AimFromOneVectorToAnother(lastPos, lastPos2));
@@ -301,7 +301,7 @@ namespace VoidTemplate.Creatures
                         }
                     }
                 }
-                dying = Mathf.Min(1f, dying + 1f / 6f);
+                dying = Mathf.Min(1f, dying + (1f / 6f));
                 if (dying >= 1f)
                 {
                     Die();
@@ -324,10 +324,10 @@ namespace VoidTemplate.Creatures
                     }
                 }
             }
-            float num4 = (1f + Mathf.Sin(AI.AttentionGrabberTimer / 2f) / 2f) * AI.AttentionGrabberTimer / ((float)attentionDelayMax * 2f);
+            float num4 = (1f + (Mathf.Sin(AI.AttentionGrabberTimer / 2f) / 2f)) * AI.AttentionGrabberTimer / (attentionDelayMax * 2f);
             if (AI.behavior == OutspectorBAI.Behavior.InspectArea)
             {
-                float b = Mathf.Max(0.15f, (0.25f + Mathf.Sin(AI.newIdlePosCounter) / 5f) * ((float)AI.newIdlePosCounter / 2500f));
+                float b = Mathf.Max(0.15f, (0.25f + (Mathf.Sin(AI.newIdlePosCounter) / 5f)) * (AI.newIdlePosCounter / 2500f));
                 num4 = Mathf.Max(num4, b);
             }
             if (!base.Consious)
@@ -383,7 +383,7 @@ namespace VoidTemplate.Creatures
                     {
                         ownerIterator = 0;
                     }
-                    else if (room.world.region.name == "MS" || room.world.region.name == "DM")
+                    else if (room.world.region.name is "MS" or "DM")
                     {
                         ownerIterator = 1;
                     }
@@ -421,7 +421,7 @@ namespace VoidTemplate.Creatures
             {
                 foreach (ZapCoil zapCoil in newRoom.zapCoils)
                 {
-                    Vector2 item = new Vector2(Mathf.Lerp(zapCoil.rect.left, zapCoil.rect.right, 0.5f) * 20f, Mathf.Lerp(zapCoil.rect.bottom, zapCoil.rect.top, 0.5f) * 20f);
+                    Vector2 item = new(Mathf.Lerp(zapCoil.rect.left, zapCoil.rect.right, 0.5f) * 20f, Mathf.Lerp(zapCoil.rect.bottom, zapCoil.rect.top, 0.5f) * 20f);
                     DangerousThrowLocations.Add(item);
                     Custom.Log("Zap coil added to hazards", item.ToString());
                 }
@@ -455,14 +455,18 @@ namespace VoidTemplate.Creatures
                     headlights[j].RemoveFromRoom();
                     headlights[j].Destroy();
                 }
-                headlights[j] = new LightSource(base.mainBodyChunk.pos, environmentalLight: false, Color.white, this);
-                headlights[j].flat = true;
+                headlights[j] = new LightSource(base.mainBodyChunk.pos, environmentalLight: false, Color.white, this)
+                {
+                    flat = true
+                };
                 room.AddObject(headlights[j]);
             }
             myLight = new LightSource(base.mainBodyChunk.pos, environmentalLight: false, bodyColor, this);
             room.AddObject(myLight);
-            mySuperGlow = new LightSource(base.mainBodyChunk.pos, environmentalLight: false, bodyColor, this);
-            mySuperGlow.flat = true;
+            mySuperGlow = new LightSource(base.mainBodyChunk.pos, environmentalLight: false, bodyColor, this)
+            {
+                flat = true
+            };
             room.AddObject(mySuperGlow);
             UpdateCoralNeuronSystem();
             for (int k = 0; k < headCount(); k++)
@@ -473,7 +477,7 @@ namespace VoidTemplate.Creatures
             {
                 room.AddObject(new ProjectedCircle(newRoom, this, 0, 300f));
             }
-            pastPositions = new List<IntVector2>();
+            pastPositions = [];
         }
 
         public override void Collide(PhysicalObject otherObject, int myChunk, int otherChunk)
@@ -651,7 +655,7 @@ namespace VoidTemplate.Creatures
                             room.PlaySound(SoundID.Vulture_Grab_NPC, headGrabChunk[l].pos);
                         }
                         headWantToGrabChunk[l] = null;
-                        headGrabChunk[l].pos = heads[l].Tip.pos + getHeadDirection(l) * 5f;
+                        headGrabChunk[l].pos = heads[l].Tip.pos + (getHeadDirection(l) * 5f);
                         headGrabChunk[l].vel *= 0f;
                         heads[l].floatGrabDest = AI.HeadGoal(l);
                     }
@@ -689,7 +693,7 @@ namespace VoidTemplate.Creatures
                 {
                     headGrabChunk[l].owner.AllGraspsLetGoOfThisObject(evenNonExlusive: true);
                     headWantToGrabChunk[l] = null;
-                    headGrabChunk[l].pos = heads[l].Tip.pos + getHeadDirection(l) * 25f;
+                    headGrabChunk[l].pos = heads[l].Tip.pos + (getHeadDirection(l) * 25f);
                     headGrabChunk[l].vel *= 0f;
                     if (!HeadWeaponized(l))
                     {
@@ -712,7 +716,7 @@ namespace VoidTemplate.Creatures
                         {
                             for (int num5 = 0; num5 < array2.Length; num5++)
                             {
-                                array2[num5].vel = Vector2.Lerp(headGrabChunk[l].vel * 0.001f, headGrabChunk[l].vel, anger) + new Vector2(inputWithDiagonals.Value.x, inputWithDiagonals.Value.y) * 15f;
+                                array2[num5].vel = Vector2.Lerp(headGrabChunk[l].vel * 0.001f, headGrabChunk[l].vel, anger) + (new Vector2(inputWithDiagonals.Value.x, inputWithDiagonals.Value.y) * 15f);
                             }
                             room.PlaySound(SoundID.Vulture_Peck, heads[l].Tip.pos);
                         }
@@ -771,7 +775,7 @@ namespace VoidTemplate.Creatures
                             else if (inputWithDiagonals.Value.AnyDirectionalInput)
                             {
                                 creature2 = this;
-                                vector = heads[l].Tip.pos + new Vector2(inputWithDiagonals.Value.x, inputWithDiagonals.Value.y) * 200f;
+                                vector = heads[l].Tip.pos + (new Vector2(inputWithDiagonals.Value.x, inputWithDiagonals.Value.y) * 200f);
                                 num7 = base.abstractCreature.Room.index;
                             }
                             else
@@ -803,7 +807,7 @@ namespace VoidTemplate.Creatures
                                         {
                                             Custom.Log($"OutspectorB throw weapon {headGrabChunk[l].owner}");
                                             Custom.Log("Dir", a.ToString());
-                                            (headGrabChunk[l].owner as Weapon).Thrown(this, headGrabChunk[l].pos, headGrabChunk[l].pos - a.ToVector2() * 15f, a, 1f, eu: true);
+                                            (headGrabChunk[l].owner as Weapon).Thrown(this, headGrabChunk[l].pos, headGrabChunk[l].pos - (a.ToVector2() * 15f), a, 1f, eu: true);
                                             headGrabChunk[l] = null;
                                             headWantToGrabChunk[l] = null;
                                         }
@@ -824,7 +828,7 @@ namespace VoidTemplate.Creatures
                                 }
                                 else
                                 {
-                                    heads[l].floatGrabDest = base.mainBodyChunk.pos + vector3 * -80f;
+                                    heads[l].floatGrabDest = base.mainBodyChunk.pos + (vector3 * -80f);
                                 }
                             }
                             else
@@ -868,7 +872,7 @@ namespace VoidTemplate.Creatures
                     }
                     if ((inputWithDiagonals.Value.x != 0 || inputWithDiagonals.Value.y != 0) && !inputWithDiagonals.Value.pckp)
                     {
-                        movementConnection = new MovementConnection(type, room.GetWorldCoordinate(base.mainBodyChunk.pos), room.GetWorldCoordinate(base.mainBodyChunk.pos + new Vector2(inputWithDiagonals.Value.x, lastInputWithDiagonals.Value.y) * 80f), 2);
+                        movementConnection = new MovementConnection(type, room.GetWorldCoordinate(base.mainBodyChunk.pos), room.GetWorldCoordinate(base.mainBodyChunk.pos + (new Vector2(inputWithDiagonals.Value.x, lastInputWithDiagonals.Value.y) * 80f)), 2);
                     }
                 }
             }
@@ -946,8 +950,8 @@ namespace VoidTemplate.Creatures
             {
                 vector6.y += room.gravity * 0.9f;
             }
-            float num12 = 1f + Mathf.Clamp(anger, 0f, 2f) * 3f + AI.rainTracker.Utility();
-            base.mainBodyChunk.vel += flyingPower * num12 / 30f + vector6;
+            float num12 = 1f + (Mathf.Clamp(anger, 0f, 2f) * 3f) + AI.rainTracker.Utility();
+            base.mainBodyChunk.vel += (flyingPower * num12 / 30f) + vector6;
         }
 
         public Vector2 AppendagePosition(int appendage, int segment)
@@ -1007,7 +1011,7 @@ namespace VoidTemplate.Creatures
                 AI.preyTracker.AddPrey(AI.tracker.RepresentationForCreature((source.owner as Weapon).thrownBy.abstractCreature, addIfMissing: true));
                 if (hitAppendage == null)
                 {
-                    damage = ((!((double)Random.value < 0.001)) ? 0f : 100f);
+                    damage = (!((double)Random.value < 0.001)) ? 0f : 100f;
                 }
                 else
                 {
@@ -1021,7 +1025,7 @@ namespace VoidTemplate.Creatures
                 AI.preyTracker.AddPrey(AI.tracker.RepresentationForCreature((source.owner as Creature).abstractCreature, addIfMissing: true));
                 if (hitAppendage == null)
                 {
-                    damage = ((!((double)Random.value < 0.001)) ? 0f : 100f);
+                    damage = (!((double)Random.value < 0.001)) ? 0f : 100f;
                 }
                 else
                 {
@@ -1045,10 +1049,7 @@ namespace VoidTemplate.Creatures
                 base.bodyChunks[i].vel = vel;
             }
             squeezeFac = 1f;
-            if (base.graphicsModule != null)
-            {
-                base.graphicsModule.Reset();
-            }
+            base.graphicsModule?.Reset();
             for (int j = 0; j < heads.Length; j++)
             {
                 headGrabChunk[j] = null;
@@ -1077,20 +1078,11 @@ namespace VoidTemplate.Creatures
 
         public override void Abstractize()
         {
-            if (myLight != null)
-            {
-                myLight.RemoveFromRoom();
-            }
-            if (mySuperGlow != null)
-            {
-                mySuperGlow.RemoveFromRoom();
-            }
+            myLight?.RemoveFromRoom();
+            mySuperGlow?.RemoveFromRoom();
             for (int i = 0; i < headCount(); i++)
             {
-                if (headlights[i] != null)
-                {
-                    headlights[i].RemoveFromRoom();
-                }
+                headlights[i]?.RemoveFromRoom();
             }
             base.Abstractize();
         }

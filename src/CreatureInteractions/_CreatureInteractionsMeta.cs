@@ -2,12 +2,12 @@
 
 public static class _CreatureInteractionsMeta
 {
-	public static void Hook()
-	{
-		AntiSpiderStun.Hook();
-		DLLindigestion.Hook();
-		LeechIndigestion.Hook();
-		BigJellyfishStunImmunity.Hook();
-		//OverseerBehavior.Hook();
-	}
+    public static void Hook()
+    {
+        AntiSpiderStun.Hook();
+        DLLindigestion.Hook();
+        LeechIndigestion.Hook();
+        BigJellyfishStunImmunity.Hook();
+        //OverseerBehavior.Hook();
+    }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -24,8 +19,8 @@ internal static class ExplosiveResist
             {
                 Karma = 10;
             }
-            float StunResist = 1f - 0.035f * Karma;
-            float DamageResist = 1f - 0.035f * Karma;
+            float StunResist = 1f - (0.035f * Karma);
+            float DamageResist = 1f - (0.035f * Karma);
             stunBonus *= StunResist;
             damage *= DamageResist;
         }

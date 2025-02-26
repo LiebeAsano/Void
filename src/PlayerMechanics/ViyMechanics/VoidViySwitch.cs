@@ -1,18 +1,11 @@
-﻿using JollyCoop;
-using Menu;
-using MoreSlugcats;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace VoidTemplate.PlayerMechanics.ViyMechanics;
+﻿namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
 internal static class VoidViySwitch
 {
-	public static void Hook()
-	{
-		On.Menu.SlugcatSelectMenu.SetSlugcatColorOrder += SlugcatSelectMenu_SetSlugcatColorOrder;
-	}
+    public static void Hook()
+    {
+        On.Menu.SlugcatSelectMenu.SetSlugcatColorOrder += SlugcatSelectMenu_SetSlugcatColorOrder;
+    }
 
     private static void SlugcatSelectMenu_SetSlugcatColorOrder(On.Menu.SlugcatSelectMenu.orig_SetSlugcatColorOrder orig, Menu.SlugcatSelectMenu self)
     {

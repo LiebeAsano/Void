@@ -1,13 +1,7 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using RWCustom;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using VoidTemplate.Useful;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics

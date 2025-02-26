@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using MoreSlugcats;
 using System.Linq;
-using static VoidTemplate.Useful.Utils;
-using static VoidTemplate.Oracles.OracleHooks;
 using UnityEngine;
-using MoreSlugcats;
-using RWCustom;
-using System.Diagnostics.Eventing.Reader;
-using System.Threading.Tasks;
+using static VoidTemplate.Oracles.OracleHooks;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.Oracles;
 
@@ -1101,7 +1095,7 @@ internal static class SLOracle
             }
         }
         else
-            orig (self);
+            orig(self);
 
     }
 
@@ -1168,7 +1162,7 @@ internal static class SLOracle
         if (OracleConversation.MoonVoidConversation.Contains(self.id))
         {
             string path = AssetManager.ResolveFilePath($"text/oracle/firstmoon/{self.id.value.ToLower()}.txt");
-            if (self.State.playerEncounters > 0 && self.State.playerEncountersWithMark == 0 
+            if (self.State.playerEncounters > 0 && self.State.playerEncountersWithMark == 0
                 && self.myBehavior.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                 path = AssetManager.ResolveFilePath($"text/oracle/moon11/{self.id.value.ToLower()}.txt");
             else if (self.State.playerEncounters > 0 && self.State.playerEncountersWithMark == 0)
@@ -1210,16 +1204,16 @@ internal static class SLOracle
                     else logerr("attempting event HoverPearl while moon is not holding pearl");
                     break;
                 }
-            /*case "AsyncHover":
-                {
-                    if (self.holdingObject is DataPearl pearl)
+                /*case "AsyncHover":
                     {
-                        var roomref = self.oracle.room;
-                        var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
-                        hoveringPearl.AnyncHover(16000);
-                    }
-                    break;
-                }*/
+                        if (self.holdingObject is DataPearl pearl)
+                        {
+                            var roomref = self.oracle.room;
+                            var hoveringPearl = new HoveringPearl(pearl.abstractPhysicalObject, roomref.world);
+                            hoveringPearl.AnyncHover(16000);
+                        }
+                        break;
+                    }*/
         }
     }
     private static void MoonVoice(SLOracleBehaviorHasMark self)

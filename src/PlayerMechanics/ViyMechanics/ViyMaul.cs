@@ -1,12 +1,4 @@
 ﻿using MoreSlugcats;
-using RWCustom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
@@ -25,7 +17,7 @@ internal static class ViyMaul
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
         {
             bool critStun = !crit.Stunned || crit.Stunned;
-            if (crit != null && !crit.dead && (crit is not IPlayerEdible || crit is Centipede && !(crit as Centipede).Edible) && critStun)
+            if (crit != null && !crit.dead && (crit is not IPlayerEdible || (crit is Centipede && !(crit as Centipede).Edible)) && critStun)
             {
                 crit.Stun(10);
                 return true;
@@ -51,7 +43,7 @@ internal static class ViyMaul
                 || obj is Hazer
                 || obj is PoleMimic
                 || obj is Snail
-                || obj is Centipede && (obj as Centipede).Edible
+                || (obj is Centipede && (obj as Centipede).Edible)
                 || obj is LanternMouse
                 || obj is EggBug
                 || obj is FlyLure

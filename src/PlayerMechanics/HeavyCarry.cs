@@ -1,12 +1,4 @@
-﻿using MonoMod.RuntimeDetour;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VoidTemplate.PlayerMechanics;
+﻿namespace VoidTemplate.PlayerMechanics;
 
 internal static class HeavyCarry
 {

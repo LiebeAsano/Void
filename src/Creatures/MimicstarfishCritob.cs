@@ -1,14 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using DevInterface;
+﻿using DevInterface;
 using Fisobs.Core;
 using Fisobs.Creatures;
 using Fisobs.Sandbox;
-using MonoMod.RuntimeDetour;
 using MoreSlugcats;
-using RWCustom;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace VoidTemplate;
@@ -16,11 +11,11 @@ namespace VoidTemplate;
 
 
 sealed class MimicstarfishCritob : Critob
-    {
+{
     internal MimicstarfishCritob() : base(CreatureTemplateType.Mimicstarfish)
     {
         base.Icon = new SimpleIcon("Mimicstarfish_Icon", new Color(1f, 0.8f, 0.8f));
-        
+
         base.SandboxPerformanceCost = new SandboxPerformanceCost(1f, 0.65f);
         base.RegisterUnlock(KillScore.Configurable(9), SandboxUnlockID.Mimicstarfish, null, 0);
         base.ShelterDanger = ShelterDanger.Hostile;
@@ -50,21 +45,21 @@ sealed class MimicstarfishCritob : Critob
                 "Mimicstar"
         };
     }
-    
 
-    
-        public override IEnumerable<RoomAttractivenessPanel.Category> DevtoolsRoomAttraction()
+
+
+    public override IEnumerable<RoomAttractivenessPanel.Category> DevtoolsRoomAttraction()
+    {
+        return new RoomAttractivenessPanel.Category[]
         {
-            return new RoomAttractivenessPanel.Category[]
-            {
                 RoomAttractivenessPanel.Category.LikesWater,
                 RoomAttractivenessPanel.Category.Swimming,
                 RoomAttractivenessPanel.Category.Dark
-            };
-        }
+        };
+    }
 
-        public override CreatureTemplate CreateTemplate()
-        {
+    public override CreatureTemplate CreateTemplate()
+    {
         CreatureTemplate creatureTemplate = new CreatureFormula(CreatureTemplate.Type.BrotherLongLegs, base.Type, "Mimicstar")
         {
             TileResistances = new TileResist
@@ -79,7 +74,7 @@ sealed class MimicstarfishCritob : Critob
                 OffScreenMovement = new PathCost(1f, 0),
                 BetweenRooms = new PathCost(10f, 0)
             },
-        DefaultRelationship = new CreatureTemplate.Relationship(CreatureTemplate.Relationship.Type.Ignores, 0f),
+            DefaultRelationship = new CreatureTemplate.Relationship(CreatureTemplate.Relationship.Type.Ignores, 0f),
             DamageResistances = new AttackResist
             {
                 Base = 2.5f,
@@ -96,14 +91,14 @@ sealed class MimicstarfishCritob : Critob
             HasAI = true,
             Pathing = PreBakedPathing.Ancestral(CreatureTemplate.Type.BrotherLongLegs),
         }.IntoTemplate();
-     
-            return creatureTemplate;
-        }
 
-        // Token: 0x06000019 RID: 25 RVA: 0x00002744 File Offset: 0x00000944
-        public override void EstablishRelationships()
-        {
-       
+        return creatureTemplate;
+    }
+
+    // Token: 0x06000019 RID: 25 RVA: 0x00002744 File Offset: 0x00000944
+    public override void EstablishRelationships()
+    {
+
         var relationships = new Relationships(base.Type);
 
         relationships.Ignores(CreatureTemplate.Type.GreenLizard);
@@ -121,21 +116,21 @@ sealed class MimicstarfishCritob : Critob
         {
             relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.MirosVulture, 1f);
             relationships.Ignores(MoreSlugcatsEnums.CreatureTemplateType.TrainLizard);
-            relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.AquaCenti,0.8f);
+            relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.AquaCenti, 0.8f);
             relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.TerrorLongLegs, 1f);
         }
         relationships.Ignores(base.Type);
-        }
+    }
 
-        public override ArtificialIntelligence CreateRealizedAI(AbstractCreature acrit)
-        {
-            return new DaddyAI(acrit, acrit.world);
-        }
+    public override ArtificialIntelligence CreateRealizedAI(AbstractCreature acrit)
+    {
+        return new DaddyAI(acrit, acrit.world);
+    }
 
-        public override Creature CreateRealizedCreature(AbstractCreature acrit)
-        {
-            return new Mimicstarfish(acrit, acrit.world);
-        }
+    public override Creature CreateRealizedCreature(AbstractCreature acrit)
+    {
+        return new Mimicstarfish(acrit, acrit.world);
+    }
 
     public override void CorpseIsEdible(Player player, Creature crit, ref bool canEatMeat)
     {
@@ -146,17 +141,17 @@ sealed class MimicstarfishCritob : Critob
     {
         return new Mimicstarfish.DaddyState(acrit);
         {
-            
-            };
-}
+
+        };
+    }
 
     public override void LoadResources(RainWorld rainWorld)
-        {
-        }
-
- 
-        public override CreatureTemplate.Type ArenaFallback()
-        {
-            return CreatureTemplate.Type.BrotherLongLegs;
-        }
+    {
     }
+
+
+    public override CreatureTemplate.Type ArenaFallback()
+    {
+        return CreatureTemplate.Type.BrotherLongLegs;
+    }
+}

@@ -1,15 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MoreSlugcats;
-using RWCustom;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using VoidTemplate.Useful;
 using static VoidTemplate.Useful.Utils;
 
@@ -34,7 +25,7 @@ internal static class СanMaul
 
     private static void Player_GrabUpdate(ILContext il)
     {
-        ILCursor c = new ILCursor(il);
+        ILCursor c = new(il);
 
         if (c.TryGotoNext(
         MoveType.After,
@@ -50,7 +41,7 @@ internal static class СanMaul
                     if (grasp != null
                         && grasp.grabbed is Player playerInGrasp
                         && (playerInGrasp.IsVoid() || playerInGrasp.IsViy())
-                        && creature is Player player 
+                        && creature is Player player
                         && player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy)
                     {
                         creature.Stun(TicksPerSecond * 5);

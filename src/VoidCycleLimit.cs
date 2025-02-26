@@ -1,15 +1,6 @@
-﻿using HUD;
-using Menu;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VoidTemplate.OptionInterface;
-using static HUD.Map;
-using static Menu.SlugcatSelectMenu;
 
 namespace VoidTemplate
 {
@@ -120,7 +111,7 @@ namespace VoidTemplate
         {
             orig(self);
 
-            
+
             if (self.cycleLabel == null && self.mapTexture != null &&
                 self.hud.owner is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void && !self.hud.rainWorld.ExpeditionMode)
             {

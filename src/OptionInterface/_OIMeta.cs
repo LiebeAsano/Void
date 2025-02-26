@@ -4,30 +4,30 @@ namespace VoidTemplate.OptionInterface;
 
 public static class _OIMeta
 {
-	const string uniqueprefix = "voidmod";
+    const string uniqueprefix = "voidmod";
 
-	//how to add options into OptionInterface:
-	//Create config in OptionAccessors (and preferably add an accessor to it)
-	//Bind it here
-	//Add UI to it in VoidOptionInterface
-	//Preferably, if you plan on making complicated methods with OI, make them as extensions in UIExtensions
+    //how to add options into OptionInterface:
+    //Create config in OptionAccessors (and preferably add an accessor to it)
+    //Bind it here
+    //Add UI to it in VoidOptionInterface
+    //Preferably, if you plan on making complicated methods with OI, make them as extensions in UIExtensions
 
-	public static void Initialize()
-	{
-		VoidOptionInterface voidOI = new();
-		MachineConnector.SetRegisteredOI(ModID, voidOI);
-		voidOI.config.configurables.Clear();
+    public static void Initialize()
+    {
+        VoidOptionInterface voidOI = new();
+        MachineConnector.SetRegisteredOI(ModID, voidOI);
+        voidOI.config.configurables.Clear();
 
         //IMPORTANT: the creation of checkboxes uses first tag as text for checkbox
         OptionAccessors.cfgSaintArenaAscension = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaAscension", true, new ConfigurableInfo("Allows Saint to use ascension mechanic in arena", tags: "Saint ascension"));
-		OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
+        OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
         OptionAccessors.cfgArenaAscensionStun = voidOI.config.Bind<bool>(uniqueprefix + "ArenaAscensionStun", false, new ConfigurableInfo("Saint's ascension stuns instead of kills", tags: "Ascension stuns"));
         OptionAccessors.cfgGamepadController = voidOI.config.Bind<bool>(uniqueprefix + "GamepadController", false, new ConfigurableInfo("Makes easier to climb the ceiling using a gamepad. Press 'Jump' + 'Pick up' to ceiling climb", tags: "Gamepad controller"));
         OptionAccessors.cfgSimpleFood = voidOI.config.Bind<bool>(uniqueprefix + "SimpleFood", false, new ConfigurableInfo("Gives you whole pips when eating food instead of half pips", tags: "Simplified hunger"));
-//#warning to be implemented
-		OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void, but also closes access to the secret ending", tags: "Disable permadeath"));
-		OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete as Hunter to play this mod", tags: "Unlock campaign"));
-		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 15, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99),tags: "Void Cycles"));
+        //#warning to be implemented
+        OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void, but also closes access to the secret ending", tags: "Disable permadeath"));
+        OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete as Hunter to play this mod", tags: "Unlock campaign"));
+        OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 15, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99), tags: "Void Cycles"));
         OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 5, new ConfigurableInfo("Changes the amount of bonus cycles Void can receive from the echo, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99), tags: "Void Bonus Cycles"));
 
     }

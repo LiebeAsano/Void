@@ -1,10 +1,5 @@
 ﻿using MoreSlugcats;
 using RWCustom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
@@ -51,7 +46,7 @@ internal static class JumpUnderWater
                     self.swimCycle = 2.7f;
                     Vector2 vector = Custom.DirVec(self.bodyChunks[1].pos, self.bodyChunks[0].pos);
                     self.bodyChunks[0].vel += vector * 3f * 0.2f * karmaCap;
-                    self.airInLungs -= (0.2f - 0.02f * karmaCap) * num2;
+                    self.airInLungs -= (0.2f - (0.02f * karmaCap)) * num2;
                 }
                 else
                 {
@@ -63,7 +58,7 @@ internal static class JumpUnderWater
             if (self.input[0].ZeroGGamePadIntVec.x != 0 || self.input[0].ZeroGGamePadIntVec.y != 0)
             {
                 float value = Vector2.Angle(self.bodyChunks[0].lastPos - self.bodyChunks[1].lastPos, self.bodyChunks[0].pos - self.bodyChunks[1].pos);
-                float num3 = 0.2f + Mathf.InverseLerp(0f, 12f, value) * 0.8f;
+                float num3 = 0.2f + (Mathf.InverseLerp(0f, 12f, value) * 0.8f);
                 if (self.slowMovementStun > 0)
                 {
                     num3 *= 0.5f;
@@ -77,7 +72,7 @@ internal static class JumpUnderWater
                     self.swimForce = Mathf.Lerp(self.swimForce, num3, 0.05f);
                 }
                 self.swimCycle += Mathf.Lerp(self.swimForce, 1f, 0.5f) / 10f;
-                if (self.airInLungs < 0.5f && self.airInLungs > 0.16666667f)
+                if (self.airInLungs is < 0.5f and > 0.16666667f)
                 {
                     self.swimCycle += 0.05f;
                 }

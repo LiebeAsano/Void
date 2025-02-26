@@ -1,9 +1,6 @@
 ﻿using RWCustom;
-using SlugBase.DataTypes;
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using UnityEngine;
 
 namespace VoidTemplate.Oracles;
@@ -27,8 +24,8 @@ internal class HoveringPearl : DataPearl
     public override void Update(bool eu)
     {
         base.Update(eu);
-        if(Carried 
-            && !lastCarried 
+        if (Carried
+            && !lastCarried
             && hoverPos != null)
         {
             hoverPos = null;
@@ -48,7 +45,7 @@ internal class HoveringPearl : DataPearl
     public override void InitiateSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
     {
         base.InitiateSprites(sLeaser, rCam);
-        Array.Resize(ref sLeaser.sprites, sLeaser.sprites.Length+1);
+        Array.Resize(ref sLeaser.sprites, sLeaser.sprites.Length + 1);
         var lastIndexOfResizedArray = sLeaser.sprites.Length - 1;
         sLeaser.sprites[lastIndexOfResizedArray] = new FSprite("LizardBubble6", true);
         AddToContainer(sLeaser, rCam, null);
@@ -61,7 +58,7 @@ internal class HoveringPearl : DataPearl
         lizardSprite.y = vector.y;
         lizardSprite.scale = beatScale * 0.75f;
         lizardSprite.color = Color.red;
-        lizardSprite.alpha = 0.25f + beatScale * 0.65f;
+        lizardSprite.alpha = 0.25f + (beatScale * 0.65f);
         base.DrawSprites(sLeaser, rCam, timeStacker, camPos);
     }
     public override void TerrainImpact(int chunk, IntVector2 direction, float speed, bool firstContact)

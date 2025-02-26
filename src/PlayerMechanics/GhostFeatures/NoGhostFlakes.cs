@@ -4,7 +4,7 @@ public static class NoGhostFlakes
 {
     public static void Hook()
     {
-        On.Room.NowViewed += RoomOnNowViewed; 
+        On.Room.NowViewed += RoomOnNowViewed;
     }
 
     private static void RoomOnNowViewed(On.Room.orig_NowViewed orig, Room self)

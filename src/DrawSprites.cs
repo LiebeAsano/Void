@@ -1,6 +1,7 @@
 ﻿using RWCustom;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.Useful;
@@ -143,9 +144,11 @@ internal class DrawSprites
 
 					}
 				}
-				if (sprite.element.name.StartsWith("pixel"))
+				if (sprite.element.name.StartsWith("pixel") && !ModManager.ActiveMods.Any(mod => mod.id == "dressmyslugcat"))
 				{
-					sLeaser.sprites[11].scale = 1f;
+
+                    sLeaser.sprites[11].scale = 1f;
+
 					if (session.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
 					{
 						string pixel = "VoidR-";

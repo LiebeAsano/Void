@@ -35,6 +35,12 @@ internal static class GraspSave
 					if (timerOfBeingGrasped.Value > TicksUntilStun(playerInGrasp))
 					{
 						self.Stun(TicksPerSecond * 5);
+						if (playerInGrasp.IsViy() && !playerInGrasp.dead)
+						{
+                            self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
+                            self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
+                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Bite, 2.5f, 250f);
+                        }
 						timerOfBeingGrasped.Value = 0;
 					}
 				}

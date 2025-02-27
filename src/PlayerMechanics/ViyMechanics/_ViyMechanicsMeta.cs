@@ -10,6 +10,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
     {
         public static void Hook()
         {
+            ViyBitByPlayer.Hook();
             ViyMaul.Hook();
             ViyTail.Hook();
             ViyThrowSpear.Hook();

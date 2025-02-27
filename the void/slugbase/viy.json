@@ -17,9 +17,9 @@
 		],
 		
 		"weight": [2.5, 2],
-		"tunnel_speed": [1.25, 0.8],
-		"climb_speed": [1.25, 0.8],
-		"walk_speed": [1.25, 0.8],
+		"tunnel_speed": [1.5, 1.0],
+		"climb_speed": [1.5, 1.0],
+		"walk_speed": [1.0, 0.6],
 		"throw_skill": [2, 0],
 		"lung_capacity": 1.0,
 		"crouch_stealth": [0.66, 1.0],

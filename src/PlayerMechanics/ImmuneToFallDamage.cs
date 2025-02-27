@@ -19,7 +19,22 @@ internal static class ImmuneToFallDamage
         orig(self);
         if (self.IsVoid() || self.IsViy())
         {
-            self.immuneToFallDamage = 1;
+            bool hasGuardian = false;
+            if (self.room != null)
+            {
+                foreach (AbstractCreature creature in self.room.abstractRoom.creatures)
+                {
+                    if (creature.creatureTemplate.type == CreatureTemplate.Type.TempleGuard)
+                    {
+                        hasGuardian = true;
+                        break;
+                    }
+                }
+            }
+            if (hasGuardian)
+            {
+                self.immuneToFallDamage = 1;
+            }
         }
     }
 }

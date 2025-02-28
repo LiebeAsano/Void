@@ -31,7 +31,7 @@ internal static class ImmuneToFallDamage
                     }
                 }
             }
-            if (hasGuardian)
+            if (!hasGuardian)
             {
                 self.immuneToFallDamage = 1;
             }

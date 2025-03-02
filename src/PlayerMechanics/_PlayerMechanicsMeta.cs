@@ -8,7 +8,7 @@ public static class _PlayerMechanicsMeta
 {
 	public static void Hook()
 	{
-
+		BitByPlayer.Hook();
 		CanBeSwallowed.Hook();
 		CanIPickThisUp.Hook();
 		СanMaul.Hook();

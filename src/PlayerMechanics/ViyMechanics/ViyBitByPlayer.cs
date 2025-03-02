@@ -150,7 +150,7 @@ internal static class ViyBitByPlayer
     {
         if (grasp.grabber is Player player && player.IsViy())
         {
-            self.bites--;
+            self.bites -= 2;
         }
         orig(self, grasp, eu);
     }

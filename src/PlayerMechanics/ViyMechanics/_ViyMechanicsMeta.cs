@@ -9,6 +9,7 @@
             ViyThrowSpear.Hook();
             ViyViolence.Hook();
             VoidViySwitch.Hook();
+            ViyBodyChanges.Hook();
         }
     }
 }

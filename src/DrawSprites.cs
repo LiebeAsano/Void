@@ -270,11 +270,13 @@ internal class DrawSprites
 			}
 			if (sprite.element.name.StartsWith("Face"))
 			{
-
-                if (Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM && Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO)
-                {
-                    sprite.color = new(1f, 0.86f, 0f);
-                }
+				if (self.player.room != null)
+				{
+					if (Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM && Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO && !self.player.room.game.IsArenaSession)
+					{
+						sprite.color = new(1f, 0.86f, 0f);
+					}
+				}
 
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
 				BodyChunk body_chunk_1 = self.player.bodyChunks[1];
@@ -359,6 +361,10 @@ internal class DrawSprites
                 sprite.color = new(0f, 0f, 0.005f);
             }
             if (sprite.element.name.StartsWith("Legs"))
+			{
+                sprite.color = new(0f, 0f, 0.005f);
+            }
+            if (sLeaser.sprites[2] is TriangleMesh tail2 && !ExternalSaveData.VoidKarma11)
 			{
                 sprite.color = new(0f, 0f, 0.005f);
             }

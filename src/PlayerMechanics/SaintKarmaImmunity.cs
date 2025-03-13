@@ -22,7 +22,7 @@ internal static class SaintKarmaImmunity
     private static void Player_ClassMechanicsSaint1(On.Player.orig_ClassMechanicsSaint orig, Player self)
     {
         float num2 = 60f;
-        Vector2 vector3 = new Vector2(self.mainBodyChunk.pos.x + self.burstX, self.mainBodyChunk.pos.y + self.burstY + 60f);
+        Vector2 vector3 = new(self.mainBodyChunk.pos.x + self.burstX, self.mainBodyChunk.pos.y + self.burstY + 60f);
         bool flag3 = false;
         for (int i = 0; i < self.room.physicalObjects.Length; i++)
         {

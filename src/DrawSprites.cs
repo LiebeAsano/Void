@@ -366,7 +366,7 @@ internal class DrawSprites
             }
             if (sLeaser.sprites[2] is TriangleMesh tail2 && !ExternalSaveData.VoidKarma11)
 			{
-                sprite.color = new(0f, 0f, 0.005f);
+                tail2.color = new(0f, 0f, 0.005f);
             }
         }
 	}

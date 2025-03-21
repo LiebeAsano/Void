@@ -25,7 +25,7 @@ public static class DreamCustom
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
 						break;
 					}
-				case "VS":
+				case "SB" when saveState.deathPersistentSaveData.karmaCap > 3:
 					{
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
 						break;
@@ -58,8 +58,7 @@ public static class DreamCustom
 					}
 				default:
 					{
-						if (currentRegion == "SB")
-							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidNSH);
+						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidNSH);
 						break;
 					}
 			}

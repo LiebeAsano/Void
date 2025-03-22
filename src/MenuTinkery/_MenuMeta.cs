@@ -11,6 +11,7 @@ public static class _MenuMeta
 		JollyMenu.Hook();
         MenuStatisticsSound.Hook();
 		MenuTitle.Hook();
+		NoSleepSoundLoop.Hook();
         PermaDeathScreen.Hook();
 		StopContinueButtonWhenAboutToDie.Hook();
     }

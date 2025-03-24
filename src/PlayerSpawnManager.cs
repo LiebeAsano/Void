@@ -1,16 +1,18 @@
 ﻿using System;
 using UnityEngine;
 using VoidTemplate;
+using VoidTemplate.Useful;
 
 public static class PlayerSpawnManager
 {
 	public static void ApplyHooks()
 	{
 		On.Player.Update += Player_Update;
-		//On.RainWorldGame.Update += RainWorldGame_Update;
-	}
+		On.RainCycle.ctor += RainCycle_ctor;
+        //On.RainWorldGame.Update += RainWorldGame_Update;
+    }
 
-	private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+    private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
 	{
 		orig(self, eu);
 		if (self.room is Room playerRoom
@@ -21,7 +23,7 @@ public static class PlayerSpawnManager
 		{
 			InitializeTargetRoomID(playerRoom);
 
-			int currentRoomIndex = self.abstractCreature.pos.room;
+            int currentRoomIndex = self.abstractCreature.pos.room;
 
 			if (currentRoomIndex == NewSpawnPoint.room)
 			{
@@ -35,9 +37,24 @@ public static class PlayerSpawnManager
 		}
     }
 
-	#region minor helper functions
+    private static void RainCycle_ctor(On.RainCycle.orig_ctor orig, RainCycle self, World world, float minutes)
+    {
+        orig(self, world, minutes);
+		if (world.game.GetStorySession.saveState.cycleNumber == 0 && world.game.IsVoidWorld())
+		{
+			self.cycleLength = 11 * 60 * 40;
+		}
+		if (world.name == "MS" && world.game.IsVoidWorld())
+		{
+			int minute = UnityEngine.Random.Range(11, 16);
+            self.cycleLength = minute * 60 * 40;
+        }
 
-	private static int targetRoomID = -1;
+    }
+
+    #region minor helper functions
+
+    private static int targetRoomID = -1;
 	static WorldCoordinate NewSpawnPoint
 	{
 		get

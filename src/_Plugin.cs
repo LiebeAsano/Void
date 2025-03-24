@@ -119,6 +119,7 @@ class _Plugin : BaseUnityPlugin
 	private static void RegisterPOMObjects()
 	{
 		Objects.PomObjects.TheVoidRoomWideStaggerByGhost.Register();
+		Objects.PomObjects.LizardCorpse.Register();
 		Objects.PomObjects.AlbinoVultureTriggerSpawner.Register();
         Objects.PomObjects.VultureTriggerSpawner.Register();
 		Objects.PomObjects.Warp.Register();

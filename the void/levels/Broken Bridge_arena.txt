@@ -1,0 +1,24 @@
+Creature - Caramel - dens:4,5,7,8 - chance:0.9
+
+Creature - CicadaA - dens:4,5,6,7,8 - chance:0.6 - amount:1-3
+Creature - CicadaB - dens:4,5,6,7,8 - chance:0.4 - amount:1-2
+
+Creature - WhiteLizard - dens:4,5,6,7,8 - chance:0.8
+Creature - WhiteLizard - dens:4,5,6,7,8 - chance:0.8
+
+Creature - StrawberryLizard - dens:4,5,6,7,8 - chance:0.6
+
+Creature - PinkLizard - dens:4,5,6,7,8 - chance:0.8
+Creature - PinkLizard - dens:4,5,6,7,8 - chance:0.8
+
+Creature - Needle - dens:6 - chance:1
+Creature - Needle - dens:6 - chance:1
+
+Creature - SmallNeedle - dens:6 - chance:0.8
+Creature - SmallNeedle - dens:6 - chance:0.8
+Creature - SmallNeedle - dens:6 - chance:0.8
+Creature - SmallNeedle - dens:6 - chance:0.8
+
+Creature - Vulture - dens:-1 - chance:0.75
+Creature - Vulture - dens:-1 - chance:0.75
+Creature - KingVulture - dens:-1 - chance:0.25 - RARE

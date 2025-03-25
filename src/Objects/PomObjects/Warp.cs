@@ -1,8 +1,10 @@
 ﻿using MoreSlugcats;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using UnityEngine;
 using VoidTemplate.Useful;
@@ -19,11 +21,12 @@ internal class Warp : UpdatableAndDeletable
 			defaultVectorField,
 			new StringField(targetRoomName, "SS_D08"),
 			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
-			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time")
+			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time"),
+			new BooleanField(forceSpawningAtTarget, false, displayName: "force new den")
 			];
 		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
 		WarpDestination.Register();
-        On.OverWorld.Update += OverWorld_Update; //since we are doing index based 
+		On.OverWorld.Update += OverWorld_Update; //since we are doing index based 
 	}
 
 	//Swapping the world directly from UAD yields a side effect:
@@ -40,56 +43,56 @@ internal class Warp : UpdatableAndDeletable
 	//which leads to index out of range
 	static ConditionalWeakTable<OverWorld, StrongBox<(WorldLoader, Warp, string)>> customLoader = new();
 private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld self)
-    {
+	{
 		orig(self);
 		if(customLoader.TryGetValue(self, out var loader))
 		{
 
-            AbstractRoom absRoom = WorldLoaded(self, loader.Value);
+			AbstractRoom absRoom = WorldLoaded(self, loader.Value);
 			loader.Value.Item2.OnRoomChange(absRoom);
 			customLoader.Remove(self);
 			GC.Collect();
 		}
 
 
-        //if you dare to use this method, be aware that players realize at (10;10) coordinate
-        //it used to be (0;0), which really threw off camera logic
-        //after using this, change slugcat positions and apply camera change
-        AbstractRoom WorldLoaded(OverWorld overWorld, (WorldLoader, Warp, string) args)
-        {
-            World world = overWorld.activeWorld;
-            World world2 = args.Item1.ReturnWorld();
-            AbstractRoom abstractRoom2 = null;
-            abstractRoom2 = world2.GetAbstractRoom(args.Item3);
-            overWorld.activeWorld = world2;
-            if (overWorld.game.roomRealizer != null)
-            {
-                overWorld.game.roomRealizer = new RoomRealizer(overWorld.game.roomRealizer.followCreature, world2);
-            }
+		//if you dare to use this method, be aware that players realize at (10;10) coordinate
+		//it used to be (0;0), which really threw off camera logic
+		//after using this, change slugcat positions and apply camera change
+		AbstractRoom WorldLoaded(OverWorld overWorld, (WorldLoader, Warp, string) args)
+		{
+			World world = overWorld.activeWorld;
+			World world2 = args.Item1.ReturnWorld();
+			AbstractRoom abstractRoom2 = null;
+			abstractRoom2 = world2.GetAbstractRoom(args.Item3);
+			overWorld.activeWorld = world2;
+			if (overWorld.game.roomRealizer != null)
+			{
+				overWorld.game.roomRealizer = new RoomRealizer(overWorld.game.roomRealizer.followCreature, world2);
+			}
 
-            abstractRoom2.RealizeRoom(world2, overWorld.game);
+			abstractRoom2.RealizeRoom(world2, overWorld.game);
 
-            foreach (AbstractCreature absPly in overWorld.game.Players)
-            {
-                WorldCoordinate worldCoordinate = new(abstractRoom2.index, 10, 10, -1);
+			foreach (AbstractCreature absPly in overWorld.game.Players)
+			{
+				WorldCoordinate worldCoordinate = new(abstractRoom2.index, 10, 10, -1);
 
 				absPly.world.GetAbstractRoom(absPly.pos).RemoveEntity(absPly);
-                absPly.world = world2;
+				absPly.world = world2;
 				absPly.pos = worldCoordinate;
 				absPly.world.GetAbstractRoom(worldCoordinate).AddEntity(absPly);
 
 
-                if (absPly.realizedCreature is Player p
-                    && p.room is not null)
-                {
-                    p.room.RemoveObject(p);
-                    p.PlaceInRoom(abstractRoom2.realizedRoom);
-                    
-                    if (p.objectInStomach is not null) p.objectInStomach.world = world2;
+				if (absPly.realizedCreature is Player p
+					&& p.room is not null)
+				{
+					p.room.RemoveObject(p);
+					p.PlaceInRoom(abstractRoom2.realizedRoom);
+					
+					if (p.objectInStomach is not null) p.objectInStomach.world = world2;
 
-                    foreach (Creature.Grasp grasp in p.grasps)
-                    {
-                        if(grasp is not null)
+					foreach (Creature.Grasp grasp in p.grasps)
+					{
+						if(grasp is not null)
 						{
 							var APO = grasp.grabbed.abstractPhysicalObject;
 							APO.world.GetAbstractRoom(APO.pos).RemoveEntity(APO);
@@ -97,65 +100,90 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 							APO.pos = worldCoordinate;
 							APO.world.GetAbstractRoom (worldCoordinate).AddEntity(APO);
 						}
-                    }
-                }
-            }
+					}
+				}
+			}
+			Room realizedDestination = abstractRoom2.realizedRoom;
+			WarpDestination warpDestination = null;
+			if (realizedDestination.updateList.Exists(UAD =>
+			{
+				if (UAD is WarpDestination wDest)
+				{
+					warpDestination = wDest;
+					return true;
+				}
+				return false;
+			}))
+			{
+				List<AbstractCreature> players = realizedDestination.game.Players;
+				for (short i = 0; i < players.Count; i++)
+				{
+					if (players[i].realizedCreature is not null)
+					{
+						foreach (var bodyChunk in players[i].realizedCreature.bodyChunks)
+						{
+							bodyChunk.pos = warpDestination.Pos + new Vector2(i * 20f, 0f);
+						}
+					}
+				}
+			}
 
-            foreach (var camera in overWorld.game.cameras)
-            {
-                camera.virtualMicrophone.AllQuiet();
+			foreach (var camera in overWorld.game.cameras)
+			{
+				camera.virtualMicrophone.AllQuiet();
 
-                camera.MoveCamera(abstractRoom2.realizedRoom, 0);
-                camera.ApplyPositionChange();
-                camera.GetCameraBestIndex();
+				camera.MoveCamera(abstractRoom2.realizedRoom, 0);
+				camera.ApplyPositionChange();
+				camera.GetCameraBestIndex();
 
-                var hud = camera.hud;
-                hud.ResetMap(new(world2, overWorld.game.rainWorld));
-                camera.dayNightNeedsRefresh = true;
-                if (hud.textPrompt.subregionTracker is not null) hud.textPrompt.subregionTracker.lastShownRegion = 0;
+				var hud = camera.hud;
+				hud.ResetMap(new(world2, overWorld.game.rainWorld));
+				camera.dayNightNeedsRefresh = true;
+				if (hud.textPrompt.subregionTracker is not null) hud.textPrompt.subregionTracker.lastShownRegion = 0;
 
-            }
+			}
 
-            overWorld.worldLoader = null;
+			overWorld.worldLoader = null;
 
-            if (world.regionState is not null) world.regionState.world = null;
+			if (world.regionState is not null) world.regionState.world = null;
 
-            world2.rainCycle.baseCycleLength = world.rainCycle.baseCycleLength;
-            world2.rainCycle.cycleLength = world.rainCycle.cycleLength;
-            world2.rainCycle.timer = world.rainCycle.timer;
-            world2.rainCycle.duskPalette = world.rainCycle.duskPalette;
-            world2.rainCycle.nightPalette = world.rainCycle.nightPalette;
-            world2.rainCycle.dayNightCounter = world.rainCycle.dayNightCounter;
+			world2.rainCycle.baseCycleLength = world.rainCycle.baseCycleLength;
+			world2.rainCycle.cycleLength = world.rainCycle.cycleLength;
+			world2.rainCycle.timer = world.rainCycle.timer;
+			world2.rainCycle.duskPalette = world.rainCycle.duskPalette;
+			world2.rainCycle.nightPalette = world.rainCycle.nightPalette;
+			world2.rainCycle.dayNightCounter = world.rainCycle.dayNightCounter;
 
-            if (ModManager.MSC)
-            {
-                if (world.rainCycle.timer == 0)
-                {
-                    world2.rainCycle.preTimer = world.rainCycle.preTimer;
-                    world2.rainCycle.maxPreTimer = world.rainCycle.maxPreTimer;
-                }
-                else
-                {
-                    world2.rainCycle.preTimer = 0;
-                    world2.rainCycle.maxPreTimer = 0;
-                }
-            }
+			if (ModManager.MSC)
+			{
+				if (world.rainCycle.timer == 0)
+				{
+					world2.rainCycle.preTimer = world.rainCycle.preTimer;
+					world2.rainCycle.maxPreTimer = world.rainCycle.maxPreTimer;
+				}
+				else
+				{
+					world2.rainCycle.preTimer = 0;
+					world2.rainCycle.maxPreTimer = 0;
+				}
+			}
 
-            if (!world2.activeRooms.Contains(abstractRoom2.realizedRoom)) world2.activeRooms.Add(abstractRoom2.realizedRoom);
+			if (!world2.activeRooms.Contains(abstractRoom2.realizedRoom)) world2.activeRooms.Add(abstractRoom2.realizedRoom);
 
-            if (ModManager.MMF)
-            {
-                GC.Collect();
-            }
-            return abstractRoom2;
-        }
-    }
+			if (ModManager.MMF)
+			{
+				GC.Collect();
+			}
+			return abstractRoom2;
+		}
+	}
 
-    #region exposed data IDs
-    const string triggerZone = "trigger zone";
+	#region exposed data IDs
+	const string triggerZone = "trigger zone";
 	const string targetRoomName = "TargetRoomName";
 	const string timeToFadeIn = "timetofadein";
 	const string timeToFadeOut = "timetofadeout";
+	const string forceSpawningAtTarget = "forceSpawning";
 	#endregion
 
 	public Warp(Room room, PlacedObject pobj)
@@ -171,6 +199,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	string Acronym => TargetRoom.Split('_')[0];
 	float TimeToFadeIn => data.GetValue<float>(timeToFadeIn);
 	float TimeToFadeOut => data.GetValue<float>(timeToFadeOut);
+	bool ForceDenSwitch => data.GetValue<bool>(forceSpawningAtTarget);
 	#endregion
 
 
@@ -237,37 +266,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 
 			case State.awaitingPOMLoad:
 
-				WarpDestination warpDestination = null;
-				if (room.updateList.Exists(UAD =>
-				{
-					if (UAD is WarpDestination wDest)
-					{
-						warpDestination = wDest;
-						return true;
-					}
-					return false;
-				}))
-				{
-					List<AbstractCreature> players = room.game.Players;
-					for (short i = 0; i < players.Count; i++)
-					{
-						if (players[i].realizedCreature is not null)
-						{
-							foreach (var bodyChunk in players[i].realizedCreature.bodyChunks)
-							{
-								bodyChunk.pos = warpDestination.Pos + new Vector2(i * 20f, 0f);
-							}
-						}
-					}
-
-					foreach (var camera in room.game.cameras)
-					{
-						camera.GetCameraBestIndex();
-					}
-
-					state = State.over;
-					slatedForDeletetion = true;
-				}
+				
 				break;
 		}
 		
@@ -275,14 +274,22 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	}
 	public void OnRoomChange(AbstractRoom destinationRoom)
 	{
-        room.updateList.Remove(this);
-        destinationRoom.realizedRoom.AddObject(this);
-        room = destinationRoom.realizedRoom;
+		room.updateList.Remove(this);
+		destinationRoom.realizedRoom.AddObject(this);
+		room = destinationRoom.realizedRoom;
 
-        fadeOut = new FadeOut(room, Color.black, TimeToFadeOut, true);
-        room.AddObject(fadeOut);
-        state = State.awaitingPOMLoad;
-    }
+		fadeOut = new FadeOut(room, Color.black, TimeToFadeOut, true);
+		room.AddObject(fadeOut);
+		OnTeleportationEnd();
+	}
+	public void OnTeleportationEnd()
+	{
+		if(ForceDenSwitch)
+		{
+			RainWorldGame.ForceSaveNewDenLocation(room.game, room.abstractRoom.name, true);
+		}
+		slatedForDeletetion = true;
+	}
 
 	class ThreadedLoading(Warp warp, Room room, string targetRegionAcronym)
 	{

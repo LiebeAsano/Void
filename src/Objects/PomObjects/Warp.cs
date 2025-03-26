@@ -23,7 +23,8 @@ internal class Warp : UpdatableAndDeletable
 			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
 			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time"),
 			new BooleanField(forceSpawningAtTarget, false, displayName: "force new den"),
-			new FloatField(cycleTime, 0f, 1f, 0f, 0.05f, displayName: "subtract time")
+			new FloatField(cycleTime, 0f, 1f, 0f, 0.05f, displayName: "subtract time"),
+			new IntegerField(spendCycles, 0, 15, 0, displayName: "spend cycles")
 			];
 		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
 		WarpDestination.Register();
@@ -217,6 +218,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	const string timeToFadeOut = "timetofadeout";
 	const string forceSpawningAtTarget = "forceSpawning";
 	const string cycleTime = "cycleTime";
+	const string spendCycles = "spendCycles";
 	#endregion
 
 	public Warp(Room room, PlacedObject pobj)
@@ -234,6 +236,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	float TimeToFadeOut => data.GetValue<float>(timeToFadeOut);
 	bool ForceDenSwitch => data.GetValue<bool>(forceSpawningAtTarget);
 	float SubtractCycleTime => data.GetValue<float>(cycleTime);
+	int SubtractCycles => data.GetValue<int>(spendCycles);
 	#endregion
 
 
@@ -311,9 +314,14 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	}
 	public void OnTeleportationEnd()
 	{
-		if(ForceDenSwitch)
+		room.game.GetStorySession.saveState.cycleNumber += SubtractCycles;
+		if (ForceDenSwitch)
 		{
 			RainWorldGame.ForceSaveNewDenLocation(room.game, room.abstractRoom.name, true);
+		}
+		else if (SubtractCycles > 0)
+		{
+			room.game.GetStorySession.saveState.progression.SaveWorldStateAndProgression(false);
 		}
 		room.world.rainCycle.timer += (int)(SubtractCycleTime * room.world.rainCycle.cycleLength);
 

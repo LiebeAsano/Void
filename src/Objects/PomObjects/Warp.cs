@@ -26,7 +26,37 @@ internal class Warp : UpdatableAndDeletable
 			];
 		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
 		WarpDestination.Register();
-		On.OverWorld.Update += OverWorld_Update; //since we are doing index based 
+		//since cycling through UAD is index based,
+		//removing warp from UAD while room gives it update tick means
+		//game assumes it has finished updating *next* object
+		//or error out of range while doing so
+		On.OverWorld.Update += OverWorld_Update;
+		//this is the method that is only used in spawning to realize players for the first time in the cycle
+		On.Room.ShortCutsReady += Room_ShortCutsReady;
+	}
+
+	private static void Room_ShortCutsReady(On.Room.orig_ShortCutsReady orig, Room self)
+	{
+		bool playerRealization = self.game is not null && self.game.Players[0].realizedCreature is null;
+		orig(self);
+		if (playerRealization
+			&& self.game.IsStorySession
+			&& self.abstractRoom.name == self.game.GetStorySession.saveState.denPosition)
+		{
+			foreach (UpdatableAndDeletable uad in self.updateList)
+			{
+				if (uad is WarpDestination destination)
+				{
+					for (int i = 0; i < self.game.Players.Count; i++)
+					{
+						Player p = self.game.Players[i].realizedCreature as Player;
+						p.SuperHardSetPosition(destination.Pos + new Vector2(20f * i, 0f));
+						p.standing = true;
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	//Swapping the world directly from UAD yields a side effect:

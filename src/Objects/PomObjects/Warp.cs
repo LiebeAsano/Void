@@ -22,7 +22,8 @@ internal class Warp : UpdatableAndDeletable
 			new StringField(targetRoomName, "SS_D08"),
 			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
 			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time"),
-			new BooleanField(forceSpawningAtTarget, false, displayName: "force new den")
+			new BooleanField(forceSpawningAtTarget, false, displayName: "force new den"),
+			new FloatField(cycleTime, 0f, 1f, 0f, 0.05f, displayName: "subtract time")
 			];
 		RegisterFullyManagedObjectType(exposedFields, typeof(Warp), category: "The Void");
 		WarpDestination.Register();
@@ -117,6 +118,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 				{
 					p.room.RemoveObject(p);
 					p.PlaceInRoom(abstractRoom2.realizedRoom);
+					p.standing = true;
 					
 					if (p.objectInStomach is not null) p.objectInStomach.world = world2;
 
@@ -214,6 +216,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	const string timeToFadeIn = "timetofadein";
 	const string timeToFadeOut = "timetofadeout";
 	const string forceSpawningAtTarget = "forceSpawning";
+	const string cycleTime = "cycleTime";
 	#endregion
 
 	public Warp(Room room, PlacedObject pobj)
@@ -230,6 +233,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 	float TimeToFadeIn => data.GetValue<float>(timeToFadeIn);
 	float TimeToFadeOut => data.GetValue<float>(timeToFadeOut);
 	bool ForceDenSwitch => data.GetValue<bool>(forceSpawningAtTarget);
+	float SubtractCycleTime => data.GetValue<float>(cycleTime);
 	#endregion
 
 
@@ -249,9 +253,7 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		awaiting,
 		fadein,
 		awaitingWorld,
-		awaitingTransition,
-		awaitingPOMLoad,
-		over
+		awaitingTransition
 	}
 	#endregion
 	public override void Update(bool eu)
@@ -293,11 +295,6 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 
 			case State.awaitingTransition:
 				break;
-
-			case State.awaitingPOMLoad:
-
-				
-				break;
 		}
 		
 		
@@ -318,6 +315,8 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		{
 			RainWorldGame.ForceSaveNewDenLocation(room.game, room.abstractRoom.name, true);
 		}
+		room.world.rainCycle.timer += (int)(SubtractCycleTime * room.world.rainCycle.cycleLength);
+
 		slatedForDeletetion = true;
 	}
 

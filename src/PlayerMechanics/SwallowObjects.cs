@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VoidTemplate.Oracles;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static MonoMod.InlineRT.MonoModRule;
 using static VoidTemplate.SaveManager;
@@ -85,7 +86,7 @@ internal static class SwallowObjects
                     HandleHalfFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
-                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void") && self.KarmaCap != 10 && !self.IsViy() && !ExternalSaveData.VoidKarma11)
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-void") && self.KarmaCap != 10 && !self.IsViy() && !Karma11Update.VoidKarma11)
                 {
                     orig(self, grasp);
 
@@ -96,7 +97,7 @@ internal static class SwallowObjects
 
                     return;
                 }
-                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot") && self.KarmaCap != 10 && !self.IsViy() && !ExternalSaveData.VoidKarma11)
+                else if (grabbed is DataPearl && (grabbed as DataPearl).AbstractPearl.dataPearlType == new DataPearl.AbstractDataPearl.DataPearlType("LW-rot") && self.KarmaCap != 10 && !self.IsViy() && !Karma11Update.VoidKarma11)
                 {
                     orig(self, grasp);
 
@@ -107,7 +108,7 @@ internal static class SwallowObjects
 
                     return;
                 }
-                else if (self.KarmaCap != 10 && !self.IsViy() && !ExternalSaveData.VoidKarma11)
+                else if (self.KarmaCap != 10 && !self.IsViy() && !Karma11Update.VoidKarma11)
                 {
                     if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl && hasMark &&
                         self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
@@ -635,9 +636,9 @@ internal static class SwallowObjects
                         {
                             if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
                             {
-                                if (self.KarmaCap == 10 || ExternalSaveData.VoidKarma11 || (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11 && self.FoodInStomach >= 3))
+                                if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
                                 {
-                                    if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+                                    if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
                                     {
                                         self.SubtractFood(1);
                                         self.SaintStagger(240);
@@ -652,9 +653,9 @@ internal static class SwallowObjects
                             }
                             else
                             {
-                                if (self.KarmaCap == 10 || ExternalSaveData.VoidKarma11 || (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11 && self.FoodInStomach >= 3))
+                                if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
                                 {
-                                    if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+                                    if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
                                     {
                                         self.SubtractFood(3);
                                         self.SaintStagger(720);

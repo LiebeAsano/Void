@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -24,7 +25,7 @@ internal static class LizardResist
             float resist = player.KarmaCap * 0.05f;
             if (self.Template.type == CreatureTemplate.Type.RedLizard)
             {
-                if (player.KarmaCap == 10 || ExternalSaveData.VoidKarma11)
+                if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
                 {
                     self.lizardParams.biteDamageChance = 0.5f;
                 }

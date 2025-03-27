@@ -34,12 +34,12 @@ internal class Warp : UpdatableAndDeletable
 		//or error out of range while doing so
 		On.OverWorld.Update += OverWorld_Update;
 		//this is the method that is only used in spawning to realize players for the first time in the cycle
-		On.Room.ShortCutsReady += Room_ShortCutsReady;
+		//On.Room.ShortCutsReady += Room_ShortCutsReady;
 	}
 
 	private static void Room_ShortCutsReady(On.Room.orig_ShortCutsReady orig, Room self)
 	{
-		bool playerRealization = self.game is not null && self.game.Players[0].realizedCreature is null;
+		bool playerRealization = self.game is not null && self.game.Players.Count > 0 && self.game.Players[0].realizedCreature is null;
 		orig(self);
 		if (playerRealization
 			&& self.game.IsStorySession

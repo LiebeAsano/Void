@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
@@ -74,7 +75,7 @@ namespace VoidTemplate.PlayerMechanics
                         self.Die();
                     }
                 }
-                if (player.KarmaCap == 10 || ExternalSaveData.VoidKarma11)
+                if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
                 {
                     if (Damage >= self.Template.instantDeathDamageLimit * 1.25f)
                     {

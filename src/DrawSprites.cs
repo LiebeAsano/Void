@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using VoidTemplate.Misc;
 using VoidTemplate.PlayerMechanics;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static Room;
 using static VoidTemplate.SaveManager;
@@ -14,7 +16,7 @@ internal class DrawSprites
 {
 	public static void Hook()
 	{
-		On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+        On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
 		On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawTail;
 	}
 
@@ -84,7 +86,6 @@ internal class DrawSprites
 		if (!self.player.IsVoid()) return;
 		foreach (var sprite in sLeaser.sprites)
 		{
-
             if (self.player.abstractCreature.world.game.session is StoryGameSession session)
 			{
 				if (session.saveState.deathPersistentSaveData.karmaCap == 10)
@@ -92,8 +93,8 @@ internal class DrawSprites
 					if (sLeaser.sprites[2] is TriangleMesh tail)
 					{
                         tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
-						tail.color = new(1f, 0.86f, 0f);
-						/*
+						tail.color = sLeaser.sprites[9].color;
+                        /*
                         Vector2 vector = Vector2.Lerp(self.drawPositions[0, 1], self.drawPositions[0, 0], timeStacker);
                         Vector2 vector2 = Vector2.Lerp(self.drawPositions[1, 1], self.drawPositions[1, 0], timeStacker);
                         Vector2 vector4 = (vector2 * 3f + vector) / 4f;
@@ -169,12 +170,13 @@ internal class DrawSprites
 					}
 				}
 			}
-            if (ExternalSaveData.VoidKarma11)
+            if (Karma11Update.VoidKarma11)
             {
                 if (sLeaser.sprites[2] is TriangleMesh tail)
                 {
                     tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
-                    tail.color = new(1f, 0.86f, 0f);
+                    tail.color = sLeaser.sprites[9].color;
+
                     /*
                     Vector2 vector = Vector2.Lerp(self.drawPositions[0, 1], self.drawPositions[0, 0], timeStacker);
                     Vector2 vector2 = Vector2.Lerp(self.drawPositions[1, 1], self.drawPositions[1, 0], timeStacker);
@@ -276,7 +278,9 @@ internal class DrawSprites
 					{
 						sprite.color = new(1f, 0.86f, 0f);
 					}
-				}
+                }
+
+                Utils.VoidColor = sLeaser.sprites[9].color;
 
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
 				BodyChunk body_chunk_1 = self.player.bodyChunks[1];
@@ -364,7 +368,7 @@ internal class DrawSprites
 			{
                 sprite.color = new(0f, 0f, 0.005f);
             }
-            if (sLeaser.sprites[2] is TriangleMesh tail2 && !ExternalSaveData.VoidKarma11)
+            if (sLeaser.sprites[2] is TriangleMesh tail2 && !Karma11Update.VoidKarma11)
 			{
                 tail2.color = new(0f, 0f, 0.005f);
             }

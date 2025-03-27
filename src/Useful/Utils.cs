@@ -26,10 +26,10 @@ internal static class Utils
             && !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
     public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
 
+    public static Color VoidColor = new(0f, 0f, 0f);
 
-
-	//stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
-	private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }
+    //stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
+    private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }
 	private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
 	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
 	public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")

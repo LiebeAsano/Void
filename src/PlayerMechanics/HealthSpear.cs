@@ -5,6 +5,7 @@ using RWCustom;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
@@ -112,11 +113,11 @@ namespace VoidTemplate.PlayerMechanics
                             {
                                 player.playerState.permanentDamageTracking += (double)(num / player.Template.baseDamageResistance);
                             }
-                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10 && !Karma11Update.VoidKarma11)
                             {
                                 player.Die();
                             }
-                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && (player.KarmaCap == 10 || ExternalSaveData.VoidKarma11))
+                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && (player.KarmaCap == 10 || Karma11Update.VoidKarma11))
                             {
                                 player.Die();
                             }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static Room;
 using static VoidTemplate.SaveManager;
@@ -64,7 +65,7 @@ internal static class Climbing
 
 	private static bool KarmaCap_Check(Player self)
 	{
-		return self.IsVoid() && (self.KarmaCap > 3 || ExternalSaveData.VoidKarma11) || self.IsViy();
+		return self.IsVoid() && (self.KarmaCap > 3 || Karma11Update.VoidKarma11) || self.IsViy();
 	}
 
 
@@ -285,7 +286,7 @@ internal static class Climbing
 		player.canJump = 1;
 		player.standing = true;
 		float climbSpeed = 1f + 0.05f * player.KarmaCap;
-		if (player.KarmaCap == 10 || ExternalSaveData.VoidKarma11 || player.IsViy())
+		if (player.KarmaCap == 10 || Karma11Update.VoidKarma11 || player.IsViy())
 		{
 			climbSpeed = 1.5f;
         }
@@ -331,7 +332,7 @@ internal static class Climbing
 			body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
 			float minusone = 0.05f * player.KarmaCap;
             float minustwo = 0.16f * player.KarmaCap;
-			if (player.KarmaCap == 10 || ExternalSaveData.VoidKarma11 || player.IsViy())
+			if (player.KarmaCap == 10 || Karma11Update.VoidKarma11 || player.IsViy())
 			{
 				minusone = 0.5f;
 				minustwo = 1.6f;

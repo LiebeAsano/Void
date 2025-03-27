@@ -15,6 +15,8 @@ internal static class Karma11Update
         On.Player.ctor += Player_ctor;
     }
 
+    public static bool VoidKarma11 = false;
+
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
         orig(self, abstractCreature, world);
@@ -27,6 +29,14 @@ internal static class Karma11Update
             else
             {
                 ExternalSaveData.VoidKarma11 = false;
+            }
+            if (ExternalSaveData.VoidKarma11)
+            {
+                VoidKarma11 = true;
+            }
+            else
+            {
+                VoidKarma11 = false;
             }
         }
     }

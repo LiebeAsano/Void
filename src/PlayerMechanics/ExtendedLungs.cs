@@ -1,4 +1,5 @@
 ﻿using System;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
@@ -17,7 +18,7 @@ internal static class ExtendedLungs
         orig(self, eu);
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            if (self.KarmaCap != 10 && !ExternalSaveData.VoidKarma11)
+            if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
             {
                 int karma = self.KarmaCap;
 

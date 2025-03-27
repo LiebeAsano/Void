@@ -1,6 +1,7 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static VoidTemplate.Useful.Utils;
 
@@ -39,7 +40,7 @@ public static class AntiSpiderStun
                         return (int)((float)orig * 0.0f);
                     }
 
-					if (SaveManager.ExternalSaveData.VoidKarma11)
+					if (Karma11Update.VoidKarma11)
 					{
                         return (int)((float)orig * 0.1f);
                     }

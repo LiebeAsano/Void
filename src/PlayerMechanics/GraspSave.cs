@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
@@ -55,7 +56,7 @@ internal static class GraspSave
 			return TicksPerSecond * secondsToStunViy;
 
         }
-		return TicksPerSecond * (p.KarmaCap == 10 || ExternalSaveData.VoidKarma11 ? secondsToStunOnK10 : secondsToStunBelowK10);
+		return TicksPerSecond * (p.KarmaCap == 10 || Karma11Update.VoidKarma11 ? secondsToStunOnK10 : secondsToStunBelowK10);
 	}
 
 	static ConditionalWeakTable<AbstractCreature, ConditionalWeakTable<AbstractCreature, StrongBox<int>>> grabbers = new();

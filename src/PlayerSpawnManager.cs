@@ -40,16 +40,21 @@ public static class PlayerSpawnManager
     private static void RainCycle_ctor(On.RainCycle.orig_ctor orig, RainCycle self, World world, float minutes)
     {
         orig(self, world, minutes);
-		if (world.game.GetStorySession.saveState.cycleNumber == 0 && world.game.IsVoidWorld())
+		if (world.game != null)
 		{
-			self.cycleLength = 11 * 60 * 40;
+			if (world.game.GetStorySession != null)
+			{
+				if (world.game.GetStorySession.saveState.cycleNumber == 0 && world.game.IsVoidWorld())
+				{
+					self.cycleLength = 11 * 60 * 40;
+				}
+				if (world.name == "MS" && world.game.IsVoidWorld())
+				{
+					int minute = UnityEngine.Random.Range(11, 16);
+					self.cycleLength = minute * 60 * 40;
+				}
+			}
 		}
-		if (world.name == "MS" && world.game.IsVoidWorld())
-		{
-			int minute = UnityEngine.Random.Range(11, 16);
-            self.cycleLength = minute * 60 * 40;
-        }
-
     }
 
     #region minor helper functions

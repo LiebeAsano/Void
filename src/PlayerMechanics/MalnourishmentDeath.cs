@@ -1,4 +1,5 @@
-﻿using VoidTemplate.Useful;
+﻿using VoidTemplate.PlayerMechanics.Karma11Features;
+using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -22,7 +23,7 @@ internal static class MalnourishmentDeath
 			&& player.room != null
 			&& player.room == self.room
 			&& player.KarmaCap != 10
-            && ExternalSaveData.VoidKarma11
+            && !Karma11Update.VoidKarma11
             && player.Malnourished) player.Die();
 		});
 

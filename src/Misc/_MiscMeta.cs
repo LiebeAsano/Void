@@ -8,6 +8,6 @@ internal static class _MiscMeta
 		ForbidenDrone.Hook();
 		EngageInMovement.Hook();
         Expedition.Hook();
-
+		ShortcutColor.Hook();
     }
 }

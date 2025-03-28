@@ -1,0 +1,13 @@
+Template: NONE
+CeilingDrips: 0.04373866
+RainIntensity: 0.1570763
+RumbleIntensity: 0
+Clouds: 0.6959915
+Grime: 0
+Palette: 53
+EffectColorA: 13
+EffectColorB: 18
+Effects: SkyAndLightBloom-0.06186577-604.1073-378.575, Fog-0.2629302-1027.425-481.025, AboveCloudsView-1-1023.156-393.5156, PixelShift-0.5026607-1018.176-320.2354, LightRain-0.07733221-1077.227-255.4927, Contrast-0.02319983-1068.69-182.924, DayNight-0.3093297-1073.67-115.3354, Moth-0.3943954-1064.421-48.45833, LightBurn-0.08506576-1028.136-547.1906, 
+PlacedObjects: LightSource><-96.38646><1438.525><0.4045397~Environment~744.8969~-183.8718~50~86.60254~1~1~None~0~0, LightSource><1138.338><1437.373><0.4045397~Environment~744.8969~-183.8718~50~86.60254~1~1~None~0~0, LightSource><-111.6948><618.1479><0.4973383~Environment~744.8969~-183.8718~50~86.60254~1~1~None~0~0, LightSource><1193.12><578.3063><0.4973383~Environment~744.8969~-183.8718~50~86.60254~1~1~None~0~0, CustomEntranceSymbol><267.7812><390.7499><17.32051~-10~ShortcutGate~0, DangleFruit><486.9515><181.8956><0~0~2~3, DangleFruit><460.5721><284.1857><0~0~2~3, DangleFruit><514.7815><236.7292><0~0~2~3, DangleFruit><563.2562><259.8765><0~0~2~3, DangleFruit><613.0903><245.2426><0~0~2~3, 
+FadePalette: 42, 0.1701314, 0.2474639
+BackgroundOffset: 0,154.6645

@@ -1,0 +1,5 @@
+Template: OE_SettingsTemplate_Ruins
+Clouds: 1
+Effects: Moth-0-792.6439-414.8594, 
+PlacedObjects: LanternOnStick><145.6948><215.5886><27.74692~-97.7854, LanternOnStick><825.8489><460.3302><34.15002~-89.24786, DayNightSettings><237.1365><265.4848><5~8.660254~10~10, 
+FadePalette: 10, 1

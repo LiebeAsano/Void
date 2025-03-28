@@ -1,4 +1,23 @@
+[FINDLINESTART]OE_RUINBackHall
+[REPLACE]OE_RUINBackHall : OE_LWN01, OE_RUIN18, OE_RUIN21
+
+[FINDLINESTART]OE_RUIN04
+[REPLACE]OE_RUIN04 : OE_LWA01, OE_RAIL02, OE_RUIN03, DISCONNECTED, OE_RUIN02 : SWARMROOM
+
 [MERGE]
+
+ROOMS
+OE_LWN01 : OE_LWA02, OE_RUINBackHall : PERF_HEAVY
+OE_LWA01 : OE_RUIN04, OE_LWD01
+OE_LWD01 : OE_LWH01, OE_LWA01
+OE_LWH01 : OE_LWE01, OE_LWD01, DISCONNECTED
+OE_LWE01 : OE_LWA02, OE_LWH01
+OE_LWA02 : OE_LWE01, OE_LWE02, OE_LWN01 : SWARMROOM
+OE_LWE02 : OE_LWB01, OE_LWA02
+OE_LWB01 : OE_LWE02, OE_LWB01, GATE_OE_IW
+GATE_OE_IW : OE_LWB01, DISCONNECTED : GATE
+END ROOMS
+
 CREATURES
 OE_TOWER02 : 6-Salamander-{PreCycle}
 OE_TOWER06 : 2-White-{PreCycle}
@@ -50,5 +69,15 @@ OE_CAVE02 : 5-Salamander-{PreCycle}
 (Void)OE_RUINFrontHall : 2-TentaclePlant-{Night}, 4-Big Spider-2-{Night}
 (Void)OE_RUIN16 : 6-TentaclePlant-{Night}
 (Void)OE_JUNGLEESCAPE : 6-Blue-{Ignorecycle}, 3-Mimic-{Ignorecycle}-{16}, 9-DropBug-{Ignorecycle}, 8-Small Centipede-5-{Ignorecycle}
+//New Spawns
+
+OE_LWN01 : 2-WhiteLizard-2-{Ignorecycle}, 3-Caramel-{Ignorecycle}, 4-CicadaB-4, 5-CicadaA-4
+OE_LWE01 : 2-CicadaB-3, 4-CicadaA-4
+OE_LWE02 : 2-Caramel-{Ignorecycle}, 4-Pink-2-{Ignorecycle}
+
+(White)OE_RUINBackHall : 6-Blue
+(Gourmand)OE_RUINBackHall : 6-Blue, 6-TentaclePlant-{Night}, 7-White-{Night}, 10-TentaclePlant-{Night}
+(White,Yellow,Gourmand)OE_RUIN04 : 7-CicadaB-2
+
 END CREATURES
 [ENDMERGE]

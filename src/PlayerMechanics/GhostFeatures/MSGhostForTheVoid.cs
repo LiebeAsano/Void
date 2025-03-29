@@ -25,7 +25,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
         {
             IL.World.SpawnGhost += World_SpawnGhost;
 
-            On.GhostWorldPresence.ctor += GhostWorldPresence_ctor;
+            On.GhostWorldPresence.ctor_World_GhostID += GhostWorldPresence_ctor_World_GhostID;
 
             On.World.CheckForRegionGhost += World_CheckForRegionGhost;
 
@@ -37,7 +37,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
             On.Player.Update += Player_Update;
         }
 
-        private static void GhostWorldPresence_ctor(On.GhostWorldPresence.orig_ctor orig, GhostWorldPresence self, World world, GhostWorldPresence.GhostID ghostID)
+        private static void GhostWorldPresence_ctor_World_GhostID(On.GhostWorldPresence.orig_ctor_World_GhostID orig, GhostWorldPresence self, World world, GhostWorldPresence.GhostID ghostID)
         {
             orig(self, world, ghostID);
 

@@ -14,12 +14,12 @@ internal static class CycleEnd
 		On.ShelterDoor.Close += CycleEndLogic;
 		//On.RainWorldGame.Update += RainWorldGame_Update;
 		//IL.ShelterDoor.Update += ShelterDoor_Update;
-		On.RainWorldGame.Win += RainWorldGame_Win;
+        On.RainWorldGame.Win += RainWorldGame_Win;
 	}
 
-	private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
-	{
-		if (self.IsVoidWorld() && malnourished && self.Players[0].realizedCreature is Player p && p.KarmaCap != 10)
+    private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
+    {
+        if (self.IsVoidWorld() && malnourished && self.Players[0].realizedCreature is Player p && p.KarmaCap != 10)
 		{
 			self.GoToDeathScreen();
 			return;
@@ -28,7 +28,7 @@ internal static class CycleEnd
         //{
         //    self.GetStorySession.saveState.cycleNumber -= 2;
         //}
-        orig(self, malnourished);
+        orig(self, malnourished, fromWarpPoint);
 
     }
 

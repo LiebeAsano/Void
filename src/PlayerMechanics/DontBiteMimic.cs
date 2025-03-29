@@ -27,8 +27,8 @@ internal static class DontBiteMimic
 				c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
 				{
 					if ((self.IsVoid() || self.IsViy()) &&
-						self.room.climbableVines.vines[self.vinePos.vine] is PoleMimic)
-						return false;
+						self.room.climbableVines.vines[self.vinePos.vine.TotalPositions()] is PoleMimic) //self.vinePos.vine can't be converted to int
+                        return false;
 					return re;
 				});
 			}

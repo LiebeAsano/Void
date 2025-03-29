@@ -119,10 +119,10 @@ sealed class MimicstarfishCritob : Critob
         relationships.Fears(CreatureTemplate.Type.DaddyLongLegs, 1f);
         if (ModManager.MSC)
         {
-            relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.MirosVulture, 1f);
+            relationships.Fears(DLCSharedEnums.CreatureTemplateType.MirosVulture, 1f);
             relationships.Ignores(MoreSlugcatsEnums.CreatureTemplateType.TrainLizard);
-            relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.AquaCenti,0.8f);
-            relationships.Fears(MoreSlugcatsEnums.CreatureTemplateType.TerrorLongLegs, 1f);
+            relationships.Fears(DLCSharedEnums.CreatureTemplateType.AquaCenti,0.8f);
+            relationships.Fears(DLCSharedEnums.CreatureTemplateType.TerrorLongLegs, 1f);
         }
         relationships.Ignores(base.Type);
         }

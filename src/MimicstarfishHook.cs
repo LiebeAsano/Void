@@ -71,7 +71,10 @@ namespace VoidTemplate
 
             orig(self, sLeaser, rCam, palette);
             Color color = palette.blackColor;
-            if (self.owner.daddy.Template.type == CreatureTemplateType.Mimicstarfish)
+
+            var rotGraphics = self.owner as DaddyGraphics;
+
+            if (rotGraphics.daddy.Template.type == CreatureTemplateType.Mimicstarfish)
             {
 
                 color = new Color(1f, 0.8f, 0.8f);
@@ -86,7 +89,7 @@ namespace VoidTemplate
                     sLeaser.sprites[self.firstSprite + 1 + j].color = Color.Lerp(color, Custom.HSL2RGB(Custom.WrappedRandomVariation(1f, .48f, .15f), .8f, Custom.ClampedRandomVariation(.86f, .72f, .43f)), self.OnTubeEffectColorFac(self.bumps[j].pos.y));
                     if (self.bumps[j].eyeSize > 0f)
                     {
-                        sLeaser.sprites[self.firstSprite + 1 + self.bumps.Length + num].color = (self.owner.colorClass ? self.owner.EffectColor : color);
+                        sLeaser.sprites[self.firstSprite + 1 + self.bumps.Length + num].color = (rotGraphics.colorClass ? rotGraphics.EffectColor : color);
                         num++;
                     }
                 }

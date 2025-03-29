@@ -52,7 +52,7 @@ namespace VoidTemplate.Creatures
                 DamageResistances = new() { Base = 200f, Explosion = .03f },
                 StunResistances = new() { Base = 200f },
                 HasAI = true,
-                Pathing = PreBakedPathing.Ancestral(MoreSlugcatsEnums.CreatureTemplateType.Inspector),
+                Pathing = PreBakedPathing.Ancestral(DLCSharedEnums.CreatureTemplateType.Inspector),
             }.IntoTemplate();
             t.canFly = true;
             return t;
@@ -65,13 +65,13 @@ namespace VoidTemplate.Creatures
 
             foreach (var template in StaticWorld.creatureTemplates)
 
-                self.EatenBy(MoreSlugcatsEnums.CreatureTemplateType.Inspector, 3f);
+                self.EatenBy(DLCSharedEnums.CreatureTemplateType.Inspector, 3f);
             self.FearedBy(CreatureTemplate.Type.LizardTemplate, 1f);
             self.FearedBy(CreatureTemplate.Type.Slugcat, 0.5f);
             self.FearedBy(CreatureTemplate.Type.Scavenger, 0.7f);
             self.FearedBy(CreatureTemplate.Type.LizardTemplate, 1f);
             self.AttackedBy(MoreSlugcatsEnums.CreatureTemplateType.SlugNPC, 0.5f);
-            self.FearedBy(MoreSlugcatsEnums.CreatureTemplateType.ScavengerElite, 0.7f);
+            self.FearedBy(DLCSharedEnums.CreatureTemplateType.ScavengerElite, 0.7f);
             self.Eats(CreatureTemplateType.OutspectorB, 3f);
             self.EatenBy(CreatureTemplateType.OutspectorB, 3f);
         }
@@ -87,6 +87,6 @@ namespace VoidTemplate.Creatures
 
         public override void LoadResources(RainWorld rainWorld) { }
 
-        public override CreatureTemplate.Type ArenaFallback() => MoreSlugcatsEnums.CreatureTemplateType.Inspector;
+        public override CreatureTemplate.Type ArenaFallback() => DLCSharedEnums.CreatureTemplateType.Inspector;
     }
 }

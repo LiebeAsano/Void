@@ -21,7 +21,7 @@ internal static class KarmaLadderTokenDecrease
 		//making process manager understand how to recognize new ID
 		On.ProcessManager.PostSwitchMainProcess += ProcessManager_PostSwitchMainProcess;
         //making sleepanddeathscreen understand new ID
-        On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
+        On.Menu.KarmaLadder.ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool += KarmaLadder_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool;
 		//all the logic with swapping sprites
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
         //adding background illustration to new process ID
@@ -39,9 +39,9 @@ internal static class KarmaLadderTokenDecrease
 		}
     }
 
-    private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, UnityEngine.Vector2 pos, HUD.HUD hud, RWCustom.IntVector2 displayKarma, bool reinforced)
+    private static void KarmaLadder_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool(On.Menu.KarmaLadder.orig_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool orig, KarmaLadder self, Menu.Menu menu, MenuObject owner, UnityEngine.Vector2 pos, HUD.HUD hud, RWCustom.IntVector2 displayKarma, bool reinforced)
     {
-		orig(self, menu, owner, pos, hud, displayKarma, reinforced);
+        orig(self, menu, owner, pos, hud, displayKarma, reinforced);
 		if(menu is KarmaLadderScreen kscreen
 			&& kscreen.ID == VoidEnums.ProcessID.TokenDecrease)
 		{

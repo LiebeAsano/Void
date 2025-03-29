@@ -18,7 +18,7 @@ public static class InitGame
 	}
 	private const string startingRoom = "SH_S10";
 
-	private static void RainWorldGameOnWin(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished)
+	private static void RainWorldGameOnWin(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
 	{
         if (self.GetStorySession is StoryGameSession storySession
             && storySession.saveStateNumber == VoidEnums.SlugcatID.Viy
@@ -26,7 +26,7 @@ public static class InitGame
         {
             storySession.saveState.SetViyFirstCycle(true);
         }
-        orig(self, malnourished);
+        orig(self, malnourished, fromWarpPoint);
 	}
 	
 /// <summary>

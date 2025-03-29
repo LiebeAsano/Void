@@ -95,12 +95,12 @@ namespace VoidTemplate.Creatures
             if (rel.trackerRep is Tracker.ElaborateCreatureRepresentation)
             {
                 if (rel.trackerRep.representedCreature.creatureTemplate.TopAncestor().type == CreatureTemplate.Type.DaddyLongLegs)
-                    if (rel.trackerRep.representedCreature.creatureTemplate.type != MoreSlugcatsEnums.CreatureTemplateType.Inspector)
+                    if (rel.trackerRep.representedCreature.creatureTemplate.type != DLCSharedEnums.CreatureTemplateType.Inspector)
                     {
                         rel.currentRelationship.type = CreatureTemplate.Relationship.Type.Attacks;
                     }
 
-                if (rel.trackerRep.representedCreature.creatureTemplate.type == MoreSlugcatsEnums.CreatureTemplateType.Inspector)
+                if (rel.trackerRep.representedCreature.creatureTemplate.type == DLCSharedEnums.CreatureTemplateType.Inspector)
                 {
                     rel.currentRelationship.type = CreatureTemplate.Relationship.Type.Ignores;
 

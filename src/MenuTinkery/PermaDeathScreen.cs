@@ -13,7 +13,8 @@ internal static class PermaDeathScreen
 	public static void Hook()
 	{
 		//when needed, initiate karmatominscreen process
-		On.Menu.KarmaLadder.ctor += KarmaLadder_ctor;
+        On.Menu.KarmaLadder.ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool += KarmaLadder_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool;
+
 		//special treatment for go to karma if karma0 exists
 		On.Menu.KarmaLadder.GoToKarma += KarmaLadder_GoToKarma;
 		//fetch empty karma
@@ -23,7 +24,7 @@ internal static class PermaDeathScreen
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
 	}
 
-	static bool IsPlummetingScreen(this KarmaLadder karmaLadder) => karmaLadder.karmaSymbols[0].sprites[karmaLadder.karmaSymbols[0].KarmaSprite].element.name.Contains("blank");
+    static bool IsPlummetingScreen(this KarmaLadder karmaLadder) => karmaLadder.karmaSymbols[0].sprites[karmaLadder.karmaSymbols[0].KarmaSprite].element.name.Contains("blank");
 
 	private static void KarmaLadder_GoToKarma(On.Menu.KarmaLadder.orig_GoToKarma orig, KarmaLadder self, int newGoalKarma, bool displayMetersOnRest)
 	{
@@ -56,9 +57,9 @@ internal static class PermaDeathScreen
 		}
 	}
 
-	private static void KarmaLadder_ctor(On.Menu.KarmaLadder.orig_ctor orig, KarmaLadder self, Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
-	{
-		var screen = menu as KarmaLadderScreen;
+    private static void KarmaLadder_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool(On.Menu.KarmaLadder.orig_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool orig, KarmaLadder self, Menu menu, MenuObject owner, Vector2 pos, HUD.HUD hud, IntVector2 displayKarma, bool reinforced)
+    {
+        var screen = menu as KarmaLadderScreen;
 		bool needInsert = false;
 
 		if (screen.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
@@ -75,7 +76,7 @@ internal static class PermaDeathScreen
 		{
 			var zeroKarma = new KarmaLadder.KarmaSymbol(menu, self,
 				new Vector2(0f, 0f), self.containers[self.MainContainer],
-				self.containers[self.FadeCircleContainer], new IntVector2(-1, 0));
+				self.containers[self.FadeCircleContainer], new IntVector2(-1, 0), false);
 
 			self.karmaSymbols.Insert(0, zeroKarma);
 			self.subObjects.Add(zeroKarma);

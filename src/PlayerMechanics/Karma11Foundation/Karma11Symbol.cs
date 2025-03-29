@@ -66,9 +66,9 @@ internal static class Karma11Symbol
 	/// <param name="container"></param>
 	/// <param name="foregroundContainer"></param>
 	/// <param name="displayKarma"></param>
-	private static void KarmaSymbol_ctor(On.Menu.KarmaLadder.KarmaSymbol.orig_ctor orig, KarmaLadder.KarmaSymbol self, Menu.Menu menu, MenuObject owner, Vector2 pos, FContainer container, FContainer foregroundContainer, IntVector2 displayKarma)
+	private static void KarmaSymbol_ctor(On.Menu.KarmaLadder.KarmaSymbol.orig_ctor orig, KarmaLadder.KarmaSymbol self, Menu.Menu menu, MenuObject owner, Vector2 pos, FContainer container, FContainer foregroundContainer, IntVector2 displayKarma, bool ripple)
 	{
-		orig(self, menu, owner, pos, container, foregroundContainer, displayKarma);
+		orig(self, menu, owner, pos, container, foregroundContainer, displayKarma, ripple);
 
 		if (displayKarma.x == karma11index)
 		{

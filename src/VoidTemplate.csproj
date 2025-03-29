@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     
     <PropertyGroup>
-        <TargetFramework>net48</TargetFramework>
+        <TargetFramework>net481</TargetFramework>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
     
@@ -13,10 +13,6 @@
 		
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="DataArchives\" />
     </ItemGroup>
 	<Target Name="MoveBinariesToProperFoler" AfterTargets="PostBuildEvent">
 		<Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb" DestinationFolder="$(ProjectDir)../the void/plugins/" />

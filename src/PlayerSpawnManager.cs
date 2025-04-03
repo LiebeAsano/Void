@@ -7,7 +7,7 @@ public static class PlayerSpawnManager
 {
 	public static void ApplyHooks()
 	{
-		On.Player.Update += Player_Update;
+		//On.Player.Update += Player_Update;
 		On.RainCycle.ctor += RainCycle_ctor;
         //On.RainWorldGame.Update += RainWorldGame_Update;
     }

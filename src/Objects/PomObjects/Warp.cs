@@ -258,8 +258,9 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		awaitingWorld,
 		awaitingTransition
 	}
-	#endregion
-	public override void Update(bool eu)
+    #endregion
+    [Obsolete]
+    public override void Update(bool eu)
 	{
 		base.Update(eu);
 		switch (state)
@@ -334,15 +335,16 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		private readonly Warp warp = warp;
 		private readonly string acronym = targetRegionAcronym;
 
-		public void Load()
+        [Obsolete]
+        public void Load()
 		{
 			WorldLoader worldLoader = new(game: room.game,
-						playerCharacter: room.game.GetStorySession.characterStats.name,
+                        playerCharacter: room.game.GetStorySession.characterStats.name,
 						singleRoomWorld: false,
 						//this may be wrong, maybe there is no need to wrap
 						worldName: Region.GetProperRegionAcronym(room.game.StoryCharacter, acronym),
 
-						region: room.game.overWorld.GetRegion(acronym),
+                        region: room.game.overWorld.GetRegion(acronym),
 						setupValues: room.game.setupValues);
 			worldLoader.NextActivity();
 			while (!worldLoader.Finished)

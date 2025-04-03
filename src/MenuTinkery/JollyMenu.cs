@@ -27,9 +27,20 @@ internal static class JollyMenu
 		//On.JollyCoop.JollyMenu.JollyPlayerSelector.SetPortraitImage_Name_Color += JollyPlayerSelector_SetPortraitImage_Name_Color;
 		//this hook assigns bodytintcolor again to bypass that
 		On.JollyCoop.JollyMenu.JollyPlayerSelector.Update += JollyPlayerSelector_Update;
-	}
+		//On.JollyCoop.JollyMenu.JollyPlayerSelector.SetPortraitImage_Name_Color += JollyPlayerSelector_SetPortraitImage_Name_Color;
 
-	private static void SymbolButtonToggle_ctor(On.JollyCoop.JollyMenu.SymbolButtonToggle.orig_ctor orig, JollyCoop.JollyMenu.SymbolButtonToggle self, Menu menu, MenuObject owner, string signal, Vector2 pos, Vector2 size, string symbolNameOn, string symbolNameOff, bool isOn, bool textAboveButton, string stringLabelOn, string stringLabelOff, FTextParams textParams)
+    }
+
+    private static void JollyPlayerSelector_SetPortraitImage_Name_Color(On.JollyCoop.JollyMenu.JollyPlayerSelector.orig_SetPortraitImage_Name_Color orig, JollyCoop.JollyMenu.JollyPlayerSelector self, SlugcatStats.Name className, Color colorTint)
+    {
+		orig(self, className, colorTint);
+		if (className == VoidEnums.SlugcatID.Void)
+		{
+            self.portrait.sprite.color = PlayerGraphics.JollyFaceColorMenu(VoidEnums.SlugcatID.Void, self.JollyOptions(0).playerClass, self.index);
+        }   
+    }
+
+    private static void SymbolButtonToggle_ctor(On.JollyCoop.JollyMenu.SymbolButtonToggle.orig_ctor orig, JollyCoop.JollyMenu.SymbolButtonToggle self, Menu menu, MenuObject owner, string signal, Vector2 pos, Vector2 size, string symbolNameOn, string symbolNameOff, bool isOn, bool textAboveButton, string stringLabelOn, string stringLabelOff, FTextParams textParams)
 	{
 		orig(self, menu, owner, signal, pos, size, symbolNameOn, symbolNameOff, isOn, textAboveButton, stringLabelOn, stringLabelOff, textParams);
 	}
@@ -118,20 +129,19 @@ internal static class JollyMenu
     private static Color PlayerGraphics_JollyBodyColorMenu(On.PlayerGraphics.orig_JollyBodyColorMenu orig, SlugcatStats.Name slugName, SlugcatStats.Name reference)
     {
         var res = orig(slugName, reference);
-        if (slugName == VoidEnums.SlugcatID.Void && RWCustom.Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM)
+        if (slugName == VoidEnums.SlugcatID.Void)
         {
-            res = new Color(1f, 1f, 1f);
+            res = new Color(1f, 0.87f, 0f);
         }
         return res;
     }
     private static void JollyPlayerSelector_Update(On.JollyCoop.JollyMenu.JollyPlayerSelector.orig_Update orig, JollyCoop.JollyMenu.JollyPlayerSelector self)
-	{
-		orig(self);
-		if(self.JollyOptions(self.index).playerClass == VoidEnums.SlugcatID.Void)
-		{
-			self.bodyTintColor = PlayerGraphics.JollyBodyColorMenu(
-				new SlugcatStats.Name("JollyPlayer" + (self.index + 1).ToString(), false),
-				self.JollyOptions(self.index).playerClass);
+    {
+        orig(self);
+
+        if (self.JollyOptions(self.index).playerClass == VoidEnums.SlugcatID.Void)
+        {
+            self.bodyTintColor = self.faceTintColor;
 
             if (self.JollyOptions(self.index).isPup)
             {
@@ -139,5 +149,5 @@ internal static class JollyMenu
             }
             self.pupButton.GetButtonBehavior.greyedOut = true;
         }
-	}
+    }
 }

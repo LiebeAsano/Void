@@ -202,13 +202,13 @@ internal static class Climbing
 			if (!gamepadController)
 				gamepadTimer2++;
 
-			if (gamepadTimer2 >= 30 && (IsTouchingDiagonalCeiling(player) || IsTouchingCeiling(player)) && KarmaCap_Check(player) && player.input[0].jmp && player.input[0].pckp)
+			if (gamepadTimer2 >= 40 && (IsTouchingDiagonalCeiling(player) || IsTouchingCeiling(player)) && KarmaCap_Check(player) && player.input[0].jmp && player.input[0].pckp)
 			{
 				gamepadController = true;
 				gamepadTimer2 = 0;
 			}
 
-			if (gamepadTimer >= 30 && player.input[0].jmp && player.input[0].pckp)
+			if (gamepadTimer >= 40 && player.input[0].jmp && player.input[0].pckp)
 			{
 				gamepadController = false;
 				gamepadTimer = 0;

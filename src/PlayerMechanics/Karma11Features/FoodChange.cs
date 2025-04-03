@@ -77,10 +77,18 @@ internal static class FoodChange
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
 		orig(self, saveStateNumber, game);
-        if (saveStateNumber == VoidEnums.SlugcatID.Void && (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 8 || ExternalSaveData.VoidKarma11))
+        if (saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
-            self.characterStats.maxFood = 9;
+			if (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 8 || Karma11Update.VoidKarma11)
+			{
+                self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
+                self.characterStats.maxFood = 9;
+            }
+            else
+			{
+                self.characterStats.foodToHibernate = 9;
+                self.characterStats.maxFood = 9;
+            }
         }
     }
 }

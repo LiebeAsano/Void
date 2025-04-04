@@ -274,13 +274,29 @@ internal class DrawSprites
 			{
 				if (self.player.room != null)
 				{
-					if (Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM && Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO && !self.player.room.game.IsArenaSession)
+					if (ModManager.CoopAvailable)
 					{
-						sprite.color = new(1f, 0.86f, 0f);
-					}
+                        if ((Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM 
+							&& Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO
+                            || Custom.rainWorld.options.jollyColorMode == Options.JollyColorMode.AUTO
+                            && self.player.abstractCreature == self.player.room.game.Players[0])
+                            && !self.player.room.game.IsArenaSession)
+                        {
+                            sprite.color = new(1f, 0.86f, 0f);
+                            Utils.VoidColors[0] = new(1f, 0.86f, 0f);
+                        }
+                    }
+					else if (!self.player.room.game.IsArenaSession)
+					{
+                        sprite.color = new(1f, 0.86f, 0f);
+                    }
                 }
 
-                Utils.VoidColor = sLeaser.sprites[9].color;
+				int number = self.player.playerState.playerNumber;
+				if (sprite.color != null)
+				{
+                    Utils.VoidColors[number] = sprite.color;
+                }
 
                 BodyChunk body_chunk_0 = self.player.bodyChunks[0];
 				BodyChunk body_chunk_1 = self.player.bodyChunks[1];

@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Menu;
 using UnityEngine;
+using SlugBase.Features;
 
 namespace VoidTemplate.Useful;
 internal static class Utils
@@ -26,7 +27,7 @@ internal static class Utils
             && !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
     public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
 
-    public static Color VoidColor = new(0f, 0f, 0f);
+    public static Color[] VoidColors = new Color[32];
 
     //stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
     private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }

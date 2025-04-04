@@ -1,7 +1,9 @@
 ﻿namespace VoidTemplate.MenuTinkery;
 
+using HUD;
 using Menu;
 using MoreSlugcats;
+using RWCustom;
 using System;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
@@ -10,17 +12,18 @@ internal static class JollyMenu
 {
 	public static void Hook()
 	{
-		//On.JollyCoop.JollyMenu.SymbolButtonToggle.ctor += SymbolButtonToggle_ctor;
-		//change state of player to adult when choosing void
-		//grey out slugpup toggle button when void is chosen
-		//On.JollyCoop.JollyMenu.JollyPlayerSelector.Update += JollyPlayerSelector_Update1;
+		On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.ctor += JollyPlayerSpecificHud_ctor;
+        //On.JollyCoop.JollyMenu.SymbolButtonToggle.ctor += SymbolButtonToggle_ctor;
+        //change state of player to adult when choosing void
+        //grey out slugpup toggle button when void is chosen
+        //On.JollyCoop.JollyMenu.JollyPlayerSelector.Update += JollyPlayerSelector_Update1;
 
-		//make jolly identify unique face sprite of void
-		On.JollyCoop.JollyMenu.SymbolButtonTogglePupButton.LoadIcon += SymbolButtonTogglePupButton_LoadIcon;
+        //make jolly identify unique face sprite of void
+        On.JollyCoop.JollyMenu.SymbolButtonTogglePupButton.LoadIcon += SymbolButtonTogglePupButton_LoadIcon;
 		On.JollyCoop.JollyMenu.JollyPlayerSelector.GetPupButtonOffName += JollyPlayerSelector_GetPupButtonOffName;
 		//assigns eye color to be yellow on slugpup select button
 		On.PlayerGraphics.JollyFaceColorMenu += PlayerGraphics_JollyFaceColorMenu;
-		On.PlayerGraphics.JollyUniqueColorMenu += PlayerGraphics_JollyUniqueColorMenu;
+        On.PlayerGraphics.JollyUniqueColorMenu += PlayerGraphics_JollyUniqueColorMenu;
 		On.JollyCoop.JollyMenu.SymbolButtonTogglePupButton.HasUniqueSprite += SymbolButtonTogglePupButton_HasUniqueSprite;
 		//On.PlayerGraphics.JollyBodyColorMenu += PlayerGraphics_JollyBodyColorMenu;
 		//when making slugpup sprite color, jolly coop does Color.Clamp with L factor not going below 0.25
@@ -31,13 +34,17 @@ internal static class JollyMenu
 
     }
 
-    private static void JollyPlayerSelector_SetPortraitImage_Name_Color(On.JollyCoop.JollyMenu.JollyPlayerSelector.orig_SetPortraitImage_Name_Color orig, JollyCoop.JollyMenu.JollyPlayerSelector self, SlugcatStats.Name className, Color colorTint)
+    private static void JollyPlayerSpecificHud_ctor(On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.orig_ctor orig, JollyCoop.JollyHUD.JollyPlayerSpecificHud self, HUD hud, FContainer fContainer, AbstractCreature player)
     {
-		orig(self, className, colorTint);
-		if (className == VoidEnums.SlugcatID.Void)
-		{
-            self.portrait.sprite.color = PlayerGraphics.JollyFaceColorMenu(VoidEnums.SlugcatID.Void, self.JollyOptions(0).playerClass, self.index);
-        }   
+        orig(self, hud, fContainer, player);
+		self.playerNumber = self.PlayerState.playerNumber;
+        if (Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.CUSTOM
+                   && Custom.rainWorld.options.jollyColorMode != Options.JollyColorMode.AUTO
+                   || Custom.rainWorld.options.jollyColorMode == Options.JollyColorMode.AUTO
+                   && self.playerNumber == 0)
+        {
+            self.playerColor = new(1f, 0.86f, 0f);
+        }
     }
 
     private static void SymbolButtonToggle_ctor(On.JollyCoop.JollyMenu.SymbolButtonToggle.orig_ctor orig, JollyCoop.JollyMenu.SymbolButtonToggle self, Menu menu, MenuObject owner, string signal, Vector2 pos, Vector2 size, string symbolNameOn, string symbolNameOff, bool isOn, bool textAboveButton, string stringLabelOn, string stringLabelOff, FTextParams textParams)
@@ -115,6 +122,8 @@ internal static class JollyMenu
 		return res;
 
 	}
+
+    
 
     private static Color PlayerGraphics_JollyUniqueColorMenu(On.PlayerGraphics.orig_JollyUniqueColorMenu orig, SlugcatStats.Name slugName, SlugcatStats.Name reference, int playerNumber)
     {

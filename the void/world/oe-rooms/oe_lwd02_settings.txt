@@ -1,0 +1,5 @@
+Template: oe_settingstemplate_ruins
+EffectColorB: 6
+Effects: SkyAndLightBloom-0.4485288-722.9209-345.1365, 
+PlacedObjects: LightBeam><357.3557><1723.115><113.1218~559.3647~227.1136~565.0564~253.4374~-98.8927~-90.35519~-98.89268~0.6984041~0~0~1~None~0~0, 
+FadePalette: 42, 0.2242641, 0.2938634, 0.28613

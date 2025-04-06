@@ -9,7 +9,7 @@ public static class PlayerSpawnManager
 	{
 		On.Player.Update += Player_Update;
 		On.RainCycle.ctor += RainCycle_ctor;
-        On.RainWorldGame.Update += RainWorldGame_Update;
+        //On.RainWorldGame.Update += RainWorldGame_Update;
     }
 
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)

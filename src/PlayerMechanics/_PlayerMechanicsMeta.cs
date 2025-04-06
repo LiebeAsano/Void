@@ -8,6 +8,7 @@ public static class _PlayerMechanicsMeta
 {
 	public static void Hook()
 	{
+		BarnacleResist.Hook();
 		BitByPlayer.Hook();
 		CanBeSwallowed.Hook();
 		CanIPickThisUp.Hook();

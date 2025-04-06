@@ -1,5 +1,5 @@
-Template: OE_SettingsTemplate_Ruins
+Template: oe_settingstemplate_ruins
 Effects: SkyAndLightBloom-0.01546644-679.5219-435.4917, 
 PlacedObjects: LightSource><-160.8022><532.0304><0.4045408~Environment~656.676~-271.3812~50~86.60254~1~1~None~0~0, LightSource><1182.602><517.7136><0.404541~Environment~656.676~-271.3812~-295.7687~50.31818~1~1~None~0~0, NoSpearStickZone><128.8307><474.1087><0~100, NoSpearStickZone><899.7058><370.4528><0~100, 
 FadePalette: 42, 0.2861302
-BackgroundOffset: 0,-232
+BackgroundOffset: 0,-180

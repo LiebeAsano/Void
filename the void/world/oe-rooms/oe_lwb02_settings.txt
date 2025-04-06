@@ -1,5 +1,5 @@
 Template: oe_settingstemplate_ruins
 Effects: SkyAndLightBloom-0.01086957-644-393, 
-PlacedObjects: LightSource><-66.17944><1329.063><0.2537815~Environment~870~-227~275~-89.39746~1~1~None~0~0, LightSource><1003.225><1396.355><0.2537815~Environment~870~-227~-341.8344~-112.153~1~1~None~0~0, LightSource><69.74686><382.7703><0.2615148~Environment~870~-227~54.44791~24.38031~1~1~None~0~0, LightSource><1006.162><715.9556><0.253782~Environment~870~-227~-334.7198~-186.1086~1~1~None~0~0, DeadSeedCob><300.3135><419.3104><, DeadSeedCob><391.104><423.6367><, SeedCob><342.5587><385.0584><0~0~7~10, LightSource><426><190><0.4021739~EffectColor1~139~-34~-97~103.6025~1~1~None~0~0, LightSource><572><189><0.4021739~EffectColor1~134~-27~-97~103.6025~1~1~None~0~0, 
+PlacedObjects: LightSource><-66.17944><1329.063><0.2537815~Environment~870~-227~275~-89.39746~1~1~None~0~0, LightSource><1003.225><1396.355><0.2537815~Environment~870~-227~-341.8344~-112.153~1~1~None~0~0, LightSource><69.74686><382.7703><0.2615148~Environment~870~-227~54.44791~24.38031~1~1~None~0~0, LightSource><1006.162><715.9556><0.253782~Environment~870~-227~-334.7198~-186.1086~1~1~None~0~0, DeadSeedCob><300.3135><419.3104><, DeadSeedCob><391.104><423.6367><, SeedCob><342.5587><385.0584><0~0~7~10, LightSource><426><190><0.4021739~EffectColor1~139~-34~-192~39.60251~0~1~None~0~0, LightSource><572><189><0.4021739~EffectColor1~134~-27~79~26.60251~0~1~None~0~0, 
 FadePalette: 42, 0.3551291, 0.3241962
-BackgroundOffset: 0,69.33153
+BackgroundOffset: 0,-160

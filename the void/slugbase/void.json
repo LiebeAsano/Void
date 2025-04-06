@@ -67,7 +67,6 @@
 		"food_min": 9,
 		"food_max": 9,
 		"world_state": ["Void","Red"],
-		"timeline_after": "Red",
 		"start_room": "SB_A14",
 		"diet": {
 			"base": "White",

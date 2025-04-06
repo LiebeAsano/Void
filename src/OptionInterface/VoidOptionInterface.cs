@@ -22,7 +22,8 @@ internal class VoidOptionInterface : global::OptionInterface
 			(cfgArenaAscensionStun, MediumGrey)
 			]);
 		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: [
-			(cfgGamepadController, MediumGrey),
+            (cfgComplexControl, MediumGrey),
+            (cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, MediumGrey),
 			(cfgNoPermaDeath, CheatingColor),
 			(cfgForceUnlockCampaign, CheatingColor),

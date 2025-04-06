@@ -10,6 +10,8 @@ public static class OptionAccessors
     public static bool ArenaAscensionStun => cfgArenaAscensionStun.Value;
     public static bool SimpleFood => cfgSimpleFood.Value;
     public static bool GamepadController => cfgGamepadController.Value;
+
+    public static bool ComplexControl => cfgComplexControl.Value;
     public static bool PermaDeath => !cfgNoPermaDeath.Value;
 	public static bool ForceUnlockCampaign => cfgForceUnlockCampaign.Value;
     public static int PermaDeathCycle => cfgPermaDeathCycle.Value;
@@ -21,6 +23,7 @@ public static class OptionAccessors
 	internal static Configurable<bool> cfgSaintArenaAscension;
     internal static Configurable<bool> cfgArenaAscensionStun;
     internal static Configurable<bool> cfgGamepadController;
+    internal static Configurable<bool> cfgComplexControl;
     internal static Configurable<bool> cfgSimpleFood;
 	internal static Configurable<bool> cfgNoPermaDeath;
 	internal static Configurable<bool> cfgForceUnlockCampaign;

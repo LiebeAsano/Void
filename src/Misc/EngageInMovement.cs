@@ -20,7 +20,7 @@ internal static class EngageInMovement
 			return orig(slugcat_hand);
 		}
 
-		if (player.animation != Player.AnimationIndex.None || (player.input[0].y == 0 && !Climbing.gamepadController) || (player.bodyMode != Player.BodyModeIndex.WallClimb && player.bodyMode != BodyModeIndexExtension.CeilCrawl))
+		if (player.animation != Player.AnimationIndex.None || (player.input[0].y == 0 && !Climbing.gamepadController[player.playerState.playerNumber]) || (player.bodyMode != Player.BodyModeIndex.WallClimb && player.bodyMode != BodyModeIndexExtension.CeilCrawl))
 		{
 			attached_fields.initialize_hands = true;
 			return orig(slugcat_hand);

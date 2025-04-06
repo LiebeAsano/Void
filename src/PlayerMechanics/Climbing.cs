@@ -25,7 +25,7 @@ internal static class Climbing
 
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
 	{
-		if (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+		if ((self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[self.playerState.playerNumber]))
 		{
 
 			BodyChunk body_chunk_0 = self.bodyChunks[0];
@@ -126,9 +126,13 @@ internal static class Climbing
 	private static int flipTimer = -1;
 	private const int ticksToFlip = 10;
 
-	public static bool gamepadController = false;
-	public static int gamepadTimer = 0;
-	public static int gamepadTimer2 = 0;
+	public static bool[] gamepadController = new bool [32];
+	public static int[] gamepadTimer = new int [32];
+	public static int[] gamepadTimer2 = new int [32];
+
+    public static bool[] switchMode = new bool[32];
+    public static bool[] switchModeUnic = new bool [32];
+	public static int[] switchTimer = new int [32];
 
     private static readonly ConditionalWeakTable<Player, StrongBox<int>> rightLeft = new();
 
@@ -196,30 +200,50 @@ internal static class Climbing
 
 		if (OptionAccessors.GamepadController)
 		{
-			if (gamepadController)
-				gamepadTimer++;
+			if (gamepadController[player.playerState.playerNumber])
+				gamepadTimer[player.playerState.playerNumber]++;
 
-			if (!gamepadController)
-				gamepadTimer2++;
+			if (!gamepadController[player.playerState.playerNumber])
+				gamepadTimer2[player.playerState.playerNumber]++;
 
-			if (gamepadTimer2 >= 40 && (IsTouchingDiagonalCeiling(player) || IsTouchingCeiling(player)) && KarmaCap_Check(player) && player.input[0].jmp && player.input[0].pckp)
+			if (gamepadTimer2[player.playerState.playerNumber] >= 20 && (IsTouchingDiagonalCeiling(player) || IsTouchingCeiling(player)) && KarmaCap_Check(player) && player.input[0].jmp && player.input[0].pckp && !player.input[1].jmp && !player.input[1].pckp)
 			{
-				gamepadController = true;
-				gamepadTimer2 = 0;
+				gamepadController[player.playerState.playerNumber] = true;
+				gamepadTimer2[player.playerState.playerNumber] = 0;
 			}
 
-			if (gamepadTimer >= 40 && player.input[0].jmp && player.input[0].pckp)
+			if (gamepadTimer[player.playerState.playerNumber] >= 20 && player.input[0].jmp && player.input[0].pckp && !player.input[1].jmp && !player.input[1].pckp)
 			{
-				gamepadController = false;
-				gamepadTimer = 0;
+				gamepadController[player.playerState.playerNumber] = false;
+				gamepadTimer[player.playerState.playerNumber] = 0;
 			}
 		}
-		if (player.bodyMode == Player.BodyModeIndex.WallClimb)
+
+		if (OptionAccessors.ComplexControl)
+		{
+			if (switchModeUnic[player.playerState.playerNumber])
+			{
+				switchTimer[player.playerState.playerNumber]++;
+			}
+			
+			if (switchTimer[player.playerState.playerNumber] >= 20)
+			{
+                switchModeUnic[player.playerState.playerNumber] = false;
+            }
+
+			if (!switchModeUnic[player.playerState.playerNumber] && player.input[0].spec && !player.input[1].spec)
+			{
+				switchMode[player.playerState.playerNumber] = !switchMode[player.playerState.playerNumber];
+            }
+
+		}
+
+		if (player.bodyMode == Player.BodyModeIndex.WallClimb && !OptionAccessors.ComplexControl || player.bodyMode == Player.BodyModeIndex.WallClimb && OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber])
 		{
 			UpdateBodyMode_WallClimb(player);
 			player.noGrabCounter = 5;
 		}
-		else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && (player.input[0].y > 0 || gamepadController) &&
+		else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
 				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
 		{
@@ -228,9 +252,9 @@ internal static class Climbing
 			state.IsCeilCrawling = true;
 			state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.05f;
 		}
-		else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && (player.input[0].y > 0 || gamepadController) &&
+		else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
-			(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
+				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
 		{
 			player.bodyMode = BodyModeIndexExtension.CeilCrawl;
 			UpdateBodyMode_CeilCrawl(player, state);
@@ -318,7 +342,7 @@ internal static class Climbing
 
 		TryApplyWallClimbOverride(player);
 
-		if (player.input[0].y > 0 || gamepadController)
+		if (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber])
 		{
 			if (!player.input[0].jmp)
 			{
@@ -341,7 +365,7 @@ internal static class Climbing
             if (player.input[0].jmp && player.input[0].x != 0)
 			{
 				float jumpForceX;
-				if (gamepadController && player.input[0].y <= 0)
+				if (gamepadController[player.playerState.playerNumber] && player.input[0].y <= 0)
 					jumpForceX = (-8f + minustwo) * climbSpeed * player.input[0].x;
 				else
 					jumpForceX = (-3.4f + minusone) * climbSpeed * player.input[0].x;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VoidTemplate.Misc;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
@@ -348,19 +349,34 @@ internal class DrawSprites
 						self.player.bodyMode == Player.BodyModeIndex.Dead || self.player.bodyMode == Player.BodyModeIndex.Stunned ||
 						self.player.bodyMode == Player.BodyModeIndex.Crawl)
 					{
-
-						string face = "Void-";
-						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						if (Climbing.switchMode[self.player.playerState.playerNumber] && OptionAccessors.ComplexControl)
+                        {
+							string face = "VoidA-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						}
+						else
+						{
+                            string face = "Void-";
+                            if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                                sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                        }
 
 					}
 					else
 					{
-
-						string face = "VoidDown-";
-						if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
-							sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
-
+						if (Climbing.switchMode[self.player.playerState.playerNumber] && OptionAccessors.ComplexControl)
+						{
+							string face = "VoidADown-";
+							if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+								sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+						}
+						else
+						{
+                            string face = "VoidDown-";
+                            if (Futile.atlasManager.DoesContainElementWithName(face + sprite.element.name))
+                                sprite.element = Futile.atlasManager.GetElementWithName(face + sprite.element.name);
+                        }
 					}
 				}
 			}

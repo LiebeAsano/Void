@@ -34,7 +34,7 @@ internal class Warp : UpdatableAndDeletable
 		//or error out of range while doing so
 		On.OverWorld.Update += OverWorld_Update;
 		//this is the method that is only used in spawning to realize players for the first time in the cycle
-		//On.Room.ShortCutsReady += Room_ShortCutsReady;
+		On.Room.ShortCutsReady += Room_ShortCutsReady;
 	}
 
 	private static void Room_ShortCutsReady(On.Room.orig_ShortCutsReady orig, Room self)
@@ -259,7 +259,6 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		awaitingTransition
 	}
     #endregion
-    [Obsolete]
     public override void Update(bool eu)
 	{
 		base.Update(eu);
@@ -335,7 +334,6 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		private readonly Warp warp = warp;
 		private readonly string acronym = targetRegionAcronym;
 
-        [Obsolete]
         public void Load()
 		{
 			WorldLoader worldLoader = new(game: room.game,

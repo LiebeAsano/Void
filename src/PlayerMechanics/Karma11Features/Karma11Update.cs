@@ -20,7 +20,7 @@ internal static class Karma11Update
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
         orig(self, abstractCreature, world);
-        if (self.IsVoid())
+        if (self.IsVoid() && world.game.IsVoidStoryCampaign())
         {
             if (self.KarmaCap == 10)
             {
@@ -30,14 +30,14 @@ internal static class Karma11Update
             {
                 ExternalSaveData.VoidKarma11 = false;
             }
-            if (ExternalSaveData.VoidKarma11)
-            {
-                VoidKarma11 = true;
-            }
-            else
-            {
-                VoidKarma11 = false;
-            }
+        }
+        if (ExternalSaveData.VoidKarma11)
+        {
+            VoidKarma11 = true;
+        }
+        else
+        {
+            VoidKarma11 = false;
         }
     }
 }

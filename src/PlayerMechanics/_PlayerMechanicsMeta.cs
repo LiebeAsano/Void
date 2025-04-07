@@ -9,6 +9,7 @@ public static class _PlayerMechanicsMeta
 	public static void Hook()
 	{
 		BarnacleResist.Hook();
+		BasiliskResist.Hook();
 		BitByPlayer.Hook();
 		CanBeSwallowed.Hook();
 		CanIPickThisUp.Hook();
@@ -26,6 +27,7 @@ public static class _PlayerMechanicsMeta
 		ExplosiveResist.Hook();
 		ExtendedLungs.Hook();
 		FastCrawl.Hook();
+		FrogResist.Hook();
 		Grabability.Hook();
 		GraspSave.Hook();
 		HealthSpear.Hook();

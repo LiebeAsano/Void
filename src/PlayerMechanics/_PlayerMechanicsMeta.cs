@@ -37,6 +37,7 @@ public static class _PlayerMechanicsMeta
 		JumpUnderWater.Hook();
 		KarmaFlowerChanges.Initiate();
 		LizardResist.Hook();
+		LocustResist.Hook();
         MalnourishmentDeath.Hook();
 		NoForceSleep.Hook();
 		NoVisualMalnourishment.Hook();

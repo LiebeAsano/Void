@@ -94,7 +94,7 @@ internal class DrawSprites
 					if (sLeaser.sprites[2] is TriangleMesh tail)
 					{
                         tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
-						tail.color = sLeaser.sprites[9].color;
+						tail.color = new(0f, 0f, 0f);
                         /*
                         Vector2 vector = Vector2.Lerp(self.drawPositions[0, 1], self.drawPositions[0, 0], timeStacker);
                         Vector2 vector2 = Vector2.Lerp(self.drawPositions[1, 1], self.drawPositions[1, 0], timeStacker);
@@ -176,7 +176,7 @@ internal class DrawSprites
                 if (sLeaser.sprites[2] is TriangleMesh tail)
                 {
                     tail.element = Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail");
-                    tail.color = sLeaser.sprites[9].color;
+                    tail.color = new(0f, 0f, 0f);
 
                     /*
                     Vector2 vector = Vector2.Lerp(self.drawPositions[0, 1], self.drawPositions[0, 0], timeStacker);

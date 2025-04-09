@@ -24,6 +24,7 @@ internal class TardigradeResist
             Creature grabber = grasp.grabber;
             Vector3 vector = Custom.RGB2HSL((self.BitesLeft == 3) ? self.iVars.secondaryColor : self.iVars.bodyColor);
             (self.State as Tardigrade.TardigradeState).bites--;
+            (self.State as Tardigrade.TardigradeState).bites--;
             self.room.PlaySound((self.BitesLeft == 0) ? SoundID.Slugcat_Eat_Slime_Mold : SoundID.Slugcat_Bite_Slime_Mold, self.firstChunk);
             self.firstChunk.MoveFromOutsideMyUpdate(eu, grabber.mainBodyChunk.pos);
             if (self.BitesLeft <= 1 && !self.dead)

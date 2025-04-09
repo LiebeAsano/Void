@@ -26,7 +26,7 @@ public static class _PlayerMechanicsMeta
 		ElectricSpearResist.Hook();
 		ExplosiveResist.Hook();
 		ExtendedLungs.Hook();
-		FastCrawl.Hook();
+		SlugStats.Hook();
 		FrogResist.Hook();
 		Grabability.Hook();
 		GraspSave.Hook();
@@ -47,6 +47,7 @@ public static class _PlayerMechanicsMeta
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();
 		SaintKarmaImmunity.Hook();
+		SpiderResist.Hook();
 		SwallowObjects.Hook();
 		TardigradeResist.Hook();
 		ThrowObject.Hook();

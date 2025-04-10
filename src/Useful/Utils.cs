@@ -30,7 +30,6 @@ internal static class Utils
     public static Color[] VoidColors = new Color[32];
 
     //stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
-    private static string TrimCaller(string callerFile) { return (callerFile = callerFile.Substring(Mathf.Max(callerFile.LastIndexOf(Path.DirectorySeparatorChar), callerFile.LastIndexOf(Path.AltDirectorySeparatorChar)) + 1)).Substring(0, callerFile.LastIndexOf('.')); }
 	private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
 	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
 	public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
@@ -42,22 +41,15 @@ internal static class Utils
 		logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
 	}
 
-	public static void LogdumpIL(ILContext iLContext)
-	{
-		loginf("Dumping IL -----");
-
-		foreach (Instruction instruction in iLContext.Instrs)
-		{
-			try
-			{
-				loginf(instruction.OpCode);
-				loginf(instruction.Operand);
-			}
-			catch { }
-		}
-
-		loginf("IL Dump end -----");
-	}
+    private static bool? dressMySlugcatEnabled = null;
+    public static bool DressMySlugcatEnabled
+    {
+        get
+        {
+            dressMySlugcatEnabled ??= ModManager.ActiveMods.Exists(mod => mod.id == "dressmyslugcat");
+            return (bool)dressMySlugcatEnabled;
+        }
+    }
 }
 public static class POMUtils
 {

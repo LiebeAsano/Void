@@ -84,11 +84,6 @@ internal static class FoodChange
                 self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
                 self.characterStats.maxFood = 9;
             }
-            else
-			{
-                self.characterStats.foodToHibernate = 9;
-                self.characterStats.maxFood = 9;
-            }
         }
     }
 }

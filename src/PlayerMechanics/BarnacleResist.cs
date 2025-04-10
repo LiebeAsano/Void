@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.Useful;
 using Watcher;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -14,6 +15,7 @@ internal class BarnacleResist
     public static void Hook()
     {
         On.Player.CanMaulCreature += Player_CanMaulCreature;
+        On.Watcher.Barnacle.BitByPlayer += Barnacle_BitByPlayer;
         On.Watcher.Barnacle.Collide += Barnacle_Colide;
         On.Watcher.Barnacle.Violence += Barnacle_Violence;
     }
@@ -26,6 +28,16 @@ internal class BarnacleResist
         }
         return orig(self, crit);
     }
+
+    private static void Barnacle_BitByPlayer(On.Watcher.Barnacle.orig_BitByPlayer orig, Barnacle self, Creature.Grasp grasp, bool eu)
+    {
+        if (grasp.grabber is Player player && player.IsVoid())
+        {
+            self.bites -= 1;
+        }
+        orig(self, grasp, eu);
+    }
+
     private static void Barnacle_Colide(On.Watcher.Barnacle.orig_Collide orig, Watcher.Barnacle self, PhysicalObject otherObject, int myChunk, int otherChunk)
     {
         if (!self.Consious)

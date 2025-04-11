@@ -1,7 +1,4 @@
-60 : Is that what I think it is? : 60
-0 : Excellent, you really are a good messenger. : 120
-0 : Strangely enough, your structure is very similar to the disease that I was exposed to. : 60
-0 : I never would have thought that I had anything in common with you... : 120
-0 : Anyway, I need another pearl. It stores data about an unfortunate development. : 60
-0 : The problem is that it was washed away along with other samples, its approximate location is the Garbage Wastes. : 60
-0 : You should be careful, my samples have an aggressive form of behavior... : 60
+60 : I recognise this colour... there is a serious crack in the pearl. : 60
+0 : It will take time to recover the corrupted data, but these records will also help me to slow down the infection of my structure. : 180
+0 : Are you still here? : 60
+0 : Come back another time, I need to be alone to finish the preparations. : 120

@@ -43,6 +43,8 @@ public static class _PlayerMechanicsMeta
 		NoVisualMalnourishment.Hook();
 		PunishNonPermaDeath.Hook();
 		RockHitSomething.Hook();
+		RottenDangleResist.Hook();
+		RottenSeedCob.Hook();
 		CrawlJump.Hook();
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();

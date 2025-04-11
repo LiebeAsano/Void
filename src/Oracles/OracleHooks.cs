@@ -280,7 +280,7 @@ static class OracleHooks
                         miscData.SSaiConversationsHad--;
                         break;
                     }*/
-                case 4 when !saveState.GetVoidMeetMoon():
+                case 3 when !saveState.GetVoidMeetMoon():
                     {
                         switch (UnityEngine.Random.Range(0, 3))
                         {
@@ -304,7 +304,7 @@ static class OracleHooks
                         self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
 						break;
                     }
-                case >= 4 when self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5 && saveState.GetVoidMeetMoon():
+                case >= 3 when self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SLOracleState.neuronsLeft < 5 && saveState.GetVoidMeetMoon():
                     {
                         PebbleVoice(self);
                         self.dialogBox.Interrupt("You should not have done that.".TranslateString(), 60);
@@ -315,7 +315,7 @@ static class OracleHooks
                         self.getToWorking = 1f;
                         break;
                     }
-                case 4:
+                case 3:
                     {
                         if (self.action != MeetVoid_Init)
                         {
@@ -333,7 +333,7 @@ static class OracleHooks
                         
                         break;
                     }
-                case 5:
+                case 4:
 					{
                         if (VoidPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractVoidPearl)
                         {
@@ -363,7 +363,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 6:
+                case 5:
                     {
                         if (RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl)
                         {
@@ -392,7 +392,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case 7:
+                case 6:
                     {
                         if (self.action != MeetVoid_Init)
                         {
@@ -409,7 +409,7 @@ static class OracleHooks
                         }
                         break;
                     }
-                case > 7:
+                case > 6:
 					{
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);

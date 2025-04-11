@@ -1,10 +1,9 @@
-0 : . . . : 60
-0 : I am astonished at your audacity. Are you looking for death in my room? : 60
-0 : Why are you always being followed by an NSH's overseer? Why is he so interested in you? : 60
-0 : . . . : 180
-0 : Oh... it is you... To be precise, what is left of you. : 60
-0 : Were you able to complete your mission, little creature? : 120
-0 : Apparently, you do not understand what I mean. : 60
-0 : I will refine your mark so that it can record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak. : 60
-0 : Then come back to me, there is a possibility, I can find a solution to your desperate situation. : 60
-0 : Now leave me alone for your sake, I have more work to do. : 60
+240 : At least she is conscious... : 60
+0 : In a way, I am grateful to you. : 60
+0 : Now I have to fulfill my part... : 180
+0 : A more detailed analysis of your "parasite" suggests that it has the beginnings of a gene-repairing mechanism. : 60
+0 : Which will allow you to recover your body indefinitely. : 120
+0 : But I have already said, I do not have the medical equipment for that anymore. There will be a different approach. : 60
+0 : First of all, I need research records on the void liquid. Similar research have been carried out at mining sites, particularly in the Pipeyard. : 60
+0 : The pearls with the necessary data should have been located in the underground western part of the region. : 60
+0 : Bring me at least one to continue my work. Go right away and do not waste my time. : 60

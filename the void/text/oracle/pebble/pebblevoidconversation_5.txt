@@ -1,9 +1,7 @@
-240 : At least she is conscious... : 60
-0 : In a way, I am grateful to you. : 60
-0 : Now I have to fulfill my part... : 180
-0 : A more detailed analysis of your "parasite" suggests that it has the beginnings of a gene-repairing mechanism. : 60
-0 : Which will allow you to recover your body indefinitely. : 120
-0 : But I have already said, I do not have the medical equipment for that anymore. There will be a different approach. : 60
-0 : First of all, I need research records on the void liquid. Similar research have been carried out at mining sites, particularly in the Pipeyard. : 60
-0 : The pearls with the necessary data should have been located in the underground western part of the region. : 60
-0 : Bring me at least one to continue my work. Go right away and do not waste my time. : 60
+60 : Is that what I think it is? : 60
+0 : Excellent, you really are a good messenger. : 120
+0 : Strangely enough, your structure is very similar to the disease that I was exposed to. : 60
+0 : I never would have thought that I had anything in common with you... : 120
+0 : Anyway, I need another pearl. It stores data about an unfortunate development. : 60
+0 : The problem is that it was washed away along with other samples, its approximate location is the Garbage Wastes. : 60
+0 : You should be careful, my samples have an aggressive form of behavior... : 60

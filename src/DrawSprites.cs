@@ -211,8 +211,8 @@ internal class DrawSprites
         {
             faceSprite.color = new(1f, 0.86f, 0f);
         }
-#warning change later pls
-        //Utils.VoidColor = sLeaser.sprites[9].color;
+
+        Utils.VoidColors[self.player.playerState.playerNumber] = faceSprite.color;
 
         BodyChunk body_chunk_0 = self.player.bodyChunks[0];
         BodyChunk body_chunk_1 = self.player.bodyChunks[1];
@@ -295,7 +295,10 @@ internal class DrawSprites
             && tail.shader != FShader.defaultShader) 
         {
             tail.shader = FShader.defaultShader;
-            tail.color = sLeaser.sprites[9].color;
+            if (!Karma11Update.VoidKarma11)
+            {
+                tail.color = new(0f, 0f, 0.005f);
+            }
         }
         #endregion
 

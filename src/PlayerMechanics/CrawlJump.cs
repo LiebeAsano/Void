@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -19,7 +20,7 @@ internal static class CrawlJump
     private static void Player_MovementUpdate(On.Player.orig_MovementUpdate orig, Player self, bool eu)
     {
         orig(self, eu);
-        if (self.IsVoid())
+        if (self.IsVoid() && (self.KarmaCap >= 4 || Karma11Update.VoidKarma11))
         {
             int num16 = 0;
             if (self.superLaunchJump > 0 && self.killSuperLaunchJumpCounter < 1)

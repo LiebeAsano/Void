@@ -1,7 +1,7 @@
 ﻿{
 	"id": "void.lwteam",
 	"name": "Rain world: Last Wish",
-	"version": "0.28.0",
+	"version": "0.29.2",
 	"authors": "LW team",
 	"description": "",
 	"requirements": ["moreslugcats", "watcher", "slime-cubed.slugbase", "crs", "regionkit", "pom", "fisobs"],

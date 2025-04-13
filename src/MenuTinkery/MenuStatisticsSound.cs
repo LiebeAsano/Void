@@ -36,17 +36,21 @@ internal static class MenuStatisticsSound
 	{
 		if (package.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
-			string currentScene = self.scene.sceneID.value;
+			string currentScene;
 
-			if (StatisticSoundMap.Keys.Contains(currentScene)
-				&& self.manager.musicPlayer is MusicPlayer player)
+			if (self?.scene?.sceneID?.value != null)
 			{
-                player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu)
-                {
-                    playWhenReady = true
-                };
+				currentScene = self.scene.sceneID.value;
 
-            }
+				if (StatisticSoundMap.Keys.Contains(currentScene)
+					&& self.manager.musicPlayer is MusicPlayer player)
+				{
+					player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu)
+					{
+						playWhenReady = true
+					};
+				}
+			}
 		}
 		orig(self, package);
 	}

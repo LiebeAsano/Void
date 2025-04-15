@@ -338,9 +338,10 @@ private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld se
 		{
 			WorldLoader worldLoader = new(game: room.game,
                         playerCharacter: room.game.GetStorySession.characterStats.name,
+                        timelinePosition: SlugcatStats.SlugcatToTimeline(room.game.StoryCharacter),
 						singleRoomWorld: false,
 						//this may be wrong, maybe there is no need to wrap
-						worldName: Region.GetProperRegionAcronym(room.game.StoryCharacter, acronym),
+						worldName: Region.GetProperRegionAcronym(SlugcatStats.SlugcatToTimeline(room.game.StoryCharacter), acronym),
 
                         region: room.game.overWorld.GetRegion(acronym),
 						setupValues: room.game.setupValues);

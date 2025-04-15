@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
@@ -271,18 +272,34 @@ internal class DrawSprites
                 || self.player.bodyMode == Player.BodyModeIndex.Stunned
                 || self.player.bodyMode == Player.BodyModeIndex.Crawl)
             {
-
-                string face = "Void-";
-                if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                    faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
+                {
+                    string face = "Void-";
+                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
+                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                }
+                else
+                {
+                    string face = "VoidA-";
+                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
+                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                }
 
             }
             else
             {
-
-                string face = "VoidDown-";
-                if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                    faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
+                {
+                    string face = "VoidDown-";
+                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
+                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                }
+                else
+                {
+                    string face = "VoidADown-";
+                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
+                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                }
 
             }
         }

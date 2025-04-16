@@ -126,8 +126,8 @@ public static class SaveManager
 
 
     private const string stomachPearls = uniqueprefix + "stomachPearls";
-    public static Dictionary<int, List<DataPearl.AbstractDataPearl>> GetStomachPearls(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet<Dictionary<int, List<DataPearl.AbstractDataPearl>>>(stomachPearls, out var dic) ? dic : [];
-    public static void SetStomachPearls(this SaveState save, Dictionary<int, List<DataPearl.AbstractDataPearl>> pearls) => save.miscWorldSaveData.GetSlugBaseData().Set(stomachPearls, pearls);
+    public static Dictionary<int, List<string>> GetStomachPearls(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet<Dictionary<int, List<string>>>(stomachPearls, out var dic) ? dic : [];
+    public static void SetStomachPearls(this SaveState save, Dictionary<int, List<string>> pearls) => save.miscWorldSaveData.GetSlugBaseData().Set(stomachPearls, pearls);
 
     //Pearls
 

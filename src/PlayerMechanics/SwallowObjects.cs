@@ -184,25 +184,28 @@ internal static class SwallowObjects
         }
     }
 
-    private static Dictionary<int, List<DataPearl.AbstractDataPearl>> stomachPearls = new();
+    private static Dictionary<int, List<string>> pearlIDsInPlayerStomaches = new();
 
     private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
     {
-
-        if (self.SlugCatClass == VoidEnums.SlugcatID.Void)
+        if (self.SlugCatClass == VoidEnums.SlugcatID.Void 
+            && self.objectInStomach is null
+            && pearlIDsInPlayerStomaches[self.playerState.playerNumber] is not null
+            && pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0)
         {
-            if (stomachPearls[self.playerState.playerNumber].Count > 0)
-            {
-                var pearlToSpit = stomachPearls[self.playerState.playerNumber][stomachPearls.Count - 1];
-                stomachPearls[self.playerState.playerNumber].RemoveAt(stomachPearls.Count - 1);
-                self.objectInStomach = pearlToSpit;
-                self.abstractCreature.world.game.GetStorySession?.saveState.SetStomachPearls(stomachPearls);
-            }
-            else
-            {
-                orig(self);
-                return;
-            }
+                string pearlToSpit = pearlIDsInPlayerStomaches[self.playerState.playerNumber].Last();
+                pearlIDsInPlayerStomaches[self.playerState.playerNumber].RemoveAt(pearlIDsInPlayerStomaches.Count - 1);
+                self.objectInStomach = new DataPearl.AbstractDataPearl(world: self.abstractCreature.world,
+                    objType: AbstractPhysicalObject.AbstractObjectType.DataPearl, 
+                    realizedObject: null,
+                    pos: self.abstractCreature.pos,
+                    ID: self.abstractCreature.world.game.GetNewID(),
+                    originRoom: -1,
+                    placedObjectIndex: -1,
+                    consumableData: null,
+                    dataPearlType: new DataPearl.AbstractDataPearl.DataPearlType(pearlToSpit)
+                ); 
+                self.abstractCreature.world.game.GetStorySession?.saveState?.SetStomachPearls(pearlIDsInPlayerStomaches);
         }
         orig(self);
     }
@@ -605,7 +608,7 @@ internal static class SwallowObjects
                     self.swallowAndRegurgitateCounter++;
                     for (int num14 = 0; num14 < 2; num14++)
                     {
-                        if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || stomachPearls[self.playerState.playerNumber].Count > 0))
+                        if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
                         {
                             if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
                             {
@@ -654,20 +657,20 @@ internal static class SwallowObjects
                         }
                         else if (self.swallowAndRegurgitateCounter > 90)
                         {
-                            for (int num13 = 0; num13 < 2; num13++)
+                            for (int graspIndex = 0; graspIndex < 2; graspIndex++)
                             {
-                                if (self.grasps[num13] != null && self.CanBeSwallowed(self.grasps[num13].grabbed))
+                                if (self.grasps[graspIndex] != null && self.CanBeSwallowed(self.grasps[graspIndex].grabbed))
                                 {
-                                    if (self.grasps[num13].grabbed is DataPearl pearl && self.swallowAndRegurgitateCounter == 91)
+                                    if (self.grasps[graspIndex].grabbed is DataPearl pearl 
+                                        && self.swallowAndRegurgitateCounter == 91
+                                        && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl 
+                                        && self.abstractCreature.world.game.GetStorySession is not null)
                                     {
-                                        if (pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl && self.abstractCreature.world?.game?.GetStorySession is not null)
-                                        {
-                                            stomachPearls[self.playerState.playerNumber].Add(abstractPearl);
-                                            self.abstractCreature.world.game.GetStorySession.saveState.SetStomachPearls(stomachPearls);
-                                        }
+                                            pearlIDsInPlayerStomaches[self.playerState.playerNumber].Add(abstractPearl.dataPearlType.value);
+                                            self.abstractCreature.world.game.GetStorySession.saveState.SetStomachPearls(pearlIDsInPlayerStomaches);
                                     }
-                                    self.bodyChunks[0].pos += Custom.DirVec(self.grasps[num13].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;
-                                    self.SwallowObject(num13);
+                                    self.bodyChunks[0].pos += Custom.DirVec(self.grasps[graspIndex].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;
+                                    self.SwallowObject(graspIndex);
                                     if (self.spearOnBack != null)
                                     {
                                         self.spearOnBack.interactionLocked = true;
@@ -1056,7 +1059,7 @@ internal static class SwallowObjects
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
     {
         orig(self);
-        if ((self.player.objectInStomach != null || stomachPearls[self.player.playerState.playerNumber].Count > 0) && self.swallowing <= 0 && self.player.IsVoid() && self.player.swallowAndRegurgitateCounter > 0)
+        if ((self.player.objectInStomach != null || pearlIDsInPlayerStomaches[self.player.playerState.playerNumber].Count > 0) && self.swallowing <= 0 && self.player.IsVoid() && self.player.swallowAndRegurgitateCounter > 0)
         {
             if (self.player.swallowAndRegurgitateCounter > 30)
             {
@@ -1085,9 +1088,9 @@ internal static class SwallowObjects
         orig(self, abstractCreature, world);
         if (self.IsVoid())
         {
-            if (!stomachPearls.TryGetValue(self.playerState.playerNumber, out var pearl))
+            if (!pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out var pearl))
             {
-                stomachPearls[self.playerState.playerNumber] = [];
+                pearlIDsInPlayerStomaches[self.playerState.playerNumber] = [];
             }
         }
         
@@ -1096,7 +1099,7 @@ internal static class SwallowObjects
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
         orig(self, saveStateNumber, game);
-        stomachPearls = self.saveState.GetStomachPearls();
+        pearlIDsInPlayerStomaches = self.saveState.GetStomachPearls();
     }
 }
 

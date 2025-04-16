@@ -206,11 +206,6 @@ internal static class SwallowObjects
                 ); 
                 self.abstractCreature.world.game.GetStorySession?.saveState?.SetStomachPearls(pearlIDsInPlayerStomaches);
         }
-        else
-        {
-            orig(self);
-            return;
-        }
         orig(self);
     }
     private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)

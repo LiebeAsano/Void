@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SlugBase.SaveData;
 using static VoidTemplate.Useful.Utils;
 
@@ -122,6 +123,11 @@ public static class SaveManager
 	public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);
 	public static int GetVoidExtraCycles(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(voidExtraCycles, out int extraCycles) ? extraCycles : 0;
 	public static void SetVoidExtraCycles(this SaveState save, int value) => save.deathPersistentSaveData.GetSlugBaseData().Set(voidExtraCycles, value);
+
+
+    private const string stomachPearls = uniqueprefix + "stomachPearls";
+    public static Dictionary<int, List<DataPearl.AbstractDataPearl>> GetStomachPearls(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet<Dictionary<int, List<DataPearl.AbstractDataPearl>>>(stomachPearls, out var dic) ? dic : [];
+    public static void SetStomachPearls(this SaveState save, Dictionary<int, List<DataPearl.AbstractDataPearl>> pearls) => save.miscWorldSaveData.GetSlugBaseData().Set(stomachPearls, pearls);
 
     //Pearls
 

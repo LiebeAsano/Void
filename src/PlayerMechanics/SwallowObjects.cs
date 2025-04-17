@@ -189,11 +189,10 @@ internal static class SwallowObjects
     private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
     {
         if (self.SlugCatClass == VoidEnums.SlugcatID.Void 
-            && self.objectInStomach is null
             && pearlIDsInPlayerStomaches[self.playerState.playerNumber] is not null
             && pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0)
         {
-                string pearlToSpit = pearlIDsInPlayerStomaches[self.playerState.playerNumber].Last();
+                string pearlToSpit = pearlIDsInPlayerStomaches[self.playerState.playerNumber][pearlIDsInPlayerStomaches.Count - 1];
                 pearlIDsInPlayerStomaches[self.playerState.playerNumber].RemoveAt(pearlIDsInPlayerStomaches.Count - 1);
                 self.objectInStomach = new DataPearl.AbstractDataPearl(world: self.abstractCreature.world,
                     objType: AbstractPhysicalObject.AbstractObjectType.DataPearl, 

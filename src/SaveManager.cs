@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SlugBase.SaveData;
-using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate;
 
@@ -17,7 +13,7 @@ public static class SaveManager
 	private const string punishDeath = uniqueprefix + "NonPermaDeath";
 	private const string punishPebble = uniqueprefix + "PunishFromPebble";
 
-	public const string endingDone = uniqueprefix + "EndingDone";
+	const string endingDone = uniqueprefix + "EndingDone";
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
 	private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
 	private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
@@ -197,6 +193,19 @@ public static class SaveManager
 		{
 			save.ForceEnlistDreamInShowQueue(dream);
 		}
+	}
+	#endregion
+
+	#region ConvulsionObjects
+	const string convulsionList = "convulsionList";
+	public static bool IsValidForAppearing(this SaveState save, string roomname) => save.miscWorldSaveData.GetSlugBaseData().TryGet(convulsionList, out List<string> list) && list.Contains(roomname);
+	public static void DelistConvulsion(this SaveState save, string roomname)
+	{
+		var slugbase = save.miscWorldSaveData.GetSlugBaseData();
+		List<string> list;
+		if (slugbase.TryGet(convulsionList, out list)) list.Add(roomname);
+		else list = [roomname];
+		slugbase.Set(convulsionList, list);
 	}
 	#endregion
 

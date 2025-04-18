@@ -1058,25 +1058,28 @@ internal static class SwallowObjects
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
     {
         orig(self);
-        if ((self.player.objectInStomach != null || pearlIDsInPlayerStomaches[self.player.playerState.playerNumber].Count > 0) && self.swallowing <= 0 && self.player.IsVoid() && self.player.swallowAndRegurgitateCounter > 0)
+        if (self.player.IsVoid())
         {
-            if (self.player.swallowAndRegurgitateCounter > 30)
+            if ((self.player.objectInStomach != null || pearlIDsInPlayerStomaches[self.player.playerState.playerNumber].Count > 0) && self.swallowing <= 0 && self.player.swallowAndRegurgitateCounter > 0)
             {
-                self.blink = 5;
-            }
-            float num11 = Mathf.InverseLerp(0f, 110f, (float)self.player.swallowAndRegurgitateCounter);
-            float num12 = (float)self.player.swallowAndRegurgitateCounter / Mathf.Lerp(30f, 15f, num11);
-            if (self.player.standing)
-            {
-                self.drawPositions[0, 0].y += Mathf.Sin(num12 * 3.1415927f * 2f) * num11 * 2f;
-                self.drawPositions[1, 0].y += -Mathf.Sin((num12 + 0.2f) * 3.1415927f * 2f) * num11 * 3f;
-            }
-            else
-            {
-                self.drawPositions[0, 0].y += Mathf.Sin(num12 * 3.1415927f * 2f) * num11 * 3f;
-                self.drawPositions[0, 0].x += Mathf.Cos(num12 * 3.1415927f * 2f) * num11 * 1f;
-                self.drawPositions[1, 0].y += Mathf.Sin((num12 + 0.2f) * 3.1415927f * 2f) * num11 * 2f;
-                self.drawPositions[1, 0].x += -Mathf.Cos(num12 * 3.1415927f * 2f) * num11 * 3f;
+                if (self.player.swallowAndRegurgitateCounter > 30)
+                {
+                    self.blink = 5;
+                }
+                float num11 = Mathf.InverseLerp(0f, 110f, (float)self.player.swallowAndRegurgitateCounter);
+                float num12 = (float)self.player.swallowAndRegurgitateCounter / Mathf.Lerp(30f, 15f, num11);
+                if (self.player.standing)
+                {
+                    self.drawPositions[0, 0].y += Mathf.Sin(num12 * 3.1415927f * 2f) * num11 * 2f;
+                    self.drawPositions[1, 0].y += -Mathf.Sin((num12 + 0.2f) * 3.1415927f * 2f) * num11 * 3f;
+                }
+                else
+                {
+                    self.drawPositions[0, 0].y += Mathf.Sin(num12 * 3.1415927f * 2f) * num11 * 3f;
+                    self.drawPositions[0, 0].x += Mathf.Cos(num12 * 3.1415927f * 2f) * num11 * 1f;
+                    self.drawPositions[1, 0].y += Mathf.Sin((num12 + 0.2f) * 3.1415927f * 2f) * num11 * 2f;
+                    self.drawPositions[1, 0].x += -Mathf.Cos(num12 * 3.1415927f * 2f) * num11 * 3f;
+                }
             }
         }
     }

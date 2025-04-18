@@ -198,7 +198,7 @@ public static class SaveManager
 
 	#region ConvulsionObjects
 	const string convulsionList = "convulsionList";
-	public static bool IsValidForAppearing(this SaveState save, string roomname) => save.miscWorldSaveData.GetSlugBaseData().TryGet(convulsionList, out List<string> list) && list.Contains(roomname);
+	public static bool IsValidForAppearing(this SaveState save, string roomname) => !(save.miscWorldSaveData.GetSlugBaseData().TryGet(convulsionList, out List<string> list) && list.Contains(roomname));
 	public static void DelistConvulsion(this SaveState save, string roomname)
 	{
 		var slugbase = save.miscWorldSaveData.GetSlugBaseData();

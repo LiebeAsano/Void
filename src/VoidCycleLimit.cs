@@ -8,8 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics;
 using static HUD.Map;
 using static Menu.SlugcatSelectMenu;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate
 {
@@ -60,7 +62,12 @@ namespace VoidTemplate
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc_3);
             }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(SlugcatPageContinue_ctor)}: first match failed");
+            }
         }
+
 
         private static void DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay(ILContext il)
         {
@@ -77,6 +84,10 @@ namespace VoidTemplate
                 insertVoidDisplayCycleNumber.EmitDelegate(YieldVoidCycleDisplayNumberWithMainLoopProcess);
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc, 5);
+            }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay)}: first match failed");
             }
         }
 
@@ -96,6 +107,10 @@ namespace VoidTemplate
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc_3);
             }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(SubregionTracker_Update)}: first match failed");
+            }
         }
 
         private static void CycleLabel_UpdateCycleText(ILContext il)
@@ -113,6 +128,10 @@ namespace VoidTemplate
                 insertVoidDisplayCycleNumber.EmitDelegate(YieldVoidCycleDisplayNumberWithPlayer);
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc_1);
+            }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(CycleLabel_UpdateCycleText)}: first match failed");
             }
         }
 

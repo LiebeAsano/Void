@@ -17,14 +17,14 @@ internal static class Climbing
 {
 	public static void Hook()
 	{
-		On.Player.WallJump += Player_UpdateWallJump;
+        //On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+        On.Player.WallJump += Player_UpdateWallJump;
 		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
-        On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
     }
 
-    private static readonly AGCachedStrings _cachedLegsAClimbing = new("LegsAClimbing", 31);
+    private static readonly AGCachedStrings _cachedLegsAClimbing = new("VoidW-LegsACrawling", 31);
 
-    private const int ClimbingFrameCount = 6;
+    private const int ClimbingFrameCount = 5;
     private const int LegsSpriteIndex = 4;
 
     private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
@@ -43,6 +43,7 @@ internal static class Climbing
         sprite.scaleX = wrapped ? -1f : 1f;
 
         string elementName = _cachedLegsAClimbing[frame];
+        sprite.rotation = Mathf.PI / 2;
         sprite.element = Futile.atlasManager.GetElementWithName(elementName);
     }
 
@@ -263,13 +264,13 @@ internal static class Climbing
 
 		}
 
-		if (player.bodyMode == Player.BodyModeIndex.WallClimb && !OptionAccessors.ComplexControl || player.bodyMode == Player.BodyModeIndex.WallClimb && OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber])
+		if (player.bodyMode == Player.BodyModeIndex.WallClimb && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]))
 		{
 			UpdateBodyMode_WallClimb(player);
 			player.noGrabCounter = 5;
 			state.IsWallCrawling = true;
 		}
-		else if (player.bodyMode != Player.BodyModeIndex.WallClimb)
+		else if (!(player.bodyMode == Player.BodyModeIndex.WallClimb && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber])))
 		{
 			state.IsWallCrawling = false;
         }

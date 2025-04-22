@@ -11,14 +11,32 @@ internal static class MalnourishmentDeath
 		On.Player.Update += Malnourishment_Death;
 	}
 
-	private static void Malnourishment_Death(On.Player.orig_Update orig, Player self, bool eu)
+	public static int Malnourished = 0;
+
+    private static void Malnourishment_Death(On.Player.orig_Update orig, Player self, bool eu)
 	{
 		orig(self, eu);
-		if(self.IsVoid()
+		if (self.IsVoid()
+		   && self.room is not null
+		   && self.room.game.IsVoidWorld()
+		   && self.KarmaCap != 10
+		   && !Karma11Update.VoidKarma11
+		   && self.Malnourished)
+		{
+			Malnourished++;
+		}
+
+		if (Malnourished >= 440)
+		{
+			self.slugcatStats.malnourished = false;
+			Malnourished = 0;
+		}
+
+        if (self.IsVoid()
 		   && self.room is not null
 		   && !self.room.game.IsVoidWorld()
 		   && self.KarmaCap != 10
 		   && !Karma11Update.VoidKarma11
 		   && self.Malnourished) self.Die();
-	}
+    }
 }

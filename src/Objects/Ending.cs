@@ -43,7 +43,7 @@ internal class Ending : UpdatableAndDeletable
 					if (room.world.game.Players.Exists(x =>
 					x.realizedCreature is Player p
 					&& p.IsVoid()
-					&& (p.KarmaCap == 10 || room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+					&& (p.KarmaCap == 10 || room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 7)
                     && x.Room == room.abstractRoom
 					&& (p.mainBodyChunk.pos - expectedPositionOfTrigger).magnitude < triggerRadius))
 					{

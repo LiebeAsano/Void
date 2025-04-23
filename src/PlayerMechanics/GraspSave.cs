@@ -10,8 +10,8 @@ namespace VoidTemplate.PlayerMechanics;
 internal static class GraspSave
 {
 	const int secondsToStunViy = 10;
-    const int secondsToStunOnK10 = 30;
-	const int secondsToStunBelowK10 = 45;
+    const int secondsToStunOnK10 = 20;
+	const int secondsToStunBelowK10 = 30;
 
 
 	public static void Hook()

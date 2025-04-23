@@ -633,7 +633,7 @@ internal static class SwallowObjects
                     {
                         if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
                         {
-                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 7)
                             {
                                 if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
                                 {

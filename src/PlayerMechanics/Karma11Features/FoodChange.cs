@@ -32,7 +32,7 @@ internal static class FoodChange
 			{
                 if (name == VoidEnums.SlugcatID.Void
 				&& (slugcatPageContinue.saveGameData.karmaCap == 10
-				|| menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save && save.miscWorldSaveData.SSaiConversationsHad >= 8))
+				|| menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save && save.miscWorldSaveData.SSaiConversationsHad >= 7))
 				{
                     return 6;
                 }
@@ -57,7 +57,7 @@ internal static class FoodChange
                 var game = self.room.game;
                 if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void 
 				&& ((self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10 
-				|| self.room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+				|| self.room.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 7)
 				|| ExternalSaveData.VoidKarma11)
 				{
 					return 6;
@@ -79,7 +79,7 @@ internal static class FoodChange
 		orig(self, saveStateNumber, game);
         if (saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-			if (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 8 || Karma11Update.VoidKarma11)
+			if (self.saveState.deathPersistentSaveData.karma == 10 || self.saveState.miscWorldSaveData.SSaiConversationsHad >= 7 || Karma11Update.VoidKarma11)
 			{
                 self.characterStats.foodToHibernate = self.saveState.malnourished ? 9 : 6;
                 self.characterStats.maxFood = 9;

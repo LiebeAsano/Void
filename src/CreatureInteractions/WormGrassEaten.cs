@@ -28,6 +28,7 @@ internal static class WormGrassEaten
             if (creaturePull != null && creaturePull.bury >= 1f)
             {
                 RemoveGrassPatchImmediately(self.patch);
+                player.Destroy();
             }
         }
     }

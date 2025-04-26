@@ -17,11 +17,37 @@ internal static class Climbing
 {
 	public static void Hook()
 	{
-		On.Player.WallJump += Player_UpdateWallJump;
+        //On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+        On.Player.WallJump += Player_UpdateWallJump;
 		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
     }
 
-	private static float currentTimeWall = 0f;
+    private static readonly AGCachedStrings _cachedLegsAClimbing = new("VoidW-LegsACrawling", 31);
+
+    private const int ClimbingFrameCount = 5;
+    private const int LegsSpriteIndex = 4;
+
+    private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
+    {
+        orig(self, sLeaser, rCam, timeStacker, camPos);
+
+        var state = self.player.abstractCreature.GetPlayerState();
+        if (!state.IsWallCrawling)
+            return;
+
+        var sprite = sLeaser.sprites[LegsSpriteIndex];
+        int rawFrame = self.player.animationFrame;
+
+        bool wrapped = rawFrame > ClimbingFrameCount;
+        int frame = wrapped ? rawFrame % ClimbingFrameCount : rawFrame;
+        sprite.scaleX = wrapped ? -1f : 1f;
+
+        string elementName = _cachedLegsAClimbing[frame];
+        sprite.rotation = Mathf.PI / 2;
+        sprite.element = Futile.atlasManager.GetElementWithName(elementName);
+    }
+
+    private static float currentTimeWall = 0f;
 
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
 	{
@@ -238,11 +264,16 @@ internal static class Climbing
 
 		}
 
-		if (player.bodyMode == Player.BodyModeIndex.WallClimb && !OptionAccessors.ComplexControl || player.bodyMode == Player.BodyModeIndex.WallClimb && OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber])
+		if (player.bodyMode == Player.BodyModeIndex.WallClimb && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]))
 		{
 			UpdateBodyMode_WallClimb(player);
 			player.noGrabCounter = 5;
+			state.IsWallCrawling = true;
 		}
+		else if (!(player.bodyMode == Player.BodyModeIndex.WallClimb && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber])))
+		{
+			state.IsWallCrawling = false;
+        }
 		else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
 				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
@@ -543,7 +574,7 @@ public static class PlayerExtensions
 public class PlayerState
 {
 	public bool IsCeilCrawling { get; set; } = false;
-	public bool IsWallCrawling { get; set; } = true;
+	public bool IsWallCrawling { get; set; } = false;
 	public float CeilCrawlStartTime { get; set; } = 0f;
 }
 

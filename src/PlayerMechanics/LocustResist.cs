@@ -26,8 +26,7 @@ namespace VoidTemplate.PlayerMechanics
         private static void Swarm_Update(On.LocustSystem.Swarm.orig_Update orig, LocustSystem.Swarm self)
         {
             orig(self);
-            Player player = self.target.realizedCreature as Player;
-            if (self.locusts.Count > self.maxLocusts - 5 && UnityEngine.Random.value < 0.2f && (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy))
+            if (self.target is Player player && self.locusts.Count > self.maxLocusts - 5 && UnityEngine.Random.value < 0.2f && (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy))
             {
                 self.RemoveLocust(self.locusts[UnityEngine.Random.Range(0, self.locusts.Count)]);
                 SmartLocust[player.playerState.playerNumber]++;
@@ -36,7 +35,7 @@ namespace VoidTemplate.PlayerMechanics
 
         private static void GroundLocust_DoSwarming(On.LocustSystem.GroundLocust.orig_DoSwarming orig, LocustSystem.GroundLocust self, LocustSystem owner)
         {
-            Creature realizedCreature = self.swarm.target.realizedCreature;
+            Creature realizedCreature = self.swarm.target;
             if (realizedCreature is Player player && SmartLocust[player.playerState.playerNumber] >= 150 && (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy))
             {
                 return;

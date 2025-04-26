@@ -8,6 +8,11 @@ public static class _CreatureInteractionsMeta
 		DLLindigestion.Hook();
 		LeechIndigestion.Hook();
 		BigJellyfishStunImmunity.Hook();
-		//OverseerBehavior.Hook();
+		BigMothDrinks.Hook();
+		CorruptionEaten.Hook();
+		LoachEaten.Hook();
+        //OverseerBehavior.Hook();
+		SandGrubEaten.Hook();
+        WormGrassEaten.Hook();
 	}
 }

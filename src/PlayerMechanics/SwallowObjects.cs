@@ -190,7 +190,8 @@ internal static class SwallowObjects
     {
         if (self.SlugCatClass == VoidEnums.SlugcatID.Void 
             && pearlIDsInPlayerStomaches[self.playerState.playerNumber] is not null
-            && pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0)
+            && pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0
+            && !Karma11Update.VoidKarma11)
         {
                 string pearlToSpit = pearlIDsInPlayerStomaches[self.playerState.playerNumber][pearlIDsInPlayerStomaches.Count - 1];
                 pearlIDsInPlayerStomaches[self.playerState.playerNumber].RemoveAt(pearlIDsInPlayerStomaches.Count - 1);
@@ -468,12 +469,35 @@ internal static class SwallowObjects
                                 self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[num11].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[num11].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(self.grasps[num11].grabbed.firstChunk.pos, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
                             }
                             Creature creature = self.grasps[num11].grabbed as Creature;
+                            BodyChunk hitChunk = self.grasps[num11].grabbedChunk;
+                            float damage = 2.5f;
                             creature.SetKillTag(self.abstractCreature);
                             if (creature is Lizard && self.IsViy())
                             {
-                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, 2.5f, 50f);
+                                if (hitChunk != null && hitChunk.index == 0)
+                                {
+                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 20, 50f);
+                                }
+                                else
+                                 {
+                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 4, 50f);
+                                }
                             }
-                            creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, 2.5f, 50f);
+                            if (creature is Lizard && self.IsVoid())
+                            {
+                                if (hitChunk != null && hitChunk.index == 0)
+                                {
+                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 10, 50f);
+                                }
+                                else
+                                {
+                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 2, 50f);
+                                }
+                            }
+                            if (creature is not Lizard && self.IsVoid())
+                            {
+                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage, 50f);
+                            }
                             creature.stun = 5;
                             if (creature.abstractCreature.creatureTemplate.type == DLCSharedEnums.CreatureTemplateType.Inspector)
                             {
@@ -609,7 +633,7 @@ internal static class SwallowObjects
                     {
                         if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
                         {
-                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 8)
+                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 7)
                             {
                                 if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
                                 {
@@ -663,7 +687,8 @@ internal static class SwallowObjects
                                     if (self.grasps[graspIndex].grabbed is DataPearl pearl 
                                         && self.swallowAndRegurgitateCounter == 91
                                         && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl 
-                                        && self.abstractCreature.world.game.GetStorySession is not null)
+                                        && self.abstractCreature.world.game.GetStorySession is not null
+                                        && !Karma11Update.VoidKarma11)
                                     {
                                             pearlIDsInPlayerStomaches[self.playerState.playerNumber].Add(abstractPearl.dataPearlType.value);
                                             self.abstractCreature.world.game.GetStorySession.saveState.SetStomachPearls(pearlIDsInPlayerStomaches);

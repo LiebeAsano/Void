@@ -2,14 +2,17 @@
 using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics;
 using static HUD.Map;
 using static Menu.SlugcatSelectMenu;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate
 {
@@ -22,7 +25,7 @@ namespace VoidTemplate
 
         public static bool GetCycleLimitLifted(SaveState saveState)
         {
-            return saveState.deathPersistentSaveData.karmaCap >= 10 || saveState.miscWorldSaveData.SSaiConversationsHad >= 8;
+            return saveState.deathPersistentSaveData.karmaCap >= 10 || saveState.miscWorldSaveData.SSaiConversationsHad >= 7;
         }
 
         public static int GetDisplayCycleNumber(SaveState saveState)
@@ -37,7 +40,7 @@ namespace VoidTemplate
             On.HUD.Map.Update += Map_Update;
 
             IL.HUD.Map.CycleLabel.UpdateCycleText += CycleLabel_UpdateCycleText;
-            IL.HUD.SubregionTracker.Update += SubregionTracker_Update;
+            On.HUD.SubregionTracker.Update += SubregionTracker_Update;
 
             IL.Menu.DialogBackupSaveInfo.PopulateSaveSlotInfoDisplay += DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay;
             IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctor;
@@ -60,7 +63,12 @@ namespace VoidTemplate
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc_3);
             }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(SlugcatPageContinue_ctor)}: first match failed");
+            }
         }
+
 
         private static void DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay(ILContext il)
         {
@@ -78,23 +86,93 @@ namespace VoidTemplate
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc, 5);
             }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay)}: first match failed");
+            }
         }
 
-        private static void SubregionTracker_Update(ILContext il)
+        private static void SubregionTracker_Update(On.HUD.SubregionTracker.orig_Update orig, HUD.SubregionTracker self)
         {
-            ILCursor insertVoidDisplayCycleNumber = new(il);
-
-            if (insertVoidDisplayCycleNumber.TryGotoNext(
-                MoveType.After,
-                op => op.MatchLdfld<SaveState>(nameof(SaveState.cycleNumber)),
-                op => op.MatchStloc(3)))
+            Player player = self.textPrompt.hud.owner as Player;
+            int num = 0;
+            if (player.room != null && !player.room.world.singleRoomWorld && player.room.world.region != null)
             {
-                insertVoidDisplayCycleNumber.Emit(OpCodes.Ldloc_0);
-                insertVoidDisplayCycleNumber.Emit(OpCodes.Ldloc_3);
-
-                insertVoidDisplayCycleNumber.EmitDelegate(YieldVoidCycleDisplayNumberWithPlayer);
-
-                insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc_3);
+                for (int i = 1; i < player.room.world.region.subRegions.Count; i++)
+                {
+                    if (player.room.abstractRoom.subregionName == player.room.world.region.subRegions[i])
+                    {
+                        num = i;
+                        break;
+                    }
+                }
+            }
+                if (!self.DEVBOOL && num != 0 && player.room.game.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.Dev)
+                {
+                    self.lastShownRegion = num;
+                    self.DEVBOOL = true;
+                }
+                if (num != self.lastShownRegion && player.room != null && num != 0 && self.lastRegion == num && self.textPrompt.show == 0f)
+                {
+                if (player.room.world.game.IsVoidStoryCampaign())
+                {
+                    bool flag = false;
+                    for (int j = 0; j < player.room.warpPoints.Count; j++)
+                    {
+                        if (player.room.warpPoints[j].timeWarpTearClosed <= 20)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (!flag || self.counter == 1 || self.counter == 75)
+                    {
+                        self.counter++;
+                    }
+                    if (self.counter > 80)
+                    {
+                        if ((num > 1 || self.lastShownRegion == 0 || (player.room.world.region.name != "SS" && player.room.world.region.name != "DM")) && num < player.room.world.region.subRegions.Count)
+                        {
+                            if (self.showCycleNumber && player.room.game.IsStorySession && player.room.game.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.Load)
+                            {
+                                int num2 = YieldVoidCycleDisplayNumberWithPlayer(player, player.room.game.GetStorySession.saveState.cycleNumber);
+                                string s = player.room.world.region.subRegions[num];
+                                if (num < player.room.world.region.altSubRegions.Count && player.room.world.region.altSubRegions[num] != null)
+                                {
+                                    s = player.room.world.region.altSubRegions[num];
+                                }
+                                self.textPrompt.AddMessage(string.Concat(new string[]
+                                {
+                                self.textPrompt.hud.rainWorld.inGameTranslator.Translate("Cycle"),
+                                " ",
+                                num2.ToString(),
+                                " ~ ",
+                                self.textPrompt.hud.rainWorld.inGameTranslator.Translate(s)
+                                }), 0, 160, false, true);
+                            }
+                            else
+                            {
+                                string s2 = player.room.world.region.subRegions[num];
+                                if (num < player.room.world.region.altSubRegions.Count && player.room.world.region.altSubRegions[num] != null)
+                                {
+                                    s2 = player.room.world.region.altSubRegions[num];
+                                }
+                                self.textPrompt.AddMessage(self.textPrompt.hud.rainWorld.inGameTranslator.Translate(s2), 0, 160, false, true);
+                            }
+                        }
+                        self.showCycleNumber = false;
+                        self.lastShownRegion = num;
+                    }
+                }
+                else
+                {
+                    self.counter = 0;
+                }
+                self.lastRegion = num;
+            }
+            else
+            {
+                orig(self);
             }
         }
 
@@ -113,6 +191,10 @@ namespace VoidTemplate
                 insertVoidDisplayCycleNumber.EmitDelegate(YieldVoidCycleDisplayNumberWithPlayer);
 
                 insertVoidDisplayCycleNumber.Emit(OpCodes.Stloc_1);
+            }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(CycleLabel_UpdateCycleText)}: first match failed");
             }
         }
 

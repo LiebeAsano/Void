@@ -30,12 +30,12 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 				c => c.MatchBge(out dontMoveToPreGhostKarmaCapLabel)))
 			{
 				iLCursor.Emit(OpCodes.Ldarg_0);
-				iLCursor.EmitDelegate(SkipMoveToPreGhostEncounterMax);
+				iLCursor.EmitDelegate(IsForVoidOrViy);
 				iLCursor.Emit(OpCodes.Brtrue, dontMoveToPreGhostKarmaCapLabel);
 			}
 			else
 			{
-				logerr("First failed to match KarmaLadder karma cap increase animation (pre-add scroll), " +
+				LogExErr("First failed to match KarmaLadder karma cap increase animation (pre-add scroll), " +
 					"karma ladder screen will display wrong data for the Void");
 			}
 
@@ -44,8 +44,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 			if (iLCursor.TryGotoNext(MoveType.After,
 				c => c.MatchLdarg(0),
 				c => c.MatchLdarg(0),
-				c => c.MatchLdflda<KarmaLadder>(nameof(KarmaLadder.displayKarma)),
-				c => c.MatchLdfld<IntVector2>(nameof(IntVector2.y)),
+				c => c.MatchCall(typeof(KarmaLadder).GetProperty(nameof(KarmaLadder.displayKarmaCap)).GetGetMethod()),
 				c => c.Match(OpCodes.Ldc_I4_1),
 				c => c.MatchCall<KarmaLadder>(nameof(KarmaLadder.GoToKarma)))
 				&&
@@ -59,12 +58,12 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 			}
 			else
 			{
-				logerr("Second failed to match KarmaLadder karma cap increase animation (post-add scroll), " +
+				LogExErr("Second failed to match KarmaLadder karma cap increase animation (post-add scroll), " +
 					"karma ladder screen will display wrong data for the Void");
 			}
 		}
 
-		private static bool SkipMoveToPreGhostEncounterMax(KarmaLadder self)
+		private static bool IsForVoidOrViy(KarmaLadder self)
 		{
 			return (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Void || (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Viy;
 		}

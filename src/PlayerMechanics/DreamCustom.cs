@@ -11,8 +11,6 @@ public static class DreamCustom
 	{
 		if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
-			var miscData = saveState.miscWorldSaveData;
-
 			switch (currentRegion)
 			{
 				case "LF":
@@ -25,7 +23,7 @@ public static class DreamCustom
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
 						break;
 					}
-				case "SB" when saveState.deathPersistentSaveData.karmaCap > 3:
+				case "SB":
 					{
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
 						break;
@@ -54,11 +52,6 @@ public static class DreamCustom
 				case 10:
 					{
 						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
-						break;
-					}
-				default:
-					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidNSH);
 						break;
 					}
 			}

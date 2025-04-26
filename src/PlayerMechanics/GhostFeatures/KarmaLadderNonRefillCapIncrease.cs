@@ -35,7 +35,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 			}
 			else
 			{
-				logerr("Failed to match KarmaLadder karma cap increase animation (pre-add scroll), " +
+				logerr("First failed to match KarmaLadder karma cap increase animation (pre-add scroll), " +
 					"karma ladder screen will display wrong data for the Void");
 			}
 
@@ -59,12 +59,11 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 			}
 			else
 			{
-				logerr("Failed to match KarmaLadder karma cap increase animation (post-add scroll), " +
+				logerr("Second failed to match KarmaLadder karma cap increase animation (post-add scroll), " +
 					"karma ladder screen will display wrong data for the Void");
 			}
 		}
 
-		// Does the skip internally to avoid tainting IL for other matches. Leaves a flag on eval stack to decide which branch to follow.
 		private static bool SkipMoveToPreGhostEncounterMax(KarmaLadder self)
 		{
 			return (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Void || (self.menu as KarmaLadderScreen).saveState.saveStateNumber == VoidEnums.SlugcatID.Viy;

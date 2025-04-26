@@ -42,12 +42,13 @@ public class TriggeredSpasm : UpdatableAndDeletable
     public override void Update(bool eu)
     {
         base.Update(eu);
-        if (!room.game.GetStorySession.saveState.IsValidForAppearing(room.abstractRoom.name))
+        var saveState = room.game.GetStorySession.saveState;
+        if (!saveState.IsValidForAppearing(room.abstractRoom.name))
         {
             slatedForDeletetion = true;
             return;
         }
-        if (room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= ConversationsHad)
+        if (saveState.miscWorldSaveData.SSaiConversationsHad >= ConversationsHad)
         {
             Player candidate = null;
             if (room.game.Players.Exists(player =>
@@ -62,7 +63,7 @@ public class TriggeredSpasm : UpdatableAndDeletable
                 }))
             {
                 HunterSpasms.Spasm(candidate, Duration, Strength);
-                room.game.GetStorySession.saveState.DelistConvulsion(room.abstractRoom.name);
+                saveState.DelistConvulsion(room.abstractRoom.name);
                 slatedForDeletetion = true;
             }
         }

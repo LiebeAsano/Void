@@ -16,7 +16,7 @@ internal static class EatMeatUpdate
 
 		if (self.IsVoid())
 		{
-			if (self.grasps[graspIndex] == null || !(self.grasps[graspIndex].grabbed is Creature creature))
+			if (self.grasps[graspIndex] == null || self.grasps[graspIndex].grabbed is not Creature creature)
 			{
 				return;
 			}
@@ -92,16 +92,9 @@ internal static class EatMeatUpdate
 							self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[graspIndex].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[graspIndex].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(vector, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
 						}
 
-						if (self.SessionRecord != null)
-						{
-							self.SessionRecord.AddEat(self.grasps[graspIndex].grabbed);
-						}
+						self.SessionRecord?.AddEat(self.grasps[graspIndex].grabbed);
 
 						(self.grasps[graspIndex].grabbed as Creature).State.meatLeft--;
-
-						var game = self.abstractCreature.world.game;
-
-						bool hasMark = game.IsStorySession && (game.GetStorySession.saveState.deathPersistentSaveData.theMark);
 
 						if (OptionInterface.OptionAccessors.SimpleFood)
 						{

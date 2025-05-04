@@ -49,6 +49,7 @@ public static class _PlayerMechanicsMeta
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();
 		SaintKarmaImmunity.Hook();
+		Spasm.Hook();
 		SpiderResist.Hook();
 		SwallowObjects.Hook();
 		TardigradeResist.Hook();

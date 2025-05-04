@@ -210,7 +210,7 @@ namespace VoidTemplate
             }
         }
 
-        private static int YieldVoidCycleDisplayNumberWithPlayer(Player player, int originalCycleNumber)
+        public static int YieldVoidCycleDisplayNumberWithPlayer(Player player, int originalCycleNumber)
         {
             SaveState saveState = player.abstractCreature.world.game.GetStorySession.saveState;
 

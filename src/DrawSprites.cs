@@ -312,15 +312,20 @@ internal class DrawSprites
             && tail.shader != FShader.defaultShader) 
         {
             tail.shader = FShader.defaultShader;
+            
+        }
+        if (sLeaser.sprites[2] is TriangleMesh tail2)
+        {
             if (!Karma11Update.VoidKarma11 && self.player.KarmaCap != 10)
             {
-                tail.color = new(0f, 0f, 0.005f);
+                tail2.color = new(0f, 0f, 0.005f);
             }
             else
             {
-                tail.color = Utils.VoidColors[self.player.playerState.playerNumber];
+                tail2.color = Utils.VoidColors[self.player.playerState.playerNumber];
             }
         }
+
         #endregion
 
         foreach (var sprite in sLeaser.sprites)

@@ -22,10 +22,10 @@ internal class KarmaFlowerChanges
 	{
 		if (grasp.grabber is Player player && (player.IsVoid() && self.bites < 2 || player.IsViy()))
 		{
-			self.room.PlaySound((self.bites == 0) ? SoundID.Slugcat_Eat_Karma_Flower : SoundID.Slugcat_Bite_Karma_Flower, self.firstChunk.pos);
+			self.room.PlaySound((self.bites == 1) ? SoundID.Slugcat_Eat_Karma_Flower : SoundID.Slugcat_Bite_Karma_Flower, self.firstChunk.pos);
 			self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
             player.abstractCreature.world.game.GetStorySession.saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidNSH);
-            if (self.bites == 0 && player.KarmaCap == 10 && !player.IsViy())
+            if (self.bites == 1 && player.KarmaCap == 10 && !player.IsViy())
 			{
 				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
 				var amountOfTokens = Math.Min(10, savestate.GetKarmaToken() + 2);

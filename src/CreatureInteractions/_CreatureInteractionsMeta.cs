@@ -11,7 +11,7 @@ public static class _CreatureInteractionsMeta
 		BigMothDrinks.Hook();
 		CorruptionEaten.Hook();
 		LoachEaten.Hook();
-        //OverseerBehavior.Hook();
+        OverseerBehavior.Hook();
 		SandGrubEaten.Hook();
         WormGrassEaten.Hook();
 	}

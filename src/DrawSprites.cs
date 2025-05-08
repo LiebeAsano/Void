@@ -29,7 +29,7 @@ internal class DrawSprites
         Player player = self.player;
 
         //game behaves in a really weird way when you try to touch tail, so we just gonna make a new one and overlay it over the old one
-        if (player.KarmaCap == 10 && (player.IsVoid() || player.IsViy()))
+        if ((player.KarmaCap == 10 || Karma11Update.VoidKarma11) && (player.IsVoid() || player.IsViy()))
         {
             var tail = sLeaser.sprites[2] as TriangleMesh;
             //changing tail sprite element
@@ -312,11 +312,20 @@ internal class DrawSprites
             && tail.shader != FShader.defaultShader) 
         {
             tail.shader = FShader.defaultShader;
-            if (!Karma11Update.VoidKarma11)
+            
+        }
+        if (sLeaser.sprites[2] is TriangleMesh tail2)
+        {
+            if (!Karma11Update.VoidKarma11 && self.player.KarmaCap != 10)
             {
-                tail.color = new(0f, 0f, 0.005f);
+                tail2.color = new(0f, 0f, 0.005f);
+            }
+            else
+            {
+                tail2.color = Utils.VoidColors[self.player.playerState.playerNumber];
             }
         }
+
         #endregion
 
         foreach (var sprite in sLeaser.sprites)

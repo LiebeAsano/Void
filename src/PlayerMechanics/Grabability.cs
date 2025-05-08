@@ -64,7 +64,11 @@ internal static class Grabability
 	{
 		if ((self.IsVoid() || self.IsViy()) && (obj is PoleMimic || obj is TentaclePlant))
 			return Player.ObjectGrabability.CantGrab;
-		return orig(self, obj);
+        if ((self.IsVoid() || self.IsViy()) && (obj is LanternMouse))
+            return Player.ObjectGrabability.OneHand;
+        if ((self.IsVoid() || self.IsViy()) && (obj is Cicada))
+            return Player.ObjectGrabability.Drag;
+        return orig(self, obj);
 	}
 	
 }

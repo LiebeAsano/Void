@@ -19,28 +19,36 @@ internal static class Spasm
     private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
     {
         orig(self);
+
+        if (self?.Players == null) return;
+
         for (int i = 0; i < self.Players.Count; i++)
         {
-            Player player = self.Players[i].realizedCreature as Player;
-            if (self.IsVoidStoryCampaign() && player.IsVoid())
-            {
-                bool hasMark = self.IsStorySession && (self.GetStorySession.saveState.deathPersistentSaveData.theMark);
+            if (self.Players[i]?.realizedCreature is not Player player || player.slugcatStats == null) continue;
 
-                if (!hasMark
-                    && player.KarmaCap != 10
+            if (self.IsVoidStoryCampaign() && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+            {
+                if (self.GetStorySession?.saveState == null) continue;
+
+                bool hasMark = self.IsStorySession && (self.GetStorySession.saveState.deathPersistentSaveData?.theMark ?? false);
+
+                if (player.KarmaCap != 10
+                    && player.KarmaCap > 3
                     && !Karma11Update.VoidKarma11
-                    && player.KarmaCap > 3)
+                    && self.GetStorySession.saveState.miscWorldSaveData?.SSaiConversationsHad < 6)
                 {
-                    float MaxSize = 220000;
-                    float Lenght = 2.5f;
+                    float MaxSize = 220000f;
+                    float Lenght = 10f;
                     MaxSize = MaxSize * 0.1f * player.KarmaCap;
-                    Lenght = Lenght * 1 / player.KarmaCap;
+
                     if (VoidCycleLimit.YieldVoidCycleDisplayNumberWithPlayer(player, self.GetStorySession.saveState.cycleNumber) < 10)
                     {
                         MaxSize = MaxSize * VoidCycleLimit.YieldVoidCycleDisplayNumberWithPlayer(player, self.GetStorySession.saveState.cycleNumber) / 10;
-                        Lenght = 5f;
+                        Lenght = 20f;
                     }
+
                     float random = UnityEngine.Random.Range(1, MaxSize);
+                    random = (int)random;
                     if (random == 1)
                     {
                         HunterSpasms.Spasm(player, Lenght, 1f);

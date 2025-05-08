@@ -25,10 +25,10 @@ internal static class CanIPickThisUp
         var result = orig(self, obj);
         if (self.slugcatStats.name != VoidEnums.SlugcatID.Void && self.slugcatStats.name != VoidEnums.SlugcatID.Viy) return result;
         int heavyObjectsCount = 0;
-        foreach (var grasp in self.grasps) if (grasp?.grabbed != null && self.Grabability(grasp.grabbed) == Player.ObjectGrabability.Drag) heavyObjectsCount++;
+        foreach (var grasp in self.grasps) if (grasp?.grabbed != null && (self.Grabability(grasp.grabbed) == Player.ObjectGrabability.Drag || self.Grabability(grasp.grabbed) == Player.ObjectGrabability.TwoHands)) heavyObjectsCount++;
         if (heavyObjectsCount == 1 && obj is Spear) return true;
         int amountOfSpearsInHands = self.grasps.Aggregate(func: (int acc, Creature.Grasp grasp) => acc + ((grasp?.grabbed is Spear) ? 1 : 0), seed: 0);
-		if (amountOfSpearsInHands == 1 && self.Grabability(obj) == Player.ObjectGrabability.Drag) return true;
+        if (amountOfSpearsInHands == 1 && (self.Grabability(obj) == Player.ObjectGrabability.Drag)) return true;
         return result;
 	}
 

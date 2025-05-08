@@ -1,0 +1,4 @@
+Palette: 201
+Subregion: Icy Wastelands
+Subregion: Communication Array
+Room Setting Templates: Depo, CommunicationArray

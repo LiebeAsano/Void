@@ -1,0 +1,5 @@
+DangerType: None
+Palette: 201
+EffectColorA: 18
+FadePalette: 53, 0.8038647, 0.8193237, 0.8579707, 0.8888887, 0.9043478, 0.9507245, 0.973913, 0.9198066
+BackgroundOffset: 0,991

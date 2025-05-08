@@ -22,6 +22,7 @@ Akashic Records|Хроники Акаши
 Retained Wall|Подпорная Стена
 Far Wall|Дальняя Стена
 Icy Wastelands|Ледяные Пустоши
+Communication Array|Массив Связи
 
 //REMIX
 

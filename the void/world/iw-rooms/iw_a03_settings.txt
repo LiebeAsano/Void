@@ -1,0 +1,9 @@
+Template: iw_settingstemplate_communicationarray
+WaveSpeed: 0.3292581
+WaveLength: 0.914629
+WaveAmplitude: 3.272717E-08
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Effects: LightBurn-0.1778646-30-30, SkyAndLightBloom-0.2165308-774.1458-392.0927, 
+PlacedObjects: SnowSource><489.233><302.0415><Radial~330.8281~51.62085~50~86.60254~0.5050725~0.6805254, LanternOnStick><492.4386><269.1368><-22.05524~-70.03848, DangleFruit><489.9675><332.511><0~0~2~3, DangleFruit><476.7765><397.169><0~0~2~3, DangleFruit><509.0593><373.1763><0~0~2~3, 
+FadePalette: 2, 0.4949276

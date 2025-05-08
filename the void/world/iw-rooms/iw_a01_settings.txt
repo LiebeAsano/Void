@@ -1,0 +1,23 @@
+Template: iw_settingstemplate_communicationarray
+RainIntensity: 0.5050722
+WaveSpeed: 0.493139
+WaveLength: 0.9965695
+WaveAmplitude: 2.875012E-07
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+TerrainLight: 0.1261451
+TerrainStainAmount: 0.8066685
+TerrainStainBrightness: 0.1057965
+TerrainStainHeight: 0.332424
+TerrainWaves: 0.659737
+TerrainEdgeRadius: 38.37572
+TerrainGooHeight: 0.1725424
+TerrainGrain: 0.07173886
+TerrainDepth: 0.1014709
+TerrainSkyFade: 0.1314127
+TerrainPalette: test_snow
+Effects: Coldness-0.7501246-30-30, SkyAndLightBloom-0-641.8938-369.4052, 
+PlacedObjects: SnowSource><314.3938><470.9552><Radial~358.4001~-51.46667~267.7063~46.04944~0.590338~0, SnowSource><601.0528><263.2803><Radial~358.4001~-51.46667~50~86.60254~0.590338~0, TerrainHandle><653.0517><106.1591><-68.44427~-16.35552~61.8667~4.266708~34.9334, TerrainHandle><325.8666><101.1556><-113.7777~9.244507~103.2889~-38.39998~20.71117, LanternOnStick><554.2402><188.0181><19.20947~-95.65099, LanternOnStick><391.1479><190.0552><-21.34363~-106.3229, LanternOnStick><601.7396><429.1052><25.61261~-77.86459, AdjustableFan><282.6582><202.2398><5~8.660254~0~0.2087973~0.3922663~1, AdjustableFan><279.449><322.3864><5~8.660254~0~0.4639946~0.3922663~1, AdjustableFan><280.8719><439.0656><5~8.660254~0~0.04639866~0.3922663~1, AdjustableFan><279.4489><559.302><5~8.660254~0~0.2861295~0.3922663~1, DangleFruit><400.1219><458.7647><-357.1521~61.89685~2~3, DangleFruit><366.6888><570.4823><-314.4646~-79.68335~2~3, DangleFruit><443.6661><523.2676><13.51776~35.57294~2~3, DangleFruit><509.25><339.4615><-12.09479~-140.1573~2~3, DangleFruit><540.5541><407.05><-12.09479~-140.1573~2~3, ScavengerTreasury><484.3701><225.7231><240.473~58.02396, 
+AmbientSounds: OMNI><AM_ENV-LightWind.ogg><727.0734><527.6737><0><1, OMNI><AM_ENV-NatWind.ogg><723.6979><606.7867><0><1, OMNI><AM_IND-ElectricHum02.ogg><754.8416><280.5618><0.2989356><1, OMNI><SO_SFX-Data3.ogg><462.4557><303.3876><0.2989363><1, 
+FadePalette: 2, 0.3787437
+TerrainFadePalette: test_sand, 0

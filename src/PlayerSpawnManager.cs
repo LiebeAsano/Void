@@ -21,8 +21,11 @@ public static class PlayerSpawnManager
 			&& playerRoom.game.GetStorySession.saveState is SaveState save
 			&& !save.GetTeleportationDone())
 		{
-			InitializeTargetRoomID(playerRoom);
-
+			if (playerRoom.game.IsVoidStoryCampaign())
+			{
+                InitializeTargetRoomID(playerRoom);
+            }
+			
             int currentRoomIndex = self.abstractCreature.pos.room;
 
 			if (currentRoomIndex == NewSpawnPoint.room)

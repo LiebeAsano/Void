@@ -20,4 +20,4 @@ EffectColorB: 10
 Effects: LightBurn-0.0695648-290.9778-83.33334, AboveCloudsView-1-308-17.86667, DayNight-1-19.28943-15.02224, Dustpuffs-1-285.9556-139.4667, Coldness-1-10.04443-123.1111, 
 AmbientSounds: OMNI><AM_ENV-LightWind.ogg><755.5317><517.7133><0.206137><1, OMNI><AM_ENV-NatWind.ogg><776.3458><441.0169><0.4072007><1, 
 Brightness-0.06183558-23.59998-76.93333, 
-BackgroundOffset: 0
+BackgroundOffset: 0,0

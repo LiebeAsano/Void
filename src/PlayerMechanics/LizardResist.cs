@@ -22,12 +22,12 @@ internal static class LizardResist
     {
         if (chunk.owner is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            float resist = player.KarmaCap * 0.05f;
+            float resist = player.KarmaCap * 0.033f;
             if (self.Template.type == CreatureTemplate.Type.RedLizard)
             {
                 if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
                 {
-                    self.lizardParams.biteDamageChance = 0.5f;
+                    self.lizardParams.biteDamageChance = 0.66f;
                 }
                 else
                 {

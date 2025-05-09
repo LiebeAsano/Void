@@ -270,13 +270,9 @@ internal static class Climbing
 			player.noGrabCounter = 5;
 			state.IsWallCrawling = true;
 		}
-		else if (!(player.bodyMode == Player.BodyModeIndex.WallClimb && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber])))
-		{
-			state.IsWallCrawling = false;
-        }
 		else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
-				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
+				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam)))
 		{
 			player.bodyMode = BodyModeIndexExtension.CeilCrawl;
 			UpdateBodyMode_CeilCrawl(player, state);
@@ -285,7 +281,7 @@ internal static class Climbing
 		}
 		else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
 				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
-				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam && player.input[0].jmp)))
+				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam)))
 		{
 			player.bodyMode = BodyModeIndexExtension.CeilCrawl;
 			UpdateBodyMode_CeilCrawl(player, state);

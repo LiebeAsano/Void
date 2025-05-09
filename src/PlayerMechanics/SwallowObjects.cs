@@ -96,10 +96,6 @@ internal static class SwallowObjects
                         ((self.room.updateList.First(i => i is Oracle) as Oracle)
                         .oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
                     }
-
-                    orig(self, grasp);
-
-                    return;
                 }
             }
         }
@@ -684,9 +680,9 @@ internal static class SwallowObjects
                             {
                                 if (self.grasps[graspIndex] != null && self.CanBeSwallowed(self.grasps[graspIndex].grabbed))
                                 {
-                                    if (self.grasps[graspIndex].grabbed is DataPearl pearl 
+                                    if (self.grasps[graspIndex].grabbed is DataPearl pearl
                                         && self.swallowAndRegurgitateCounter == 91
-                                        && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl 
+                                        && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl
                                         && self.abstractCreature.world.game.GetStorySession is not null
                                         && !Karma11Update.VoidKarma11)
                                     {

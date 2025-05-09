@@ -13,6 +13,5 @@ internal static class _OracleMeta
     {
         OracleHooks.Hook();
         SLOracle.Hook();
-
     }
 }

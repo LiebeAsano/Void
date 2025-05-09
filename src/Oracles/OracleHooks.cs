@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using RWCustom;
 using static VoidTemplate.Oracles.OracleHooks;
 using System.Data.SqlTypes;
+using MonoMod.RuntimeDetour;
+using VoidTemplate.Objects;
 
 namespace VoidTemplate.Oracles;
 
@@ -19,6 +21,7 @@ static class OracleHooks
 {
 	public static void Hook()
 	{
+        //new Hook(typeof(OverseerGraphics).GetProperty(nameof(OverseerGraphics.MainColor)).GetGetMethod(), CustomColor);
         On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
 		On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
         On.SSOracleBehavior.SpecialEvent += SSOracleBehavior_SpecialEvent;
@@ -27,6 +30,12 @@ static class OracleHooks
         On.SSOracleBehavior.Update += SSOralceBehavior_Update;
         IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
 	}
+
+    private static Color CustomColor(Func<OverseerGraphics, Color> orig, OverseerGraphics self)
+    {
+        var color = orig(self);
+        return new Color(1, 1, 1);
+    }
 
     private static void SSOralceBehavior_Update(On.SSOracleBehavior.orig_Update orig, SSOracleBehavior self, bool eu)
     {
@@ -798,7 +807,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
 
         if (base.action == MeetVoid_Curious)
         {
-            if (this.owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad == 8)
+            if (this.owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad == 7)
             {
                 this.owner.NewAction(MeetVoid_Heal);
                 return;
@@ -901,6 +910,11 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     return;
                 }
             }
+            if (base.action == SSOracleBehavior.Action.General_GiveMark)
+            {
+                if (inActionCounter == 300 && this.player.KarmaCap != 10)
+                    HunterSpasms.Spasm(this.player);
+            }
             else if (base.action == MeetVoid_SecondCurious)
             {
                 base.movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
@@ -921,7 +935,9 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                 if (inActionCounter > 240)
                 {
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
+                    {
                         this.owner.NewAction(SSOracleBehavior.Action.General_GiveMark);
+                    }
                     if (this.owner.conversation != null)
                     {
                         this.owner.conversation.paused = false;

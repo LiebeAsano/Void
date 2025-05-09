@@ -1,4 +1,5 @@
 ﻿using RWCustom;
+using VoidTemplate.Useful;
 namespace VoidTemplate.Objects;
 
 internal class CeilingClimbTutorial : UpdatableAndDeletable
@@ -12,9 +13,10 @@ internal class CeilingClimbTutorial : UpdatableAndDeletable
 
 	public override void Update(bool eu)
 	{
-		if (room.game.session.Players[0].realizedCreature == null ||
+		if ((room.game.session.Players[0].realizedCreature == null ||
 			room.game.cameras[0].hud == null ||
 			room.game.cameras[0].hud.textPrompt == null)
+			&& room.game.IsVoidStoryCampaign())
 		{
 			return;
 		}

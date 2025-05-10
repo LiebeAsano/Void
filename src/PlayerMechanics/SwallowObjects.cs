@@ -681,6 +681,7 @@ internal static class SwallowObjects
                                 if (self.grasps[graspIndex] != null && self.CanBeSwallowed(self.grasps[graspIndex].grabbed))
                                 {
                                     if (self.grasps[graspIndex].grabbed is DataPearl pearl
+                                        && pearl is not PebblesPearl
                                         && self.swallowAndRegurgitateCounter == 91
                                         && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl
                                         && self.abstractCreature.world.game.GetStorySession is not null

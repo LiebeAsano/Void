@@ -138,7 +138,7 @@ internal class DrawSprites
             //hence only rerendering it when game requests to rerender it in any other way
             //i.e. changing rooms
             //i dislike it, but oh well
-            if (AmountOfPebblesConversations >= 8)
+            if (AmountOfPebblesConversations >= 7)
             {
                 string pixel = "VoidR-";
                 if (Futile.atlasManager.DoesContainElementWithName(pixel + spritename))

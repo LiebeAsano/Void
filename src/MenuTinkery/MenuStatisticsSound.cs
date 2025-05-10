@@ -32,26 +32,26 @@ internal static class MenuStatisticsSound
 		}
 	}
 
-	private static void GetDataFromGame_Update(On.Menu.StoryGameStatisticsScreen.orig_GetDataFromGame orig, Menu.StoryGameStatisticsScreen self, Menu.KarmaLadderScreen.SleepDeathScreenDataPackage package)
-	{
-		if (package.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
-		{
-			string currentScene;
+    private static void GetDataFromGame_Update(On.Menu.StoryGameStatisticsScreen.orig_GetDataFromGame orig, Menu.StoryGameStatisticsScreen self, Menu.KarmaLadderScreen.SleepDeathScreenDataPackage package)
+    {
+        orig(self, package);
+        if (package.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
+        {
+            string currentScene;
 
-			if (self?.scene?.sceneID?.value != null)
-			{
-				currentScene = self.scene.sceneID.value;
+            if (self?.scene?.sceneID?.value != null)
+            {
+                currentScene = self.scene.sceneID.value;
 
-				if (StatisticSoundMap.Keys.Contains(currentScene)
-					&& self.manager.musicPlayer is MusicPlayer player)
-				{
-					player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu)
-					{
-						playWhenReady = true
-					};
-				}
-			}
-		}
-		orig(self, package);
-	}
+                if (StatisticSoundMap.Keys.Contains(currentScene)
+                    && self.manager.musicPlayer is MusicPlayer player)
+                {
+                    player.song = new(player, StatisticSoundMap[currentScene], MusicPlayer.MusicContext.Menu)
+                    {
+                        playWhenReady = true
+                    };
+                }
+            }
+        }
+    }
 }

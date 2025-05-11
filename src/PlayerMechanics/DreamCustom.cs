@@ -15,17 +15,23 @@ public static class DreamCustom
 			{
 				case "LF":
 					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
+						int random = UnityEngine.Random.Range(0, 3);
+						if (random == 0)
+							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
 						break;
 					}
 				case "SI":
 					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
+                        int random = UnityEngine.Random.Range(0, 3);
+                        if (random == 0)
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
 						break;
 					}
 				case "SB":
 					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
+                        int random = UnityEngine.Random.Range(0, 3);
+                        if (random == 0)
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
 						break;
 					}
 			}

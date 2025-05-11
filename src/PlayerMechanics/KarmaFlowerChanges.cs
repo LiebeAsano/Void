@@ -24,7 +24,11 @@ internal class KarmaFlowerChanges
 		{
 			self.room.PlaySound((self.bites == 1) ? SoundID.Slugcat_Eat_Karma_Flower : SoundID.Slugcat_Bite_Karma_Flower, self.firstChunk.pos);
 			self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
-            player.abstractCreature.world.game.GetStorySession.saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidNSH);
+			int random = UnityEngine.Random.Range(0, 3);
+			if (random == 0)
+			{
+                player.abstractCreature.world.game.GetStorySession.saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidNSH);
+            }
             if (self.bites == 1 && player.KarmaCap == 10 && !player.IsViy())
 			{
 				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;

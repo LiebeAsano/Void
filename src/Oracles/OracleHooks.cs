@@ -74,7 +74,18 @@ static class OracleHooks
                             flag4 = true;
                             flag3 = true;
                         }
-                        if (self.inspectPearl == null && (self.conversation == null || flag3) && physicalObject is DataPearl && (physicalObject as DataPearl).grabbedBy.Count == 0 && ((physicalObject as DataPearl).AbstractPearl.dataPearlType != DataPearl.AbstractDataPearl.DataPearlType.PebblesPearl || (self.oracle.ID == MoreSlugcatsEnums.OracleID.DM && ((physicalObject as DataPearl).AbstractPearl as PebblesPearl.AbstractPebblesPearl).color >= 0)) && !self.readDataPearlOrbits.Contains((physicalObject as DataPearl).AbstractPearl) && flag4 && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark && !self.talkedAboutThisSession.Contains(physicalObject.abstractPhysicalObject.ID))
+                        if (self.inspectPearl == null 
+                            && (self.conversation == null || flag3) 
+                            && physicalObject is DataPearl 
+                            && (physicalObject as DataPearl).grabbedBy.Count == 0
+                            && (physicalObject as DataPearl).AbstractPearl != VoidPearl(self.oracle.room)
+                            && (physicalObject as DataPearl).AbstractPearl != RotPearl(self.oracle.room)
+                            && ((physicalObject as DataPearl).AbstractPearl.dataPearlType != DataPearl.AbstractDataPearl.DataPearlType.PebblesPearl
+                            || (self.oracle.ID == MoreSlugcatsEnums.OracleID.DM 
+                            && ((physicalObject as DataPearl).AbstractPearl as PebblesPearl.AbstractPebblesPearl).color >= 0)) 
+                            && !self.readDataPearlOrbits.Contains((physicalObject as DataPearl).AbstractPearl) 
+                            && flag4 && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark 
+                            && !self.talkedAboutThisSession.Contains(physicalObject.abstractPhysicalObject.ID))
                         {
                             self.inspectPearl = (physicalObject as DataPearl);
                             if (!(self.inspectPearl is SpearMasterPearl) || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)

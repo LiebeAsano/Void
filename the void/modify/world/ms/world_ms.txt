@@ -91,7 +91,7 @@ MS_I02 : 4-Eel, 5-Salamander-2, 6-Jetfish-2
 (Void, Red, Gourmand, Rivulet) MS_FARWALL03 : 3-CyanLizard, 4-CicadaA-3, 5-CicadaB, 6-EelLizard
 (X-Void, Red, Gourmand, Rivulet, Yellow, White) MS_FARWALL05 : 4-CicadaA-3, 4-CicadaB-2, 5-WhiteLizard
 (X-Void, Red, Gourmand, Rivulet, Yellow, White) MS_BITTERWALL01 : 3-Snail-6
-(Void, Red) MS_FARWALL04 : 10-CyanLizard, 12-CyanLizard-2, 8-CyanLizard-2, 4-CyanLizard-3, 7-Snail-5, 5-WhiteLizard-2
+(Void, Red) MS_FARWALL04 : 10-CyanLizard, 4-CyanLizard-1, 7-Snail-2, 5-WhiteLizard-1
 
 (X-Yellow) MS_LWFARSIDE : 4-BlueLizard, 5-Salamander, 10-Jetfish, 11-Jetfish, 12-Sea Leech-13
 (X-Yellow) MS_FARWALL01 : 2-WhiteLizard, 4-EggBug-{Pre-Cycle}

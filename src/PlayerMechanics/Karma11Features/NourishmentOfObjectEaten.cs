@@ -24,7 +24,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 				if (OptionInterface.OptionAccessors.SimpleFood)
 				{
 					string objectId = eatenobject.ToString();
-					if (objectId is "Fly" or "DangleFruit" or "WaterNut" or
+					if (objectId is "Fly" or "DangleFruit" or "SwollenWaterNut" or
 						"SlimeMold" or "SSOracleSwarmer" or "MoreSlugcats.GooieDuck" or
 						"MoreSlugcats.LillyPuck" or "MoreSlugcats.DandelionPeach" or "MoreSlugcats.GlowWeed" or
 						"MoreSlugcats.Seed")

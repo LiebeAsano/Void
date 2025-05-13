@@ -17,7 +17,8 @@ internal static class Climbing
 {
 	public static void Hook()
 	{
-        //On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+		//On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
+		On.Player.ctor += Player_ctor;
         On.Player.WallJump += Player_UpdateWallJump;
 		On.Player.UpdateBodyMode += Player_UpdateBodyMode;
     }
@@ -149,7 +150,7 @@ internal static class Climbing
 
 	private static readonly float CeilCrawlDuration = 0.2f;
 
-	private static int flipTimer = -1;
+	private static int[] flipTimer = new int [32];
 	private const int ticksToFlip = 10;
 
 	public static bool[] gamepadController = new bool [32];
@@ -162,7 +163,16 @@ internal static class Climbing
 
     private static readonly ConditionalWeakTable<Player, StrongBox<int>> rightLeft = new();
 
-    private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
+    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+	{
+		orig(self, abstractCreature, world);
+		if (self.IsVoid())
+		{
+			flipTimer[self.playerState.playerNumber] = -1;
+        }
+	}
+
+	private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 	{
 		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy)
 		{
@@ -208,7 +218,7 @@ internal static class Climbing
 		if (!rightLeft.TryGetValue(player, out var rightLeftStrongBox))
 			rightLeft.Add(player, new(0));
 
-		if (flipTimer > -1)
+		if (flipTimer[player.playerState.playerNumber] > -1)
 		{
 			if (player.input[0].x < 0)
                 rightLeftStrongBox.Value = 1;
@@ -216,11 +226,11 @@ internal static class Climbing
                 rightLeftStrongBox.Value = -1;
 
 			player.bodyMode = Player.BodyModeIndex.ZeroG;
-			body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer) / ((float)ticksToFlip) * 180 * rightLeftStrongBox.Value) * 17;
-			flipTimer++;
-			if (flipTimer == ticksToFlip)
+			body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer[player.playerState.playerNumber]) / ((float)ticksToFlip) * 180 * rightLeftStrongBox.Value) * 17;
+			flipTimer[player.playerState.playerNumber]++;
+			if (flipTimer[player.playerState.playerNumber] == ticksToFlip)
 			{
-				flipTimer = -1;
+				flipTimer[player.playerState.playerNumber] = -1;
 			}
 		}
 
@@ -437,9 +447,9 @@ internal static class Climbing
 
 		if (currentTimeWall > 9)
 		{
-			if (player.input[0].y < 0 && player.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y && flipTimer == -1)
+			if (player.input[0].y < 0 && player.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y && flipTimer[player.playerState.playerNumber] == -1)
 			{
-				flipTimer = 0;
+				flipTimer[player.playerState.playerNumber] = 0;
 				currentTimeWall = 0;
 			}
 		}

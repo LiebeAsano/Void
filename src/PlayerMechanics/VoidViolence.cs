@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
-using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal class VoidViolence
+    internal static class VoidViolence
     {
+        [RunOnModsInit]
+        [UsedImplicitly]
         public static void Hook()
         {
             On.Creature.Violence += Creature_Violence;

@@ -84,42 +84,8 @@ internal class BarnacleResist
     {
         if (self.hasShell)
         {
-            int num = 0;
-            while ((float)num < Mathf.Lerp(2f, 5f, self.creatureParams.sizeMultiplier))
-            {
-                AbstractPhysicalObject abstractPhysicalObject = new AbstractPhysicalObject(self.room.world, AbstractPhysicalObject.AbstractObjectType.Rock, null, self.room.GetWorldCoordinate(self.mainBodyChunk.pos + Custom.RNV() * self.mainBodyChunk.rad), self.room.game.GetNewID());
-                self.room.abstractRoom.entities.Add(abstractPhysicalObject);
-                abstractPhysicalObject.RealizeInRoom();
-                abstractPhysicalObject.realizedObject.firstChunk.vel = Custom.RNV() * UnityEngine.Random.Range(8f, 16f);
-                num++;
-            }
-            int num2 = 0;
-            while ((float)num2 < Mathf.Lerp(4f, 7f, self.creatureParams.sizeMultiplier))
-            {
-                Vector2 vector = Custom.RNV() * 4f;
-                vector = new Vector2(vector.x, Mathf.Abs(vector.y));
-                int num3 = UnityEngine.Random.Range(0, 4);
-                string overrideSprite = "RootBall1";
-                if (num3 == 1)
-                {
-                    overrideSprite = "KrakenShield0";
-                }
-                else if (num3 == 2)
-                {
-                    overrideSprite = "Cicada5body";
-                }
-                else if (num3 == 3)
-                {
-                    overrideSprite = "Cicada1body";
-                }
-                Color shellColor = (self.graphicsModule as BarnacleGraphics).GetShellColor(UnityEngine.Random.value);
-                CentipedeShell centipedeShell = new CentipedeShell(self.mainBodyChunk.pos + Custom.RNV() * self.mainBodyChunk.rad, vector, shellColor, self.creatureParams.sizeMultiplier * 1.5f, self.creatureParams.sizeMultiplier * 1.5f, overrideSprite);
-                centipedeShell.impactSound = WatcherEnums.WatcherSoundID.Barnacle_Shell_Fragment_Hit_Terrain;
-                self.room.AddObject(centipedeShell);
-                num2++;
-            }
-            self.temporaryDamageImmunity = 20;
             self.hasShell = false;
+            self.temporaryDamageImmunity = 20;
             for (int i = 0; i < self.bodyChunks.Length; i++)
             {
                 self.bodyChunks[i].mass /= 8f;
@@ -127,6 +93,47 @@ internal class BarnacleResist
             }
             self.bodyChunkConnections[0].distance *= 0.75f;
             self.AI.OnLoseShell();
+            if (self.room == null)
+            {
+                return;
+            }
+            int num = 0;
+            while ((float)num < Mathf.Lerp(1f, 3f, self.creatureParams.sizeMultiplier))
+            {
+                AbstractPhysicalObject abstractPhysicalObject = new AbstractPhysicalObject(self.room.world, AbstractPhysicalObject.AbstractObjectType.Rock, null, self.room.GetWorldCoordinate(self.mainBodyChunk.pos + Custom.RNV() * self.mainBodyChunk.rad), self.room.game.GetNewID());
+                self.room.abstractRoom.entities.Add(abstractPhysicalObject);
+                abstractPhysicalObject.RealizeInRoom();
+                abstractPhysicalObject.realizedObject.firstChunk.vel = Custom.RNV() * UnityEngine.Random.Range(8f, 16f);
+                num++;
+            }
+            if (self.graphicsModule != null)
+            {
+                int num2 = 0;
+                while ((float)num2 < Mathf.Lerp(4f, 7f, self.creatureParams.sizeMultiplier))
+                {
+                    Vector2 vector = Custom.RNV() * 4f;
+                    vector = new Vector2(vector.x, Mathf.Abs(vector.y));
+                    int num3 = UnityEngine.Random.Range(0, 4);
+                    string overrideSprite = "RootBall1";
+                    if (num3 == 1)
+                    {
+                        overrideSprite = "KrakenShield0";
+                    }
+                    else if (num3 == 2)
+                    {
+                        overrideSprite = "Cicada5body";
+                    }
+                    else if (num3 == 3)
+                    {
+                        overrideSprite = "Cicada1body";
+                    }
+                    Color shellColor = (self.graphicsModule as BarnacleGraphics).GetShellColor(UnityEngine.Random.value);
+                    CentipedeShell centipedeShell = new CentipedeShell(self.mainBodyChunk.pos + Custom.RNV() * self.mainBodyChunk.rad, vector, shellColor, self.creatureParams.sizeMultiplier * 1.5f, self.creatureParams.sizeMultiplier * 1.5f, overrideSprite);
+                    centipedeShell.impactSound = WatcherEnums.WatcherSoundID.Barnacle_Shell_Fragment_Hit_Terrain;
+                    self.room.AddObject(centipedeShell);
+                    num2++;
+                }
+            }
             self.room.PlaySound(SoundID.Coral_Circuit_Jump_Explosion, self.mainBodyChunk);
         }
     }

@@ -3,6 +3,8 @@ using BepInEx.Logging;
 using Fisobs.Core;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Security.Permissions;
 using UnityEngine;
 using VoidTemplate.Creatures;
@@ -69,51 +71,66 @@ class _Plugin : BaseUnityPlugin
 	private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
 	{
 		orig(self);
-		try
+		if (!ModLoaded)
 		{
-			if (!ModLoaded)
+			VoidEnums.RegisterEnums();
+
+			if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
 			{
-				VoidEnums.RegisterEnums();
-
-				if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
-				{
-					DevEnabled = true;
-				}
-
-				CycleEnd.Hook();
-				DrawSprites.Hook();
-				PlayerSpawnManager.ApplyHooks();
-				PermadeathConditions.Hook();
-				Oracles._OracleMeta.Hook();
-				KarmaHooks.Hook();
-				RoomHooks.Hook();
-				MenuTinkery._MenuMeta.Startup();
-				CreatureInteractions._CreatureInteractionsMeta.Hook();
-				PersistCycleLengthForGracePeriodRestarts.Hook();
-				_GhostFeaturesMeta.Hook();
-				_Karma11FeaturesMeta.Hook();
-				_Karma11FoundationMeta.Hook();
-				_PlayerMechanicsMeta.Hook();
-				_MiscMeta.Hook();
-				_ViyMechanicsMeta.Hook();
-				VoidCycleLimit.Hook();
-				OptionInterface._OIMeta.Initialize();
-
-				RegisterPOMObjects();
-				if (DevEnabled)
-				{
-					//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
-				}
-				LoadResources();
-				ModLoaded = true;
-
+				DevEnabled = true;
 			}
-		}
-		catch (Exception e)
-		{
-			Debug.LogException(e);
-		}
 
+			CycleEnd.Hook();
+			DrawSprites.Hook();
+			PlayerSpawnManager.ApplyHooks();
+			PermadeathConditions.Hook();
+			Oracles._OracleMeta.Hook();
+			KarmaHooks.Hook();
+			RoomHooks.Hook();
+			MenuTinkery._MenuMeta.Startup();
+			CreatureInteractions._CreatureInteractionsMeta.Hook();
+			PersistCycleLengthForGracePeriodRestarts.Hook();
+			_GhostFeaturesMeta.Hook();
+			_Karma11FeaturesMeta.Hook();
+			_Karma11FoundationMeta.Hook();
+			_PlayerMechanicsMeta.Hook();
+			_MiscMeta.Hook();
+			_ViyMechanicsMeta.Hook();
+			VoidCycleLimit.Hook();
+			OptionInterface._OIMeta.Initialize();
+
+			RegisterPOMObjects();
+			if (DevEnabled)
+			{
+				//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
+			}
+			LoadResources();
+			
+			const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+			Assembly assembly = Assembly.GetAssembly(typeof(_Plugin));
+			foreach (MethodInfo method in assembly.GetTypes().SelectMany(type => type.GetMethods(flags)))
+			{
+				if (method.GetCustomAttribute<RunOnModsInitAttribute>() is not null)
+				{
+					try
+					{
+						method.Invoke(null, null);
+					}
+					catch (Exception ex)
+					{
+						Logger.LogError("Failed to summon RunOnModsInitAttribute " +
+						                $"for method {method.Name} " +
+						                $"from class {(method.DeclaringType is not null
+							                ? method.DeclaringType.FullName
+							                : "not specified by method")}\n" +
+						                $"Exception: {ex}");
+					}
+				}
+			}
+			
+			ModLoaded = true;
+
+		}
 	}
 
 	private static void RegisterPOMObjects()
@@ -153,3 +170,4 @@ class _Plugin : BaseUnityPlugin
 	}
 
 }
+public class RunOnModsInitAttribute : Attribute { }

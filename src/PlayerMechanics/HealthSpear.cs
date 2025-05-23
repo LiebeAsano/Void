@@ -11,11 +11,11 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
 {
-	internal static class HealthSpear
-	{
-		public static void Hook()
-		{
-			//IL.Spear.HitSomething += Spear_HitSomething;
+    internal static class HealthSpear
+    {
+        public static void Hook()
+        {
+            //IL.Spear.HitSomething += Spear_HitSomething;
             On.Spear.HitSomething += Spear_HitSomething;
             On.Player.Update += Player_Update;
         }
@@ -64,10 +64,6 @@ namespace VoidTemplate.PlayerMechanics
         {
             if (result.obj is Player player && (player.IsViy() || player.IsVoid()))
             {
-                if (result.obj == null)
-                {
-                    return false;
-                }
                 if ((player.IsVoid() || player.IsViy())
                     && self.Spear_NeedleCanFeed()
                     && self.thrownBy is Player thrower)
@@ -156,6 +152,7 @@ namespace VoidTemplate.PlayerMechanics
             }
             return orig(self, result, eu);
         }
+
         private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);

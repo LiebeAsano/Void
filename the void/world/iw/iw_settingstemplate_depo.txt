@@ -1,4 +1,4 @@
-DangerType: Rain
+DangerType: None
 CeilingDrips: 0.04347826
 RainIntensity: 0.157488
 RumbleIntensity: 1
@@ -14,9 +14,8 @@ BkgDroneNoThreatVolume: 1
 RandomItemDensity: 0.5
 RandomItemSpearChance: 0.2
 WaterReflectionAlpha: 1
-Palette: 53
-EffectColorA: 13
+Palette: 201
+EffectColorA: 18
 EffectColorB: 18
-Effects: LightRain-0.07-30-30, LightBurn-0.08695652-284-76, Contrast-0.02173913-286-20, DayNight-0.3-266-186, Fog-0.2608696-20-132, PixelShift-0.5-32-65, AboveCloudsView-1-20-76, Moth-0.3913043-278-130, 
+Effects: LightRain-0.07-30-30, LightBurn-0.08695652-284-76, Contrast-0.02173913-286-20, DayNight-0.3-288.7667-181.7313, Fog-0.2608696-20-132, PixelShift-0.5-21.32813-81.36354, AboveCloudsView-1-1030.982-156.3948, Moth-0.3913043-278-130,
 AmbientSounds: OMNI><SO_WAT-Splashes.ogg><118.95><305.7476><0.1086956><1, OMNI><AM_ENV-WindGrass.ogg><123.1874><383.8198><0.4130435><1, 
-FadePalette: 2, 0.3632852

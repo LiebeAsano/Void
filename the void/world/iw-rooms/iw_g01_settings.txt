@@ -8,7 +8,7 @@ WaveLength: 0.9996795
 WaveAmplitude: 2.331754E-07
 SecondWaveLength: 0.1666667
 SecondWaveAmplitude: 0
-Clouds: 0.01545848
+Clouds: 0.8042493
 Grime: 0
 BkgDroneVolume: 0.3
 BkgDroneNoThreatVolume: 1
@@ -18,8 +18,8 @@ WaterReflectionAlpha: 1
 Palette: 201
 EffectColorA: 18
 EffectColorB: 18
-Effects: LightRain-0.07-30-30, LightBurn-0.08695652-284-76, Contrast-0.02173913-286-20, DayNight-0.3-288.7667-181.7313, Fog-0.2608696-20-132, PixelShift-0.5-21.32813-81.36354, AboveCloudsView-1-1030.982-156.3948, Moth-0.3913043-278-130,
-AmbientSounds: OMNI><SO_WAT-Splashes.ogg><118.95><305.7476><0.1086956><1, OMNI><AM_ENV-WindGrass.ogg><123.1874><383.8198><0.4130435><1, 
+Effects: LightRain-0.07-30-30, LightBurn-0.08695652-284-76, Contrast-0.02173913-286-20, DayNight-0.3-288.7667-181.7313, Fog-0.2608696-20-132, PixelShift-0.5-21.32813-81.36354, AboveCloudsView-1-1030.982-156.3948, Moth-0.3913043-278-130, 
 PlacedObjects: LightSource><5552.909><1478.37><0.3194739~Environment~623.9487~-516.8344~50~86.60254~1~1~None~0~0, LightSource><6839.984><1532.187><0.4509383~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><4631.906><1509.42><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><3538.183><1488.787><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><2698.451><1493.056><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><1495.164><1472.424><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><296.1448><1486.681><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><2935.444><451.6073><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, LightSource><4236.701><458.0104><0.3658726~Environment~640.3123~-521.8146~50~86.60254~1~1~None~0~0, 
+AmbientSounds: OMNI><SO_WAT-Splashes.ogg><118.95><305.7476><0.1086956><1, OMNI><AM_ENV-WindGrass.ogg><123.1874><383.8198><0.4130435><1, 
 FadePalette: 53, 0.8038647, 0.8193237, 0.8579707, 0.8888887, 0.9043478, 0.9275247, 0.973913, 0.9198066
 BackgroundOffset: 0,652.1738

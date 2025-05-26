@@ -3,7 +3,8 @@ GATE_OE_IW : DISCONNECTED, IW_LWB01 : GATE
 
 IW_LWB01 : IW_G01, IW_LWB01, GATE_OE_IW, IW_LWB01
 IW_G01 : DISCONNECTED, IW_H01, IW_LWB01, DISCONNECTED
-IW_H01 : IW_G01, DISCONNECTED
+IW_H01 : IW_G01, IW_D01
+IW_D01 : IW_H01, DISCONNECTED
 
 //Communication Array
 
@@ -24,7 +25,8 @@ END ROOMS
 
 CREATURES
 
-OFFSCREEN : 0-Scavenger-7, 0-EliteScavenger-2, 0-MirosVulture-1, 0-KingVulture-1, 0-KingVulture-1-{Night}
+OFFSCREEN : 0-Scavenger-7, 0-EliteScavenger-2-{Ignore Cycle}, 0-MirosVulture-1-{Ignore Cycle}, 0-KingVulture-1, 0-KingVulture-1-{Night}
+IW_D01 : 5-Caramel-1-{Ignore Cycle}
 
 //Communication Array
 

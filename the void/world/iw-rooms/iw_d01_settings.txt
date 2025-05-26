@@ -1,0 +1,19 @@
+Template: NONE
+DangerType: None
+CeilingDrips: 0
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.5
+WaveLength: 1
+WaveAmplitude: 0
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.8042493
+Grime: 0.005313708
+RandomItemDensity: 0.6082126
+RandomItemSpearChance: 0.3082126
+Palette: 201
+EffectColorB: 10
+Effects: DayNight-0.3014493-20-20, LightBurn-0.06956532-19.33334-75.51112, Fog-0.2164252-15.06665-134.5333, PixelShift-0.5024154-315.1555-25.73334, Contrast-0.08983576-315.1555-71.24445, 
+PlacedObjects: VoidSpawnEgg><706.5303><2904.214><0~0~2~7~1, VoidSpawnEgg><911.6166><2674.983><0~0~2~7~1, GooieDuck><604.0607><2881.797><0~0~2~3, GooieDuck><821.5206><2823.19><0~0~2~3, GooieDuck><906.8418><2760.784><0~0~2~3, GooieDuck><131.9483><2876.13><0~0~2~3, DangleFruit><829.567><949.6046><0~0~2~3, DangleFruit><943.9819><1251.218><0~0~2~3, DangleFruit><981.718><1215.665><0~0~2~3, DangleFruit><235.6832><1240.461><0~0~2~3, DangleFruit><308.1225><1179.014><0~0~2~3, DangleFruit><106.8984><1435.425><0~0~2~3, DangleFruit><127.8783><1369.095><0~0~2~3, 
+FadePalette: 53, 0.4021286, 0.3711958, 0.3325296, 0.2861298

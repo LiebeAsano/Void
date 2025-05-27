@@ -51,7 +51,9 @@ public static class VoidEnums
 			SelectEnding11Scene = new("End_Scene_Void11");
 			SelectKarma5Scene = new("Scene_Five_Karma_Void");
 			SelectKarma11Scene = new("Scene_Eleven_Karma_Void");
-		}
+
+			MainMenuSceneVoid = new("Main_Menu_Scene_Void");
+        }
 		public static MenuScene.SceneID SleepScene;
 		public static MenuScene.SceneID SleepScene11;
 		public static MenuScene.SceneID DeathScene;
@@ -83,7 +85,9 @@ public static class VoidEnums
 		public static MenuScene.SceneID Void_Heart;
 		public static MenuScene.SceneID Void_NSH;
 		public static MenuScene.SceneID Void_Sea;
-	}
+
+        public static MenuScene.SceneID MainMenuSceneVoid;
+    }
 	public static class DreamID
 	{
 		public static void Register()

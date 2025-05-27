@@ -22,6 +22,7 @@ internal static class SwallowObjects
         On.Player.GrabUpdate += Player_GrabUpdate;
         On.SlugcatHand.Update += SlugcatHand_Update;
         On.PlayerGraphics.Update += PlayerGraphics_Update;
+        On.Player.MaulingUpdate += Player_MaulingUpdate;
         On.Player.ctor += Player_ctor;
         On.StoryGameSession.ctor += StoryGameSession_ctor;
     }
@@ -435,10 +436,11 @@ internal static class SwallowObjects
             }
             if (ModManager.MSC && SlugcatStats.SlugcatCanMaul(self.SlugCatClass))
             {
-                if (self.input[0].pckp && self.grasps[num11] != null && self.grasps[num11].grabbed is Creature && (self.CanMaulCreature(self.grasps[num11].grabbed as Creature) || self.maulTimer > 0))
+                if (self.input[0].pckp && self.grasps[num11] != null && (self.grasps[num11].grabbed is Pomegranate || self.grasps[num11].grabbed is Creature && self.CanMaulCreature(self.grasps[num11].grabbed as Creature) || self.maulTimer > 0))
                 {
                     self.maulTimer++;
-                    (self.grasps[num11].grabbed as Creature).Stun(60);
+                    if (self.grasps[num11].grabbed is Creature)
+                        (self.grasps[num11].grabbed as Creature).Stun(60);
                     self.MaulingUpdate(num11);
                     if (self.spearOnBack != null)
                     {
@@ -458,7 +460,8 @@ internal static class SwallowObjects
                         [
                         "Mauled target"
                         ]);
-                        if (!(self.grasps[num11].grabbed as Creature).dead)
+                        Pomegranate pomegranate = self.grasps[num11].grabbed as Pomegranate;
+                        if (self.grasps[num11].grabbed is Creature && !(self.grasps[num11].grabbed as Creature).dead)
                         {
                             for (int num12 = UnityEngine.Random.Range(8, 14); num12 >= 0; num12--)
                             {
@@ -498,6 +501,16 @@ internal static class SwallowObjects
                             if (creature.abstractCreature.creatureTemplate.type == DLCSharedEnums.CreatureTemplateType.Inspector)
                             {
                                 creature.Die();
+                            }
+                        }
+                        if (pomegranate is not null)
+                        {
+                            pomegranate.Smash();
+                            if (pomegranate.abstractPhysicalObject is Pomegranate.AbstractPomegranate abstractPom)
+                            {
+                                abstractPom.smashed = true;
+                                abstractPom.disconnected = true;
+                                abstractPom.Consume();
                             }
                         }
                         self.maulTimer = 0;
@@ -629,9 +642,9 @@ internal static class SwallowObjects
                     {
                         if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
                         {
-                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 7)
+                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 5)
                             {
-                                if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
+                                if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 1))
                                 {
                                     if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
                                     {
@@ -1103,6 +1116,73 @@ internal static class SwallowObjects
                     self.drawPositions[1, 0].x += -Mathf.Cos(num12 * 3.1415927f * 2f) * num11 * 3f;
                 }
             }
+        }
+    }
+
+    private static void Player_MaulingUpdate(On.Player.orig_MaulingUpdate orig, Player self, int graspIndex)
+    {
+        if (self.grasps[graspIndex] != null && self.IsVoid())
+        {
+            if (self.maulTimer > 15)
+            {
+                if (self.grasps[graspIndex].grabbed is Creature && (self.grasps[graspIndex].grabbed as Creature).abstractCreature.creatureTemplate.type == CreatureTemplate.Type.Scavenger)
+                {
+                    self.grasps[graspIndex].grabbed.bodyChunks[0].mass = 0.5f;
+                    self.grasps[graspIndex].grabbed.bodyChunks[1].mass = 0.3f;
+                    self.grasps[graspIndex].grabbed.bodyChunks[2].mass = 0.05f;
+                }
+                self.standing = false;
+                self.Blink(5);
+                if (self.maulTimer % 3 == 0)
+                {
+                    Vector2 b = Custom.RNV() * 3f;
+                    self.mainBodyChunk.pos += b;
+                    self.mainBodyChunk.vel += b;
+                }
+                Vector2 vector = self.grasps[graspIndex].grabbedChunk.pos * self.grasps[graspIndex].grabbedChunk.mass;
+                float num = self.grasps[graspIndex].grabbedChunk.mass;
+                for (int i = 0; i < self.grasps[graspIndex].grabbed.bodyChunkConnections.Length; i++)
+                {
+                    if (self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk1 == self.grasps[graspIndex].grabbedChunk)
+                    {
+                        vector += self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk2.pos * self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk2.mass;
+                        num += self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk2.mass;
+                    }
+                    else if (self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk2 == self.grasps[graspIndex].grabbedChunk)
+                    {
+                        vector += self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk1.pos * self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk1.mass;
+                        num += self.grasps[graspIndex].grabbed.bodyChunkConnections[i].chunk1.mass;
+                    }
+                }
+                vector /= num;
+                self.mainBodyChunk.vel += Custom.DirVec(self.mainBodyChunk.pos, vector) * 0.5f;
+                self.bodyChunks[1].vel -= Custom.DirVec(self.mainBodyChunk.pos, vector) * 0.6f;
+                if (self.graphicsModule != null)
+                {
+                    if (!Custom.DistLess(self.grasps[graspIndex].grabbedChunk.pos, (self.graphicsModule as PlayerGraphics).head.pos, self.grasps[graspIndex].grabbedChunk.rad))
+                    {
+                        (self.graphicsModule as PlayerGraphics).head.vel += Custom.DirVec(self.grasps[graspIndex].grabbedChunk.pos, (self.graphicsModule as PlayerGraphics).head.pos) * (self.grasps[graspIndex].grabbedChunk.rad - Vector2.Distance(self.grasps[graspIndex].grabbedChunk.pos, (self.graphicsModule as PlayerGraphics).head.pos));
+                    }
+                    else if (self.maulTimer % 5 == 3)
+                    {
+                        (self.graphicsModule as PlayerGraphics).head.vel += Custom.RNV() * 4f;
+                    }
+                    if (self.maulTimer > 10 && self.maulTimer % 8 == 3)
+                    {
+                        self.mainBodyChunk.pos += Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * 4f;
+                        self.grasps[graspIndex].grabbedChunk.vel += Custom.DirVec(vector, self.mainBodyChunk.pos) * 0.9f / self.grasps[graspIndex].grabbedChunk.mass;
+                        for (int j = UnityEngine.Random.Range(0, 3); j >= 0; j--)
+                        {
+                            self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[graspIndex].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[graspIndex].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(vector, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+        else
+        {
+            orig(self, graspIndex);
         }
     }
 

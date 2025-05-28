@@ -1,0 +1,14 @@
+Template: iw_settingstemplate_surface
+RainIntensity: 0.2034763
+RumbleIntensity: 0
+WaveSpeed: 0.5011685
+WaveLength: 0.9994158
+WaveAmplitude: 0.0003268646
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.5026607
+Grime: 0.7087979
+RandomItemDensity: 0.6005319
+RandomItemSpearChance: 0.3005321
+Effects: SandPuffs-0-280.4333-127.4698, 
+AmbientSounds: SPOT><AM_WIN-StrongWnd2.ogg><29.31642><211.43><0.3453352><1><-27.12317><547.9655><279.8207><-167.6866><0><0.3319972, 

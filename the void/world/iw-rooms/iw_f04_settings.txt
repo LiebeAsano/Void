@@ -1,0 +1,19 @@
+Template: NONE
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.5
+WaveLength: 1
+WaveAmplitude: 0
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.6031929
+Grime: 0
+RandomItemDensity: 0.6005325
+Palette: 201
+EffectColorA: 18
+EffectColorB: 10
+Effects: Fog-1-18.6167-59.16979, DayNight-0.3015966-12.88544-3.636456, Contrast-0.07733254-271.1448-0, Brightness-0.07733254-279.6823-53.43854, Desaturation-0.1082653-42.76669-132.4104, Coldness-0.2010644-312.4094-128.1417, 
+AmbientSounds: OMNI><AM_ENV-NatWind.ogg><719.998><489.6446><0.4072007><1, OMNI><AM_ENV-LightWind.ogg><725.2907><566.4486><0.206137><1, OMNI><AM_ENV-Outside.ogg><720.417><416.1732><0.3658741><1, 
+FadePalette: 53, 0.2397302, 0.09279865, 0.1623983, 0.2010644, 0.2165308, 0.2242637
+RoomSpecificScriptActive: ON

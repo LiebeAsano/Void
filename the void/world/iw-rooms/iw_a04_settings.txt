@@ -1,0 +1,14 @@
+Template: iw_settingstemplate_subway
+RainIntensity: 0.05413188
+RumbleIntensity: 0
+WaveSpeed: 0.4998973
+WaveLength: 0.9999487
+WaveAmplitude: 2.551801E-05
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.3093302
+Grime: 0.5927993
+RandomItemDensity: 0.9021288
+RandomItemSpearChance: 0.3005318
+Effects: SkyAndLightBloom-0.4562617-737.901-350.1563, SandPuffs-0-266.2042-128.1812, 
+PlacedObjects: NoSpearStickZone><456.4534><710.0515><239.05~-15.96771, KarmaFlower><523.6931><171.1269><0~0~5~7, GooieDuck><349.4306><512.2098><0~0~2~3, GooieDuck><555.1089><510.8569><0~0~2~3, LightBeam><442.1367><136.2387><-13.51764~595.649~23.63641~596.3604~170.9084~-9.248947~-547.1115~145.1375~0.1525361~0.1623983~0.3634624~1~None~0~0, LightSource><514.4427><179.6373><0.3426739~Environment~136.6~48.77499~50~86.60254~1~1~None~0~0, 

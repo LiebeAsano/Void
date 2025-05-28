@@ -1,4 +1,5 @@
 Palette: 201
+pupSpawnChance: 0.6
 Subregion: Icy Wastelands
 Subregion: Communication Array
-Room Setting Templates: Depo, CommunicationArray
+Room Setting Templates: Depo, CommunicationArray, Surface, Subway

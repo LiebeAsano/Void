@@ -1,0 +1,10 @@
+Template: iw_settingstemplate_subway
+WaveSpeed: 0.4998953
+WaveLength: 0.9999477
+WaveAmplitude: 6.961501E-10
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+BkgDroneVolume: 0
+BkgDroneNoThreatVolume: 0
+EffectColorA: 10
+FadePalette: 10, 0.4173914

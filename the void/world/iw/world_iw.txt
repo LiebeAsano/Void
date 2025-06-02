@@ -35,7 +35,6 @@ CREATURES
 
 OFFSCREEN : 0-Scavenger-7, 0-EliteScavenger-2-{Ignore Cycle}, 0-MirosVulture-1-{Ignore Cycle}, 0-KingVulture-1, 0-KingVulture-1-{Night}
 IW_D01 : 5-Caramel-1-{Ignore Cycle}
-IW_S02 : 1-BlackLizard-{Winter}, 2-BlackLizard-{Winter}
 
 //Communication Array
 

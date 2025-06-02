@@ -1,0 +1,23 @@
+Template: iw_settingstemplate_surface
+DangerType: Blizzard
+RainIntensity: 0.5050729
+RumbleIntensity: 0.5514715
+WaveSpeed: 0.5132862
+WaveLength: 0.9933569
+WaveAmplitude: 0.0009289033
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.479461
+Palette: 202
+TerrainLight: 0
+TerrainStainBrightness: 0.5231987
+TerrainStainHeight: 0
+TerrainWaves: 0.433063
+TerrainGooHeight: 0.04639866
+TerrainGrain: 0.2726666
+TerrainDepth: -6.623973
+TerrainSkyFade: 1
+TerrainPalette: ridgesnow
+Effects: LightBurn-0.07733287-621.9333-450.4719, 
+PlacedObjects: LightSource><854.6876><720.647><0.4818732~Environment~-310.9073~-303.3969~-568.9688~-341.6953~1~0~None~0~0, LightSource><880.3156><719.301><0.4818732~Environment~-310.9073~-303.3969~-568.9688~-341.6953~1~1~None~0~0, LightBeam><438.0837><100.9218><359.9979~622.6844~466.1635~627.6646~224.9792~3.557297~-318.7333~9.960419~0.11387~0~0~1~None~0~0, LightSource><817.7072><712.1865><0.1416105~Environment~-517.2302~-530.3522~-650.7865~-235.688~1~1~None~0~0, TerrainHandle><166.7692><197.8672><-69.16975~32.72708~194.3865~-74.70314~20, TerrainHandle><838.0629><66.1294><-245.6115~17.075~139.6042~-6.403122~167.9834, TerrainHandle><-62.36666><270.3708><-245.6115~17.075~40~0~20, CustomDecal><215.5627><35.4241><-87.50938~602.0521~990.5085~681.024~900.8645~-86.08646~-273.9114~58.33961~0.2861302~1~0~rust1~1~1~0.4741395~1~0.2189424~1~1~1, CustomDecal><133.9958><255.4303><-87.50938~602.0521~990.5085~681.024~900.8645~-86.08646~229.0897~78.26044~0~0~0~rust1~0.3504075~1~0.4741395~1~0.2189424~1~1~1, LightSource><872.4895><708.6292><0.07201153~Environment~-488.7719~-433.5938~-442.3293~-302.5651~0~1~None~0~0, SnowSource><843.6796><670.4728><Radial~-408.3771~-367.4281~-660.7469~-271.261~1~1, 
+FadePalette: 10, 0.6109261

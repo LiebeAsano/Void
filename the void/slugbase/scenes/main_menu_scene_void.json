@@ -4,7 +4,7 @@
 	"images": [
 		{"name": "main - menu - scene - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background", "pos": [0, 0], "depth": -1.0, "shader": "Basic" },
-		{ "name": "void - core", "pos": [-40, -76], "depth": 50.0, "shader": "Basic" },
+		{ "name": "void - core", "pos": [-75, -55], "depth": 50.0, "shader": "Basic" },
 		{ "name": "voideggs", "pos": [-67, -76], "depth": 50.0, "shader": "Basic" },
 		{ "name": "void - worm", "pos": [-67, -38], "depth": 15.0, "shader": "Basic" },
 		{ "name": "survivor - monk", "pos": [0, 0], "depth": 2.0, "shader": "Basic" },

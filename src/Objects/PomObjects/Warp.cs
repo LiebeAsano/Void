@@ -137,6 +137,7 @@ internal class Warp : UpdatableAndDeletable
 						absPly.realizedCreature.inShortcut = true;
 						break;
 					case (true, not null): //when player is in shortcut, as intended
+
 						break;
 				}
 				if (!targetingData.warp.ExitInShortcut
@@ -176,6 +177,7 @@ internal class Warp : UpdatableAndDeletable
                     IEnumerable<ShortcutHandler.ShortCutVessel> playerVessels = overWorld.game.shortcuts.transportVessels.Where(vessel => realizedDestination.game.Players.Any(absply => vessel.creature == absply.realizedCreature));
 					foreach(var playerVessel in playerVessels)
 					{
+						playerVessel.room = targetAbstractRoom;
 						playerVessel.pos = pos;
 						playerVessel.lastPositions[0] = pos with { y = pos.y + 1 };
 					}

@@ -135,14 +135,22 @@ static class OracleHooks
                 return;
             }
         }
-        if (!self.currSubBehavior.Gravity)
+        if (self.player != null && self.player.room == self.oracle.room)
         {
-            self.oracle.room.gravity = Custom.LerpAndTick(self.oracle.room.gravity, 0f, 0.05f, 0.02f);
-            return;
+            if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+            {
+                if ((self.currSubBehavior is SSOracleBehavior.SSSleepoverBehavior || self.currSubBehavior is SSOracleBehavior.ThrowOutBehavior) && self.pearlConversation == null && self.timeSinceSeenPlayer < 0)
+                {
+                    self.SeePlayer();
+                }
+            }
+            self.playerOutOfRoomCounter = 0;
         }
-        if (!ModManager.MSC || self.oracle.room.world.name != "HR" || !self.oracle.room.game.IsStorySession || !self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.ripMoon || self.oracle.ID != Oracle.OracleID.SS)
+        else
         {
-            self.oracle.room.gravity = 1f - self.working;
+            self.killFac = 0f;
+            self.playerOutOfRoomCounter++;
+            self.timeSinceSeenPlayer = -1;
         }
     }
 
@@ -171,7 +179,6 @@ static class OracleHooks
 		}
 		else if (amountOfEatenPearls < 12)
 		{
-            PebbleVoice(self);
             self.dialogBox.Interrupt(self.Translate(
                 savestate.GetVoidMeetMoon()
                     ? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
@@ -181,7 +188,32 @@ static class OracleHooks
 
 	}
 
-	private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
+    public static void RegurgitatePearlsInterrupt(this SSOracleBehavior self)
+    {
+        if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
+        if (self.conversation != null && self.action != SSOracleBehavior.Action.ThrowOut_ThrowOut)
+        {
+            self.conversation.paused = true;
+            self.restartConversationAfterCurrentDialoge = true;
+        }
+        var savestate = self.oracle.room.game.GetStorySession.saveState;
+        var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
+        if (amountOfEatenPearls == 6 && !savestate.GetVoidMeetMoon())
+        {
+            self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
+            self.getToWorking = 1f;
+        }
+        else if (amountOfEatenPearls < 12)
+        {
+            self.dialogBox.Interrupt(self.Translate(
+                savestate.GetVoidMeetMoon()
+                    ? OracleConversation.regurgitateInterruptMessages6Step[amountOfEatenPearls]
+                    : OracleConversation.regurgitateInterruptMessages[amountOfEatenPearls]), 10);
+        }
+
+    }
+
+    private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
 	{
 		orig(self);
 		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
@@ -220,10 +252,7 @@ static class OracleHooks
                 }
             }
 
-            if (subBehavior == null)
-            {
-                subBehavior = new SSOracleMeetVoid_CuriousBehavior(self, self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad);
-            }
+            subBehavior ??= new SSOracleMeetVoid_CuriousBehavior(self, self.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad);
             self.allSubBehaviors.Add(subBehavior);
 
             subBehavior.Activate(self.action, nextAction);
@@ -272,10 +301,16 @@ static class OracleHooks
                         }
                         if (!saveState.GetVoidMeetMoon())
                         {
-                            if(self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                            if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                 self.NewAction(self.afterGiveMarkAction);
-                            self.NewAction(SSOracleBehavior.Action.ThrowOut_ThrowOut);
-						    break;
+                            //self.currSubBehavior.owner.conversation.slatedForDeletion = false;
+                            miscData.SSaiConversationsHad++;
+                            saveState.SetLastMeetCycles(saveState.cycleNumber);
+                            self.afterGiveMarkAction = MeetVoid_Init;
+                            self.NewAction(MeetVoid_Curious);
+                            self.SlugcatEnterRoomReaction();
+                            self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                            break;
                         }
                         else
                         {
@@ -701,8 +736,31 @@ static class OracleHooks
             "Eat as much as you want, from now I will no longer store important information here in your presence."
         ];
 
+        public static string[] regurgitateInterruptMessages =
+        [
+            "I am not sure you can stomach pearl.",
+            ". . .",
+            "Do you really eat them?",
+            "Little creature, you should not eat pearls.",
+            "You must stop right now.",
+            "I am warning you for the last time."
+        ];
 
-
+        public static string[] regurgitateInterruptMessages6Step =
+        [
+            "I am not sure you can stomach pearl.",
+            ". . .",
+            "Do you really eat them?",
+            "Little creature, you should not eat pearls.",
+            "Can you stop dissolving my pearls?",
+            "You just ate something more valuable than you can imagine.",
+            "These pearls that you have swallowed, do they disappear without a trace or just become a part of you? In any case, I cannot get it back.",
+            "Considering that your body weight does not change, this means that all the objects you eat are dissolved by the void fluid.",
+            "If to assume that all the water in your body has been displaced by the void fluid,<LINE>its concentration is still insufficient to dissolve objects in such a short period of time.",
+            "Watching you, I can assume that your body is invisibly connected to the Void Sea, but this thought alone raises even more questions.",
+            "I would never have thought that such wasteful use of pearls would bring me closer to understanding the nature of the Void Sea.",
+            "Eat as much as you want, from now I will no longer store important information here in your presence."
+        ];
     }
     public class SSOracleVoidBehavior : SSOracleBehavior.ConversationBehavior
     {
@@ -717,20 +775,6 @@ static class OracleHooks
             }
 
 
-        }
-
-        public override void Update()
-        {
-            base.Update();
-            if (owner.conversation == null || owner.conversation.slatedForDeletion == true ||
-                owner.conversation.events == null)
-            {
-                this.SSOracleVoidCommonConvoEnd();
-            }
-            else
-            {
-                owner.LockShortcuts();
-            }
         }
 
         public override void NewAction(SSOracleBehavior.Action oldAction, SSOracleBehavior.Action newAction)
@@ -775,187 +819,191 @@ static class OracleHooks
 
 public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBehavior
 {
-    public static SSOracleBehavior.Action MeetVoid_Talking = new SSOracleBehavior.Action("MeetVoid_Talking", true);
-    public static SSOracleBehavior.Action MeetVoid_Texting = new SSOracleBehavior.Action("MeetVoid_Texting", true);
-    public static SSOracleBehavior.Action MeetVoid_FirstImages = new SSOracleBehavior.Action("MeetVoid_FirstImages", true);
-    public static SSOracleBehavior.Action MeetVoid_SecondCurious = new SSOracleBehavior.Action("MeetVoid_SecondCurious", true);
-    public static SSOracleBehavior.Action MeetVoid_Heal = new SSOracleBehavior.Action("MeetVoid_Heal", true);
+    public static SSOracleBehavior.Action MeetVoid_Talking = new("MeetVoid_Talking", true);
+    public static SSOracleBehavior.Action MeetVoid_Texting = new("MeetVoid_Texting", true);
+    public static SSOracleBehavior.Action MeetVoid_FirstImages = new("MeetVoid_FirstImages", true);
+    public static SSOracleBehavior.Action MeetVoid_SecondCurious = new("MeetVoid_SecondCurious", true);
+    public static SSOracleBehavior.Action MeetVoid_SecondMeetsSameCycle = new("MeetVoid_SecondMeetsSameCycle", true);
+    public static SSOracleBehavior.Action MeetVoid_SecondMeets = new("MeetVoid_SecondMeets", true);
+    public static SSOracleBehavior.Action MeetVoid_ThirdMeets = new("MeetVoid_ThirdMeets", true);
+    public static SSOracleBehavior.Action MeetVoid_FourMeets = new("MeetVoid_FourMeets", true);
+    public static SSOracleBehavior.Action MeetVoid_Heal = new("MeetVoid_Heal", true);
     int MeetTimes => owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad;
 
-    public ChunkSoundEmitter voice
+    public ChunkSoundEmitter Voice
     {
         get
         {
-            return this.owner.voice;
+            return owner.voice;
         }
         set
         {
-            this.owner.voice = value;
+            owner.voice = value;
         }
     }
 
     public SSOracleMeetVoid_CuriousBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.PebbleVoidConversation[times - 1])
     {
-        this.chatLabel = new OracleChatLabel(owner);
-        this.showMediaPos = new Vector2(400f, 300f);
-        this.oracle.room.AddObject(this.chatLabel);
-        this.chatLabel.Hide();
-        if (ModManager.MMF && owner.oracle.room.game.IsStorySession && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked && base.oracle.room.world.rainCycle.timer > base.oracle.room.world.rainCycle.cycleLength / 4)
+        chatLabel = new OracleChatLabel(owner);
+        showMediaPos = new Vector2(400f, 300f);
+        oracle.room.AddObject(chatLabel);
+        chatLabel.Hide();
+        if (ModManager.MMF && owner.oracle.room.game.IsStorySession && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked && oracle.room.world.rainCycle.timer > oracle.room.world.rainCycle.cycleLength / 4)
         {
-            base.oracle.room.world.rainCycle.timer = this.oracle.room.world.rainCycle.cycleLength / 4;
-            base.oracle.room.world.rainCycle.dayNightCounter = 0;
+            oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
+            oracle.room.world.rainCycle.dayNightCounter = 0;
         }
     }
 
     public override void Update()
     {
-        if (base.player == null)
+        if (player == null)
         {
             return;
         }
-        this.owner.LockShortcuts();
-        this.owner.getToWorking = 0f;
 
-        if (base.action == MeetVoid_Curious)
+        owner.LockShortcuts();
+        owner.getToWorking = 0f;
+
+        if (action == MeetVoid_Curious)
         {
-            if (this.owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad == 7)
+            if (inActionCounter < 360)
             {
-                this.owner.NewAction(MeetVoid_Heal);
+                owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+            }
+            else
+            {
+                owner.movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
+            }
+            if (inActionCounter > 360 && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad == 5)
+            {
+                owner.NewAction(MeetVoid_Heal);
                 return;
             }
-            if (inActionCounter < 360)
-                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
-            else
-                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
             if (inActionCounter > 360)
             {
-                this.owner.NewAction(MeetVoid_Talking);
-                //UnityEngine.Debug.Log("MeetVoid_Talking");
+                owner.NewAction(MeetVoid_Talking);
                 return;
             }
         }
-        else if (base.action == MeetVoid_Talking)
+        else if (action == MeetVoid_Talking)
         {
-            this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-            if (!this.CurrentlyCommunicating && this.communicationPause > 0)
+            owner.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+            if (!CurrentlyCommunicating && communicationPause > 0)
             {
-                this.communicationPause--;
+                communicationPause--;
             }
-            if (!this.CurrentlyCommunicating && this.communicationPause < 1)
+            if (!CurrentlyCommunicating && communicationPause < 1)
             {
-                if (this.communicationIndex >= 4)
+                if (communicationIndex >= 4)
                 {
-                    this.owner.NewAction(MeetVoid_Texting);
-                    //UnityEngine.Debug.Log("MeetVoid_Texting");
+                    owner.NewAction(MeetVoid_Texting);
                 }
-                else if (this.owner.allStillCounter > 20)
+                else if (owner.allStillCounter > 20)
                 {
-                    this.NextCommunication();
-                    //UnityEngine.Debug.Log("Next Commu");
+                    NextCommunication();
                 }
             }
-            if (!this.CurrentlyCommunicating)
+            if (!CurrentlyCommunicating)
             {
-                this.owner.nextPos += Custom.RNV();
+                owner.nextPos += Custom.RNV();
                 return;
             }
         }
         else
         {
-            if (base.action == MeetVoid_Texting)
+            if (action == MeetVoid_Texting)
             {
-                base.movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
-                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
-                if (base.oracle.graphicsModule != null)
+                movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
+                owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+                if (oracle.graphicsModule != null)
                 {
-                    (base.oracle.graphicsModule as OracleGraphics).halo.connectionsFireChance = 0f;
+                    (oracle.graphicsModule as OracleGraphics).halo.connectionsFireChance = 0f;
                 }
-                if (!this.CurrentlyCommunicating && this.communicationPause > 0)
+                if (!CurrentlyCommunicating && communicationPause > 0)
                 {
-                    this.communicationPause--;
+                    communicationPause--;
                 }
-                if (!this.CurrentlyCommunicating && this.communicationPause < 1)
+                if (!CurrentlyCommunicating && communicationPause < 1)
                 {
-                    if (this.communicationIndex >= 6)
+                    if (communicationIndex >= 6)
                     {
-                        this.owner.NewAction(MeetVoid_FirstImages);
-                        //UnityEngine.Debug.Log("MeetVoid_FirstImages");
+                        owner.NewAction(MeetVoid_FirstImages);
                     }
-                    else if (this.owner.allStillCounter > 20)
+                    else if (owner.allStillCounter > 20)
                     {
-                        this.NextCommunication();
-                        this.communicationPause = 150;
+                        NextCommunication();
+                        communicationPause = 150;
                     }
                 }
                 return;
             }
-            if (base.action == MeetVoid_FirstImages)
+            if (action == MeetVoid_FirstImages)
             {
-                base.movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
-                this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
-                if (this.communicationPause > 0)
+                movementBehavior = SSOracleBehavior.MovementBehavior.ShowMedia;
+                owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+                if (communicationPause > 0)
                 {
-                    this.communicationPause--;
+                    communicationPause--;
                 }
 
-                if (inActionCounter > 150 && this.communicationPause < 1)
+                if (inActionCounter > 150 && communicationPause < 1)
                 {
-                    if (base.action == MeetVoid_FirstImages && this.communicationIndex >= 3)
+                    if (action == MeetVoid_FirstImages && communicationIndex >= 3)
                     {
-                        this.owner.NewAction(MeetVoid_SecondCurious);
-                        //UnityEngine.Debug.Log("MeetVoid_SecondCurious");
+                        owner.NewAction(MeetVoid_SecondCurious);
                     }
                     else
                     {
-                        this.NextCommunication();
+                        NextCommunication();
                     }
                 }
-                if (this.showImage != null)
+                if (showImage != null)
                 {
-                    this.showImage.setPos = new Vector2?(this.showMediaPos);
+                    showImage.setPos = new Vector2?(showMediaPos);
                 }
                 if (UnityEngine.Random.value < 0.0333333351f)
                 {
-                    this.idealShowMediaPos += Custom.RNV() * UnityEngine.Random.value * 30f;
-                    this.showMediaPos += Custom.RNV() * UnityEngine.Random.value * 30f;
+                    idealShowMediaPos += Custom.RNV() * UnityEngine.Random.value * 30f;
+                    showMediaPos += Custom.RNV() * UnityEngine.Random.value * 30f;
                     return;
                 }
             }
-            if (base.action == SSOracleBehavior.Action.General_GiveMark)
+            if (action == SSOracleBehavior.Action.General_GiveMark)
             {
-                if (inActionCounter == 300 && this.player.KarmaCap != 10)
-                    HunterSpasms.Spasm(this.player);
+                if (inActionCounter == 300 && player.KarmaCap != 10)
+                    HunterSpasms.Spasm(player);
             }
-            else if (base.action == MeetVoid_SecondCurious)
+            else if (action == MeetVoid_SecondCurious)
             {
-                base.movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
+                movementBehavior = SSOracleBehavior.MovementBehavior.Investigate;
                 if (inActionCounter == 80)
                 {
-                    Custom.Log(new string[]
-                    {
+                    Custom.Log(
+                    [
                         "extra talk"
-                    });
-                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_5, base.oracle.firstChunk);
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    ]);
+                    Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_5, oracle.firstChunk);
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
-                        this.dialogBox.Interrupt(". . .".TranslateString(), 60);
-                        this.dialogBox.NewMessage("I can see by your face that you understand me.".TranslateString(), 60);
+                        dialogBox.Interrupt(". . .".TranslateString(), 60);
+                        dialogBox.NewMessage("I can see by your face that you understand me.".TranslateString(), 60);
                     }
-                    this.voice.requireActiveUpkeep = true;
+                    Voice.requireActiveUpkeep = true;
                 }
                 if (inActionCounter > 240)
                 {
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                     {
-                        this.owner.NewAction(SSOracleBehavior.Action.General_GiveMark);
+                        owner.NewAction(SSOracleBehavior.Action.General_GiveMark);
                     }
-                    if (this.owner.conversation != null)
+                    if (owner.conversation != null)
                     {
-                        this.owner.conversation.paused = false;
+                        owner.conversation.paused = false;
                     }
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.owner.NewAction(this.owner.afterGiveMarkAction);
-                    this.owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                        owner.NewAction(owner.afterGiveMarkAction);
+                    owner.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
                 }
                 return;
             }
@@ -1067,7 +1115,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             }
         }
 
-        if (owner.conversation != null && owner.conversation.slatedForDeletion == true)
+        if (owner.conversation != null && owner.conversation.slatedForDeletion == true && oracle.room.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad == 1)
         {
             this.SSOracleVoidCommonConvoEnd();
         }
@@ -1108,7 +1156,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
     {
         this.chatLabel.Hide();
         this.showImage?.Destroy();
-        this.voice = null;
+        this.Voice = null;
         base.Deactivate();
     }
 
@@ -1124,40 +1172,40 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
             switch (this.communicationIndex)
             {
                 case 0:
-                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
+                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
                         this.dialogBox.Interrupt("Did someone send a messenger to me?".TranslateString(), 60);
                     }
-                    this.voice.requireActiveUpkeep = true;
+                    this.Voice.requireActiveUpkeep = true;
                     this.communicationPause = 10;
                     break;
                 case 1:
-                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_2, base.oracle.firstChunk);
+                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_2, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
                         this.dialogBox.Interrupt("It does not have a mark.".TranslateString(), 30);
                         this.dialogBox.NewMessage("It is just another pest was able to get into my structure.".TranslateString(), 30);
                     }
-                    this.voice.requireActiveUpkeep = true;
+                    this.Voice.requireActiveUpkeep = true;
                     this.communicationPause = 70;
                     break;
                 case 2:
-                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
+                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
                         this.dialogBox.Interrupt("You look unnatural.".TranslateString(), 60);
                         this.dialogBox.NewMessage("What happened to you? There are clear signs of external interference here.".TranslateString(), 60);
                     }
-                    this.voice.requireActiveUpkeep = true;
+                    this.Voice.requireActiveUpkeep = true;
                     break;
                 case 3:
-                    this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_4, base.oracle.firstChunk);
+                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_4, base.oracle.firstChunk);
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
                         this.dialogBox.Interrupt("A rather strange creature.".TranslateString(), 60);
                     }
-                    this.voice.requireActiveUpkeep = true;
+                    this.Voice.requireActiveUpkeep = true;
                     this.communicationPause = 140;
                     break;
             }
@@ -1189,7 +1237,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                 case 2:
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                     {
-                        this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
+                        this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
                         this.showImage = base.oracle.myScreen.AddImage(new List<string>
                         {
                             "void_glyphs_3",
@@ -1198,7 +1246,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     }
                     else
                     {
-                        this.voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
+                        this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
                         this.showImage = base.oracle.myScreen.AddImage(new List<string>
                         {
                             "void_glyphs_4",
@@ -1281,7 +1329,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
     {
         get
         {
-            return base.CurrentlyCommunicating || this.voice != null || (base.action == SSOracleBehavior.Action.MeetWhite_Texting && !this.chatLabel.finishedShowingMessage) || this.showImage != null;
+            return base.CurrentlyCommunicating || this.Voice != null || (base.action == SSOracleBehavior.Action.MeetWhite_Texting && !this.chatLabel.finishedShowingMessage) || this.showImage != null;
         }
     }
 

@@ -7,7 +7,7 @@
 		{ "name": "void - core", "pos": [-75, -55], "depth": 50.0, "shader": "Basic" },
 		{ "name": "voideggs", "pos": [-67, -76], "depth": 50.0, "shader": "Basic" },
 		{ "name": "void - worm", "pos": [-67, -38], "depth": 15.0, "shader": "Basic" },
-		{ "name": "survivor - monk", "pos": [0, 0], "depth": 2.0, "shader": "Basic" },
+		{ "name": "survivor - monk", "pos": [0, 0], "depth": 3.0, "shader": "Basic" },
 	],
 	"idle_depths": [ 15.0 ],
 	"select_menu_pos": [0, 0],

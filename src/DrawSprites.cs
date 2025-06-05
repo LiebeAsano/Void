@@ -120,47 +120,48 @@ internal class DrawSprites
         }
         return false;
     }
+
+    private static string GetVoidMarkSpriteName(StoryGameSession session, string baseSpriteName)
+    {
+        if (session.saveState.GetVoidMarkV3())
+        {
+            return "VoidR-" + baseSpriteName.Split('-').Last();
+        }
+        else if (session.saveState.GetVoidMarkV2())
+        {
+            return "VoidS-" + baseSpriteName.Split('-').Last();
+        }
+        else
+        {
+            return "Void-" + baseSpriteName.Split('-').Last();
+        }
+    }
+
     private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
+        string originalMarkSpriteName = sLeaser.sprites[11].element.name;
+
         orig(self, sLeaser, rCam, timeStacker, camPos);
+
         if (!self.player.IsVoid()) return;
 
-        #region mark
-        //mark sprite logic
-        if (self.player.abstractCreature.world.game.session is StoryGameSession session
-                && !Utils.DressMySlugcatEnabled)
-        {
-            FSprite markSprite = sLeaser.sprites[11];
-            string spritename = markSprite.element.name;
-            int AmountOfPebblesConversations = session.saveState.miscWorldSaveData.SSaiConversationsHad;
+        string currentMarkSpriteName = sLeaser.sprites[11].element.name;
 
-            //this only works because game doesn't know yet the sprite element has changed,
-            //hence only rerendering it when game requests to rerender it in any other way
-            //i.e. changing rooms
-            //i dislike it, but oh well
-            if (AmountOfPebblesConversations >= 7)
+        if (currentMarkSpriteName == originalMarkSpriteName ||
+            currentMarkSpriteName.StartsWith("Void"))
+        {
+            if (self.player.abstractCreature.world.game.session is StoryGameSession session
+                && !Utils.DressMySlugcatEnabled)
             {
-                string pixel = "VoidR-";
-                if (Futile.atlasManager.DoesContainElementWithName(pixel + spritename))
-                    markSprite.element = Futile.atlasManager.GetElementWithName(pixel + spritename);
-            }
-            else if (AmountOfPebblesConversations >= 2)
-            {
-                string pixel = "VoidS-";
-                if (Futile.atlasManager.DoesContainElementWithName(pixel + spritename))
-                    markSprite.element = Futile.atlasManager.GetElementWithName(pixel + spritename);
-            }
-            else
-            {
-                string pixel = "Void-";
-                if (Futile.atlasManager.DoesContainElementWithName(pixel + spritename))
-                    markSprite.element = Futile.atlasManager.GetElementWithName(pixel + spritename);
+                string newSpriteName = GetVoidMarkSpriteName(session, currentMarkSpriteName);
+                if (Futile.atlasManager.DoesContainElementWithName(newSpriteName))
+                {
+                    sLeaser.sprites[11].element = Futile.atlasManager.GetElementWithName(newSpriteName);
+                }
             }
         }
-        #endregion
 
         #region head
-        //head sprite logic
         if (self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
             FSprite sprite = sLeaser.sprites[3];

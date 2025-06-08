@@ -9,6 +9,7 @@ using System.Security.Permissions;
 using UnityEngine;
 using VoidTemplate.Creatures;
 using VoidTemplate.Misc;
+using VoidTemplate.Objects.NoodleEgg;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
 using VoidTemplate.PlayerMechanics.Karma11Features;

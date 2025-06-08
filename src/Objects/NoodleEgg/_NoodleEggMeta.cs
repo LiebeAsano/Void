@@ -13,6 +13,7 @@ namespace VoidTemplate.Objects.NoodleEgg
         {
             IL.Player.BiteEdibleObject += Player_BiteEdibleObject;
             IL.SlugcatHand.Update += SlugcatHand_Update;
+            ShellGrabUpdate.Hook();
         }
 
         private static void SlugcatHand_Update(ILContext il)

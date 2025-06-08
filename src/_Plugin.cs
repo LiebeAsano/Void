@@ -98,6 +98,7 @@ class _Plugin : BaseUnityPlugin
 			_ViyMechanicsMeta.Hook();
 			VoidCycleLimit.Hook();
 			OptionInterface._OIMeta.Initialize();
+			Objects.NoodleEgg._NoodleEggMeta.Hook();
 
 			RegisterPOMObjects();
 			if (DevEnabled)

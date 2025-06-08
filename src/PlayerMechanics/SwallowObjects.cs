@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using UnityEngine;
+using VoidTemplate.Objects.NoodleEgg;
 using VoidTemplate.Oracles;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
@@ -265,7 +266,7 @@ internal static class SwallowObjects
                 int num8 = 0;
                 while (num5 < 0 && num8 < 2 && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
                 {
-                    if (self.grasps[num8] != null && self.grasps[num8].grabbed is IPlayerEdible && (self.grasps[num8].grabbed as IPlayerEdible).Edible)
+                    if (self.grasps[num8] != null && ((self.grasps[num8].grabbed is IPlayerEdible && (self.grasps[num8].grabbed as IPlayerEdible).Edible) || (self.AreVoidViy() && self.grasps[num8].grabbed is NeedleEgg)))
                     {
                         num5 = num8;
                     }
@@ -556,11 +557,13 @@ internal static class SwallowObjects
                 {
                     if (ModManager.MSC)
                     {
-                        if (num5 <= -1 || self.grasps[num5] == null || self.grasps[num5].grabbed is not GooieDuck || (self.grasps[num5].grabbed as GooieDuck).bites != 6 || self.timeSinceSpawned % 2 == 0)
+                        bool canEat = num5 > -1 && self.grasps[num5] != null && ((self.grasps[num5].grabbed is GooieDuck gd && gd.bites == 6) || (self.AreVoidViy() && (self.grasps[num5].grabbed is NeedleEgg egg && egg.GetEdible().bites == 4)));
+
+                        if (!canEat || self.timeSinceSpawned % 2 == 0)
                         {
                             self.eatCounter--;
                         }
-                        if (num5 > -1 && self.grasps[num5] != null && self.grasps[num5].grabbed is GooieDuck && (self.grasps[num5].grabbed as GooieDuck).bites == 6 && self.FoodInStomach < self.MaxFoodInStomach)
+                        if (canEat && self.FoodInStomach < self.MaxFoodInStomach)
                         {
                             (self.graphicsModule as PlayerGraphics).BiteStruggle(num5);
                         }

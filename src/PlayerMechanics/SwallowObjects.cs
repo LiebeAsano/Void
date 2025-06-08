@@ -50,10 +50,6 @@ internal static class SwallowObjects
         typeof(SporePlant),
         ];
 
-    private static readonly HashSet<Type> TwoFullPinFoodObjects =
-    [
-        typeof(NeedleEgg),
-        ];
 
     private static void Player_SwallowObject(On.Player.orig_SwallowObject orig, Player self, int grasp)
     {
@@ -77,11 +73,6 @@ internal static class SwallowObjects
                 else if (FullPinFoodObjects.Contains(grabbed.GetType()))
                 {
                     HandleFullPinFood(orig, self, grasp, abstractGrabbed);
-                    return;
-                }
-                else if (TwoFullPinFoodObjects.Contains(grabbed.GetType()))
-                {
-                    HandleTwoFullPinFood(orig, self, grasp, abstractGrabbed);
                     return;
                 }
                 else if (HalfFoodObjects.Contains(grabbed.GetType()))
@@ -141,21 +132,6 @@ internal static class SwallowObjects
                 else
                     self.AddFood(1);
             }
-        }
-    }
-
-    private static void HandleTwoFullPinFood(On.Player.orig_SwallowObject orig, Player self, int grasp, AbstractPhysicalObject abstractGrabbed)
-    {
-        orig(self, grasp);
-
-        if (self.objectInStomach != null && self.objectInStomach == abstractGrabbed)
-        {
-            self.objectInStomach.Destroy();
-            self.objectInStomach = null;
-            if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
-                self.AddFood(4);
-            else
-                self.AddFood(2);
         }
     }
 

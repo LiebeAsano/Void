@@ -16,71 +16,11 @@ public class EdibleNoodleEgg
     public bool shellCrack = false;
     public NeedleEgg sourceEgg;
 
-    private bool hookActive = false;
-
     public EdibleNoodleEgg(NeedleEgg egg)
     {
         sourceEgg = egg;
-        Hook();
     }
 
-    public void Hook()
-    {
-        if (!hookActive)
-        {
-            On.NeedleEgg.Shell.Draw += Shell_Draw;
-            On.NeedleEgg.Update += NeedleEgg_Update;
-            hookActive = true;
-        }
-    }
-
-    public void Unhook()
-    {
-        if (hookActive)
-        {
-            On.NeedleEgg.Shell.Draw -= Shell_Draw;
-            On.NeedleEgg.Update -= NeedleEgg_Update;
-            hookActive = false;
-        }
-    }
-
-    private void Shell_Draw(On.NeedleEgg.Shell.orig_Draw orig, NeedleEgg.Shell self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos, Vector2 drwPos, Vector2 rotVec, Vector2 prp)
-    {
-        if (self == sourceEgg.halves[0] || self == sourceEgg.halves[1])
-        {
-            if (!shellCrack)
-            {
-                orig(self, sLeaser, rCam, timeStacker, camPos, drwPos, rotVec, prp);
-            }
-            else
-            {
-                for (int i = self.sprite; i < self.sprite + 2; i++)
-                {
-                    sLeaser.sprites[i].isVisible = false;
-                }
-            }
-        }
-        else
-        {
-            orig(self, sLeaser, rCam, timeStacker, camPos, drwPos, rotVec, prp);
-        }
-    }
-
-    private void NeedleEgg_Update(On.NeedleEgg.orig_Update orig, NeedleEgg self, bool eu)
-    {
-        orig(self, eu);
-
-        if (self == sourceEgg && shellCrack)
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    sourceEgg.shellpositions[i, j] = Vector2.zero;
-                }
-            }
-        }
-    }
 
     public bool CanEat(Player grabber)
     {
@@ -131,7 +71,6 @@ public static class EdibleNoodleEggCWT
         return edibleEgg.GetValue(egg, e =>
         {
             var edible = new EdibleNoodleEgg(e);
-            edible.Hook();
             return edible;
         });
     }
@@ -140,7 +79,6 @@ public static class EdibleNoodleEggCWT
     {
         if (edibleEgg.TryGetValue(egg, out var edible))
         {
-            edible.Unhook();
             edibleEgg.Remove(egg);
         }
     }

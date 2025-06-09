@@ -16,6 +16,8 @@ internal static class ShellGrabUpdate
     public static void Hook()
     {
         IL.Player.GrabUpdate += Player_GrabUpdate;
+        On.NeedleEgg.Update += NeedleEgg_Update;
+        On.NeedleEgg.DrawSprites += NeedleEgg_DrawSprites;
     }
 
     private static void Player_GrabUpdate(ILContext il)
@@ -53,5 +55,32 @@ internal static class ShellGrabUpdate
         {
             logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: first match failed");
         }
+    }
+
+    private static void NeedleEgg_Update(On.NeedleEgg.orig_Update orig, NeedleEgg self, bool eu)
+    {
+        orig(self, eu);
+
+        var edible = self.GetEdible();
+
+        if (self == edible.sourceEgg && edible.shellCrack)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    edible.sourceEgg.shellpositions[i, j] = Vector2.zero;
+                }
+            }
+        }
+    }
+
+    private static void NeedleEgg_DrawSprites(On.NeedleEgg.orig_DrawSprites orig, NeedleEgg self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, UnityEngine.Vector2 camPos)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            sLeaser.sprites[self.halves[i].sprite].isVisible = !self.GetEdible().shellCrack;
+        }
+        orig(self, sLeaser, rCam, timeStacker, camPos);
     }
 }

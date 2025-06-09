@@ -4,6 +4,8 @@ using UnityEngine;
 using VoidTemplate.OptionInterface;
 using RWCustom;
 using static VoidTemplate.Useful.Utils;
+using MoreSlugcats;
+using VoidTemplate.CreatureInteractions;
 
 
 namespace VoidTemplate.Objects.NoodleEgg;
@@ -103,7 +105,17 @@ public class EdibleNoodleEgg
         if (bites < 1)
         {
             grasp.Release();
-            (grasp.grabber as Player).AddFood(OptionAccessors.SimpleFood ? 4 : 2);
+            if (grasp.grabber is Player player)
+            {
+                if (player.AreVoidViy())
+                {
+                    player.AddFood(OptionAccessors.SimpleFood ? 4 : 2);
+                }
+                else 
+                {
+                    player.AddFood(4);
+                }
+            }
             sourceEgg.Destroy();
             sourceEgg.RemoveEdible();
         }

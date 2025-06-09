@@ -33,7 +33,7 @@ namespace VoidTemplate.Objects.NoodleEgg
                     c.Emit(OpCodes.Ldloc, 4);
                     c.EmitDelegate((SlugcatHand hand, int grasp) =>
                     {
-                        if ((hand.owner.owner as Player).grasps[grasp].grabbed is NeedleEgg)
+                        if ((hand.owner.owner as Player).grasps[grasp].grabbed is NeedleEgg egg && egg.GetEdible().CanEat(hand.owner.owner as Player))
                         {
                             return true;
                         }
@@ -66,7 +66,7 @@ namespace VoidTemplate.Objects.NoodleEgg
                 c.Emit(OpCodes.Ldloc_0);
                 c.EmitDelegate((Player player, bool eu, int grasp) =>
                 {
-                    if (player.AreVoidViy() && player.grasps[grasp].grabbed is NeedleEgg egg)
+                    if (player.grasps[grasp].grabbed is NeedleEgg egg && egg.GetEdible().CanEat(player))
                     {
                         if (player.graphicsModule != null)
                         {

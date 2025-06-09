@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.OptionInterface;
 using RWCustom;
+using static VoidTemplate.Useful.Utils;
 
 
 namespace VoidTemplate.Objects.NoodleEgg;
@@ -77,6 +78,11 @@ public class EdibleNoodleEgg
                 }
             }
         }
+    }
+
+    public bool CanEat(Player grabber)
+    {
+        return (grabber != null && grabber.AreVoidViy()) || shellCrack;
     }
 
 

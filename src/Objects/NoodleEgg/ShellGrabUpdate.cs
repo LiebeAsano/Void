@@ -20,5 +20,38 @@ internal static class ShellGrabUpdate
 
     private static void Player_GrabUpdate(ILContext il)
     {
+        ILCursor c = new(il);
+        if (c.TryGotoNext(x => x.MatchStloc(13))
+            && c.TryGotoNext(MoveType.After, x => x.MatchBrfalse(out _)))
+        {
+            LogExInf(c.ToString());
+            ILCursor u = c.Clone();
+            if (u.TryGotoNext(MoveType.Before,
+                x => x.MatchLdloc(13),
+                x => x.MatchStloc(6)))
+            {
+                ILLabel label = u.MarkLabel();
+
+                c.Emit(OpCodes.Ldarg_0);
+                c.Emit(OpCodes.Ldloc, 13);
+                c.EmitDelegate((Player player, int grasp) =>
+                {
+                    if (player.grasps[grasp].grabbed is NeedleEgg egg && egg.GetEdible().shellCrack)
+                    {
+                        return true;
+                    }
+                    return false;
+                });
+                c.Emit(OpCodes.Brtrue, label);
+            }
+            else
+            {
+                logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: second match failed");
+            }
+        }
+        else
+        {
+            logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: first match failed");
+        }
     }
 }

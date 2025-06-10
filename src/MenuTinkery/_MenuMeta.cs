@@ -15,5 +15,6 @@ public static class _MenuMeta
 		NoSleepSoundLoop.Hook();
         PermaDeathScreen.Hook();
 		StopContinueButtonWhenAboutToDie.Hook();
+		IntroRollSound.Hook();
     }
 }

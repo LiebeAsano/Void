@@ -16,6 +16,12 @@ internal static class MainMenuScene
     public static void Hook()
     {
         On.ProcessManager.RequestMainProcessSwitch_ProcessID += ProcessManager_RequestMainProcessSwitch_ProcessID;
+        On.Menu.MainMenu.BackgroundScene += MainMenu_BackgroundScene;
+    }
+
+    private static MenuScene.SceneID MainMenu_BackgroundScene(On.Menu.MainMenu.orig_BackgroundScene orig, MainMenu self)
+    {
+        return VoidEnums.SceneID.MainMenuSceneVoid;
     }
 
     private static void ProcessManager_RequestMainProcessSwitch_ProcessID(On.ProcessManager.orig_RequestMainProcessSwitch_ProcessID orig, ProcessManager self, ProcessManager.ProcessID ID)

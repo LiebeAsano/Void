@@ -32,7 +32,7 @@ public class EdibleNoodleEgg
     {
         if (bites == 4)
         {
-            sourceEgg.room.PlaySound(DLCSharedEnums.SharedSoundID.Duck_Pop, grasp.grabber.mainBodyChunk, false, 1f, 0.5f + UnityEngine.Random.value * 0.5f);
+            sourceEgg.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, grasp.grabber.mainBodyChunk, false, 1f, 0.5f + UnityEngine.Random.value * 0.5f);
             shellCrack = true;
             for (int i = 0; i < 3; i++)
             {

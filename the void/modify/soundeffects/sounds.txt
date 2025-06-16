@@ -1,3 +1,5 @@
+[ADD]Halcyon_Memories/dopplerFac=0 : HalcyonMemories/vol=0.25
+
 [ADD]Static_Death_Sound/dopplerFac=0 : StaticDeathSound/vol=0.25
 [ADD]Static_Death_Sound11/dopplerFac=0 : StaticDeathSound11/vol=0.25
 [ADD]Static_End_Scene_Void/dopplerFac=0 : StaticEndSound/vol=0.25

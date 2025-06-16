@@ -17,7 +17,9 @@ namespace VoidTemplate.MenuTinkery
         {
             orig(self, musicPlayer);
             self.subTracks.RemoveAt(self.subTracks.Count - 1);
-            self.subTracks.Add(new(self, 1, "StaticEndSound11"));
+            self.subTracks.Add(new(self, 1, "MainMenuTheme"));
+            self.Loop = true;
         }
+
     }
 }

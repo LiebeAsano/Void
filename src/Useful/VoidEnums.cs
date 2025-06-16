@@ -122,7 +122,9 @@ public static class VoidEnums
 	{
 		public static void Register()
 		{
-			VoidNSHDreamSound = new("Void_NSH_Dream_Sound", true);
+            HalcyonMemories = new("Halcyon_Memories", true);
+
+            VoidNSHDreamSound = new("Void_NSH_Dream_Sound", true);
 			NSHDreamSound = new("NSH_Dream_Sound", true);
 			SkyDreamSound = new("Sky_Dream_Sound", true);
 			SubDreamSound = new("Sub_Dream_Sound", true);
@@ -135,7 +137,9 @@ public static class VoidEnums
 			VoidHeartDreamSound = new("Void_Heart_Dream_Sound", true);
         }
 
-		public static global::SoundID VoidNSHDreamSound;
+        public static global::SoundID HalcyonMemories;
+
+        public static global::SoundID VoidNSHDreamSound;
 		public static global::SoundID NSHDreamSound;
 		public static global::SoundID SkyDreamSound;
 		public static global::SoundID SubDreamSound;

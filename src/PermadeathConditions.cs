@@ -178,8 +178,7 @@ static class PermadeathConditions
             && rainWorldGame.IsVoidStoryCampaign()
             && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
 			|| session.saveState.GetKarmaToken() == 0
-            || session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && session.saveState.miscWorldSaveData.SSaiConversationsHad < 7
-			|| session.saveState.miscWorldSaveData.SSaiConversationsHad < 7 && session.saveState.miscWorldSaveData.SSaiConversationsHad > 3 && session.saveState.GetPunishFromPebble())
+            || session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && !session.saveState.GetVoidMarkV3())
             && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}
 

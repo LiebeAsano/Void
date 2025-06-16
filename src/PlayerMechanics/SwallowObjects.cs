@@ -84,7 +84,7 @@ internal static class SwallowObjects
                 else if (self.KarmaCap != 10 && !self.IsViy() && !Karma11Update.VoidKarma11)
                 {
                     if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl && hasMark &&
-                        self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior))
+                        self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior behavior && behavior.action != SSOracleBehavior.Action.ThrowOut_ThrowOut && behavior.action != SSOracleBehavior.Action.ThrowOut_KillOnSight))
                     {
                         ((self.room.updateList.First(i => i is Oracle) as Oracle)
                         .oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
@@ -537,7 +537,7 @@ internal static class SwallowObjects
                     self.TossObject(num11, eu);
                     self.ReleaseGrasp(num11);
                     self.standing = true;
-                }
+                } 
                 return;
             }
             if (!self.input[0].pckp && self.grasps[num11] != null && self.eatMeat > 60)
@@ -619,9 +619,9 @@ internal static class SwallowObjects
                     self.swallowAndRegurgitateCounter++;
                     for (int num14 = 0; num14 < 2; num14++)
                     {
-                        if ((self.IsViy() || self.IsVoid()) && self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
+                        if (self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
                         {
-                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad >= 5)
+                            if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.GetVoidMarkV3())
                             {
                                 if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 1))
                                 {

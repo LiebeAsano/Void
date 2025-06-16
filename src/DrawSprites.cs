@@ -399,7 +399,7 @@ internal class DrawSprites
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
         if ((player.IsVoid() || player.IsViy()) && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            player.bodyMode == Player.BodyModeIndex.WallClimb && body_chunk_0.pos.y < body_chunk_1.pos.y)
+            player.bodyMode == Player.BodyModeIndex.WallClimb)
         {
             sLeaser.sprites[4].isVisible = false;
         }

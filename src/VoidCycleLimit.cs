@@ -25,7 +25,7 @@ namespace VoidTemplate
 
         public static bool GetCycleLimitLifted(SaveState saveState)
         {
-            return saveState.deathPersistentSaveData.karmaCap >= 10 || saveState.miscWorldSaveData.SSaiConversationsHad >= 7;
+            return saveState.deathPersistentSaveData.karmaCap >= 10 || saveState.GetVoidMarkV3();
         }
 
         public static int GetDisplayCycleNumber(SaveState saveState)

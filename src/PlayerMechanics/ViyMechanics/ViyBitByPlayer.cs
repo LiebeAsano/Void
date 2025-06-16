@@ -137,7 +137,7 @@ internal static class ViyBitByPlayer
 
     private static void Hazer_BitByPlayer(On.Hazer.orig_BitByPlayer orig, Hazer self, Creature.Grasp grasp, bool eu)
     {
-        
+        orig(self, grasp, eu);
         if (grasp.grabber is Player player && player.IsViy())
         {
             (grasp.grabber as Player).ObjectEaten(self);

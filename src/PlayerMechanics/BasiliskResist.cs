@@ -15,7 +15,7 @@ namespace VoidTemplate.PlayerMechanics
 
         private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
         {
-            if (self.injectedPoison > 0 || self.mushroomCounter > 0 && (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name != VoidEnums.SlugcatID.Viy))
+            if (self.injectedPoison > 0 || self.mushroomCounter > 0 && (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name != VoidEnums.SlugcatID.Viy) && self.chatlog == false)
             {
                 self.mushroomCounter = 0;
                 self.injectedPoison = 0;

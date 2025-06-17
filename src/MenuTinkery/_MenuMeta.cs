@@ -16,5 +16,6 @@ public static class _MenuMeta
         PermaDeathScreen.Hook();
 		StopContinueButtonWhenAboutToDie.Hook();
 		IntroRollSound.Hook();
+		IntroRollIllustrstion.Hook();
     }
 }

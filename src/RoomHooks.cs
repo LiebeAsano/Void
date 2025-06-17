@@ -55,7 +55,11 @@ namespace VoidTemplate
 				switch (self.abstractRoom.name)
 				{
 					case "SB_E05":
-						self.AddObject(new ClimbTutorial(self));
+						if (!saveState.GetStartClimbingMessageShown())
+						{
+							self.AddObject(new ClimbTutorial(self));
+							saveState.SetStartClimbingMessageShown(true);
+						}
 						break;
 					case VoidEnums.RoomNames.EndingRoomName:
 						self.AddObject(new Ending(self));

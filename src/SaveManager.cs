@@ -12,6 +12,7 @@ public static class SaveManager
 	private const string messageShown = uniqueprefix + "MessageShown";
 	private const string punishDeath = uniqueprefix + "NonPermaDeath";
 	private const string punishPebble = uniqueprefix + "PunishFromPebble";
+	private const string startClimbingMessageShown = uniqueprefix + "StartClimbingMessageShown";
 
 	const string endingDone = uniqueprefix + "EndingDone";
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
@@ -29,7 +30,10 @@ public static class SaveManager
 	public static bool GetMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(messageShown, out bool shown) && shown;
 	public static void SetMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(messageShown, value);
 
-	private const string KarmaToken = uniqueprefix + "KarmaToken";
+	public static bool GetStartClimbingMessageShown(this SaveState saveState) => saveState.miscWorldSaveData.GetSlugBaseData().TryGet(startClimbingMessageShown, out bool shown) && shown;
+	public static void SetStartClimbingMessageShown(this SaveState saveState, bool value) => saveState.miscWorldSaveData.GetSlugBaseData().Set(startClimbingMessageShown, value);
+
+    private const string KarmaToken = uniqueprefix + "KarmaToken";
 
 	public static void SetKarmaToken(this SaveState save, int amount) => save.deathPersistentSaveData.GetSlugBaseData().Set(KarmaToken, amount);
 

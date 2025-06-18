@@ -1,5 +1,7 @@
 ﻿using Kittehface.Framework20;
 using Menu;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 using Watcher;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -17,6 +20,21 @@ internal static class MainMenuScene
     {
         On.ProcessManager.RequestMainProcessSwitch_ProcessID += ProcessManager_RequestMainProcessSwitch_ProcessID;
         On.Menu.MainMenu.BackgroundScene += MainMenu_BackgroundScene;
+        IL.Menu.MainMenu.ctor += MainMenu_ctor;
+    }
+
+    private static void MainMenu_ctor(ILContext il)
+    {
+        ILCursor c = new(il);
+        ILLabel cancel = c.DefineLabel();
+        if (c.TryGotoNext(MoveType.Before,
+            x => x.MatchLdsfld<ModManager>("Watcher"),
+            x => x.MatchBrfalse(out cancel)))
+        {
+            c.MoveAfterLabels();
+            c.Emit(OpCodes.Br, cancel);
+        }
+        else logerr($"{nameof(MenuTinkery)}.{nameof(MainMenuScene)}.{nameof(MainMenu_ctor)}: match error");
     }
 
     private static MenuScene.SceneID MainMenu_BackgroundScene(On.Menu.MainMenu.orig_BackgroundScene orig, MainMenu self)

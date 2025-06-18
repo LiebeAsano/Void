@@ -14,7 +14,7 @@ namespace VoidTemplate.MenuTinkery
             IL.Menu.IntroRoll.ctor += IntroRoll_ctor;
         }
 
-        private static void IntroRoll_ctor(MonoMod.Cil.ILContext il)
+        private static void IntroRoll_ctor(ILContext il)
         {
             ILCursor c = new(il);
             if (c.TryGotoNext(MoveType.Before,

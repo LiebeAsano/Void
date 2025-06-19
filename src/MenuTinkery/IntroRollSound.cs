@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.MenuTinkery
 {
-    internal class IntroRollSound
+    public class IntroRollSound
     {
         public static void Hook()
         {

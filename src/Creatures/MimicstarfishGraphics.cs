@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace VoidTemplate;
 
-internal sealed class MimicstarfishGraphics : DaddyGraphics
+public sealed class MimicstarfishGraphics : DaddyGraphics
 {
     public float Camouflaged
     {

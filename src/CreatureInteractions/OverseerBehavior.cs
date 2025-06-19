@@ -3,7 +3,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal static class OverseerBehavior
+public static class OverseerBehavior
 {
     public static void Hook()
     {

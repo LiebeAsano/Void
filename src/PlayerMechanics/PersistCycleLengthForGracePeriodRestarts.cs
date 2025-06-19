@@ -3,7 +3,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
 {
-	internal static class PersistCycleLengthForGracePeriodRestarts
+	public static class PersistCycleLengthForGracePeriodRestarts
 	{
 		public const string PERSISTED_CYCLE_LENGTH_SLUGBASE_KEY = "theVoidpersistedCycleLength";
 

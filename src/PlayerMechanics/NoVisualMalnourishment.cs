@@ -2,7 +2,7 @@
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class NoVisualMalnourishment
+public static class NoVisualMalnourishment
 {
 	public static void Hook()
 	{

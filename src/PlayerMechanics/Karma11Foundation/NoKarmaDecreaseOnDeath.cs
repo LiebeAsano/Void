@@ -5,7 +5,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
-internal static class NoKarmaDecreaseOnDeath
+public static class NoKarmaDecreaseOnDeath
 {
 	public static void Initiate()
 	{

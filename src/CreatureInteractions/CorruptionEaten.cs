@@ -10,7 +10,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal static class CorruptionEaten
+public static class CorruptionEaten
 {
     public static void Hook()
     {

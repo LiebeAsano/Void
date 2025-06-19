@@ -14,7 +14,7 @@ using static MonoMod.InlineRT.MonoModRule;
 using static VoidTemplate.SaveManager;
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class SwallowObjects
+public static class SwallowObjects
 {
     public static void Hook()
     {

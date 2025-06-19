@@ -10,7 +10,7 @@ using Watcher;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal class BarnacleResist
+public class BarnacleResist
 {
     public static void Hook()
     {

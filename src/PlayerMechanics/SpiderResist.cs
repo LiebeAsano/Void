@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal class SpiderResist
+    public class SpiderResist
     {
         public static void Hook()
         {

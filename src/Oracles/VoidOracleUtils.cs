@@ -14,7 +14,7 @@ namespace VoidTemplate.Oracles
     /// Библиотека функций для реализаций SSOracleBehaviour.Convers SSOracleBehavior.ConversationBehavior. Нужно подумать о 
     /// более подходящем месте для них (либо единый ConversationBehavior, либо общий промежуточный <see langword="abstract"/>) при рефакторе этих классов.
     /// </summary>
-    internal static class VoidOracleUtils
+    public static class VoidOracleUtils
     {
         public static void SSOracleVoidCommonConvoEnd(this SSOracleBehavior.ConversationBehavior callingConvoBehavior)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.Misc
 {
-    internal static class Expedition
+    public static class Expedition
     {
         public static void Hook()
         {

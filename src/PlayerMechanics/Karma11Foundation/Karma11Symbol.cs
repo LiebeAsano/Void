@@ -8,7 +8,7 @@ using static VoidTemplate.VoidEnums;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
-internal static class Karma11Symbol
+public static class Karma11Symbol
 {
 	public static void Startup()
 	{

@@ -1,7 +1,7 @@
 ﻿namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 using static VoidTemplate.Useful.Utils;
 
-internal static class TokenSystem
+public static class TokenSystem
 {
 	public static void Initiate()
 	{

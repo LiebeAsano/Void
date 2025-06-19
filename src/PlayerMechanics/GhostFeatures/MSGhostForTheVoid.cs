@@ -11,13 +11,13 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures
 {
-    internal class GhostPingControlData
+    public class GhostPingControlData
     {
         public string playerLastUpdateRegion = "";
         public bool ghostPingStaged = false;
     }
 
-    internal static class MSGhostForTheVoid
+    public static class MSGhostForTheVoid
     {
         private static ConditionalWeakTable<Player, GhostPingControlData> ghostPingControlDataCWT = new();
 

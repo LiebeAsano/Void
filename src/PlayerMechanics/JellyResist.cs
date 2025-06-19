@@ -12,7 +12,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal static class JellyResist
+    public static class JellyResist
     {
         public static void Hook()
         {

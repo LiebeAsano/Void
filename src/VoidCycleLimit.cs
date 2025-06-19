@@ -16,7 +16,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate
 {
-    internal static class VoidCycleLimit
+    public static class VoidCycleLimit
     {
         public static int GetVoidCycleLimit(SaveState saveState)
         {

@@ -3,7 +3,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class CanBeSwallowed
+public static class CanBeSwallowed
 {
 	public static void Hook()
 	{

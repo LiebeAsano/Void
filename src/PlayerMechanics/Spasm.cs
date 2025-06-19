@@ -9,7 +9,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class Spasm
+public static class Spasm
 {
     public static void Hook()
     {

@@ -4,7 +4,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class MalnourishmentDeath
+public static class MalnourishmentDeath
 {
 	public static void Hook()
 	{

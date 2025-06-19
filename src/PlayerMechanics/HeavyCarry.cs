@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class HeavyCarry
+public static class HeavyCarry
 {
     public static void Hook()
     {

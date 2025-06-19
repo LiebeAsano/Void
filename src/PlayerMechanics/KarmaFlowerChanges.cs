@@ -3,7 +3,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal class KarmaFlowerChanges
+public class KarmaFlowerChanges
 {
 	public static void Initiate()
 	{

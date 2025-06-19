@@ -13,7 +13,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class Climbing
+public static class Climbing
 {
 	public static void Hook()
 	{
@@ -543,7 +543,7 @@ public static class PlayMod
 			all_attached_fields.Add(player, new());
 	}
 
-	internal static ConditionalWeakTable<Player, PlayMod.Player_Attached_Fields> all_attached_fields = new();
+	public static ConditionalWeakTable<Player, PlayMod.Player_Attached_Fields> all_attached_fields = new();
 
 	public sealed class Player_Attached_Fields
 	{

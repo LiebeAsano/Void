@@ -5,7 +5,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
-internal static class ViyTail
+public static class ViyTail
 {
 	public static void Hook()
 	{

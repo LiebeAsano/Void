@@ -6,7 +6,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.OptionInterface;
 
-internal class VoidOptionInterface : global::OptionInterface
+public class VoidOptionInterface : global::OptionInterface
 {
 	const int marginBetweenVerticalElements = 30;
 	static Color MediumGrey = new Color(0.66f, 0.64f, 0.70f);

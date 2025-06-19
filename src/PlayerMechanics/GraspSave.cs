@@ -7,7 +7,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class GraspSave
+public static class GraspSave
 {
 	const int secondsToStunViy = 10;
     const int secondsToStunOnK10 = 20;

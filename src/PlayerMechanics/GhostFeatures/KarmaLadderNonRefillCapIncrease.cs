@@ -6,7 +6,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures
 {
-	internal static class KarmaLadderNonRefillCapIncrease
+	public static class KarmaLadderNonRefillCapIncrease
 	{
 		public static void Hook()
 		{

@@ -2,7 +2,7 @@
 using VoidTemplate.Useful;
 namespace VoidTemplate.Objects;
 
-internal class CeilingClimbTutorial : UpdatableAndDeletable
+public class CeilingClimbTutorial : UpdatableAndDeletable
 {
 
 	public CeilingClimbTutorial(Room room, params Message[] messages)

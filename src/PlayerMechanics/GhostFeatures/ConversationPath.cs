@@ -3,7 +3,7 @@ using System.IO;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures;
 
-internal static class ConversationPath
+public static class ConversationPath
 {
 	public static void Hook()
 	{

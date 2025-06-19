@@ -4,7 +4,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
 
-internal static class EatMeatUpdate
+public static class EatMeatUpdate
 {
 	public static void Hook()
 	{

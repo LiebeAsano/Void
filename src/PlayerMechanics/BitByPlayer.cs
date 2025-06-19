@@ -10,7 +10,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class BitByPlayer
+public static class BitByPlayer
 {
     public static void Hook()
     {

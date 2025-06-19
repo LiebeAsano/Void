@@ -7,7 +7,7 @@ using Menu;
 
 namespace VoidTemplate.MenuTinkery
 {
-    internal static class IntroRollIllustrstion
+    public static class IntroRollIllustrstion
     {
         public static void Hook()
         {

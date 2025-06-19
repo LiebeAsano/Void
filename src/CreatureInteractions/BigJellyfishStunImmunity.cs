@@ -9,7 +9,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal class BigJellyfishStunImmunity
+public class BigJellyfishStunImmunity
 {
     public static void Hook()
     {

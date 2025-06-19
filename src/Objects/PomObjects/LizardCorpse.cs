@@ -7,7 +7,7 @@ using RWCustom;
 
 namespace VoidTemplate.Objects.PomObjects;
 
-internal class LizardCorpse : UpdatableAndDeletable
+public class LizardCorpse : UpdatableAndDeletable
 {
 	public static void Register() => Pom.Pom.RegisterFullyManagedObjectType([], typeof(LizardCorpse), name: "Corpse", category: "The Void");
 	

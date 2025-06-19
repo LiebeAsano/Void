@@ -8,7 +8,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
-internal static class ViyBitByPlayer
+public static class ViyBitByPlayer
 {
     public static void Hook()
     {

@@ -1,6 +1,6 @@
 ﻿namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
-internal static class KarmaLadderTweaks
+public static class KarmaLadderTweaks
 {
 	const int karma11index = 10;
 	public static void Hook()

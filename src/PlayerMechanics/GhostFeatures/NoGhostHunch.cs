@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures;
 
-internal static class NoGhostHunch
+public static class NoGhostHunch
 {
     public static void Hook()
     {

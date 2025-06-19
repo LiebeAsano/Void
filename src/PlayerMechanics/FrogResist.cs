@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal class FrogResist
+    public class FrogResist
     {
         public static void Hook()
         {

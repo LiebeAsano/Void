@@ -8,7 +8,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class RottenSeedCob
+public static class RottenSeedCob
 {
     public static void Hook()
     {

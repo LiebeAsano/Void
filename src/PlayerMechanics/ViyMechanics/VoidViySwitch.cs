@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
-internal static class VoidViySwitch
+public static class VoidViySwitch
 {
 	public static void Hook()
 	{

@@ -11,7 +11,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal static class HealthSpear
+    public static class HealthSpear
     {
         public static void Hook()
         {

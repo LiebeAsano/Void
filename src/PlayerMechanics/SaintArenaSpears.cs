@@ -6,7 +6,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class SaintArenaSpears
+public static class SaintArenaSpears
 {
 	public static void Hook()
 	{

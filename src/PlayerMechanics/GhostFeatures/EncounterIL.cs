@@ -13,7 +13,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures
 {
-	internal static class EncounterIL
+	public static class EncounterIL
 	{
 		public static void Hook()
 		{

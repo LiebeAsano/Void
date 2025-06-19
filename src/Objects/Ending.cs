@@ -2,7 +2,7 @@
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.Objects;
-internal class Ending : UpdatableAndDeletable
+public class Ending : UpdatableAndDeletable
 {
 	#region immutable
 	const int DelayTreshold = 1 * Utils.TicksPerSecond;

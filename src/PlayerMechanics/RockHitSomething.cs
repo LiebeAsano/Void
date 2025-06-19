@@ -3,7 +3,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class RockHitSomething
+public static class RockHitSomething
 {
 	public static void Hook()
 	{

@@ -4,7 +4,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class NoForceSleep
+public static class NoForceSleep
 {
 	public static void Hook()
 	{

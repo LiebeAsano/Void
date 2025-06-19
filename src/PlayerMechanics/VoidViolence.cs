@@ -10,7 +10,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal static class VoidViolence
+    public static class VoidViolence
     {
         [RunOnModsInit]
         [UsedImplicitly]

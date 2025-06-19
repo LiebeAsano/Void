@@ -4,7 +4,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal static class LeechIndigestion
+public static class LeechIndigestion
 {
 	public static void Hook()
 	{

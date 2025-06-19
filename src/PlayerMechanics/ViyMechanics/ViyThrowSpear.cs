@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics
 {
-    internal static class ViyThrowSpear
+    public static class ViyThrowSpear
     {
         public static void Hook()
         {

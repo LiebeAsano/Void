@@ -8,7 +8,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal static class WormGrassEaten
+public static class WormGrassEaten
 {
     public static void Hook()
     {

@@ -10,7 +10,7 @@ using static Pom.Pom;
 
 namespace VoidTemplate.Objects.PomObjects
 {
-    internal class VultureTriggerSpawner : UpdatableAndDeletable
+    public class VultureTriggerSpawner : UpdatableAndDeletable
     {
         private class SpawnedVultureData(bool isAlbino = false)
         {
@@ -25,7 +25,7 @@ namespace VoidTemplate.Objects.PomObjects
 
         private const string SAVEDATA_TRIGGER_WAS_FIRED_KEY = "TheVoid:AlbinoVultureTriggerWasFired";
 
-        internal static ManagedField[] managedFields = [
+        public static ManagedField[] managedFields = [
             new Vector2Field(TRIGGER_AREA_DATA_KEY, new(100, 0), Vector2Field.VectorReprType.circle),
             new Vector2Field(SPAWN_POINT_DATA_KEY, new(0, 200), Vector2Field.VectorReprType.line)
             ];

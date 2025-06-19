@@ -8,7 +8,7 @@ using Expedition;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
-internal static class KarmaLadderTokenDecrease
+public static class KarmaLadderTokenDecrease
 {
 	const float secondsToFadeOut = 3f;
 	const float ticksToFadeOut = secondsToFadeOut * TicksPerSecond;

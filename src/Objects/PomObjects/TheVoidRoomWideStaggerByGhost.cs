@@ -10,7 +10,7 @@ using static Pom.Pom.ManagedFieldWithPanel;
 
 namespace VoidTemplate.Objects.PomObjects
 {
-    internal class TheVoidRoomWideStaggerByGhostData : ManagedData
+    public class TheVoidRoomWideStaggerByGhostData : ManagedData
     {
         [IntegerField("MinIntervalFrames", 0, int.MaxValue, 400, ControlType.text, "Minimal Interval")]
         public int MinimalInterval = 0;
@@ -26,7 +26,7 @@ namespace VoidTemplate.Objects.PomObjects
         }
     }
 
-    internal class TheVoidRoomWideStaggerByGhost : UpdatableAndDeletable
+    public class TheVoidRoomWideStaggerByGhost : UpdatableAndDeletable
     {
         public static void Register()
         {

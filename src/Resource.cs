@@ -10,14 +10,14 @@ namespace VoidTemplate.Resource
 	[GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
 	[DebuggerNonUserCode]
 	[CompilerGenerated]
-	internal class TheVoidRes
+	public class TheVoidRes
 	{
-		internal TheVoidRes()
+		public TheVoidRes()
 		{
 		}
 
 		[EditorBrowsable(EditorBrowsableState.Advanced)]
-		internal static ResourceManager ResourceManager
+		public static ResourceManager ResourceManager
 		{
 			get
 			{
@@ -32,7 +32,7 @@ namespace VoidTemplate.Resource
 		}
 
 		[EditorBrowsable(EditorBrowsableState.Advanced)]
-		internal static CultureInfo Culture
+		public static CultureInfo Culture
 		{
 			get
 			{
@@ -44,7 +44,7 @@ namespace VoidTemplate.Resource
 			}
 		}
 
-		internal static string Origs
+		public static string Origs
 		{
 			get
 			{
@@ -52,7 +52,7 @@ namespace VoidTemplate.Resource
 			}
 		}
 
-		internal static string Translations
+		public static string Translations
 		{
 			get
 			{

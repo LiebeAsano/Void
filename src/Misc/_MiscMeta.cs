@@ -1,6 +1,6 @@
 ﻿namespace VoidTemplate.Misc;
 
-internal static class _MiscMeta
+public static class _MiscMeta
 {
 	public static void Hook()
 	{

@@ -11,7 +11,7 @@ namespace VoidTemplate
 {
     static class OutspectorHooks
     {
-        internal static void Apply()
+        public static void Apply()
         {
             On.MoreSlugcats.InspectorAI.IUseARelationshipTracker_CreateTrackedCreatureState += InspectorAI_IUseARelationshipTracker_CreateTrackedCreatureState;
         }

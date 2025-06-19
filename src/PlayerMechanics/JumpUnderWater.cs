@@ -12,7 +12,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class JumpUnderWater
+public static class JumpUnderWater
 {
     public static void Hook()
     {

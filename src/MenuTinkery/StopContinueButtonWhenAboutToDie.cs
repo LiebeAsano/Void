@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.MenuTinkery;
 
-internal static class StopContinueButtonWhenAboutToDie
+public static class StopContinueButtonWhenAboutToDie
 {
 	private const float secondsToWatchForFlickering = 2;
 	private const float ticksToWatchForFlickering = secondsToWatchForFlickering * 40;

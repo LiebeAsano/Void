@@ -1,6 +1,6 @@
 ﻿namespace VoidTemplate.PlayerMechanics.GhostFeatures
 {
-	internal static class _GhostFeaturesMeta
+	public static class _GhostFeaturesMeta
 	{
 		public static void Hook()
 		{

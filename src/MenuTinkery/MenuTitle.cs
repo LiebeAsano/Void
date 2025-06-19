@@ -11,7 +11,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery
 {
-    internal static class MenuTitle
+    public static class MenuTitle
     {
         public static void Hook()
         {

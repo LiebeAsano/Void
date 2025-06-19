@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics
 {
-    internal static class _ViyMechanicsMeta
+    public static class _ViyMechanicsMeta
     {
         public static void Hook()
         {

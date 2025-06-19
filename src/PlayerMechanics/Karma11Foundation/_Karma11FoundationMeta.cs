@@ -1,6 +1,6 @@
 ﻿namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
-internal static class _Karma11FoundationMeta
+public static class _Karma11FoundationMeta
 {
 	public static void Hook()
 	{

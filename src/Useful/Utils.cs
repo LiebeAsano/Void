@@ -8,7 +8,7 @@ using UnityEngine;
 using SlugBase.Features;
 
 namespace VoidTemplate.Useful;
-internal static class Utils
+public static class Utils
 {
 	public const string ModID = "void.lwteam";
 	public const int TicksPerSecond = 40;

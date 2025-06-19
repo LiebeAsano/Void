@@ -7,7 +7,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class DontBiteMimic
+public static class DontBiteMimic
 {
     public static void Hook()
     {

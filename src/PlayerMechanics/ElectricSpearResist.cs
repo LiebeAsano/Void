@@ -9,7 +9,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class ElectricSpearResist
+public static class ElectricSpearResist
 {
     public static void Hook()
     {

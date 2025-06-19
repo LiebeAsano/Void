@@ -7,7 +7,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.MenuTinkery;
 
-internal static class SelectScreenScenes
+public static class SelectScreenScenes
 {
 	public static void Hook()
 	{

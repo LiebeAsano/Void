@@ -3,7 +3,7 @@ using Music;
 using System.Collections.Generic;
 using System.Linq;
 
-internal static class MenuStatisticsSound
+public static class MenuStatisticsSound
 {
 	static Dictionary<string, string> StatisticSoundMap;
 	public static void Hook()

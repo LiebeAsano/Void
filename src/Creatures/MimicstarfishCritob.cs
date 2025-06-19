@@ -17,7 +17,7 @@ namespace VoidTemplate;
 
 sealed class MimicstarfishCritob : Critob
     {
-    internal MimicstarfishCritob() : base(CreatureTemplateType.Mimicstarfish)
+    public MimicstarfishCritob() : base(CreatureTemplateType.Mimicstarfish)
     {
         base.Icon = new SimpleIcon("Mimicstarfish_Icon", new Color(1f, 0.8f, 0.8f));
         

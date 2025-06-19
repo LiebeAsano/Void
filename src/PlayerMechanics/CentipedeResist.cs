@@ -11,7 +11,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class CentipedeResist
+public static class CentipedeResist
 {
     public static void Hook()
     {

@@ -5,7 +5,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.OptionInterface;
 
-internal static class UIExtensions
+public static class UIExtensions
 {
 	/// <summary>
 	/// generates checkbox at specified position bound to configurable.

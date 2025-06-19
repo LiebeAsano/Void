@@ -10,7 +10,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class CanIPickThisUp
+public static class CanIPickThisUp
 {
 	public static void Hook()
 	{

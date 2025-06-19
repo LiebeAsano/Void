@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace VoidTemplate;
 
-internal sealed class Mimicstarfish : DaddyLongLegs
+public class Mimicstarfish : DaddyLongLegs
 {
     public new HealthState State
     {
@@ -28,7 +28,7 @@ internal sealed class Mimicstarfish : DaddyLongLegs
             return a / base.TotalMass;
         }
     }
-    internal Mimicstarfish(AbstractCreature abstractCreature, World world) : base(abstractCreature, world)
+    public Mimicstarfish(AbstractCreature abstractCreature, World world) : base(abstractCreature, world)
     {
         this.world = world;
 

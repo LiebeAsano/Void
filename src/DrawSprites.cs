@@ -12,7 +12,7 @@ using static Room;
 
 namespace VoidTemplate;
 
-internal class DrawSprites
+public class DrawSprites
 {
     public static void Hook()
     {

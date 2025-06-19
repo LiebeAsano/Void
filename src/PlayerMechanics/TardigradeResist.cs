@@ -10,7 +10,7 @@ using Watcher;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal class TardigradeResist
+public class TardigradeResist
 {
     public static void Hook()
     {

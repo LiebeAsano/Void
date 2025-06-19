@@ -3,7 +3,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.Objects;
 
-internal class EnqueueMoonDream : UpdatableAndDeletable
+public class EnqueueMoonDream : UpdatableAndDeletable
 {
 	public EnqueueMoonDream(Room room) : base()
 	{

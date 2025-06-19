@@ -3,7 +3,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features
 {
-	internal static class NourishmentOfObjectEaten
+	public static class NourishmentOfObjectEaten
 	{
 		public static void Hook()
 		{

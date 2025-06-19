@@ -5,7 +5,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class ExtendedLungs
+public static class ExtendedLungs
 {
 	public static void Hook()
 	{

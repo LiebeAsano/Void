@@ -16,7 +16,7 @@ namespace VoidTemplate.Creatures
 {
     sealed class OutspectorCritob : Critob
     {
-        internal OutspectorCritob() : base(CreatureTemplateType.Outspector)
+        public OutspectorCritob() : base(CreatureTemplateType.Outspector)
         {
             Icon = new SimpleIcon("Kill_Inspector", Color.red);
             RegisterUnlock(KillScore.Configurable(25), SandboxUnlockID.Outspector);

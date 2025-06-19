@@ -5,7 +5,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures;
 
-internal static class UpdateIL
+public static class UpdateIL
 {
     public static void Hook()
     {

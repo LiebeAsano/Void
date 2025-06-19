@@ -8,7 +8,7 @@ using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using System;
 
-internal static class PermaDeathScreen
+public static class PermaDeathScreen
 {
 	public static void Hook()
 	{

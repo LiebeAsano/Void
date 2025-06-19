@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class RottenDangleResist
+public static class RottenDangleResist
 {
     public static void Hook()
     {

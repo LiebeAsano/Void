@@ -8,7 +8,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
 
-internal static class Karma11Update
+public static class Karma11Update
 {
     public static void Hook()
     {

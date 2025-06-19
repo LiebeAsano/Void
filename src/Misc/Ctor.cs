@@ -2,7 +2,7 @@
 
 namespace VoidTemplate.Misc;
 
-internal static class Ctor
+public static class Ctor
 {
 	public static void Hook()
 	{

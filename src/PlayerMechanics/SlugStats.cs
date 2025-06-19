@@ -8,7 +8,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal static class SlugStats
+    public static class SlugStats
     {
         public static void Hook()
         {

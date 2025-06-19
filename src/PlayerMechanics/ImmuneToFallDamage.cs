@@ -7,7 +7,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class ImmuneToFallDamage
+public static class ImmuneToFallDamage
 {
     public static void Hook()
     {

@@ -10,7 +10,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class SaintKarmaImmunity
+public static class SaintKarmaImmunity
 {
     public static void Hook()
     {

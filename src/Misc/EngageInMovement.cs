@@ -4,7 +4,7 @@ using VoidTemplate.PlayerMechanics;
 
 namespace VoidTemplate.Misc;
 
-internal static class EngageInMovement
+public static class EngageInMovement
 {
 	public static void Hook()
 	{

@@ -5,7 +5,7 @@ using RWCustom;
 
 namespace VoidTemplate.Misc;
 
-internal static class ShortcutColor
+public static class ShortcutColor
 {
     public static void Hook()
     {

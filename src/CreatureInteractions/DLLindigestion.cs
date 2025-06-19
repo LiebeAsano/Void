@@ -4,7 +4,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal static class DLLindigestion
+public static class DLLindigestion
 {
 	public static void Hook()
 	{

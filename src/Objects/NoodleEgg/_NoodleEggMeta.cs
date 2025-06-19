@@ -7,7 +7,7 @@ using VoidTemplate.PlayerMechanics;
 
 namespace VoidTemplate.Objects.NoodleEgg
 {
-    internal static class _NoodleEggMeta
+    public static class _NoodleEggMeta
     {
         public static void Hook()
         {

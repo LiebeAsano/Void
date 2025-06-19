@@ -6,7 +6,7 @@ namespace VoidTemplate.Objects;
 
 
 
-internal class TutorialTrigger : UpdatableAndDeletable
+public class TutorialTrigger : UpdatableAndDeletable
 {
 
 	public TutorialTrigger(Room room, params Message[] messages)

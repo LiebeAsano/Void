@@ -5,7 +5,7 @@ using System;
 
 namespace VoidTemplate.MenuTinkery;
 
-internal static class DisablePassage
+public static class DisablePassage
 {
 	public static void Hook()
 	{

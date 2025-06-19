@@ -15,7 +15,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class СanMaul
+public static class СanMaul
 {
     public static void Hook()
     {

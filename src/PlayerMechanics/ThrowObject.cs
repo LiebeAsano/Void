@@ -14,7 +14,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class ThrowObject
+public static class ThrowObject
 {
     public static void Hook()
     {

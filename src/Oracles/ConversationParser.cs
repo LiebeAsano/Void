@@ -4,7 +4,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.Oracles;
 
-internal static class ConversationParser
+public static class ConversationParser
 {
 	public static void GetConversationEvents(Conversation conversation, string path)
 	{

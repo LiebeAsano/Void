@@ -8,7 +8,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
-internal static class ViyViolence
+public static class ViyViolence
 {
     public static void Hook()
     {

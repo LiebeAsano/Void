@@ -9,7 +9,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class Grabability
+public static class Grabability
 {
     public static void Hook()
     {

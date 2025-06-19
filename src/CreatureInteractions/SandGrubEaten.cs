@@ -9,7 +9,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions
 {
-    internal static class SandGrubEaten
+    public static class SandGrubEaten
     {
         public static void Hook()
         {

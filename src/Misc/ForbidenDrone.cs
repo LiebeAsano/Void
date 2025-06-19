@@ -7,7 +7,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.Misc;
 
-internal static class ForbidenDrone
+public static class ForbidenDrone
 {
 	public static void Hook()
 	{

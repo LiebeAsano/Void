@@ -8,7 +8,7 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Features;
 
-internal static class FoodChange
+public static class FoodChange
 {
 	public static void Hook()
 	{

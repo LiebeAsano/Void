@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal class LocustResist
+    public class LocustResist
     {
         public static void Hook()
         {

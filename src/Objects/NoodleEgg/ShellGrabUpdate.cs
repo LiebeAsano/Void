@@ -11,7 +11,7 @@ using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.Objects.NoodleEgg;
-internal static class ShellGrabUpdate
+public static class ShellGrabUpdate
 {
     public static void Hook()
     {

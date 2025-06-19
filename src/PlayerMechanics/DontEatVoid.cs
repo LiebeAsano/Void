@@ -3,7 +3,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class DontEatVoid
+public static class DontEatVoid
 {
 	public static void Hook()
 	{

@@ -11,7 +11,7 @@ using static VoidTemplate.Useful.POMUtils;
 
 namespace VoidTemplate.Objects.PomObjects;
 
-internal class Warp : UpdatableAndDeletable
+public class Warp : UpdatableAndDeletable
 {
 	public static void Register()
 	{

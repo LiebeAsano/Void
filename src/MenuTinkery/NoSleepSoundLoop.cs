@@ -1,7 +1,7 @@
 ﻿namespace VoidTemplate.MenuTinkery;
 using static VoidEnums.SlugcatID;
 
-internal static class NoSleepSoundLoop
+public static class NoSleepSoundLoop
 {
 	public static void Hook()
 	{

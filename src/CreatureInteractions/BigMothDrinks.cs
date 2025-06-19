@@ -7,7 +7,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
 
-internal static class BigMothDrinks
+public static class BigMothDrinks
 {
     public static void Hook()
     {

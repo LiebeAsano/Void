@@ -1,6 +1,6 @@
 ﻿namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
 
-internal static class IngameHUDTokenBump
+public static class IngameHUDTokenBump
 {
 	public static void Startup()
 	{

@@ -9,7 +9,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class ExplosiveResist
+public static class ExplosiveResist
 {
     public static void Hook()
     {

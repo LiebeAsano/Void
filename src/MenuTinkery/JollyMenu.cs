@@ -8,7 +8,7 @@ using System;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
-internal static class JollyMenu
+public static class JollyMenu
 {
 	public static void Hook()
 	{

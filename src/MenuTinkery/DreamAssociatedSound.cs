@@ -3,7 +3,7 @@ using static VoidTemplate.VoidEnums.DreamID;
 
 namespace VoidTemplate.MenuTinkery;
 
-internal static class DreamAssociatedSound
+public static class DreamAssociatedSound
 {
 
 	//This dictionary associates DreamID with the ID of sound to be played. so yeah it does support custom sounds

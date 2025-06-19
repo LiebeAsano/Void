@@ -11,7 +11,7 @@ using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class LizardResist
+public static class LizardResist
 {
     public static void Hook()
     {

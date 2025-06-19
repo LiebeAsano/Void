@@ -3,7 +3,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
-internal static class PunishNonPermaDeath
+public static class PunishNonPermaDeath
 {
 	public static void Hook()
 	{

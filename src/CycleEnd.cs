@@ -6,7 +6,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 
-internal static class CycleEnd
+public static class CycleEnd
 {
 	private static void log(object e) => _Plugin.logger.LogInfo(e);
 	public static void Hook()

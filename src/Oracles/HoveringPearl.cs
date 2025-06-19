@@ -10,7 +10,7 @@ namespace VoidTemplate.Oracles;
 /// <summary>
 /// HoveringPeral is intended to be used when iterator uses pearl to hover it
 /// </summary>
-internal class HoveringPearl : DataPearl
+public class HoveringPearl : DataPearl
 {
     public HoveringPearl(AbstractPhysicalObject abstractPhysicalObject, World world) : base(abstractPhysicalObject, world)
     {

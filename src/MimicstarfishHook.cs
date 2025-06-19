@@ -11,7 +11,7 @@ namespace VoidTemplate
 {
     static class MimicstarfishHook
     {
-        internal static void Hook()
+        public static void Hook()
         {
 
             On.DaddyGraphics.DaddyTubeGraphic.ApplyPalette += OnApplyPalette;

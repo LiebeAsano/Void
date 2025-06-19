@@ -10,7 +10,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
-internal static class ViyMaul
+public static class ViyMaul
 {
     public static void Hook()
     {

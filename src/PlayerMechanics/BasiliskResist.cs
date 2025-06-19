@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics
 {
-    internal class BasiliskResist
+    public class BasiliskResist
     {
         public static void Hook()
         {

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace VoidTemplate.Oracles;
 
-internal static class SLOracle
+public static class SLOracle
 {
     public static void Hook()
     {

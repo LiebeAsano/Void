@@ -7,7 +7,7 @@
 		{ "name": "leaf - sleep2",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
 		{ "name": "leaf - sleep",    "pos": [598,0], "depth": 2.3, "shader": "Basic"},
 		{ "name": "void - sleep11",    "pos": [598,0], "depth": 2.0, "shader": "Basic"},
-        { "name": "frontleaf - sleep",    "pos": [598,0], "depth": 1.7, "shader": "Basic"}
+        { "name": "frontleaf11 - sleep",    "pos": [598,0], "depth": 1.7, "shader": "Basic"}
 	],
 	"idle_depths": [ 2.8 ],
 	"glow_pos": [750, 100],

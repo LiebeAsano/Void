@@ -35,10 +35,12 @@ Allows Saint to throw spears in arena|Позволяет Святому кида
 Saint's ascension stuns instead of kills|Возвышение Святого оглушает, а не убивает
 
 ~ Assist ~|~ Помощь ~
+Complex control|Усложнённое управление
 Simplified hunger|Упрощённый голод
 Gamepad controller|Управление для геймпада
 Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
+Allows Void to switch move set between climbing and running. Press 'Special' to switch mode|Позволяет Пустотному переключаться между режимами лазания и бега. Нажмите 'Особенность', чтобы переключить режим
 Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
 Makes easier to climb the ceiling using a gamepad. Press 'Jump' + 'Pick up' to ceiling climb|Упрощает лазание по потолку используя геймпад. Нажмите 'Прыжок' + 'Взять', чтобы лазать по потолку
 Disables permadeath for Void, but also closes access to the secret ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к секретной концовке

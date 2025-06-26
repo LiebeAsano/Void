@@ -28,7 +28,7 @@ namespace VoidTemplate.PlayerMechanics
                     self.slugcatStats.poleClimbSpeedFac = 1.25f;
                     self.slugcatStats.runspeedFac = 1.25f;
                     self.slugcatStats.bodyWeightFac = 1.2f;
-                    crawlSpeed = 2f;
+                    crawlSpeed = 2.5f;
                 }
                 else if (self.KarmaCap == 3)
                 {
@@ -37,7 +37,7 @@ namespace VoidTemplate.PlayerMechanics
                     self.slugcatStats.poleClimbSpeedFac = 1.15f;
                     self.slugcatStats.runspeedFac = 1.15f;
                     self.slugcatStats.bodyWeightFac = 1.1f;
-                    crawlSpeed = 1.5f;
+                    crawlSpeed = 2.0f;
                 }
                 else
                 {
@@ -46,7 +46,7 @@ namespace VoidTemplate.PlayerMechanics
                     self.slugcatStats.poleClimbSpeedFac = 1.05f;
                     self.slugcatStats.runspeedFac = 1.05f;
                     self.slugcatStats.bodyWeightFac = 1f;
-                    crawlSpeed = 1f;
+                    crawlSpeed = 1.5f;
                 }
                 if (self.bodyMode == Player.BodyModeIndex.Crawl)
                 {

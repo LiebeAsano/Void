@@ -17,6 +17,7 @@ public static class _PlayerMechanicsMeta
 		CentipedeResist.Hook();
 		Climbing.Hook();
 		ColdImmunityPatch.Hook();
+		Crawl.Hook();
 		MovementUpdate.Hook();
 		DontBiteMimic.Hook();
 		DontEatVoid.Hook();

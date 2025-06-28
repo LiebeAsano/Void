@@ -13,6 +13,7 @@ public static class DreamManager
 		DreamSceneMap = new()
 		{
 			{FarmDream, Farm},
+			{HunterRotDream, HunterRot},
 			{MoonDream, Moon},
 			{NSHDream, NSH},
 			{PebbleDream, Pebble},
@@ -27,6 +28,7 @@ public static class DreamManager
 		DreamEnumMapper = new()
 		{
 			{Dream.Farm, FarmDream},
+			{Dream.HunterRot, HunterRotDream},
 			{Dream.Moon, MoonDream},
 			{Dream.NSH, NSHDream},
 			{Dream.Pebble, PebbleDream},
@@ -48,7 +50,7 @@ public static class DreamManager
 	/// first is more priority
 	/// and also if there's no dream here, it won't appear
 	/// </summary>
-	private static Dream[] DreamPriority = [Dream.Farm, Dream.Moon, Dream.NSH, Dream.Pebble, Dream.Rot, Dream.Sky, Dream.Sub, Dream.VoidBody, Dream.VoidHeart, Dream.VoidNSH, Dream.VoidSea];
+	private static Dream[] DreamPriority = [Dream.Farm, Dream.HunterRot, Dream.Moon, Dream.NSH, Dream.Pebble, Dream.Rot, Dream.Sky, Dream.Sub, Dream.VoidBody, Dream.VoidHeart, Dream.VoidNSH, Dream.VoidSea];
 
 	public static void Hook()
 	{

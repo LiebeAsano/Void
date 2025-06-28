@@ -36,8 +36,13 @@ public static class DreamCustom
 					}
 			}
             switch (saveState.cycleNumber)
-            {
-                case >= 18:
+			{
+				case >= 24:
+					{
+						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.HunterRot);
+						break;
+					}
+				case >= 18:
                     {
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidSea);
                         break;

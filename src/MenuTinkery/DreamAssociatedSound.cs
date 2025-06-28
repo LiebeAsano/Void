@@ -19,6 +19,7 @@ public static class DreamAssociatedSound
 			{ SkyDream, VoidEnums.SoundID.SkyDreamSound },
 			{ SubDream, VoidEnums.SoundID.SubDreamSound },
 			{ FarmDream, VoidEnums.SoundID.FarmDreamSound },
+			{ HunterRotDream, VoidEnums.SoundID.HunterRotDreamSound },
 			{ MoonDream, VoidEnums.SoundID.MoonDreamSound },
 			{ PebbleDream, VoidEnums.SoundID.PebbleDreamSound },
 			{ RotDream, VoidEnums.SoundID.RotDreamSound },

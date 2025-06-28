@@ -1,6 +1,7 @@
 ﻿namespace VoidTemplate;
 using Menu;
 using MoreSlugcats;
+using VoidTemplate.Objects;
 
 public static class VoidEnums
 {
@@ -20,6 +21,7 @@ public static class VoidEnums
 		public static void Register()
 		{
 			Farm = new("Farm_Dream_Void");
+			HunterRot = new("Hunter_Rot_Dream_Void");
 			Moon = new("Moon_Dream_Void");
 			NSH = new("NSH_Dream_Void");
 			Pebble = new("Pebble_Dream_Void");
@@ -75,6 +77,7 @@ public static class VoidEnums
 		public static MenuScene.SceneID SelectKarma11Scene;
 
 		public static MenuScene.SceneID Farm;
+		public static MenuScene.SceneID HunterRot;
 		public static MenuScene.SceneID Moon;
 		public static MenuScene.SceneID NSH;
 		public static MenuScene.SceneID Pebble;
@@ -93,6 +96,7 @@ public static class VoidEnums
 		public static void Register()
 		{
 			FarmDream = new(uniqueprefix + "FarmDream", true);
+			HunterRotDream = new(uniqueprefix + "HunterRotDream", true);
 			MoonDream = new(uniqueprefix + "MoonDream", true);
 			NSHDream = new(uniqueprefix + "NSHDream", true);
 			PebbleDream = new(uniqueprefix + "PebbleDream", true);
@@ -106,6 +110,7 @@ public static class VoidEnums
 		}
 
 		public static DreamsState.DreamID FarmDream;
+		public static DreamsState.DreamID HunterRotDream;
 		public static DreamsState.DreamID MoonDream;
 		public static DreamsState.DreamID NSHDream;
 		public static DreamsState.DreamID PebbleDream;
@@ -129,6 +134,7 @@ public static class VoidEnums
 			SkyDreamSound = new("Sky_Dream_Sound", true);
 			SubDreamSound = new("Sub_Dream_Sound", true);
 			FarmDreamSound = new("Farm_Dream_Sound", true);
+			HunterRotDreamSound = new("Hunter_Rot_Dream_Sound", true);
 			MoonDreamSound = new("Moon_Dream_Sound", true);
 			PebbleDreamSound = new("Pebble_Dream_Sound", true);
 			RotDreamSound = new("Rot_Dream_Sound", true);
@@ -144,7 +150,8 @@ public static class VoidEnums
 		public static global::SoundID SkyDreamSound;
 		public static global::SoundID SubDreamSound;
 		public static global::SoundID FarmDreamSound;
-		public static global::SoundID MoonDreamSound;
+        public static global::SoundID HunterRotDreamSound;
+        public static global::SoundID MoonDreamSound;
 		public static global::SoundID PebbleDreamSound;
 		public static global::SoundID RotDreamSound;
         public static global::SoundID VoidSeaDreamSound;

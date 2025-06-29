@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VoidTemplate.OptionInterface;
 
 namespace VoidTemplate.MenuTinkery
 {
@@ -16,9 +17,12 @@ namespace VoidTemplate.MenuTinkery
         private static void IntroRollMusic_ctor(On.Music.IntroRollMusic.orig_ctor orig, Music.IntroRollMusic self, Music.MusicPlayer musicPlayer)
         {
             orig(self, musicPlayer);
-            self.subTracks.RemoveAt(self.subTracks.Count - 1);
-            self.subTracks.Add(new(self, 1, "MainMenuTheme"));
-            self.Loop = true;
+            if (!OptionAccessors.DisableMenuBackGround)
+            {
+                self.subTracks.RemoveAt(self.subTracks.Count - 1);
+                self.subTracks.Add(new(self, 1, "MainMenuTheme"));
+                self.Loop = true;
+            }
         }
 
     }

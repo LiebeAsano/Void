@@ -16,12 +16,15 @@ public class VoidOptionInterface : global::OptionInterface
 	{
 		base.Initialize();
 		Tabs = [new OpTab(this, "blahblahblah")];
-		Tabs[0].GenerateBlock("~ Arena ~".TranslateStringComplex(), new Vector2(50, 550), options: [
+        Tabs[0].GenerateBlock("~ Menu ~".TranslateStringComplex(), new Vector2(50, 550), options: [
+			(cfgDisableMenuBackGround, MediumGrey)
+            ]);
+        Tabs[0].GenerateBlock("~ Arena ~".TranslateStringComplex(), new Vector2(50, 490), options: [
             (cfgSaintArenaSpears, MediumGrey),
             (cfgSaintArenaAscension, MediumGrey),
 			(cfgArenaAscensionStun, MediumGrey)
 			]);
-		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 430), options: [
+		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 370), options: [
             (cfgComplexControl, MediumGrey),
             (cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, MediumGrey),

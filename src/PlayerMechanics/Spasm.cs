@@ -51,6 +51,7 @@ public static class Spasm
                     random = (int)random;
                     if (random == 1)
                     {
+                        self.GetStorySession.saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
                         HunterSpasms.Spasm(player, Lenght, 1f);
                     }
                 }

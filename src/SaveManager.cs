@@ -11,7 +11,6 @@ public static class SaveManager
 	private const string teleportationDone = uniqueprefix + "TeleportationDone";
 	private const string messageShown = uniqueprefix + "MessageShown";
 	private const string punishDeath = uniqueprefix + "NonPermaDeath";
-	private const string punishPebble = uniqueprefix + "PunishFromPebble";
 	private const string startClimbingMessageShown = uniqueprefix + "StartClimbingMessageShown";
 
 	const string endingDone = uniqueprefix + "EndingDone";
@@ -66,9 +65,6 @@ public static class SaveManager
 
 	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
 
-	public static bool GetPunishFromPebble(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishPebble, out bool choose) && choose;
-
-	public static void SetPunishFromPebble(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishPebble, value);
 
 	#region oracle data
 	private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";
@@ -129,10 +125,18 @@ public static class SaveManager
     public static Dictionary<int, List<string>> GetStomachPearls(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet<Dictionary<int, List<string>>>(stomachPearls, out var dic) ? dic : [];
     public static void SetStomachPearls(this SaveState save, Dictionary<int, List<string>> pearls) => save.miscWorldSaveData.GetSlugBaseData().Set(stomachPearls, pearls);
 
-    //Pearls
+    private const string voidPearl = uniqueprefix + "voidPearl";
+    private const string rotPearl = uniqueprefix + "rotPearl";
+    private const string voidQuest = uniqueprefix + "voidQuest";
+    private const string voidMarkV2 = uniqueprefix + "voidMarkV2";
+    private const string voidMarkV3 = uniqueprefix + "voidMarkV3";
 
-    private const string voidMarkV2 = uniqueprefix + "VoidMarkV2";
-    private const string voidMarkV3 = uniqueprefix + "VoidMarkV3";
+    public static bool GetVoidPearl(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidPearl, out bool voidpearl) && voidpearl;
+    public static void SetVoidPearl(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidPearl, value);
+    public static bool GetRotPearl(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(rotPearl, out bool rotpearl) && rotpearl;
+    public static void SetRotPearl(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(rotPearl, value);
+    public static bool GetVoidQuest(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidQuest, out bool voidquest) && voidquest;
+    public static void SetVoidQuest(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidQuest, value);
 
     public static bool GetVoidMarkV2(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMarkV2, out bool voidmark2) && voidmark2;
     public static void SetVoidMarkV2(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMarkV2, value);
@@ -146,6 +150,7 @@ public static class SaveManager
 	{
 		None,
 		Farm,
+		HunterRot,
 		Moon,
 		NSH,
 		Pebble,

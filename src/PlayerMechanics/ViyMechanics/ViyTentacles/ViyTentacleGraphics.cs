@@ -16,6 +16,14 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public ViyTentacle tentacle;
 
+        public Color ViyBodyColor
+        {
+            get
+            {
+                return new(0, 0, 0.005f);
+            }
+        }
+
         public Player player
         {
             get
@@ -71,9 +79,9 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             var triangleMesh = sLeaser.sprites[firstSprite] as TriangleMesh;
             for (int i = 0; i < triangleMesh.vertices.Length; i++)
             {
-                triangleMesh.verticeColors[i] = tentacle.EffectColorA;
+                triangleMesh.verticeColors[i] = ViyBodyColor;
             }
-            triangleMesh.color = tentacle.EffectColorA;
+            triangleMesh.color = ViyBodyColor;
         }
 
         public void MoveBehindFirstSprite(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)

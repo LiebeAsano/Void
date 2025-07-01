@@ -49,14 +49,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
         }
 
-        public Color EffectColorA
-        {
-            get
-            {
-                return Color.red;
-            }
-        }
-
         public ViyTentacle(Player player, ViyRotModule rotControl, BodyChunk connectedChunk, float length, Vector2 tentacleDir) : base(player, connectedChunk, length)
         {
             this.rotControl = rotControl;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace VoidTemplate.PlayerMechanics.ViyMechanics
 {
     public static class _ViyMechanicsMeta
@@ -16,6 +17,8 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
             ViyThrowSpear.Hook();
             ViyViolence.Hook();
             VoidViySwitch.Hook();
+            ViyTentacles.TentaclesPlayerHooks.Hook();
+            ViyTentacles.TentaclesPlayerGraphicsHooks.Hook();
         }
     }
 }

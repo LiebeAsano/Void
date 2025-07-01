@@ -9,6 +9,7 @@ using MoreSlugcats;
 using RWCustom;
 using System.Diagnostics.Eventing.Reader;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace VoidTemplate.Oracles;
 
@@ -64,7 +65,7 @@ public static class SLOracle
             {
                 case > 0 when saveState.cycleNumber - saveState.GetEncountersWithMark() <= 0:
                     {
-                        switch (UnityEngine.Random.Range(0, 5))
+                        switch (UnityEngine.Random.Range(0, 3))
                         {
                             case 0:
                                 MoonVoice(self);
@@ -72,17 +73,9 @@ public static class SLOracle
                                 break;
                             case 1:
                                 MoonVoice(self);
-                                self.dialogBox.Interrupt("Your return pleases me. What secrets of this world have you revealed this time?".TranslateString(), 60);
-                                break;
-                            case 2:
-                                MoonVoice(self);
-                                self.dialogBox.Interrupt("You are back. In your eyes, I see a reflection of our changing world.".TranslateString(), 60);
-                                break;
-                            case 3:
-                                MoonVoice(self);
                                 self.dialogBox.Interrupt("<CapPlayerName>, what brought you to me again?".TranslateString(), 60);
                                 break;
-                            case 4:
+                            case 2:
                                 MoonVoice(self);
                                 self.dialogBox.Interrupt("Oh, is that you? Did you come back to learn something new?".TranslateString(), 60);
                                 break;
@@ -114,7 +107,9 @@ public static class SLOracle
                         saveState.SetEncountersWithMark(saveState.cycleNumber);
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
                         if (miscData.SSaiConversationsHad == 3)
+                        {
                             saveState.SetVoidMeetMoon(true);
+                        }
                         break;
                     }
             }
@@ -131,8 +126,8 @@ public static class SLOracle
             {
                 if (self.State.neuronsLeft > 3)
                 {
-                    MoonVoice(self);
                     self.dialogBox.Interrupt(self.Translate("..."), 60);
+                    MoonVoice(self);
                     self.dialogBox.NewMessage(self.Translate("<CapPlayerName>, are you okay?"), 60);
                     self.dialogBox.NewMessage(self.Translate("..."), 120);
                     self.dialogBox.NewMessage(self.Translate("Oh..."), 60);
@@ -142,6 +137,7 @@ public static class SLOracle
                     self.dialogBox.Interrupt(self.Translate("..."), 60);
                 }
                 self.deadTalk = true;
+                self.currentConversation.paused = true;
             }
         }
         else
@@ -1144,19 +1140,52 @@ public static class SLOracle
             orig(self);
     }
 
+    private static int deathCounter = 0;
+    private static bool deathVoid = false;
+
     private static void SLOracleBehaviorHasMark_Update(On.SLOracleBehaviorHasMark.orig_Update orig, SLOracleBehaviorHasMark self, bool eu)
     {
         orig(self, eu);
         if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
-            /*if (self.player == null && self.hasNoticedPlayer)
+            if (self.player != null && self.hasNoticedPlayer && self.player.dead)
             {
                 self.TalkToDeadPlayer();
-            }*/
+            }
             int randomTime = UnityEngine.Random.Range(200, 401);
             if (self.holdingObject != null && self.describeItemCounter % randomTime == 0 && !VoidEnums.ConversationID.PearlConversations.Contains(self.currentConversation.id))
             {
                 MoonVoice(self);
+            }
+            if (self.State.neuronsLeft >= 5 && self.oracle.room.game.GetStorySession.saveState.GetVoidMarkV2())
+            {
+                deathCounter = 0;
+                deathVoid = false;
+            }
+            if (self.playerLeavingCounter == 80 && self.State.neuronsLeft >= 5 
+                && self.oracle.room.game.GetStorySession.saveState.GetVoidMarkV2() 
+                && self.oracle.room.game.GetStorySession.saveState.GetVoidMeetMoon()
+                && !self.oracle.room.game.GetStorySession.saveState.GetVoidQuest())
+            {
+                self.player.InitChatLog(new("pebble_quest"));
+                self.oracle.room.game.GetStorySession.saveState.SetVoidQuest(true);
+            }
+            if (self.playerLeavingCounter == 80 && self.State.neuronsLeft < 5 
+                && self.oracle.room.game.GetStorySession.saveState.GetVoidMarkV2())
+            {
+                self.player.InitChatLog(new("pebble_punish"));
+                deathVoid = true;
+            }
+            if (deathVoid)
+            {
+                deathCounter++;
+            }
+            if (deathCounter == 320)
+            {
+                self.player.Die();
+                self.player.room.AddObject(new Explosion.ExplosionLight(self.player.firstChunk.pos, 160f, 1f, 3, new Color(1f, 0.4f, 0.3f)));
+                self.player.room.AddObject(new ExplosionSpikes(self.player.room, self.player.firstChunk.pos, 9, 4f, 5f, 5f, 90f, new Color(1f, 0.4f, 0.3f)));
+                self.player.room.PlaySound(SoundID.Fire_Spear_Explode, self.player.firstChunk.pos, self.player.abstractPhysicalObject);
             }
         }
     }
@@ -1225,7 +1254,7 @@ public static class SLOracle
     private static void MoonVoice(SLOracleBehaviorHasMark self)
     {
         SoundID randomTalk = SoundID.SL_AI_Talk_1;
-        switch (UnityEngine.Random.Range(0, 5))
+        switch (UnityEngine.Random.Range(0, 3))
         {
             case 0:
                 randomTalk = SoundID.SL_AI_Talk_1;
@@ -1235,12 +1264,6 @@ public static class SLOracle
                 break;
             case 2:
                 randomTalk = SoundID.SL_AI_Talk_3;
-                break;
-            case 3:
-                randomTalk = SoundID.SL_AI_Talk_4;
-                break;
-            case 4:
-                randomTalk = SoundID.SL_AI_Talk_5;
                 break;
         }
         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)

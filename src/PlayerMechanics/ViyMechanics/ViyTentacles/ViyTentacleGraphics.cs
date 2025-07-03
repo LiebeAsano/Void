@@ -84,7 +84,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             triangleMesh.color = ViyBodyColor;
         }
 
-        public void MoveBehindFirstSprite(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
+        public void AddToMidgroundContainer(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
         {
             FSprite sprite = sLeaser.sprites[firstSprite];
             sprite.RemoveFromContainer();

@@ -11,16 +11,16 @@ public static class DontEatVoid
 	}
 
 	private static void DontEat_Void(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
-	{
-		orig(self, graspIndex);
-		if (self.eatMeat != 50 || self.IsVoid() || self.IsViy()) return;
-		Array.ForEach(self.grasps, grasp =>
-		{
-			if (grasp != null
-			&& grasp.grabbed is Player prey
-			&& (prey.IsVoid() || prey.IsViy()))
-				self.Die();
-
-		});
-	}
+    {
+        orig(self, graspIndex);
+        if (self.eatMeat != 50 || self.AreVoidViy()) return;
+        foreach (var grasp in self.grasps)
+        {
+            if (grasp?.grabbed is Player prey && prey.AreVoidViy())
+            {
+                self.Die();
+                break;
+            }
+        }
+    }
 }

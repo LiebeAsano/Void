@@ -60,13 +60,16 @@ public static class Grabability
         else LogExErr("search for grabability check failed. Void won't be able to swap hands with heavy objects");
     }
 
+    public static bool CanOneHandGrabVoidViy(Player self, PhysicalObject obj)
+    {
+        return self.AreVoidViy() && (obj is LanternMouse || obj is Player || obj is Watcher.Frog || obj is Watcher.Barnacle);
+    }
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {
-        if ((self.IsVoid() || self.IsViy()) && (obj is PoleMimic || obj is TentaclePlant))
+        if (CanOneHandGrabVoidViy(self, obj)) return Player.ObjectGrabability.OneHand;
+        if (self.AreVoidViy() && (obj is PoleMimic || obj is TentaclePlant))
             return Player.ObjectGrabability.CantGrab;
-        if ((self.IsVoid() || self.IsViy()) && (obj is LanternMouse || obj is Watcher.Frog))
-            return Player.ObjectGrabability.OneHand;
-        if ((self.IsVoid() || self.IsViy()) && (obj is Cicada))
+        if (self.AreVoidViy() && (obj is Cicada))
             return Player.ObjectGrabability.Drag;
         return orig(self, obj);
     }

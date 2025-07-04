@@ -18,11 +18,13 @@ public static class _PlayerMechanicsMeta
 		Climbing.Hook();
 		ColdImmunityPatch.Hook();
 		Crawl.Hook();
+		CreatureReleaseGrasp.Hook();
 		MovementUpdate.Hook();
 		DontBiteMimic.Hook();
 		DontEatVoid.Hook();
 		DreamManager.RegisterMaps();
-		DreamCustom.Hook();
+        DropCarriedObject.Hook();
+        DreamCustom.Hook();
 		DreamManager.Hook();
 		EdibleChanges.Hook();
 		ElectricSpearResist.Hook();
@@ -31,6 +33,7 @@ public static class _PlayerMechanicsMeta
 		SlugStats.Hook();
 		FrogResist.Hook();
 		Grabability.Hook();
+		GrabUpdate.Hook();
 		GraspSave.Hook();
 		HealthSpear.Hook();
 		HeavyCarry.Hook();

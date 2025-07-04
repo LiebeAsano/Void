@@ -16,7 +16,8 @@ public static class CanIPickThisUp
 	{
 		On.Player.CanIPickThisUp += Player_CanIPickThisUp;
 		On.Player.CanIPickThisUp += Player_CanIPickThisSpear;
-		On.Player.SlugOnBack.SlugToBack += Player_SlugToBack;
+        //On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
+        On.Player.SlugOnBack.SlugToBack += Player_SlugToBack;
         IL.Player.Grabability += Player_GrababilityHook;
     }
 
@@ -86,9 +87,15 @@ public static class CanIPickThisUp
         orig(self, player);
     }
 
+    private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)
+    {
+        if (grabCheck is Player player && player.AreVoidViy()) return false;
+        return orig(self, grabCheck);
+    }
+
     private static void Player_GrababilityHook(ILContext il)
     {
-        ILCursor c = new ILCursor(il);
+        ILCursor c = new(il);
 
         if (c.TryGotoNext(
             MoveType.After,

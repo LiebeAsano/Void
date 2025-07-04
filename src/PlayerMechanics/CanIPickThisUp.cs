@@ -21,36 +21,51 @@ public static class CanIPickThisUp
     }
 
     private static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
-	{
-        var result = orig(self, obj);
-        if (self.slugcatStats.name != VoidEnums.SlugcatID.Void && self.slugcatStats.name != VoidEnums.SlugcatID.Viy) return result;
-        int heavyObjectsCount = 0;
-        foreach (var grasp in self.grasps) if (grasp?.grabbed != null && (self.Grabability(grasp.grabbed) == Player.ObjectGrabability.Drag || self.Grabability(grasp.grabbed) == Player.ObjectGrabability.TwoHands)) heavyObjectsCount++;
-        if (heavyObjectsCount == 1 && obj is Spear) return true;
-        int amountOfSpearsInHands = self.grasps.Aggregate(func: (int acc, Creature.Grasp grasp) => acc + ((grasp?.grabbed is Spear) ? 1 : 0), seed: 0);
-        if (amountOfSpearsInHands == 1 && (self.Grabability(obj) == Player.ObjectGrabability.Drag)) return true;
-        return result;
-	}
+    {
+        bool result = orig(self, obj);
+        if (!self.AreVoidViy()) return result;
 
-	public static bool Player_CanIPickThisSpear(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
-	{
-		if (self.IsVoid() || self.IsViy())
-		{
-			bool canPick = true;
-			foreach (var grasp in self.grasps)
-			{
-				if (grasp != null && self.Grabability(grasp.grabbed) >= Player.ObjectGrabability.BigOneHand)
-				{
-					canPick = false;
-					break;
-				}
-			}
-			if (obj is Spear spear && spear.mode == Weapon.Mode.StuckInWall &&
-				(!ModManager.MSC || !spear.abstractSpear.electric) && canPick)
-				return true;
-		}
-		return orig(self, obj);
-	}
+        int heavyObjectsCount = 0;
+        int amountOfSpearsInHands = 0;
+
+        foreach (var grasp in self.grasps)
+        {
+            if (grasp?.grabbed == null) continue;
+
+            var grabbedObj = grasp.grabbed;
+            var grabability = self.Grabability(grabbedObj);
+
+            if (grabability == Player.ObjectGrabability.Drag || grabability == Player.ObjectGrabability.TwoHands)
+                heavyObjectsCount++;
+
+            if (grabbedObj is Spear)
+                amountOfSpearsInHands++;
+        }
+
+        if (heavyObjectsCount == 1 && obj is Spear) return true;
+
+        var grabObjType = self.Grabability(obj);
+        if (amountOfSpearsInHands == 1 && (grabObjType == Player.ObjectGrabability.Drag || grabObjType == Player.ObjectGrabability.TwoHands)) return true;
+
+        return result;
+    }
+
+    public static bool Player_CanIPickThisSpear(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
+    {
+        if (self.AreVoidViy() && obj is Spear spear)
+        {
+            if (spear.mode == Weapon.Mode.StuckInWall && (!ModManager.MSC || !spear.abstractSpear.electric))
+            {
+                foreach (var grasp in self.grasps)
+                {
+                    if (grasp?.grabbed != null && self.Grabability(grasp.grabbed) >= Player.ObjectGrabability.BigOneHand)
+                        return orig(self, obj);
+                }
+                return true;
+            }
+        }
+        return orig(self, obj);
+    }
     private static void Player_SlugToBack(On.Player.SlugOnBack.orig_SlugToBack orig, Player.SlugOnBack self, Player player)
     {
         if (self.slugcat != null)
@@ -58,12 +73,12 @@ public static class CanIPickThisUp
 			return;
         }
 
-        if (self.owner.slugcatStats.name == VoidEnums.SlugcatID.Void || self.owner.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        if (self.owner.AreVoidViy())
 		{
             return;
         }
 
-        if (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        if (player.AreVoidViy())
         {
             return;
         }
@@ -85,18 +100,21 @@ public static class CanIPickThisUp
 
             c.EmitDelegate<Func<bool, Player, PhysicalObject, bool>>((orig, player, obj) =>
             {
-                if (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+                if (!player.AreVoidViy()) return orig;
+
+                if (player.IsViy() && obj is Player target && !target.IsViy())
+                    return true;
+
+                if (obj is Player targetVoid)
                 {
-                    if (player.IsViy())
-                        return true;
-                    else if (obj is Player targetPlayer && (targetPlayer.slugcatStats.name == VoidEnums.SlugcatID.Void || targetPlayer.slugcatStats.name == VoidEnums.SlugcatID.Viy))
+                    if (targetVoid.AreVoidViy())
                         return false;
-                    else if (obj is Player player2 && player2.bodyMode == Player.BodyModeIndex.Crawl && !player2.room.game.IsArenaSession)
+
+                    if (targetVoid.bodyMode == Player.BodyModeIndex.Crawl && !targetVoid.room.game.IsArenaSession)
                         return true;
-                    else return orig;
                 }
-                else
-                    return orig;
+
+                return orig;
             });
 
         }

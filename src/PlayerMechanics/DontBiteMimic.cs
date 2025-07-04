@@ -26,7 +26,7 @@ public static class DontBiteMimic
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<bool, Player, bool>>((re, self) =>
                 {
-                    if (self.IsVoid() || self.IsViy())
+                    if (self.AreVoidViy())
                     {
                         var vine = self.room.climbableVines.GetVineObject(self.vinePos);
                         if (vine is PoleMimic)

@@ -18,6 +18,7 @@ public static class _PlayerMechanicsMeta
 		Climbing.Hook();
 		ColdImmunityPatch.Hook();
 		Crawl.Hook();
+		CreatureGrab.Hook();
 		CreatureReleaseGrasp.Hook();
 		MovementUpdate.Hook();
 		DontBiteMimic.Hook();
@@ -46,6 +47,7 @@ public static class _PlayerMechanicsMeta
         MalnourishmentDeath.Hook();
 		NoForceSleep.Hook();
 		NoVisualMalnourishment.Hook();
+		PlayerGrabbed.Hook();
 		PunishNonPermaDeath.Hook();
 		RockHitSomething.Hook();
 		RottenDangleResist.Hook();
@@ -54,6 +56,7 @@ public static class _PlayerMechanicsMeta
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();
 		SaintKarmaImmunity.Hook();
+		SlugcatGrab.Hook();
 		Spasm.Hook();
 		SpiderResist.Hook();
 		SwallowObjects.Hook();

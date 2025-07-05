@@ -66,6 +66,10 @@ namespace VoidTemplate.PlayerMechanics
                         Damage = 0f;
                     }
                 }
+                if (source.owner is BigNeedleWorm)
+                {
+                    player.playerState.permanentDamageTracking += Damage;
+                }
                 self.stunDamageType = type;
                 self.Stun((int)Stun);
                 self.stunDamageType = Creature.DamageType.None;
@@ -79,7 +83,7 @@ namespace VoidTemplate.PlayerMechanics
                 }
                 if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
                 {
-                    if (Damage >= self.Template.instantDeathDamageLimit * 1.25f)
+                    if (Damage >= self.Template.instantDeathDamageLimit * 1.25f || player.playerState.permanentDamageTracking >= 1.25f)
                     {
                         self.Die();
                     }

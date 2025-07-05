@@ -302,7 +302,7 @@ public static class SwallowObjects
                     {
                         (self.graphicsModule as PlayerGraphics).head.vel += Custom.RNV() * 4f;
                     }
-                    if (self.maulTimer > 10 && self.maulTimer % 8 == 3)
+                    if (self.maulTimer > 10 && self.maulTimer % 8 == 3) 
                     {
                         self.mainBodyChunk.pos += Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * 4f;
                         self.grasps[graspIndex].grabbedChunk.vel += Custom.DirVec(vector, self.mainBodyChunk.pos) * 0.9f / self.grasps[graspIndex].grabbedChunk.mass;

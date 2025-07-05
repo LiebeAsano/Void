@@ -21,15 +21,17 @@ public static class DropCarriedObject
             orig(self, graspIndex);
             return;
         }
-        for (int i = self.stuckObjects.Count - 1; i >= 0; i--)
+
+        foreach (var objectStick in self.stuckObjects.ToArray())
         {
-            if (self.stuckObjects[i] is AbstractPhysicalObject.CreatureGripStick &&
-                self.stuckObjects[i].A == self &&
-                (self.stuckObjects[i] as AbstractPhysicalObject.CreatureGripStick).grasp == graspIndex)
+            if (objectStick is AbstractPhysicalObject.CreatureGripStick &&
+                objectStick.A == self &&
+                (objectStick as AbstractPhysicalObject.CreatureGripStick).grasp == graspIndex)
             {
-                self.stuckObjects[i].Deactivate();
+                objectStick.Deactivate();
             }
         }
+
         if (self.realizedCreature != null &&
             self.realizedCreature.grasps != null &&
             graspIndex >= 0 &&

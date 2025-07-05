@@ -36,7 +36,7 @@ public static class CanIPickThisUp
             var grabbedObj = grasp.grabbed;
             var grabability = self.Grabability(grabbedObj);
 
-            if (grabability == Player.ObjectGrabability.Drag || grabability == Player.ObjectGrabability.TwoHands)
+            if (grabability == Player.ObjectGrabability.Drag)
                 heavyObjectsCount++;
 
             if (grabbedObj is Spear)
@@ -46,7 +46,7 @@ public static class CanIPickThisUp
         if (heavyObjectsCount == 1 && obj is Spear) return true;
 
         var grabObjType = self.Grabability(obj);
-        if (amountOfSpearsInHands == 1 && (grabObjType == Player.ObjectGrabability.Drag || grabObjType == Player.ObjectGrabability.TwoHands)) return true;
+        if (amountOfSpearsInHands == 1 && grabObjType == Player.ObjectGrabability.Drag) return true;
 
         return result;
     }

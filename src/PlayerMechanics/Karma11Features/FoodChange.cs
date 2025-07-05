@@ -54,16 +54,21 @@ public static class FoodChange
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<int, ShelterDoor, int>>((int orig, ShelterDoor self) =>
 			{
-                var game = self.room.game;
-                if (self.room.world.game.StoryCharacter == VoidEnums.SlugcatID.Void 
-				&& ((self.room.game.Players[0].realizedCreature as Player).KarmaCap == 10 
-				|| self.room.world.game.GetStorySession.saveState.GetVoidMarkV3())
-				|| ExternalSaveData.VoidKarma11)
-				{
-					return 6;
-				}
-				return orig;
-			});
+                var game = self.room?.game;
+                if (game == null) return orig;
+
+                if (game.Players[0]?.realizedCreature is not Player player) return orig;
+
+                bool isVoidSlugcat = game.StoryCharacter == VoidEnums.SlugcatID.Void;
+                bool hasMaxKarma = player.KarmaCap == 10;
+                bool hasVoidMark = game.GetStorySession?.saveState?.GetVoidMarkV3() ?? false;
+
+                if (isVoidSlugcat && (hasMaxKarma || hasVoidMark || ExternalSaveData.VoidKarma11))
+                {
+                    return 6;
+                }
+                return orig;
+            });
 		}
 		else LogExErr("failed to locate slugcatfoodmeter call in shelterdoor closing. expect mismatch between food requirements and success of hybernation");
 	}

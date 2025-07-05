@@ -1,0 +1,88 @@
+{	"id": "Viy",
+	"name": "The Viy",
+	"description": "Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.",
+	"features": {
+		"color": "000000",
+		"custom_colors": [
+			{
+				"name": "Body",
+				"story": "000001"
+
+			},
+			{
+				"name": "Eyes",
+				"story": "ffdd00",
+				"arena": [ "ffffff", "ffdd00", "ee3366", "7700dd" ]
+			}
+		],
+		
+		"weight": [2.5, 2],
+		"tunnel_speed": [1.5, 1.0],
+		"climb_speed": [1.5, 1.0],
+		"walk_speed": [1.0, 0.6],
+		"throw_skill": [2, 0],
+		"lung_capacity": 1.0,
+		"crouch_stealth": [0.66, 1.0],
+		"loudness": [0.66, 1.0],
+		"alignments": {
+			"Lizards": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Scavengers": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Cicadas ": {
+				"like": -0.15,
+				"locked": false
+			},
+			"GarbageWorms": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Deer": {
+				"like": -0.15,
+				"locked": false
+			},
+			"Jetfish": {
+				"like": -0.15,
+				"locked": false
+			}
+		},
+		"auto_grab_batflies": false,
+		"back_spear": false,
+		"can_maul": true,
+		"perma_unlock_gates": false,
+		"maul_damage": 3,
+		"karma": 10,
+		"karma_cap": 10,
+		"the_mark": false,
+		"the_glow": true,
+		"has_dreams": true,
+		"expedition_enabled": true,
+		"guide_overseer": 2,
+		"cycle_length_min": 6,
+		"cycle_length_max": 13,
+		"food_min": 9,
+		"food_max": 12,
+		"world_state": ["Viy","Void","Red"],
+		"timeline_after": "Red",
+		"start_room": "SH_S10",
+		"diet": {
+			"base": "White",
+			"corpses": 0.5,
+			"meat": 0.5,
+			"plants": 0.25,
+			"overrides": {
+				"Fly" : 0.25
+			}
+		},
+		"title_card": "Void_Title_Card",
+		"sleep_scene": "sleep_viy",
+		"select_menu_scene": "karma_death_void_karma11",
+		"death_scene": "Death_Void",
+		"starve_scene": "Death_Void",
+		"intro_slideshow": "Void_Intro"
+	}
+}

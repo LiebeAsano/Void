@@ -26,6 +26,11 @@ public static class VoidViySwitch
         int indexOfHunter = self.slugcatColorOrder.IndexOf(SlugcatStats.Name.Red);
         if (indexOfHunter >= 0)
         {
+            if (voidDead && voidKarma11)
+            {
+                self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Viy);
+            }
+            else
             {
                 self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Void);
             }

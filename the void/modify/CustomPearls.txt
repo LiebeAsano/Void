@@ -4,3 +4,6 @@
 [ADD]LR_pearldiss : 3d43ff : 59b9ff : LR_pearl_dissertation
 [ADD]LR_archreq : 801c03 : c22700 : LR_archive_request
 [ADD]LR_secret : cf7e04 : edc305 : LR_secret
+
+[ADD]pebble_punish : ffffff : ffffff : pebble_punish
+[ADD]pebble_quest : ffffff : ffffff : pebble_quest

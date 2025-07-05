@@ -86,8 +86,6 @@ public static class CycleEnd
 				&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
 				{
 					if ((session.saveState.deathPersistentSaveData.karma == 0 && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0 && game.IsVoidWorld()) game.GoToRedsGameOver();
-
-					//else timerStarted = true;
 				}
 
 			}

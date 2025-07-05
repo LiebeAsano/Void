@@ -2,6 +2,8 @@
 0 : . . . : 60
 0 : Your health indicators are still at the same critical level as in the last cycle. One step away from death you continue to live. : 60
 0 : Do you delay your death? I will set your mark to collect data about your condition. Probably it helps me find the answer to another problem. : 60
-0 : You do not have to do anything, just come back to me after a few cycles. : 60
+0 : The procedure requires special precision, therefore do not move, or I might accidentally kill you. : 60
+SPECEVENT : GiveMarkV2
+60 : You do not have to do anything, just come back to me after a few cycles. : 60
 0 : Otherwise, it will only be easier for me if you do not return. : 60
 0 : Now get out of here, I do not need another great problem that does not have a solution. : 60

@@ -19,7 +19,7 @@ public static class _OIMeta
 		voidOI.config.configurables.Clear();
 
         //IMPORTANT: the creation of checkboxes uses first tag as text for checkbox
-        OptionAccessors.cfgDisableMenuBackGround = voidOI.config.Bind<bool>(uniqueprefix + "DisableMenuBackGround", false, new ConfigurableInfo("Disable menu backgroud of the mod Rain World: Last Wish", tags: "Disable menu backgroud"));
+        OptionAccessors.cfgDisableMenuBackGround = voidOI.config.Bind<bool>(uniqueprefix + "DisableMenuBackGround", false, new ConfigurableInfo("Disable background of the mod in main menu", tags: "Disable background"));
         OptionAccessors.cfgSaintArenaAscension = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaAscension", true, new ConfigurableInfo("Allows Saint to use ascension mechanic in arena", tags: "Saint ascension"));
 		OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
         OptionAccessors.cfgArenaAscensionStun = voidOI.config.Bind<bool>(uniqueprefix + "ArenaAscensionStun", false, new ConfigurableInfo("Saint's ascension stuns instead of kills", tags: "Ascension stuns"));
@@ -29,8 +29,8 @@ public static class _OIMeta
 //#warning to be implemented
 		OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void, but also closes access to the secret ending", tags: "Disable permadeath"));
 		OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete as Hunter to play this mod", tags: "Unlock campaign"));
-		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 15, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99),tags: "Void Cycles"));
-        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 5, new ConfigurableInfo("Changes the amount of bonus cycles Void can receive from the echo, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99), tags: "Void Bonus Cycles"));
+		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 10, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99),tags: "Void Cycles"));
+        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 3, new ConfigurableInfo("Changes the amount of bonus cycles Void can receive from the echo, but changing the value will also close access to the secret ending", new ConfigAcceptableRange<int>(1, 99), tags: "Void Bonus Cycles"));
 
     }
 }

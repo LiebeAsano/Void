@@ -2,12 +2,9 @@
 0 : I had hoped that the problem would resolve itself, but apparently it has not. : 60
 0 : The mark is slightly damaged, but the data is still intact. : 180
 0 : It is quite interesting... : 120
-0 : Half your vital organs are missing and a tumor takes their place? : 60
-0 : Even such a decision has its limits, sooner or later your genes will be permanently damaged and you will not wake up in the next cycle. : 60
-0 : . . . : 180
 0 : Oh... it is you... To be precise, what is left of you. : 60
 0 : Were you able to complete your mission, little creature? : 120
 0 : Apparently, you do not understand what I mean. : 60
-0 : I will refine your mark so that it can record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak. : 60
+0 : Your mark is advanced enough to record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak. : 60
 0 : Then come back to me, there is a possibility, I can find a solution to your desperate situation. : 60
 0 : Now leave me alone for your sake, I have more work to do. : 60

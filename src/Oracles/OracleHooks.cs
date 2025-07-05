@@ -493,7 +493,10 @@ static class OracleHooks
                                 if (self.action != MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty)
                                 {
                                     self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-                                    self.dialogBox.NewMessage(self.Translate("Have you brought another pearl?"), 60);
+                                    if (!fivePebblesGetOut)
+                                    {
+                                        self.dialogBox.NewMessage(self.Translate("Have you brought another pearl?"), 60);
+                                    }
                                     miscData.SSaiConversationsHad--;
                                 }
                             }
@@ -513,7 +516,8 @@ static class OracleHooks
                                         if (self.action != MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty)
                                         {
                                             self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-                                            self.dialogBox.NewMessage(self.Translate(""), 60);
+                                            self.dialogBox.NewMessage(self.Translate("Did you really find it? This pearl will help us both."), 60);
+                                            self.dialogBox.NewMessage(self.Translate("What about the other one?"), 60);
                                             miscData.SSaiConversationsHad--;
                                         }
                                     }
@@ -526,7 +530,10 @@ static class OracleHooks
                                 if (self.action != MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty)
                                 {
                                     self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-                                    self.dialogBox.NewMessage(self.Translate("Have you brought another pearl?"), 60);
+                                    if (!fivePebblesGetOut)
+                                    {
+                                        self.dialogBox.NewMessage(self.Translate("Have you brought another pearl?"), 60);
+                                    }
                                     miscData.SSaiConversationsHad--;
                                 }
                             }
@@ -538,7 +545,10 @@ static class OracleHooks
                             if (self.action != MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty)
                             {
                                 self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-                                self.dialogBox.NewMessage(self.Translate("Have you brought the pearls I need?"), 60);
+                                if (!fivePebblesGetOut)
+                                {
+                                    self.dialogBox.NewMessage(self.Translate("Have you brought the pearls I need?"), 60);
+                                }
                                 miscData.SSaiConversationsHad--;
                             }
                         }

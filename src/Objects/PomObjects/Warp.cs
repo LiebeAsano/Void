@@ -18,8 +18,8 @@ public class Warp : UpdatableAndDeletable
 		ManagedField[] exposedFields = [
 			defaultVectorField,
 			new StringField(targetRoomName, "SS_D08"),
-			new FloatField(timeToFadeIn, 0.1f, 200f, 60f, displayName: "fadein time"),
-			new FloatField(timeToFadeOut, 0.1f, 200f, 60f, displayName: "fadeout time"),
+			new FloatField(timeToFadeIn, 1f, 200f, 60f, increment: 1f, displayName: "fadein time"),
+			new FloatField(timeToFadeOut, 1f, 200f, 60f, increment: 1f, displayName: "fadeout time"),
 			new BooleanField(forceSpawningAtTarget, false, displayName: "force new den"),
 			new FloatField(cycleTime, 0f, 1f, 0f, 0.05f, displayName: "subtract time"),
 			new IntegerField(spendCycles, 0, 15, 0, displayName: "spend cycles"),

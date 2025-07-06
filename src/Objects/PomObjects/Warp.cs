@@ -41,21 +41,15 @@ public class Warp : UpdatableAndDeletable
 		bool playerRealization = self.game is not null && self.game.Players.Count > 0 && self.game.Players[0].realizedCreature is null;
 		orig(self);
 		if (playerRealization
-			&& self.game.IsStorySession
-			&& self.abstractRoom.name == self.game.GetStorySession.saveState.denPosition)
+		    && self.game.IsStorySession
+		    && self.abstractRoom.name == self.game.GetStorySession.saveState.denPosition
+		    && self.updateList.OfType<WarpDestination>().FirstOrDefault() is WarpDestination destination)
 		{
-			foreach (UpdatableAndDeletable uad in self.updateList)
+			for (int i = 0; i < self.game.Players.Count; i++)
 			{
-				if (uad is WarpDestination destination)
-				{
-					for (int i = 0; i < self.game.Players.Count; i++)
-					{
-						Player p = self.game.Players[i].realizedCreature as Player;
-						p.SuperHardSetPosition(destination.Pos + new Vector2(20f * i, 0f));
-						p.standing = true;
-					}
-					break;
-				}
+				Player p = self.game.Players[i].realizedCreature as Player;
+				p.SuperHardSetPosition(destination.Pos + new Vector2(20f * i, 0f));
+				p.standing = true;
 			}
 		}
 	}
@@ -79,7 +73,7 @@ public class Warp : UpdatableAndDeletable
 	//so when one swaps worlds from within UAD, update index stays
 	//but the number of active rooms drops
 	//which leads to index out of range
-	static ConditionalWeakTable<OverWorld, CustomLoader> customLoader = new();
+	static readonly ConditionalWeakTable<OverWorld, CustomLoader> customLoader = new();
 	private static void OverWorld_Update(On.OverWorld.orig_Update orig, OverWorld self)
 	{
 		orig(self);
@@ -140,32 +134,35 @@ public class Warp : UpdatableAndDeletable
 
 						break;
 				}
-				if (!targetingData.warp.ExitInShortcut
-					&& absPly.realizedCreature is Player p
-						   && p.room is not null)
+				switch (targetingData.warp.ExitInShortcut)
 				{
-					p.room.RemoveObject(p);
-					p.PlaceInRoom(targetAbstractRoom.realizedRoom);
-					p.standing = true;
-
-					if (p.objectInStomach is not null) p.objectInStomach.world = newWorld;
-
-					foreach (Creature.Grasp grasp in p.grasps)
+					case false
+						when absPly.realizedCreature is Player { room: not null } p:
 					{
-						if (grasp is not null)
+						p.room.RemoveObject(p);
+						p.PlaceInRoom(targetAbstractRoom.realizedRoom);
+						p.standing = true;
+
+						if (p.objectInStomach is not null) p.objectInStomach.world = newWorld;
+
+						foreach (Creature.Grasp grasp in p.grasps)
 						{
-							var APO = grasp.grabbed.abstractPhysicalObject;
-							APO.world.GetAbstractRoom(APO.pos).RemoveEntity(APO);
-							APO.world = newWorld;
-							APO.pos = newWorldCoordinate;
-							APO.world.GetAbstractRoom(newWorldCoordinate).AddEntity(APO);
+							if (grasp is not null)
+							{
+								AbstractPhysicalObject grabbedAbstractPhysicalObject = grasp.grabbed.abstractPhysicalObject;
+								grabbedAbstractPhysicalObject.world.GetAbstractRoom(grabbedAbstractPhysicalObject.pos).RemoveEntity(grabbedAbstractPhysicalObject);
+								grabbedAbstractPhysicalObject.world = newWorld;
+								grabbedAbstractPhysicalObject.pos = newWorldCoordinate;
+								grabbedAbstractPhysicalObject.world.GetAbstractRoom(newWorldCoordinate).AddEntity(grabbedAbstractPhysicalObject);
+							}
 						}
+
+						break;
 					}
+					case true:
+						//the attempt to guess where to put the vessel is way too expensive. i'll just rely on wDestination
+						break;
 				}
-				else if(targetingData.warp.ExitInShortcut)
-				{
-					//the attempt to guess where to put the vessel is way too expensive. i'll just rely on wDestination
-                }
 			}
 			Room realizedDestination = targetAbstractRoom.realizedRoom;
 			if (realizedDestination.updateList.OfType<WarpDestination>().FirstOrDefault() is WarpDestination warpDestination)
@@ -175,11 +172,12 @@ public class Warp : UpdatableAndDeletable
 				{
 					RWCustom.IntVector2 pos = realizedDestination.GetTilePosition(warpDestination.Pos);
                     IEnumerable<ShortcutHandler.ShortCutVessel> playerVessels = overWorld.game.shortcuts.transportVessels.Where(vessel => realizedDestination.game.Players.Any(absply => vessel.creature == absply.realizedCreature));
-					foreach(var playerVessel in playerVessels)
+                    RWCustom.IntVector2 lastPosOffset = warpDestination.LastRelativePositionForShortcutVessel;
+					foreach(ShortcutHandler.ShortCutVessel playerVessel in playerVessels)
 					{
 						playerVessel.room = targetAbstractRoom;
 						playerVessel.pos = pos;
-						playerVessel.lastPositions[0] = pos with { y = pos.y + 1 };
+						playerVessel.lastPositions[0] = pos + lastPosOffset;
 					}
 				}
 				else
@@ -288,7 +286,7 @@ public class Warp : UpdatableAndDeletable
 	readonly PlacedObject placedObject;
 	readonly ManagedData data;
 	private FadeOut? fadeOut;
-	private State state = State.awaiting;
+	private State state = State.Awaiting;
 	//vanilla worldloading happens during a few ticks, and then immediately changes world
 	//so i want to load world prematurely and only utilize it afterwards
 	private WorldLoader? worldLoader;
@@ -298,10 +296,10 @@ public class Warp : UpdatableAndDeletable
 
 	enum State
 	{
-		awaiting,
-		fadein,
-		awaitingWorld,
-		awaitingTransition
+		Awaiting,
+		Fadein,
+		AwaitingWorld,
+		AwaitingTransition
 	}
 	#endregion
 	public override void Update(bool eu)
@@ -309,7 +307,7 @@ public class Warp : UpdatableAndDeletable
 		base.Update(eu);
 		switch (state)
 		{
-			case State.awaiting:
+			case State.Awaiting:
 				if (room.PlayersInRoom.Any(
 					realizedPlayerInRoom => 
 						realizedPlayerInRoom is not null
@@ -322,21 +320,21 @@ public class Warp : UpdatableAndDeletable
 					room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
 					fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);
 					room.AddObject(fadeOut);
-					threadedLoading = new(this, room, Acronym);
-					thread = new Thread(new ThreadStart(threadedLoading.Load));
+					threadedLoading = new ThreadedLoading(this, room, Acronym);
+					thread = new Thread(threadedLoading.Load);
 					thread.Start();
-					state = State.fadein;
+					state = State.Fadein;
 				}
 				break;
 
-			case State.fadein:
-				if (fadeOut.fade >= 1f)
+			case State.Fadein:
+				if (fadeOut!.fade >= 1f)
 				{
-					state = State.awaitingWorld;
+					state = State.AwaitingWorld;
 				}
 				break;
 
-			case State.awaitingWorld:
+			case State.AwaitingWorld:
 				if (worldLoader is not null
 					&& worldLoader.ReturnWorld() is not null)
 				{
@@ -348,17 +346,18 @@ public class Warp : UpdatableAndDeletable
 						targetRoom = TargetRoom
 					});
 					worldLoader = null;
-					state = State.awaitingTransition;
+					state = State.AwaitingTransition;
 				}
 				break;
 
-			case State.awaitingTransition:
+			case State.AwaitingTransition:
 				break;
 		}
 		
 		
 	}
-	public void OnRoomChange(AbstractRoom destinationRoom)
+
+	void OnRoomChange(AbstractRoom destinationRoom)
 	{
 		room.updateList.Remove(this);
 		destinationRoom.realizedRoom.AddObject(this);
@@ -368,7 +367,8 @@ public class Warp : UpdatableAndDeletable
 		room.AddObject(fadeOut);
 		OnTeleportationEnd();
 	}
-	public void OnTeleportationEnd()
+
+	void OnTeleportationEnd()
 	{
 		room.game.GetStorySession.saveState.cycleNumber += SubtractCycles;
 		if (ForceDenSwitch)
@@ -414,13 +414,46 @@ public class Warp : UpdatableAndDeletable
 	{
 		public static void Register()
 		{
-			RegisterFullyManagedObjectType([], typeof(WarpDestination), "Warp Destination", "The Void");
+			RegisterFullyManagedObjectType([
+			new EnumField<Direction>(directionKey, Direction.Down, control: ManagedFieldWithPanel.ControlType.button, displayName: "direction"),
+				], typeof(WarpDestination), "Warp Destination", "The Void");
 		}
-		public WarpDestination(Room room, PlacedObject pObj)
+
+		#region keys
+		const string directionKey = "direction";
+		#endregion
+
+		#region variables
+
+		public RWCustom.IntVector2 LastRelativePositionForShortcutVessel =>
+			Dir switch
+			{
+				Direction.Up => new RWCustom.IntVector2(0, -1),
+				Direction.Down => new RWCustom.IntVector2(0, 1),
+				Direction.Left => new RWCustom.IntVector2(1, 0),
+				Direction.Right => new RWCustom.IntVector2(-1, 0),
+				_ => throw new ArgumentOutOfRangeException($"the direction {Dir} is not a supported enum type"),
+			};
+
+		Direction Dir => data.GetValue<Direction>(directionKey); 
+		#endregion
+		
+		public WarpDestination(Room _, PlacedObject pObj)
 		{
 			pobj = pObj;
+			data = pobj.data as ManagedData;
 		}
+
+		readonly ManagedData data;
 		readonly PlacedObject pobj;
 		public Vector2 Pos => pobj.pos;
+
+		enum Direction
+		{
+			Up,
+			Down,
+			Left,
+			Right
+		}
 	}
 }

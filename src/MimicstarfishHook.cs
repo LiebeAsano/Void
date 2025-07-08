@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace VoidTemplate
 {
-    static class MimicstarfishHook
+    /*static class MimicstarfishHook
     {
         public static void Hook()
         {
@@ -126,5 +126,5 @@ namespace VoidTemplate
         public static float showDominance = 0;
         public static float whiteDominanceHue = 0;
         //public static int whiteGlitchFit;
-    }
+    }*/
 }

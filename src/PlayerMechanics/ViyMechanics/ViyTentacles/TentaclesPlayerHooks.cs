@@ -19,7 +19,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
         {
             orig(self, abstractCreature, world);
-            if (ViyRotModule.shouldICreateTentacles && self.IsViy() && !self.TryGetRot(out _))
+            if (self.IsViy() && !self.TryGetRot(out _))
             {
                 RotCWT.rotModule.Add(self, new(self));
             }

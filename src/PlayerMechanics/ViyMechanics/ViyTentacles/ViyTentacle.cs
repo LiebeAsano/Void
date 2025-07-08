@@ -131,7 +131,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 Custom.LogWarning(
                 [
-                    $"PlayerRotTentcle Climb ray tracing limit exceeded, extending cache to {_cachedRays1.Length + 100} and trying again!"
+                    $"ViyRotTentcle Climb ray tracing limit exceeded, extending cache to {_cachedRays1.Length + 100} and trying again!"
                 ]);
                 Array.Resize(ref _cachedRays1, _cachedRays1.Length + 100);
             }
@@ -202,7 +202,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 UpdateClimbGrabPos(ref path);
             }
-
         }
 
         public float ReleaseScore()

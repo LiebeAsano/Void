@@ -24,7 +24,7 @@ sealed class MimicstarfishCritob : Critob
         base.SandboxPerformanceCost = new SandboxPerformanceCost(1f, 0.65f);
         base.RegisterUnlock(KillScore.Configurable(9), SandboxUnlockID.Mimicstarfish, null, 0);
         base.ShelterDanger = ShelterDanger.Hostile;
-        MimicstarfishHook.Hook();
+        //MimicstarfishHook.Hook();
     }
 
     public override int ExpeditionScore()

@@ -25,6 +25,10 @@ public static class MovementUpdate
     {
         if (self.AreVoidViy())
         {
+            if (self.bodyMode == BodyModeIndexExtension.Rot)
+            {
+                return;
+            }
             self.DirectIntoHoles();
             if (self.rocketJumpFromBellySlide && self.animation != Player.AnimationIndex.RocketJump)
             {

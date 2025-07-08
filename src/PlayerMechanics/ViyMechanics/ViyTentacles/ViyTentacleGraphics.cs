@@ -10,7 +10,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 {
     public class ViyTentacleGraphics : RopeGraphic
     {
-        public int firstSprite;
+        public int spriteIndex;
 
         public int sprites;
 
@@ -35,30 +35,34 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public ViyTentacleGraphics(ViyTentacle tentacle, int firstSprite) : base((int)(tentacle.idealLength / 10f))
         {
             this.tentacle = tentacle;
-            this.firstSprite = firstSprite;
+            this.spriteIndex = firstSprite;
             sprites = 1;
         }
 
         public override void InitiateSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
         {
-            sLeaser.sprites[firstSprite] = TriangleMesh.MakeLongMeshAtlased(segments.Length, false, true);
+            sLeaser.sprites[spriteIndex] = TriangleMesh.MakeLongMeshAtlased(segments.Length, false, true);
         }
 
         public override void DrawSprite(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
-            Vector2 vector = Vector2.Lerp(segments[0].lastPos, segments[0].pos, timeStacker);
-            vector += Custom.DirVec(Vector2.Lerp(segments[1].lastPos, segments[1].pos, timeStacker), vector) * 1f;
-            float d = 1.7f;
-            for (int i = 0; i < segments.Length; i++)
+            sLeaser.sprites[spriteIndex].isVisible = tentacle.rotControl.rotMode;
+            if (tentacle.rotControl.rotMode)
             {
-                Vector2 vector2 = Vector2.Lerp(segments[i].lastPos, segments[i].pos, timeStacker);
-                Vector2 normalized = (vector - vector2).normalized;
-                Vector2 a = Custom.PerpendicularVector(normalized);
-                (sLeaser.sprites[firstSprite] as TriangleMesh).MoveVertice(i * 4, vector - a * d - camPos);
-                (sLeaser.sprites[firstSprite] as TriangleMesh).MoveVertice(i * 4 + 1, vector + a * d - camPos);
-                (sLeaser.sprites[firstSprite] as TriangleMesh).MoveVertice(i * 4 + 2, vector2 - a * d - camPos);
-                (sLeaser.sprites[firstSprite] as TriangleMesh).MoveVertice(i * 4 + 3, vector2 + a * d - camPos);
-                vector = vector2;
+                Vector2 vector = Vector2.Lerp(segments[0].lastPos, segments[0].pos, timeStacker);
+                vector += Custom.DirVec(Vector2.Lerp(segments[1].lastPos, segments[1].pos, timeStacker), vector) * 1f;
+                float d = 1.7f;
+                for (int i = 0; i < segments.Length; i++)
+                {
+                    Vector2 vector2 = Vector2.Lerp(segments[i].lastPos, segments[i].pos, timeStacker);
+                    Vector2 normalized = (vector - vector2).normalized;
+                    Vector2 a = Custom.PerpendicularVector(normalized);
+                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4, vector - a * d - camPos);
+                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4 + 1, vector + a * d - camPos);
+                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4 + 2, vector2 - a * d - camPos);
+                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4 + 3, vector2 + a * d - camPos);
+                    vector = vector2;
+                }
             }
         }
 
@@ -76,7 +80,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
         {
-            var triangleMesh = sLeaser.sprites[firstSprite] as TriangleMesh;
+            var triangleMesh = sLeaser.sprites[spriteIndex] as TriangleMesh;
             for (int i = 0; i < triangleMesh.vertices.Length; i++)
             {
                 triangleMesh.verticeColors[i] = ViyBodyColor;
@@ -84,11 +88,11 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             triangleMesh.color = ViyBodyColor;
         }
 
-        public void AddToMidgroundContainer(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
+        public void AddToContainer(RoomCamera.SpriteLeaser sLeaser, FContainer newContainer)
         {
-            FSprite sprite = sLeaser.sprites[firstSprite];
+            FSprite sprite = sLeaser.sprites[spriteIndex];
             sprite.RemoveFromContainer();
-            rCam.ReturnFContainer("Midground").AddChild(sprite);
+            newContainer.AddChild(sprite);
             sprite.MoveBehindOtherNode(sLeaser.sprites[0]);
         }
 

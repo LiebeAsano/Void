@@ -555,9 +555,12 @@ public static class BodyModeIndexExtension
 {
 	public static readonly Player.BodyModeIndex CeilCrawl;
 
+	public static readonly Player.BodyModeIndex Rot;
+
 	static BodyModeIndexExtension()
 	{
 		CeilCrawl = new Player.BodyModeIndex("CeilCrawl", true);
+		Rot = new Player.BodyModeIndex("Rot", true);
 	}
 }
 

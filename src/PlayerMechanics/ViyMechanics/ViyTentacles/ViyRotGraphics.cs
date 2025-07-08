@@ -35,7 +35,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 {
                     legs[i].InitiateSprites(sLeaser, rCam);
                 }
-                AddToMidgroundContainer(sLeaser, rCam);
+                AddToContainer(sLeaser, rCam, null);
             }
         }
 
@@ -59,19 +59,23 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void Update()
         {
-            for (int i = 0; i < 5; i++)
-            {
-                legs[i].Update();
-            }
-        }
-
-        public void AddToMidgroundContainer(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
-        {
-            if (legs != null)
+            if (rotControl.rotMode)
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    legs[i].AddToMidgroundContainer(sLeaser, rCam);
+                    legs[i].Update();
+                }
+            }
+        }
+
+        public void AddToContainer(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, FContainer newContainer)
+        {
+            if (legs != null)
+            {
+                newContainer ??= rCam.ReturnFContainer("Midground");
+                for (int i = 0; i < 5; i++)
+                {
+                    legs[i].AddToContainer(sLeaser, newContainer);
                 }
             }
         }
@@ -82,6 +86,11 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 legs[i].ApplyPalette(sLeaser, rCam, palette);
             }
+        }
+
+        public void MakeVisibleSprites()
+        {
+
         }
     }
 }

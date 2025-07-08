@@ -50,7 +50,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             orig(self, sLeaser, rCam, newContatiner);
             if (self.player.TryGetRot(out var rot))
             {
-                rot.graphics.AddToMidgroundContainer(sLeaser, rCam);
+                rot.graphics.AddToContainer(sLeaser, rCam, newContatiner);
             }
         }
 

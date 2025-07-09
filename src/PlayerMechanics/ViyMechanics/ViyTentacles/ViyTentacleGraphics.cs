@@ -111,10 +111,13 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void AddToContainer(RoomCamera.SpriteLeaser sLeaser, FContainer newContainer)
         {
-            FSprite sprite = sLeaser.sprites[spriteIndex];
-            sprite.RemoveFromContainer();
-            newContainer.AddChild(sprite);
-            sprite.MoveBehindOtherNode(sLeaser.sprites[0]);
+            if (spriteIndex < sLeaser.sprites.Length)
+            {
+                FSprite sprite = sLeaser.sprites[spriteIndex];
+                sprite.RemoveFromContainer();
+                newContainer.AddChild(sprite);
+                sprite.MoveBehindOtherNode(sLeaser.sprites[0]);
+            }
         }
 
         public override void Update()

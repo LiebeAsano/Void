@@ -30,13 +30,13 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                     legs[i] = new(rotControl.tentacles[i], sLeaser.sprites.Length + totalLegSprites);
                     totalLegSprites += legs[i].sprites;
                 }
-                Array.Resize(ref sLeaser.sprites, sLeaser.sprites.Length + totalLegSprites);
-                for (int i = 0; i < 5; i++)
-                {
-                    legs[i].InitiateSprites(sLeaser, rCam);
-                }
-                AddToContainer(sLeaser, rCam, null);
             }
+            Array.Resize(ref sLeaser.sprites, sLeaser.sprites.Length + totalLegSprites);
+            for (int i = 0; i < 5; i++)
+            {
+                legs[i].InitiateSprites(sLeaser, rCam);
+            }
+            AddToContainer(sLeaser, rCam, null);
         }
 
         public void DrawSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
@@ -70,13 +70,10 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void AddToContainer(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, FContainer newContainer)
         {
-            if (legs != null)
+            newContainer ??= rCam.ReturnFContainer("Midground");
+            for (int i = 0; i < 5; i++)
             {
-                newContainer ??= rCam.ReturnFContainer("Midground");
-                for (int i = 0; i < 5; i++)
-                {
-                    legs[i].AddToContainer(sLeaser, newContainer);
-                }
+                legs[i].AddToContainer(sLeaser, newContainer);
             }
         }
     }

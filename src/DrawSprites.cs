@@ -142,7 +142,7 @@ public class DrawSprites
         string originalMarkSpriteName = sLeaser.sprites[11].element.name;
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
-
+        if (self.player.IsViy()) Utils.ViyColors[self.player.playerState.playerNumber] = sLeaser.sprites[9].color;
         if (!self.player.IsVoid()) return;
 
         string currentMarkSpriteName = sLeaser.sprites[11].element.name;

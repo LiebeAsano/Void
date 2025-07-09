@@ -15,16 +15,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             On.PlayerGraphics.AddToContainer += PlayerGraphics_AddToContainer;
             On.PlayerGraphics.Reset += PlayerGraphics_Reset;
             On.PlayerGraphics.Update += PlayerGraphics_Update;
-            On.PlayerGraphics.ApplyPalette += PlayerGraphics_ApplyPalette;
-        }
-
-        private static void PlayerGraphics_ApplyPalette(On.PlayerGraphics.orig_ApplyPalette orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
-        {
-            orig(self, sLeaser, rCam, palette);
-            if (self.player.TryGetRot(out var rot))
-            {
-                rot.graphics.ApplyPallete(sLeaser, rCam, palette);
-            }
         }
 
         private static void PlayerGraphics_InitiateSprites(On.PlayerGraphics.orig_InitiateSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)

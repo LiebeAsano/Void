@@ -382,13 +382,13 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
             if (vector.x != 0f)
             {
-                chunk.vel.x = chunk.vel.x + (vector.x - chunk.pos.x) * 0.1f;
-                chunk.vel.y = chunk.vel.y * 0.9f;
+                chunk.vel.x += (vector.x - chunk.pos.x) * 0.1f;
+                chunk.vel.y *= 0.9f;
             }
             if (vector.y != 0f)
             {
-                chunk.vel.y = chunk.vel.y + (vector.y - chunk.pos.y) * 0.1f;
-                chunk.vel.x = chunk.vel.x * 0.9f;
+                chunk.vel.y += (vector.y - chunk.pos.y) * 0.1f;
+                chunk.vel.x *= 0.9f;
             }
             if (vector.x != 0f || vector.y != 0f)
             {

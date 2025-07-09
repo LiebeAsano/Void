@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using RWCustom;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 {
@@ -16,19 +17,19 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public ViyTentacle tentacle;
 
-        public Color ViyBodyColor
-        {
-            get
-            {
-                return new(0, 0, 0.005f);
-            }
-        }
-
         public Player player
         {
             get
             {
                 return tentacle.player;
+            }
+        }
+
+        public Color ViyBodyColor
+        {
+            get
+            {
+                return new(0, 0, 0.005f);
             }
         }
 
@@ -49,19 +50,49 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             sLeaser.sprites[spriteIndex].isVisible = tentacle.rotControl.rotMode;
             if (tentacle.rotControl.rotMode)
             {
+                var triangleMesh = sLeaser.sprites[spriteIndex] as TriangleMesh;
                 Vector2 vector = Vector2.Lerp(segments[0].lastPos, segments[0].pos, timeStacker);
                 vector += Custom.DirVec(Vector2.Lerp(segments[1].lastPos, segments[1].pos, timeStacker), vector) * 1f;
-                float d = 1.7f;
+
+                float baseWidth = 3.4f;
+                float midWidth = baseWidth * 0.5f;
+                float tipWidth = 0.5f;
+
                 for (int i = 0; i < segments.Length; i++)
                 {
                     Vector2 vector2 = Vector2.Lerp(segments[i].lastPos, segments[i].pos, timeStacker);
                     Vector2 normalized = (vector - vector2).normalized;
                     Vector2 a = Custom.PerpendicularVector(normalized);
-                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4, vector - a * d - camPos);
-                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4 + 1, vector + a * d - camPos);
-                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4 + 2, vector2 - a * d - camPos);
-                    (sLeaser.sprites[spriteIndex] as TriangleMesh).MoveVertice(i * 4 + 3, vector2 + a * d - camPos);
+
+                    float progress = (float)i / (segments.Length - 1);
+
+                    float currentWidth;
+                    if (progress < 0.85f)
+                    {
+                        currentWidth = baseWidth - (baseWidth - midWidth) * (progress / 0.85f);
+                    }
+                    else
+                    {
+                        float coneProgress = (progress - 0.85f) / 0.15f;
+                        currentWidth = midWidth - (midWidth - tipWidth) * coneProgress;
+                    }
+
+                    triangleMesh.MoveVertice(i * 4, vector - a * currentWidth - camPos);
+                    triangleMesh.MoveVertice(i * 4 + 1, vector + a * currentWidth - camPos);
+                    triangleMesh.MoveVertice(i * 4 + 2, vector2 - a * currentWidth - camPos);
+                    triangleMesh.MoveVertice(i * 4 + 3, vector2 + a * currentWidth - camPos);
                     vector = vector2;
+                }
+                Color body = ViyBodyColor;
+                Color eyes = sLeaser.sprites[9].color;
+                int num = 0;
+                for (int i = 0; i < triangleMesh.vertices.Length; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        num++;
+                    }
+                    triangleMesh.verticeColors[i] = Color.Lerp(body, eyes, Mathf.InverseLerp(0.88f, 0.95f, (float)num / ((triangleMesh.verticeColors.Length / 2) - 1)));
                 }
             }
         }
@@ -76,16 +107,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 return;
             }
             segments[segment].pos = smoothedGoalPos;
-        }
-
-        public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
-        {
-            var triangleMesh = sLeaser.sprites[spriteIndex] as TriangleMesh;
-            for (int i = 0; i < triangleMesh.vertices.Length; i++)
-            {
-                triangleMesh.verticeColors[i] = ViyBodyColor;
-            }
-            triangleMesh.color = ViyBodyColor;
         }
 
         public void AddToContainer(RoomCamera.SpriteLeaser sLeaser, FContainer newContainer)

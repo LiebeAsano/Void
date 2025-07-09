@@ -67,7 +67,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void Update()
         {
-            if (player.input[0].spec && player.input[0].y < 0)
+            if (player.Consious && player.input[0].spec && player.input[0].y < 0)
             {
                 rotModeTransformTime++;
                 if (rotMode)
@@ -88,7 +88,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             if (rotModeTransformTime >= 80)
             {
                 rotModeTransformTime = 0;
-                OverrideTentacleMode();
+                SwitchTentacleMode();
             }
 
             if (rotMode)
@@ -107,11 +107,12 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 if (player.Consious)
                 {
                     Act(legsGrabbing);
+                    player.bodyMode = BodyModeIndexExtension.Rot;
                 }
             }
         }
 
-        public void OverrideTentacleMode()
+        public void SwitchTentacleMode()
         {
             rotMode = !rotMode;
             if (rotMode)
@@ -124,6 +125,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 player.bodyMode = Player.BodyModeIndex.Default;
             }
+            room.PlaySound(SoundID.Daddy_And_Bro_Tentacle_Grab_Creature, player.mainBodyChunk.pos, player.abstractCreature);
         }
 
         public void Act(int legsGrabbing)

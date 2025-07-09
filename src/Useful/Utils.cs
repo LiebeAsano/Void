@@ -30,6 +30,8 @@ public static class Utils
 
     public static Color[] VoidColors = new Color[32];
 
+    public static Color[] ViyColors = new Color[32];
+
     //stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
 	private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
 	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }

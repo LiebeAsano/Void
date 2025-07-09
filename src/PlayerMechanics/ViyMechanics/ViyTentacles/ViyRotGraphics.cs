@@ -79,18 +79,5 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 }
             }
         }
-
-        public void ApplyPallete(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                legs[i].ApplyPalette(sLeaser, rCam, palette);
-            }
-        }
-
-        public void MakeVisibleSprites()
-        {
-
-        }
     }
 }

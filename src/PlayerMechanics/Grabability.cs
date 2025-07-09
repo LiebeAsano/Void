@@ -5,6 +5,7 @@ using MoreSlugcats;
 using RWCustom;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
@@ -17,7 +18,7 @@ public static class Grabability
         //prevents grabbing pole plant for void
         //IL.Player.MovementUpdate += Player_Movement;
         On.Player.Grabability += Player_Grabability;
-        On.Player.Update += Player_Update;
+        On.Creature.Update += Creature_Update;
         On.Player.CanIPickThisUp += Player_CanIPickThisUp;
         On.SlugcatHand.Update += SlugcatHand_Update;
         //allows hand switching when holding big object
@@ -79,42 +80,67 @@ public static class Grabability
         return orig(self, obj);
     }
 
-    private static readonly Dictionary<Player, (float chunk0Mass, float chunk1Mass)> OriginalMasses = [];
-    private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+    private static readonly Dictionary<Creature, Dictionary<BodyChunk, float>> OriginalMasses = [];
+
+    private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
     {
         orig(self, eu);
 
-        if (!OriginalMasses.ContainsKey(self))
-        {
-            OriginalMasses[self] = (self.bodyChunks[0].mass, self.bodyChunks[1].mass);
-        }
+        bool isGrabbedByVoidViy = false;
 
-        bool shouldBeLight = false;
-
-        if (!self.dead && self.grabbedBy != null && self.grabbedBy.Count > 0)
+        if (self.grabbedBy != null)
         {
             foreach (var grasp in self.grabbedBy)
             {
-                if (grasp.grabber is Player grabberPlayer && grabberPlayer != self && grabberPlayer.AreVoidViy())
+                if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
                 {
-                    self.stun = 20;
-                    self.bodyChunks[0].mass = 0.05f;
-                    self.bodyChunks[1].mass = 0.05f;
-                    shouldBeLight = true;
+                    isGrabbedByVoidViy = true;
                     break;
                 }
             }
         }
 
-        if (!shouldBeLight && OriginalMasses.TryGetValue(self, out var original))
+        if (isGrabbedByVoidViy && !OriginalMasses.ContainsKey(self))
         {
-            self.bodyChunks[0].mass = original.chunk0Mass;
-            self.bodyChunks[1].mass = original.chunk1Mass;
+            var chunkMasses = new Dictionary<BodyChunk, float>();
+            foreach (var chunk in self.bodyChunks)
+            {
+                chunkMasses[chunk] = chunk.mass;
+            }
+            OriginalMasses[self] = chunkMasses;
         }
 
-        if (self.dead && OriginalMasses.ContainsKey(self))
+        if (OriginalMasses.TryGetValue(self, out var originalChunks))
         {
-            OriginalMasses.Remove(self);
+            foreach (var chunk in self.bodyChunks)
+            {
+                if (originalChunks.TryGetValue(chunk, out var originalMass))
+                {
+                    if (self is Player || self is Cicada)
+                    {
+                        if (self is Player)
+                        {
+                            self.stun = 20;
+                        }
+                        chunk.mass = isGrabbedByVoidViy ? 0.05f : originalMass;
+                    }
+                    else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is JetFish || self is Scavenger)
+                    {
+                        chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
+                    }
+                }
+            }
+
+            if (!isGrabbedByVoidViy)
+            {
+                OriginalMasses.Remove(self);
+            }
+        }
+
+        var deadEntries = OriginalMasses.Keys.Where(c => c.slatedForDeletetion || c.room == null).ToList();
+        foreach (var deadCreature in deadEntries)
+        {
+            OriginalMasses.Remove(deadCreature);
         }
     }
 
@@ -130,6 +156,10 @@ public static class Grabability
             {
                 return false;
             }
+        }
+        if (obj is Player player && player.AreVoidViy() && player.Consious)
+        {
+            return false;
         }
         return orig(self, obj);
     }

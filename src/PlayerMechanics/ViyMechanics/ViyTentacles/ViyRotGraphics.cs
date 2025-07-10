@@ -45,7 +45,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 legs[i].DrawSprite(sLeaser, rCam, timeStacker, camPos);
             }
-        }
+        } 
 
         public void Reset()
         {
@@ -70,10 +70,13 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void AddToContainer(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, FContainer newContainer)
         {
-            newContainer ??= rCam.ReturnFContainer("Midground");
-            for (int i = 0; i < 5; i++)
+            if (legs != null)
             {
-                legs[i].AddToContainer(sLeaser, newContainer);
+                newContainer ??= rCam.ReturnFContainer("Midground");
+                for (int i = 0; i < 5; i++)
+                {
+                    legs[i].AddToContainer(sLeaser, newContainer);
+                }
             }
         }
     }

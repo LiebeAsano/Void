@@ -29,7 +29,7 @@ public class DrawSprites
         Player player = self.player;
 
         //game behaves in a really weird way when you try to touch tail, so we just gonna make a new one and overlay it over the old one
-        if ((player.KarmaCap == 10 || Karma11Update.VoidKarma11) && (player.IsVoid() || player.IsViy()))
+        if ((player.KarmaCap == 10 || Karma11Update.VoidKarma11) && player.IsVoid() || player.IsViy())
         {
             var tail = sLeaser.sprites[2] as TriangleMesh;
             //changing tail sprite element
@@ -142,7 +142,19 @@ public class DrawSprites
         string originalMarkSpriteName = sLeaser.sprites[11].element.name;
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
-        if (self.player.IsViy()) Utils.ViyColors[self.player.playerState.playerNumber] = sLeaser.sprites[9].color;
+        if (self.player.IsViy())
+        { 
+            Utils.ViyColors[self.player.playerState.playerNumber] = sLeaser.sprites[9].color;
+            if (sLeaser.sprites[2] is TriangleMesh viyTail
+            && viyTail.shader != FShader.defaultShader)
+            {
+                viyTail.shader = FShader.defaultShader;
+            }
+            if (sLeaser.sprites[2] is TriangleMesh viyTail2)
+            {
+                viyTail2.color = Utils.ViyColors[self.player.playerState.playerNumber];
+            }
+        }
         if (!self.player.IsVoid()) return;
 
         string currentMarkSpriteName = sLeaser.sprites[11].element.name;

@@ -198,7 +198,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 float num12 = Mathf.Pow(tentacles[num11].chunksGripping, 0.5f);
                 if (tentacles[num11].atGrabDest && tentacles[num11].grabDest != null)
                 {
-                    num10 += Mathf.Pow(Mathf.InverseLerp(-0.1f, 0.85f, Vector2.Dot((tentacles[num11].floatGrabDest.Value - player.mainBodyChunk.pos).normalized, moveDirection)), 0.8f) / tentacles.Length;
+                    num10 += Mathf.Pow(Mathf.InverseLerp(-0.1f, 0.85f, Vector2.Dot(((moveDirection.y < 0) ? player.mainBodyChunk.pos - tentacles[num11].floatGrabDest.Value : tentacles[num11].floatGrabDest.Value - player.mainBodyChunk.pos).normalized, moveDirection)), 0.8f) / tentacles.Length;
                     num12 = Mathf.Lerp(num12, 1f, 0.75f);
                 }
                 num9 += num12 / tentacles.Length;

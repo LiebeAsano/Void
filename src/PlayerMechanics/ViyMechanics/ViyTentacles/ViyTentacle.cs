@@ -53,11 +53,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         {
             this.rotControl = rotControl;
             this.tentacleDir = tentacleDir;
-            segments = [];
-            for (int i = 0; i < (int)(idealLength / 20f); i++)
-            {
-                segments.Add(player.abstractCreature.pos.Tile);
-            }
             tProps = new TentacleProps(false, true, false, 0.5f, 0f, 0f, 0f, 0f, 3.2f, 10f, 0.25f, 5f, 15, 60, 12, 20);
             tChunks = new TentacleChunk[(int)(length / 40f)];
             for (int j = 0; j < tChunks.Length; j++)
@@ -112,6 +107,14 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             Climb(ref scratchPath);
             for (int m = 0; m < tChunks.Length; m++)
             {
+                if (atGrabDest)
+                {
+                    float num4 = (float)m / (tChunks.Length - 1);
+                    if (num4 < 0.2f)
+                    {
+                        tChunks[m].vel += tentacleDir * Mathf.InverseLerp(0.2f, 0f, num4) * 2.5f;
+                    }
+                }
                 for (int n = m + 1; n < tChunks.Length; n++)
                 {
                     PushChunksApart(m, n);
@@ -124,7 +127,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             Vector3 vector = (Vector2)Vector3.Slerp(tentacleDir, rotControl.moveDirection, 0.5f);
             idealGrabPos = FloatBase + (Vector2)vector * idealLength * 0.7f;
             Vector2 actualGrabPos = FloatBase + (Vector2)Vector3.Slerp(vector, Custom.RNV(), Mathf.InverseLerp(20f, 200f, foundNoGrabPos))
-                * idealLength * Custom.LerpMap(Mathf.Max(0, foundNoGrabPos), 20f, 200f, 0.7f, 1.2f);
+                * idealLength * Custom.LerpMap(foundNoGrabPos, 20f, 200f, 0.7f, 1.2f);
 
             int i;
             for (i = SharedPhysics.RayTracedTilesArray(FloatBase, actualGrabPos, _cachedRays1); i >= _cachedRays1.Length; i = SharedPhysics.RayTracedTilesArray(FloatBase, actualGrabPos, _cachedRays1))
@@ -141,7 +144,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 if (room.GetTile(_cachedRays1[j + 1]).IsSolid())
                 {
-                    ConsiderGrabPos(Custom.RestrictInRect(actualGrabPos, room.TileRect(_cachedRays1[j]).Shrink(1f)), idealGrabPos);
+                    ConsiderGrabPos(Custom.RestrictInRect(actualGrabPos, room.TileRect(_cachedRays1[j]).Shrink(1)), idealGrabPos);
                     flag = true;
                     break;
                 }
@@ -169,13 +172,13 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                     StickToTerrain(tChunks[k]);
                     if (grabDest != null)
                     {
-                        if (!atGrabDest && Custom.DistLess(tChunks[k].pos, floatGrabDest.Value, 20f))
+                        if (!atGrabDest && Custom.DistLess(tChunks[k].pos, floatGrabDest.Value, 5))
                         {
                             atGrabDest = true;
                         }
                         if (tChunks[k].currentSegment <= grabPath.Count || !flag2)
                         {
-                            tChunks[k].vel += Vector2.ClampMagnitude(floatGrabDest.Value - tChunks[k].pos, 20f) / 20f * 1.2f;
+                            tChunks[k].vel += Vector2.ClampMagnitude(floatGrabDest.Value - tChunks[k].pos, 5f) / 5f * 1.2f;
                         }
                         else if (k > 1 && segments.Count > grabPath.Count && flag2)
                         {
@@ -187,7 +190,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                             tChunks[k].vel += a.normalized * 1.2f;
                             if (k == tChunks.Length - 1)
                             {
-                                tChunks[k].vel += Vector2.ClampMagnitude(room.MiddleOfTile(secondaryGrabPos) - tChunks[k].pos, 20f) / 20f * 4.2f;
+                                tChunks[k].vel += Vector2.ClampMagnitude(room.MiddleOfTile(secondaryGrabPos) - tChunks[k].pos, 5f) / 5f * 4.2f;
                             }
                         }
                     }
@@ -216,10 +219,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
             return num;
         }
-        public float ReleaseScoreForAngle()
-        {
-            return ReleaseScore() * (atGrabDest ? 1f : 1.2f) * Custom.LerpMap(Vector2.Dot(rotControl.moveDirection, Tip.pos - connectedChunk.pos), -1f, 1f, 2f, 1f);
-        }
 
         public float GrabPosScore(Vector2 testPos, Vector2 idealGrabPos)
         {
@@ -230,7 +229,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
             for (int i = 0; i < 4; i++)
             {
-                if (room.GetTile(testPos + Custom.fourDirections[i].ToVector2() * 20f).Solid)
+                if (room.GetTile(testPos + Custom.fourDirections[i].ToVector2() * 5f).Solid)
                 {
                     num *= 2f;
                     break;
@@ -241,6 +240,13 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void ConsiderGrabPos(Vector2 testPos, Vector2 idealGrabPos)
         {
+            for (int i = 0; i < rotControl.tentacles.Length; i++)
+            {
+                if (rotControl.tentacles[i] != this && GrabPosScore(testPos, idealGrabPos) < rotControl.tentacles[i].GrabPosScore(testPos, idealGrabPos))
+                {
+                    return;
+                }
+            }
             if (GrabPosScore(testPos, idealGrabPos) > GrabPosScore(preliminaryGrabDest, idealGrabPos))
             {
                 preliminaryGrabDest = testPos;
@@ -250,19 +256,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public void UpdateClimbGrabPos(ref List<IntVector2> path)
         {
             MoveGrabDest(preliminaryGrabDest, ref path);
-        }
-
-        public void ConsiderSecondaryGrabPos(IntVector2 testPos)
-        {
-            if (room.GetTile(testPos).Solid)
-            {
-                return;
-            }
-            if (SecondaryGrabPosScore(testPos) > SecondaryGrabPosScore(secondaryGrabPos))
-            {
-                secondaryGrabBackTrackCounter = 0;
-                secondaryGrabPos = testPos;
-            }
         }
 
         public float SecondaryGrabPosScore(IntVector2 testPos)
@@ -275,7 +268,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 return 0f;
             }
-            float num = idealLength - grabPath.Count * 20f;
+            float num = idealLength - grabPath.Count * 5f;
             if (Vector2.Distance(room.MiddleOfTile(testPos), floatGrabDest.Value) > num)
             {
                 return 0f;
@@ -309,6 +302,19 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 Vector2.Distance(room.MiddleOfTile(testPos), room.MiddleOfTile(segments[segments.Count - 1])));
         }
 
+        public void ConsiderSecondaryGrabPos(IntVector2 testPos)
+        {
+            if (room.GetTile(testPos).Solid)
+            {
+                return;
+            }
+            if (SecondaryGrabPosScore(testPos) > SecondaryGrabPosScore(secondaryGrabPos))
+            {
+                secondaryGrabBackTrackCounter = 0;
+                secondaryGrabPos = testPos;
+            }
+        }
+
         public void StickToTerrain(TentacleChunk chunk)
         {
             if (floatGrabDest != null && !Custom.DistLess(chunk.pos, floatGrabDest.Value, 200f))
@@ -325,11 +331,11 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 {
                     if (Custom.eightDirectionsDiagonalsLast[i].x != 0)
                     {
-                        vector.x = room.MiddleOfTile(chunk.pos).x + Custom.eightDirectionsDiagonalsLast[i].x * num * (20f - chunk.rad);
+                        vector.x = room.MiddleOfTile(chunk.pos).x + Custom.eightDirectionsDiagonalsLast[i].x * num * (5f - chunk.rad);
                     }
                     if (Custom.eightDirectionsDiagonalsLast[i].y != 0)
                     {
-                        vector.y = room.MiddleOfTile(chunk.pos).y + Custom.eightDirectionsDiagonalsLast[i].y * (20f - chunk.rad);
+                        vector.y = room.MiddleOfTile(chunk.pos).y + Custom.eightDirectionsDiagonalsLast[i].y * (5f - chunk.rad);
                         break;
                     }
                     break;

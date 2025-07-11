@@ -17,7 +17,8 @@ public class BasiliskResist
             self.AreVoidViy() &&
             !self.chatlog)
         {
-            self.mushroomCounter = self.injectedPoison = 0;
+            self.mushroomCounter = 0;
+            self.injectedPoison = 0;
         }
         orig(self, eu);
     }

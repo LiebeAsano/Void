@@ -66,7 +66,7 @@ namespace VoidTemplate.PlayerMechanics
                         Damage = 0f;
                     }
                 }
-                if (source.owner is BigNeedleWorm)
+                if (source != null && source.owner is BigNeedleWorm)
                 {
                     player.playerState.permanentDamageTracking += Damage;
                 }

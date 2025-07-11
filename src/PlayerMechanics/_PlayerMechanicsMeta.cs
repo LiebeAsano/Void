@@ -36,6 +36,7 @@ public static class _PlayerMechanicsMeta
 		Grabability.Hook();
 		GrabUpdate.Hook();
 		GraspSave.Hook();
+		HarmfulSteam.Hook();
 		HealthSpear.Hook();
 		HeavyCarry.Hook();
         ImmuneToFallDamage.Hook();

@@ -15,8 +15,10 @@ using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
-public static class СanMaul
+public static class CanMaul
 {
+    private const int StunDuration = 5;
+
     public static void Hook()
     {
         On.Player.CanMaulCreature += CanMaulCreatureHook;
@@ -25,42 +27,48 @@ public static class СanMaul
 
     private static bool CanMaulCreatureHook(On.Player.orig_CanMaulCreature orig, Player self, Creature crit)
     {
-        if (crit is Player && !crit.dead && self != null && (self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy))
-        {
-            return true;
-        }
-        return orig(self, crit);
+        if (self == null || crit == null || crit.dead)
+            return orig(self, crit);
+
+        return crit is Player && self.AreVoidViy() || orig(self, crit);
     }
 
     private static void Player_GrabUpdate(ILContext il)
     {
-        ILCursor c = new ILCursor(il);
-
-        if (c.TryGotoNext(
-        MoveType.After,
-        x => x.MatchCallOrCallvirt(typeof(Creature).GetMethod("Violence"))))
+        try
         {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(MoveType.After,
+                x => x.MatchCallOrCallvirt(typeof(Creature).GetMethod("Violence"))))
+            {
+                LogExErr("Player_GrabUpdate injection point not found.");
+                return;
+            }
 
             c.Emit(OpCodes.Ldarg_0);
-
             c.EmitDelegate<Action<Creature>>(creature =>
             {
-                Array.ForEach(creature.grasps, grasp =>
+                if (creature?.grasps == null) return;
+
+                foreach (var grasp in creature.grasps)
                 {
-                    if (grasp != null
-                        && grasp.grabbed is Player playerInGrasp
-                        && (playerInGrasp.IsVoid() || playerInGrasp.IsViy())
-                        && creature is Player player 
-                        && player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy)
+                    if (grasp?.grabbed is not Player playerInGrasp ||
+                        !playerInGrasp.AreVoidViy())
+                        continue;
+
+                    if (creature is Player attackingPlayer &&
+                        !attackingPlayer.AreVoidViy())
                     {
-                        creature.Stun(TicksPerSecond * 5);
+                        creature.Stun(StunDuration * TicksPerSecond);
+                        break;
                     }
-                });
+                }
             });
         }
-        else
+        catch (Exception ex)
         {
-            LogExErr("Failed to find the call to Player_GrabUpdate injection point not found.");
+            LogExErr($"Error in Player_GrabUpdate IL hook: {ex}");
         }
     }
 }

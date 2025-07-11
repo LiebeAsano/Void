@@ -13,7 +13,7 @@ public static class _PlayerMechanicsMeta
 		BitByPlayer.Hook();
 		CanBeSwallowed.Hook();
 		CanIPickThisUp.Hook();
-		СanMaul.Hook();
+        CanMaul.Hook();
 		CentipedeResist.Hook();
 		Climbing.Hook();
 		ColdImmunityPatch.Hook();

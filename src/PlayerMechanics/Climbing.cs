@@ -166,7 +166,7 @@ public static class Climbing
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
 	{
 		orig(self, abstractCreature, world);
-		if (self.IsVoid())
+		if (self.AreVoidViy())
 		{
 			flipTimer[self.playerState.playerNumber] = -1;
         }
@@ -174,7 +174,7 @@ public static class Climbing
 
 	private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 	{
-		if (player.slugcatStats.name != VoidEnums.SlugcatID.Void && player.slugcatStats.name != VoidEnums.SlugcatID.Viy)
+		if (!player.AreVoidViy())
 		{
 			orig(player);
 			return;
@@ -532,9 +532,8 @@ public static class PlayMod
 {
 	public static Player_Attached_Fields Get_Attached_Fields(this Player player)
 	{
-		Player_Attached_Fields attached_fields;
-		all_attached_fields.TryGetValue(player, out attached_fields);
-		return attached_fields;
+        all_attached_fields.TryGetValue(player, out Player_Attached_Fields attached_fields);
+        return attached_fields;
 	}
 
 	public static void Add_Attached_Fields(this Player player)

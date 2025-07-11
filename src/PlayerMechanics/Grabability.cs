@@ -75,7 +75,7 @@ public static class Grabability
             return Player.ObjectGrabability.OneHand;
         if (self.AreVoidViy() && (obj is PoleMimic || obj is TentaclePlant))
             return Player.ObjectGrabability.CantGrab;
-        if (self.AreVoidViy() && (obj is Cicada || (obj is Player player && player != self && !player.AreVoidViy() && (player.bodyMode == Player.BodyModeIndex.Crawl || player.bodyMode == Player.BodyModeIndex.Stunned) && !player.room.game.IsArenaSession)))
+        if (self.AreVoidViy() && (obj is Cicada || (obj is Player player && player != self && !player.AreVoidViy() && (player.bodyMode == Player.BodyModeIndex.Crawl && player.room.game.IsArenaSession || !player.room.game.IsArenaSession))))
             return Player.ObjectGrabability.TwoHands;
         return orig(self, obj);
     }
@@ -87,6 +87,7 @@ public static class Grabability
         orig(self, eu);
 
         bool isGrabbedByVoidViy = false;
+        bool maulTimer = false;
 
         if (self.grabbedBy != null)
         {
@@ -94,6 +95,8 @@ public static class Grabability
             {
                 if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
                 {
+                    if (grabberPlayer.maulTimer == 0)
+                        maulTimer = true;
                     isGrabbedByVoidViy = true;
                     break;
                 }
@@ -116,13 +119,13 @@ public static class Grabability
             {
                 if (originalChunks.TryGetValue(chunk, out var originalMass))
                 {
-                    if (self is Player || self is Cicada)
+                    if (self is Player player || self is Cicada)
                     {
                         if (self is Player)
                         {
                             self.stun = 20;
                         }
-                        chunk.mass = isGrabbedByVoidViy ? 0.05f : originalMass;
+                        chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
                     }
                     else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is JetFish || self is Scavenger)
                     {

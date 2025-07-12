@@ -212,7 +212,49 @@ public static class Climbing
 			player.lowerBodyFramesOffGround++;
 		}
 
-		BodyChunk body_chunk_0 = player.bodyChunks[0];
+        if (player.bodyMode == Player.BodyModeIndex.Default)
+        {
+            if (player.input[0].y < 0 && (player.animation != Player.AnimationIndex.Roll || player.input[0].x == 0))
+            {
+                player.GoThroughFloors = true;
+                if (player.input[0].downDiagonal != 0 && player.consistentDownDiagonal > 6 && player.bodyChunks[0].ContactPoint.x == 0 && player.bodyChunks[0].ContactPoint.y == 0 && player.bodyChunks[1].ContactPoint.x == 0 && player.bodyChunks[1].ContactPoint.y == 0)
+                {
+                    IntVector2 intVector = player.room.GetTilePosition((player.mainBodyChunk.pos.y < player.bodyChunks[1].pos.y) ? player.mainBodyChunk.pos : player.bodyChunks[1].pos);
+                    int i = 0;
+                    while (i < 5)
+                    {
+                        intVector += new IntVector2(0, -1);
+                        if (player.room.GetTile(intVector).Terrain == Room.Tile.TerrainType.Solid)
+                        {
+                            break;
+                        }
+                        if (player.room.GetTile(intVector).Terrain == Room.Tile.TerrainType.Floor)
+                        {
+                            if (player.room.GetTile(intVector + new IntVector2(player.input[0].x, 0)).Terrain == Room.Tile.TerrainType.Solid && !player.room.GetTile(intVector + new IntVector2(player.input[0].x, 1)).Solid)
+                            {
+                                player.GoThroughFloors = false;
+                                break;
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+                }
+            }
+            if (player.input[0].y < 0 && player.mainBodyChunk.ContactPoint.y == 0 && player.mainBodyChunk.ContactPoint.x == 0 && player.bodyChunks[1].ContactPoint.y == 0 && player.bodyChunks[1].ContactPoint.x == 0 && player.mainBodyChunk.vel.y < -6f)
+            {
+                player.diveForce = Mathf.Min(1f, player.diveForce + 0.09f);
+                BodyChunk mainBodyChunk = player.mainBodyChunk;
+                mainBodyChunk.vel.y = mainBodyChunk.vel.y - 1.2f * player.diveForce;
+                BodyChunk bodyChunk3 = player.bodyChunks[1];
+                bodyChunk3.vel.y = bodyChunk3.vel.y + 1.2f * player.diveForce;
+            }
+        }
+
+        BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 
 		if (!rightLeft.TryGetValue(player, out var rightLeftStrongBox))

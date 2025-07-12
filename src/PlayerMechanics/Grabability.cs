@@ -75,7 +75,7 @@ public static class Grabability
             return Player.ObjectGrabability.OneHand;
         if (self.AreVoidViy() && (obj is PoleMimic || obj is TentaclePlant))
             return Player.ObjectGrabability.CantGrab;
-        if (self.AreVoidViy() && (obj is Cicada || (obj is Player player && player != self && !player.AreVoidViy() && (player.bodyMode == Player.BodyModeIndex.Crawl && player.room.game.IsArenaSession || !player.room.game.IsArenaSession))))
+        if (self.AreVoidViy() && (obj is Cicada || (obj is Player player && player != self && !player.AreVoidViy() && !player.room.game.IsArenaSession)))
             return Player.ObjectGrabability.TwoHands;
         return orig(self, obj);
     }

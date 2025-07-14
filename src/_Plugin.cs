@@ -9,7 +9,6 @@ using System.Security.Permissions;
 using UnityEngine;
 using VoidTemplate.Creatures;
 using VoidTemplate.Misc;
-using VoidTemplate.Objects.NoodleEgg;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
 using VoidTemplate.PlayerMechanics.Karma11Features;
@@ -100,6 +99,7 @@ class _Plugin : BaseUnityPlugin
 			VoidCycleLimit.Hook();
 			OptionInterface._OIMeta.Initialize();
 			Objects.NoodleEgg._NoodleEggMeta.Hook();
+			DiscordChurch._DiscordMeta.Init();
 
 			RegisterPOMObjects();
 			if (DevEnabled)

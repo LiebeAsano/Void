@@ -26,7 +26,6 @@ public static class ShellGrabUpdate
         if (c.TryGotoNext(x => x.MatchStloc(13))
             && c.TryGotoNext(MoveType.After, x => x.MatchBrfalse(out _)))
         {
-            LogExInf(c.ToString());
             ILCursor u = c.Clone();
             if (u.TryGotoNext(MoveType.Before,
                 x => x.MatchLdloc(13),

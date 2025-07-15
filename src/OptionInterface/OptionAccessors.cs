@@ -6,6 +6,7 @@ public static class OptionAccessors
     #region accessors
 
     public static bool DisableMenuBackGround => cfgDisableMenuBackGround.Value;
+    public static bool DisableRPC => cfgDisableRPC.Value;
     public static bool SaintArenaSpears => cfgSaintArenaSpears.Value;
 	public static bool SaintArenaAscension => cfgSaintArenaAscension.Value;
     public static bool ArenaAscensionStun => cfgArenaAscensionStun.Value;
@@ -21,6 +22,7 @@ public static class OptionAccessors
 
     #region configs
     internal static Configurable<bool> cfgDisableMenuBackGround;
+    internal static Configurable<bool> cfgDisableRPC;
     internal static Configurable<bool> cfgSaintArenaSpears;
 	internal static Configurable<bool> cfgSaintArenaAscension;
     internal static Configurable<bool> cfgArenaAscensionStun;

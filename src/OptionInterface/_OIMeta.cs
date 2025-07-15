@@ -20,6 +20,7 @@ public static class _OIMeta
 
         //IMPORTANT: the creation of checkboxes uses first tag as text for checkbox
         OptionAccessors.cfgDisableMenuBackGround = voidOI.config.Bind<bool>(uniqueprefix + "DisableMenuBackGround", false, new ConfigurableInfo("Disable background of the mod in main menu", tags: "Disable background"));
+        OptionAccessors.cfgDisableRPC = voidOI.config.Bind<bool>(uniqueprefix + "DisableRPC", false, new ConfigurableInfo("Disable custon discord rich presence of the mod", tags: "Disable rich presence"));
         OptionAccessors.cfgSaintArenaAscension = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaAscension", true, new ConfigurableInfo("Allows Saint to use ascension mechanic in arena", tags: "Saint ascension"));
 		OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
         OptionAccessors.cfgArenaAscensionStun = voidOI.config.Bind<bool>(uniqueprefix + "ArenaAscensionStun", false, new ConfigurableInfo("Saint's ascension stuns instead of kills", tags: "Ascension stuns"));

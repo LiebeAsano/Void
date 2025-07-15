@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Discord;
+using Fisobs;
+using Menu;
+using MoreSlugcats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Discord;
-using Fisobs;
-using Menu;
-using MoreSlugcats;
 using UnityEngine;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using static AssetBundles.AssetBundleManager;
 using static VoidTemplate.Useful.Utils;
@@ -19,6 +20,29 @@ namespace VoidTemplate.DiscordChurch
         public static Discord.Discord discord;
         public static ActivityManager activityManager;
         public static bool discordInited;
+        public static bool starvation = false;
+        public static bool sleeping = false;
+        public static bool dead = false;
+        public static bool[] leftshelter = new bool[32];
+        private static float timeSinceLastForceUpdate = 0f;
+        private static readonly float forceUpdateInterval = 1f / 4;
+
+        private static readonly Dictionary<Player.BodyModeIndex, string> BodyModeToSlugMode = new()
+        {
+            { Player.BodyModeIndex.Default, "Jumping" },
+            { Player.BodyModeIndex.Crawl, "Crawling" },
+            { Player.BodyModeIndex.Stand, "Standing" },
+            { Player.BodyModeIndex.CorridorClimb, "Corridor climbing" },
+            { Player.BodyModeIndex.ClimbIntoShortCut, "Short cutting" },
+            { Player.BodyModeIndex.WallClimb, "Wall climbing" },
+            { Player.BodyModeIndex.ClimbingOnBeam, "Climbing on beam" },
+            { Player.BodyModeIndex.Swimming, "Swimming" },
+            { Player.BodyModeIndex.ZeroG, "Levitating" },
+            { Player.BodyModeIndex.Stunned, "Stunned" },
+            { Player.BodyModeIndex.Dead, "Dead" },
+            { BodyModeIndexExtension.CeilCrawl, "Ceil climbing" }
+        };
+
 
         private static readonly long _gameStartTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
@@ -26,6 +50,13 @@ namespace VoidTemplate.DiscordChurch
         {
             On.Menu.MainMenu.Update += MainMenu_Update;
             On.Player.Update += Player_Update;
+            On.Player.ctor += Player_ctor;
+        }
+
+        private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+        {
+            orig(self, abstractCreature, world);
+            leftshelter[self.playerState.playerNumber] = false;
         }
 
         private static int[] killScores;
@@ -96,9 +127,13 @@ namespace VoidTemplate.DiscordChurch
         {
             orig(self, eu);
 
+            timeSinceLastForceUpdate += Time.deltaTime;
+            if (timeSinceLastForceUpdate < forceUpdateInterval || OptionAccessors.DisableRPC) return;
+
             if (!discordInited)
             {
                 TryInitiateDiscord();
+                timeSinceLastForceUpdate = 0f;
                 return;
             }
 
@@ -110,64 +145,113 @@ namespace VoidTemplate.DiscordChurch
                 Assets = { LargeImage = self.SlugCatClass.value.ToLower() }
             };
 
-            var bodyMode = self.bodyMode;
-            string slugMode = "Standing";
-            if (bodyMode == Player.BodyModeIndex.Default) slugMode = "Jumping";
-            if (bodyMode == Player.BodyModeIndex.Crawl) slugMode = "Crawling";
-            if (bodyMode == Player.BodyModeIndex.Stand) slugMode = "Standing";
-            if (bodyMode == Player.BodyModeIndex.CorridorClimb) slugMode = "Corridor climbing";
-            if (bodyMode == Player.BodyModeIndex.ClimbIntoShortCut) slugMode = "Short cutting";
-            if (bodyMode == Player.BodyModeIndex.WallClimb) slugMode = "Wall climbing";
-            if (bodyMode == Player.BodyModeIndex.ClimbingOnBeam) slugMode = "Climbing on beam";
-            if (bodyMode == Player.BodyModeIndex.Swimming) slugMode = "Swimming";
-            if (bodyMode == Player.BodyModeIndex.ZeroG) slugMode = "Levitating";
-            if (bodyMode == Player.BodyModeIndex.Stunned) slugMode = "Stunned";
-            if (bodyMode == Player.BodyModeIndex.Dead) slugMode = "Dead";
-            if (bodyMode == BodyModeIndexExtension.CeilCrawl) slugMode = "Ceil climbing";
-
-            if (self.abstractCreature?.world?.game?.session is StoryGameSession story)
-            {
-                string regionName = self.room?.abstractRoom?.subregionName
-                                ?? Region.GetRegionFullName(self.room.world.name, story.saveStateNumber);
-
-                string minutes = "minutes";
-
-                if ((story.game.world.rainCycle.cycleLength - story.game.world.rainCycle.timer) / (40 * 60) > 1)
-                {
-                    minutes = "minutes";
-                }
-                else if ((story.game.world.rainCycle.cycleLength - story.game.world.rainCycle.timer) / (40 * 60) > 0)
-                {
-                    minutes = "minute";
-                }
-                activity.State = $"{slugMode} in {regionName}";
-                activity.Details = $"Food: [{self.FoodInStomach}/{self.slugcatStats.foodToHibernate}] | " +
-                    $"{(story.saveState.deathPersistentSaveData.karma < 10 ? "Karma" : "Protection")}: " +
-                    $"{(story.saveState.deathPersistentSaveData.karma < 10 ? $"[{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]" : $"[{story.saveState.GetKarmaToken()/2}/5]")} | " +
-                    $"Cycles: {story.saveState.cycleNumber} | " +
-                    $"Deaths: {story.saveState.deathPersistentSaveData.deaths} | " +
-                    $"Score: {GetTotalScore(story.saveState)} | " +
-                    $"{((story.game.world.rainCycle.cycleLength - story.game.world.rainCycle.timer)/(40 * 60) == 0 ? "Rain is coming" : $"Rain in {(story.game.world.rainCycle.cycleLength - story.game.world.rainCycle.timer) / (40 * 60)}" + $"{minutes}")} | " +
-                    $"Story: The {SlugcatStats.getSlugcatName(story.saveStateNumber)}";
-            }
-            else if (self.abstractCreature?.world?.game?.session is ArenaGameSession arena)
-            {
-                activity.Details = $"{slugMode} in Arena";
-            }
+            UpdateActivityBasedOnGameSession(self, ref activity);
 
             activityManager.UpdateActivity(activity, result =>
             {
-                if (result != Result.Ok) Debug.LogError($"Discord RP update failed: {result}");
+                if (result != Result.Ok)
+                    Debug.LogError($"Discord RP update failed: {result}");
             });
+
+            timeSinceLastForceUpdate = 0f;
+        }
+
+        private static void UpdateActivityBasedOnGameSession(Player self, ref Activity activity)
+        {
+            string slugMode = GetSlugMode(self);
+
+            if (self.abstractCreature?.world?.game?.session is StoryGameSession story)
+            {
+                UpdateStorySessionActivity(self, story, ref activity, slugMode);
+            }
+            else if (self.abstractCreature?.world?.game?.session is ArenaGameSession)
+            {
+                activity.Details = $"{slugMode} in Arena";
+            }
+        }
+
+        private static string GetSlugMode(Player self)
+        {
+            if (self.Stunned) return "Stunned";
+            if (self.dead) return "Dead";
+
+            if (self.room?.abstractRoom?.shelter ?? false)
+            {
+                if (dead) return "Dead";
+                if (starvation) return leftshelter[self.playerState.playerNumber] ? "Starving" : "Waking up";
+                if (sleeping) return "Sleeping";
+            }
+
+            return BodyModeToSlugMode.TryGetValue(self.bodyMode, out var mode) ? mode : "Standing";
+        }
+
+        private static void UpdateStorySessionActivity(Player self, StoryGameSession story, ref Activity activity, string slugMode)
+        {
+            string regionName = self.room?.abstractRoom?.subregionName ??
+                               (self.room?.world != null ? Region.GetRegionFullName(self.room.world.name, story.saveStateNumber) : "Depths");
+
+            UpdateShelterStatus(self, story);
+
+            activity.State = $"{slugMode} in {regionName}";
+            activity.Details = BuildActivityDetails(self, story);
+            activity.Assets.LargeText = $"Story: The {SlugcatStats.getSlugcatName(story.saveStateNumber)}";
+            activity.Assets.SmallImage = $"{(self.KarmaCap == 10 ? $"protection{story.saveState.GetKarmaToken()/2}" : $"karma{self.Karma}{(self.Karma < 5 ? "" : $"{self.KarmaCap}")}")}";
+            activity.Assets.SmallText = $"{(story.saveState.deathPersistentSaveData.karma < 10 ? "Karma" : "Protection")}: " +
+                   $"{(story.saveState.deathPersistentSaveData.karma < 10 && story.saveState.deathPersistentSaveData.karma <= story.saveState.deathPersistentSaveData.karmaCap ?
+                       $"[{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]" :
+                       $"[{story.saveState.GetKarmaToken() / 2}/5]")}";
+        }
+
+        private static void UpdateShelterStatus(Player self, StoryGameSession story)
+        {
+            if (self.room?.abstractRoom?.shelter ?? false)
+            {
+                if (self.Consious)
+                {
+                    var rainCycle = story.game.world.rainCycle;
+                    if (self.abstractCreature.world.game.GetStorySession.saveState.malnourished && rainCycle.cycleLength - rainCycle.timer <= 0)
+                        dead = true;
+                    else if (self.FoodInStomach < self.slugcatStats.foodToHibernate)
+                        starvation = true;
+                    else if (self.readyForWin)
+                        sleeping = true;
+                }
+            }
+            else
+            {
+                leftshelter[self.playerState.playerNumber] = true;
+                starvation = false;
+                sleeping = false;
+                dead = false;
+            }
+        }
+
+        private static string BuildActivityDetails(Player self, StoryGameSession story)
+        {
+            var saveState = story.saveState;
+            var rainCycle = story.game.world.rainCycle;
+            var timeToRain = (rainCycle.cycleLength - rainCycle.timer) / (40 * 60);
+            var minutesText = timeToRain > 1 ? "mins" : "min";
+            var rainText = timeToRain == 0 ? "Rain is coming" : $"Rain in {timeToRain} {minutesText}";
+
+            return $"Food: [{self.FoodInStomach}/{self.slugcatStats.foodToHibernate}] | " +
+                   $"Cycles: {saveState.cycleNumber} | " +
+                   $"Deaths: {saveState.deathPersistentSaveData.deaths} | " +
+                   $"Score: {GetTotalScore(saveState)} | " +
+                   $"{rainText}";
         }
 
         private static void MainMenu_Update(On.Menu.MainMenu.orig_Update orig, Menu.MainMenu self)
         {
             orig(self);
 
+            timeSinceLastForceUpdate += Time.deltaTime;
+            if (timeSinceLastForceUpdate < forceUpdateInterval || OptionAccessors.DisableRPC) return;
+
             if (!discordInited)
             {
                 TryInitiateDiscord();
+                timeSinceLastForceUpdate = 0f;
                 return;
             }
 
@@ -179,6 +263,8 @@ namespace VoidTemplate.DiscordChurch
                 Timestamps = { Start = _gameStartTimestamp },
                 Assets = { LargeImage = "lastwish_rpc_thumbnail" }
             }, _ => { });
+
+            timeSinceLastForceUpdate = 0f;
         }
 
         public static void TryDiscordCallBack()

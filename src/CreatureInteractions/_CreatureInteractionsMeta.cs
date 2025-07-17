@@ -14,5 +14,6 @@ public static class _CreatureInteractionsMeta
         OverseerBehavior.Hook();
 		SandGrubEaten.Hook();
         WormGrassEaten.Hook();
+		EdibleMoths.Hook();
 	}
 }

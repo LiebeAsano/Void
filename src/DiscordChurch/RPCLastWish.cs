@@ -24,6 +24,8 @@ namespace VoidTemplate.DiscordChurch
         public static bool sleeping = false;
         public static bool dead = false;
         public static bool[] leftshelter = new bool[32];
+        public static string oldSmallImage;
+        public static string oldSmallText;
         private static float timeSinceLastForceUpdate = 0f;
         private static readonly float forceUpdateInterval = 1f / 4;
 
@@ -188,18 +190,26 @@ namespace VoidTemplate.DiscordChurch
         private static void UpdateStorySessionActivity(Player self, StoryGameSession story, ref Activity activity, string slugMode)
         {
             string regionName = self.room?.abstractRoom?.subregionName ??
-                               (self.room?.world != null ? Region.GetRegionFullName(self.room.world.name, story.saveStateNumber) : "Depths");
+                               (self.room?.world != null ? Region.GetRegionFullName(self.room.world.name, story.saveStateNumber) : "Depths"); 
 
             UpdateShelterStatus(self, story);
 
             activity.State = $"{slugMode} in {regionName}";
             activity.Details = BuildActivityDetails(self, story);
             activity.Assets.LargeText = $"Story: The {SlugcatStats.getSlugcatName(story.saveStateNumber)}";
-            activity.Assets.SmallImage = $"{(self.KarmaCap == 10 ? $"protection{story.saveState.GetKarmaToken()/2}" : $"karma{self.Karma}{(self.Karma < 5 ? "" : $"{self.KarmaCap}")}")}";
-            activity.Assets.SmallText = $"{(story.saveState.deathPersistentSaveData.karma < 10 ? "Karma" : "Protection")}: " +
-                   $"{(story.saveState.deathPersistentSaveData.karma < 10 && story.saveState.deathPersistentSaveData.karma <= story.saveState.deathPersistentSaveData.karmaCap ?
-                       $"[{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]" :
-                       $"[{story.saveState.GetKarmaToken() / 2}/5]")}";
+            if (!self.room?.abstractRoom?.shelter ?? false)
+            {
+                activity.Assets.SmallImage = oldSmallImage = $"{(self.KarmaCap == 10 ? $"protection{story.saveState.GetKarmaToken() / 2}" : $"karma{self.Karma}{(self.Karma < 5 ? "" : $"{self.KarmaCap}")}")}";
+                activity.Assets.SmallText = oldSmallText = $"{(story.saveState.deathPersistentSaveData.karma < 10 ? "Karma" : "Protection")}: " +
+                       $"{(story.saveState.deathPersistentSaveData.karma < 10 ?
+                           $"[{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]" :
+                           $"[{story.saveState.GetKarmaToken() / 2}/5]")}";
+            }
+            else
+            {
+                activity.Assets.SmallImage = oldSmallImage;
+                activity.Assets.SmallText = oldSmallText;
+            }
         }
 
         private static void UpdateShelterStatus(Player self, StoryGameSession story)

@@ -178,15 +178,15 @@ static class PermadeathConditions
             && rainWorldGame.IsVoidStoryCampaign()
             && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
 			|| session.saveState.GetKarmaToken() == 0
-            || session.saveState.cycleNumber > VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && !session.saveState.GetVoidMarkV3())
+            || session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && !session.saveState.GetVoidMarkV3())
             && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}
 
 	private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
 	{
 		orig(self);
-		if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond) SetVoidCatDeadTrue(self);
-		if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * Utils.TicksPerSecond)
+		if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * TicksPerSecond) SetVoidCatDeadTrue(self);
+		if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * TicksPerSecond)
 		{
             var savestate = self.world.game.GetStorySession.saveState;
             session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 2));

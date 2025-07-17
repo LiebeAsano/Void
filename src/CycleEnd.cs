@@ -24,10 +24,11 @@ public static class CycleEnd
 			self.GoToDeathScreen();
 			return;
 		}
-        //if (self.IsVoidWorld() && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && self.GetStorySession.saveState.miscWorldSaveData.SSaiConversationsHad < 8)
-        //{
-        //    self.GetStorySession.saveState.cycleNumber -= 2;
-        //}
+		if (self.IsVoidStoryCampaign() && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && !self.GetStorySession.saveState.GetVoidMarkV3())
+		{
+            self.GoToRedsGameOver();
+			return;
+        }
         orig(self, malnourished, fromWarpPoint);
 
     }
@@ -85,7 +86,7 @@ public static class CycleEnd
 				&& session.characterStats.name == VoidEnums.SlugcatID.Void
 				&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
 				{
-					if ((session.saveState.deathPersistentSaveData.karma == 0 && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0 && game.IsVoidWorld()) game.GoToRedsGameOver();
+					if ((((session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) || session.saveState.deathPersistentSaveData.karma == 0) && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) && game.IsVoidWorld()) game.GoToRedsGameOver();
 				}
 
 			}

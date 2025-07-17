@@ -69,7 +69,7 @@ public static class Grabability
 
     public static bool CanOneHandGrabVoidViy(Player self, PhysicalObject obj)
     {
-        return self.AreVoidViy() && (obj is LanternMouse || obj is Watcher.Frog || obj is Watcher.Barnacle barnacle && !barnacle.hasShell);
+        return self.AreVoidViy() && (obj is LanternMouse || obj is Watcher.Frog || obj is Watcher.Rat || obj is Watcher.Barnacle barnacle && !barnacle.hasShell);
     }
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {

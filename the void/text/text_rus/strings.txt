@@ -27,7 +27,9 @@ Communication Array|Массив Связи
 //REMIX
 ~ Menu ~|~ Меню ~
 Disable background|Отключить задний фон
+Disable rich presence|Отключить игровую активность
 Disable background of the mod in main menu|Отключает задний фон мода в главном меню
+Disable custon discord rich presence of the mod|Отключает кастомную игровую активность мода в дискорде
 
 ~ Arena ~|~ Арена ~
 Saint ascension|Возвышение Святого

@@ -1,4 +1,5 @@
 ﻿using CoralBrain;
+using IL.Watcher;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
@@ -20,6 +21,7 @@ public static class Grabability
         On.Player.Grabability += Player_Grabability;
         On.Creature.Update += Creature_Update;
         On.Player.CanIPickThisUp += Player_CanIPickThisUp;
+        On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         On.SlugcatHand.Update += SlugcatHand_Update;
         //allows hand switching when holding big object
         //IL.Player.GrabUpdate += Player_GrabUpdate;
@@ -75,7 +77,9 @@ public static class Grabability
             return Player.ObjectGrabability.OneHand;
         if (self.AreVoidViy() && (obj is PoleMimic || obj is TentaclePlant))
             return Player.ObjectGrabability.CantGrab;
-        if (self.AreVoidViy() && (obj is Cicada || (obj is Player player && player != self && !player.AreVoidViy() && !player.room.game.IsArenaSession)))
+        if (self.AreVoidViy() && (obj is Cicada 
+            || (obj is Player player && player != self && !player.AreVoidViy() && !player.room.game.IsArenaSession) 
+            || obj is Watcher.BigMoth bigMoth && bigMoth.Small))
             return Player.ObjectGrabability.TwoHands;
         return orig(self, obj);
     }
@@ -127,6 +131,10 @@ public static class Grabability
                         }
                         chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
                     }
+                    else if (self is Watcher.BigMoth bigMoth && bigMoth.Small)
+                    {
+                        chunk.mass = isGrabbedByVoidViy ? originalMass * 0.25f : originalMass;
+                    }
                     else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is JetFish || self is Scavenger)
                     {
                         chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
@@ -159,12 +167,21 @@ public static class Grabability
             {
                 return false;
             }
+            if (self.grasps[0]?.grabbed is Watcher.BigMoth bigMoth && bigMoth.Small || self.grasps[1]?.grabbed is Watcher.BigMoth bigMoth1 && bigMoth1.Small)
+            {
+                return false;
+            }
         }
         if (obj is Player player && player.AreVoidViy() && player.Consious)
         {
             return false;
         }
         return orig(self, obj);
+    }
+
+    private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)
+    {
+        return grabCheck is Watcher.BigMoth bigMoth && bigMoth.Small || orig(self, grabCheck);
     }
 
     public static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)

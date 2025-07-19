@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IL.Watcher;
+using System;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -16,7 +17,9 @@ public static class RockHitSomething
 			&& player.IsVoid()
 			&& result.obj is Creature creature)
 		{
-			string creatureTypeName = creature.Template.type.ToString();
+			if (creature is Watcher.BigMoth bigMoth && bigMoth.Small) creature.Stun(69);
+
+            string creatureTypeName = creature.Template.type.ToString();
 
 			string[] excludedCreatureTypes = [
 					"Vulture",

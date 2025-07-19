@@ -1,2 +1,14 @@
 [FINDLINE]LF_M02 : LF_M03, LF_M01
 [REPLACE]LF_M02 : LF_M02, LF_M03, LF_M01
+
+[FINDLINE](Red)OFFSCREEN : 0-Deer-6, 0-Vulture-2, 0-KingVulture, 0-Scavenger-14
+[REPLACE](Red)OFFSCREEN : 0-Deer-6, 0-Vulture-2, 0-KingVulture, 0-Scavenger-14, 0-bigmoth
+
+[FINDLINE](White)OFFSCREEN : 0-Deer-6, 0-Vulture-3, 0-Scavenger-8
+[REPLACE](White)OFFSCREEN : 0-Deer-6, 0-Vulture-3, 0-Scavenger-8, 0-bigmoth
+
+[FINDLINE](Yellow)OFFSCREEN : 0-Deer-6, 0-Vulture-2, 0-Scavenger-7
+[REPLACE](Yellow)OFFSCREEN : 0-Deer-6, 0-Vulture-2, 0-Scavenger-7, 0-bigmoth
+
+[FINDLINE](Gourmand)OFFSCREEN : 0-Deer-5, 0-Vulture, 0-KingVulture-2, 0-Scavenger-8
+[REPLACE](Gourmand)OFFSCREEN : 0-Deer-5, 0-Vulture, 0-KingVulture-2, 0-Scavenger-8, 0-bigmoth

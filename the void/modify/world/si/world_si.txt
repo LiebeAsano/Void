@@ -1,6 +1,18 @@
 [FINDLINESTART]SI_C07 :
 [REPLACE]SI_C07 : SI_C02, SI_E01 : SWARMROOM
 
+[FINDLINESTART](Gourmand)OFFSCREEN : 0-Vulture
+[REPLACE]OFFSCREEN : 0-Vulture-3, 0-KingVulture-1, 0-Scavenger-6, 0-bigmoth-5
+
+[FINDLINE](Yellow)OFFSCREEN : 0-Vulture
+[REPLACE]OFFSCREEN : 0-Vulture-3, 0-Scavenger-6, 0-bigmoth-5
+
+[FINDLINE](White)OFFSCREEN : 0-Vulture
+[REPLACE](White)OFFSCREEN : 0-Vulture-4, 0-Scavenger-6, 0-bigmoth-5
+
+[FINDLINE](Red)OFFSCREEN : 0-Vulture
+[REPLACE](Red)OFFSCREEN : 0-Vulture-3, 0-KingVulture-2, 0-Scavenger-8, 0-bigmoth-5
+
 [MERGE]
 ROOMS
 GATE_SI_WARF : DISCONNECTED, SI_E03 : GATE
@@ -15,7 +27,7 @@ END ROOMS
 CREATURES
 //all
 SI_E01 : 2-Blue
-SI_E02 : 3-SmallNeedleWorm-3, 4-BigNeedleWorm
+SI_E02 : 3-SmallNeedleWorm-3, 3-BigNeedleWorm, 4-bigmoth, 4-smallmoth2
 SI_E03 : 4-Yellow-1, 5-Yellow-1
 SI_E04 : 1-Centiwing, 2-Centiwing
 SI_E05 : 2-Eggbug

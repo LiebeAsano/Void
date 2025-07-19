@@ -1,0 +1,5 @@
+[MERGE]
+Room_Attr: SI_E04: BigMoth-Forbidden,KingVulture-Forbidden,Vulture-Forbidden,
+Room_Attr: SI_E02: KingVulture-Forbidden,Vulture-Forbidden,BigMoth-Like,
+Room_Attr: SI_E01: KingVulture-Forbidden,Vulture-Forbidden,BigMoth-Like,
+[ENDMERGE]

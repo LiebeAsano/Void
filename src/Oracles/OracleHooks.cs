@@ -99,10 +99,10 @@ static class OracleHooks
                             self.inspectPearl = (physicalObject as DataPearl);
                             if (!(self.inspectPearl is SpearMasterPearl) || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
                             {
-                                Custom.Log(new string[]
-                                {
+                                Custom.Log(
+                                [
                                     string.Format("---------- INSPECT PEARL TRIGGERED: {0}", self.inspectPearl.AbstractPearl.dataPearlType)
-                                });
+                                ]);
                                 if (self.inspectPearl is SpearMasterPearl)
                                 {
                                     self.LockShortcuts();
@@ -177,7 +177,7 @@ static class OracleHooks
     public static SSOracleBehavior.Action MeetVoid_Curious = new("MeetVoid_Curious", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidScan = new("VoidScan", true);
-    public static List<ProjectedImage> Void_projectImages = new List<ProjectedImage>();
+    public static List<ProjectedImage> Void_projectImages = new();
     #endregion
 
     public static void EatPearlsInterrupt(this SSOracleBehavior self)
@@ -758,7 +758,7 @@ static class OracleHooks
 #nullable disable
     private static void ILSSOracleBehavior_Update(ILContext il)
 	{
-		ILCursor c = new ILCursor(il);
+		ILCursor c = new(il);
 
         // this.dialogBox.Interrupt(this.Translate("Yes, help yourself. They are not edible." < OR PICK ONE OF CUSTOM INTERRUPT LINES AFTER 1ST MEET>), 10);
         if (c.TryGotoNext(MoveType.After, i => i.MatchLdstr("Yes, help yourself. They are not edible.")))

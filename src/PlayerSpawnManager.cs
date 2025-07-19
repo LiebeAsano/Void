@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using VoidTemplate;
+using VoidTemplate.Objects;
 using VoidTemplate.Useful;
 
 public static class PlayerSpawnManager
@@ -10,6 +11,7 @@ public static class PlayerSpawnManager
 		On.Player.Update += Player_Update;
 		On.RainCycle.ctor += RainCycle_ctor;
         //On.RainWorldGame.Update += RainWorldGame_Update;
+        //On.RainWorldGame.Update += RainWorldGame_Update2;
     }
 
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
@@ -90,6 +92,17 @@ public static class PlayerSpawnManager
         if (Input.GetKey(KeyCode.H) && !prevPressed)
         {
             _ = new VoidTemplate.Objects.KarmaRotator(self.Players[0].Room.realizedRoom);
+        }
+        prevPressed = Input.GetKey(KeyCode.H);
+    }
+
+    private static void RainWorldGame_Update2(On.RainWorldGame.orig_Update orig, RainWorldGame self)
+    {
+        orig(self);
+        if (Input.GetKey(KeyCode.H) && !prevPressed)
+        {
+			if (self.Players[1].realizedCreature is Player player)
+            HunterSpasms.Spasm(player, 5f, 1f);
         }
         prevPressed = Input.GetKey(KeyCode.H);
     }

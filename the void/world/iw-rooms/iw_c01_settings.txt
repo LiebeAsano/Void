@@ -1,0 +1,8 @@
+Template: iw_settingstemplate_subway
+WaveSpeed: 0.5016772
+WaveLength: 0.9991614
+WaveAmplitude: 8.349279E-08
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+PlacedObjects: LightBeam><1337.272><348.2775><70.43442~389.3262~382.2115~389.3261~360.8678~-26.32401~-202.0541~-214.8604~0.5469314~0~0.4949274~1~None~0~0, LightSource><1516.739><346.6512><1~Environment~288.1406~21.0282~50~86.60254~1~0~None~0~0, SnowSource><1393.079><405.5291><Radial~129.4855~2.530182~50~86.60254~0.7602692~1, SnowSource><1594.072><377.1688><Radial~128.0626~10.35629~50~86.60254~0.7602692~1, LightFixture><2404.927><172.1336><RedLight~17.32051~-10~40, LightFixture><517.424><51.32084><RedLight~17.32051~-10~40, LanternOnStick><1136.691><337.3464><27.0354~-87.82501, LanternOnStick><146.0427><362.2281><-20.63226~-80.71045, LanternOnStick><405.0039><350.855><-47.65692~-99.92987, DangleFruit><890.5198><339.8837><0~0~2~3, DangleFruit><755.8768><355.617><0~0~2~3, 
+FadePalette: 10, 0.5027096, 0.5027096, 0.5027099

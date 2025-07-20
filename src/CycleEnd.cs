@@ -24,7 +24,7 @@ public static class CycleEnd
 			self.GoToDeathScreen();
 			return;
 		}
-		if (self.IsVoidStoryCampaign() && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && !self.GetStorySession.saveState.GetVoidMarkV3())
+		if (self.IsVoidStoryCampaign() && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) && OptionAccessors.PermaDeath && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && !self.GetStorySession.saveState.GetVoidMarkV3())
 		{
             self.GoToRedsGameOver();
 			return;

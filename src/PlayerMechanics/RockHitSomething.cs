@@ -44,7 +44,8 @@ public static class RockHitSomething
 					"AquaCenti",
 					"StowawayBug",
                     "Mimicstarfish",
-                    "Outspector"
+                    "Outspector",
+                    "BigMoth"
             ];
 
 			if (Array.IndexOf(excludedCreatureTypes, creatureTypeName) == -1)

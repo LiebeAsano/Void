@@ -48,6 +48,7 @@ public class KarmaFlowerChanges
                     if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !saveState.GetSaveVoidCycle())
                     {
                         saveState.SetSaveVoidCycle(true);
+                        saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + 1);
                         self.room.game.cameras[0].hud.karmaMeter.blinkRed = true;
                         self.room.game.cameras[0].hud.karmaMeter.blinkRedCounter = 300;
                         HunterSpasms.Spasm(player, 10f, 0.2f);

@@ -38,10 +38,27 @@ SB_Q02 : DISCONNECTED, GATE_SB_WARG, SB_Q01
 END ROOMS
 
 CREATURES
+(Void)OFFSCREEN : 0-Miros-4, 0-Scavenger-2
+(Void)SB_H03 : 9-Centipede-2, 4-SpitterSpider-2
+(Void)SB_H02 : 4-Centipede-2, 5-BigSpider-2, 6-SpitterSpider-2, 7-Centipede-2, 5-Red Centipede
+(Void)SB_C06 : 3-Black, 4-Black
+(Void)SB_F02 : 4-Black, 5-Black, 6-Black, 7-Black
+(Void)SB_J03 : 8-Black, 7-Black, 4-TentaclePlant, 5-Small Centipede-3, 6-Centipede-3
+(Void)SB_J02 : 3-Cyan-3, 5-JetFish
+(Void)SB_G02 : 3-DropBug
+(Void)SB_E02 : 3-DropBug
+(Void)SB_C01 : 4-DropBug
+(Void)SB_B02 : 2-DropBug
+(Void)SB_E04 : 4-SpitterSpider, 4-BigSpider
+(Void)SB_A03 : 3-DropBug, 4-TentaclePlant, 5-Cyan-2
+(Void)SB_F01 : 3-SpitterSpider, 4-SpitterSpider, 5-BigSpider
+(Void)SB_C07 : 2-Salamander, 3-Dropbug
+(Void)SB_D04 : 9-Black, 5-BigSpider, 6-BigSpider
 (Void)SB_F02 : 5-Black, 6-Black
 (Void)SB_I01 : 8-Black, 10-Black, 12-Black
 (Void)SB_C06 : 3-Black, 4-Black
 (Void)SB_H02 : 4-Centipede-3, 5-BigSpider-5, 7-Centipede-4
+(Void)SB_GOR01 : 3-Small Centipede-2, 3-Centipede, 4-BigSpider, 5-Blue, 6-Small Centipede-2
 SB_LWB01 : 2-WhiteLizard
 SB_LWB02 : 3-BigSpider, 4-SpitterSpider, 5-PoleMimic-{Ignorecycle}
 SB_LWB03 : 2-DropBug-2, 3-WhiteLizard

@@ -17,7 +17,8 @@ public static class SaveManager
 	private const string voidCatDead = uniqueprefix + "VoidCatDead";
 	private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
 	private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
-	private const string hasHadFirstCycleAsViy = uniqueprefix + "ViyFirstCycle";
+    private const string saveVoidCycle = uniqueprefix + "SaveVoidCycle";
+    private const string hasHadFirstCycleAsViy = uniqueprefix + "ViyFirstCycle";
 
 
 	public static bool GetViyFirstCycle(this SaveState saveState) =>
@@ -119,7 +120,8 @@ public static class SaveManager
 	public static void SetEndingEncountered(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(endingDone, value);
 	public static int GetVoidExtraCycles(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(voidExtraCycles, out int extraCycles) ? extraCycles : 0;
 	public static void SetVoidExtraCycles(this SaveState save, int value) => save.deathPersistentSaveData.GetSlugBaseData().Set(voidExtraCycles, value);
-
+    public static bool GetSaveVoidCycle(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(saveVoidCycle, out bool dead) && dead;
+    public static void SetSaveVoidCycle(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(saveVoidCycle, value);
 
     private const string stomachPearls = uniqueprefix + "stomachPearls";
     public static Dictionary<int, List<string>> GetStomachPearls(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet<Dictionary<int, List<string>>>(stomachPearls, out var dic) ? dic : [];

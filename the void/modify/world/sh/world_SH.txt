@@ -1,0 +1,74 @@
+[MERGE]
+
+CREATURES
+SH_A11 : 4-Lantern Mouse-2
+SH_A12 : 3-Lantern Mouse-2
+SH_A14 : 3-Lantern Mouse-2
+SH_B01 : 4-Lantern Mouse, 3-Lantern Mouse
+SH_A05 : 3-Lantern Mouse-2
+SH_C07 : 6-Spider-20, 4-Spider-20
+SH_B17 : 3-Spider-10, 4-Spider-12
+SH_C03 : 4-Spider-10
+SH_A21 : 2-Lantern Mouse-1, 3-Lantern Mouse-1, 4-Lantern Mouse-1
+SH_C01 : 4-Lantern Mouse-2, 5-Lantern Mouse-2
+SH_A16 : 2-Spider-10, 3-Spider-5
+SH_A17 : 3-Spider-20, 4-Spider-20
+SH_B06 : 2-Spider-10, 3-Spider-10, 4-Spider-20, 5-Spider-20
+SH_B11 : 4-Spider-10, 5-Spider-10
+SH_B07 : 3-Spider-15
+SH_A06 : 2-Lantern Mouse-2, 3-Lantern Mouse-2
+SH_B02 : 4-Spider-15, 3-Lantern Mouse-2, 8-Lantern Mouse-1
+SH_B03 : 3-Lantern Mouse-1, 2-Lantern Mouse-2
+SH_A07 : 6-Spider-10
+SH_A22 : 2-Spider-10
+SH_A23 : 4-Spider-10
+SH_C08 : 4-Black-2
+SH_A09 : 4-Lantern Mouse, 5-Lantern Mouse
+SH_A19 : 1-Spider-15, 2-Spider-15
+SH_B04 : 3-Lantern Mouse-2, 4-Lantern Mouse-2
+SH_A04 : 4-Lantern Mouse-2, 3-Lantern Mouse-2
+SH_D02 : 3-Tentacle Plant, 4-Tentacle Plant
+SH_B10 : 3-Tentacle Plant
+SH_E02 : 4-Tentacle Plant, 5-Tentacle Plant, 6-Tentacle Plant
+SH_C10 : 3-Lantern Mouse, 4-Lantern Mouse, 5-Lantern Mouse, 6-Lantern Mouse, 7-Lantern Mouse
+SH_H01 : 4-Small Centipede-3
+LINEAGE : SH_A11 : 4 : NONE-0.05, Green-0.4, Black-0
+LINEAGE : SH_A11 : 5 : NONE-0.05, Pink-0.4, Black-0
+LINEAGE : SH_B01 : 5 : Lantern Mouse-0.2, BigSpider-0.2, BigSpider-0.2, NONE-0.05, SpitterSpider-0
+LINEAGE : SH_C08 : 3 : Black-0.2, Yellow-0.2, Red-0
+LINEAGE : SH_B05 : 6 : Lantern Mouse-0.15, BigSpider-0.2, BigSpider-0.2, NONE-0.05, SpitterSpider-0
+LINEAGE : SH_B05 : 8 : Lantern Mouse-0.2, BigSpider-0.2, BigSpider-0.2, NONE-0.05, SpitterSpider-0
+LINEAGE : SH_H01 : 3 : Small Centipede-0.5, Centipede-{0.3}-1.0, Centipede-{0.6}-0
+LINEAGE : SH_H01 : 5 : Small Centipede-0.5, Centipede-{0.3}-1.0, Centipede-{0.6}-0
+LINEAGE : SH_B02 : 5 : NONE-0.05, Black-0
+LINEAGE : SH_C05 : 7 : NONE-0.05, TentaclePlant-0
+LINEAGE : SH_C05 : 5 : NONE-0.05, Black-0
+LINEAGE : SH_B02 : 4 : BigSpider-0.3, BigSpider-0.3, NONE-0.1, SpitterSpider-0
+LINEAGE : SH_B17 : 5 : BigSpider-0.3, BigSpider-0.3, NONE-0.1, SpitterSpider-0
+(Void)SH_C09 : 2-Spider-5, 3-Spider-10, 4-Spider-15, 5-Spider-15, 3-BigSpider
+(Void)SH_C05 : 2-Lantern Mouse, 3-Lantern Mouse, 5-Lantern Mouse, 6-BigSpider, 4-Spider-20
+(Void)SH_C04 : 8-Lantern Mouse-2, 5-Lantern Mouse-2, 6-Dropbug, 7-Spider-20
+(Void)SH_A15 : 4-Dropbug
+(Void)SH_A14 : 4-Dropbug
+(Void)SH_H01 : 4-Centipede-{0.65}
+(Void)SH_B06 : 4-BigSpider-2, 5-BigSpider
+(Void)SH_C03 : 5-SpitterSpider, 7-Spider-30
+(Void)SH_C01 : 6-SpitterSpider
+(Void)SH_B13 : 3-BigSpider, 3-Spider-10
+(Void)SH_B07 : 2-BigSpider, 4-Spider-5
+(Void)SH_E02 : 3-Centipede-{0.25}, 3-Centipede-{0.2}, 3-Centipede-{0.4}, 3-Centipede-{0.35}
+(Void)LINEAGE : SH_B08 : 2 : Dropbug-0.3, BigSpider-0.5, SpitterSpider-0.5, NONE-0
+(Void)LINEAGE : SH_B05 : 7 : BigSpider-0.4, SpitterSpider-0
+(Void)LINEAGE : SH_C08 : 2 : Black-0.2, BigSpider-0.5, SpitterSpider-0.5, Red-0
+(Void)LINEAGE : SH_C03 : 7 : BigSpider-0.5, DropBug-0.5, SpitterSpider-0
+(Void)LINEAGE : SH_C03 : 4 : BigSpider-0.5, DropBug-0.5, SpitterSpider-0
+(Void)LINEAGE : SH_C01 : 3 : BigSpider-0.5, DropBug-0.5, SpitterSpider-0
+(Void)LINEAGE : SH_C05 : 6 : BigSpider-0.5, DropBug-0.5, SpitterSpider-0
+(Void)LINEAGE : SH_C12 : 2 : NONE-0.05, BigSpider-0
+(Void)LINEAGE : SH_B17 : 5 : BigSpider-0.2, NONE-0.5, Black-0.5, SpitterSpider-0
+(Void)LINEAGE : SH_B04 : 5 : EggBug-0.5, BigSpider-0
+
+(Void)OFFSCREEN : 0-Miros Bird-10, 0-Scavenger-4
+END CREATURES
+
+[ENDMERGE]

@@ -9,8 +9,17 @@ public class KarmaFlowerChanges
 {
     public static void Initiate()
     {
+        On.Player.ctor += Player_ctor;
         On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
         On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
+    }
+
+    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+    {
+        orig(self, abstractCreature, world);
+        var saveState = self.abstractCreature?.world?.game?.GetStorySession.saveState;
+        if (self.abstractCreature.world.game.IsVoidStoryCampaign())
+            saveState.SetSaveVoidCycle(false);
     }
 
     private static int Player_FoodInRoom_Room_bool(On.Player.orig_FoodInRoom_Room_bool orig, Player self, Room checkRoom, bool eatAndDestroy)
@@ -36,10 +45,12 @@ public class KarmaFlowerChanges
 
                 if (player.abstractCreature.world.game.IsVoidStoryCampaign())
                 {
-                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3())
+                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !saveState.GetSaveVoidCycle())
                     {
-                        saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + 1);
-                        HunterSpasms.Spasm(player, 5f, 0.2f);
+                        saveState.SetSaveVoidCycle(true);
+                        self.room.game.cameras[0].hud.karmaMeter.blinkRed = true;
+                        self.room.game.cameras[0].hud.karmaMeter.blinkRedCounter = 300;
+                        HunterSpasms.Spasm(player, 10f, 0.2f);
                     }
 
                     if (self.bites == 1 && player.KarmaCap == 10 && !player.IsViy())

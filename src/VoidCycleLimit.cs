@@ -34,7 +34,7 @@ namespace VoidTemplate
 
             return GetCycleLimitLifted(saveState) ? actualCycleNumber : GetVoidCycleLimit(saveState) - actualCycleNumber;
         }
-
+         
         public static void Hook()
         {
             On.HUD.Map.Update += Map_Update;

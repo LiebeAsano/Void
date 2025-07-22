@@ -36,7 +36,7 @@ public static class Spasm
                     && player.KarmaCap > 3
                     && !Karma11Update.VoidKarma11
                     && !self.GetStorySession.saveState.GetVoidMarkV3()
-                    && !self.GetStorySession.saveState.GetSaveVoidCycle())
+                    && !KarmaFlowerChanges.SaveVoidCycle)
                 {
                     float MaxSize = 220000f;
                     float Lenght = 10f;

@@ -8,10 +8,38 @@ public static class PlayerSpawnManager
 {
 	public static void ApplyHooks()
 	{
-		On.Player.Update += Player_Update;
+		On.Player.ctor += Player_ctor;
 		On.RainCycle.ctor += RainCycle_ctor;
         //On.RainWorldGame.Update += RainWorldGame_Update;
         //On.RainWorldGame.Update += RainWorldGame_Update2;
+    }
+
+    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+    {
+        orig(self, abstractCreature, world);
+        if (self.room is Room playerRoom
+            && playerRoom.game.IsStorySession
+            && playerRoom.game.GetStorySession.saveStateNumber == VoidEnums.SlugcatID.Void
+            && playerRoom.game.GetStorySession.saveState is SaveState save
+            && !save.GetTeleportationDone())
+        {
+            if (playerRoom.game.IsVoidStoryCampaign())
+            {
+                InitializeTargetRoomID(playerRoom);
+            }
+
+            int currentRoomIndex = self.abstractCreature.pos.room;
+
+            if (currentRoomIndex == NewSpawnPoint.room)
+            {
+                save.SetTeleportationDone(true);
+                self.abstractCreature.pos = NewSpawnPoint;
+                Vector2 newPosition = self.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
+                Array.ForEach(self.bodyChunks, x => x.pos = newPosition);
+                self.standing = true;
+                self.animation = Player.AnimationIndex.StandUp;
+            }
+        }
     }
 
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)

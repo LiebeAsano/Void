@@ -14,12 +14,14 @@ public class KarmaFlowerChanges
         On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
     }
 
+    public static bool SaveVoidCycle = false;
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
         orig(self, abstractCreature, world);
-        var saveState = self.abstractCreature?.world?.game?.GetStorySession.saveState;
         if (self.abstractCreature.world.game.IsVoidStoryCampaign())
-            saveState.SetSaveVoidCycle(false);
+        {
+            SaveVoidCycle = false;
+        }
     }
 
     private static int Player_FoodInRoom_Room_bool(On.Player.orig_FoodInRoom_Room_bool orig, Player self, Room checkRoom, bool eatAndDestroy)
@@ -45,9 +47,9 @@ public class KarmaFlowerChanges
 
                 if (player.abstractCreature.world.game.IsVoidStoryCampaign())
                 {
-                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !saveState.GetSaveVoidCycle())
+                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !SaveVoidCycle)
                     {
-                        saveState.SetSaveVoidCycle(true);
+                        SaveVoidCycle = true;
                         saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + 1);
                         self.room.game.cameras[0].hud.karmaMeter.blinkRed = true;
                         self.room.game.cameras[0].hud.karmaMeter.blinkRedCounter = 300;

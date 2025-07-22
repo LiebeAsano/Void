@@ -111,7 +111,6 @@ sealed class MimicstarfishCritob : Critob
             creatureTemplate.movementBasedVision = 0f;
             creatureTemplate.dangerousToPlayer = 0.55f;
             creatureTemplate.communityID = CreatureCommunities.CommunityID.None;
-            creatureTemplate.daddyCorruptionImmune = false;
             creatureTemplate.waterRelationship = CreatureTemplate.WaterRelationship.Amphibious;
             creatureTemplate.meatPoints = 7;
             creatureTemplate.BlizzardWanderer = false;

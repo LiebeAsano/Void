@@ -2,3 +2,4 @@
 [ADD]GATE_LC_LR : 3 : R
 [ADD]GATE_OE_IW : 1 : 5
 [ADD]GATE_SI_WARF : 2 : 4
+[ADD]GATE_SB_WARG : 1 : 3

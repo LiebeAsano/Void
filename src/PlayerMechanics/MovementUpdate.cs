@@ -134,7 +134,7 @@ public static class MovementUpdate
                 {
                     self.jumpBoost = 0f;
                 }
-                if (self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[0].ContactPoint.x == self.input[0].x && self.bodyMode != Player.BodyModeIndex.Crawl)
+                if (self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[0].ContactPoint.x == self.input[0].x && Crawl.crawlTicks[self.playerState.playerNumber] <= 10)
                 {
                     if (self.bodyChunks[0].lastContactPoint.x != self.input[0].x)
                     {

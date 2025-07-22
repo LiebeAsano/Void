@@ -101,8 +101,8 @@ public static class PlayerSpawnManager
         orig(self);
         if (Input.GetKey(KeyCode.H) && !prevPressed)
         {
-			if (self.Players[1].realizedCreature is Player player)
-            HunterSpasms.Spasm(player, 5f, 1f);
+			if (self.Players[0].realizedCreature is Player player)
+            HunterSpasms.Spasm(player, 10f, 1f);
         }
         prevPressed = Input.GetKey(KeyCode.H);
     }

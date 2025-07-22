@@ -41,19 +41,40 @@ public class RedOverlay : CosmeticSprite
         viableFade = Min(1f, viableFade + 1 / 30f);
         
         if(fade == 0f && lastFade > 0f) rotDir = Random.value < 0.5f ? -1f : 1f;
-        
+
+        SoundID meow = SoundID.None;
+
+        switch (Random.Range(0, 5))
+        {
+            case 0:
+                meow = Watcher.WatcherEnums.WatcherSoundID.RotLiz_Vocalize;
+                break;
+            case 1:
+                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A;
+                break;
+            case 2:
+                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
+                break;
+            case 3:
+                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
+                break;
+            case 4:
+                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
+                break;
+        }
+
         if (soundLoop is null && fade > 0f)
         {
             soundLoop = new DisembodiedDynamicSoundLoop(this)
             {
-                sound = SoundID.Reds_Illness_LOOP,
+                sound = meow,
                 VolumeGroup = 1
             };
         }
         else if (soundLoop is not null)
         {
             soundLoop.Update();
-            soundLoop.Volume = LerpAndTick(soundLoop.Volume, Pow((fade + strength) / 2f, 0.5f), 0.06f, 1 / 7f);
+            soundLoop.Volume = LerpAndTick(soundLoop.Volume, Pow((fade + strength) / 8f, 0.5f), 0.06f, 1 / 7f);
         }
         
     }

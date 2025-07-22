@@ -14,6 +14,17 @@
 [REPLACE](Red)OFFSCREEN : 0-Vulture-3, 0-KingVulture-2, 0-Scavenger-8, 0-bigmoth-5
 
 [MERGE]
+CONDITIONAL LINKS
+Rivulet, Saint : SI_C07 : SI_E01 : DISCONNECTED
+Rivulet, Saint : HIDEROOM : SI_E01
+Rivulet, Saint : HIDEROOM : SI_E02
+Rivulet, Saint : HIDEROOM : SI_E03
+Rivulet, Saint : HIDEROOM : SI_E04
+Rivulet, Saint : HIDEROOM : SI_E05
+Rivulet, Saint : HIDEROOM : SI_E06
+Rivulet, Saint : HIDEROOM : GATE_SI_WARF
+END CONDITIONAL LINKS
+
 ROOMS
 GATE_SI_WARF : DISCONNECTED, SI_E03 : GATE
 SI_E01 : SI_C07, SI_E02

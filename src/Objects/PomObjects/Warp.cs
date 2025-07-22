@@ -301,63 +301,76 @@ public class Warp : UpdatableAndDeletable
 		AwaitingWorld,
 		AwaitingTransition
 	}
-	#endregion
-	public override void Update(bool eu)
-	{
-		base.Update(eu);
-		switch (state)
-		{
-			case State.Awaiting:
-				if (room.PlayersInRoom.Any(
-					realizedPlayerInRoom => 
-						realizedPlayerInRoom is not null
-						&& PositionWithinPoly(TriggerZone, realizedPlayerInRoom.mainBodyChunk.pos))
-					|| room.game.shortcuts.transportVessels.Any( 
-						vessel => 
-						vessel.room == room.abstractRoom 
-						&& PositionWithinPoly(TriggerZone, room.MiddleOfTile(vessel.pos))))
-				{
-					room.game.cameras[0].EnterCutsceneMode(room.PlayersInRoom[0].abstractCreature, RoomCamera.CameraCutsceneType.EndingOE);
-					fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);
-					room.AddObject(fadeOut);
-					threadedLoading = new ThreadedLoading(this, room, Acronym);
-					thread = new Thread(threadedLoading.Load);
-					thread.Start();
-					state = State.Fadein;
-				}
-				break;
+    #endregion
 
-			case State.Fadein:
-				if (fadeOut!.fade >= 1f)
-				{
-					state = State.AwaitingWorld;
-				}
-				break;
+    private void ActivateWarp(AbstractCreature player)
+    {
+        room.game.cameras[0].EnterCutsceneMode(player, RoomCamera.CameraCutsceneType.EndingOE);
+        fadeOut = new FadeOut(room, Color.black, duration: TimeToFadeIn, fadeIn: false);
+        room.AddObject(fadeOut);
+        threadedLoading = new ThreadedLoading(this, room, Acronym);
+        thread = new Thread(threadedLoading.Load);
+        thread.Start();
+        state = State.Fadein;
+    }
 
-			case State.AwaitingWorld:
-				if (worldLoader is not null
-					&& worldLoader.ReturnWorld() is not null)
-				{
-					OverWorld overWorld = room.game.overWorld;
-					customLoader.Add(overWorld, new CustomLoader()
-					{
-						worldLoader = worldLoader,
-						warp = this,
-						targetRoom = TargetRoom
-					});
-					worldLoader = null;
-					state = State.AwaitingTransition;
-				}
-				break;
+    public override void Update(bool eu)
+    {
+        base.Update(eu);
+        switch (state)
+        {
+            case State.Awaiting:
+                foreach (var player in room.PlayersInRoom)
+                {
+                    if (player != null && PositionWithinPoly(TriggerZone, player.mainBodyChunk.pos))
+                    {
+                        ActivateWarp(player.abstractCreature);
+                        break;
+                    }
+                }
 
-			case State.AwaitingTransition:
-				break;
-		}
-		
-		
-	}
+                foreach (var vessel in room.game.shortcuts.transportVessels)
+                {
+                    if (vessel.room == room.abstractRoom
+                        && PositionWithinPoly(TriggerZone, room.MiddleOfTile(vessel.pos))
+                        && vessel.creature is Player) // Добавляем проверку, что это игрок
+                    {
+                        ActivateWarp(vessel.creature.abstractCreature);
+                        break;
+                    }
+                }
+                break;
 
-	void OnRoomChange(AbstractRoom destinationRoom)
+
+            case State.Fadein:
+                if (fadeOut!.fade >= 1f)
+                {
+                    state = State.AwaitingWorld;
+                }
+                break;
+
+            case State.AwaitingWorld:
+                if (worldLoader is not null
+                    && worldLoader.ReturnWorld() is not null)
+                {
+                    OverWorld overWorld = room.game.overWorld;
+                    customLoader.Add(overWorld, new CustomLoader()
+                    {
+                        worldLoader = worldLoader,
+                        warp = this,
+                        targetRoom = TargetRoom
+                    });
+                    worldLoader = null;
+                    state = State.AwaitingTransition;
+                }
+                break;
+
+            case State.AwaitingTransition:
+                break;
+        }
+    }
+
+    void OnRoomChange(AbstractRoom destinationRoom)
 	{
 		room.updateList.Remove(this);
 		destinationRoom.realizedRoom.AddObject(this);

@@ -1,0 +1,8 @@
+Template: NONE
+Clouds: 1
+Grime: 0
+Palette: 21
+EffectColorA: 10
+PlacedObjects: LightSource><231.3644><253.147><0.08695652~White~924~229~-27~142.6025~1~0, LightSource><232.3292><255.104><0.08695652~EffectColor1~926~226~-220~233.6025~1~0, NoSpearStickZone><481.0742><238.0953><6~226, 
+AmbientSounds: SPOT><AM_SUB-BlankState.ogg><759.4086><267.0721><0.25><1><1119.409><187.0721><21.64465><-278.3553><0><0.3391306, SPOT><AM_ENV-LightWind.ogg><718.8085><518.4421><0.1521739><1><165.8085><632.4421><-217.3553><-147.3553><0><0.2413045, 
+FadePalette: 4, 0.4347826

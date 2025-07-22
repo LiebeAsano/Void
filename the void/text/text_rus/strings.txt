@@ -23,6 +23,7 @@ Retained Wall|Подпорная Стена
 Far Wall|Дальняя Стена
 Icy Wastelands|Ледяные Пустоши
 Communication Array|Массив Связи
+Abyss|Бездна
 
 //REMIX
 ~ Menu ~|~ Меню ~

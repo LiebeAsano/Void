@@ -15,7 +15,7 @@ RandomItemDensity: 0.9021288
 RandomItemSpearChance: 0.3005318
 WaterReflectionAlpha: 1
 Palette: 201
-EffectColorA: 0
+EffectColorA: 18
 EffectColorB: 10
 Effects: Coldness-0.3093297-17.19376-131.0271, SandPuffs-1-274.7416-131.0271, DayNight-0.9047893-20-20, Darkness-0.3711959-23.59689-73.39896, Contrast-0.09279898-270.4729-18.61667, Ant-0.4639944-277.5874-71.97608, 
 AmbientSounds: OMNI><AM_ENV-CityTone.ogg><37.95732><474.3356><0.2138701><1, OMNI><AM_SUB-BlankState.ogg><24.68452><388.3925><0.3272079><1, OMNI><MSC-Subtundra.ogg><65.41608><309.4172><0.1752034><1, 

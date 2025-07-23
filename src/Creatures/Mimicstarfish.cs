@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 using System;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 
@@ -708,9 +709,10 @@ public class Mimicstarfish : Creature, PhysicalObject.IHaveAppendages
 
                     this.AI.tracker.ForgetCreature((this.eatObjects[i].chunk.owner as Creature).abstractCreature);
                     Player player = this.eatObjects[i].chunk.owner as Player;
-                    if (player != null)
+                    player?.PermaDie();
+                    if (player != null && player.AreVoidViy())
                     {
-                        player.PermaDie();
+                        this.Die();
                     }
                 }
                 this.eatObjects[i].chunk.owner.Destroy();

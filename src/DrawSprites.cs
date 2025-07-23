@@ -56,8 +56,8 @@ public class DrawSprites
             tail.color = sLeaser.sprites[9].color;
         }
 
-        //custom sprite of the mark requires scale to be 1
-        sLeaser.sprites[11].scale = 1f;
+        if (self.player.IsVoid() && !Utils.DressMySlugcatEnabled)
+            sLeaser.sprites[11].scale = 1f;
     }
 
     private static bool IsTouchingCeiling(Player player)
@@ -142,6 +142,7 @@ public class DrawSprites
         string originalMarkSpriteName = sLeaser.sprites[11].element.name;
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
+
         if (self.player.IsViy())
         { 
             Utils.ViyColors[self.player.playerState.playerNumber] = sLeaser.sprites[9].color;

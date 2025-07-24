@@ -9,6 +9,7 @@ public static class _CreatureInteractionsMeta
 		LeechIndigestion.Hook();
 		BigJellyfishStunImmunity.Hook();
 		BigMothDrinks.Hook();
+		CentipedeColour.Hook();
 		CorruptionEaten.Hook();
 		LoachEaten.Hook();
         OverseerBehavior.Hook();

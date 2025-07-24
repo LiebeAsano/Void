@@ -57,7 +57,8 @@ public static class _PlayerMechanicsMeta
 		SaintArenaKarma.Hook();
 		SaintArenaSpears.Hook();
 		SaintKarmaImmunity.Hook();
-		SlugcatGrab.Hook();
+        Sandstorm.Hook();
+        SlugcatGrab.Hook();
 		Spasm.Hook();
 		SpiderResist.Hook();
 		SwallowObjects.Hook();

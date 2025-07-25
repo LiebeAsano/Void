@@ -12,11 +12,12 @@ IW_F05 : IW_H02, IW_A04, IW_S02
 IW_S02 : IW_F05 : SHELTER
 IW_H02 : DISCONNECTED, IW_F05, IW_D02
 IW_D02 : IW_H02, IW_A06
-IW_A06 : IW_D02, DISCONNECTED
+IW_A06 : IW_D02, IW_D03
 IW_G02 : IW_A04, IW_C01
 IW_C01 : IW_H03, IW_G02
-IW_H03 : IW_C01, DISCONNECTED, IW_E01
-IW_E01 : DISCONNECTED, IW_H03, DISCONNECTED
+IW_H03 : IW_C01, IW_D03, IW_E01
+IW_E01 : IW_D03, IW_H03, DISCONNECTED
+IW_D03 : IW_H03, IW_E01, IW_A06
 
 IW_TempEdgeWest : DISCONNECTED : NOTRACKERS
 IW_TempEdgeSouth : : DISCONNECTED : NOTRACKERS
@@ -47,7 +48,7 @@ IW_C01 : 3-SmallCentipede-3, 5-SmallCentipede-2
 
 //Communication Array
 
-IW_F03 : 6-White-{Winter}, 5-White-{Winter}, 
+IW_F03 : 6-White-{Winter}, 5-White-{Winter}
 IW_L01 : 4-White-{Winter}, 6-Strawberry-{Winter}, 7-Centiwing-3
 IW_I03 : 3-White-{Winter}, 5-Cyan-2-{Winter}, 6-Centiwing-2
 IW_I02 : 7-Yellow-2-{winter}, 6-Yellow-2-{winter}, 9-Yellow-3-{winter}, 8-Centiwing-2

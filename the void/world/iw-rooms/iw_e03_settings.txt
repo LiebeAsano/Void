@@ -1,0 +1,8 @@
+Template: iw_settingstemplate_abyss
+WaveSpeed: 0.5
+WaveLength: 1
+WaveAmplitude: 0
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Effects: VoidMelt-0.7578578-20-20, 
+PlacedObjects: KarmaFlowerPatch><4721.461><332.4799><214.8604~26.0083~0.5~-69.01141~107.4302~0.25~0.5, KarmaFlowerPatch><3821.822><267.8257><249.0106~-55.80939~0.5~0~0~0.25~0.5, KarmaFlowerPatch><2155.726><311.3814><253.2792~-33.75418~0.5~0~0~0.25~0.5, KarmaFlowerPatch><1022.137><203.9004><174.3073~72.25311~0.5~0~0~0.25~0.5, KarmaFlowerPatch><280.3505><376.7135><146.5604~20.31668~0.5~0~0~0.25~0.5, 

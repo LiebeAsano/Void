@@ -242,13 +242,13 @@ namespace VoidTemplate.DiscordChurch
             var rainCycle = story.game.world.rainCycle;
             var timeToRain = (rainCycle.cycleLength - rainCycle.timer) / (40 * 60);
             var minutesText = timeToRain > 1 ? "mins" : "min";
-            var rainText = timeToRain == 0 ? "Rain is coming" : $"Rain in {timeToRain} {minutesText}";
+            var rainText = timeToRain <= 0 ? "Rain is coming" : $"Rain in {timeToRain} {minutesText}";
 
             return $"Food: [{self.FoodInStomach}/{self.slugcatStats.foodToHibernate}] | " +
+                   $"{rainText} | " +
                    $"Cycles: {saveState.cycleNumber} | " +
                    $"Deaths: {saveState.deathPersistentSaveData.deaths} | " +
-                   $"Score: {GetTotalScore(saveState)} | " +
-                   $"{rainText}";
+                   $"Score: {GetTotalScore(saveState)}";
         }
 
         private static void MainMenu_Update(On.Menu.MainMenu.orig_Update orig, Menu.MainMenu self)

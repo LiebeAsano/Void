@@ -22,7 +22,7 @@ public static class Sandstorm
             foreach (PhysicalObject physicalObject in physicalObjects[i])
             {
                 if (physicalObject != null && physicalObject is Player player && player.AreVoidViy())
-                    return;
+                    player.rainDeath = 0;
             }
         }
         orig(self, amount);

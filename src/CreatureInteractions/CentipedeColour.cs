@@ -13,6 +13,7 @@ public static class CentipedeColour
     public static void Hook()
     {
         On.CentipedeGraphics.DrawSprites += CentipedeGraphics_DrawSprites;
+        On.Centipede.ShortCutColor += Centipede_ShortCutColor;
     }
 
     private static void CentipedeGraphics_DrawSprites(On.CentipedeGraphics.orig_DrawSprites orig, CentipedeGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
@@ -56,8 +57,7 @@ public static class CentipedeColour
         {
             for (int l = 0; l < 2; l++)
             {
-                VertexColorSprite legSprite = sLeaser.sprites[self.LegSprite(i, l, 1)] as VertexColorSprite;
-                if (legSprite != null)
+                if (sLeaser.sprites[self.LegSprite(i, l, 1)] is VertexColorSprite legSprite)
                 {
                     Color legColor = Color.Lerp(darkBlueColor, self.blackColor, 0.3f + 0.7f * self.darkness);
                     legSprite.verticeColors[0] = legColor;
@@ -67,5 +67,12 @@ public static class CentipedeColour
         }
 
         UnityEngine.Random.state = state;
+    }
+
+    private static Color Centipede_ShortCutColor(On.Centipede.orig_ShortCutColor orig, Centipede self)
+    {
+        if (ModManager.DLCShared && self.Small && self.abstractCreature.Room.world.name == "IW")
+            return Custom.HSL2RGB(0.65f, 0.75f, 0.5f);
+        return orig(self);
     }
 }

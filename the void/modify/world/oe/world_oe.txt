@@ -88,7 +88,6 @@ OE_CAVE02 : 5-Salamander-{PreCycle}
 
 OE_LWN01 : 3-WhiteLizard-2, 4-Caramel, 5-CicadaB-4, 6-CicadaA-4
 OE_LWE01 : 2-CicadaB-3, 4-CicadaA-4
-OE_LWE02 : 2-Caramel-{Ignorecycle}, 4-Pink-2-{Ignorecycle}
 
 (White)OE_RUINBackHall : 6-Blue
 (Gourmand)OE_RUINBackHall : 6-Blue, 6-TentaclePlant-{Night}, 7-White-{Night}, 10-TentaclePlant-{Night}

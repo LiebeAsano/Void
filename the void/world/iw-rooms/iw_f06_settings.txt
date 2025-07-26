@@ -1,0 +1,7 @@
+Template: iw_settingstemplate_abyss
+WaveSpeed: 0.4991214
+WaveLength: 0.9995607
+WaveAmplitude: 2.148703E-07
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Effects: VoidMelt-0.3093293-20-20, 

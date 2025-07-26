@@ -1,6 +1,0 @@
-Template: iw_settingstemplate_subway
-WaveSpeed: 0.5009927
-WaveLength: 0.9995037
-WaveAmplitude: 1.40523E-07
-SecondWaveLength: 0.1666667
-SecondWaveAmplitude: 0

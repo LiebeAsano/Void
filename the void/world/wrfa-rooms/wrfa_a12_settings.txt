@@ -1,0 +1,8 @@
+Template: NONE
+DangerType: Flood
+Palette: 209
+EffectColorA: 2
+EffectColorB: 13
+PlacedObjects: CustomDecal><67.6991><123.7312><6~518~863~556~829~-41~-231~112~0.02173913~1~0~BlackRust1~0.4673913~1~0.4673913~1~0.4673913~1~0.4673913~1, LightSource><298.2404><620.3847><0.5543478~Environment~-412~58~69~-71.39746~0~0~None~0~0, 
+AmbientSounds: OMNI><SO_WAT-ProperDrips.ogg><49.18207><529.0828><0.5><1, OMNI><SO_WAT-RunningWater.ogg><46.42786><451.3415><0.2282609><1, OMNI><SO_WAT-OpenFlow.ogg><54.59534><377.9258><0.2717391><1, SPOT><SO_IND-Turbine.ogg><247.8054><488.5578><0.423913><1><289.8054><159.5578><-222.3553><-9.355347><0><0.2304349, OMNI><AM_IND-Midsex01.ogg><45.30267><299.2175><0.25><1, 
+FadePalette: 208, 0.3369565

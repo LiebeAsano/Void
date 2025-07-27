@@ -246,9 +246,9 @@ namespace VoidTemplate.DiscordChurch
 
             return $"Food: [{self.FoodInStomach}/{self.slugcatStats.foodToHibernate}] | " +
                    $"{rainText} | " +
+                   $"Score: {GetTotalScore(saveState)} | " +
                    $"Cycles: {saveState.cycleNumber} | " +
-                   $"Deaths: {saveState.deathPersistentSaveData.deaths} | " +
-                   $"Score: {GetTotalScore(saveState)}";
+                   $"Deaths: {saveState.deathPersistentSaveData.deaths}";
         }
 
         private static void MainMenu_Update(On.Menu.MainMenu.orig_Update orig, Menu.MainMenu self)

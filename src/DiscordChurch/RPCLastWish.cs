@@ -52,6 +52,7 @@ namespace VoidTemplate.DiscordChurch
         {
             On.Menu.MainMenu.Update += MainMenu_Update;
             On.Player.Update += Player_Update;
+            On.Player.Destroy += Player_Destroy;
             On.Player.ctor += Player_ctor;
         }
 
@@ -130,7 +131,7 @@ namespace VoidTemplate.DiscordChurch
             orig(self, eu);
 
             timeSinceLastForceUpdate += Time.deltaTime;
-            if (timeSinceLastForceUpdate < forceUpdateInterval || OptionAccessors.DisableRPC) return;
+            if (timeSinceLastForceUpdate < forceUpdateInterval || OptionAccessors.DisableRPC || self.playerState.permaDead) return;
 
             if (!discordInited)
             {
@@ -158,6 +159,37 @@ namespace VoidTemplate.DiscordChurch
             timeSinceLastForceUpdate = 0f;
         }
 
+        private static void Player_Destroy(On.Player.orig_Destroy orig, Player self)
+        {
+            dead = true;
+            if (!OptionAccessors.DisableRPC)
+            {
+                if (!discordInited)
+                {
+                    TryInitiateDiscord();
+                    timeSinceLastForceUpdate = 0f;
+                    return;
+                }
+
+                TryDiscordCallBack();
+
+                var activity = new Activity
+                {
+                    Timestamps = { Start = _gameStartTimestamp },
+                    Assets = { LargeImage = self.SlugCatClass.value.ToLower() }
+                };
+
+                UpdateActivityBasedOnGameSession(self, ref activity);
+
+                activityManager.UpdateActivity(activity, result =>
+                {
+                    if (result != Result.Ok)
+                        Debug.LogError($"Discord RP update failed: {result}");
+                });
+            }
+            orig(self);
+        }
+
         private static void UpdateActivityBasedOnGameSession(Player self, ref Activity activity)
         {
             string slugMode = GetSlugMode(self);
@@ -175,7 +207,7 @@ namespace VoidTemplate.DiscordChurch
         private static string GetSlugMode(Player self)
         {
             if (self.Stunned) return "Stunned";
-            if (self.dead) return "Dead";
+            if (self.dead || dead) return "Dead";
 
             if (self.room?.abstractRoom?.shelter ?? false)
             {

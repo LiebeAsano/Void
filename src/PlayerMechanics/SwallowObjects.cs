@@ -55,7 +55,7 @@ public static class SwallowObjects
     {
         AbstractPhysicalObject abstractGrabbed = self.grasps[grasp]?.grabbed?.abstractPhysicalObject;
 
-        if (self.IsVoid() || self.IsViy())
+        if (self.AreVoidViy())
         {
             var grabbed = self.grasps[grasp]?.grabbed;
 
@@ -161,24 +161,25 @@ public static class SwallowObjects
 
     private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
     {
-        if (self.SlugCatClass == VoidEnums.SlugcatID.Void 
-            && pearlIDsInPlayerStomaches[self.playerState.playerNumber] is not null
-            && pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0
+        if (self.IsVoid()
+            && pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out var pearls)
+            && pearls is not null
+            && pearls.Count > 0
             && !Karma11Update.VoidKarma11)
         {
-                string pearlToSpit = pearlIDsInPlayerStomaches[self.playerState.playerNumber][pearlIDsInPlayerStomaches.Count - 1];
-                pearlIDsInPlayerStomaches[self.playerState.playerNumber].RemoveAt(pearlIDsInPlayerStomaches.Count - 1);
-                self.objectInStomach = new DataPearl.AbstractDataPearl(world: self.abstractCreature.world,
-                    objType: AbstractPhysicalObject.AbstractObjectType.DataPearl, 
-                    realizedObject: null,
-                    pos: self.abstractCreature.pos,
-                    ID: self.abstractCreature.world.game.GetNewID(),
-                    originRoom: -1,
-                    placedObjectIndex: -1,
-                    consumableData: null,
-                    dataPearlType: new DataPearl.AbstractDataPearl.DataPearlType(pearlToSpit)
-                ); 
-                self.abstractCreature.world.game.GetStorySession?.saveState?.SetStomachPearls(pearlIDsInPlayerStomaches);
+            string pearlToSpit = pearls[pearls.Count - 1];
+            pearls.RemoveAt(pearls.Count - 1);
+            self.objectInStomach = new DataPearl.AbstractDataPearl(world: self.abstractCreature.world,
+                objType: AbstractPhysicalObject.AbstractObjectType.DataPearl,
+                realizedObject: null,
+                pos: self.abstractCreature.pos,
+                ID: self.abstractCreature.world.game.GetNewID(),
+                originRoom: -1,
+                placedObjectIndex: -1,
+                consumableData: null,
+                dataPearlType: new DataPearl.AbstractDataPearl.DataPearlType(pearlToSpit)
+            );
+            self.abstractCreature.world.game.GetStorySession?.saveState?.SetStomachPearls(pearlIDsInPlayerStomaches);
         }
         orig(self);
     }

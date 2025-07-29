@@ -102,6 +102,29 @@ public static class Grabability
                     if (grabberPlayer.maulTimer == 0)
                         maulTimer = true;
                     isGrabbedByVoidViy = true;
+                    if (self is Player player && !player.AreVoidViy())
+                    {
+                        if (player.playerState is not null)
+                        {
+                            player.SetKillTag(grabberPlayer.abstractCreature);
+                            player.playerState.permanentDamageTracking += 0.005f;
+                            if (player.playerState.permanentDamageTracking >= 1.0f)
+                            {
+                                player.Die();
+                            }
+                        }
+                    }
+                    else if (self is not Player)
+                    {
+                        if (self.State is HealthState)
+                        {
+                            (self.State as HealthState).health -= 0.005f;
+                            if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
+                            {
+                                self.Die();
+                            }
+                        }
+                    }
                     break;
                 }
             }
@@ -172,7 +195,11 @@ public static class Grabability
                 return false;
             }
         }
-        if (obj is Player player && player.AreVoidViy() && player.Consious)
+        if (obj is Player player && player.IsViy() && player.Consious)
+        {
+            return false;
+        }
+        if (obj is Player player2 && player2.IsVoid() && player2.Consious && player2.bodyMode != Player.BodyModeIndex.Crawl)
         {
             return false;
         }

@@ -7,6 +7,7 @@ using MonoMod.Cil;
 using MoreSlugcats;
 using System.Reflection;
 using static VoidTemplate.Useful.Utils;
+using Watcher;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -18,8 +19,14 @@ public static class CanIPickThisUp
 		On.Player.CanIPickThisUp += Player_CanIPickThisSpear;
         //On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         On.Player.SlugOnBack.SlugToBack += Player_SlugToBack;
+        On.Player.SlugOnBack.Update += SlugOnBack_Update;
+        On.Player.GrabUpdate += Player_GrabUpdate;
+        On.Player.Update += Player_Update;
+        On.Player.ctor += Player_ctor;
         IL.Player.Grabability += Player_GrababilityHook;
     }
+
+    public static int[] voidBurn = new int[32];
 
     private static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
     {
@@ -79,12 +86,79 @@ public static class CanIPickThisUp
             return;
         }
 
-        if (player.AreVoidViy())
+        if (player.IsVoid() && player.room.game.IsArenaSession || player.IsViy())
         {
             return;
         }
 
         orig(self, player);
+    }
+
+    private static void SlugOnBack_Update(On.Player.SlugOnBack.orig_Update orig, Player.SlugOnBack self, bool eu)
+    {
+        if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugcat != null && self.slugcat.IsVoid() && !self.owner.IsVoid())
+        {
+            voidBurn[self.owner.playerState.playerNumber]++;
+            if (self.owner.playerState is not null)
+            {
+                self.owner.playerState.permanentDamageTracking += 0.01f;
+                if (self.owner.playerState.permanentDamageTracking >= 1.0f)
+                {
+                    self.owner.Die();
+                }
+            }
+        }
+            
+        orig(self, eu);
+    }
+
+    private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
+    {
+        orig(self, eu);
+    }
+
+    private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+    {
+        if (ModManager.MSC || ModManager.CoopAvailable)
+        {
+            if (voidBurn != null && self.playerState != null &&
+            self.playerState.playerNumber >= 0 && self.playerState.playerNumber < voidBurn.Length)
+            {
+                if (voidBurn[self.playerState.playerNumber] >= 1200)
+                {
+                    self.Stun(200);
+                    self.LoseAllGrasps();
+                    self.standing = false;
+                    self.feetStuckPos = null;
+                    if (self.spearOnBack != null && self.spearOnBack.spear != null)
+                        self.spearOnBack.DropSpear();
+                    if (self.slugOnBack != null && self.slugOnBack.slugcat != null)
+                        self.slugOnBack.DropSlug();
+                    voidBurn[self.playerState.playerNumber] = 1000;
+                }
+
+
+            }
+            if (voidBurn[self.playerState.playerNumber] > 0)
+            {
+                if (self.slugOnBack.slugcat == null)
+                {
+                    voidBurn[self.playerState.playerNumber]--;
+                }
+                else if (self.slugOnBack.slugcat != null && !self.slugOnBack.slugcat.IsVoid())
+                {
+                    voidBurn[self.playerState.playerNumber]--;
+                }
+            }
+        }
+        orig(self, eu);
+    }
+
+    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+    {
+        orig(self, abstractCreature, world);
+        if (ModManager.MSC || ModManager.CoopAvailable)
+            voidBurn[self.playerState.playerNumber] = 0;
     }
 
     private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)

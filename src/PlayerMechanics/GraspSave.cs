@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mono.Cecil;
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
@@ -23,16 +24,42 @@ public static class GraspSave
 	private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
 	{
 		orig(self, eu);
-		if (grabbers.TryGetValue(self.abstractCreature, out var grabbedVoidsTimers))
+		if (grabbers.TryGetValue(self.abstractCreature, out var grabbedVoidsTimers) && !(self is Player player && player.AreVoidViy()))
 		{
 			Array.ForEach(self.grasps, grasp =>
 			{
 				if (grasp != null
 				&& grasp.grabbed is Player playerInGrasp
-				&& (playerInGrasp.IsVoid() || playerInGrasp.IsViy())
+				&& playerInGrasp.AreVoidViy()
                 && grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
 				{
 					timerOfBeingGrasped.Value++;
+					if (timerOfBeingGrasped.Value % 40 == 0)
+					{
+						self.SetKillTag(playerInGrasp.abstractCreature);
+						if (self is not null && self is not Player)
+						{
+							if (self.State is HealthState)
+							{
+								(self.State as HealthState).health -= 0.01f;
+								if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
+								{
+									self.Die();
+								}
+							}
+						}
+						else if (self is Player player && !player.AreVoidViy())
+						{
+							if (player.playerState is not null)
+							{
+								player.playerState.permanentDamageTracking += 0.01f;
+								if (player.playerState.permanentDamageTracking >= 1.0f)
+								{
+									self.Die();
+								}
+							}
+                        }
+                    }
 					if (timerOfBeingGrasped.Value > TicksUntilStun(playerInGrasp))
 					{
 						self.Stun(TicksPerSecond * 5);
@@ -49,7 +76,7 @@ public static class GraspSave
 		} 
 	}
 
-	static int TicksUntilStun(Player p)
+    static int TicksUntilStun(Player p)
 	{
 		if (p.slugcatStats.name == VoidEnums.SlugcatID.Viy)
 		{
@@ -63,16 +90,15 @@ public static class GraspSave
 	private static void Player_Grabbed(On.Player.orig_Grabbed orig, Player self, Creature.Grasp grasp)
 	{
 		orig(self, grasp);
-		if (self.IsVoid() || self.IsViy())
+		if (self.AreVoidViy())
 		{
-			ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbedVoidsTimers;
-			if (!grabbers.TryGetValue(grasp.grabber.abstractCreature, out grabbedVoidsTimers))
-			{
-				grabbedVoidsTimers = new();
-				grabbers.Add(grasp.grabber.abstractCreature, grabbedVoidsTimers);
-			}
+            if (!grabbers.TryGetValue(grasp.grabber.abstractCreature, out ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbedVoidsTimers))
+            {
+                grabbedVoidsTimers = new();
+                grabbers.Add(grasp.grabber.abstractCreature, grabbedVoidsTimers);
+            }
 
-			if (!grabbedVoidsTimers.TryGetValue(self.abstractCreature, out _))
+            if (!grabbedVoidsTimers.TryGetValue(self.abstractCreature, out _))
 			{
 				grabbedVoidsTimers.Add(self.abstractCreature, new(0));
 			}

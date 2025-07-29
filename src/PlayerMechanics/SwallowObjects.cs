@@ -188,7 +188,7 @@ public static class SwallowObjects
     {
         orig(self);
 
-        if (self.owner.owner is Player player && (player.IsVoid() || player.IsViy()))
+        if (self.owner.owner is Player player && player.AreVoidViy())
         {
             if (player.swallowAndRegurgitateCounter > 10)
             {
@@ -328,11 +328,11 @@ public static class SwallowObjects
         orig(self, abstractCreature, world);
         if (self.IsVoid())
         {
-            if (!pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out var pearl))
+            if (!pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out _))
             {
                 pearlIDsInPlayerStomaches[self.playerState.playerNumber] = [];
             }
-        }
+        } 
         
     }
 

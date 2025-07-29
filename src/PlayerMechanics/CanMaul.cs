@@ -60,7 +60,12 @@ public static class CanMaul
                     if (creature is Player attackingPlayer &&
                         !attackingPlayer.AreVoidViy())
                     {
-                        creature.Stun(StunDuration * TicksPerSecond);
+                        if (attackingPlayer.playerState is not null)
+                        {
+                            attackingPlayer.SetKillTag(playerInGrasp.abstractCreature);
+                            attackingPlayer.playerState.permanentDamageTracking += 0.3f;
+                        }
+                        attackingPlayer.Stun(StunDuration * TicksPerSecond);
                         break;
                     }
                 }

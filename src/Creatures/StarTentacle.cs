@@ -543,110 +543,117 @@ namespace VoidTemplate;
             }
         }
 
-        public void Climb(ref List<IntVector2> path)
+    public void Climb(ref List<IntVector2> path)
+    {
+        float t = Custom.LerpMap((float)this.star.stuckCounter, 50f, 200f, 0.5f, 0.95f);
+        this.idealGrabPos = base.FloatBase + (Vector2)Vector3.Slerp(this.tentacleDir, this.star.moveDirection, t) * this.idealLength * 0.7f;
+        Vector2 vector = base.FloatBase + (Vector2)Vector3.Slerp(Vector3.Slerp(this.tentacleDir, this.star.moveDirection, t), Custom.RNV(), Mathf.InverseLerp(20f, 200f, (float)this.foundNoGrabPos)) * this.idealLength * Custom.LerpMap((float)Math.Max(this.foundNoGrabPos, this.star.stuckCounter), 20f, 200f, 0.7f, 1.2f);
+
+        List<IntVector2> list = [];
+        SharedPhysics.RayTracedTilesArray(base.FloatBase, vector, list);
+
+        bool flag = false;
+        for (int i = 0; i < list.Count - 1; i++)
         {
-            float t = Custom.LerpMap((float)this.star.stuckCounter, 50f, 200f, 0.5f, 0.95f);
-            this.idealGrabPos = base.FloatBase + (Vector2)Vector3.Slerp(this.tentacleDir, this.star.moveDirection, t) * this.idealLength * 0.7f;
-            Vector2 vector = base.FloatBase + (Vector2)Vector3.Slerp(Vector3.Slerp(this.tentacleDir, this.star.moveDirection, t), Custom.RNV(), Mathf.InverseLerp(20f, 200f, (float)this.foundNoGrabPos)) * this.idealLength * Custom.LerpMap((float)Math.Max(this.foundNoGrabPos, this.star.stuckCounter), 20f, 200f, 0.7f, 1.2f);
-            List<IntVector2> list = SharedPhysics.RayTracedTilesArray(base.FloatBase, vector);
-            bool flag = false;
+            if (this.room.GetTile(list[i + 1]).Solid)
+            {
+                this.ConsiderGrabPos(Custom.RestrictInRect(vector, this.room.TileRect(list[i]).Shrink(1f)), this.idealGrabPos);
+                flag = true;
+                break;
+            }
+            if (this.room.GetTile(list[i]).horizontalBeam || this.room.GetTile(list[i]).verticalBeam)
+            {
+                this.ConsiderGrabPos(this.room.MiddleOfTile(list[i]), this.idealGrabPos);
+                flag = true;
+            }
+        }
+        if (flag)
+        {
+            this.foundNoGrabPos = 0;
+        }
+        else
+        {
+            this.foundNoGrabPos++;
+        }
+        bool flag2 = this.secondaryGrabBackTrackCounter < 200 && this.SecondaryGrabPosScore(this.secondaryGrabPos) > 0f;
+        for (int j = 0; j < this.tChunks.Length; j++)
+        {
+            if (this.backtrackFrom == -1 || this.backtrackFrom > j)
+            {
+                this.StickToTerrain(this.tChunks[j]);
+                if (base.grabDest != null)
+                {
+                    if (!this.atGrabDest && Custom.DistLess(this.tChunks[j].pos, this.floatGrabDest.Value, 20f))
+                    {
+                        this.atGrabDest = true;
+                    }
+                    if (this.tChunks[j].currentSegment <= this.grabPath.Count || !flag2)
+                    {
+                        this.tChunks[j].vel += Vector2.ClampMagnitude(this.floatGrabDest.Value - this.tChunks[j].pos, 20f) / 20f * 1.2f;
+                    }
+                    else if (j > 1 && this.segments.Count > this.grabPath.Count && flag2)
+                    {
+                        float num = Mathf.InverseLerp((float)this.grabPath.Count, (float)this.segments.Count, (float)this.tChunks[j].currentSegment);
+                        Vector2 a = Custom.DirVec(this.tChunks[j - 2].pos, this.tChunks[j].pos) * (1f - num) * 0.6f;
+                        a += Custom.DirVec(this.tChunks[j].pos, this.room.MiddleOfTile(base.grabDest.Value)) * Mathf.Pow(1f - num, 4f) * 2f;
+                        a += Custom.DirVec(this.tChunks[j].pos, this.room.MiddleOfTile(this.secondaryGrabPos)) * Mathf.Pow(num, 4f) * 2f;
+                        a += Custom.DirVec(this.tChunks[j].pos, base.FloatBase) * Mathf.Sin(num * 3.1415927f) * 0.3f;
+                        this.tChunks[j].vel += a.normalized * 1.2f;
+                        if (j == this.tChunks.Length - 1)
+                        {
+                            this.tChunks[j].vel += Vector2.ClampMagnitude(this.room.MiddleOfTile(this.secondaryGrabPos) - this.tChunks[j].pos, 20f) / 20f * 4.2f;
+                        }
+                    }
+                }
+            }
+        }
+        if (base.grabDest != null)
+        {
+            this.ConsiderSecondaryGrabPos(base.grabDest.Value + new IntVector2(Random.Range(-20, 21), Random.Range(-20, 21)));
+        }
+        if (base.grabDest == null || !this.atGrabDest)
+        {
+            this.UpdateClimbGrabPos(ref path);
+        }
+    }
+
+    public void ExamineSound(ref List<IntVector2> path)
+    {
+        if (!Custom.DistLess(this.checkSound.pos, base.FloatBase, this.idealLength * 1.1f) || this.checkSound.slatedForDeletion)
+        {
+            this.SwitchTask(StarTentacle.Task.Locomotion);
+            return;
+        }
+        this.soundCheckTimer--;
+        if (this.soundCheckTimer < 1 || this.examineSoundPos == null || Custom.DistLess(this.examineSoundPos.Value, base.Tip.pos, 20f))
+        {
+            if (this.examineSoundPos != null)
+            {
+                this.soundCheckTimer = Random.Range(40, 180);
+                this.soundCheckCounter++;
+                if (this.soundCheckCounter > 17)
+                {
+                    this.checkSound.Destroy();
+                    this.SwitchTask(StarTentacle.Task.Locomotion);
+                    return;
+                }
+                this.examineSoundPos = default(Vector2?);
+            }
+
+            // Modified RayTracedTilesArray usage
+            List<IntVector2> list = new List<IntVector2>();
+            SharedPhysics.RayTracedTilesArray(checkSound.pos, this.checkSound.pos + Custom.RNV() * 150f, list);
+
+            int num = list.Count;
             for (int i = 0; i < list.Count - 1; i++)
             {
                 if (this.room.GetTile(list[i + 1]).Solid)
                 {
-                    this.ConsiderGrabPos(Custom.RestrictInRect(vector, this.room.TileRect(list[i]).Shrink(1f)), this.idealGrabPos);
-                    flag = true;
+                    num = i;
                     break;
                 }
-                if (this.room.GetTile(list[i]).horizontalBeam || this.room.GetTile(list[i]).verticalBeam)
-                {
-                    this.ConsiderGrabPos(this.room.MiddleOfTile(list[i]), this.idealGrabPos);
-                    flag = true;
-                }
             }
-            if (flag)
-            {
-                this.foundNoGrabPos = 0;
-            }
-            else
-            {
-                this.foundNoGrabPos++;
-            }
-            bool flag2 = this.secondaryGrabBackTrackCounter < 200 && this.SecondaryGrabPosScore(this.secondaryGrabPos) > 0f;
-            for (int j = 0; j < this.tChunks.Length; j++)
-            {
-                if (this.backtrackFrom == -1 || this.backtrackFrom > j)
-                {
-                    this.StickToTerrain(this.tChunks[j]);
-                    if (base.grabDest != null)
-                    {
-                        if (!this.atGrabDest && Custom.DistLess(this.tChunks[j].pos, this.floatGrabDest.Value, 20f))
-                        {
-                            this.atGrabDest = true;
-                        }
-                        if (this.tChunks[j].currentSegment <= this.grabPath.Count || !flag2)
-                        {
-                            this.tChunks[j].vel += Vector2.ClampMagnitude(this.floatGrabDest.Value - this.tChunks[j].pos, 20f) / 20f * 1.2f;
-                        }
-                        else if (j > 1 && this.segments.Count > this.grabPath.Count && flag2)
-                        {
-                            float num = Mathf.InverseLerp((float)this.grabPath.Count, (float)this.segments.Count, (float)this.tChunks[j].currentSegment);
-                            Vector2 a = Custom.DirVec(this.tChunks[j - 2].pos, this.tChunks[j].pos) * (1f - num) * 0.6f;
-                            a += Custom.DirVec(this.tChunks[j].pos, this.room.MiddleOfTile(base.grabDest.Value)) * Mathf.Pow(1f - num, 4f) * 2f;
-                            a += Custom.DirVec(this.tChunks[j].pos, this.room.MiddleOfTile(this.secondaryGrabPos)) * Mathf.Pow(num, 4f) * 2f;
-                            a += Custom.DirVec(this.tChunks[j].pos, base.FloatBase) * Mathf.Sin(num * 3.1415927f) * 0.3f;
-                            this.tChunks[j].vel += a.normalized * 1.2f;
-                            if (j == this.tChunks.Length - 1)
-                            {
-                                this.tChunks[j].vel += Vector2.ClampMagnitude(this.room.MiddleOfTile(this.secondaryGrabPos) - this.tChunks[j].pos, 20f) / 20f * 4.2f;
-                            }
-                        }
-                    }
-                }
-            }
-            if (base.grabDest != null)
-            {
-                this.ConsiderSecondaryGrabPos(base.grabDest.Value + new IntVector2(Random.Range(-20, 21), Random.Range(-20, 21)));
-            }
-            if (base.grabDest == null || !this.atGrabDest)
-            {
-                this.UpdateClimbGrabPos(ref path);
-            }
-        }
-
-        public void ExamineSound(ref List<IntVector2> path)
-        {
-            if (!Custom.DistLess(this.checkSound.pos, base.FloatBase, this.idealLength * 1.1f) || this.checkSound.slatedForDeletion)
-            {
-                this.SwitchTask(StarTentacle.Task.Locomotion);
-                return;
-            }
-            this.soundCheckTimer--;
-            if (this.soundCheckTimer < 1 || this.examineSoundPos == null || Custom.DistLess(this.examineSoundPos.Value, base.Tip.pos, 20f))
-            {
-                if (this.examineSoundPos != null)
-                {
-                    this.soundCheckTimer = Random.Range(40, 180);
-                    this.soundCheckCounter++;
-                    if (this.soundCheckCounter > 17)
-                    {
-                        this.checkSound.Destroy();
-                        this.SwitchTask(StarTentacle.Task.Locomotion);
-                        return;
-                    }
-                    this.examineSoundPos = default(Vector2?);
-                }
-                List<IntVector2> list = SharedPhysics.RayTracedTilesArray(this.checkSound.pos, this.checkSound.pos + Custom.RNV() * 150f);
-                int num = list.Count;
-                for (int i = 0; i < list.Count - 1; i++)
-                {
-                    if (this.room.GetTile(list[i + 1]).Solid)
-                    {
-                        num = i;
-                        break;
-                    }
-                }
-                for (int j = list.Count - 1; j > num; j--)
+            for (int j = list.Count - 1; j > num; j--)
                 {
                     list.RemoveAt(j);
                 }

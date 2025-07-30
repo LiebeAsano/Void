@@ -99,12 +99,15 @@ public static class CanIPickThisUp
         if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugcat != null && self.slugcat.IsVoid() && !self.owner.IsVoid())
         {
             voidBurn[self.owner.playerState.playerNumber]++;
-            if (self.owner.playerState is not null)
+            if (voidBurn[self.owner.playerState.playerNumber] % 40 == 0)
             {
-                self.owner.playerState.permanentDamageTracking += 0.01f;
-                if (self.owner.playerState.permanentDamageTracking >= 1.0f)
+                if (self.owner.playerState is not null)
                 {
-                    self.owner.Die();
+                    self.owner.playerState.permanentDamageTracking += 0.01f;
+                    if (self.owner.playerState.permanentDamageTracking >= 1.0f)
+                    {
+                        self.owner.Die();
+                    }
                 }
             }
         }

@@ -79,7 +79,7 @@ class _Plugin : BaseUnityPlugin
 			{
 				DevEnabled = true;
 			}
-
+			AddQuaterFood.Hook();
 			CycleEnd.Hook();
 			DrawSprites.Hook();
 			PlayerSpawnManager.ApplyHooks();

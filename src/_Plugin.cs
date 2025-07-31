@@ -63,7 +63,8 @@ class _Plugin : BaseUnityPlugin
    [
 		new MimicstarfishCritob(),
 		new OutspectorCritob(),
-		new OutspectorBCritob()
+		new OutspectorBCritob(),
+		new IceLizardCritob()
    ]);
 	}
 

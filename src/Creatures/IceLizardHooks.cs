@@ -64,8 +64,8 @@ namespace VoidTemplate.Creatures
             orig(self, lizard);
             if (lizard is IceLizard)
             {
-                self.range = 340f;
-                self.elasticRange = 0.1f;
+                self.range = 540f;
+                self.elasticRange = 0.5f;
                 self.lashOutSpeed = 37f;
                 self.reelInSpeed = 0.0043333336f;
                 self.chunkDrag = 0f;

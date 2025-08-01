@@ -37,7 +37,7 @@ namespace VoidTemplate.Creatures
                 name = CreatureName,
             };
             (t.breedParameters as LizardBreedParams).standardColor = Color.white;
-            //(t.breedParameters as LizardBreedParams).tongue = true;
+            (t.breedParameters as LizardBreedParams).tongue = true;
             return t;
         }
 

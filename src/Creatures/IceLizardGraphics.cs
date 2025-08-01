@@ -114,6 +114,10 @@ namespace VoidTemplate.Creatures
                     timeSinceLastForceDrawSprites = 0f;
                 }
             }
+            if (lizard.State.dead)
+            {
+                invisAmount = 0;
+            }
             whiteCamoColorAmount = Mathf.InverseLerp(0f, 90f, invisAmount);
             if (!isVisible && whiteCamoColorAmount == 1)
             {
@@ -124,6 +128,11 @@ namespace VoidTemplate.Creatures
         public override void Update()
         {
             base.Update();
+            if (!lizard.Consious)
+            {
+                isVisible = true;
+                return;
+            }
             timeSinceLastForceUpdate += Time.deltaTime;
             if (timeSinceLastForceUpdate >= forceUpdateInterval)
             {

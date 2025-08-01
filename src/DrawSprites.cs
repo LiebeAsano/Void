@@ -358,7 +358,7 @@ public class DrawSprites
     }
 
 
-    private static float timeSinceLastForceUpdate = 0f;
+    private static float[] timeSinceLastForceUpdate = new float [32];
     private static readonly float forceUpdateInterval = 1f / 40f;
     private static void PlayerGraphics_DrawTail(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
@@ -368,10 +368,10 @@ public class DrawSprites
         BodyChunk body_chunk_0 = player.bodyChunks[0];
         BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-        if (player.IsVoid() || player.IsViy())
+        if (player.AreVoidViy())
         {
 
-            timeSinceLastForceUpdate += Time.deltaTime;
+            timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
 
             if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
                 player.bodyMode == Player.BodyModeIndex.WallClimb &&
@@ -379,7 +379,7 @@ public class DrawSprites
                 player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
                 player.bodyMode != Player.BodyModeIndex.Crawl)
             {
-                if (timeSinceLastForceUpdate >= forceUpdateInterval)
+                if (timeSinceLastForceUpdate[player.playerState.playerNumber] >= forceUpdateInterval)
                 {
                     foreach (TailSegment tailSegment in self.tail)
                     {
@@ -404,7 +404,7 @@ public class DrawSprites
                         tailSegment.vel += force;
                     }
 
-                    timeSinceLastForceUpdate = 0f;
+                    timeSinceLastForceUpdate[player.playerState.playerNumber] = 0f;
                 }
             }
         }

@@ -39,6 +39,10 @@ namespace VoidTemplate.Creatures
             Random.state = state;
         }
 
+        private float timeSinceLastForceDrawSprites = 0f;
+        private float timeSinceLastForceUpdate = 0f;
+        private static readonly float forceUpdateInterval = 1f / 40f;
+
         public override void DrawSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
             ColorBody(sLeaser, DynamicBodyColor(0));
@@ -64,6 +68,7 @@ namespace VoidTemplate.Creatures
 
             whiteCamoColor = whitePickUpColor;
 
+
             base.DrawSprites(sLeaser, rCam, timeStacker, camPos);
             int num = SpriteLimbsColorStart - SpriteLimbsStart;
             for (int i = SpriteLimbsStart; i < SpriteLimbsEnd; i++)
@@ -76,34 +81,38 @@ namespace VoidTemplate.Creatures
             }*/
             if (changeVisibleState)
             {
-                if (isVisible)
+                timeSinceLastForceDrawSprites += Time.deltaTime;
+                if (timeSinceLastForceDrawSprites >= forceUpdateInterval)
                 {
-                    if (invisAmount >= 90)
+                    if (isVisible)
                     {
-                        MakeVisibleBodyAndHead(sLeaser, true);
-                    }
-                    if (invisAmount > 0)
-                    {
-                        invisAmount--;
+                        if (invisAmount >= 90)
+                        {
+                            MakeVisibleBodyAndHead(sLeaser, true);
+                        }
+                        if (invisAmount > 0)
+                        {
+                            invisAmount--;
+                        }
+                        else
+                        {
+                            changeVisibleState = false;
+                        }
                     }
                     else
                     {
-                        changeVisibleState = false;
+                        if (invisAmount < 90)
+                        {
+                            invisAmount++;
+                        }
+                        else
+                        {
+                            changeVisibleState = false;
+                        }
                     }
+                    invisTime = 0;
+                    timeSinceLastForceDrawSprites = 0f;
                 }
-                else
-                {
-                    if (invisAmount < 90)
-                    {
-                        invisAmount++;
-                    }
-                    else
-                    {
-                        changeVisibleState = false;
-                    }
-                }
-
-                invisTime = 0;
             }
             whiteCamoColorAmount = Mathf.InverseLerp(0f, 90f, invisAmount);
             if (!isVisible && whiteCamoColorAmount == 1)
@@ -115,7 +124,12 @@ namespace VoidTemplate.Creatures
         public override void Update()
         {
             base.Update();
-            invisTime++;
+            timeSinceLastForceUpdate += Time.deltaTime;
+            if (timeSinceLastForceUpdate >= forceUpdateInterval)
+            {
+                invisTime++;
+                timeSinceLastForceUpdate = 0f;
+            }
             if (!changeVisibleState && ((isVisible && invisTime >= Random.Range(80, 120)) || (!isVisible && invisTime >= Random.Range(120, 200))))
             {
                 changeVisibleState = true;

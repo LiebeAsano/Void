@@ -14,7 +14,7 @@ namespace VoidTemplate.Creatures
     {
         public IceLizardCritob() : base(CreatureTemplateType.IceLizard)
         {
-            Icon = new SimpleIcon("Kill_Standard_Lizard", new(0.75f, 0.75f, 0.75f));
+            Icon = new SimpleIcon("Kill_Standard_Lizard", new(0.7f, 0.7f, 0.7f));
             RegisterUnlock(KillScore.Configurable(25), SandboxUnlockID.IceLizard);
             IceLizardHooks.Hook();
         }

@@ -4,7 +4,7 @@
 	"images": [
 	    {"name": "sleep - screen - void - flat", "pos": [598, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background - sleep", "pos": [598,0], "depth": 4, "shader": "Basic"},
-		{ "name": "leaf - sleep2",    "pos": [598,0], "depth": 3.3, "shader": "Basic"},
+		{ "name": "leaf - sleep",    "pos": [598,0], "depth": 3.3, "shader": "Basic"},
 		{ "name": "leaf - sleep",    "pos": [598,0], "depth": 3.3, "shader": "Basic"},
 		{ "name": "void - sleep",    "pos": [598,0], "depth": 3.0, "shader": "Basic"},
         { "name": "frontleaf - sleep",    "pos": [598,0], "depth": 2.7, "shader": "Basic"}

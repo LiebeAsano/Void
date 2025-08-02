@@ -35,8 +35,10 @@ public static class VoidEnums
 
 			SleepScene = new("Sleep_Void");
 			SleepScene11 = new("Sleep_Void11");
+            SleepSceneMark = new("Sleep_VoidMark");
 			DeathScene = new("Death_Void");
 			DeathScene11 = new("Death_Void11");
+            DeathSceneMark = new("Death_VoidMark");
 
 			StaticDeath = new("Static_Death_Void");
 			StaticDeath11 = new("Static_Death_Void11");
@@ -58,9 +60,12 @@ public static class VoidEnums
         }
 		public static MenuScene.SceneID SleepScene;
 		public static MenuScene.SceneID SleepScene11;
-		public static MenuScene.SceneID DeathScene;
+        public static MenuScene.SceneID SleepSceneMark;
+        public static MenuScene.SceneID DeathScene;
 		public static MenuScene.SceneID DeathScene11;
-		public static MenuScene.SceneID StaticEnd;
+        public static MenuScene.SceneID DeathSceneMark;
+
+        public static MenuScene.SceneID StaticEnd;
 		public static MenuScene.SceneID StaticEnd11;
 		public static MenuScene.SceneID StaticDeath;
 		public static MenuScene.SceneID StaticDeath11;

@@ -23,8 +23,8 @@ public static class LizardResist
     {
         if (chunk.owner is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            float resist = player.KarmaCap * 0.02f;
-            if (self.Template.type == CreatureTemplate.Type.RedLizard || self.Template.type == CreatureTemplateType.IceLizard)
+            float resist = player.KarmaCap != 10 ? (player.KarmaCap + 1) * 0.02f : player.KarmaCap * 0.03f;
+            if (self.Template.type == CreatureTemplate.Type.RedLizard)
             {
                 if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
                 {
@@ -32,10 +32,14 @@ public static class LizardResist
                 }
                 else
                 {
-                    self.lizardParams.biteDamageChance = 1f;
+                    self.lizardParams.biteDamageChance = 1f - resist;
                 }
             }
-            else 
+            else if (self.Template.type == CreatureTemplateType.IceLizard)
+            {
+                self.lizardParams.biteDamageChance = 0.5f - resist;
+            }
+            else
             {
                 self.lizardParams.biteDamageChance = self.lizardParams.biteDamageChance - resist;
                 if (self.lizardParams.biteDamageChance < 0)

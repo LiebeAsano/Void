@@ -34,7 +34,11 @@ namespace VoidTemplate
 			if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 			{
 				MenuScene.SceneID sceneID = null;
-				if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				if (self.IsSleepScreen && self.saveState.GetVoidMarkV3())
+				{
+					sceneID = VoidEnums.SceneID.SleepMark;
+				}
+				else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
 				{
 					sceneID = VoidEnums.SceneID.SleepScene;
 				}

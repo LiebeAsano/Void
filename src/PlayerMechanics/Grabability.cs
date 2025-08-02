@@ -99,6 +99,7 @@ public static class Grabability
             {
                 if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
                 {
+
                     if (grabberPlayer.maulTimer == 0)
                         maulTimer = true;
                     isGrabbedByVoidViy = true;
@@ -107,7 +108,7 @@ public static class Grabability
                         if (player.playerState is not null)
                         {
                             player.SetKillTag(grabberPlayer.abstractCreature);
-                            player.playerState.permanentDamageTracking += 0.005f;
+                            player.playerState.permanentDamageTracking += 0.000125f;
                             if (player.playerState.permanentDamageTracking >= 1.0f)
                             {
                                 player.Die();
@@ -118,7 +119,7 @@ public static class Grabability
                     {
                         if (self.State is HealthState)
                         {
-                            (self.State as HealthState).health -= 0.005f;
+                            (self.State as HealthState).health -= 0.000125f;
                             if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
                             {
                                 self.Die();

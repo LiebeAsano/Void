@@ -33,33 +33,31 @@ public static class GraspSave
 				&& playerInGrasp.AreVoidViy()
                 && grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
 				{
-					timerOfBeingGrasped.Value++;
-					if (timerOfBeingGrasped.Value % 40 == 0)
+					
+					self.SetKillTag(playerInGrasp.abstractCreature);
+					if (self is not null && self is not Player)
 					{
-						self.SetKillTag(playerInGrasp.abstractCreature);
-						if (self is not null && self is not Player)
+						if (self.State is HealthState)
 						{
-							if (self.State is HealthState)
+							(self.State as HealthState).health -= 0.00025f;
+							if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
 							{
-								(self.State as HealthState).health -= 0.01f;
-								if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
-								{
-									self.Die();
-								}
+								self.Die();
 							}
 						}
-						else if (self is Player player && !player.AreVoidViy())
+					}
+					else if (self is Player player && !player.AreVoidViy())
+					{
+						if (player.playerState is not null)
 						{
-							if (player.playerState is not null)
+							player.playerState.permanentDamageTracking += 0.00025f;
+							if (player.playerState.permanentDamageTracking >= 1.0f)
 							{
-								player.playerState.permanentDamageTracking += 0.01f;
-								if (player.playerState.permanentDamageTracking >= 1.0f)
-								{
-									self.Die();
-								}
+								self.Die();
 							}
-                        }
-                    }
+						}
+					}
+                    
 					if (timerOfBeingGrasped.Value > TicksUntilStun(playerInGrasp))
 					{
 						self.Stun(TicksPerSecond * 5);

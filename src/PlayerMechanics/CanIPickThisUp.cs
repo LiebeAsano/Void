@@ -20,7 +20,6 @@ public static class CanIPickThisUp
         //On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         On.Player.SlugOnBack.SlugToBack += Player_SlugToBack;
         On.Player.SlugOnBack.Update += SlugOnBack_Update;
-        On.Player.GrabUpdate += Player_GrabUpdate;
         On.Player.Update += Player_Update;
         On.Player.ctor += Player_ctor;
         IL.Player.Grabability += Player_GrababilityHook;
@@ -98,25 +97,17 @@ public static class CanIPickThisUp
     {
         if ((ModManager.MSC || ModManager.CoopAvailable) && self.slugcat != null && self.slugcat.IsVoid() && !self.owner.IsVoid())
         {
-            voidBurn[self.owner.playerState.playerNumber]++;
-            if (voidBurn[self.owner.playerState.playerNumber] % 40 == 0)
+            if (self.owner.playerState is not null)
             {
-                if (self.owner.playerState is not null)
+                voidBurn[self.owner.playerState.playerNumber]++;
+                self.owner.playerState.permanentDamageTracking += 0.00025f;
+                if (self.owner.playerState.permanentDamageTracking >= 1.0f)
                 {
-                    self.owner.playerState.permanentDamageTracking += 0.01f;
-                    if (self.owner.playerState.permanentDamageTracking >= 1.0f)
-                    {
-                        self.owner.Die();
-                    }
+                    self.owner.Die();
                 }
             }
         }
             
-        orig(self, eu);
-    }
-
-    private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
-    {
         orig(self, eu);
     }
 

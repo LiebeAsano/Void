@@ -15,7 +15,6 @@ namespace VoidTemplate.Creatures
         public static void Hook()
         {
             On.LizardGraphics.GenerateIvars += LizardGraphics_GenerateIvars;
-            On.LizardTongue.ctor += LizardTongue_ctor;
             On.LizardGraphics.DynamicBodyColor += LizardGraphics_DynamicBodyColor;
             On.LizardGraphics.BodyColor += LizardGraphics_BodyColor;
             HeadColor12Hook();
@@ -57,24 +56,6 @@ namespace VoidTemplate.Creatures
                 }
                 return orig(self);
             }));
-        }
-
-        private static void LizardTongue_ctor(On.LizardTongue.orig_ctor orig, LizardTongue self, Lizard lizard)
-        {
-            orig(self, lizard);
-            if (lizard is IceLizard)
-            {
-                self.range = 540f;
-                self.elasticRange = 0.5f;
-                self.lashOutSpeed = 37f;
-                self.reelInSpeed = 0.0043333336f;
-                self.chunkDrag = 0f;
-                self.terrainDrag = 0f;
-                self.dragElasticity = 0.05f;
-                self.emptyElasticity = 0.01f;
-                self.involuntaryReleaseChance = 1f;
-                self.voluntaryReleaseChance = 1f;
-            }
         }
 
         private static LizardGraphics.IndividualVariations LizardGraphics_GenerateIvars(On.LizardGraphics.orig_GenerateIvars orig, LizardGraphics self)

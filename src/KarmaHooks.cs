@@ -16,8 +16,9 @@ namespace VoidTemplate
 		public static void Hook()
 		{
 
-			//On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
-			On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
+			On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
+
+			//On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 			//echoes think void is at max karma and treat him as hunter
 			IL.World.SpawnGhost += KarmaReqTinker;
 
@@ -28,7 +29,35 @@ namespace VoidTemplate
 			//IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.ctor += SlugcatPageContinue_ctorIL;
 		}
 
-		private static void KarmaReqTinker(ILContext il)
+        private static void SleepAndDeathScreen_AddBkgIllustration(On.Menu.SleepAndDeathScreen.orig_AddBkgIllustration orig, SleepAndDeathScreen self)
+        {
+			if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
+			{
+				MenuScene.SceneID sceneID = null;
+				if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				{
+					sceneID = VoidEnums.SceneID.SleepScene;
+				}
+				else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap == 10)
+				{
+					sceneID = VoidEnums.SceneID.SleepScene11;
+				}
+				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				{
+					sceneID = VoidEnums.SceneID.DeathScene;
+				}
+				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap == 10)
+				{
+					sceneID = VoidEnums.SceneID.DeathScene11;
+				}
+				self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
+				self.pages[0].subObjects.Add(self.scene);
+				return;
+			}
+			orig(self);
+        } 
+
+        private static void KarmaReqTinker(ILContext il)
 		{
 			ILCursor c = new(il);
 			// bool flag = this.game.setupValues.ghosts > 0

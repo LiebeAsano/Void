@@ -2,10 +2,10 @@
 using VoidTemplate.Useful;
 namespace VoidTemplate.Objects;
 
-public class CeilingClimbTutorial : UpdatableAndDeletable
+public class Tutorial : UpdatableAndDeletable
 {
 
-	public CeilingClimbTutorial(Room room, params Message[] messages)
+	public Tutorial(Room room, params Message[] messages)
 	{
 		messageList = messages;
 		this.room = room;
@@ -29,7 +29,6 @@ public class CeilingClimbTutorial : UpdatableAndDeletable
 
 			room.game.cameras[0].hud.textPrompt.AddMessage(text, message.wait, message.time, true, ModManager.MMF);
 		}
-		room.game.GetStorySession.saveState.SetMessageShown(true);
 		slatedForDeletetion = true;
 	}
 

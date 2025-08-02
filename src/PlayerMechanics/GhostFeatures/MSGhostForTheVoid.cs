@@ -207,14 +207,13 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 
         private static bool TheVoidCanMeetMSGhost(World self)
         {
-            SaveState saveState = (self.game.session as StoryGameSession).saveState;
             DeathPersistentSaveData deathPersistentSaveData = (self.game.session as StoryGameSession).saveState.deathPersistentSaveData;
-            return !deathPersistentSaveData.theMark && !saveState.GetPunishNonPermaDeath();
+            return !deathPersistentSaveData.theMark;
         }
 
         private static bool HasMetMSGhost(DeathPersistentSaveData deathPersistentSaveData)
         {
-            if (deathPersistentSaveData.ghostsTalkedTo.TryGetValue(MoreSlugcats.MoreSlugcatsEnums.GhostID.MS, out int metStatus))
+            if (deathPersistentSaveData.ghostsTalkedTo.TryGetValue(MoreSlugcatsEnums.GhostID.MS, out int metStatus))
             {
                 return metStatus == 2;
             }

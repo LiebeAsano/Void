@@ -1,5 +1,6 @@
 ﻿using System;
 using VoidTemplate.Objects;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.Useful;
 using Random = UnityEngine.Random;
 
@@ -47,13 +48,22 @@ public class KarmaFlowerChanges
 
                 if (player.abstractCreature.world.game.IsVoidStoryCampaign())
                 {
-                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !SaveVoidCycle)
+                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !SaveVoidCycle && OptionAccessors.PermaDeath)
                     {
                         SaveVoidCycle = true;
                         saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + 1);
                         self.room.game.cameras[0].hud.karmaMeter.blinkRed = true;
                         self.room.game.cameras[0].hud.karmaMeter.blinkRedCounter = 300;
-                        HunterSpasms.Spasm(player, 10f, 0.2f);
+                        HunterSpasms.Spasm(player, 10f, 0.5f);
+
+                        if (!saveState.GetKarmaFlowerMessageShown())
+                        {
+                            self.room.AddObject(new Tutorial(self.room,
+                            [
+                                new("It is painful... but Karma Flower saves your current cycle.", 222, 333)
+                            ]));
+                            saveState.SetKarmaFlowerMessageShown(true);
+                        }
                     }
 
                     if (self.bites == 1 && player.KarmaCap == 10 && !player.IsViy())
@@ -70,6 +80,12 @@ public class KarmaFlowerChanges
                 }
             }
 
+            grasp.Release();
+            self.Destroy();
+            return;
+        }
+        if (grasp.grabber is Player player2 && self.bites < 2 && player2.abstractCreature.world.game.IsVoidStoryCampaign())
+        {
             grasp.Release();
             self.Destroy();
             return;

@@ -44,14 +44,15 @@ namespace VoidTemplate
 			if (self.game != null && self.game.session.characterStats.name == VoidEnums.SlugcatID.Void)
 			{
 				SaveState saveState = self.game.GetStorySession.saveState;
-				if (!saveState.GetMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
+				if (!saveState.GetCeilClimbMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
 				{
-					self.AddObject(new CeilingClimbTutorial(self,
+					self.AddObject(new Tutorial(self,
 					[
-						new("Your body is strong enough to climb on any surface.", 0, 333),
+						new("Your body is strong enough to climb on any surface.", 33, 333),
 						new("Your abilities also continue to improve.", 0, 333)
 					]));
-				}
+					saveState.SetCeilClimbMessageShown(true);
+                }
 				switch (self.abstractRoom.name)
 				{
 					case "SB_E05":

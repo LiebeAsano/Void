@@ -49,7 +49,6 @@ public static class _PlayerMechanicsMeta
 		NoForceSleep.Hook();
 		NoVisualMalnourishment.Hook();
 		PlayerGrabbed.Hook();
-		PunishNonPermaDeath.Hook();
 		RockHitSomething.Hook();
 		RottenDangleResist.Hook();
 		RottenSeedCob.Hook();

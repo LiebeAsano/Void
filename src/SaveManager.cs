@@ -10,7 +10,8 @@ public static class SaveManager
 	private const string uniqueprefix = "VoidSlugcat";
 	private const string teleportationDone = uniqueprefix + "TeleportationDone";
 	private const string messageShown = uniqueprefix + "MessageShown";
-	private const string punishDeath = uniqueprefix + "NonPermaDeath";
+    private const string karmaFlowerShown = uniqueprefix + "MessageShown";
+    private const string punishDeath = uniqueprefix + "NonPermaDeath";
 	private const string startClimbingMessageShown = uniqueprefix + "StartClimbingMessageShown";
 
 	const string endingDone = uniqueprefix + "EndingDone";
@@ -27,10 +28,13 @@ public static class SaveManager
 	public static bool GetTeleportationDone(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(teleportationDone, out bool done) && done;
 	public static void SetTeleportationDone(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(teleportationDone, value);
 
-	public static bool GetMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(messageShown, out bool shown) && shown;
-	public static void SetMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(messageShown, value);
+	public static bool GetCeilClimbMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(messageShown, out bool shown) && shown;
+	public static void SetCeilClimbMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(messageShown, value);
 
-	public static bool GetStartClimbingMessageShown(this SaveState saveState) => saveState.miscWorldSaveData.GetSlugBaseData().TryGet(startClimbingMessageShown, out bool shown) && shown;
+    public static bool GetKarmaFlowerMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(karmaFlowerShown, out bool shown) && shown;
+    public static void SetKarmaFlowerMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(karmaFlowerShown, value);
+
+    public static bool GetStartClimbingMessageShown(this SaveState saveState) => saveState.miscWorldSaveData.GetSlugBaseData().TryGet(startClimbingMessageShown, out bool shown) && shown;
 	public static void SetStartClimbingMessageShown(this SaveState saveState, bool value) => saveState.miscWorldSaveData.GetSlugBaseData().Set(startClimbingMessageShown, value);
 
     private const string KarmaToken = uniqueprefix + "KarmaToken";
@@ -59,13 +63,6 @@ public static class SaveManager
 		}
 		return KarmaTokenAmount;
 	}
-
-	private const string CycleToken = uniqueprefix + "CycleToken";
-
-	public static bool GetPunishNonPermaDeath(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(punishDeath, out bool choose) && choose;
-
-	public static void SetPunishNonPermaDeath(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(punishDeath, value);
-
 
 	#region oracle data
 	private const string lastMeetCycles = uniqueprefix + "LastMeetCycles";

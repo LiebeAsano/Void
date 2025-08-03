@@ -160,6 +160,11 @@ public class MimicGraphics : GraphicsModule
                 this.whiteCamoColor = Color.Lerp(this.whiteCamoColor, this.whitePickUpColor, 0.1f);
             }
         }
+        if (!changeVisibleState && (((isVisible) && star.AI.runSpeed <= .3f) || ((!isVisible) && star.AI.runSpeed >= .3f)))
+        {
+            changeVisibleState = true;
+            isVisible = !isVisible;
+        }
     }
     public void CamoAmountControlled()
     {
@@ -282,6 +287,69 @@ public class MimicGraphics : GraphicsModule
             this.legGraphics[k].DrawSprite(sLeaser, rCam, timeStacker, camPos);
         }
         this.ColorBody(sLeaser, this.DynamicBodyColor(0f));
+        Color color = rCam.PixelColorAtCoordinate(this.star.mainBodyChunk.pos);
+        Color color2 = rCam.PixelColorAtCoordinate(this.star.bodyChunks[0].pos);
+        Color color3 = rCam.PixelColorAtCoordinate(this.star.bodyChunks[2].pos);
+        if (color == color2)
+        {
+            this.whitePickUpColor = color;
+        }
+        else if (color2 == color3)
+        {
+            this.whitePickUpColor = color2;
+        }
+        else if (color3 == color)
+        {
+            this.whitePickUpColor = color3;
+        }
+        else
+        {
+            this.whitePickUpColor = (color + color2 + color3) / 3f;
+        }
+        whiteCamoColor = whitePickUpColor;
+        if (changeVisibleState)
+            {
+                if (isVisible)
+                {
+                    if (invisAmount >= 90)
+                    {
+                    for (int i = 0; i < this.star.bodyChunks.Length; i++)
+                    {
+                        sLeaser.sprites[this.BodySprite(i)].isVisible = true;
+
+                    }
+                    }
+                    if (invisAmount > 0)
+                    {
+                        invisAmount--;
+                    }
+                    else
+                    {
+                        changeVisibleState = false;
+                    }
+                }
+                else
+                {
+                    if (invisAmount < 90)
+                    {
+                        invisAmount++;
+                    }
+                    else
+                    {
+                        changeVisibleState = false;
+                    }
+                }
+
+                
+            }
+            whiteCamoColorAmount = Mathf.InverseLerp(0f, 90f, invisAmount);
+        if (!isVisible && whiteCamoColorAmount == 1)
+        {
+            for (int i = 0; i < this.star.bodyChunks.Length; i++)
+            {
+                sLeaser.sprites[this.BodySprite(i)].isVisible = false;
+            }
+        }
     }
 
     public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
@@ -411,6 +479,13 @@ public class MimicGraphics : GraphicsModule
     public StaticSoundLoop digestLoop;
 
     public Color whiteCamoColor = Custom.RGB2RGBA(new Color(0f, 0f, 0f), 1f);
+
+    public int invisAmount;
+
+    public bool changeVisibleState;
+
+    public bool isVisible = true;
+
     public interface DaddyBubbleOwner
     {
 
@@ -794,8 +869,10 @@ public class MimicGraphics : GraphicsModule
         public float showDominance;
         public float whiteDominanceHue;
         public int whiteGlitchFit;
-
         public MimicGraphics.StarTubeGraphic.Bump[] bumps;
+        public int invisAmount;
+        public bool changeVisibleState;
+        public bool isVisible = true;
 
         public struct Bump
         {
@@ -884,6 +961,11 @@ public class MimicGraphics : GraphicsModule
                 }
             }
             base.AlignAndConnect(listCount);
+            if (!changeVisibleState && (((isVisible) && owner.star.AI.runSpeed <= .3f) || ((!isVisible) && owner.star.AI.runSpeed >= .3f)))
+            {
+                changeVisibleState = true;
+                isVisible = !isVisible;
+            }
         }
 
         public override void ConnectPhase(float totalRopeLength)
@@ -894,6 +976,80 @@ public class MimicGraphics : GraphicsModule
         {
             base.DrawSprite(sLeaser, rCam, timeStacker, camPos);
             Colorleg(sLeaser, DynamicBodyColor(0f), DynamicEffectColorColor(0f));
+            Color color = rCam.PixelColorAtCoordinate(this.owner.star.mainBodyChunk.pos);
+            Color color2 = rCam.PixelColorAtCoordinate(this.owner.star.bodyChunks[0].pos);
+            Color color3 = rCam.PixelColorAtCoordinate(this.owner.star.bodyChunks[2].pos);
+            if (color == color2)
+            {
+                this.whitePickUpColor = color;
+            }
+            else if (color2 == color3)
+            {
+                this.whitePickUpColor = color2;
+            }
+            else if (color3 == color)
+            {
+                this.whitePickUpColor = color3;
+            }
+            else
+            {
+                this.whitePickUpColor = (color + color2 + color3) / 3f;
+            }
+            whiteCamoColor = whitePickUpColor;
+            if (changeVisibleState)
+            {
+                if (isVisible)
+                {
+                    if (invisAmount >= 90)
+                    {
+                        sLeaser.sprites[this.firstSprite].isVisible = true;
+                        for (int i = 0; i < this.bumps.Length; i++)
+                        {
+                            sLeaser.sprites[this.firstSprite + 1 + i].isVisible = true;
+                            if (this.bumps[i].eyeSize > 0f)
+                            {
+                                sLeaser.sprites[this.firstSprite + 1 + this.bumps.Length + num].isVisible = true;
+                                num++;
+                            }
+                        }
+                    }
+                    if (invisAmount > 0)
+                    {
+                        invisAmount--;
+                    }
+                    else
+                    {
+                        changeVisibleState = false;
+                    }
+                }
+                else
+                {
+                    if (invisAmount < 90)
+                    {
+                        invisAmount++;
+                    }
+                    else
+                    {
+                        changeVisibleState = false;
+                    }
+                }
+
+
+            }
+            whiteCamoColorAmount = Mathf.InverseLerp(0f, 90f, invisAmount);
+            if (!isVisible && whiteCamoColorAmount == 1)
+            {
+                sLeaser.sprites[this.firstSprite].isVisible = false;
+                for (int i = 0; i < this.bumps.Length; i++)
+                {
+                    sLeaser.sprites[this.firstSprite + 1 + i].isVisible = false;
+                    if (this.bumps[i].eyeSize > 0f)
+                    {
+                        sLeaser.sprites[this.firstSprite + 1 + this.bumps.Length + num].isVisible = false;
+                        num++;
+                    }
+                }
+            }
         }
 
         public int tentacleIndex;

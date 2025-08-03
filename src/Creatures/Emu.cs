@@ -16,6 +16,10 @@ public static class CreatureTemplateType
 
     public static CreatureTemplate.Type IceLizard = new("IceLizard", true);
 
+    public static CreatureTemplate.Type Dartspider = new("Dartspider", true);
+
+    public static AbstractPhysicalObject.AbstractObjectType DartPoison = new("DartPoison", true);
+
     public static void UnregisterValues()
     {
         if (Mimicstarfish != null)
@@ -37,6 +41,16 @@ public static class CreatureTemplateType
         {
             IceLizard.Unregister();
             IceLizard = null;
+        }
+        if (Dartspider != null)
+        {
+            Dartspider.Unregister();
+            Dartspider = null;
+        }
+        if (DartPoison != null)
+        {
+            DartPoison.Unregister();
+            DartPoison = null;
         }
     }
 }
@@ -51,6 +65,8 @@ public static class SandboxUnlockID
 
     public static MultiplayerUnlocks.SandboxUnlockID IceLizard = new("IceLizard", true);
 
+    public static MultiplayerUnlocks.SandboxUnlockID Dartspider = new("Dartspider", true);
+
     public static void UnregisterValues()
     {
         if (Mimicstarfish != null)
@@ -72,6 +88,11 @@ public static class SandboxUnlockID
         {
             IceLizard.Unregister();
             IceLizard = null;
+        }
+        if (Dartspider != null)
+        {
+            Dartspider.Unregister();
+            Dartspider = null;
         }
     }
 }

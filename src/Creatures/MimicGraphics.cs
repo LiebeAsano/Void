@@ -975,6 +975,7 @@ public class MimicGraphics : GraphicsModule
         public override void DrawSprite(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
             base.DrawSprite(sLeaser, rCam, timeStacker, camPos);
+            int num = 0;
             Colorleg(sLeaser, DynamicBodyColor(0f), DynamicEffectColorColor(0f));
             Color color = rCam.PixelColorAtCoordinate(this.owner.star.mainBodyChunk.pos);
             Color color2 = rCam.PixelColorAtCoordinate(this.owner.star.bodyChunks[0].pos);
@@ -1064,5 +1065,6 @@ public class MimicGraphics : GraphicsModule
     public float showDominance;
     public float whiteDominanceHue;
     public int whiteGlitchFit;
+
 
 }

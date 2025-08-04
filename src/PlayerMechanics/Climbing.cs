@@ -52,7 +52,7 @@ public static class Climbing
 
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
 	{
-		if ((self.slugcatStats.name == VoidEnums.SlugcatID.Void || self.slugcatStats.name == VoidEnums.SlugcatID.Viy) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[self.playerState.playerNumber]))
+		if (self.AreVoidViy() && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[self.playerState.playerNumber]))
 		{
 
 			BodyChunk body_chunk_0 = self.bodyChunks[0];
@@ -61,8 +61,8 @@ public static class Climbing
 			if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y > 0 && self.input[0].jmp)
 			{
 
-				self.bodyChunks[0].vel.y = 10f;
-				self.bodyChunks[1].vel.y = 10f;
+				self.bodyChunks[0].vel.y = 10.5f;
+				self.bodyChunks[1].vel.y = 10.5f;
 
 				self.bodyChunks[0].vel.x = 8f * -self.input[0].x;
 				self.bodyChunks[1].vel.x = 8f * -self.input[0].x;
@@ -76,8 +76,29 @@ public static class Climbing
 
 				return;
 			}
-			else if (self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
-            {
+			else if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y < 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
+			{
+				self.standing = true;
+				self.jumpBoost = 0;
+				self.jumpStun = 0;
+
+				self.canWallJump = 0;
+
+				return;
+			}
+			else if (self.bodyChunks[0].ContactPoint.x != 0 && !self.input[0].spec && self.input[1].spec && body_chunk_0.pos.y > body_chunk_1.pos.y && MovementUpdate.superWallJump[self.playerState.playerNumber] >= 40)
+			{
+				MovementUpdate.superWallJump[self.playerState.playerNumber] = 20;
+
+                self.animation = Player.AnimationIndex.Flip;
+
+                self.bodyChunks[0].vel.y = 10f;
+                self.bodyChunks[1].vel.y = 10f;
+
+                self.bodyChunks[0].vel.x = 8f * -self.input[0].x;
+                self.bodyChunks[1].vel.x = 8f * -self.input[0].x;
+
+                self.room.PlaySound(SoundID.Slugcat_Wall_Jump, self.mainBodyChunk, false, 1f, 1f);
                 self.standing = true;
                 self.jumpBoost = 0;
                 self.jumpStun = 0;
@@ -85,12 +106,17 @@ public static class Climbing
                 self.canWallJump = 0;
 
                 return;
+			}
+            else if (self.bodyChunks[0].ContactPoint.x != 0 && self.input[0].y == 0 && self.input[0].jmp && body_chunk_0.pos.y > body_chunk_1.pos.y)
+            {
+                orig(self, direction);
+                return;
             }
         }
 		orig(self, direction);
 	}
 
-	private static bool KarmaCap_Check(Player self)
+	public static bool KarmaCap_Check(Player self)
 	{
 		return self.IsVoid() && (self.KarmaCap > 3 || Karma11Update.VoidKarma11) || self.IsViy();
 	}
@@ -158,7 +184,6 @@ public static class Climbing
 	public static int[] gamepadTimer2 = new int [32];
 
     public static bool[] switchMode = new bool[32];
-    public static bool[] switchModeUnic = new bool [32];
 	public static int[] switchTimer = new int [32];
 
     private static readonly ConditionalWeakTable<Player, StrongBox<int>> rightLeft = new();
@@ -174,7 +199,21 @@ public static class Climbing
 
 	private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player player)
 	{
-		if (!player.AreVoidViy())
+
+        if (OptionAccessors.ComplexControl && player.input[0].spec && !player.input[1].spec)
+        {
+            bool isInSpecialCondition = player.bodyMode == Player.BodyModeIndex.WallClimb ||
+										IsTouchingDiagonalCeiling(player) ||
+										IsTouchingCeiling(player);
+
+            if (isInSpecialCondition)
+            {
+                if (switchMode[player.playerState.playerNumber]) switchMode[player.playerState.playerNumber] = false;
+            }
+            else switchMode[player.playerState.playerNumber] = !switchMode[player.playerState.playerNumber];
+        }
+
+        if (!player.AreVoidViy() || OptionAccessors.ComplexControl && switchMode[player.playerState.playerNumber])
 		{
 			orig(player);
 			return;
@@ -262,90 +301,62 @@ public static class Climbing
 
 		if (flipTimer[player.playerState.playerNumber] > -1)
 		{
-			if (player.input[0].x < 0)
-                rightLeftStrongBox.Value = 1;
-			else
-                rightLeftStrongBox.Value = -1;
+			if (player.input[0].x < 0) rightLeftStrongBox.Value = 1;
 
-			player.bodyMode = Player.BodyModeIndex.ZeroG;
-			body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer[player.playerState.playerNumber]) / ((float)ticksToFlip) * 180 * rightLeftStrongBox.Value) * 17;
+            else rightLeftStrongBox.Value = -1;
+
+            player.bodyMode = Player.BodyModeIndex.ZeroG;
+
+			player.bodyChunks[0].vel.y = 0.75f;
+            player.bodyChunks[1].vel.y = 1.5f;
+
+            body_chunk_0.pos = body_chunk_1.pos + Custom.DegToVec(((float)flipTimer[player.playerState.playerNumber]) / ((float)ticksToFlip) * 180 * rightLeftStrongBox.Value) * 17;
+
 			flipTimer[player.playerState.playerNumber]++;
-			if (flipTimer[player.playerState.playerNumber] == ticksToFlip)
-			{
-				flipTimer[player.playerState.playerNumber] = -1;
-			}
+
+			if (flipTimer[player.playerState.playerNumber] == ticksToFlip) flipTimer[player.playerState.playerNumber] = -1;
 		}
 
-		if (OptionAccessors.GamepadController)
+        if (OptionAccessors.GamepadController
+			&& KarmaCap_Check(player)
+			&& (IsTouchingDiagonalCeiling(player) || IsTouchingCeiling(player)))
 		{
-			if (gamepadController[player.playerState.playerNumber])
-				gamepadTimer[player.playerState.playerNumber]++;
-
-			if (!gamepadController[player.playerState.playerNumber])
-				gamepadTimer2[player.playerState.playerNumber]++;
-
-			if (gamepadTimer2[player.playerState.playerNumber] >= 20 && (IsTouchingDiagonalCeiling(player) || IsTouchingCeiling(player)) && KarmaCap_Check(player) && player.input[0].jmp && player.input[0].pckp && !player.input[1].jmp && !player.input[1].pckp)
-			{
-				gamepadController[player.playerState.playerNumber] = true;
-				gamepadTimer2[player.playerState.playerNumber] = 0;
-			}
-
-			if (gamepadTimer[player.playerState.playerNumber] >= 20 && player.input[0].jmp && player.input[0].pckp && !player.input[1].jmp && !player.input[1].pckp)
-			{
-				gamepadController[player.playerState.playerNumber] = false;
-				gamepadTimer[player.playerState.playerNumber] = 0;
-			}
+			if (player.input[0].spec && !player.input[1].spec)
+				gamepadController[player.playerState.playerNumber] = !gamepadController[player.playerState.playerNumber];
 		}
+		else gamepadController[player.playerState.playerNumber] = false;
 
-		if (OptionAccessors.ComplexControl)
-		{
-			if (switchModeUnic[player.playerState.playerNumber])
-			{
-				switchTimer[player.playerState.playerNumber]++;
-			}
-			
-			if (switchTimer[player.playerState.playerNumber] >= 20)
-			{
-                switchModeUnic[player.playerState.playerNumber] = false;
-            }
 
-			if (!switchModeUnic[player.playerState.playerNumber] && player.input[0].spec && !player.input[1].spec)
-			{
-				switchMode[player.playerState.playerNumber] = !switchMode[player.playerState.playerNumber];
-            }
+        if (player.bodyMode == Player.BodyModeIndex.WallClimb)
+        {
+            UpdateBodyMode_WallClimb(player);
+            player.noGrabCounter = 5;
+            state.IsWallCrawling = true;
+        }
+        else if ((IsTouchingCeiling(player) || IsTouchingDiagonalCeiling(player))
+            && KarmaCap_Check(player)
+            && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber])
+            && (player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam ||
+                (player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
+                 player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam &&
+                 player.bodyMode != Player.BodyModeIndex.Swimming &&
+                 player.bodyMode != Player.BodyModeIndex.Stand &&
+                 player.bodyMode != Player.BodyModeIndex.ZeroG &&
+                 player.bodyMode != Player.BodyModeIndex.Crawl)))
+        {
+            player.bodyMode = BodyModeIndexExtension.CeilCrawl;
+            UpdateBodyMode_CeilCrawl(player, state);
+            state.IsCeilCrawling = true;
 
-		}
+            state.CeilCrawlStartTime = Time.realtimeSinceStartup -
+                (IsTouchingCeiling(player) ? 0.05f : 0f);
+        }
 
-		if (player.bodyMode == Player.BodyModeIndex.WallClimb && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]))
-		{
-			UpdateBodyMode_WallClimb(player);
-			player.noGrabCounter = 5;
-			state.IsWallCrawling = true;
-		}
-		else if (IsTouchingCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
-				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
-				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam)))
-		{
-			player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-			UpdateBodyMode_CeilCrawl(player, state);
-			state.IsCeilCrawling = true;
-			state.CeilCrawlStartTime = Time.realtimeSinceStartup - 0.05f;
-		}
-		else if (IsTouchingDiagonalCeiling(player) && KarmaCap_Check(player) && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[player.playerState.playerNumber]) && (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber]) &&
-				((player.bodyMode != Player.BodyModeIndex.CorridorClimb && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam && player.bodyMode != Player.BodyModeIndex.Swimming && player.bodyMode != Player.BodyModeIndex.Stand && player.bodyMode != Player.BodyModeIndex.ZeroG && player.bodyMode != Player.BodyModeIndex.Crawl) ||
-				(player.bodyMode == Player.BodyModeIndex.ClimbingOnBeam)))
-		{
-			player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-			UpdateBodyMode_CeilCrawl(player, state);
-			state.IsCeilCrawling = true;
-			state.CeilCrawlStartTime = Time.realtimeSinceStartup;
-		}
-
-		player.bodyChunks[1].collideWithTerrain = true;
+        player.bodyChunks[1].collideWithTerrain = true;
 
 		if (state.IsCeilCrawling)
 		{
-			if (player.input[0].y > 0)
+			if (player.input[0].y > 0 || gamepadController[player.playerState.playerNumber])
 			{
 				float elapsedTime = Time.realtimeSinceStartup - state.CeilCrawlStartTime;
 
@@ -365,7 +376,13 @@ public static class Climbing
 			}
 		}
 		orig(player);
-	}
+        if (player.bodyMode == Player.BodyModeIndex.Default && !player.standing && MovementUpdate.superWallJump[player.playerState.playerNumber] > 0)
+		{
+			player.dynamicRunSpeed[0] = 0f;
+            player.dynamicRunSpeed[1] = 0f;
+			MovementUpdate.superWallJump[player.playerState.playerNumber]--;
+        }
+    }
 
 	private static void TryApplyWallClimbOverride(Player player)
 	{
@@ -399,7 +416,6 @@ public static class Climbing
 			else if (body_chunk_0.pos.x < body_chunk_1.pos.x && player.input[0].x > 0)
 				climbSpeed = -0.25f;
 
-		// Горизонтальное движение при ползке по потолку
 		if (player.input[0].x != 0)
 		{
 			body_chunk_0.vel.x = player.input[0].x * climbSpeed;
@@ -434,20 +450,14 @@ public static class Climbing
 
 			body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
 			float minusone = 0.05f * player.KarmaCap;
-            float minustwo = 0.16f * player.KarmaCap;
 			if (player.KarmaCap == 10 || Karma11Update.VoidKarma11 || player.IsViy())
 			{
 				minusone = 0.5f;
-				minustwo = 1.6f;
-
             }
             if (player.input[0].jmp && player.input[0].x != 0)
 			{
 				float jumpForceX;
-				if (gamepadController[player.playerState.playerNumber] && player.input[0].y <= 0)
-					jumpForceX = (-8f + minustwo) * climbSpeed * player.input[0].x;
-				else
-					jumpForceX = (-3.4f + minusone) * climbSpeed * player.input[0].x;
+				jumpForceX = (-3.4f + minusone) * climbSpeed * player.input[0].x;
 				body_chunk_1.vel.x = Custom.LerpAndTick(body_chunk_1.vel.x, jumpForceX, 0.3f, 1f);
 			}
 
@@ -506,7 +516,7 @@ public static class Climbing
 				velXGain *= 0.4f + 0.6f * Mathf.InverseLerp(10f, 0.0f, player.slowMovementStun);
 			}
 
-			if (player.input[0].y != 0)
+			if (player.input[0].y != 0 && !player.input[0].spec)
 			{
 				if (player.input[0].y == 1 && !player.IsTileSolid(bChunk: 1, player.input[0].x, 0) && (body_chunk_1.pos.x < body_chunk_0.pos.x) == (player.input[0].x < 0))
 				{
@@ -535,7 +545,7 @@ public static class Climbing
 				}
 				++player.animationFrame;
 			}
-			else if (player.lowerBodyFramesOffGround > 8 && player.input[0].y != -1)
+			else if (player.lowerBodyFramesOffGround > 8 && (player.input[0].y != -1 || player.input[0].spec))
 			{
 				if (player.grasps[0]?.grabbed is Cicada cicada)
 				{

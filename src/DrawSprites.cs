@@ -411,7 +411,7 @@ public class DrawSprites
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
-        if ((player.IsVoid() || player.IsViy()) && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+        if (player.AreVoidViy() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
             player.bodyMode == Player.BodyModeIndex.WallClimb)
         {
             sLeaser.sprites[4].isVisible = false;

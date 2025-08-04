@@ -21,6 +21,7 @@ public static class MovementUpdate
         On.Player.MovementUpdate += Player_MovementUpdate;
     }
 
+    public static int[] superWallJump = new int[32]; 
     private static void Player_MovementUpdate(On.Player.orig_MovementUpdate orig, Player self, bool eu)
     {
         if (self.AreVoidViy())
@@ -134,7 +135,7 @@ public static class MovementUpdate
                 {
                     self.jumpBoost = 0f;
                 }
-                if (self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[0].ContactPoint.x == self.input[0].x && Crawl.crawlTicks[self.playerState.playerNumber] <= 10)
+                if (self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[0].ContactPoint.x == self.input[0].x && Crawl.crawlTicks[self.playerState.playerNumber] <= 5)
                 {
                     if (self.bodyChunks[0].lastContactPoint.x != self.input[0].x)
                     {
@@ -626,6 +627,33 @@ public static class MovementUpdate
                     self.wantToJump = 1;
                 }
             }
+            if (self.bodyMode == Player.BodyModeIndex.WallClimb && self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[1].ContactPoint.x != 0 && self.bodyChunks[0].pos.y > self.bodyChunks[1].pos.y)
+            {
+                if (self.input[0].spec)
+                {
+                    self.wantToJump = 0;
+                    if (superWallJump[self.playerState.playerNumber] < 60)
+                    {
+                        if (self.KarmaCap >= 9 || Karma11Update.VoidKarma11)
+                        {
+                            superWallJump[self.playerState.playerNumber] += 2;
+                        }
+                        else if (self.KarmaCap >= 4)
+                        {
+                            superWallJump[self.playerState.playerNumber]++;
+                        }
+                    }
+                    if (superWallJump[self.playerState.playerNumber] >= 40) self.Blink(5);
+                }
+                else if (superWallJump[self.playerState.playerNumber] > 0)
+                {
+                    superWallJump[self.playerState.playerNumber]--;
+                }
+                if (!self.input[0].spec && self.input[1].spec && superWallJump[self.playerState.playerNumber] >= 40)
+                {
+                    self.wantToJump = 1;
+                }
+            }
             if (self.killSuperLaunchJumpCounter > 0)
             {
                 self.killSuperLaunchJumpCounter--;
@@ -643,77 +671,13 @@ public static class MovementUpdate
             else if (self.canWallJump != 0 && self.wantToJump > 0 && self.input[0].x != -Math.Sign(self.canWallJump))
             {
                 self.WallJump(Math.Sign(self.canWallJump));
-                self.wantToJump = 0;
+                self.wantToJump = 0; 
             }
             else if (self.jumpChunkCounter > 0 && self.wantToJump > 0)
             {
                 self.jumpChunkCounter = -5;
                 self.wantToJump = 0;
                 self.JumpOnChunk();
-            }
-            if (self.Adrenaline > 0f)
-            {
-                float num17 = (self.isRivulet ? 16f : 8f) * self.Adrenaline;
-                if (self.input[0].x < 0)
-                {
-                    if (!self.IsTileSolid(0, -1, 0) && self.directionBoosts[0] == 1f)
-                    {
-                        self.directionBoosts[0] = 0f;
-                        BodyChunk mainBodyChunk3 = self.mainBodyChunk;
-                        mainBodyChunk3.vel.x = mainBodyChunk3.vel.x - num17;
-                        BodyChunk bodyChunk14 = self.bodyChunks[1];
-                        bodyChunk14.vel.x = bodyChunk14.vel.x + num17 / 3f;
-                    }
-                }
-                else if (self.directionBoosts[0] == 0f)
-                {
-                    self.directionBoosts[0] = 0.01f;
-                }
-                if (self.input[0].x > 0)
-                {
-                    if (!self.IsTileSolid(0, 1, 0) && self.directionBoosts[1] == 1f)
-                    {
-                        self.directionBoosts[1] = 0f;
-                        BodyChunk mainBodyChunk4 = self.mainBodyChunk;
-                        mainBodyChunk4.vel.x = mainBodyChunk4.vel.x + num17;
-                        BodyChunk bodyChunk15 = self.bodyChunks[1];
-                        bodyChunk15.vel.x = bodyChunk15.vel.x - num17 / 3f;
-                    }
-                }
-                else if (self.directionBoosts[1] == 0f)
-                {
-                    self.directionBoosts[1] = 0.01f;
-                }
-                if (self.input[0].y < 0)
-                {
-                    if (!self.IsTileSolid(0, 0, -1) && self.directionBoosts[2] == 1f)
-                    {
-                        self.directionBoosts[2] = 0f;
-                        BodyChunk mainBodyChunk5 = self.mainBodyChunk;
-                        mainBodyChunk5.vel.y = mainBodyChunk5.vel.y - num17;
-                        BodyChunk bodyChunk16 = self.bodyChunks[1];
-                        bodyChunk16.vel.y = bodyChunk16.vel.y + num17 / 3f;
-                    }
-                }
-                else if (self.directionBoosts[2] == 0f)
-                {
-                    self.directionBoosts[2] = 0.01f;
-                }
-                if (self.input[0].y > 0)
-                {
-                    if (!self.IsTileSolid(0, 0, 1) && self.directionBoosts[3] == 1f)
-                    {
-                        self.directionBoosts[3] = 0f;
-                        BodyChunk mainBodyChunk6 = self.mainBodyChunk;
-                        mainBodyChunk6.vel.y = mainBodyChunk6.vel.y + num17;
-                        BodyChunk bodyChunk17 = self.bodyChunks[1];
-                        bodyChunk17.vel.y = bodyChunk17.vel.y - num17;
-                    }
-                }
-                else if (self.directionBoosts[3] == 0f)
-                {
-                    self.directionBoosts[3] = 0.01f;
-                }
             }
             self.superLaunchJump -= num16;
             if (self.shortcutDelay < 1 && (!ModManager.MSC || (self.onBack == null && (self.grabbedBy.Count == 0 || !(self.grabbedBy[0].grabber is Player)))))

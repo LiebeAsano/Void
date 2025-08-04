@@ -17,5 +17,6 @@ public static class _MenuMeta
 		StopContinueButtonWhenAboutToDie.Hook();
 		IntroRollSound.Hook();
 		IntroRollIllustrstion.Hook();
+		PauseMenuTips.Hook();
     }
 }

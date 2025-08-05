@@ -23,7 +23,7 @@ public static class ThrowObject
 
     private static void Player_ThrowObject(On.Player.orig_ThrowObject orig, Player self, int grasp, bool eu)
     {
-        if (self.slugcatStats.name == VoidEnums.SlugcatID.Void
+        if (self.IsVoid()
         && self.bodyMode == BodyModeIndexExtension.CeilCrawl
         && self.input[0].jmp)
         {

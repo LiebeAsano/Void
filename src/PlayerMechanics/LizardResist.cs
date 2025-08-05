@@ -37,7 +37,7 @@ public static class LizardResist
             }
             else if (self.Template.type == CreatureTemplateType.IceLizard)
             {
-                self.lizardParams.biteDamageChance = 0.5f - resist;
+                self.lizardParams.biteDamageChance = 0.7f - resist;
             }
             else
             {

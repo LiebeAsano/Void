@@ -41,10 +41,10 @@ namespace VoidTemplate.Creatures
 
             void SpeedCamoLerp(int index)
             {
-                lizardParams.terrainSpeeds[index].speed = Mathf.Lerp(origSpeed[index].speed, greenLizardSpeed[index].speed, IceGraphics.whiteCamoColorAmount);
-                lizardParams.terrainSpeeds[index].horizontal = Mathf.Lerp(origSpeed[index].horizontal, greenLizardSpeed[index].horizontal, IceGraphics.whiteCamoColorAmount);
-                lizardParams.terrainSpeeds[index].down = Mathf.Lerp(origSpeed[index].down, greenLizardSpeed[index].down, IceGraphics.whiteCamoColorAmount);
-                lizardParams.terrainSpeeds[index].up = Mathf.Lerp(origSpeed[index].up, greenLizardSpeed[index].up, IceGraphics.whiteCamoColorAmount);
+                lizardParams.terrainSpeeds[index].speed = Mathf.Lerp(origSpeed[index].speed, greenLizardSpeed[index].speed / 2, IceGraphics.whiteCamoColorAmount);
+                lizardParams.terrainSpeeds[index].horizontal = Mathf.Lerp(origSpeed[index].horizontal, greenLizardSpeed[index].horizontal / 2, IceGraphics.whiteCamoColorAmount);
+                lizardParams.terrainSpeeds[index].down = Mathf.Lerp(origSpeed[index].down, greenLizardSpeed[index].down / 2, IceGraphics.whiteCamoColorAmount);
+                lizardParams.terrainSpeeds[index].up = Mathf.Lerp(origSpeed[index].up, greenLizardSpeed[index].up / 2, IceGraphics.whiteCamoColorAmount);
             }
         }
     }

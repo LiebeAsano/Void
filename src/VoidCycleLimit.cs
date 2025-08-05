@@ -214,14 +214,14 @@ namespace VoidTemplate
         {
             SaveState saveState = player.abstractCreature.world.game.GetStorySession.saveState;
 
-            if (saveState.saveStateNumber != VoidEnums.SlugcatID.Void) return originalCycleNumber;
+            if (saveState.saveStateNumber != VoidEnums.SlugcatID.Void || !OptionAccessors.PermaDeath) return originalCycleNumber;
 
             return GetDisplayCycleNumber(saveState);
         }
 
         private static int YieldVoidCycleDisplayNumberWithMainLoopProcess(MainLoopProcess mainLoopProcess, SlugcatStats.Name slugcatId, int originalCycleNumber)
         {
-            if (slugcatId != VoidEnums.SlugcatID.Void) return originalCycleNumber;
+            if (slugcatId != VoidEnums.SlugcatID.Void || !OptionAccessors.PermaDeath) return originalCycleNumber;
 
             SaveState saveState = mainLoopProcess.manager.rainWorld.progression.GetOrInitiateSaveState(slugcatId, null, mainLoopProcess.manager.menuSetup, false);
 

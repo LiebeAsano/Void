@@ -332,6 +332,11 @@ public static class SwallowObjects
             {
                 pearlIDsInPlayerStomaches[self.playerState.playerNumber] = [];
             }
+            if (self.objectInStomach != null)
+            {
+                self.objectInStomach.Destroy();
+                self.objectInStomach = null;
+            }
         } 
         
     }

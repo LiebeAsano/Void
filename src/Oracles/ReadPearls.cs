@@ -41,7 +41,6 @@ public static class ReadPearls
                 c.Emit(OpCodes.Ldarg_3);
                 c.EmitDelegate((Conversation self, string fileName, SlugcatStats.Name saveFile) =>
                 {
-                    bool b = false;
                     if (saveFile == VoidEnums.SlugcatID.Void && self is SLOracleBehaviorHasMark.MoonConversation && self.interfaceOwner is SSOracleBehavior)
                     {
                         InGameTranslator.LanguageID lang = Custom.rainWorld.inGameTranslator.currentLanguage;
@@ -54,7 +53,6 @@ public static class ReadPearls
                     return fileName;
                 });
                 c.Emit(OpCodes.Starg, 1);
-                LogExInf(il.ToString());
             }
             else
             {

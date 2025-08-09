@@ -1,0 +1,5 @@
+(Void)SpawnOnDifficulty
+(Void)priming : false
+minkarma : 0
+echosong : SH
+room : GW_A11

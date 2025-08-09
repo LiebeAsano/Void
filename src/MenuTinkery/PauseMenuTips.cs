@@ -19,7 +19,7 @@ namespace VoidTemplate.MenuTinkery
         private static void ControlMap_ctor(On.Menu.ControlMap.orig_ctor orig, ControlMap self, Menu.Menu menu, MenuObject owner, UnityEngine.Vector2 pos, Options.ControlSetup.Preset preset, bool showPickupInstructions)
         {
             orig(self, menu, owner, pos, preset, showPickupInstructions);
-            if (menu is PauseMenu && menu.manager.currentMainLoop is RainWorldGame rainworldgame && rainworldgame.IsVoidWorld())
+            if (menu is PauseMenu pause && pause.game.IsVoidWorld())
             {
                 self.pickupButtonInstructions.text = $"{menu.Translate("Pick up / Eat / Maul button interactions:") + "\r\n\r\n"}";
                 self.pickupButtonInstructions.text += "  - " + menu.Translate("Tap to pick up object") + "\r\n";

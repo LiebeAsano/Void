@@ -95,7 +95,18 @@ namespace VoidTemplate.DiscordChurch
             }
 
             var sandboxUnlockID = MultiplayerUnlocks.SandboxUnlockForSymbolData(iconData);
-            return sandboxUnlockID != null ? KillScores()[sandboxUnlockID.Index] : 0;
+            if (sandboxUnlockID == null)
+            {
+                return 0;
+            }
+
+            var scores = KillScores();
+            if (sandboxUnlockID.Index >= 0 && sandboxUnlockID.Index < scores.Length)
+            {
+                return scores[sandboxUnlockID.Index];
+            }
+
+            return 0;
         }
 
         private static int GetTotalScore(SaveState s)

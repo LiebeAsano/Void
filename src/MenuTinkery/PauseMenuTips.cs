@@ -28,18 +28,18 @@ namespace VoidTemplate.MenuTinkery
                 self.pickupButtonInstructions.text += "  - " + menu.Translate("Double tap to switch hands") + "\r\n";
                 self.pickupButtonInstructions.text += $"{"\r\n\r\n" + menu.Translate("Jump button interactions:") + "\r\n\r\n"}";
                 self.pickupButtonInstructions.text += "  - " + menu.Translate("Press while climbing wall + holding up / down direction to jump up / flip") + "\r\n";
-                if (rainworldgame.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)
+                if (pause.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)
                 {
                     self.pickupButtonInstructions.text += "  - " + menu.Translate("Hold while climbing ceil + press left / right direction to flip") + "\r\n";
                     self.pickupButtonInstructions.text += $"{"\r\n\r\n" + menu.Translate("Throw button interactions:") + "\r\n\r\n"}";
                     self.pickupButtonInstructions.text += "  - " + menu.Translate("Press while climbing ceil + holding jump to throw down") + "\r\n";
                 }
-                if (OptionAccessors.ComplexControl || rainworldgame.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)
+                if (OptionAccessors.ComplexControl || pause.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)
                 {
                     self.pickupButtonInstructions.text += $"{"\r\n\r\n" + menu.Translate("Special button interactions:") + "\r\n\r\n"}";
                     if (OptionAccessors.ComplexControl)
                         self.pickupButtonInstructions.text += "  - " + menu.Translate("Tap to switch climbing / running mode") + "\r\n";
-                    if (rainworldgame.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)
+                    if (pause.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)
                         self.pickupButtonInstructions.text += "  - " + menu.Translate("Hold while climbing wall to charge wall jump") + "\r\n";
                 }
             }

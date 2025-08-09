@@ -92,6 +92,7 @@ public static class Grabability
 
         bool isGrabbedByVoidViy = false;
         bool maulTimer = false;
+        bool inWater = false;
 
         if (self.grabbedBy != null)
         {
@@ -99,7 +100,10 @@ public static class Grabability
             {
                 if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
                 {
-
+                    if (grabberPlayer.mainBodyChunk.submersion >= 0.5f)
+                    {
+                        inWater = true;
+                    }
                     if (grabberPlayer.maulTimer == 0)
                         maulTimer = true;
                     isGrabbedByVoidViy = true;
@@ -159,9 +163,13 @@ public static class Grabability
                     {
                         chunk.mass = isGrabbedByVoidViy ? originalMass * 0.25f : originalMass;
                     }
-                    else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is JetFish || self is Scavenger)
+                    else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is Scavenger)
                     {
                         chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
+                    }
+                    else if (self is JetFish)
+                    {
+                        chunk.mass = isGrabbedByVoidViy && !inWater ? originalMass * 0.5f : originalMass;
                     }
                 }
             }

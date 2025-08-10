@@ -1,5 +1,8 @@
 (Void)SpawnOnDifficulty
 (Void)priming : false
 minkarma : 0
+size : 0.9
+radius : 5
 echosong : SH
-room : GW_A11
+room : WARG_W11
+defaultflip : -1

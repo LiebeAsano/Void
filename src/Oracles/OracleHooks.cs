@@ -49,6 +49,7 @@ static class OracleHooks
     private static void SSOralceBehavior_Update(On.SSOracleBehavior.orig_Update orig, SSOracleBehavior self, bool eu)
     {
         orig(self, eu);
+        if (self?.oracle?.room?.game == null) return;
         if (self.player != null && self.player.room == self.oracle.room)
         {
             if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
@@ -190,7 +191,12 @@ static class OracleHooks
 
 	private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
 	{
-		if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
+        if (self?.oracle?.room?.game?.GetStorySession?.saveState == null)
+        {
+            orig(self);
+            return;
+        }
+        if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
 			&& self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
 		{
             if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;

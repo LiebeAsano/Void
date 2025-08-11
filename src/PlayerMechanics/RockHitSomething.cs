@@ -32,6 +32,7 @@ public static class RockHitSomething
 					"TentaclePlant",
 					"MirosBird",
 					"RedLizard",
+					"IceLizard",
 					"KingVulture",
 					"Centipede",
 					"RedCentipede",

@@ -28,7 +28,7 @@ public static class ReadPearls
     public static void CRSHook()
     {
         MethodInfo method = typeof(CustomConvo).GetMethod(nameof(CustomConvo.LoadEventsFromFile), [typeof(Conversation), typeof(string), typeof(Oracle.OracleID), typeof(SlugcatStats.Name), typeof(bool), typeof(int)]);
-        new ILHook(method, (ILContext il) =>
+        new ILHook(method, il =>
         {
             ILCursor c = new(il);
             if (c.TryGotoNext(MoveType.After,

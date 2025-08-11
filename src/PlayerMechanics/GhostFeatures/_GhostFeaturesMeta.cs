@@ -11,6 +11,7 @@
 			NoGhostFlakes.Hook();
 			NoGhostHunch.Hook();
 			UpdateIL.Hook();
+			CustomGhostsPathConvs.Hook();
 		}
 	}
 }

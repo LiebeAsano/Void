@@ -69,6 +69,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
 				if (ghostId == MoreSlugcatsEnums.GhostID.MS)
 				{
 					saveState.deathPersistentSaveData.karmaCap = 10;
+					saveState.SetKarmaToken(10);
 					ExternalSaveData.VoidKarma11 = true;
                 }
 				else

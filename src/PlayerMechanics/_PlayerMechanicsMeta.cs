@@ -48,6 +48,7 @@ public static class _PlayerMechanicsMeta
         MalnourishmentDeath.Hook();
 		NoForceSleep.Hook();
 		NoVisualMalnourishment.Hook();
+		PilgrimPasage.Hook();
 		PlayerGrabbed.Hook();
 		RockHitSomething.Hook();
 		RottenDangleResist.Hook();

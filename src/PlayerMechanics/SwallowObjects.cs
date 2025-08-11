@@ -40,7 +40,6 @@ public static class SwallowObjects
         typeof(FlyLure),
         typeof(FlareBomb),
         typeof(PuffBall),
-        typeof(FlyLure),
         typeof(BubbleGrass),
         typeof(Lantern),
     ];
@@ -157,7 +156,7 @@ public static class SwallowObjects
         }
     }
 
-    public static Dictionary<int, List<string>> pearlIDsInPlayerStomaches = new();
+    public static Dictionary<int, List<string>> pearlIDsInPlayerStomaches = [];
 
     private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
     {
@@ -322,7 +321,6 @@ public static class SwallowObjects
         }
     }
 
-
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
         orig(self, abstractCreature, world);
@@ -332,10 +330,77 @@ public static class SwallowObjects
             {
                 pearlIDsInPlayerStomaches[self.playerState.playerNumber] = [];
             }
-            if (self.objectInStomach != null)
+            if (self.objectInStomach is AbstractPhysicalObject absObj && absObj.type != null)
             {
-                self.objectInStomach.Destroy();
-                self.objectInStomach = null;
+
+                var itemInStomach = absObj.type.value;
+
+                if (itemInStomach == "WaterNut"
+                        || itemInStomach == "FirecrackerPlant"
+                        || itemInStomach == "FlyLure"
+                        || itemInStomach == "FlareBomb"
+                        || itemInStomach == "PuffBall"
+                        || itemInStomach == "BubbleGrass"
+                        || itemInStomach == "Lantern")
+                {
+                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                    {
+                        self.objectInStomach.Destroy();
+                        self.objectInStomach = null;
+                        self.AddQuarterFood();
+                    }
+                    if (self.room.game.IsArenaSession)
+                    {
+                        self.objectInStomach.Destroy();
+                        self.objectInStomach = null;
+                        self.AddFood(1);
+                    }
+                }
+                else if (itemInStomach == "SporePlant")
+                {
+                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                    {
+                        self.objectInStomach.Destroy();
+                        self.objectInStomach = null;
+                        if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                            self.AddFood(2);
+                        else
+                            self.AddFood(1);
+                    }
+                }
+                else if (itemInStomach == "Hazer"
+                    || itemInStomach == "VultureGrub")
+                {
+                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                    {
+                        self.objectInStomach.Destroy();
+                        self.objectInStomach = null;
+                        if (OptionInterface.OptionAccessors.SimpleFood || self.room.game.IsArenaSession)
+                            self.AddFood(1);
+                        else
+                        {
+                            self.AddQuarterFood();
+                            self.AddQuarterFood();
+                        }
+                    }
+                }
+                else if (itemInStomach == "NeedleEgg")
+                {
+                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
+                    {
+                        self.objectInStomach.Destroy();
+                        self.objectInStomach = null;
+                        if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                            self.AddFood(4);
+                        else
+                            self.AddFood(2);
+                    }
+                }
+                else
+                {
+                    self.objectInStomach.Destroy();
+                    self.objectInStomach = null;
+                }
             }
         } 
         

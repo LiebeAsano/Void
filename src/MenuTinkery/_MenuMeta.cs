@@ -10,7 +10,8 @@ public static class _MenuMeta
 		DreamAssociatedSound.Startup();
 		JollyMenu.Hook();
 		MainMenuScene.Hook();
-        MenuStatisticsSound.Hook();
+		MenuStatisticFix.Hook();
+		MenuStatisticsSound.Hook();
 		MenuTitle.Hook();
 		NoSleepSoundLoop.Hook();
         PermaDeathScreen.Hook();

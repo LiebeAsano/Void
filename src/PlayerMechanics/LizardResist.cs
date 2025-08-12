@@ -35,7 +35,7 @@ public static class LizardResist
                     self.lizardParams.biteDamageChance = 1f - resist;
                 }
             }
-            else if (self.Template.type == CreatureTemplateType.IceLizard)
+            else if (self.Template.type == CreatureTemplateType.IceLizard || self.Template.type == Watcher.WatcherEnums.CreatureTemplateType.BlizzardLizard)
             {
                 self.lizardParams.biteDamageChance = 0.7f - resist;
             }

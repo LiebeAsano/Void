@@ -10,7 +10,6 @@ public static class _MenuMeta
 		DreamAssociatedSound.Startup();
 		JollyMenu.Hook();
 		MainMenuScene.Hook();
-		MenuStatisticFix.Hook();
 		MenuStatisticsSound.Hook();
 		MenuTitle.Hook();
 		NoSleepSoundLoop.Hook();
@@ -19,5 +18,6 @@ public static class _MenuMeta
 		IntroRollSound.Hook();
 		IntroRollIllustrstion.Hook();
 		PauseMenuTips.Hook();
+		StatiscticsScreen.Hook();
     }
 }

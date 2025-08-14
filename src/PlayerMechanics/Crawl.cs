@@ -37,7 +37,7 @@ public static class Crawl
                 {
                     karmaCap = 0;
                 }
-                if (crawlTicks[self.playerState.playerNumber] >= 5 && self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[0].ContactPoint.x == self.input[0].x)
+                if (crawlTicks[self.playerState.playerNumber] >= 10 && self.bodyChunks[0].ContactPoint.x != 0 && self.bodyChunks[0].ContactPoint.x == self.input[0].x)
                 {
                     BodyChunk body_chunk_0 = self.bodyChunks[0];
                     float force = self.gravity * 3 + karmaCap;

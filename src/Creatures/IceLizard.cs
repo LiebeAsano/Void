@@ -36,6 +36,8 @@ namespace VoidTemplate.Creatures
         {
             base.Update(eu);
 
+            if (IceGraphics == null) return;
+
             SpeedCamoLerp(1);
             SpeedCamoLerp(3);
 

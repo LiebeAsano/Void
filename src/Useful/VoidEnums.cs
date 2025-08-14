@@ -14,7 +14,17 @@ public static class VoidEnums
 		ConversationID.Register();
 		SlugcatID.Register();
 		ProcessID.Register();
+		AbstractPhysicalObjectType.Register();
     }
+
+	public static class AbstractPhysicalObjectType
+	{
+		public static void Register()
+		{
+            MiniEnergyCell = new("MiniEnergyCell", true);
+        }
+		public static AbstractPhysicalObject.AbstractObjectType MiniEnergyCell;
+	}
 
 	public static class SceneID
 	{
@@ -134,6 +144,8 @@ public static class VoidEnums
 		{
             HalcyonMemories = new("Halcyon_Memories", true);
 
+            SleepMarkSound = new("Sleep_Mark_Sound", true);
+
             VoidNSHDreamSound = new("Void_NSH_Dream_Sound", true);
 			NSHDreamSound = new("NSH_Dream_Sound", true);
 			SkyDreamSound = new("Sky_Dream_Sound", true);
@@ -149,6 +161,8 @@ public static class VoidEnums
         }
 
         public static global::SoundID HalcyonMemories;
+
+        public static global::SoundID SleepMarkSound;
 
         public static global::SoundID VoidNSHDreamSound;
 		public static global::SoundID NSHDreamSound;

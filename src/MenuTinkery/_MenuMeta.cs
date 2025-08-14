@@ -3,6 +3,7 @@ public static class _MenuMeta
 {
 	public static void Startup()
 	{
+		CustomSleepMusic.Hook();
 		DisablePassage.Hook();
 		InitGame.Hook();
 		MenuHooks.Hook();
@@ -10,7 +11,7 @@ public static class _MenuMeta
 		DreamAssociatedSound.Startup();
 		JollyMenu.Hook();
 		MainMenuScene.Hook();
-        MenuStatisticsSound.Hook();
+		MenuStatisticsSound.Hook();
 		MenuTitle.Hook();
 		NoSleepSoundLoop.Hook();
         PermaDeathScreen.Hook();
@@ -18,5 +19,6 @@ public static class _MenuMeta
 		IntroRollSound.Hook();
 		IntroRollIllustrstion.Hook();
 		PauseMenuTips.Hook();
+		StatiscticsScreen.Hook();
     }
 }

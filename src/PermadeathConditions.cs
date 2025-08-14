@@ -133,7 +133,8 @@ static class PermadeathConditions
 	{
 		if (game.StoryCharacter == VoidEnums.SlugcatID.Void
 			&& game.IsStorySession
-			&& game.GetStorySession.saveState is SaveState save)
+			&& game.GetStorySession.saveState is SaveState save
+			&& PermaDeath)
 		{
 			Player player = null;
 			foreach (var abstractPlayer in game.Players)

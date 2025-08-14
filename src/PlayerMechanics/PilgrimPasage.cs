@@ -37,7 +37,13 @@ public static class PilgrimPasage
                     "SS",
                     "SB",
                     "LC",
-                    "WARG"
+                    "WARB",
+                    "WARD",
+                    "WARE",
+                    "WARF",
+                    "WARG",
+                    "WRFA",
+                    "WRFB"
                 ];
             return [.. source];
         }

@@ -5,6 +5,8 @@
 [ADD]Static_End_Scene_Void/dopplerFac=0 : StaticEndSound/vol=0.25
 [ADD]Static_End_Scene_Void11/dopplerFac=0 : StaticEndSound11/vol=0.25
 
+[ADD]Sleep_Mark_Sound/dopplerFac=0 : SleepMarkSound/vol=0.25
+
 [ADD]Void_Heart_Dream_Sound/dopplerFac=0 : VoidHeartDreamSound/vol=0.25
 [ADD]Void_Body_Dream_Sound/dopplerFac=0 : VoidBodyDreamSound/vol=0.25
 [ADD]Void_Sea_Dream_Sound/dopplerFac=0 : VoidSeaDreamSound/vol=0.25

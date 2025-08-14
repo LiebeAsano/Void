@@ -3,6 +3,7 @@ public static class _MenuMeta
 {
 	public static void Startup()
 	{
+		CustomSleepMusic.Hook();
 		DisablePassage.Hook();
 		InitGame.Hook();
 		MenuHooks.Hook();

@@ -1,0 +1,8 @@
+(Void)SpawnOnDifficulty
+(Void)priming : false
+minkarma : 0
+size : 1
+radius : 4
+echosong : SH
+room : WARD_E33
+defaultflip : 0

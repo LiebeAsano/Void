@@ -20,6 +20,8 @@ public static class CreatureTemplateType
 
     public static AbstractPhysicalObject.AbstractObjectType DartPoison = new("DartPoison", true);
 
+    public static AbstractPhysicalObject.AbstractObjectType MiniEnergyCell = new("MiniEnergyCell", true);
+
     public static void UnregisterValues()
     {
         if (Mimicstarfish != null)
@@ -52,6 +54,11 @@ public static class CreatureTemplateType
             DartPoison.Unregister();
             DartPoison = null;
         }
+        if (MiniEnergyCell != null)
+        {
+            MiniEnergyCell.Unregister();
+            MiniEnergyCell = null;
+        }
     }
 }
 
@@ -66,6 +73,8 @@ public static class SandboxUnlockID
     public static MultiplayerUnlocks.SandboxUnlockID IceLizard = new("IceLizard", true);
 
     public static MultiplayerUnlocks.SandboxUnlockID Dartspider = new("Dartspider", true);
+
+    public static MultiplayerUnlocks.SandboxUnlockID MiniEnergyCell = new("MiniEnergyCell", true);
 
     public static void UnregisterValues()
     {
@@ -93,6 +102,11 @@ public static class SandboxUnlockID
         {
             Dartspider.Unregister();
             Dartspider = null;
+        }
+        if (MiniEnergyCell != null)
+        {
+            MiniEnergyCell.Unregister();
+            MiniEnergyCell = null;
         }
     }
 }

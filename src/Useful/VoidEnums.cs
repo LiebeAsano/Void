@@ -14,17 +14,7 @@ public static class VoidEnums
 		ConversationID.Register();
 		SlugcatID.Register();
 		ProcessID.Register();
-		AbstractPhysicalObjectType.Register();
     }
-
-	public static class AbstractPhysicalObjectType
-	{
-		public static void Register()
-		{
-            MiniEnergyCell = new("MiniEnergyCell", true);
-        }
-		public static AbstractPhysicalObject.AbstractObjectType MiniEnergyCell;
-	}
 
 	public static class SceneID
 	{

@@ -9,6 +9,7 @@ using System.Security.Permissions;
 using UnityEngine;
 using VoidTemplate.Creatures;
 using VoidTemplate.Misc;
+using VoidTemplate.Objects.SingularityRock;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
 using VoidTemplate.PlayerMechanics.Karma11Features;
@@ -54,6 +55,8 @@ class _Plugin : BaseUnityPlugin
 			{
 				MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.OutspectorB);
 			}
+			MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.IceLizard);
+			MultiplayerUnlocks.ItemUnlockList.Remove(SandboxUnlockID.MiniEnergyCell);
 			CreatureTemplateType.UnregisterValues();
             SandboxUnlockID.UnregisterValues();
     }
@@ -65,7 +68,8 @@ class _Plugin : BaseUnityPlugin
 		new OutspectorCritob(),
 		new OutspectorBCritob(),
 		new IceLizardCritob(),
-        new DartspiderCritob()
+        new DartspiderCritob(),
+		new MiniEnergyCellFisob()
    ]);
 	}
 

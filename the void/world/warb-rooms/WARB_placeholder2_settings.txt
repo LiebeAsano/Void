@@ -1,0 +1,9 @@
+Template: NONE
+DangerType: None
+WaveSpeed: 0.5
+WaveLength: 0.75
+WaveAmplitude: 0.03729067
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Palette: 10
+PlacedObjects: ExitSymbolHidden><411.5432><367.0648><, ExitSymbolHidden><529.6098><310.7138><, ExitSymbolHidden><527.4188><370.4888><, ExitSymbolHidden><409.9028><310.2393><, ShortcutColor><471.0966><347.0878><100~50~0~0~0~681.8937^-371.3813, 

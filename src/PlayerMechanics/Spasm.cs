@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VoidTemplate.Objects;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 
@@ -30,8 +31,6 @@ public static class Spasm
             {
                 if (self.GetStorySession?.saveState == null) continue;
 
-                bool hasMark = self.IsStorySession && (self.GetStorySession.saveState.deathPersistentSaveData?.theMark ?? false);
-
                 if (player.KarmaCap != 10
                     && player.KarmaCap > 3
                     && !Karma11Update.VoidKarma11
@@ -42,7 +41,7 @@ public static class Spasm
                     float Lenght = 10f;
                     MaxSize = MaxSize * 0.1f * player.KarmaCap;
 
-                    if (VoidCycleLimit.YieldVoidCycleDisplayNumberWithPlayer(player, self.GetStorySession.saveState.cycleNumber) < 10)
+                    if (VoidCycleLimit.YieldVoidCycleDisplayNumberWithPlayer(player, self.GetStorySession.saveState.cycleNumber) < 10 && OptionAccessors.PermaDeath)
                     {
                         MaxSize = MaxSize * VoidCycleLimit.YieldVoidCycleDisplayNumberWithPlayer(player, self.GetStorySession.saveState.cycleNumber) / 10;
                         Lenght = 20f;

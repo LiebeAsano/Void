@@ -15,7 +15,7 @@ namespace VoidTemplate.Objects.SingularityRock
 
         public bool shouldExplode;
 
-        public bool charged
+        public bool Charged
         {
             get
             {
@@ -39,7 +39,7 @@ namespace VoidTemplate.Objects.SingularityRock
         public override void TerrainImpact(int chunk, IntVector2 direction, float speed, bool firstContact)
         {
             base.TerrainImpact(chunk, direction, speed, firstContact);
-            if (firstContact && charged && mode == Mode.Thrown && Random.value > 0.3f)
+            if (firstContact && Charged && mode == Mode.Thrown && Random.value > 0.3f)
             {
                 shouldExplode = true;
             }
@@ -147,7 +147,7 @@ namespace VoidTemplate.Objects.SingularityRock
         {
             sLeaser.sprites = new FSprite[5];
 
-            float col = charged ? 0.6638889f : 0.003333333f;
+            float col = Charged ? 0.6638889f : 0.003333333f;
 
             sLeaser.sprites[0] = new TriangleMesh("Futile_White", [new TriangleMesh.Triangle(0, 1, 2)], true, false);
             sLeaser.sprites[1] = new FSprite("Circle20", true);
@@ -210,7 +210,7 @@ namespace VoidTemplate.Objects.SingularityRock
             sLeaser.sprites[4].y = spritePos.y - camPos.y + 0.75f;
             sLeaser.sprites[4].rotation = spriteRotation;
             sLeaser.sprites[4].scaleX = 0.15f * num2;
-            Color color2 = Custom.HSL2RGB(charged ? Random.Range(0.55f, 0.7f) : Random.Range(0, 0.15f), Random.Range(0.8f, 1f), Random.Range(0.3f, 0.6f));
+            Color color2 = Custom.HSL2RGB(Charged ? Random.Range(0.55f, 0.7f) : Random.Range(0, 0.15f), Random.Range(0.8f, 1f), Random.Range(0.3f, 0.6f));
             sLeaser.sprites[4].color = color2;
 
         }

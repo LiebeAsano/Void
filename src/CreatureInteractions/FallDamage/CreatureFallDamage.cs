@@ -2,6 +2,7 @@
 using RWCustom;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +27,36 @@ namespace VoidTemplate.CreatureInteractions.FallDamage
                 float hardSpeed = 35;
                 float deathSpeed = 60;
 
-                if (self is not Player && self is not StowawayBug)
+                bool isCyanLizard = self is Lizard cyan && cyan.Template.type == CreatureTemplate.Type.CyanLizard;
+
+                if (self is not Player 
+                    && self is not StowawayBug 
+                    && self is not Vulture 
+                    && self is not Watcher.BigMoth 
+                    && self is not NeedleWorm 
+                    && !isCyanLizard 
+                    && self is not Yeek 
+                    && self is not MirosBird
+                    && self is not DaddyLongLegs
+                    && self is not DropBug
+                    && self is not Watcher.Frog)
                 {
+                    bool isCaramelLizard = self is Lizard caramel && caramel.Template.type == DLCSharedEnums.CreatureTemplateType.SpitLizard;
+
+                    if (self is LanternMouse
+                        || self is BigSpider
+                        || self is Cicada
+                        || self is Snail
+                        || self is EggBug
+                        || self is JetFish
+                        || self is TubeWorm
+                        || self is Centipede centipede && centipede.Small
+                        || isCaramelLizard
+                        || self is Scavenger
+                        || self is Watcher.Barnacle
+                        || self is Watcher.DrillCrab
+                        || self is Watcher.Tardigrade)
+                        speed *= 0.5f;
                     BodyChunk bodyChunk = self.bodyChunks[chunk];
                     if (speed > deathSpeed && direction.y < 0 && self.grabbedBy.Count == 0)
                     {

@@ -26,7 +26,7 @@ public static class Spasm
         {
             if (self.Players[i]?.realizedCreature is not Player player || player.slugcatStats == null) continue;
 
-            if (self.IsVoidStoryCampaign() && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+            if (self.IsVoidStoryCampaign() && player.IsVoid() && !player.dead)
             {
                 if (self.GetStorySession?.saveState == null) continue;
 

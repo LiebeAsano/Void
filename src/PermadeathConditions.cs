@@ -196,21 +196,24 @@ static class PermadeathConditions
 	}
 	private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
 	{
-        if (ModManager.CoopAvailable && self.rainWorld.options.JollyPlayerCount > 1)
-        {
-            if (!self.JollyGameOverEvaluator(dependentOnGrasp))
-            {
-                return;
-            }
-            if (!self.playedGameOverSound && dependentOnGrasp == null)
-            {
-                self.cameras[0].hud.PlaySound(SoundID.HUD_Game_Over_Prompt);
-                self.playedGameOverSound = true;
-            }
-        }
-        if (VoidSpecificGameOverCondition(self) && dependentOnGrasp == null)
+		if (self.IsVoidWorld())
 		{
-			self.GoToRedsGameOver();
+			if (ModManager.CoopAvailable && self.rainWorld.options.JollyPlayerCount > 1)
+			{
+				if (!self.JollyGameOverEvaluator(dependentOnGrasp))
+				{
+					return;
+				}
+			}
+			if (!self.playedGameOverSound && dependentOnGrasp == null)
+			{
+				self.cameras[0].hud.PlaySound(SoundID.HUD_Game_Over_Prompt);
+				self.playedGameOverSound = true;
+			}
+			if (VoidSpecificGameOverCondition(self) && dependentOnGrasp == null)
+			{
+				self.GoToRedsGameOver();
+			}
 		}
 		orig(self, dependentOnGrasp);
 	}

@@ -1,0 +1,4 @@
+Template: NONE
+DangerType: None
+Palette: 10
+PlacedObjects: ExitSymbolHidden><409.5432><329.0648><, ExitSymbolHidden><469.6098><389.7138><, ExitSymbolHidden><529.4188><328.4888><, ExitSymbolHidden><469.9028><269.2393><, ShortcutColor><473.0966><344.0878><75~126~0~0~0~681.8937^-371.3813, 

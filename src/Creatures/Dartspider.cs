@@ -6,10 +6,13 @@ namespace VoidTemplate;
    
 public class Dartspider : BigSpider
 {
+    public bool Spipoison => abstractCreature.creatureTemplate.type == CreatureTemplateType.DartspiderP;
+    public bool Spihypothermic => abstractCreature.creatureTemplate.type == CreatureTemplateType.DartspiderH;
+
     public Dartspider(AbstractCreature abstractCreature, World world)
         : base(abstractCreature, world)
     {
-        spitter = abstractCreature.creatureTemplate.type == CreatureTemplateType.Dartspider;
+        spitter = abstractCreature.creatureTemplate.type == CreatureTemplateType.DartspiderH || abstractCreature.creatureTemplate.type == CreatureTemplateType.DartspiderP;
         spewBabies = false;
         mother = ModManager.DLCShared && abstractCreature.creatureTemplate.type == DLCSharedEnums.CreatureTemplateType.MotherSpider;
         float num = (spitter ? 1.4f : 0.8f);
@@ -33,7 +36,14 @@ public class Dartspider : BigSpider
         base.buoyancy = 0.95f;
         Random.State state = Random.state;
         Random.InitState(abstractCreature.ID.RandomSeed);
-        yellowCol = Color.Lerp(new Color(0f, .8f, .5f), Custom.HSL2RGB(Random.value, Random.value, Random.value), Random.value * 0.2f);
+        if(Spihypothermic)
+        {
+            yellowCol = Color.Lerp(new Color(0f, .8f, .5f), Custom.HSL2RGB(Random.value, Random.value, Random.value), Random.value * 0.2f);
+        }
+        if (Spipoison)
+        {
+            yellowCol = Color.Lerp(new Color(.5f, .8f, 0f), Custom.HSL2RGB(Random.value, Random.value, Random.value), Random.value * 0.2f);
+        }
 
         Random.state = state;
         deathConvulsions = (State.alive ? 1f : 0f);

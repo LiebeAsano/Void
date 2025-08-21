@@ -8,6 +8,7 @@ namespace VoidTemplate;
     {
         public DartSpiGraphics(PhysicalObject ow) : base(ow)
         {
+            
             this.bug = (ow as Dartspider);
             this.tailEnd = new GenericBodyPart(this, 3f, 0.5f, 0.99f, this.bug.bodyChunks[1]);
             this.lastDarkness = -1f;
@@ -43,7 +44,7 @@ namespace VoidTemplate;
             this.totalScales = 0;
             Random.State state = Random.state;
             Random.InitState(this.bug.abstractCreature.ID.RandomSeed);
-            this.scales = new Vector2[(this.Spitter ? 10 : 0) + Random.Range(this.Spitter ? 16 : 10, Random.Range(20, 28))][,];
+            this.scales = new Vector2[( 10 ) + Random.Range(16, Random.Range(20, 28))][,];
             this.scaleStuckPositions = new Vector2[this.scales.Length];
             this.scaleSpecs = new Vector2[this.scales.Length, 2];
             this.legsThickness = Mathf.Lerp(0.7f, 1.1f, Random.value);
@@ -85,25 +86,18 @@ namespace VoidTemplate;
         
 
 
-        Random.state = state;
+            Random.state = state;
             this.soundLoop = new ChunkDynamicSoundLoop(this.bug.mainBodyChunk);
             this.Reset();
         }
-        public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
+        /*public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
         {
+            
             float num;
-            if (ModManager.DLCShared && (base.owner as Creature).abstractCreature.Winterized)
-            {
-                this.blackColor = new Color(1f, 1f, 1f);
-                this.yellowCol = this.bug.yellowCol;
-                num = 1f;
-            }
-            else
-            {
-                this.blackColor = new Color(1f, 1f, 1f);
+                this.blackColor = palette.blackColor;
                 this.yellowCol = Color.Lerp(this.bug.yellowCol, palette.fogColor, 0.2f);
                 num = 1f - this.darkness;
-            }
+            
             for (int i = 0; i < sLeaser.sprites.Length; i++)
             {
                 sLeaser.sprites[i].color = this.blackColor;
@@ -123,6 +117,7 @@ namespace VoidTemplate;
                     sLeaser.sprites[this.FirstScaleSprite + (int)this.scales[l][m, 3].x].color = Color.Lerp(this.blackColor, this.yellowCol, num2 * Mathf.Lerp(0.3f, 0.9f, this.scaleSpecs[l, 0].x) * num);
                 }
             }
-        }
+
+        }*/
     }
 

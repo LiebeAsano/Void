@@ -5,7 +5,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 //stun color
-public class DartPoison : PhysicalObject, IDrawable
+public class DartHypothermic : PhysicalObject, IDrawable
 {
     public class Mode : ExtEnum<Mode>
     {
@@ -23,9 +23,9 @@ public class DartPoison : PhysicalObject, IDrawable
         }
     }
 
-    public class DartPoisonStick : AbstractPhysicalObject.AbstractObjectStick
+    public class DartHypothermicStick : AbstractPhysicalObject.AbstractObjectStick
     {
-        public DartPoisonStick(AbstractPhysicalObject maggot, AbstractPhysicalObject stickIn)
+        public DartHypothermicStick(AbstractPhysicalObject maggot, AbstractPhysicalObject stickIn)
             : base(maggot, stickIn)
         {
         }
@@ -40,7 +40,7 @@ public class DartPoison : PhysicalObject, IDrawable
     {
         public Vector2[,] points;
 
-        public DartPoison maggot;
+        public DartHypothermic maggot;
 
         public BigSpider spider;
 
@@ -62,7 +62,7 @@ public class DartPoison : PhysicalObject, IDrawable
             return points[i, 3].x;
         }
 
-        public Umbilical(Room room, DartPoison maggot, BigSpider spider, Vector2 shootVel)
+        public Umbilical(Room room, DartHypothermic maggot, BigSpider spider, Vector2 shootVel)
         {
             base.room = room;
             this.maggot = maggot;
@@ -330,7 +330,7 @@ public class DartPoison : PhysicalObject, IDrawable
         return chunk.pos;
     }
 
-    public DartPoison(AbstractPhysicalObject abstrObj)
+    public DartHypothermic(AbstractPhysicalObject abstrObj)
         : base(abstrObj)
     {
         UnityEngine.Random.State state = UnityEngine.Random.state;
@@ -431,14 +431,14 @@ public class DartPoison : PhysicalObject, IDrawable
                     squeeze = Mathf.Min(1f, squeeze + 0.00384615385f);
                     if (stuckInChunk.owner is Creature && UnityEngine.Random.value < 1f / Mathf.Lerp(40f, 20f, t))
                     {
-                        
+                        (stuckInChunk.owner as Creature).Hypothermia += 0.19f * amount;
                         (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, (int)(UnityEngine.Random.value * Mathf.Lerp(8f, 22f, t)));
                     }
 
                     if (stuckInChunk.owner is Player p && (p.IsVoid() || p.IsVoid()) && UnityEngine.Random.value < 1f / Mathf.Lerp(60f, 20f, t))
                     {
-                        
-                        (stuckInChunk.owner as Player).slowMovementStun = Math.Max((stuckInChunk.owner as Player).slowMovementStun, (int)(UnityEngine.Random.value * 20f));
+                        (stuckInChunk.owner as Player).slowMovementStun = Math.Max((stuckInChunk.owner as Player).slowMovementStun, (int)(UnityEngine.Random.value * 20f)); 
+                        (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, 10 * (int)(UnityEngine.Random.value * Mathf.Lerp(8f, 22f, t)));
                     }
                 }
 
@@ -448,26 +448,12 @@ public class DartPoison : PhysicalObject, IDrawable
                     int num = 0;
                     for (int i = 0; i < stuckInChunk.owner.abstractPhysicalObject.stuckObjects.Count; i++)
                     {
-                        if (stuckInChunk.owner.abstractPhysicalObject.stuckObjects[i] is DartPoisonStick)
+                        if (stuckInChunk.owner.abstractPhysicalObject.stuckObjects[i] is DartHypothermicStick)
                         {
                             num++;
                         }
                     }
 
-                    if (stuckInChunk.owner is Creature && stuckInChunk.owner is not Player)
-                    {
-                        (stuckInChunk.owner as Creature).InjectPoison(amount * num, Color.Lerp(this.yellow, new Color(0.5f, 0.5f, 0.5f), 0.025f * Custom.IntClamp(num, 1, 4)));
-                       
-                    }
-
-                    if (stuckInChunk.owner is Player p)
-                    {
-                        (stuckInChunk.owner as Player).InjectPoison(amount, Color.Lerp(this.yellow, new Color(0.5f, 0.5f, 0.5f), 0.025f * Custom.IntClamp(num, 1, 4)));
-                        if (p.IsVoid() || p.IsVoid())
-                        {
-                            (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, 40 * (2 + 3 * Custom.IntClamp(num, 1, 4)));
-                        }
-                    }
                 }
             }
             else if (UnityEngine.Random.value < 1f / 30f || abstractPhysicalObject.stuckObjects.Count < 1)
@@ -579,7 +565,7 @@ public class DartPoison : PhysicalObject, IDrawable
                 stuckInChunk.vel += Custom.DirVec(pos, vector) * 3f / stuckInChunk.mass;
             }
 
-            new DartPoisonStick(abstractPhysicalObject, stuckInChunk.owner.abstractPhysicalObject);
+            new DartHypothermicStick(abstractPhysicalObject, stuckInChunk.owner.abstractPhysicalObject);
             room.PlaySound(SoundID.Dart_Maggot_Stick_In_Creature, base.firstChunk);
             ChangeMode(Mode.StuckInChunk);
         }
@@ -724,7 +710,7 @@ public class DartPoison : PhysicalObject, IDrawable
 
         for (int num = abstractPhysicalObject.stuckObjects.Count - 1; num >= 0; num--)
         {
-            if (abstractPhysicalObject.stuckObjects[num] is DartPoisonStick && abstractPhysicalObject.stuckObjects[num].A == abstractPhysicalObject)
+            if (abstractPhysicalObject.stuckObjects[num] is DartHypothermicStick && abstractPhysicalObject.stuckObjects[num].A == abstractPhysicalObject)
             {
                 abstractPhysicalObject.stuckObjects[num].Deactivate();
             }
@@ -848,9 +834,9 @@ public class DartPoison : PhysicalObject, IDrawable
 
     public void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
     {
-        yellow = Color.Lerp(new Color(0f, .6f, 0.15f), palette.fogColor, 0.2f);
+        yellow = Color.Lerp(new Color(0.3f, .3f, 0.6f), palette.fogColor, 0.2f);
         Color a = new Color(1f, 0f, 0f);
-        Color color = new Color(0f, 1f, 0f);
+        Color color = new Color(.8f, .8f, 1f);
         if (Rot > 0f)
         {
             yellow = Color.Lerp(yellow, new Color(0.6f, 0.4f, 0.2f), Rot);

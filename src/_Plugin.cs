@@ -68,7 +68,8 @@ class _Plugin : BaseUnityPlugin
 		new OutspectorCritob(),
 		new OutspectorBCritob(),
 		new IceLizardCritob(),
-        new DartspiderCritob(),
+        new DartspiderHCritob(),
+        new DartspiderPCritob(),
 		new MiniEnergyCellFisob()
    ]);
 	}

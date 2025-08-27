@@ -141,17 +141,25 @@ namespace VoidTemplate.Objects.SingularityRock
             float col = Charged ? 0.6638889f : 0.003333333f;
 
             sLeaser.sprites[0] = new TriangleMesh("Futile_White", [new TriangleMesh.Triangle(0, 1, 2)], true, false);
-            sLeaser.sprites[1] = new FSprite("Circle20", true);
-            sLeaser.sprites[1].color = Custom.HSL2RGB(col, 0.5f, 0.1f);
-            sLeaser.sprites[1].scale = 0.7f;
-            sLeaser.sprites[2] = new FSprite("Circle20", true);
-            sLeaser.sprites[2].color = Custom.HSL2RGB(col, 1f, 0.35f);
-            sLeaser.sprites[2].scale = 0.3f;
-            sLeaser.sprites[3] = new FSprite("Circle20", true);
-            sLeaser.sprites[3].color = Custom.HSL2RGB(col, 0.5f, 0.1f);
-            sLeaser.sprites[3].scale = 0.3f;
-            sLeaser.sprites[4] = new FSprite("Circle20", true);
-            sLeaser.sprites[4].scale = 0.15f;
+            sLeaser.sprites[1] = new FSprite("Circle20", true)
+            {
+                color = Custom.HSL2RGB(col, 0.5f, 0.1f),
+                scale = 0.7f
+            };
+            sLeaser.sprites[2] = new FSprite("Circle20", true)
+            {
+                color = Custom.HSL2RGB(col, 1f, 0.35f),
+                scale = 0.3f
+            };
+            sLeaser.sprites[3] = new FSprite("Circle20", true)
+            {
+                color = Custom.HSL2RGB(col, 0.5f, 0.1f),
+                scale = 0.3f
+            };
+            sLeaser.sprites[4] = new FSprite("Circle20", true)
+            {
+                scale = 0.15f
+            };
             AddToContainer(sLeaser, rCam, null);
         }
 

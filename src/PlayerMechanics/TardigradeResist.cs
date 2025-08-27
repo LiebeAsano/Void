@@ -21,8 +21,12 @@ public class TardigradeResist
     {
         if (grasp.grabber is Player player && (player.IsVoid() || player.IsViy()))
         {
+            int karma = player.KarmaCap;
+            if (player.KarmaCap == 10)
+                karma = 9;
             Creature grabber = grasp.grabber;
-            Vector3 vector = Custom.RGB2HSL((self.BitesLeft == 3) ? self.iVars.secondaryColor : self.iVars.bodyColor);
+            Vector3 vector = Custom.RGB2HSL((self.BitesLeft == 2) ? self.iVars.secondaryColor : self.iVars.bodyColor);
+            self.room.AddObject(new PoisonInjecter(grabber, 0.22f, (10f + UnityEngine.Random.value * 8f) * ((self.BitesLeft == 2) ? 1f : 4.4f) * (1f - 0.5f * karma + 1), new HSLColor(vector.x, Mathf.Lerp(vector.y, 1f, 0.5f), 0.5f).rgb));
             (self.State as Tardigrade.TardigradeState).bites--;
             (self.State as Tardigrade.TardigradeState).bites--;
             self.room.PlaySound((self.BitesLeft == 0) ? SoundID.Slugcat_Eat_Slime_Mold : SoundID.Slugcat_Bite_Slime_Mold, self.firstChunk);

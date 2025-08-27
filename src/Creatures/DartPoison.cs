@@ -434,12 +434,6 @@ public class DartPoison : PhysicalObject, IDrawable
                         
                         (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, (int)(UnityEngine.Random.value * Mathf.Lerp(8f, 22f, t)));
                     }
-
-                    if (stuckInChunk.owner is Player p && (p.IsVoid() || p.IsVoid()) && UnityEngine.Random.value < 1f / Mathf.Lerp(60f, 20f, t))
-                    {
-                        
-                        (stuckInChunk.owner as Player).slowMovementStun = Math.Max((stuckInChunk.owner as Player).slowMovementStun, (int)(UnityEngine.Random.value * 20f));
-                    }
                 }
 
                 poisonCounter--;
@@ -463,10 +457,6 @@ public class DartPoison : PhysicalObject, IDrawable
                     if (stuckInChunk.owner is Player p)
                     {
                         (stuckInChunk.owner as Player).InjectPoison(amount, Color.Lerp(this.yellow, new Color(0.5f, 0.5f, 0.5f), 0.025f * Custom.IntClamp(num, 1, 4)));
-                        if (p.IsVoid() || p.IsVoid())
-                        {
-                            (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, 40 * (2 + 3 * Custom.IntClamp(num, 1, 4)));
-                        }
                     }
                 }
             }

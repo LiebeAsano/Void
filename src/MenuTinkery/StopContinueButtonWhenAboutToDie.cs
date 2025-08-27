@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using VoidTemplate.OptionInterface;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -25,7 +26,8 @@ public static class StopContinueButtonWhenAboutToDie
 	{
 		if(self.myGamePackage.characterStats.name == VoidEnums.SlugcatID.Void
 			&& self.karma.x == 1
-			&& self.IsDeathScreen)
+			&& self.IsDeathScreen
+			&& OptionAccessors.PermaDeath)
 			return orig(self) && self.karmaLadder.karmaSymbols[0].flickerCounter < ticksToWatchForFlickering;
 		return orig(self);
 	}
@@ -34,7 +36,8 @@ public static class StopContinueButtonWhenAboutToDie
 		orig(self, package);
 		if(package.characterStats.name == VoidEnums.SlugcatID.Void
 			&& self.karma.x == 1
-			&& self.IsDeathScreen)
+			&& self.IsDeathScreen
+            && OptionAccessors.PermaDeath)
 		{
 			self.forceWatchAnimation = true;
 		}

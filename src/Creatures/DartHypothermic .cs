@@ -434,12 +434,6 @@ public class DartHypothermic : PhysicalObject, IDrawable
                         (stuckInChunk.owner as Creature).Hypothermia += 0.19f * amount;
                         (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, (int)(UnityEngine.Random.value * Mathf.Lerp(8f, 22f, t)));
                     }
-
-                    if (stuckInChunk.owner is Player p && (p.IsVoid() || p.IsVoid()) && UnityEngine.Random.value < 1f / Mathf.Lerp(60f, 20f, t))
-                    {
-                        (stuckInChunk.owner as Player).slowMovementStun = Math.Max((stuckInChunk.owner as Player).slowMovementStun, (int)(UnityEngine.Random.value * 20f)); 
-                        (stuckInChunk.owner as Creature).stun = Math.Max((stuckInChunk.owner as Creature).stun, 10 * (int)(UnityEngine.Random.value * Mathf.Lerp(8f, 22f, t)));
-                    }
                 }
 
                 poisonCounter--;

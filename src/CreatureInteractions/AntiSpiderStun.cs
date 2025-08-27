@@ -31,7 +31,7 @@ public static class AntiSpiderStun
 			c.Emit(OpCodes.Ldarg_0);
 			c.EmitDelegate<Func<int, DartMaggot, int>>((int orig, DartMaggot maggot) =>
 			{
-				if (maggot.stuckInChunk.owner is Player p && (p.IsVoid() || p.IsViy()))
+				if (maggot.stuckInChunk.owner is Player p && p.AreVoidViy())
 				{
 					var karma = p.KarmaCap;
 
@@ -42,9 +42,9 @@ public static class AntiSpiderStun
 
 					if (Karma11Update.VoidKarma11)
 					{
-                        return (int)((float)orig * 0.1f);
+                        return (int)((float)orig * 0.5f);
                     }
-					return (int)((float)orig * (1f - 0.09f * karma));
+					return (int)((float)orig * (1f - 0.5f * karma + 1));
 				}
 				return orig;
 			});

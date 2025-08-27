@@ -21,7 +21,7 @@ namespace VoidTemplate.PlayerMechanics
             if (self.grasps[0] != null && self.grasps[0].grabbed is Player player && (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy))
             {
                 self.Attached();
-                if (SpiderKiller[player.playerState.playerNumber] >= 120)
+                if (SpiderKiller[player.playerState.playerNumber] >= 60)
                 {
                     self.Die();
                     SpiderKiller[player.playerState.playerNumber] = 0;

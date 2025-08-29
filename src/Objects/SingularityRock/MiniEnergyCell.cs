@@ -6,10 +6,11 @@ using UnityEngine;
 using RWCustom;
 using MoreSlugcats;
 using Noise;
+using CoralBrain;
 
 namespace VoidTemplate.Objects.SingularityRock
 {
-    public class MiniEnergyCell : Rock
+    public class MiniEnergyCell : Rock, IOwnProjectedCircles
     {
         public MiniEnergyCellAbstract abstractCell;
 
@@ -70,16 +71,6 @@ namespace VoidTemplate.Objects.SingularityRock
             {
                 ExplodeAndBroke();
             }
-        }
-
-        public void CreateBombAndExpode()
-        {
-            
-            AbstractPhysicalObject singulartiyBomb = new(abstractCell.world, DLCSharedEnums.AbstractObjectType.SingularityBomb, null, abstractCell.pos, room.game.GetNewID());
-            room.abstractRoom.AddEntity(singulartiyBomb);
-            singulartiyBomb.RealizeInRoom();
-            (singulartiyBomb.realizedObject as SingularityBomb).activateSingularity = true;
-            Destroy();
         }
 
         public void ExplodeAndBroke()
@@ -150,31 +141,46 @@ namespace VoidTemplate.Objects.SingularityRock
             float col = Charged ? 0.6638889f : 0.003333333f;
 
             sLeaser.sprites[0] = new TriangleMesh("Futile_White", [new TriangleMesh.Triangle(0, 1, 2)], true, false);
-            sLeaser.sprites[1] = new FSprite("Circle20", true);
-            sLeaser.sprites[1].color = Custom.HSL2RGB(col, 0.5f, 0.1f);
-            sLeaser.sprites[1].scale = 0.7f;
-            sLeaser.sprites[2] = new FSprite("Circle20", true);
-            sLeaser.sprites[2].color = Custom.HSL2RGB(col, 1f, 0.35f);
-            sLeaser.sprites[2].scale = 0.3f;
-            sLeaser.sprites[3] = new FSprite("Circle20", true);
-            sLeaser.sprites[3].color = Custom.HSL2RGB(col, 0.5f, 0.1f);
-            sLeaser.sprites[3].scale = 0.3f;
-            sLeaser.sprites[4] = new FSprite("Circle20", true);
-            sLeaser.sprites[4].scale = 0.15f;
+            sLeaser.sprites[1] = new FSprite("Circle20", true)
+            {
+                color = Custom.HSL2RGB(col, 0.5f, 0.1f),
+                scale = 0.7f
+            };
+            sLeaser.sprites[2] = new FSprite("Circle20", true)
+            {
+                color = Custom.HSL2RGB(col, 1f, 0.35f),
+                scale = 0.3f
+            };
+            sLeaser.sprites[3] = new FSprite("Circle20", true)
+            {
+                color = Custom.HSL2RGB(col, 0.5f, 0.1f),
+                scale = 0.3f
+            };
+            sLeaser.sprites[4] = new FSprite("Circle20", true)
+            {
+                scale = 0.15f
+            };
             AddToContainer(sLeaser, rCam, null);
+        }
+
+        public void UpdateColor(RoomCamera.SpriteLeaser sLeaser, float hslCol)
+        {
+            sLeaser.sprites[1].color = Custom.HSL2RGB(hslCol, 0.5f, 0.1f);
+            sLeaser.sprites[2].color = Custom.HSL2RGB(hslCol, 1f, 0.35f);
+            sLeaser.sprites[3].color = Custom.HSL2RGB(hslCol, 0.5f, 0.1f);
         }
 
         public override void DrawSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
         {
-            Vector2 spritePos = Vector2.Lerp(firstChunk.lastPos, firstChunk.pos, timeStacker);
+            Vector2 objPos = Vector2.Lerp(firstChunk.lastPos, firstChunk.pos, timeStacker);
             float spriteRotation = Custom.VecToDeg(Vector3.Slerp(lastRotation, rotation, timeStacker));
             if (mode == Mode.Thrown)
             {
                 sLeaser.sprites[0].isVisible = true;
                 Vector2 vector2 = Vector2.Lerp(tailPos, firstChunk.lastPos, timeStacker);
-                Vector2 a = Custom.PerpendicularVector((spritePos - vector2).normalized);
-                (sLeaser.sprites[0] as TriangleMesh).MoveVertice(0, spritePos + a * 2f - camPos);
-                (sLeaser.sprites[0] as TriangleMesh).MoveVertice(1, spritePos - a * 2f - camPos);
+                Vector2 a = Custom.PerpendicularVector((objPos - vector2).normalized);
+                (sLeaser.sprites[0] as TriangleMesh).MoveVertice(0, objPos + a * 2f - camPos);
+                (sLeaser.sprites[0] as TriangleMesh).MoveVertice(1, objPos - a * 2f - camPos);
                 (sLeaser.sprites[0] as TriangleMesh).MoveVertice(2, vector2 - camPos);
                 float num = Random.Range(0f, 0.7f);
                 Color color = Color.Lerp(this.color, new Color(num, num, Random.Range(0.4f, 1f)), 0.4f);
@@ -191,28 +197,52 @@ namespace VoidTemplate.Objects.SingularityRock
             {
                 sLeaser.RemoveAllSpritesFromContainer();
             }
-
+            Vector2 spritePos = objPos - camPos;
             float num2 = 1f;
             num2 = Mathf.Lerp(0.2f, 1f, Mathf.Abs(num2)) * Mathf.Sign(num2);
-            sLeaser.sprites[1].x = spritePos.x - camPos.x;
-            sLeaser.sprites[1].y = spritePos.y - camPos.y;
+            UpdateColor(sLeaser, Charged ? 0.6638889f : 0.003333333f);
+            sLeaser.sprites[1].x = spritePos.x;
+            sLeaser.sprites[1].y = spritePos.y;
             sLeaser.sprites[1].rotation = spriteRotation;
             sLeaser.sprites[1].scaleX = 0.7f * num2;
-            sLeaser.sprites[2].x = spritePos.x - camPos.x - 0.75f - 1.5f * Mathf.Abs(num2);
-            sLeaser.sprites[2].y = spritePos.y - camPos.y + 0.75f + 1.5f * Mathf.Abs(num2);
+            sLeaser.sprites[2].x = spritePos.x - 0.75f - 1.5f * Mathf.Abs(num2);
+            sLeaser.sprites[2].y = spritePos.y + 0.75f + 1.5f * Mathf.Abs(num2);
             sLeaser.sprites[2].rotation = spriteRotation;
             sLeaser.sprites[2].scaleX = 0.3f * num2;
-            sLeaser.sprites[3].x = spritePos.x - camPos.x - 0.85f;
-            sLeaser.sprites[3].y = spritePos.y - camPos.y + 0.85f;
+            sLeaser.sprites[3].x = spritePos.x - 0.85f;
+            sLeaser.sprites[3].y = spritePos.y + 0.85f;
             sLeaser.sprites[3].rotation = spriteRotation;
             sLeaser.sprites[3].scaleX = 0.3f * num2;
-            sLeaser.sprites[4].x = spritePos.x - camPos.x - 0.75f;
-            sLeaser.sprites[4].y = spritePos.y - camPos.y + 0.75f;
+            sLeaser.sprites[4].x = spritePos.x - 0.75f;
+            sLeaser.sprites[4].y = spritePos.y + 0.75f;
             sLeaser.sprites[4].rotation = spriteRotation;
             sLeaser.sprites[4].scaleX = 0.15f * num2;
             Color color2 = Custom.HSL2RGB(Charged ? Random.Range(0.55f, 0.7f) : Random.Range(0, 0.15f), Random.Range(0.8f, 1f), Random.Range(0.3f, 0.6f));
             sLeaser.sprites[4].color = color2;
+        }
 
+        public override void NewRoom(Room newRoom)
+        {
+            base.NewRoom(newRoom);
+            if (room.roomSettings.GetEffectAmount(RoomSettings.RoomEffect.Type.SuperStructureProjector) > 0)
+            {
+                room.AddObject(new ProjectedCircle(room, this, 0, 0));
+            }
+        }
+
+        public Vector2 CircleCenter(int index, float timeStacker)
+        {
+            return Vector2.Lerp(firstChunk.lastPos, firstChunk.pos, timeStacker);
+        }
+
+        public Room HostingCircleFromRoom()
+        {
+            return room;
+        }
+
+        public bool CanHostCircle()
+        {
+            return !slatedForDeletetion;
         }
     }
 }

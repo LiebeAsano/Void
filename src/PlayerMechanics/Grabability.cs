@@ -98,7 +98,7 @@ public static class Grabability
         {
             foreach (var grasp in self.grabbedBy)
             {
-                if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
+                if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy() && self is not TubeWorm)
                 {
                     if (grabberPlayer.mainBodyChunk.submersion >= 0.5f)
                     {

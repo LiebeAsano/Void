@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using DevInterface;
 using Fisobs.Core;
 using Fisobs.Creatures;
@@ -7,17 +8,17 @@ using UnityEngine;
 
 namespace VoidTemplate;
 
-sealed class DartspiderCritob : Critob
+sealed class DartspiderPCritob : Critob
 {
-    public DartspiderCritob() : base(CreatureTemplateType.Dartspider)
+    public DartspiderPCritob() : base(CreatureTemplateType.DartspiderP)
     {
-        base.Icon = new SimpleIcon("Kill_BigSpider", new Color(0f, 0.8f, 0.5f));
+        base.Icon = new SimpleIcon("Kill_BigSpider", new Color(0.5f, 0.8f, 0f));
 
         base.SandboxPerformanceCost = new SandboxPerformanceCost(0.55f, 0.65f);
-        base.RegisterUnlock(KillScore.Configurable(7), SandboxUnlockID.Dartspider, null, 0);
+        base.RegisterUnlock(KillScore.Configurable(7), SandboxUnlockID.DartspiderP, null, 0);
         base.ShelterDanger = ShelterDanger.Hostile;
         base.LoadedPerformanceCost = 50f;
-        DartHooks.Apply();
+        DartPHooks.Apply();
     }
 
     public override int ExpeditionScore()
@@ -33,15 +34,15 @@ sealed class DartspiderCritob : Critob
 
     public override string DevtoolsMapName(AbstractCreature acrit)
     {
-        return "DS";
+        return "DSP";
     }
 
     public override IEnumerable<string> WorldFileAliases()
     {
         return new string[]
         {
-                    "Dartspider",
-                    "Dart Spider"
+           "DartspiderP",
+           "Dart Spider Poison"
         };
     }
 
@@ -64,7 +65,7 @@ sealed class DartspiderCritob : Critob
     {
 
 
-        CreatureTemplate creatureTemplate = new CreatureFormula(CreatureTemplate.Type.SpitterSpider, base.Type, "Dartspider")
+        CreatureTemplate creatureTemplate = new CreatureFormula(CreatureTemplate.Type.SpitterSpider, base.Type, "DartspiderP")
         {
             TileResistances = new TileResist
             {
@@ -111,8 +112,8 @@ sealed class DartspiderCritob : Critob
         creatureTemplate.bodySize = 1.4f;
         creatureTemplate.waterRelationship = CreatureTemplate.WaterRelationship.AirAndSurface;
         creatureTemplate.meatPoints = 6;
-        creatureTemplate.BlizzardWanderer = true;
-        creatureTemplate.BlizzardAdapted = true;
+        creatureTemplate.BlizzardWanderer = false;
+        creatureTemplate.BlizzardAdapted = false;
         creatureTemplate.dangerousToPlayer = 0.7f;
         creatureTemplate.visualRadius = 1100f;
         creatureTemplate.jumpAction = "Spit";
@@ -139,6 +140,10 @@ sealed class DartspiderCritob : Critob
     {
         return new Dartspider(acrit, acrit.world);
     }
+    public override CreatureState CreateState(AbstractCreature acrit)
+    {
+        return new HealthState(acrit);
+    }
 
     public override void LoadResources(RainWorld rainWorld)
     {
@@ -150,4 +155,3 @@ sealed class DartspiderCritob : Critob
         return CreatureTemplate.Type.SpitterSpider;
     }
 }
-

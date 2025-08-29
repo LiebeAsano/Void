@@ -68,7 +68,8 @@ class _Plugin : BaseUnityPlugin
 		new OutspectorCritob(),
 		new OutspectorBCritob(),
 		new IceLizardCritob(),
-        new DartspiderCritob(),
+        new DartspiderHCritob(),
+        new DartspiderPCritob(),
 		new MiniEnergyCellFisob()
    ]);
 	}
@@ -149,6 +150,7 @@ class _Plugin : BaseUnityPlugin
         Objects.PomObjects.VultureTriggerSpawner.Register();
 		Objects.PomObjects.Warp.Register();
 		Objects.PomObjects.TriggeredSpasm.Register();
+		Objects.PomObjects.MiniEnergyCellSpawner.Register();
     }
 
 	// Load any resources, such as sprites or sounds

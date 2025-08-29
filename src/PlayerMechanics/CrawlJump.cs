@@ -13,7 +13,7 @@ public static class CrawlJump
 {
     public static void Hook()
     {
-        On.Player.Jump += Player_Jump;
+        //On.Player.Jump += Player_Jump;
     }
 
     private static void Player_Jump(On.Player.orig_Jump orig, Player self)

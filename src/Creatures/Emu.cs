@@ -16,9 +16,13 @@ public static class CreatureTemplateType
 
     public static CreatureTemplate.Type IceLizard = new("IceLizard", true);
 
-    public static CreatureTemplate.Type Dartspider = new("Dartspider", true);
+    public static CreatureTemplate.Type DartspiderP = new("DartspiderP", true);
+
+    public static CreatureTemplate.Type DartspiderH = new("DartspiderH", true);
 
     public static AbstractPhysicalObject.AbstractObjectType DartPoison = new("DartPoison", true);
+
+    public static AbstractPhysicalObject.AbstractObjectType DartHypothermic = new("DartHypothermic", true);
 
     public static AbstractPhysicalObject.AbstractObjectType MiniEnergyCell = new("MiniEnergyCell", true);
 
@@ -44,15 +48,25 @@ public static class CreatureTemplateType
             IceLizard.Unregister();
             IceLizard = null;
         }
-        if (Dartspider != null)
+        if (DartspiderP != null)
         {
-            Dartspider.Unregister();
-            Dartspider = null;
+            DartspiderP.Unregister();
+            DartspiderP = null;
+        }
+        if (DartspiderH != null)
+        {
+            DartspiderH.Unregister();
+            DartspiderH = null;
         }
         if (DartPoison != null)
         {
             DartPoison.Unregister();
             DartPoison = null;
+        }
+        if (DartHypothermic != null)
+        {
+            DartHypothermic.Unregister();
+            DartHypothermic = null;
         }
         if (MiniEnergyCell != null)
         {
@@ -72,7 +86,9 @@ public static class SandboxUnlockID
 
     public static MultiplayerUnlocks.SandboxUnlockID IceLizard = new("IceLizard", true);
 
-    public static MultiplayerUnlocks.SandboxUnlockID Dartspider = new("Dartspider", true);
+    public static MultiplayerUnlocks.SandboxUnlockID DartspiderP = new("DartspiderP", true);
+
+    public static MultiplayerUnlocks.SandboxUnlockID DartspiderH = new("DartspiderH", true);
 
     public static MultiplayerUnlocks.SandboxUnlockID MiniEnergyCell = new("MiniEnergyCell", true);
 
@@ -98,10 +114,15 @@ public static class SandboxUnlockID
             IceLizard.Unregister();
             IceLizard = null;
         }
-        if (Dartspider != null)
+        if (DartspiderP != null)
         {
-            Dartspider.Unregister();
-            Dartspider = null;
+            DartspiderP.Unregister();
+            DartspiderP = null;
+        }
+        if (DartspiderH != null)
+        {
+            DartspiderH.Unregister();
+            DartspiderH = null;
         }
         if (MiniEnergyCell != null)
         {

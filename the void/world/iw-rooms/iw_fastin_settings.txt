@@ -1,0 +1,10 @@
+Template: iw_settingstemplate_train
+DangerType: None
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.399484
+WaveLength: 0.949742
+WaveAmplitude: 4.99611E-10
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+PlacedObjects: AdjustableFan><435.1411><129.9243><5~8.660254~0~0~0.1216033~1, 

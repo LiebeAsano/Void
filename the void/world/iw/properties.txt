@@ -3,4 +3,4 @@ pupSpawnChance: 0.6
 Subregion: Icy Wastelands
 Subregion: Communication Array
 Subregion: Abyss
-Room Setting Templates: Depo, CommunicationArray, Surface, Subway, Abyss
+Room Setting Templates: Depo, CommunicationArray, Surface, Subway, Abyss, Train

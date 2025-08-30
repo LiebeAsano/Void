@@ -1,0 +1,8 @@
+Template: iw_settingstemplate_train
+RainIntensity: 0
+RumbleIntensity: 0
+WaveSpeed: 0.5
+WaveLength: 1
+WaveAmplitude: 1.609748E-18
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0

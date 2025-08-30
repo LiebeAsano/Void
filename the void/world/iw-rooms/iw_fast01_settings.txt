@@ -1,0 +1,13 @@
+Template: iw_settingstemplate_train
+RainIntensity: 1
+RumbleIntensity: 1
+WaveSpeed: 0.6403404
+WaveLength: 0.9298298
+WaveAmplitude: 1.422213E-08
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.3325298
+Grime: 0.02053899
+BkgDroneNoThreatVolume: 1
+RandomItemDensity: 0
+RandomItemSpearChance: 0

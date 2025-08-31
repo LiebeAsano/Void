@@ -151,6 +151,7 @@ class _Plugin : BaseUnityPlugin
 		Objects.PomObjects.Warp.Register();
 		Objects.PomObjects.TriggeredSpasm.Register();
 		Objects.PomObjects.MiniEnergyCellSpawner.Register();
+		Objects.PomObjects.TrainCellTrigger.Register();
     }
 
 	// Load any resources, such as sprites or sounds

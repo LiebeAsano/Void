@@ -7,6 +7,7 @@ using RWCustom;
 using MoreSlugcats;
 using Noise;
 using CoralBrain;
+using Smoke;
 
 namespace VoidTemplate.Objects.SingularityRock
 {
@@ -16,6 +17,8 @@ namespace VoidTemplate.Objects.SingularityRock
 
         public bool shouldExplode;
 
+        public float counter;
+
         public bool Charged
         {
             get
@@ -24,6 +27,7 @@ namespace VoidTemplate.Objects.SingularityRock
             }
             set
             {
+                counter = 0;
                 abstractCell.charged = value;
             }
         }
@@ -59,11 +63,12 @@ namespace VoidTemplate.Objects.SingularityRock
         public override void Update(bool eu)
         {
             base.Update(eu);
+            counter += Charged ? 0.005f : 0.002f;
             if (mode == Mode.Free && collisionLayer != 1)
             {
                 ChangeCollisionLayer(1);
             }
-            else if (mode != Mode.Free && collisionLayer != 2)
+            else if (mode != Mode.Free && collisionLayer != 0)
             {
                 ChangeCollisionLayer(0);
             }
@@ -108,14 +113,19 @@ namespace VoidTemplate.Objects.SingularityRock
                     room.AddObject(new Spark(pos + a * Mathf.Lerp(30f, 60f, Random.value), a * Mathf.Lerp(7f, 38f, Random.value) + Custom.RNV() * 20f * Random.value, Color.Lerp(explodeColor, new Color(1f, 1f, 1f), Random.value), null, 11, 28));
                 }
             }
-            room.PlaySound(SoundID.Bomb_Explode, pos, abstractPhysicalObject);
+            room.PlaySound(SoundID.Bomb_Explode, pos, abstractCell);
             room.InGameNoise(new InGameNoise(pos, 9000f, this, 1f));
-            room.PlaySound(SoundID.Zapper_Zap, pos, abstractPhysicalObject);
-            room.PlaySound(SoundID.Spear_Fragment_Bounce, pos, 3, 1, abstractPhysicalObject);
+            room.PlaySound(SoundID.Zapper_Zap, pos, abstractCell);
+            room.PlaySound(SoundID.Spear_Fragment_Bounce, pos, 3, 1, abstractCell);
 
             AbstractPhysicalObject singularityBomb = new(abstractCell.world, DLCSharedEnums.AbstractObjectType.SingularityBomb, null, abstractCell.pos, abstractCell.ID);
             room.abstractRoom.AddEntity(singularityBomb);
             singularityBomb.RealizeInRoom();
+            room.AddObject(new BombSmoke(room, default, singularityBomb.realizedObject.firstChunk, explodeColor)
+            {
+                stationary = true,
+                life = Random.Range(800, 1000)
+            });
             Destroy();
         }
 
@@ -217,7 +227,7 @@ namespace VoidTemplate.Objects.SingularityRock
             sLeaser.sprites[4].y = spritePos.y + 0.75f;
             sLeaser.sprites[4].rotation = spriteRotation;
             sLeaser.sprites[4].scaleX = 0.15f * num2;
-            Color color2 = Custom.HSL2RGB(Charged ? Random.Range(0.55f, 0.7f) : Random.Range(0, 0.15f), Random.Range(0.8f, 1f), Random.Range(0.3f, 0.6f));
+            Color color2 = Custom.HSL2RGB(Charged ? 0.5f : 0.1f, Mathf.Abs(Mathf.Sin(counter * 2 * Mathf.PI)), Charged ? 0.7f : 0.3f); //Custom.HSL2RGB(Charged ? Random.Range(0.55f, 0.7f) : Random.Range(0, 0.15f), Random.Range(0.8f, 1f), Random.Range(0.3f, 0.6f));
             sLeaser.sprites[4].color = color2;
         }
 

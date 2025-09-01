@@ -19,6 +19,8 @@ namespace VoidTemplate.Objects.PomObjects
 
         public int shakeScreenTimer = -1;
 
+        public bool[] blockedShortcuts;
+
         public Vector2 TriggerZone => data.GetValue<Vector2>(TRIGGER);
 
         public Vector2 MoveToPos => room.MiddleOfTile(pObj.pos);
@@ -34,11 +36,19 @@ namespace VoidTemplate.Objects.PomObjects
             base.Update(eu);
             if (!room.fullyLoaded) return;
 
-            if (!room.BeingViewed)
+            blockedShortcuts ??= new bool[room.shortcuts.Length];
+
+            if (!room.BeingViewed && phase != Phases.CellIncerted)
             {
                 if (phase != Phases.NotViewed)
                 {
-                    room.lockedShortcuts.Clear();
+                    for (int i = 0; i < blockedShortcuts.Length; i++)
+                    {
+                        if (blockedShortcuts[i])
+                        {
+                            UnlockShortcut(i);
+                        }
+                    }
                     phase = Phases.NotViewed;
                 }
                 return;
@@ -47,6 +57,7 @@ namespace VoidTemplate.Objects.PomObjects
             {
                 phase = Phases.None;
             }
+            UpdateShortcutGraphics();
 
             if (phase != Phases.CellIncerted && !room.lockedShortcuts.Contains(room.shortcutsIndex[1]))
             {
@@ -62,7 +73,7 @@ namespace VoidTemplate.Objects.PomObjects
                         if (room.physicalObjects[i][j] is MiniEnergyCell cell && cell.Charged)
                         {
                             chargedCellInRoom = cell;
-                            LockShortcut(0);
+                            LockShortcut(2);
                             goto CELL_FOUND;
                         }
                     }
@@ -74,7 +85,7 @@ namespace VoidTemplate.Objects.PomObjects
             if (chargedCellInRoom.room != room || chargedCellInRoom.slatedForDeletetion)
             {
                 phase = Phases.None;
-                UnlockShortcut(0);
+                UnlockShortcut(2);
                 chargedCellInRoom = null;
                 shakeScreenTimer = -1;
                 return;
@@ -98,7 +109,7 @@ namespace VoidTemplate.Objects.PomObjects
             if (phase == Phases.Suction)
             {
                 chargedCellInRoom.CollideWithObjects = false;
-                chargedCellInRoom.firstChunk.vel += Vector2.ClampMagnitude(MoveToPos - chargedCellInRoom.firstChunk.pos, 40) / 40f;
+                chargedCellInRoom.firstChunk.vel += (MoveToPos - chargedCellInRoom.firstChunk.pos).normalized;
                 if (Custom.DistLess(chargedCellInRoom.firstChunk.pos, MoveToPos, 20))
                 {
                     phase = Phases.CellIncerted;
@@ -112,12 +123,13 @@ namespace VoidTemplate.Objects.PomObjects
             if (phase == Phases.CellIncerted)
             {
                 chargedCellInRoom.firstChunk.pos = MoveToPos;
+                chargedCellInRoom.counter = 0.25f;
                 if (shakeScreenTimer > -1)
                 {
                     shakeScreenTimer++;
                     if (shakeScreenTimer >= 100)
                     {
-                        room.ScreenMovement(MoveToPos, default, 1.3f);
+                        room.ScreenMovement(null, default, 0.8f);
                         shakeScreenTimer = -1;
                     }
                 }
@@ -134,17 +146,7 @@ namespace VoidTemplate.Objects.PomObjects
             if (!room.lockedShortcuts.Contains(room.shortcutsIndex[shortcutIndex]))
             {
                 room.lockedShortcuts.Add(room.shortcutsIndex[shortcutIndex]);
-                for (int i = 0; i < room.game.cameras.Length; i++)
-                {
-                    if (room.game.cameras[i].room == room)
-                    {
-                        var sGraphics = room.game.cameras[i].shortcutGraphics;
-                        if (sGraphics.entranceSprites.Length > shortcutIndex && sGraphics.entranceSprites[shortcutIndex, 0] != null)
-                        {
-                            sGraphics.entranceSprites[shortcutIndex, 0].isVisible = false;
-                        }
-                    }
-                }
+                blockedShortcuts[shortcutIndex] = true;
             }
         }
 
@@ -152,14 +154,25 @@ namespace VoidTemplate.Objects.PomObjects
         {
             if (room.lockedShortcuts.Remove(room.shortcutsIndex[shortcutIndex]))
             {
-                for (int i = 0; i < room.game.cameras.Length; i++)
+                blockedShortcuts[shortcutIndex] = false;
+            }
+        }
+
+        public void UpdateShortcutGraphics()
+        {
+            if (room.BeingViewed)
+            {
+                for (int cam = 0; cam < room.game.cameras.Length; cam++)
                 {
-                    if (room.game.cameras[i].room == room)
+                    if (room.game.cameras[cam].room == room)
                     {
-                        var sGraphics = room.game.cameras[i].shortcutGraphics;
-                        if (sGraphics.entranceSprites.Length > shortcutIndex && sGraphics.entranceSprites[shortcutIndex, 0] != null)
+                        var sGraphics = room.game.cameras[cam].shortcutGraphics;
+                        for (int i = 0; i < blockedShortcuts.Length; i++)
                         {
-                            sGraphics.entranceSprites[shortcutIndex, 0].isVisible = true;
+                            if (sGraphics.entranceSprites.Length > i && sGraphics.entranceSprites[i, 0] != null)
+                            {
+                                sGraphics.entranceSprites[i, 0].isVisible = !blockedShortcuts[i];
+                            }
                         }
                     }
                 }

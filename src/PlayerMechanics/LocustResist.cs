@@ -13,6 +13,7 @@ namespace VoidTemplate.PlayerMechanics
         {
             On.Player.ctor += Player_ctor;
             On.LocustSystem.Swarm.Update += Swarm_Update;
+            On.LocustSystem.Swarm.IsTargetValid += Swarm_IsTargetValid;
             On.LocustSystem.GroundLocust.DoSwarming += GroundLocust_DoSwarming;
         }
 
@@ -35,10 +36,17 @@ namespace VoidTemplate.PlayerMechanics
             }
         }
 
+        private static bool Swarm_IsTargetValid(On.LocustSystem.Swarm.orig_IsTargetValid orig, LocustSystem.Swarm self)
+        {
+            if (self.target != null && self.target is Player player && player.AreVoidViy() && SmartLocust[player.playerState.playerNumber] >= 240)
+                return false;
+            return orig(self);
+        }
+
         private static void GroundLocust_DoSwarming(On.LocustSystem.GroundLocust.orig_DoSwarming orig, LocustSystem.GroundLocust self, LocustSystem owner)
         {
             Creature realizedCreature = self.swarm.target;
-            if (realizedCreature is Player player && SmartLocust[player.playerState.playerNumber] >= 60 && player.AreVoidViy())
+            if (realizedCreature is Player player && SmartLocust[player.playerState.playerNumber] >= 240 && player.AreVoidViy())
             {
                 return;
             }

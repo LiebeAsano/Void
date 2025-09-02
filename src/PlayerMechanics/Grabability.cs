@@ -119,10 +119,11 @@ public static class Grabability
                             }
                         }
                     }
-                    else if (self is not Player)
+                    else if (self is not Player && self is not JetFish)
                     {
                         if (self.State is HealthState)
                         {
+                            self.SetKillTag(grabberPlayer.abstractCreature);
                             (self.State as HealthState).health -= 0.000125f;
                             if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
                             {

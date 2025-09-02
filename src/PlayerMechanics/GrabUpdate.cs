@@ -249,7 +249,7 @@ public static class GrabUpdate
                             }
                             Creature creature = self.grasps[num11].grabbed as Creature;
                             BodyChunk hitChunk = self.grasps[num11].grabbedChunk;
-                            float damage = 2.5f;
+                            float damage = 2f;
                             creature.SetKillTag(self.abstractCreature);
                             if (creature is Lizard && self.IsViy())
                             {
@@ -266,11 +266,11 @@ public static class GrabUpdate
                             {
                                 if (hitChunk != null && hitChunk.index == 0)
                                 {
-                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 10, 50f);
+                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 5, 50f);
                                 }
                                 else
                                 {
-                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 2, 50f);
+                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 1.5f, 33f);
                                 }
                             }
                             if (creature is not Lizard && self.IsVoid())

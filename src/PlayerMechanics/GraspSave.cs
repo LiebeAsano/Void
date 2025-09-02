@@ -33,8 +33,8 @@ public static class GraspSave
 				&& playerInGrasp.AreVoidViy()
                 && grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
 				{
-					
-					self.SetKillTag(playerInGrasp.abstractCreature);
+                    timerOfBeingGrasped.Value++;
+                    self.SetKillTag(playerInGrasp.abstractCreature);
 					if (self is not null && self is not Player)
 					{
 						if (self.State is HealthState)

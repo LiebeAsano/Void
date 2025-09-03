@@ -19,6 +19,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
             VoidViySwitch.Hook();
             ViyTentacles.TentaclesPlayerHooks.Hook();
             ViyTentacles.TentaclesPlayerGraphicsHooks.Hook();
+            Viy3rdBodyChunk.Hook();
         }
     }
 }

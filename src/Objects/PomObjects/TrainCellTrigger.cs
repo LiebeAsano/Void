@@ -15,7 +15,7 @@ namespace VoidTemplate.Objects.PomObjects
 
         private ManagedData data;
 
-        public Phases phase = Phases.NotViewed;
+        public Phases phase = Phases.None;
 
         public int shakeScreenTimer = -1;
 
@@ -40,7 +40,7 @@ namespace VoidTemplate.Objects.PomObjects
 
             if (!room.BeingViewed && phase != Phases.CellIncerted)
             {
-                if (phase != Phases.NotViewed)
+                if (phase != Phases.None)
                 {
                     for (int i = 0; i < blockedShortcuts.Length; i++)
                     {
@@ -49,13 +49,13 @@ namespace VoidTemplate.Objects.PomObjects
                             UnlockShortcut(i);
                         }
                     }
-                    phase = Phases.NotViewed;
+                    phase = Phases.None;
                 }
                 return;
             }
-            else if (phase == Phases.NotViewed)
+            else if (phase == Phases.None)
             {
-                phase = Phases.None;
+                phase = Phases.Viewed;
             }
             UpdateShortcutGraphics();
 
@@ -84,13 +84,13 @@ namespace VoidTemplate.Objects.PomObjects
 
             if (chargedCellInRoom.room != room || chargedCellInRoom.slatedForDeletetion)
             {
-                phase = Phases.None;
+                phase = Phases.Viewed;
                 UnlockShortcut(2);
                 chargedCellInRoom = null;
                 shakeScreenTimer = -1;
                 return;
             }
-            else if (phase == Phases.None)
+            else if (phase == Phases.Viewed)
             {
                 if (!Trigger())
                 {
@@ -186,8 +186,8 @@ namespace VoidTemplate.Objects.PomObjects
 
         public enum Phases
         {
-            NotViewed = 0,
-            None,
+            None = 0,
+            Viewed,
             Suction,
             CellIncerted
         }

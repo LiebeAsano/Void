@@ -20,5 +20,6 @@ public static class _MenuMeta
 		IntroRollIllustrstion.Hook();
 		PauseMenuTips.Hook();
 		StatiscticsScreen.Hook();
+		FoodMeterPipsChange.Hook();
     }
 }

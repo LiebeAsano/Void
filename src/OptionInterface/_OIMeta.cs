@@ -24,7 +24,7 @@ public static class _OIMeta
         OptionAccessors.cfgSaintArenaAscension = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaAscension", true, new ConfigurableInfo("Allows Saint to use ascension mechanic in arena", tags: "Saint ascension"));
 		OptionAccessors.cfgSaintArenaSpears = voidOI.config.Bind<bool>(uniqueprefix + "SaintArenaSpears", true, new ConfigurableInfo("Allows Saint to throw spears in arena", tags: "Saint wields weapon"));
         OptionAccessors.cfgArenaAscensionStun = voidOI.config.Bind<bool>(uniqueprefix + "ArenaAscensionStun", false, new ConfigurableInfo("Saint's ascension stuns instead of kills", tags: "Ascension stuns"));
-        OptionAccessors.cfgNerfBlizzardLizard = voidOI.config.Bind<bool>(uniqueprefix + "NerfBlizzardLizard", true, new ConfigurableInfo("Disables shield and removes instant death from blizzard beam", tags: "Nerf blizzard lizard"));
+        OptionAccessors.cfgNerfBlizzardLizard = voidOI.config.Bind<bool>(uniqueprefix + "NerfBlizzardLizard", true, new ConfigurableInfo("Disables shield and removes instant death from blizzard beam", tags: "Weakened blizzard lizard"));
         OptionAccessors.cfgComplexControl = voidOI.config.Bind<bool>(uniqueprefix + "ComplexControl", false, new ConfigurableInfo("Allows Void to switch move set between climbing and running. Tap 'Special' to switch mode", tags: "Complex control"));
         OptionAccessors.cfgGamepadController = voidOI.config.Bind<bool>(uniqueprefix + "GamepadController", false, new ConfigurableInfo("Makes easier to climb the ceiling using a gamepad. Tap 'Special' to ceiling climb", tags: "Gamepad controller"));
         //#warning to be implemented

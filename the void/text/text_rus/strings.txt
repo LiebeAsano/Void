@@ -41,21 +41,22 @@ Allows Saint to throw spears in arena|Позволяет Святому кида
 Saint's ascension stuns instead of kills|Возвышение Святого оглушает, а не убивает
 
 ~ Assist ~|~ Помощь ~
+Weakened blizzard lizard|Ослабленный буреящер
 Complex control|Усложнённое управление
 Simplified hunger|Упрощённый голод
 Gamepad controller|Управление для геймпада
 Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
-Allows Void to switch move set between climbing and running. Press 'Special' to switch mode|Позволяет Пустотному переключаться между режимами лазания и бега. Нажмите 'Особенность', чтобы переключить режим
+Disables shield and removes instant death from blizzard beam|Отключает щит и убирает мгновенную смерть от морозного луча
+Allows Void to switch move set between climbing and running. Tap 'Special' to switch mode|Позволяет Пустотному переключаться между режимами лазания и бега. Нажмите 'Особенность', чтобы переключить режим
 Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
-Makes easier to climb the ceiling using a gamepad. Press 'Jump' + 'Pick up' to ceiling climb|Упрощает лазание по потолку используя геймпад. Нажмите 'Прыжок' + 'Взять', чтобы лазать по потолку
-Disables permadeath for Void, but also closes access to the secret ending|Отключает перманентную смерть для Пустотного, но также закрывает доступ к секретной концовке
+Makes easier to climb the ceiling using a gamepad. Tap 'Special' to ceiling climb|Упрощает лазание по потолку используя геймпад. Нажмите 'Особенность', чтобы лазать по потолку
+Disables permadeath for Void from losing all karma or limit cycles|Отключает перманентную смерть для Пустотного
 Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
 Void Cycles|Циклы Пустотного
 Void Bonus Cycles|Бонусные Циклы Пустотного
-Changes the amount of cycles Void starts with in their campaign, but changing the value will also close access to the secret ending|Изменить количество циклов, с которыми начинает кампанию Пустотный, но изменение значения также закроет доступ к секретной концовке
-Changes the amount of bonus cycles Void can receive from the echo, but changing the value will also close access to the secret ending|Изменить количество бонусных циклов, которые может получить Пустотный от отголоска, но изменение значения также закроет доступ к секретной концовке
-
+Changes the amount of cycles Void starts with in their campaign|Изменить количество циклов, с которыми начинает кампанию Пустотный
+Changes the amount of bonus cycles Void can receive from the echo|Изменить количество бонусных циклов, которые может получить Пустотный от отголоска
 //PICK INTERRUPT MESSAGES
 
 Yes, help yourself. They are not edible.|Да, угощайся. Они несъедобны.

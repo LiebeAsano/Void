@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics
 {
@@ -46,16 +47,13 @@ namespace VoidTemplate.PlayerMechanics
             orig(self, eu);
         }
 
-        private static void Frog_SuckFood(On.Watcher.Frog.orig_SuckFood orig, Watcher.Frog self)
+        private static bool Frog_SuckFood(On.Watcher.Frog.orig_SuckFood orig, Watcher.Frog self)
         {
-            if (self.attachedObject is Player player && (player.slugcatStats.name == VoidEnums.SlugcatID.Void || player.slugcatStats.name == VoidEnums.SlugcatID.Viy))
+            if (self.attachedObject is Player player && player.AreVoidViy())
             {
-                return;
+                return false;
             }
-            else
-            {
-                orig(self);
-            }
+            return orig(self);
         }
     }
 }

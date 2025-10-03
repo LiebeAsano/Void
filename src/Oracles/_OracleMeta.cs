@@ -14,5 +14,6 @@ public static class _OracleMeta
         OracleHooks.Hook();
         SLOracle.Hook();
         ReadPearls.Hook();
+        SSOracleBehaviorUpdate.Hook();
     }
 }

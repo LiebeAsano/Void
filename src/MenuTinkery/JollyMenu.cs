@@ -12,7 +12,7 @@ public static class JollyMenu
 {
 	public static void Hook()
 	{
-		On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.ctor += JollyPlayerSpecificHud_ctor;
+		//On.JollyCoop.JollyHUD.JollyPlayerSpecificHud.ctor += JollyPlayerSpecificHud_ctor;
         //On.JollyCoop.JollyMenu.SymbolButtonToggle.ctor += SymbolButtonToggle_ctor;
         //change state of player to adult when choosing void
         //grey out slugpup toggle button when void is chosen

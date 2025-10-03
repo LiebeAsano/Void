@@ -64,33 +64,34 @@ public static class CycleEnd
 		else _Plugin.logger.LogError($"IL hook starting at CycleEnd:41, shelter door update, starve logic tinker, failed to apply");
 	}
 
-	//immutable
 	private const int timeToWait = Utils.TicksPerSecond * 3;
 
-//#warning todo: move this to permadeath conditions
 	private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
 	{
 		orig(self);
 		RainWorldGame game = self.room.game;
-		game.Players.ForEach(absPlayer =>
+		if (game.IsVoidWorld())
 		{
-			if (absPlayer.realizedCreature is Player player
-			&& player.IsVoid())
+			game.Players.ForEach(absPlayer =>
 			{
-				var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-
-				if (player.room != null
-				&& player.room == self.room
-				&& player.FoodInStomach < player.slugcatStats.foodToHibernate
-				&& self.room.game.session is StoryGameSession session
-				&& session.characterStats.name == VoidEnums.SlugcatID.Void
-				&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
+				if (absPlayer.realizedCreature is Player player
+				&& player.IsVoid())
 				{
-					if ((((session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) || session.saveState.deathPersistentSaveData.karma == 0) && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) && game.IsVoidWorld()) game.GoToRedsGameOver();
-				}
+					var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
 
-			}
-		});
+					if (player.room != null
+					&& player.room == self.room
+					&& player.FoodInStomach < player.slugcatStats.foodToHibernate
+					&& self.room.game.session is StoryGameSession session
+					&& session.characterStats.name == VoidEnums.SlugcatID.Void
+					&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
+					{
+						if (((session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) || session.saveState.deathPersistentSaveData.karma == 0) && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();
+					}
+
+				}
+			});
+		}
 	}
 
 }

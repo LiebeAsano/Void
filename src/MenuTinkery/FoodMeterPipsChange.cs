@@ -18,7 +18,7 @@ namespace VoidTemplate.MenuTinkery
     {
         public static bool ReqFoodPip(this FoodMeter.MeterCircle pip)
         {
-            return pip.meter.hud.owner is Player player && player.IsVoid() && !pip.meter.IsPupFoodMeter && pip.number >= pip.meter.survivalLimit;
+            return pip.meter.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !pip.meter.IsPupFoodMeter && pip.number >= pip.meter.survivalLimit;
         }
         
 
@@ -60,7 +60,7 @@ namespace VoidTemplate.MenuTinkery
         private static void QuarterPipShower_Draw(On.HUD.FoodMeter.QuarterPipShower.orig_Draw orig, FoodMeter.QuarterPipShower self, float timeStacker)
         {
             orig(self, timeStacker);
-            if (self.owner.hud.owner is Player player && player.IsVoid() && !self.owner.IsPupFoodMeter && self.owner.showCount >= self.owner.survivalLimit && self.owner.showCount < self.owner.circles.Count)
+            if (self.owner.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !self.owner.IsPupFoodMeter && self.owner.showCount >= self.owner.survivalLimit && self.owner.showCount < self.owner.circles.Count)
             {
                 self.quarterPips.color = new(0, 0, 0.005f);
                 self.quarterPips.scale = (self.owner.circles[self.owner.showCount].circles[0].rad + 3) / 8f;

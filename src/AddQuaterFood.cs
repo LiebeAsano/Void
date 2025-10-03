@@ -25,11 +25,18 @@ namespace VoidTemplate
                 orig(self, add);
                 return;
             }
+
             if (ModManager.CoopAvailable && self.abstractCreature.world.game.IsStorySession &&
                 self.abstractCreature.world.game.Players[0] != self.abstractCreature && !self.isNPC)
             {
-                Player mainPlayer = (self.abstractCreature.world.game.Players[0].realizedCreature as Player);
-                mainPlayer.AddFood(add);
+                if (self.abstractCreature?.world?.game?.Players?[0]?.realizedCreature is Player mainPlayer)
+                {
+                    mainPlayer.AddFood(add);
+                }
+                else
+                {
+                    orig(self, add);
+                }
             }
             else
             {
@@ -83,8 +90,14 @@ namespace VoidTemplate
             if (ModManager.CoopAvailable && self.abstractCreature.world.game.IsStorySession &&
                 self.abstractCreature.world.game.Players[0] != self.abstractCreature && !self.isNPC)
             {
-                Player mainPlayer = (self.abstractCreature.world.game.Players[0].realizedCreature as Player);
-                mainPlayer.AddQuarterFood();
+                if (self.abstractCreature?.world?.game?.Players?[0]?.realizedCreature is Player mainPlayer)
+                {
+                    mainPlayer.AddQuarterFood();
+                }
+                else
+                {
+                    orig(self);
+                }
             }
             else
             {
@@ -108,9 +121,27 @@ namespace VoidTemplate
             if (ModManager.CoopAvailable && self.playerState.playerNumber != 0 &&
                 self.abstractCreature.world.game.IsStorySession && !self.isNPC)
             {
-                Player mainPlayer = (self.abstractCreature.world.game.Players[0].realizedCreature as Player);
-                self.playerState.foodInStomach = Mathf.Clamp(mainPlayer.playerState.foodInStomach, 0, self.MaxFoodInStomach);
-                self.playerState.quarterFoodPoints = mainPlayer.playerState.quarterFoodPoints;
+                if (self.abstractCreature?.world?.game?.Players == null ||
+                    self.abstractCreature.world.game.Players.Count == 0)
+                {
+                    orig(self);
+                    return;
+                }
+
+
+                if (self.abstractCreature?.world?.game?.Players[0]?.realizedCreature is Player mainPlayer)
+                {
+                    self.playerState.foodInStomach = Mathf.Clamp(mainPlayer.playerState.foodInStomach, 0, self.MaxFoodInStomach);
+                    self.playerState.quarterFoodPoints = mainPlayer.playerState.quarterFoodPoints;
+                }
+                else
+                {
+                    orig(self);
+                }
+            }
+            else
+            {
+                orig(self);
             }
         }
     }

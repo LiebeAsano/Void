@@ -28,8 +28,8 @@ static class OracleHooks
         On.SSOracleBehavior.SpecialEvent += SSOracleBehavior_SpecialEvent;
         On.SSOracleBehavior.PebblesConversation.AddEvents += PebblesConversation_AddEvents;
         On.SSOracleBehavior.ThrowOutBehavior.Update += ThrowOutBehavior_Update;
-        On.SSOracleBehavior.Update += SSOralceBehavior_Update;
-        IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
+        //On.SSOracleBehavior.Update += SSOralceBehavior_Update;
+        //IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
 	}
 
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
@@ -48,6 +48,130 @@ static class OracleHooks
 
     private static void SSOralceBehavior_Update(On.SSOracleBehavior.orig_Update orig, SSOracleBehavior self, bool eu)
     {
+        if (self.action == SSOracleBehavior.Action.General_GiveMark && self.player != null && self.player.IsVoid())
+        {
+            self.movementBehavior = SSOracleBehavior.MovementBehavior.KeepDistance;
+            if ((self.inActionCounter > 30 && self.inActionCounter < 300) || (ModManager.MSC && self.oracle.ID == MoreSlugcatsEnums.OracleID.DM))
+            {
+                if (self.inActionCounter < 300)
+                {
+                    if (ModManager.CoopAvailable)
+                    {
+                        self.StunCoopPlayers(20);
+                    }
+                    else
+                    {
+                        self.player.Stun(20);
+                    }
+                }
+                Vector2 b = Vector2.ClampMagnitude(self.oracle.room.MiddleOfTile(24, 14) - self.player.mainBodyChunk.pos, 40f) / 40f * 2.8f * Mathf.InverseLerp(30f, 160f, (float)self.inActionCounter);
+                if (ModManager.CoopAvailable)
+                {
+                    using (List<Player>.Enumerator enumerator = self.PlayersInRoom.GetEnumerator())
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            Player player3 = enumerator.Current;
+                            player3.mainBodyChunk.vel += b;
+                        }
+                        goto IL_10B2;
+                    }
+                }
+                self.player.mainBodyChunk.vel += b;
+            }
+        IL_10B2:
+            if (self.inActionCounter == 30)
+            {
+                self.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Telekenisis, 0f, 1f, 1f);
+            }
+            if (self.inActionCounter == 300)
+            {
+                if (!ModManager.MSC || self.oracle.ID != MoreSlugcatsEnums.OracleID.DM)
+                {
+                    self.player.mainBodyChunk.vel += Custom.RNV() * 10f;
+                    self.player.bodyChunks[1].vel += Custom.RNV() * 10f;
+                }
+
+
+                if (ModManager.MSC && self.oracle.ID == MoreSlugcatsEnums.OracleID.DM)
+                {
+                    self.afterGiveMarkAction = MoreSlugcatsEnums.SSOracleBehaviorAction.MeetWhite_ThirdCurious;
+                    self.player.AddFood(10);
+                }
+                if (ModManager.CoopAvailable)
+                {
+                    self.StunCoopPlayers(40);
+                }
+                else
+                {
+                    self.player.Stun(40);
+                }
+
+                (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.theMark = true;
+
+
+                (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma = (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
+                for (int num4 = 0; num4 < self.oracle.room.game.cameras.Length; num4++)
+                {
+                    if (self.oracle.room.game.cameras[num4].hud.karmaMeter != null)
+                    {
+                        self.oracle.room.game.cameras[num4].hud.karmaMeter.UpdateGraphic();
+                    }
+                }
+
+                if (ModManager.CoopAvailable)
+                {
+                    using (List<Player>.Enumerator enumerator = self.PlayersInRoom.GetEnumerator())
+                    {
+                        while (enumerator.MoveNext())
+                        {
+                            Player player5 = enumerator.Current;
+                            for (int num5 = 0; num5 < 20; num5++)
+                            {
+                                self.oracle.room.AddObject(new Spark(player5.mainBodyChunk.pos, Custom.RNV() * UnityEngine.Random.value * 40f, new Color(1f, 1f, 1f), null, 30, 120));
+                            }
+                        }
+                        goto IL_193C;
+                    }
+                }
+                for (int num6 = 0; num6 < 20; num6++)
+                {
+                    self.oracle.room.AddObject(new Spark(self.player.mainBodyChunk.pos, Custom.RNV() * UnityEngine.Random.value * 40f, new Color(1f, 1f, 1f), null, 30, 120));
+                }
+            IL_193C:
+
+                self.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, 0f, 1f, 1f);
+
+            }
+            if (ModManager.CoopAvailable)
+            {
+                using (List<Player>.Enumerator enumerator = self.PlayersInRoom.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        Player player6 = enumerator.Current;
+                        if (self.inActionCounter > 300 && player6.graphicsModule != null)
+                        {
+                            (player6.graphicsModule as PlayerGraphics).markAlpha = Mathf.Max((player6.graphicsModule as PlayerGraphics).markAlpha, Mathf.InverseLerp(500f, 300f, (float)self.inActionCounter));
+                        }
+                    }
+                    goto IL_1A59;
+                }
+            }
+            if (self.inActionCounter > 300 && self.player.graphicsModule != null)
+            {
+                (self.player.graphicsModule as PlayerGraphics).markAlpha = Mathf.Max((self.player.graphicsModule as PlayerGraphics).markAlpha, Mathf.InverseLerp(500f, 300f, (float)self.inActionCounter));
+            }
+        IL_1A59:
+            if (self.inActionCounter >= 500)
+            {
+                self.NewAction(self.afterGiveMarkAction);
+                if (self.conversation != null)
+                {
+                    self.conversation.paused = false;
+                }
+            }
+        }
         orig(self, eu);
         if (self?.oracle?.room?.game == null) return;
         if (self.player != null && self.player.room == self.oracle.room)

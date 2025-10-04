@@ -1,4 +1,3 @@
-
 RainIntensity: 1
 RumbleIntensity: 1
 Clouds: 0.05434782

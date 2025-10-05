@@ -9,5 +9,6 @@ public static class _Karma11FeaturesMeta
 		Karma11Update.Hook();
 		NourishmentOfObjectEaten.Hook();
 		VoidSpawnGraphics.Hook();
-	}
+        FoodMeterPipsChange.Hook();
+    }
 }

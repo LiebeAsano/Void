@@ -1,24 +1,37 @@
 ﻿using HUD;
+using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using RWCustom;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using VoidTemplate.Objects.NoodleEgg;
 using VoidTemplate.Useful;
 using static VoidTemplate.Useful.Utils;
 
-namespace VoidTemplate.MenuTinkery
+namespace VoidTemplate.PlayerMechanics.Karma11Features
 {
     public static class FoodMeterPipsChange
     {
+        private static ConditionalWeakTable<FoodMeter, FoodMeterExtention> meterExt = new();
+
+        public static FoodMeterExtention GetMeterExt(this FoodMeter meter) => meterExt.GetOrCreateValue(meter);
+            
         public static bool ReqFoodPip(this FoodMeter.MeterCircle pip)
         {
-            return pip.meter.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !pip.meter.IsPupFoodMeter && pip.number >= pip.meter.survivalLimit;
+            if (pip.meter.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !pip.meter.IsPupFoodMeter)
+            {
+                return pip.number >= pip.meter.survivalLimit - pip.meter.GetMeterExt().showNumFoodTohibernate;
+            }
+            else if (pip.meter.hud.owner is SleepAndDeathScreen screen && screen.saveState.saveStateNumber == VoidEnums.SlugcatID.Void && screen.saveState.deathPersistentSaveData.karmaCap == 10)
+            {
+                int foodToHibernate = screen.saveState.GetVoidFoodToHibernate();
+                return pip.number >= pip.meter.survivalLimit - 2 * (foodToHibernate - (screen.saveState.CanAddFoodToHibernate(pip.meter.survivalLimit) ? 1 : 0));
+            }
+
+            return false;
         }
         
 
@@ -96,7 +109,7 @@ namespace VoidTemplate.MenuTinkery
                     return circle;
                 });
             }
-            else logerr($"{nameof(MenuTinkery)}.{nameof(FoodMeterPipsChange)}.{nameof(MeterCircle_Update)}: match failed");
+            else logerr($"{nameof(Karma11Features)}.{nameof(FoodMeterPipsChange)}.{nameof(MeterCircle_Update)}: match failed");
         }
 
         private static void MeterCircle_AddCircles(On.HUD.FoodMeter.MeterCircle.orig_AddCircles orig, FoodMeter.MeterCircle self)
@@ -135,6 +148,11 @@ namespace VoidTemplate.MenuTinkery
                     self.circles[1].sprite.scale = (self.circles[1].snapRad + 4.6f) / 8f;
                 }
             }
+        }
+
+        public class FoodMeterExtention()
+        {
+            public int showNumFoodTohibernate;
         }
     }
 }

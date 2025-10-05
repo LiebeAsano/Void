@@ -72,7 +72,7 @@ public static class KarmaLadderTokenDecrease
 				int lastIndexOfSprites = self.sprites.Length-1;
 				var initialSprite = self.sprites[0];
 				self.sprites[lastIndexOfSprites] = new FSprite($"atlas-void/KarmaToken" +
-					$"{Karma11Symbol.tokensToPelletsMap[(ushort)(Karma11Symbol.currentKarmaTokens + 1)]}Big")
+					$"{Karma11Symbol.tokensToPelletsMap[Karma11Symbol.currentKarmaTokens]}Big")
 				{ x = initialSprite.x,
 				 y = initialSprite.y};
 				//we are expanding array of sprites and setting last sprite to be the old sprite

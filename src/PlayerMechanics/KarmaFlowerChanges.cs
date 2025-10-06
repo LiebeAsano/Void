@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.Useful;
@@ -6,13 +8,30 @@ using Random = UnityEngine.Random;
 
 namespace VoidTemplate.PlayerMechanics;
 
-public class KarmaFlowerChanges
+public static class KarmaFlowerChanges
 {
+    private static ConditionalWeakTable<KarmaFlower, KarmaFlowerExtention> flowerExt = new();
+    public static KarmaFlowerExtention GetFlowerExt(this KarmaFlower flower) => flowerExt.GetOrCreateValue(flower);
+
     public static void Initiate()
     {
         On.Player.ctor += Player_ctor;
         On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
         On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
+        On.KarmaFlower.Update += KarmaFlower_Update;
+    }
+
+    private static void KarmaFlower_Update(On.KarmaFlower.orig_Update orig, KarmaFlower self, bool eu)
+    {
+        orig(self, eu);
+        if (self.grabbedBy.Count > 0 && self.grabbedBy[0].grabber is Player player && player.IsVoid() && 
+            self.AbstrConsumable.world.game.session is StoryGameSession session && session.saveState.GetVoidFoodToHibernate() == 6)
+        {
+            if (self.GetFlowerExt().toVoidColor < 1) self.GetFlowerExt().toVoidColor += 0.00002f;
+            Color voidColor = new(0, 0, 0.005f);
+            self.color = Color.Lerp(self.color, voidColor, self.GetFlowerExt().toVoidColor);
+            self.stalkColor = Color.Lerp(self.stalkColor, voidColor, self.GetFlowerExt().toVoidColor);
+        }
     }
 
     public static bool SaveVoidCycle = false;
@@ -66,7 +85,7 @@ public class KarmaFlowerChanges
                         }
                     }
 
-                    if (self.bites == 1 && player.KarmaCap == 10 && !player.IsViy())
+                    if (self.bites == 1 && player.KarmaCap == 10 && saveState.GetVoidFoodToHibernate() < 6 && !player.IsViy())
                     {
                         int newTokenCount = Math.Min(10, saveState.GetKarmaToken() + 2);
                         saveState.SetKarmaToken(newTokenCount);
@@ -91,5 +110,10 @@ public class KarmaFlowerChanges
             return;
         }
         orig(self, grasp, eu);
+    }
+
+    public class KarmaFlowerExtention
+    {
+        public float toVoidColor;
     }
 }

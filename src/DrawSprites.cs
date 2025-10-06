@@ -12,8 +12,11 @@ using static Room;
 
 namespace VoidTemplate;
 
-public class DrawSprites
+public static class DrawSprites
 {
+    private static ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();
+    public static PlayerGraphiscExtention GetPlayerGExt(this PlayerGraphics graphics) => pGExt.GetOrCreateValue(graphics);
+
     public static void Hook()
     {
         //handles tail and other stuff
@@ -22,7 +25,19 @@ public class DrawSprites
         On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawTail;
 
         On.PlayerGraphics.InitiateSprites += PlayerGraphics_InitiateSprites;
+
+        On.PlayerGraphics.Update += PlayerGraphics_Update;
     }
+
+    private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
+    {
+        orig(self);
+        if (self.player.KarmaCap == 10 && self.player.FoodInStomach >= self.player.MaxFoodInStomach && self.GetPlayerGExt().toEcxoTail < 1)
+        {
+            self.GetPlayerGExt().toEcxoTail += 0.002f;
+        }
+    }
+
     private static void PlayerGraphics_InitiateSprites(On.PlayerGraphics.orig_InitiateSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
     {
         orig(self, sLeaser, rCam);
@@ -334,9 +349,21 @@ public class DrawSprites
             {
                 tail2.color = new(0f, 0f, 0.005f);
             }
+            else if (self.GetPlayerGExt().toEcxoTail < 0.11f)
+            {
+                if (tail2.element.name != "Futile_White")
+                {
+                    tail2.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Futile_White"), tail2.triangles.Length);
+                }
+                tail2.color = new(0f, 0f, 0.005f);//Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[self.player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
+            }
             else
             {
-                tail2.color = Utils.VoidColors[self.player.playerState.playerNumber];
+                if (tail2.element.name != "Void-Tail")
+                {
+                    tail2.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Void-Tail"), tail2.triangles.Length);
+                }
+                tail2.color = Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[self.player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
             }
         }
 
@@ -416,5 +443,10 @@ public class DrawSprites
         {
             sLeaser.sprites[4].isVisible = false;
         }
+    }
+
+    public class PlayerGraphiscExtention
+    {
+        public float toEcxoTail;
     }
 }

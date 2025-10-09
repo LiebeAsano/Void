@@ -406,11 +406,16 @@ public static class Climbing
 		player.canJump = 1;
 		player.standing = true;
 		float climbSpeed = 1f + 0.05f * player.KarmaCap;
-		if (player.KarmaCap == 10 || Karma11Update.VoidKarma11 || player.IsViy())
+		if (player.KarmaCap == 10 || player.IsViy())
 		{
-			climbSpeed = 1.5f;
+			if (Karma11Update.VoidKarma11)
+				climbSpeed = 1.5f;
+			else
+				climbSpeed = 1f;
         }
-		if (!player.input[0].jmp)
+		else if (Karma11Update.VoidKarma11)
+            climbSpeed = 1.5f;
+        if (!player.input[0].jmp)
 			if (body_chunk_0.pos.x > body_chunk_1.pos.x && player.input[0].x < 0)
 				climbSpeed = -0.25f;
 			else if (body_chunk_0.pos.x < body_chunk_1.pos.x && player.input[0].x > 0)
@@ -450,11 +455,18 @@ public static class Climbing
 
 			body_chunk_0.vel.y = Custom.LerpAndTick(body_chunk_0.vel.y, ceilingForce, 0.3f, 1f);
 			float minusone = 0.05f * player.KarmaCap;
-			if (player.KarmaCap == 10 || Karma11Update.VoidKarma11 || player.IsViy())
+			if (player.KarmaCap == 10 || player.IsViy())
 			{
+				if (Karma11Update.VoidKarma11)
+					minusone = 0.5f;
+				else
+					minusone = 0.0f;
+            }
+			else if (Karma11Update.VoidKarma11)
+            {			
 				minusone = 0.5f;
             }
-            if (player.input[0].jmp && player.input[0].x != 0)
+			if (player.input[0].jmp && player.input[0].x != 0)
 			{
 				float jumpForceX;
 				jumpForceX = (-3.4f + minusone) * climbSpeed * player.input[0].x;
@@ -531,8 +543,12 @@ public static class Climbing
 				float bonus = 1f + (0.025f * player.KarmaCap);
 
 				if (player.KarmaCap == 10 || player.IsViy())
+					if (Karma11Update.VoidKarma11)
+						bonus = 1.25f;
+					else
+						bonus = 1f;
+				else if (Karma11Update.VoidKarma11)
 					bonus = 1.25f;
-
 				if (body_chunk_0.pos.y > body_chunk_1.pos.y)
 				{
 					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);

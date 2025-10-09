@@ -47,9 +47,12 @@ public static class FoodChange
             if (extraFood < 3)
             {
                 self.SetVoidExtraFood(extraFood + 1);
-                self.SetKarmaToken(Mathf.Max(0, self.GetKarmaToken() - 2));
             }
-            else if (foodToHibernate < 6) self.SetVoidFoodToHibernate(foodToHibernate + 1);
+            else if (foodToHibernate < 6) 
+            {
+                self.SetKarmaToken(Mathf.Max(0, self.GetKarmaToken() - 2));
+                self.SetVoidFoodToHibernate(foodToHibernate + 1); 
+            }
             else self.SetKarmaToken(0);
         }
         orig(self, game, survived, newMalnourished);

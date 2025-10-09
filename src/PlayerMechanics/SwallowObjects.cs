@@ -126,7 +126,7 @@ public static class SwallowObjects
             {
                 self.objectInStomach.Destroy();
                 self.objectInStomach = null;
-                if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                if (OptionInterface.OptionAccessors.SimpleFood)
                     self.AddFood(2);
                 else
                     self.AddFood(1);
@@ -163,8 +163,7 @@ public static class SwallowObjects
         if (self.IsVoid()
             && pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out var pearls)
             && pearls is not null
-            && pearls.Count > 0
-            && !Karma11Update.VoidKarma11)
+            && pearls.Count > 0)
         {
             string pearlToSpit = pearls[pearls.Count - 1];
             pearls.RemoveAt(pearls.Count - 1);
@@ -362,7 +361,7 @@ public static class SwallowObjects
                     {
                         self.objectInStomach.Destroy();
                         self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                        if (OptionInterface.OptionAccessors.SimpleFood)
                             self.AddFood(2);
                         else
                             self.AddFood(1);
@@ -390,7 +389,7 @@ public static class SwallowObjects
                     {
                         self.objectInStomach.Destroy();
                         self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood && !self.room.game.IsArenaSession)
+                        if (OptionInterface.OptionAccessors.SimpleFood)
                             self.AddFood(4);
                         else
                             self.AddFood(2);

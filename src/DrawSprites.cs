@@ -32,9 +32,13 @@ public static class DrawSprites
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
     {
         orig(self);
-        if (self.player.KarmaCap == 10 && self.player.FoodInStomach >= self.player.MaxFoodInStomach && self.GetPlayerGExt().toEcxoTail < 1)
+        if (self.player.IsVoid() && Karma11Update.VoidKarma11 && self.GetPlayerGExt().toEcxoTail < 1)
         {
-            self.GetPlayerGExt().toEcxoTail += 0.002f;
+            self.GetPlayerGExt().toEcxoTail += 0.005f;
+            if (!self.player.abstractCreature.Room.world.game.IsVoidStoryCampaign())
+            {
+                self.GetPlayerGExt().toEcxoTail = 1f;
+            }
         }
     }
 
@@ -44,7 +48,7 @@ public static class DrawSprites
         Player player = self.player;
 
         //game behaves in a really weird way when you try to touch tail, so we just gonna make a new one and overlay it over the old one
-        if ((player.KarmaCap == 10 || Karma11Update.VoidKarma11) && player.IsVoid() || player.IsViy())
+        if (player.AreVoidViy() && (player.KarmaCap == 10 || Karma11Update.VoidKarma11))
         {
             var tail = sLeaser.sprites[2] as TriangleMesh;
             //changing tail sprite element
@@ -345,7 +349,7 @@ public static class DrawSprites
         }
         if (sLeaser.sprites[2] is TriangleMesh tail2)
         {
-            if (!Karma11Update.VoidKarma11 && self.player.KarmaCap != 10)
+            if (self.player.KarmaCap != 10)
             {
                 tail2.color = new(0f, 0f, 0.005f);
             }

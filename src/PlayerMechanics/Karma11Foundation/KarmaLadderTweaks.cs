@@ -22,15 +22,17 @@ public static class KarmaLadderTweaks
 			{
 				if (self.saveState.VoidFullAnd11Karma(self.food, self.hud.foodMeter.survivalLimit, self.hud.foodMeter.maxFood))
 				{
-					if (self.saveState.CanAddExtraFood(self.hud.foodMeter.maxFood))
+					if (self.saveState.CanAddFoodToHibernate(self.hud.foodMeter.survivalLimit))
 					{
-						self.karmaLadder.NewPhase(KarmaLadder.Phase.Bump);
+                        if (Karma11Symbol.currentKarmaTokens > 0)
+                            self.karmaLadder.NewPhase(KarmaLadder.Phase.Bump);
 						Karma11Symbol.currentKarmaTokens -= 2;
 						self.karmaLadder.karmaSymbols[10].UpdateDisplayKarma(self.karmaLadder.displayKarma);
 					}
 					else if (self.saveState.GetVoidFoodToHibernate() > 0 && !self.saveState.CanAddFoodToHibernate(self.hud.foodMeter.survivalLimit))
 					{
-						self.karmaLadder.NewPhase(KarmaLadder.Phase.Bump);
+						if (Karma11Symbol.currentKarmaTokens > 0)
+							self.karmaLadder.NewPhase(KarmaLadder.Phase.Bump);
 						Karma11Symbol.currentKarmaTokens = 0;
 						self.karmaLadder.karmaSymbols[10].UpdateDisplayKarma(self.karmaLadder.displayKarma);
 					}

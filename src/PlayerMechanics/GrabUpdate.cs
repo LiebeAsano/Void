@@ -421,13 +421,10 @@ public static class GrabUpdate
                     {
                         if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.GetVoidMarkV3())
                         {
-                            if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 1))
+                            if (self.FoodInStomach >= 1)
                             {
-                                if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
-                                {
-                                    self.SubtractFood(1);
-                                    self.SaintStagger(240);
-                                }
+                                self.SubtractFood(1);
+                                self.SaintStagger(240);  
                                 self.Regurgitate();
                             }
                             else
@@ -438,15 +435,14 @@ public static class GrabUpdate
                         }
                         else
                         {
-                            if (self.KarmaCap == 10 || Karma11Update.VoidKarma11 || (self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
+                            if (Karma11Update.VoidKarma11 || (!Karma11Update.VoidKarma11 && self.FoodInStomach >= 3))
                             {
-                                if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
+                                if (!Karma11Update.VoidKarma11)
                                 {
                                     self.SubtractFood(3);
                                     self.SaintStagger(720);
                                 }
                                 self.Regurgitate();
-
                             }
                             else
                             {
@@ -470,8 +466,7 @@ public static class GrabUpdate
                                     && pearl is not PebblesPearl
                                     && self.swallowAndRegurgitateCounter == 91
                                     && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl
-                                    && self.abstractCreature.world.game.GetStorySession is not null
-                                    && !Karma11Update.VoidKarma11)
+                                    && self.abstractCreature.world.game.GetStorySession is not null)
                                 {
                                     SwallowObjects.pearlIDsInPlayerStomaches[self.playerState.playerNumber].Add(abstractPearl.dataPearlType.value);
                                     self.abstractCreature.world.game.GetStorySession.saveState.SetStomachPearls(SwallowObjects.pearlIDsInPlayerStomaches);

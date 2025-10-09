@@ -29,7 +29,8 @@ public static class JollyMenu
 		//when making slugpup sprite color, jolly coop does Color.Clamp with L factor not going below 0.25
 		//On.JollyCoop.JollyMenu.JollyPlayerSelector.SetPortraitImage_Name_Color += JollyPlayerSelector_SetPortraitImage_Name_Color;
 		//this hook assigns bodytintcolor again to bypass that
-		On.JollyCoop.JollyMenu.JollyPlayerSelector.Update += JollyPlayerSelector_Update;
+        On.JollyCoop.JollyMenu.JollyPlayerSelector.Update += JollyPlayerSelector_Update;
+        On.StoryGameSession.CreateJollySlugStats += StoryGameSession_CreateJollySlugStats;
 		//On.JollyCoop.JollyMenu.JollyPlayerSelector.SetPortraitImage_Name_Color += JollyPlayerSelector_SetPortraitImage_Name_Color;
 
     }
@@ -102,9 +103,9 @@ public static class JollyMenu
 	private static string JollyPlayerSelector_GetPupButtonOffName(On.JollyCoop.JollyMenu.JollyPlayerSelector.orig_GetPupButtonOffName orig, JollyCoop.JollyMenu.JollyPlayerSelector self)
 	{
 		var result = orig(self);
-		var playerclass = self.JollyOptions(self.index).playerClass;
-		if (playerclass is not null && playerclass == VoidEnums.SlugcatID.Void)
-		{
+        SlugcatStats.Name playerclass = JollyCoop.JollyCustom.SlugClassMenu(self.index, self.dialog.currentSlugcatPageName);
+        if (playerclass == VoidEnums.SlugcatID.Void)
+        {
 			result = "void_" + "pup_off";
 		}
 		return result;
@@ -144,11 +145,15 @@ public static class JollyMenu
         }
         return res;
     }
+
+
     private static void JollyPlayerSelector_Update(On.JollyCoop.JollyMenu.JollyPlayerSelector.orig_Update orig, JollyCoop.JollyMenu.JollyPlayerSelector self)
     {
         orig(self);
 
-        if (self.JollyOptions(self.index).playerClass == VoidEnums.SlugcatID.Void)
+        SlugcatStats.Name playerclass = JollyCoop.JollyCustom.SlugClassMenu(self.index, self.dialog.currentSlugcatPageName);
+
+        if (playerclass == VoidEnums.SlugcatID.Void)
         {
             self.bodyTintColor = self.faceTintColor;
 
@@ -157,6 +162,33 @@ public static class JollyMenu
                 self.JollyOptions(self.index).isPup = false;
             }
             self.pupButton.GetButtonBehavior.greyedOut = true;
+
+            if (self.pupButton.symbolNameOff != "void_pup_off")
+            {
+                self.pupButton.symbolNameOff = "void_pup_off";
+                self.pupButton.LoadIcon();
+            }
+        }
+    }
+
+    private static void StoryGameSession_CreateJollySlugStats(On.StoryGameSession.orig_CreateJollySlugStats orig, StoryGameSession self, bool m)
+    {
+        orig(self, m);
+        PlayerState playerState;
+        SlugcatStats slugcatStats = new(self.saveState.saveStateNumber, m);
+        for (int i = 0; i < self.game.world.game.Players.Count; i++)
+        {
+            if (slugcatStats.name == VoidEnums.SlugcatID.Void)
+            {
+                playerState = self.game.Players[i].state as PlayerState;
+                SlugcatStats.Name playerClass = self.game.rainWorld.options.jollyPlayerOptionsArray[playerState.playerNumber].PlayerClass ?? self.saveState.saveStateNumber;
+                self.characterStatsJollyplayer[playerState.playerNumber] = new SlugcatStats(playerClass, m)
+                {
+                    foodToHibernate = self.saveState.malnourished ? 9 + (self.saveState.deathPersistentSaveData.karmaCap == 10 ? self.saveState.GetVoidExtraFood() : 0) : (6 + (self.saveState.GetVoidExtraFood() == 3 ? self.saveState.GetVoidFoodToHibernate() : 0)),
+                    maxFood = 9 + (self.saveState.deathPersistentSaveData.karmaCap == 10 ? self.saveState.GetVoidExtraFood() : 0),
+                    bodyWeightFac = slugcatStats.bodyWeightFac
+                };
+            }
         }
     }
 }

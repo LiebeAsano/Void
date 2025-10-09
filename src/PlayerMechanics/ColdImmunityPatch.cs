@@ -1,5 +1,6 @@
 ﻿using MoreSlugcats;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using static VoidTemplate.Useful.Utils;
 namespace VoidTemplate.PlayerMechanics;
 
@@ -14,6 +15,11 @@ public static class ColdImmunityPatch
                 self.HypothermiaGain = 0f;
                 int karma = p.KarmaCap;
                 if (p.KarmaCap == 10)
+                    if (Karma11Update.VoidKarma11)
+                        karma = 9;
+                    else
+                        karma = 0;
+                else if (Karma11Update.VoidKarma11)
                     karma = 9;
                 if (ModManager.DLCShared && self.room.blizzardGraphics != null && self.room.roomSettings.DangerType == DLCSharedEnums.RoomRainDangerType.Blizzard && self.room.world.rainCycle.CycleProgression > 0f)
                 {
@@ -122,6 +128,11 @@ public static class ColdImmunityPatch
         {
             int karma = self.KarmaCap;
             if (self.KarmaCap == 10)
+                if (Karma11Update.VoidKarma11)
+                    karma = 9;
+                else
+                    karma = 0;
+            else if (Karma11Update.VoidKarma11)
                 karma = 9;
             self.Hypothermia -= 0.00025f * 40 * 0.1f * (karma + 1);
         }

@@ -10,7 +10,7 @@ public static class ExtendedLungs
 	public static void Hook()
 	{
 		On.Player.Update += Player_Update;
-        On.PlayerGraphics.Update += PlayerGraphics_Update;
+        //On.PlayerGraphics.Update += PlayerGraphics_Update;
     }
 
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
@@ -18,21 +18,22 @@ public static class ExtendedLungs
         orig(self, eu);
         if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
-            if (self.KarmaCap != 10 && !Karma11Update.VoidKarma11)
+            if (self.KarmaCap != 10)
             {
-                int karma = self.KarmaCap;
 
-                float baseLungAirConsumption = 1.0f;
-                float reducePerKarma = 0.07f;
-                float newLungCapacity = baseLungAirConsumption - (reducePerKarma * (karma + 1));
+                float newLungCapacity = 1.0f - (0.07f * (self.KarmaCap + 1));
 
                 self.slugcatStats.lungsFac = newLungCapacity;
-
+                if (Karma11Update.VoidKarma11)
+                    self.slugcatStats.lungsFac = 0.2f;
             }
             else
-                self.slugcatStats.lungsFac = 0.2f;
+                if (Karma11Update.VoidKarma11)
+                    self.slugcatStats.lungsFac = 0.2f;
+                else
+                    self.slugcatStats.lungsFac = 1f;
         }
-        if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        /*if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
         {
             if (ExternalSaveData.ViyLungExtended)
             {
@@ -52,7 +53,7 @@ public static class ExtendedLungs
                 }
                 self.slugcatStats.lungsFac = 0.2f;
             }
-        }
+        }*/
     }
 
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)

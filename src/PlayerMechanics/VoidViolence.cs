@@ -81,7 +81,7 @@ namespace VoidTemplate.PlayerMechanics
                         self.Die();
                     }
                 }
-                if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
+                if (Karma11Update.VoidKarma11)
                 {
                     if (Damage >= self.Template.instantDeathDamageLimit * 1.25f || player.playerState.permanentDamageTracking >= 1.25f)
                     {

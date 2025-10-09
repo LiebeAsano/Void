@@ -25,7 +25,12 @@ public static class Crawl
             {
                 crawlTicks[self.playerState.playerNumber]++;
                 int karmaCap;
-                if (self.KarmaCap >= 4 || Karma11Update.VoidKarma11)
+                if (self.KarmaCap == 10)
+                    if (Karma11Update.VoidKarma11)
+                        karmaCap = 6;
+                    else
+                        karmaCap = 0;
+                else if (Karma11Update.VoidKarma11 || self.KarmaCap >= 4)
                 {
                     karmaCap = 6;
                 }

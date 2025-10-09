@@ -19,8 +19,6 @@ public static class MalnourishmentDeath
 		if (self.IsVoid()
 		   && self.room is not null
 		   && self.room.game.IsVoidWorld()
-		   && self.KarmaCap != 10
-		   && !Karma11Update.VoidKarma11
 		   && self.Malnourished)
 		{
 			Malnourished++;
@@ -35,8 +33,6 @@ public static class MalnourishmentDeath
         if (self.IsVoid()
 		   && self.room is not null
 		   && !self.room.game.IsVoidWorld()
-		   && self.KarmaCap != 10
-		   && !Karma11Update.VoidKarma11
 		   && self.Malnourished) self.Die();
     }
 }

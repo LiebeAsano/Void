@@ -27,7 +27,7 @@ public static class KarmaFlowerChanges
         if (self.grabbedBy.Count > 0 && self.grabbedBy[0].grabber is Player player && player.IsVoid() && 
             self.AbstrConsumable.world.game.session is StoryGameSession session && session.saveState.GetVoidFoodToHibernate() == 6)
         {
-            if (self.GetFlowerExt().toVoidColor < 1) self.GetFlowerExt().toVoidColor += 0.00002f;
+            if (self.GetFlowerExt().toVoidColor < 1) self.GetFlowerExt().toVoidColor += 0.00005f;
             Color voidColor = new(0, 0, 0.005f);
             self.color = Color.Lerp(self.color, voidColor, self.GetFlowerExt().toVoidColor);
             self.stalkColor = Color.Lerp(self.stalkColor, voidColor, self.GetFlowerExt().toVoidColor);

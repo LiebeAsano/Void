@@ -21,7 +21,28 @@ namespace VoidTemplate.PlayerMechanics
             if (self.IsVoid())
             {
                 float crawlSpeed;
-                if (self.KarmaCap >= 4 || Karma11Update.VoidKarma11)
+                if (self.KarmaCap == 10)
+                {
+                    if (Karma11Update.VoidKarma11)
+                    {
+                        self.slugcatStats.throwingSkill = 2;
+                        self.slugcatStats.corridorClimbSpeedFac = 1.25f;
+                        self.slugcatStats.poleClimbSpeedFac = 1.25f;
+                        self.slugcatStats.runspeedFac = 1.25f;
+                        self.slugcatStats.bodyWeightFac = 1.2f;
+                        crawlSpeed = 2.0f;
+                    }
+                    else
+                    {
+                        self.slugcatStats.throwingSkill = 0;
+                        self.slugcatStats.corridorClimbSpeedFac = 0.9f;
+                        self.slugcatStats.poleClimbSpeedFac = 0.9f;
+                        self.slugcatStats.runspeedFac = 0.9f;
+                        self.slugcatStats.bodyWeightFac = 0.9f;
+                        crawlSpeed = 1.0f;
+                    }
+                }
+                else if (Karma11Update.VoidKarma11 || self.KarmaCap >= 4)
                 {
                     self.slugcatStats.throwingSkill = 2;
                     self.slugcatStats.corridorClimbSpeedFac = 1.25f;

@@ -6,6 +6,7 @@ using MoreSlugcats;
 using RWCustom;
 using System;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using static VoidTemplate.Useful.Utils;
 
 
@@ -38,19 +39,19 @@ namespace VoidTemplate
 				{
 					sceneID = VoidEnums.SceneID.SleepSceneMark;
 				}
-				else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				else if (self.IsSleepScreen && !Karma11Update.VoidKarma11)
 				{
 					sceneID = VoidEnums.SceneID.SleepScene;
 				}
-				else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap == 10)
+				else if (self.IsSleepScreen)
 				{
 					sceneID = VoidEnums.SceneID.SleepScene11;
 				}
-				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap != 10)
+				else if ((self.IsDeathScreen || self.IsStarveScreen) && !Karma11Update.VoidKarma11)
 				{
 					sceneID = VoidEnums.SceneID.DeathScene;
 				}
-				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap == 10)
+				else if (self.IsDeathScreen || self.IsStarveScreen)
 				{
 					sceneID = VoidEnums.SceneID.DeathScene11;
 				}
@@ -119,41 +120,6 @@ namespace VoidTemplate
             var re = orig(ghostID, karma, karmaCap, ghostPreviouslyEncountered, playingAsRed);
             return re;
         }
-
-        private static void SleepAndDeathScreen_GetDataFromGame(On.Menu.SleepAndDeathScreen.orig_GetDataFromGame orig, SleepAndDeathScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
-		{
-			orig(self, package);
-			MenuScene.SceneID sceneID = null;
-			if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
-			{
-				if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap != 10)
-				{
-					sceneID = VoidEnums.SceneID.SleepScene;
-				}
-				else if (self.IsSleepScreen && self.saveState.deathPersistentSaveData.karmaCap == 10)
-				{
-					sceneID = VoidEnums.SceneID.SleepScene11;
-				}
-				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap != 10)
-				{
-					sceneID = VoidEnums.SceneID.DeathScene;
-				}
-				else if ((self.IsDeathScreen || self.IsStarveScreen) && self.saveState.deathPersistentSaveData.karmaCap == 10)
-				{
-					sceneID = VoidEnums.SceneID.DeathScene11;
-				}
-
-				if (sceneID != null && sceneID.Index != -1)
-				{
-					self.scene.RemoveSprites();
-					self.pages[0].subObjects.RemoveAll(i => i is InteractiveMenuScene);
-					self.scene = new InteractiveMenuScene(self, self.pages[0], sceneID);
-					self.pages[0].subObjects.Add(self.scene);
-					for (int i = self.scene.depthIllustrations.Count - 1; i >= 0; i--)
-						self.scene.depthIllustrations[i].sprite.MoveToBack();
-				}
-			}
-		}
 
 		
 

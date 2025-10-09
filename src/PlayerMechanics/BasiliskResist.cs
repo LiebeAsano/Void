@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -28,7 +29,7 @@ public class BasiliskResist
         if (self.injectedPoison > 0 && self.AreVoidViy())
         {
             int karma = self.KarmaCap;
-            if (self.KarmaCap == 10)
+            if (Karma11Update.VoidKarma11)
                 karma = 9;
             self.injectedPoison -= 0.00025f * 40 * 0.1f * (karma + 1);
         }
@@ -40,7 +41,7 @@ public class BasiliskResist
         if (self is Player player && player.AreVoidViy())
         {
             int karma = player.KarmaCap;
-            if (player.KarmaCap == 10)
+            if (Karma11Update.VoidKarma11)
                 karma = 9;
             self.injectedPoison += amount * (1f - 0.5f * karma + 1);
             return;

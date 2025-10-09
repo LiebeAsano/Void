@@ -19,7 +19,7 @@ public static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
     {
-        if (self.IsVoidWorld() && malnourished && self.Players[0].realizedCreature is Player p && p.KarmaCap != 10)
+        if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
 		{
 			self.GoToDeathScreen();
 			return;

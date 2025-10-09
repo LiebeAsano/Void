@@ -109,11 +109,11 @@ namespace VoidTemplate.PlayerMechanics
                             {
                                 player.playerState.permanentDamageTracking += (double)(num / player.Template.baseDamageResistance);
                             }
-                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && player.KarmaCap != 10 && !Karma11Update.VoidKarma11)
+                            if (player.playerState.permanentDamageTracking >= 1.0 && player.IsVoid() && !Karma11Update.VoidKarma11)
                             {
                                 player.Die();
                             }
-                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && (player.KarmaCap == 10 || Karma11Update.VoidKarma11))
+                            else if (player.playerState.permanentDamageTracking >= 1.25 && player.IsVoid() && Karma11Update.VoidKarma11)
                             {
                                 player.Die();
                             }
@@ -160,6 +160,14 @@ namespace VoidTemplate.PlayerMechanics
             {
                 if (self.room?.game is RainWorldGame game && (game.clock - deathMark.Value) > TicksForDelayedDeath)
                     self.Die();
+            }
+            if (self.IsVoid() && Karma11Update.VoidKarma11)
+            {
+                self.playerState.permanentDamageTracking -= 0.0005f;
+                if (self.playerState.permanentDamageTracking < 0)
+                {
+                    self.playerState.permanentDamageTracking = 0;
+                }
             }
             if (self.IsViy())
             {

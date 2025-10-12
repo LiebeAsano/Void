@@ -82,6 +82,6 @@
 		"death_scene": "Death_Void",
 		"starve_scene": "Death_Void",
 		"intro_slideshow": "Void_Intro",
-		"outro_slideshow": "Void_Intro"
+		"outro_slideshow": "Void_Outro"
 	}
 }

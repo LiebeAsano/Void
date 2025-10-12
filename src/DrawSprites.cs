@@ -32,7 +32,7 @@ public static class DrawSprites
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
     {
         orig(self);
-        if (self.player.IsVoid() && Karma11Update.VoidKarma11 && self.GetPlayerGExt().toEcxoTail < 1)
+        if (self.player.IsVoid() && (Karma11Update.VoidKarma11 || self.player.KarmaCap == 10 && self.player.dead) && self.GetPlayerGExt().toEcxoTail < 1)
         {
             self.GetPlayerGExt().toEcxoTail += 0.005f;
             if (!self.player.abstractCreature.Room.world.game.IsVoidStoryCampaign())
@@ -349,7 +349,7 @@ public static class DrawSprites
         }
         if (sLeaser.sprites[2] is TriangleMesh tail2)
         {
-            if (self.player.KarmaCap != 10)
+            if (self.player.KarmaCap != 10 && !Karma11Update.VoidKarma11)
             {
                 tail2.color = new(0f, 0f, 0.005f);
             }

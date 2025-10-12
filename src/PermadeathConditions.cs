@@ -104,6 +104,12 @@ static class PermadeathConditions
 			if (self.manager.upcomingProcess != null) return;
 
 			self.manager.musicPlayer?.FadeOutAllSongs(20f);
+			if (self.manager.nextSlideshow != null)
+			{
+				self.manager.statsAfterCredits = true;
+				self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlideShow);
+				return;
+			}
 			self.GetStorySession.saveState.redExtraCycles = true;
 			self.GetStorySession.saveState.SetVoidCatDead(true);
 			if (ModManager.CoopAvailable)

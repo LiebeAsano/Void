@@ -1,0 +1,16 @@
+Template: NONE
+WaveSpeed: 0.2373222
+WaveLength: 0.8686611
+WaveAmplitude: 0.04180509
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.3043478
+Grime: 0
+RandomItemDensity: 0.5
+RandomItemSpearChance: 0.1021738
+Palette: 455
+EffectColorB: 13
+Effects: Flies-0.25-20-20, Fog-0.8043478-279-21, 
+PlacedObjects: DangleFruit><315.135><333.3364><-489~213~3~6, DangleFruit><257.2986><301.306><-435~167~6~12, CustomDecal><159.8636><26.58545><-82~267~399~686~768~52~-507~-372~0~1~0~GreyBones~0.2065217~1~0.2065217~1~0.2065217~1~0.2065217~1,  KarmaFlower><676.7056><353.6831><0~0~5~7,  
+AmbientSounds: OMNI><AM_ENV-SubTerr.ogg><492.7029><25.69437><0.2065217><1, OMNI><SO_NAT-Fire.ogg><310.28><23.55228><0.1086956><1, OMNI><SO_SFX-Morse.ogg><118.1104><22.85681><0.04347826><1.9, SPOT><SO_NAT-Fire.ogg><9.378113><282.6586><0.25><1><470.3781><161.6586><-50.35535><-49.35535><0><0.1, 
+FadePalette: 14, 0.4017576

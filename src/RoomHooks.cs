@@ -5,6 +5,7 @@ using MoreSlugcats;
 using SlugBase;
 using SlugBase.Features;
 using System.Linq;
+using UnityEngine;
 using VoidTemplate.Objects;
 using static VoidTemplate.Useful.Utils;
 
@@ -21,6 +22,38 @@ namespace VoidTemplate
             On.RegionGate.customOEGateRequirements += RegionGate_customOEGateRequirements;
             On.World.ctor += World_ctor;
             IL.MoreSlugcats.MSCRoomSpecificScript.OE_GourmandEnding.Update += OE_GourmandEnding_Update;
+            On.MoreSlugcats.MSCRoomSpecificScript.OE_GourmandEnding.Update += On_OE_GourmandEnding_Update;
+            On.Player.ctor += Player_ctor;
+            On.RainWorldGame.BeatGameMode += RainWorldGame_BeatGameMode;
+        }
+
+        private static void RainWorldGame_BeatGameMode(On.RainWorldGame.orig_BeatGameMode orig, RainWorldGame game, bool standardVoidSea)
+        {
+            if (standardVoidSea)
+            {
+                if (game.StoryCharacter == SlugcatStats.Name.White) SaveManager.ExternalSaveData.SurvAscended = true;
+                else if (game.StoryCharacter == SlugcatStats.Name.Yellow) SaveManager.ExternalSaveData.MonkAscended = true;
+            }
+            orig(game, standardVoidSea);
+        }
+
+        private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+        {
+            orig(self, abstractCreature, world);
+            if (self.IsVoid() && abstractCreature.Room.name == "OE_FINAL03")
+            {
+                self.sleepCounter = 100;
+            }
+        }
+
+        private static void On_OE_GourmandEnding_Update(On.MoreSlugcats.MSCRoomSpecificScript.OE_GourmandEnding.orig_Update orig, MSCRoomSpecificScript.OE_GourmandEnding self, bool eu)
+        {
+            if (self.room.game.IsVoidStoryCampaign() && self.room.game.GetStorySession.saveState.GetVoidEndingTree() && !self.endTrigger)
+            {
+                self.Destroy();
+                return;
+            }
+            orig(self, eu);
         }
 
         private static void OE_GourmandEnding_Update(ILContext il)
@@ -47,6 +80,8 @@ namespace VoidTemplate
                     if (game.IsVoidStoryCampaign() && GameFeatures.OutroScene.TryGet(game, out var outro))
                     {
                         game.manager.nextSlideshow = outro;
+                        RainWorldGame.ForceSaveNewDenLocation(game, "OE_FINAL03", false);
+                        game.GetStorySession.saveState.SetVoidEndingTree(true);
                     }
                 });
             }
@@ -88,6 +123,14 @@ namespace VoidTemplate
         private static void RainWorldGame_ctor(On.RainWorldGame.orig_ctor orig, RainWorldGame self, ProcessManager manager)
         {
             orig(self, manager);
+            for (int i = 0; i < self.Players.Count; i++)
+            {
+                if (self.Players[i].Room.name == "OE_FINAL03")
+                {
+                    var spawnPos = Room.StaticGetTilePosition(new Vector2(325, 175));
+                    self.Players[i].pos.Tile = new(spawnPos.x, spawnPos.y + i);
+                }
+            }
         }
 
         private static void RoomSpeficScript(On.Room.orig_Loaded orig, Room self)

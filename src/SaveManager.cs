@@ -136,6 +136,11 @@ public static class SaveManager
     public static bool GetOEUnlockForVoid(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(unlockOEGateForVoid, out bool value) && value;
     public static void SetOEUnlockForVoid(this SaveState save, bool value) => save.deathPersistentSaveData.GetSlugBaseData().Set(unlockOEGateForVoid, value);
 
+    private static string voidEndingTree = uniqueprefix + "VoidEndingTree";
+
+    public static bool GetVoidEndingTree(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidEndingTree, out bool value) && value;
+    public static void SetVoidEndingTree(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidEndingTree, value);
+
 
     private const string voidPearl = uniqueprefix + "voidPearl";
     private const string rotPearl = uniqueprefix + "rotPearl";
@@ -328,6 +333,22 @@ public static class SaveManager
         {
             get => GetData(ViyPoisonImmuneString, false);
             set => SetData(ViyPoisonImmuneString, value);
+        }
+
+        private const string MonkAscendedString = "monkascended";
+
+        public static bool MonkAscended
+        {
+            get => GetData(MonkAscendedString, false);
+            set => SetData(MonkAscendedString, value);
+        }
+
+        private const string SurvAscendedString = "survascended";
+
+        public static bool SurvAscended
+        {
+            get => GetData(SurvAscendedString, false);
+            set => SetData(SurvAscendedString, value);
         }
 
     }

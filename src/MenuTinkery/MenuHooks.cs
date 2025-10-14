@@ -31,9 +31,23 @@ public static class MenuHooks
 
 		On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += TextLabelIfNotUnlocked;
 		//fix for select menu dying when there is no karma and food meter for the page
-        IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
+		IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
 
+        On.Menu.MainMenu.ctor += MainMenu_ctor;
 	}
+
+    private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
+    {
+		if (manager.rainWorld.progression.miscProgressionData.monkEndingID == 1 && !SaveManager.ExternalSaveData.MonkAscended)
+		{
+			SaveManager.ExternalSaveData.MonkAscended = true;
+		}
+		if (manager.rainWorld.progression.miscProgressionData.survivorEndingID == 1 && ! SaveManager.ExternalSaveData.SurvAscended)
+		{
+			SaveManager.ExternalSaveData.SurvAscended = true;
+		}
+		orig(self, manager, showRegionSpecificBkg);
+    }
 
     private static void SlugcatPageContinue_Update(MonoMod.Cil.ILContext il)
     {

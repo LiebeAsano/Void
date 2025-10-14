@@ -179,7 +179,15 @@ public static class SwallowObjects
             );
             self.abstractCreature.world.game.GetStorySession?.saveState?.SetStomachPearls(pearlIDsInPlayerStomaches);
         }
+        AbstractPhysicalObject potentialPearl = self.objectInStomach;
         orig(self);
+        SSOracleBehavior oracleBehavior = null;
+        if (potentialPearl != null && potentialPearl.realizedObject is PebblesPearl && self.IsVoid() && self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.room != null && 
+            self.abstractCreature.world.game.session is StoryGameSession session && session.saveState.deathPersistentSaveData.theMark &&
+            self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior behavior && behavior.action != SSOracleBehavior.Action.ThrowOut_ThrowOut && (oracleBehavior = behavior).action != SSOracleBehavior.Action.ThrowOut_KillOnSight))
+        {
+            oracleBehavior.RegurgitatePearlsInterrupt();
+        }
     }
 
     private static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)

@@ -67,6 +67,11 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
             if (self.ReqFoodPip())
             {
                 self.circles[1].rad = self.circles[0].rad - 1;
+                if (self.meter.hud.owner is SleepAndDeathScreen && self.foodPlopped)
+                {
+                    if (self.eaten) self.circles[0].fade = Mathf.Lerp(self.circles[0].fade, 1, self.eatCounter / 50f);
+                    else self.circles[0].fade = 1;
+                }
             }
         }
 
@@ -124,8 +129,8 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 
         private static void MeterCircle_Draw(On.HUD.FoodMeter.MeterCircle.orig_Draw orig, FoodMeter.MeterCircle self, float timeStacker)
         {
-            bool isVoidMeter = self.ReqFoodPip();
-            if (isVoidMeter)
+            bool isVoidPip = self.ReqFoodPip();
+            if (isVoidPip)
             {
                 if (self.foodPlopped)
                 {
@@ -139,13 +144,18 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
                 }
             }
             orig(self, timeStacker);
-            if (isVoidMeter && self.foodPlopped)
+            if (isVoidPip)
             {
-                self.circles[0].sprite.color = new(1f, 0.86f, 0f);
-                self.circles[1].sprite.color = new(0, 0, 0.005f);
-                if (self.circles[1].sprite.shader == self.circles[1].basicShader)
+                if (self.foodPlopped)
                 {
-                    self.circles[1].sprite.scale = (self.circles[1].snapRad + 4.6f) / 8f;
+                    self.circles[0].sprite.color = new(1f, 0.86f, 0f);
+                    self.circles[1].sprite.color = new(0, 0, 0.005f);
+                    if (self.circles[1].sprite.shader == self.circles[1].basicShader)
+                        self.circles[1].sprite.scale = (self.circles[1].snapRad + 4.6f) / 8f;
+                }
+                if (self.eaten)
+                {
+                    self.circles[0].sprite.color = Color.Lerp(Color.white, self.circles[0].sprite.color, self.eatCounter / 50f);
                 }
             }
         }

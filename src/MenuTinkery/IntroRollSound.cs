@@ -17,7 +17,7 @@ namespace VoidTemplate.MenuTinkery
         private static void IntroRollMusic_ctor(On.Music.IntroRollMusic.orig_ctor orig, Music.IntroRollMusic self, Music.MusicPlayer musicPlayer)
         {
             orig(self, musicPlayer);
-            if (!OptionAccessors.DisableMenuBackGround)
+            if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11))
             {
                 self.subTracks.RemoveAt(self.subTracks.Count - 1);
                 self.subTracks.Add(new(self, 1, "MainMenuTheme"));

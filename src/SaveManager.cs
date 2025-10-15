@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SlugBase.SaveData;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace VoidTemplate;
 
@@ -239,70 +240,87 @@ public static class SaveManager
     {
 #nullable enable
         const string SaveFolder = "modsavedata";
+        private static readonly object fileLock = new object();
+
         static string PathToSaves()
         {
             string path = Path.Combine(RWCustom.Custom.RootFolderDirectory(), SaveFolder, "lastwish");
             Directory.CreateDirectory(path);
             return path;
         }
+
         private static string FullPathOfSaveProperty(string id) => Path.Combine(PathToSaves(), id + ".json");
-        /// <summary>
-        /// Fetches a single entry associated with saveslot from save folder using ID.
-        /// </summary>
-        /// <typeparam name="T">Type of value being fetched</typeparam>
-        /// <param name="id">ID of fetched stored value</param>
-        /// <param name="defaultValue">Returned value in case it doesn't exist</param>
-        /// <param name="saveslot">Saveslot to fetch data for</param>
-        /// <returns></returns>
+
         private static T GetData<T>(string id, T defaultValue, int? saveslot = null)
         {
-            int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
-            string path = FullPathOfSaveProperty(id);
-            if (!File.Exists(path)) return defaultValue;
-            string rawData = File.ReadAllText(path);
-            Dictionary<int, T>? dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(rawData, new JsonSerializerSettings
+            lock (fileLock)
             {
-                Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                try
                 {
-                    args.ErrorContext.Handled = true;
+                    int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
+                    string path = FullPathOfSaveProperty(id);
+
+                    if (!File.Exists(path))
+                        return defaultValue;
+
+                    string rawData = File.ReadAllText(path);
+                    Dictionary<int, T>? dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(rawData, new JsonSerializerSettings
+                    {
+                        Error = (sender, args) => args.ErrorContext.Handled = true
+                    });
+
+                    return dataPerSave is not null && dataPerSave.TryGetValue(slot, out T result)
+                        ? result
+                        : defaultValue;
                 }
-            });
-            if (dataPerSave is null
-                || !dataPerSave.TryGetValue(slot, out T result))
-                return defaultValue;
-            return result;
+                catch (Exception ex)
+                {
+                    // Логируй ошибку здесь
+                    Console.WriteLine($"Error reading save data: {ex.Message}");
+                    return defaultValue;
+                }
+            }
         }
-        /// <summary>
-        /// Sets data for specified saveslot, ignores saveslot number below 0 (expedition/safari)
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
-        /// <param name="saveslot">Optional saveslot number for which this should be set</param>
+
         private static void SetData<T>(string id, T value, int? saveslot = null)
         {
-            int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
-            string path = FullPathOfSaveProperty(id);
-            Dictionary<int, T>? dataPerSave = null;
-
-            if (File.Exists(path))
-                dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(File.ReadAllText(path), new JsonSerializerSettings
-                {
-                    Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
-                    {
-                        args.ErrorContext.Handled = true;
-                    }
-                });
-
-            if (dataPerSave is null)
+            lock (fileLock)
             {
-                dataPerSave = new();
+                try
+                {
+                    int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
+                    if (slot < 0) return;
+
+                    string path = FullPathOfSaveProperty(id);
+                    Dictionary<int, T>? dataPerSave = null;
+
+                    if (File.Exists(path))
+                    {
+                        string rawData = File.ReadAllText(path);
+                        dataPerSave = JsonConvert.DeserializeObject<Dictionary<int, T>>(rawData, new JsonSerializerSettings
+                        {
+                            Error = (sender, args) => args.ErrorContext.Handled = true
+                        });
+                    }
+
+                    dataPerSave ??= new Dictionary<int, T>();
+                    dataPerSave[slot] = value;
+
+                    string newRawData = JsonConvert.SerializeObject(dataPerSave, Formatting.Indented);
+
+                    string tempPath = path + ".tmp";
+                    File.WriteAllText(tempPath, newRawData);
+
+                    if (File.Exists(path))
+                        File.Replace(tempPath, path, null);
+                    else
+                        File.Move(tempPath, path);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error writing save data: {ex.Message}");
+                }
             }
-
-            dataPerSave[slot] = value;
-
-            string rawData = JsonConvert.SerializeObject(dataPerSave);
-            File.WriteAllText(path, rawData);
         }
 
 

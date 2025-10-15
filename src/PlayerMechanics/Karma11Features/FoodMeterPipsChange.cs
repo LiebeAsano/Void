@@ -51,7 +51,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
             if (self.ReqFoodPip())
             {
                 self.rads[0, 0] += 1.5f;
-                self.meter.hud.PlaySound(SoundID.Snail_Pop);
+                self.meter.hud.PlaySound(VoidEnums.SoundID.UIPitch2);
                 FadeCircle fadeCircle = new(self.meter.hud, 10f, 4f, 0.82f, 14f, 4f, self.DrawPos(1f), self.meter.fContainer);
                 fadeCircle.circle.circleShader = fadeCircle.hud.rainWorld.Shaders["VectorCircle"];
                 fadeCircle.circle.forceColor = new(1f, 0.86f, 0f, 0.5f);
@@ -92,7 +92,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
                 self.foodPlopped = true;
                 self.rads[1, 1] += 2f;
                 self.foodPlopDelay = 16;
-                self.meter.hud.PlaySound(SoundID.Lizard_Jaws_Grab_NPC);
+                self.meter.hud.PlaySound(VoidEnums.SoundID.UIPitch1);
                 return;
             }
             orig(self);

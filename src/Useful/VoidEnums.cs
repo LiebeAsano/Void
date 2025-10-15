@@ -56,7 +56,13 @@ public static class VoidEnums
 			SelectKarma5Scene = new("Scene_Five_Karma_Void");
 			SelectKarma11Scene = new("Scene_Eleven_Karma_Void");
 
-			MainMenuSceneVoid = new("Main_Menu_Scene_Void");
+			MainMenuSceneMonk = new("Main_Menu_Scene_Monk");
+            MainMenuSceneSurv = new("Main_Menu_Scene_Surv");
+            MainMenuSceneHunt = new("Main_Menu_Scene_Hunt");
+            MainMenuSceneMonkSurv = new("Main_Menu_Scene_MonkSurv");
+            MainMenuSceneMonkHunt = new("Main_Menu_Scene_MonkHunt");
+            MainMenuSceneMonkSurvHunt = new("Main_Menu_Scene_MonkSurvHunt");
+            MainMenuSceneSurvHunt = new("Main_Menu_Scene_SurvHunt");
         }
 		public static MenuScene.SceneID SleepScene;
 		public static MenuScene.SceneID SleepScene11;
@@ -94,7 +100,13 @@ public static class VoidEnums
 		public static MenuScene.SceneID Void_NSH;
 		public static MenuScene.SceneID Void_Sea;
 
-        public static MenuScene.SceneID MainMenuSceneVoid;
+        public static MenuScene.SceneID MainMenuSceneMonk;
+        public static MenuScene.SceneID MainMenuSceneSurv;
+        public static MenuScene.SceneID MainMenuSceneHunt;
+        public static MenuScene.SceneID MainMenuSceneMonkSurv;
+        public static MenuScene.SceneID MainMenuSceneMonkHunt;
+        public static MenuScene.SceneID MainMenuSceneMonkSurvHunt;
+        public static MenuScene.SceneID MainMenuSceneSurvHunt;
     }
 	public static class DreamID
 	{
@@ -148,6 +160,9 @@ public static class VoidEnums
             VoidSeaDreamSound = new("Void_Sea_Dream_Sound", true);
             VoidBodyDreamSound = new("Void_Body_Dream_Sound", true);
 			VoidHeartDreamSound = new("Void_Heart_Dream_Sound", true);
+
+			UIPitch1 = new("UI_Pitch1", true);
+            UIPitch2 = new("UI_Pitch2", true);
         }
 
         public static global::SoundID HalcyonMemories;
@@ -166,6 +181,9 @@ public static class VoidEnums
         public static global::SoundID VoidSeaDreamSound;
         public static global::SoundID VoidBodyDreamSound;
         public static global::SoundID VoidHeartDreamSound;
+
+        public static global::SoundID UIPitch1;
+        public static global::SoundID UIPitch2;
     }
 	public static class ConversationID
 	{

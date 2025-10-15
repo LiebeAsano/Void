@@ -1,13 +1,12 @@
 {
-	"id": "Main_Menu_Scene_Void",
+	"id": "Main_Menu_Scene_Hunt",
 	"scene_folder": "slugbase/scenes/main - menu - scene - void",
 	"images": [
-		{"name": "main - menu - scene - void - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
+		{"name": "main - menu - scene - hunt - flat", "pos": [0, 0], "depth": -1.0, "flatmode": true},
 		{ "name": "background", "pos": [0, 0], "depth": -1.0, "shader": "Basic" },
 		{ "name": "void - core", "pos": [-75, -55], "depth": 50.0, "shader": "Basic" },
-		{ "name": "voideggs", "pos": [-67, -76], "depth": 50.0, "shader": "Basic" },
 		{ "name": "void - worm", "pos": [-67, -38], "depth": 15.0, "shader": "Basic" },
-		{ "name": "survivor - monk", "pos": [0, 0], "depth": 3.0, "shader": "Basic" },
+		{ "name": "hunt", "pos": [0, 0], "depth": 3.0, "shader": "Basic" },
 	],
 	"idle_depths": [ 15.0 ],
 	"select_menu_pos": [0, 0],

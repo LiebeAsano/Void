@@ -1,29 +1,29 @@
-WARG_B31: 1256.035><108.9579><950.0161><-25.38071><0><The Surface><48><78
+WARG_B31: 1256.035><108.9579><950.0161><-25.3807><0><The Surface><48><78
 WARG_B32: 1099.035><-77.04057><829.0161><-149.3823><1><The Surface><48><78
-WARG_B35: -1004.965><47.95775><-537.982><-22.38171><2><The Surface><48><78
-WARG_B36: -702.9642><-127.0411><-308.984><-198.3813><2><The Surface><48><78
+WARG_B35: -1004.965><47.95776><-537.982><-22.38169><2><The Surface><48><78
+WARG_B36: -702.9644><-127.0411><-308.9841><-198.3813><2><The Surface><48><78
 WARG_B37: -1252.965><-208.5411><-766.982><-256.3813><1><The Surface><100><35
 WARG_B38: -1705.965><-201.5421><-1110.982><-251.3813><1><The Surface><100><35
-WARG_G05: -699.9642><169.4579><-305.984><88.6143><1><The Surface><48><35
-WARG_G06: -849.9612><230.9599><-420.982><103.6137><1><The Surface><48><78
-WARG_G07: -850.9633><-62.54087><-424.982><-90.38151><1><The Surface><48><35
-WARG_G08: -702.9642><-57.54088><-194.985><1.618288><1><The Surface><48><35
-WARG_G09: -406.9633><-70.54057><-72.98463><-70.38151><1><The Surface><48><35
-WARG_G10: -322.9633><14.45884><47.01516><-69.38151><1><The Surface><48><35
-WARG_G11: -876.9642><-232.5411><-428.982><-276.3823><1><The Surface><48><35
+WARG_G05: -699.9644><169.4579><-305.9841><88.6143><1><The Surface><48><35
+WARG_G06: -849.9614><230.9599><-420.9821><103.6137><1><The Surface><48><78
+WARG_G07: -850.9635><-62.54086><-424.9821><-90.38151><1><The Surface><48><35
+WARG_G08: -702.9644><-57.54086><-194.985><1.618302><1><The Surface><48><35
+WARG_G09: -406.9635><-70.54057><-72.98467><-70.38151><1><The Surface><48><35
+WARG_G10: -322.9635><14.45885><47.01511><-69.38151><1><The Surface><48><35
+WARG_G11: -876.9644><-232.5411><-428.9821><-276.3823><1><The Surface><48><35
 WARG_G12: -1025.965><-252.5401><-545.982><-290.3823><1><The Surface><48><35
 WARG_G13: -1479.965><-217.5421><-888.982><-254.3813><2><The Surface><48><35
-WARG_G14: -553.9633><-108.5411><-193.985><-122.3813><1><The Surface><48><35
+WARG_G14: -553.9635><-108.5411><-193.985><-122.3813><1><The Surface><48><35
 WARG_G16: -1025.965><-376.5432><-540.982><-407.3823><1><The Surface><48><35
-WARG_G17: -876.9612><-412.5432><-425.982><-432.3823><1><The Surface><48><35
-WARG_G18: -387.4993><-277.1111><-193.985><-240.3813><1><The Surface><100><35
-WARG_G19: 45.03652><-192.5421><31.01516><-209.3813><1><The Surface><152><35
-WARG_G20: 405.0378><-169.5391><361.016><-190.3813><1><The Surface><48><35
-WARG_G21: 786.0377><-223.0411><505.0139><-266.3813><1><The Surface><152><78
+WARG_G17: -876.9614><-412.5432><-425.9821><-432.3823><1><The Surface><48><35
+WARG_G18: -387.4995><-277.1111><-193.985><-240.3813><1><The Surface><100><35
+WARG_G19: 45.03638><-192.5421><31.01511><-209.3813><1><The Surface><152><35
+WARG_G20: 405.0376><-169.5391><361.0159><-190.3813><1><The Surface><48><35
+WARG_G21: 786.0375><-223.0411><505.0138><-266.3813><1><The Surface><152><78
 WARG_G22: 1336.035><-161.5401><945.0161><-161.3813><1><The Surface><100><35
-WARG_H20: 226.0777><-155.8671><258.1259><-72.1711><2><><48><35
-WARG_S10: -544.9633><170.4589><-192.985><109.6147><1><><48><35
-WARG_S16: 438.0378><-277.5411><381.016><-322.3823><1><><48><35
+WARG_H20: 226.0776><-155.8671><258.1258><-72.1711><2><><48><35
+WARG_S10: -544.9635><170.4589><-192.985><109.6147><1><><48><35
+WARG_S16: 438.0376><-277.5411><381.0159><-322.3823><1><><48><35
 WARG_G28: -1788.795><-380.2722><-1116.412><-463.4303><2><Tundra Fault><48><78
 WARG_G29: -2019.795><-448.7711><-1334.412><-483.4303><2><Tundra Fault><100><35
 WARG_G30: -2248.795><-448.7711><-1446.412><-467.4303><2><Tundra Fault><48><35
@@ -39,12 +39,12 @@ WARG_W09: -2566.465><-783.9852><-1642.462><-823.6144><1><Tundra Fault><48><35
 WARG_W10: -2558.035><-610.7922><-1634.462><-693.6123><1><Tundra Fault><48><74
 WARG_W11: -2480.465><-219.9861><-1623.462><-102.6133><1><Tundra Fault><100><35
 WARG_W12: -2462.995><-330.8322><-1402.562><-297.1423><2><Tundra Fault><48><35
-WARG_W13: -1726.645><-808.9902><-16.96204><-68.20631><0><><152><35
-WARG_W14: -1918.645><-700.9902><-16.96204><-68.20631><0><><48><35
+WARG_W13: -1726.645><-808.9902><-16.96209><-68.20631><0><><152><35
+WARG_W14: -1918.645><-700.9902><-16.96209><-68.20631><0><><48><35
 WARG_S20: -1330.755><-460.0961><-722.79><-479.8743><1><><48><35
 WARG_S21: -2706.465><-463.9872><-1745.462><-309.6123><1><><48><35
 WARG_S26: 1866.495><172.5908><952.69><220.3497><1><><48><35
-WARG_S27: 577.3547><562.0098><-50.30844><564.3497><1><><48><35
+WARG_S27: 577.3545><562.0098><-50.30849><564.3497><1><><48><35
 WARG_A01_Future: 3043.075><1253.35><1863.258><1203.344><1><Fallen Tramway><48><35
 WARG_A02_Future: 2817.265><1187.41><1645.478><1116.804><1><Fallen Tramway><100><78
 WARG_A03_Future: 2809.785><1362.49><1692.258><1334.344><1><Fallen Tramway><48><35
@@ -58,17 +58,17 @@ WARG_O04_Future: 2454.715><184.1449><1297.688><267.3497><1><Fallen Tramway><152>
 WARG_O05_Future: 2528.575><289.8799><1418.688><490.3497><1><Fallen Tramway><100><35
 WARG_O06_Future: 2071.285><239.9389><1075.688><250.3497><1><Fallen Tramway><100><74
 WARG_O09_Future: 1645.465><301.4388><634.69><349.3497><2><Fallen Tramway><202><35
-WARG_O10_Future: 1712.595><54.43353><832.69><66.34969><1><Fallen Tramway><48><112
-WARG_O11_Future: 1640.025><-146.6841><606.69><8.349488><1><Fallen Tramway><100><35
-WARG_O13_Future: 1939.355><16.00984><1090.098><35.53289><1><><100><74
+WARG_O10_Future: 1712.595><54.43354><832.69><66.34969><1><Fallen Tramway><48><112
+WARG_O11_Future: 1640.025><-146.6841><606.69><8.349504><1><Fallen Tramway><100><35
+WARG_O13_Future: 1939.355><16.00985><1090.098><35.53291><1><><100><74
 WARG_O14_Future: 2618.365><312.2089><1638.338><374.7538><2><><100><35
-WARG_I10_Future: 950.0927><340.4239><286.692><371.3497><2><Fallen Tramway><48><35
-WARG_I11_Future: 1099.495><141.3428><397.692><141.3497><2><Fallen Tramway><48><78
-WARG_I12_Future: 1106.355><313.8528><401.692><355.3497><2><Fallen Tramway><48><35
+WARG_I10_Future: 950.0925><340.4239><286.6919><371.3497><2><Fallen Tramway><48><35
+WARG_I11_Future: 1099.495><141.3428><397.6919><141.3497><2><Fallen Tramway><48><78
+WARG_I12_Future: 1106.355><313.8528><401.6919><355.3497><2><Fallen Tramway><48><35
 WARG_I13_Future: 1304.345><276.9048><519.692><340.3497><2><Fallen Tramway><48><35
-WARG_D06_Future: 412.3547><490.0099><99.03796><247.7937><0><Fallen Tramway><152><78
-WARG_B29_Future: 712.3547><346.0099><63.09796><360.5338><1><><100><35
-OffScreenDen_WARG: 110.3547><654.0098><-16.96204><1.793688><1><><0><0
+WARG_D06_Future: 412.3545><490.0099><99.03791><247.7937><0><Fallen Tramway><152><78
+WARG_B29_Future: 712.3545><346.0099><63.09792><360.5338><1><><100><35
+OffScreenDen_WARG: 110.3546><654.0098><-16.96209><1.793702><1><><0><0
 Connection: WARG_B31,WARG_B32,5,6,37,68,2,0
 Connection: WARG_B32,WARG_G22,42,10,7,17,0,2
 Connection: WARG_B32,WARG_G21,7,8,137,57,2,0
@@ -145,4 +145,55 @@ Connection: WARG_I10_Future,WARG_B29_Future,5,17,95,15,2,0
 Connection: WARG_I10_Future,WARG_I12_Future,43,17,9,26,0,2
 Connection: WARG_I11_Future,WARG_I12_Future,26,73,23,4,1,3
 Connection: WARG_I12_Future,WARG_I13_Future,38,10,4,17,0,2
-Connection: WARG_D06_Future,WARG_B29_Future,144,21,35,29,0,1
+Connection: WARG_D06_Future,WARG_B29_Future,144,21,7,6,0,2
+
+SpawnMigrationStream: stream1,2653^375,2834^1588,2638^318,2720^1497,None,012,70,30,WARG_A06_Future
+SpawnMigrationStreamMidpoint: stream1,0,2505^293^-0.9804993^75^138
+SpawnMigrationStreamMidpoint: stream1,1,2329^346^20.23019^45^56
+SpawnMigrationStreamMidpoint: stream1,2,2223^506^152.5226^129^41
+SpawnMigrationStreamMidpoint: stream1,3,2213^603^17.77958^48^128
+SpawnMigrationStreamMidpoint: stream1,4,2148^784^115.9192^99^50
+SpawnMigrationStreamMidpoint: stream1,5,2266^945^182.6852^307^125
+SpawnMigrationStreamMidpoint: stream1,6,2598^1028^65.07214^93^41
+SpawnMigrationStreamMidpoint: stream1,7,2696^1105^185.7725^132^90
+SpawnMigrationStreamMidpoint: stream1,8,2851^1190^192.2114^63^65
+SpawnMigrationStreamMidpoint: stream1,9,2894^1267^26.62332^74^66
+
+SpawnMigrationStream: stream2,1210^-73,249^557,1212^-284,360^550,None,012,70,30,WARG_D06_Future
+SpawnMigrationStreamMidpoint: stream2,0,1647^-150^204.7664^167^181
+SpawnMigrationStreamMidpoint: stream2,1,1693^79^84.42778^128^92
+SpawnMigrationStreamMidpoint: stream2,2,1659^282^29.66448^59^131
+SpawnMigrationStreamMidpoint: stream2,3,1277^295^-1.490349^140^103
+SpawnMigrationStreamMidpoint: stream2,4,1083^326^39.55773^54^34
+SpawnMigrationStreamMidpoint: stream2,5,954^368^0.5935745^64^62
+SpawnMigrationStreamMidpoint: stream2,6,703^372^-6.172279^67^79
+SpawnMigrationStreamMidpoint: stream2,7,575^346^8.530937^27^75
+SpawnMigrationStreamMidpoint: stream2,8,645^408^128.0717^29^39
+SpawnMigrationStreamMidpoint: stream2,9,424^437^-8.064735^194^199
+
+SpawnMigrationStream: stream3,-2263^-378,-2541^-243,-2291^-495,-2408^-211,None,012,70,30,WARG_W11
+SpawnMigrationStreamMidpoint: stream3,0,-2003^-456^162.528^105^118
+SpawnMigrationStreamMidpoint: stream3,1,-1814^-463^182.1537^120^250
+SpawnMigrationStreamMidpoint: stream3,2,-1559^-440^186.2282^54^43
+SpawnMigrationStreamMidpoint: stream3,3,-1528^-512^-80.04868^40^70
+SpawnMigrationStreamMidpoint: stream3,4,-1628^-563^9.428261^64^68
+SpawnMigrationStreamMidpoint: stream3,5,-1883^-552^10.43798^95^88
+SpawnMigrationStreamMidpoint: stream3,6,-2206^-569^1.577217^106^153
+SpawnMigrationStreamMidpoint: stream3,7,-2446^-685^3.070244^206^103
+SpawnMigrationStreamMidpoint: stream3,8,-2578^-574^84.37386^116^73
+SpawnMigrationStreamMidpoint: stream3,9,-2465^-447^184.4691^148^56
+SpawnMigrationStreamMidpoint: stream3,10,-2376^-374^112.138^56^120
+
+SpawnMigrationStream: stream4,-1878^-226,1230^212,-1784^-122,1394^198,None,012,70,30,WARG_B31
+SpawnMigrationStreamMidpoint: stream4,0,-1601^-196^168.058^196^62
+SpawnMigrationStreamMidpoint: stream4,1,-1381^-203^188.861^77^65
+SpawnMigrationStreamMidpoint: stream4,2,-1209^-210^161.2294^46^132
+SpawnMigrationStreamMidpoint: stream4,3,-873^-195^181.7814^132^64
+SpawnMigrationStreamMidpoint: stream4,4,-703^-198^182.2803^66^99
+SpawnMigrationStreamMidpoint: stream4,5,-389^-272^181.4625^101^142
+SpawnMigrationStreamMidpoint: stream4,6,13^-182^180.764^138^25
+SpawnMigrationStreamMidpoint: stream4,7,403^-177^149.6356^192^29
+SpawnMigrationStreamMidpoint: stream4,8,483^-197^180.733^29^259
+SpawnMigrationStreamMidpoint: stream4,9,825^-143^203.6254^102^103
+SpawnMigrationStreamMidpoint: stream4,10,1117^-71^92.07677^94^53
+SpawnMigrationStreamMidpoint: stream4,11,1228^30^109.5826^33^87

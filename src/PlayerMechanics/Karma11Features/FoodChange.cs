@@ -50,7 +50,7 @@ public static class FoodChange
             }
             else if (foodToHibernate < 6) 
             {
-                self.SetKarmaToken(Mathf.Max(0, self.GetKarmaToken() - 2));
+                self.SetKarmaToken(Mathf.Max(0, self.GetKarmaToken() - 1));
                 self.SetVoidFoodToHibernate(foodToHibernate + 1); 
             }
             else self.SetKarmaToken(0);

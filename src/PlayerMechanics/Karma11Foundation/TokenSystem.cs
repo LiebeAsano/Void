@@ -13,7 +13,7 @@ public static class TokenSystem
                 && self.IsVoidStoryCampaign())
 			{
 				int karmaTokensAmount = saveState.GetKarmaToken();
-				karmaTokensAmount -= 2;
+				karmaTokensAmount -= 1;
 				saveState.SetKarmaToken(karmaTokensAmount);
 				if (karmaTokensAmount < 0) self.GoToRedsGameOver();
 			}

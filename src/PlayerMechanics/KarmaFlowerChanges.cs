@@ -87,10 +87,10 @@ public static class KarmaFlowerChanges
 
                     if (self.bites == 1 && player.KarmaCap == 10 && saveState.GetVoidFoodToHibernate() < 6 && !player.IsViy())
                     {
-                        int newTokenCount = Math.Min(10, saveState.GetKarmaToken() + 2);
+                        int newTokenCount = Math.Min(5, saveState.GetKarmaToken() + 1);
                         saveState.SetKarmaToken(newTokenCount);
 
-                        bool needBumpTokenAnim = Karma11Foundation.Karma11Symbol.currentKarmaTokens != 10;
+                        bool needBumpTokenAnim = Karma11Foundation.Karma11Symbol.currentKarmaTokens != 5;
                         Karma11Foundation.Karma11Symbol.currentKarmaTokens = (ushort)newTokenCount;
 
                         if (needBumpTokenAnim)

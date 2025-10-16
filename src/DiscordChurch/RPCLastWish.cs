@@ -242,11 +242,11 @@ namespace VoidTemplate.DiscordChurch
             activity.Assets.LargeText = $"Story: The {SlugcatStats.getSlugcatName(story.saveStateNumber)}";
             if (!self.room?.abstractRoom?.shelter ?? false)
             {
-                activity.Assets.SmallImage = oldSmallImage = $"{(self.KarmaCap == 10 ? $"protection{story.saveState.GetKarmaToken() / 2}" : $"karma{self.Karma}{(self.Karma < 5 ? "" : $"{self.KarmaCap}")}")}";
+                activity.Assets.SmallImage = oldSmallImage = $"{(self.KarmaCap == 10 ? $"protection{story.saveState.GetKarmaToken()}" : $"karma{self.Karma}{(self.Karma < 5 ? "" : $"{self.KarmaCap}")}")}";
                 activity.Assets.SmallText = oldSmallText = $"{(story.saveState.deathPersistentSaveData.karma < 10 ? "Karma" : "Protection")}: " +
                        $"{(story.saveState.deathPersistentSaveData.karma < 10 ?
                            $"[{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]" :
-                           $"[{story.saveState.GetKarmaToken() / 2}/5]")}";
+                           $"[{story.saveState.GetKarmaToken()}/5]")}";
             }
             else
             {

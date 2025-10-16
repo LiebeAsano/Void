@@ -59,8 +59,8 @@ public static class SaveManager
             }
             else
             {
-                KarmaTokenAmount = 10;
-                data.Set(KarmaToken, 10);
+                KarmaTokenAmount = 5;
+                data.Set(KarmaToken, 5);
             }
         }
         return KarmaTokenAmount;

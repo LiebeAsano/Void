@@ -18,20 +18,6 @@ public static class Karma11Symbol
 	}
 
 	const int karma11index = 10;
-	public static Dictionary<ushort, ushort> tokensToPelletsMap = new()
-	{
-		{0, 0},
-		{1, 1},
-		{2, 1},
-		{3, 2},
-		{4, 2},
-		{5, 3},
-		{6, 3},
-		{7, 4},
-		{8, 4},
-		{9, 5},
-		{10, 5},
-	};
 	public static ushort currentKarmaTokens = 0;
 
 	private static SaveState PlayerProgression_GetOrInitiateSaveState(On.PlayerProgression.orig_GetOrInitiateSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber, RainWorldGame game, ProcessManager.MenuSetup setup, bool saveAsDeathOrQuit)
@@ -40,6 +26,7 @@ public static class Karma11Symbol
 		if (saveStateNumber == SlugcatID.Void || saveStateNumber == SlugcatID.Viy)
 		{
 			currentKarmaTokens = (ushort)result.GetKarmaToken();
+			
         }
 		return result;
 	}
@@ -48,7 +35,7 @@ public static class Karma11Symbol
 	{
 		if (k.x == 10)
 		{
-			string res = $"atlas-void/KarmaToken{tokensToPelletsMap[currentKarmaTokens]}" + (small ? "Small" : "Big");
+			string res = $"atlas-void/KarmaToken{currentKarmaTokens}" + (small ? "Small" : "Big");
 			return res;
 		}
 		return orig(small, k);
@@ -69,7 +56,6 @@ public static class Karma11Symbol
 	private static void KarmaSymbol_ctor(On.Menu.KarmaLadder.KarmaSymbol.orig_ctor orig, KarmaLadder.KarmaSymbol self, Menu.Menu menu, MenuObject owner, Vector2 pos, FContainer container, FContainer foregroundContainer, IntVector2 displayKarma, bool ripple)
 	{
 		orig(self, menu, owner, pos, container, foregroundContainer, displayKarma, ripple);
-
 		if (displayKarma.x == karma11index)
 		{
 			self.sprites[self.RingSprite].alpha = 0f;

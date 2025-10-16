@@ -26,7 +26,7 @@ public static class KarmaLadderTweaks
 					{
                         if (Karma11Symbol.currentKarmaTokens > 0)
                             self.karmaLadder.NewPhase(KarmaLadder.Phase.Bump);
-						Karma11Symbol.currentKarmaTokens -= 2;
+						Karma11Symbol.currentKarmaTokens -= 1;
 						self.karmaLadder.karmaSymbols[10].UpdateDisplayKarma(self.karmaLadder.displayKarma);
 					}
 					else if (self.saveState.GetVoidFoodToHibernate() > 0 && !self.saveState.CanAddFoodToHibernate(self.hud.foodMeter.survivalLimit))
@@ -43,7 +43,7 @@ public static class KarmaLadderTweaks
 				self.karmaLadder.NewPhase(KarmaLadder.Phase.Settling);
 				self.PlaySound(SoundID.MENU_Karma_Ladder_Reinforce_Save_Pull);
                 self.hud.fadeCircles.Add(new FadeCircle(self.hud, self.karmaLadder.circleRad, 26f, 0.88f, 60f, 6f, self.karmaLadder.DrawPos(1f), self.karmaLadder.containers[self.karmaLadder.FadeCircleContainer]));
-                Karma11Symbol.currentKarmaTokens -= 2;
+                Karma11Symbol.currentKarmaTokens -= 1;
                 self.karmaLadder.karmaSymbols[10].UpdateDisplayKarma(self.karmaLadder.displayKarma);
             }
 		}

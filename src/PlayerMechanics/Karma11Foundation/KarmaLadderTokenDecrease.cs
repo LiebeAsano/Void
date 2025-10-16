@@ -23,7 +23,7 @@ public static class KarmaLadderTokenDecrease
         //making sleepanddeathscreen understand new ID
         On.Menu.KarmaLadder.ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool += KarmaLadder_ctor_Menu_MenuObject_Vector2_HUD_IntVector2_bool;
 		//all the logic with swapping sprites
-		//On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
+		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
         //adding background illustration to new process ID
         On.Menu.SleepAndDeathScreen.AddBkgIllustration += SleepAndDeathScreen_AddBkgIllustration;
 		
@@ -45,6 +45,7 @@ public static class KarmaLadderTokenDecrease
 		if(menu is KarmaLadderScreen kscreen
 			&& kscreen.ID == VoidEnums.ProcessID.TokenDecrease)
 		{
+			tokenFadeoutProcess.Add(self, new(0));
 			changingSymbol = null;
 			processDone = null;
 		}

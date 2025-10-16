@@ -9,39 +9,39 @@ WARE_I07: 1083.409><433.3464><785.0369><439.8753><1><Thermal Relay><48><35
 WARE_I08: 1023.548><334.1674><745.0369><340.4937><1><Thermal Relay><48><35
 WARE_I09: 477.7367><314.1321><313.5665><353.7166><1><Thermal Relay><100><35
 WARE_I10: 610.752><197.4108><465.5935><231.0943><1><Thermal Relay><48><35
-WARE_I11: 746.7639><-24.81562><571.3152><10.91704><1><Thermal Relay><48><78
+WARE_I11: 746.7639><-24.81566><571.3152><10.91701><1><Thermal Relay><48><78
 WARE_I12: 756.3335><170.9804><576.0369><213.803><1><Thermal Relay><48><35
 WARE_I13: 906.1942><150.2587><687.6197><199.9422><1><Thermal Relay><48><35
-WARE_I14: 1179.047><-100.6489><907.3972><1.289392><1><Thermal Relay><48><35
-WARE_I15: 967.4308><-109.2912><684.55><-3.649024><1><Thermal Relay><100><35
+WARE_I14: 1179.047><-100.6489><907.3972><1.28936><1><Thermal Relay><48><35
+WARE_I15: 967.4308><-109.2912><684.55><-3.649055><1><Thermal Relay><100><35
 WARE_S12: 266.1154><346.2839><209.2502><374.5122><1><><48><35
-WARE_G15: -1266.283><-91.50443><-894.4385><-78.93469><1><Heat Ducts><48><35
-WARE_H01: -945.8268><-115.7957><-764.7687><-94.18704><1><Heat Ducts><152><35
+WARE_G15: -1266.283><-91.50446><-894.4385><-78.93473><1><Heat Ducts><48><35
+WARE_H01: -945.8268><-115.7957><-764.7687><-94.18708><1><Heat Ducts><152><35
 WARE_H02: -319.2838><-166.9913><-220.874><-281.3591><1><Heat Ducts><48><154
 WARE_H03: -652.2725><-327.0619><-559.8738><-246.3591><1><Heat Ducts><48><35
 WARE_H04: -646.0519><-499.1661><-561.8738><-457.3591><1><Heat Ducts><48><35
 WARE_H05: -381.2837><-689.9599><-408.874><-546.359><1><Heat Ducts><152><35
-WARE_H06: -26.20555><-450.0898><38.12622><-392.3591><1><Heat Ducts><48><78
+WARE_H06: -26.20552><-450.0898><38.12623><-392.3591><1><Heat Ducts><48><78
 WARE_H07: -319.9932><-461.353><-246.874><-420.3591><1><Heat Ducts><48><35
 WARE_H08: -330.2093><242.1906><-223.874><127.6402><1><Heat Ducts><48><35
 WARE_H09: -514.2444><-334.7004><-395.874><-325.3591><1><Heat Ducts><48><35
-WARE_H10: -177.4964><-391.5535><-96.87379><-273.3591><1><Heat Ducts><48><35
+WARE_H10: -177.4964><-391.5535><-96.87378><-273.3591><1><Heat Ducts><48><35
 WARE_H11: -321.0704><462.4687><-220.874><416.6437><1><Heat Ducts><48><35
-WARE_H12: -163.6196><-126.2397><-98.01295><-119.5854><1><Heat Ducts><48><35
+WARE_H12: -163.6196><-126.2397><-98.01294><-119.5854><1><Heat Ducts><48><35
 WARE_H14: -473.5755><-256.5179><-398.874><-189.7418><1><Heat Ducts><48><35
 WARE_H15: -419.3364><-425.402><-367.8748><-815.3593><2><Heat Ducts><48><35
 WARE_H16: -104.2875><-424.3885><-236.873><-833.359><2><Heat Ducts><100><35
 WARE_H17: -372.7789><351.0385><-253.874><265.6415><1><Heat Ducts><48><35
-WARE_H18: -903.257><-5.200737><-632.9081><19.97734><1><Heat Ducts><48><35
-WARE_H19: -261.3619><136.2166><-97.87472><59.63999><1><Heat Ducts><48><35
+WARE_H18: -903.257><-5.200775><-632.9081><19.97731><1><Heat Ducts><48><35
+WARE_H19: -261.3619><136.2166><-97.87473><59.63996><1><Heat Ducts><48><35
 WARE_H21: -284.1418><-586.3602><-241.12><-674.281><1><Heat Ducts><48><35
-WARE_H22: -94.11021><464.5482><-112.4698><453.3777><1><Heat Ducts><100><35
-WARE_H23: -555.8156><-116.6712><-439.9043><-94.28565><1><Heat Ducts><100><35
-WARE_H24: -5.677338><13.57998><24.92632><-90.5818><1><Heat Ducts><48><112
+WARE_H22: -94.11018><464.5482><-112.4698><453.3777><1><Heat Ducts><100><35
+WARE_H23: -555.8156><-116.6712><-439.9043><-94.28569><1><Heat Ducts><100><35
+WARE_H24: -5.677305><13.57994><24.92633><-90.58184><1><Heat Ducts><48><112
 WARE_S05: -218.8365><-494.6443><-125.2815><-424.7052><1><><48><35
-WARE_S25: 6.898354><357.5631><8.235152><348.8005><1><><48><35
+WARE_S25: 6.898387><357.5631><8.23516><348.8005><1><><48><35
 WARE_S28: 138.8127><-126.3486><138.0061><-108.0739><1><><48><35
-WARE_S30: -902.7596><93.8297><-633.1207><115.5981><1><><48><35
+WARE_S30: -902.7596><93.82967><-633.1207><115.5981><1><><48><35
 OffScreenDen_WARE: -1096.406><-831.7416><-517.0729><-544.0274><1><Blast Deck><0><0
 Connection: WARE_B29,WARE_I09,35,29,5,13,1,3
 Connection: WARE_B29,WARE_I10,95,15,5,17,0,2
@@ -94,3 +94,35 @@ Connection: WARE_H18,WARE_S30,23,28,23,11,1,3
 Connection: WARE_H19,WARE_H24,39,19,7,96,0,2
 Connection: WARE_H22,WARE_S25,84,6,24,27,3,1
 Connection: WARE_H24,WARE_S28,41,8,15,17,0,2
+
+SpawnMigrationStream: stream1,-374^541,1200^-99,-396^356,1042^-68,None,1,70,30,WARE_I14
+SpawnMigrationStreamMidpoint: stream1,0,-107^474^179.5848^158^82
+SpawnMigrationStreamMidpoint: stream1,1,260^469^195.5687^75^59
+SpawnMigrationStreamMidpoint: stream1,2,470^456^178.4969^76^112
+SpawnMigrationStreamMidpoint: stream1,3,778^462^177.4556^98^102
+SpawnMigrationStreamMidpoint: stream1,4,892^390^-85.64246^50^104
+SpawnMigrationStreamMidpoint: stream1,5,764^337^-1.79718^69^108
+SpawnMigrationStreamMidpoint: stream1,6,450^338^3.925949^101^151
+SpawnMigrationStreamMidpoint: stream1,7,343^204^178.581^61^21
+SpawnMigrationStreamMidpoint: stream1,8,485^186^141.9875^72^91
+SpawnMigrationStreamMidpoint: stream1,9,740^173^183.3213^147^35
+SpawnMigrationStreamMidpoint: stream1,10,732^64^-38.91089^33^37
+SpawnMigrationStreamMidpoint: stream1,11,724^-103^200.8129^46^57
+SpawnMigrationStreamMidpoint: stream1,12,938^-132^184.0125^79^73
+
+SpawnMigrationStream: stream2,-1133^-47,-459^-279,-1025^-157,-459^-259,None,1,70,30,WARE_H16
+SpawnMigrationStreamMidpoint: stream2,0,-878^-147^173.7966^202^141
+SpawnMigrationStreamMidpoint: stream2,1,-356^-130^203.2315^84^18
+SpawnMigrationStreamMidpoint: stream2,2,-340^-195^267.5468^22^27
+SpawnMigrationStreamMidpoint: stream2,3,-386^-239^-2.389107^31^73
+
+SpawnMigrationStream: stream3,-460^-353,-55^-384,-465^-429,-13^-401,None,2,70,30,WARE_H16
+SpawnMigrationStreamMidpoint: stream3,0,-238^-452^179.0197^188^189
+
+SpawnMigrationStream: stream4,-461^316,-282^-555,-371^411,-334^-828,None,1,70,30,WARE_H21
+SpawnMigrationStreamMidpoint: stream4,0,-368^232^228.8888^91^61
+SpawnMigrationStreamMidpoint: stream4,1,-318^-72^229.0504^70^71
+SpawnMigrationStreamMidpoint: stream4,2,-296^-209^263.1581^66^85
+SpawnMigrationStreamMidpoint: stream4,3,-64^-360^226.5946^66^136
+SpawnMigrationStreamMidpoint: stream4,4,-29^-530^-53.35547^53^81
+SpawnMigrationStreamMidpoint: stream4,5,-193^-667^-24.17852^84^104

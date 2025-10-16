@@ -77,9 +77,9 @@ namespace VoidTemplate
                 c.Emit(OpCodes.Dup);
                 c.EmitDelegate((RainWorldGame game) =>
                 {
-                    if (game.IsVoidStoryCampaign() && GameFeatures.OutroScene.TryGet(game, out var outro))
+                    if (game.IsVoidStoryCampaign() && GameFeatures.IntroScene.TryGet(game, out var outro))
                     {
-                        game.manager.nextSlideshow = outro;
+                        //game.manager.nextSlideshow = outro;
                         RainWorldGame.ForceSaveNewDenLocation(game, "OE_FINAL03", false);
                         game.GetStorySession.saveState.SetVoidEndingTree(true);
                     }

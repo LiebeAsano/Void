@@ -32,7 +32,7 @@ public static class SelectScreenScenes
 			else if (save.GetVoidCatDead() && page2.saveGameData.karmaCap < 10) self.sceneID = KarmaDeath;
 			else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = SelectEnding11Scene;
 			else if (save.deathPersistentSaveData.karmaCap == 10) self.sceneID = SelectKarma11Scene;
-			else if (save.GetEndingEncountered()) self.sceneID = SelectEndingScene;
+			else if (save.GetEndingEncountered() || save.GetVoidEndingTree()) self.sceneID = SelectEndingScene;
 			else if (save.GetVoidMeetMoon()) self.sceneID = SelectFPScene;
 			else if (save.deathPersistentSaveData.karmaCap >= 4) self.sceneID = SelectKarma5Scene;
 			//if none of them work, the default scene happens, which is default ready to play slugcat

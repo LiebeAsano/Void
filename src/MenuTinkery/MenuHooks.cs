@@ -92,7 +92,8 @@ public static class MenuHooks
 			SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
 			if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticDeath11;
 			else if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
-			else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticEnd11;
+            else if (save.GetVoidEndingTree()) self.sceneID = VoidEnums.SceneID.StaticEnd;
+            else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticEnd11;
 			else self.sceneID = VoidEnums.SceneID.StaticEnd;
 		}
 		orig(self);
@@ -116,7 +117,7 @@ public static class MenuHooks
 			&& page.slugcatNumber == VoidEnums.SlugcatID.Void
 			&& page.menu.manager.rainWorld is RainWorld rainWorld
 			&& rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, rainWorld.processManager.menuSetup, false) is SaveState save
-			&& (save.GetVoidCatDead() || save.GetEndingEncountered()))
+			&& (save.GetVoidCatDead() || save.GetEndingEncountered() || save.GetVoidEndingTree()))
 		{
 			self.circles.ForEach(ccircle => Array.ForEach(ccircle.circles, c => c.fade = 0));
 		}
@@ -127,7 +128,7 @@ public static class MenuHooks
 		orig(self, menu, owner, pageIndex, slugcatNumber);
 		if (slugcatNumber == VoidEnums.SlugcatID.Void
 			&& menu.manager.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, menu.manager.menuSetup, false) is SaveState save
-			&& (save.GetVoidCatDead() || save.GetEndingEncountered()))
+			&& (save.GetVoidCatDead() || save.GetEndingEncountered() || save.GetVoidEndingTree()))
 		{
 			var hud = self.hud;
 			//deleting things from manifesting is prone to null reference exceptions, game definitely doesn't think they don't exist

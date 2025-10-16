@@ -1,6 +1,7 @@
 ﻿using Menu;
 using On.Menu;
 using System;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 
 namespace VoidTemplate.MenuTinkery;
 
@@ -21,7 +22,7 @@ public static class CustomSleepMusic
 
         if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            if (self.IsSleepScreen && self.saveState.GetVoidMarkV3())
+            if (self.IsSleepScreen && (self.saveState.GetVoidMarkV3() || Karma11Update.VoidKarma11))
             {
                 self.soundLoop?.Destroy();
                 self.mySoundLoopID = VoidEnums.SoundID.SleepMarkSound;
@@ -38,7 +39,7 @@ public static class CustomSleepMusic
 
         if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            if (self.IsSleepScreen && self.saveState.GetVoidMarkV3() && self.soundLoop != null && self.mySoundLoopID != VoidEnums.SoundID.SleepMarkSound)
+            if (self.IsSleepScreen && (self.saveState.GetVoidMarkV3() || Karma11Update.VoidKarma11) && self.soundLoop != null && self.mySoundLoopID != VoidEnums.SoundID.SleepMarkSound)
             {
                 self.soundLoop.Destroy();
                 self.mySoundLoopID = VoidEnums.SoundID.SleepMarkSound;

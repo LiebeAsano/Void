@@ -52,7 +52,7 @@ public static class CustomSleepMusic
     {
         orig(self, sender, message);
 
-        if (message == "CONTINUE" && self.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
+        if ((message == "CONTINUE" || message == "EXIT") && self.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
             if (self.soundLoop != null && self.mySoundLoopID == VoidEnums.SoundID.SleepMarkSound)
             {

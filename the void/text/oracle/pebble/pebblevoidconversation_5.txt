@@ -3,5 +3,5 @@ SPECEVENT : GiveMarkV3
 60 : Are you feeling better? Changes can become apparent over time. : 60
 0 : In any case, I have done everything I can. : 120
 0 : You are free, probably really free, unlike me... : 180
-0 : If you wish to leave my complex, head west through the Farm Arrays, your skills will allow you to climb over the Retaining Wall with out problems. : 120
+0 : If you wish to leave my complex, head west through the Farm Arrays, your skills will allow you to climb over the Retaining Wall without any problems. : 120
 0 : And if you visit NSH, warn him that his next messenger will be killed on the spot, I am losing my patience talking to rats. : 120

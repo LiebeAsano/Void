@@ -7,6 +7,7 @@ using RWCustom;
 using System;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
+using VoidTemplate.PlayerMechanics.Karma11Foundation;
 using static VoidTemplate.Useful.Utils;
 
 
@@ -34,7 +35,7 @@ namespace VoidTemplate
         {
 			if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
 			{
-				MenuScene.SceneID sceneID = null;
+                MenuScene.SceneID sceneID = null;
 				if (self.IsSleepScreen && self.saveState.GetVoidMarkV3())
 				{
 					sceneID = VoidEnums.SceneID.SleepSceneMark;

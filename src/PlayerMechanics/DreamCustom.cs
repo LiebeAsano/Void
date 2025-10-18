@@ -1,4 +1,6 @@
-﻿namespace VoidTemplate.PlayerMechanics;
+﻿using VoidTemplate.PlayerMechanics.Karma11Features;
+
+namespace VoidTemplate.PlayerMechanics;
 
 public static class DreamCustom
 {
@@ -62,7 +64,8 @@ public static class DreamCustom
 			{
 				case 10:
 					{
-						saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
+						if (Karma11Update.VoidKarma11)
+							saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
 						break;
 					}
 			}

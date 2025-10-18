@@ -35,7 +35,7 @@ public static class Karma11Symbol
 	{
 		if (k.x == 10)
 		{
-			string res = $"atlas-void/KarmaToken{currentKarmaTokens}" + (small ? "Small" : "Big");
+			string res = $"atlas-void/KarmaToken{Mathf.Clamp(currentKarmaTokens, 0, 5)}" + (small ? "Small" : "Big");
 			return res;
 		}
 		return orig(small, k);

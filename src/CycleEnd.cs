@@ -19,16 +19,19 @@ public static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
     {
-        if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
+		if (self.manager.upcomingProcess == null)
 		{
-			self.GoToDeathScreen();
-			return;
+			if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
+			{
+				self.GoToDeathScreen();
+				return;
+			}
+			if (self.IsVoidStoryCampaign() && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) && OptionAccessors.PermaDeath && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && !self.GetStorySession.saveState.GetVoidMarkV3())
+			{
+				self.GoToRedsGameOver();
+				return;
+			}
 		}
-		if (self.IsVoidStoryCampaign() && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) && OptionAccessors.PermaDeath && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && !self.GetStorySession.saveState.GetVoidMarkV3())
-		{
-            self.GoToRedsGameOver();
-			return;
-        }
         orig(self, malnourished, fromWarpPoint);
 
     }

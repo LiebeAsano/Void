@@ -82,10 +82,9 @@ public static class SwallowObjects
                 else if (self.KarmaCap != 10 && !self.IsViy() && !Karma11Update.VoidKarma11)
                 {
                     if (self.room != null && self.grasps[grasp].grabbed is PebblesPearl && hasMark &&
-                        self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior behavior && behavior.action != SSOracleBehavior.Action.ThrowOut_ThrowOut && behavior.action != SSOracleBehavior.Action.ThrowOut_KillOnSight))
+                        self.room.physicalObjects[1].Find(i => i is Oracle o && o.oracleBehavior is SSOracleBehavior) is Oracle oracle && (oracle.oracleBehavior as SSOracleBehavior).action != SSOracleBehavior.Action.ThrowOut_ThrowOut && (oracle.oracleBehavior as SSOracleBehavior).action != SSOracleBehavior.Action.ThrowOut_KillOnSight)
                     {
-                        ((self.room.updateList.First(i => i is Oracle) as Oracle)
-                        .oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
+                        (oracle.oracleBehavior as SSOracleBehavior).EatPearlsInterrupt();
                     }
                 }
             }
@@ -181,12 +180,16 @@ public static class SwallowObjects
         }
         AbstractPhysicalObject potentialPearl = self.objectInStomach;
         orig(self);
-        SSOracleBehavior oracleBehavior = null;
-        if (potentialPearl != null && potentialPearl.realizedObject is PebblesPearl && self.IsVoid() && self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && self.room != null && 
-            self.abstractCreature.world.game.session is StoryGameSession session && session.saveState.deathPersistentSaveData.theMark &&
-            self.room.updateList.Any(i => i is Oracle oracle && oracle.oracleBehavior is SSOracleBehavior behavior && behavior.action != SSOracleBehavior.Action.ThrowOut_ThrowOut && (oracleBehavior = behavior).action != SSOracleBehavior.Action.ThrowOut_KillOnSight))
+        if (potentialPearl != null && potentialPearl.realizedObject is DataPearl && self.IsVoid() && self.room != null &&
+            self.abstractCreature.world.game.session is StoryGameSession session && self.room.physicalObjects[1].Find(i => i is Oracle) is Oracle oracle)
         {
-            oracleBehavior.RegurgitatePearlsInterrupt();
+            if (oracle.oracleBehavior is SSOracleBehavior pebbles)
+            {
+                if (potentialPearl.realizedObject is PebblesPearl && self.KarmaCap != 10 && !Karma11Update.VoidKarma11 && session.saveState.deathPersistentSaveData.theMark && pebbles.action != SSOracleBehavior.Action.ThrowOut_ThrowOut && pebbles.action != SSOracleBehavior.Action.ThrowOut_KillOnSight)
+                    pebbles.RegurgitatePearlsInterrupt();
+            }
+            else if (oracle.oracleBehavior is SLOracleBehavior moon)
+                moon.RegurgitatePearlsInterrupt();
         }
     }
 
@@ -309,7 +312,7 @@ public static class SwallowObjects
                     {
                         (self.graphicsModule as PlayerGraphics).head.vel += Custom.RNV() * 4f;
                     }
-                    if (self.maulTimer > 10 && self.maulTimer % 8 == 3) 
+                    if (self.maulTimer > 10 && self.maulTimer % 8 == 3)
                     {
                         self.mainBodyChunk.pos += Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * 4f;
                         self.grasps[graspIndex].grabbedChunk.vel += Custom.DirVec(vector, self.mainBodyChunk.pos) * 0.9f / self.grasps[graspIndex].grabbedChunk.mass;
@@ -409,8 +412,8 @@ public static class SwallowObjects
                     self.objectInStomach = null;
                 }
             }
-        } 
-        
+        }
+
     }
 
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)

@@ -19,18 +19,18 @@ namespace VoidTemplate.Oracles;
 
 static class OracleHooks
 {
-	public static void Hook()
-	{
+    public static void Hook()
+    {
         //new Hook(typeof(OverseerGraphics).GetProperty(nameof(OverseerGraphics.MainColor)).GetGetMethod(), CustomColor);
         On.StoryGameSession.ctor += StoryGameSession_ctor;
         On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
-		On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
+        On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
         On.SSOracleBehavior.SpecialEvent += SSOracleBehavior_SpecialEvent;
         On.SSOracleBehavior.PebblesConversation.AddEvents += PebblesConversation_AddEvents;
         On.SSOracleBehavior.ThrowOutBehavior.Update += ThrowOutBehavior_Update;
         //On.SSOracleBehavior.Update += SSOralceBehavior_Update;
         //IL.SSOracleBehavior.Update += ILSSOracleBehavior_Update;
-	}
+    }
 
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
@@ -179,9 +179,9 @@ static class OracleHooks
             if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
             {
                 var saveState = self.oracle.room.game.GetStorySession.saveState;
-                if ((self.currSubBehavior is SSOracleBehavior.SSSleepoverBehavior || self.currSubBehavior is SSOracleBehavior.ThrowOutBehavior) 
-                    && self.pearlConversation == null 
-                    && ((VoidPearl(self.oracle.room) is not null && RotPearl(self.oracle.room) is not null && saveState.GetVoidQuest() && !saveState.GetVoidPearl() && !saveState.GetRotPearl()) 
+                if ((self.currSubBehavior is SSOracleBehavior.SSSleepoverBehavior || self.currSubBehavior is SSOracleBehavior.ThrowOutBehavior)
+                    && self.pearlConversation == null
+                    && ((VoidPearl(self.oracle.room) is not null && RotPearl(self.oracle.room) is not null && saveState.GetVoidQuest() && !saveState.GetVoidPearl() && !saveState.GetRotPearl())
                     || (VoidPearl(self.oracle.room) is not null && saveState.GetVoidQuest() && !saveState.GetVoidPearl())
                     || (RotPearl(self.oracle.room) is not null && saveState.GetVoidQuest() && !saveState.GetRotPearl())
                     || self.timeSinceSeenPlayer < 0))
@@ -190,7 +190,7 @@ static class OracleHooks
                 }
                 self.playerOutOfRoomCounter = 0;
             }
-            
+
         }
         else
         {
@@ -211,30 +211,30 @@ static class OracleHooks
     #endregion
 
     public static void EatPearlsInterrupt(this SSOracleBehavior self)
-	{
-		if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
-		if (self.conversation != null)
-		{
-			self.conversation.paused = true;
-			self.restartConversationAfterCurrentDialoge = true;
-		}
-		var savestate = self.oracle.room.game.GetStorySession.saveState;
-		var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
-		if (amountOfEatenPearls == 6 && !savestate.GetVoidMeetMoon())
-		{
+    {
+        if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
+        if (self.conversation != null)
+        {
+            self.conversation.paused = true;
+            self.restartConversationAfterCurrentDialoge = true;
+        }
+        var savestate = self.oracle.room.game.GetStorySession.saveState;
+        var amountOfEatenPearls = savestate.GetPebblesPearlsEaten();
+        if (amountOfEatenPearls == 6 && !savestate.GetVoidMeetMoon())
+        {
             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
-			self.getToWorking = 1f;
-		}
-		else if (amountOfEatenPearls < 12)
-		{
+            self.getToWorking = 1f;
+        }
+        else if (amountOfEatenPearls < 12)
+        {
             self.dialogBox.Interrupt(self.Translate(
                 savestate.GetVoidMeetMoon()
                     ? OracleConversation.eatInterruptMessages6Step[amountOfEatenPearls]
-					: OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
-			savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
-		}
+                    : OracleConversation.eatInterruptMessages[amountOfEatenPearls]), 10);
+            savestate.SetPebblesPearlsEaten(savestate.GetPebblesPearlsEaten() + 1);
+        }
 
-	}
+    }
 
     public static void RegurgitatePearlsInterrupt(this SSOracleBehavior self)
     {
@@ -261,22 +261,36 @@ static class OracleHooks
 
     }
 
-    private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
-	{
-		orig(self);
-		if (OracleConversation.PebbleVoidConversation.Contains(self.id))
-		{
-    //#warning may be elegible for deletion
-          
-			self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
+    public static void RegurgitatePearlsInterrupt(this SLOracleBehavior self)
+    {
+        if (self is SLOracleBehaviorHasMark hasMark)
+        {
+            if (hasMark.currentConversation != null)
+            {
+                hasMark.currentConversation.paused = true;
+                hasMark.resumeConversationAfterCurrentDialoge = true;
+            }
+            self.dialogBox.Interrupt("Харэ пёрлы жрать!!!", 10);
+        }
+        SLOracle.MoonVoice(self);
+    }
 
-			var path = AssetManager.ResolveFilePath($"text/oracle/pebble/{self.id.value.ToLower()}.txt");
+    private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)
+    {
+        orig(self);
+        if (OracleConversation.PebbleVoidConversation.Contains(self.id))
+        {
+            //#warning may be elegible for deletion
+
+            self.events.Add(new SSOracleBehavior.PebblesConversation.PauseAndWaitForStillEvent(self, self.convBehav, 30));
+
+            var path = AssetManager.ResolveFilePath($"text/oracle/pebble/{self.id.value.ToLower()}.txt");
 
             if (self.owner.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                 path = AssetManager.ResolveFilePath($"text/oracle/pebble11/{self.id.value.ToLower()}.txt");
-			ConversationParser.GetConversationEvents(self, path);
-		}
-	}
+            ConversationParser.GetConversationEvents(self, path);
+        }
+    }
 
     private static void SSOracleBehavior_NewAction(On.SSOracleBehavior.orig_NewAction orig, SSOracleBehavior self, SSOracleBehavior.Action nextAction)
     {
@@ -313,22 +327,22 @@ static class OracleHooks
         }
     }
 
-	private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
-	{
+    private static void SSOracleBehavior_SeePlayer(On.SSOracleBehavior.orig_SeePlayer orig, SSOracleBehavior self)
+    {
         if (self?.oracle?.room?.game?.GetStorySession?.saveState == null)
         {
             orig(self);
             return;
         }
         if (self.oracle.room.game.session.characterStats.name == VoidEnums.SlugcatID.Void
-			&& self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
-		{
+            && self.oracle.room.game.Players.Exists(x => x.realizedCreature is Player))
+        {
             if (self.timeSinceSeenPlayer < 0) self.timeSinceSeenPlayer = 0;
             var saveState = self.oracle.room.game.GetStorySession.saveState;
-			var miscData = saveState.miscWorldSaveData;
-			var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
-				? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
-				: -1;
+            var miscData = saveState.miscWorldSaveData;
+            var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
+                ? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
+                : -1;
             loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
             if (VoidPearl(self.oracle.room) is not null && RotPearl(self.oracle.room) is not null)
             {
@@ -344,9 +358,9 @@ static class OracleHooks
                 saveState.SetRotPearl(true);
             }
             switch (miscData.SSaiConversationsHad)
-			{
+            {
                 case 0:
-					{
+                    {
                         saveState.EnlistDreamIfNotSeen(Dream.Pebble);
                         miscData.SSaiConversationsHad++;
                         fivePebblesGetOut = false;
@@ -356,9 +370,9 @@ static class OracleHooks
                         self.SlugcatEnterRoomReaction();
                         self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
                         break;
-					}
-				case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
-					{
+                    }
+                case > 0 when saveState.cycleNumber - saveState.GetLastMeetCycles() <= 0:
+                    {
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                         {
                             self.NewAction(SSOracleBehavior.Action.ThrowOut_KillOnSight);
@@ -440,7 +454,7 @@ static class OracleHooks
                         break;
                     }
                 case 3:
-					{
+                    {
                         if (saveState.GetVoidPearl() && saveState.GetRotPearl())
                         {
                             if (VoidPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractVoidPearl && RotPearl(self.oracle.room) is DataPearl.AbstractDataPearl abstractRotPearl2)
@@ -590,35 +604,35 @@ static class OracleHooks
                         break;
                     }
                 case > 4:
-					{
+                    {
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);
                         self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
-						break;
-					}
-				default:
-					{
-						if (self.action != MeetVoid_Init)
-						{ 
-							saveState.SetLastMeetCycles(saveState.cycleNumber);
-							if (self.currSubBehavior.ID != VoidTalk)
-							{
-								miscData.SSaiConversationsHad++;
+                        break;
+                    }
+                default:
+                    {
+                        if (self.action != MeetVoid_Init)
+                        {
+                            saveState.SetLastMeetCycles(saveState.cycleNumber);
+                            if (self.currSubBehavior.ID != VoidTalk)
+                            {
+                                miscData.SSaiConversationsHad++;
                                 fivePebblesGetOut = false;
                                 self.NewAction(MeetVoid_Init);
                                 if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                     self.NewAction(self.afterGiveMarkAction);
                                 self.SlugcatEnterRoomReaction();
-								self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
-							}
-						}
+                                self.movementBehavior = SSOracleBehavior.MovementBehavior.Talk;
+                            }
+                        }
                         break;
-					}
-			}
-		}
-		else
-		{
-			orig(self);
+                    }
+            }
+        }
+        else
+        {
+            orig(self);
         }
     }
 
@@ -682,8 +696,8 @@ static class OracleHooks
         orig(self);
         if (self.oracle.room.game.StoryCharacter == VoidEnums.SlugcatID.Void)
         {
-            if (self.owner is SSOracleBehavior self2 && 
-               (self.owner.throwOutCounter == 700 || 
+            if (self.owner is SSOracleBehavior self2 &&
+               (self.owner.throwOutCounter == 700 ||
                 self.owner.throwOutCounter == 980 ||
                 self.owner.throwOutCounter == 1530))
             {

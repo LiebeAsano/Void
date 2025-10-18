@@ -1251,7 +1251,7 @@ public static class SLOracle
                 }*/
         }
     }
-    private static void MoonVoice(SLOracleBehaviorHasMark self)
+    internal static void MoonVoice(SLOracleBehavior self)
     {
         SoundID randomTalk = SoundID.SL_AI_Talk_1;
         switch (UnityEngine.Random.Range(0, 3))

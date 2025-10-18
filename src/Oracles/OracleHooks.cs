@@ -270,9 +270,20 @@ static class OracleHooks
                 hasMark.currentConversation.paused = true;
                 hasMark.resumeConversationAfterCurrentDialoge = true;
             }
+            SLOracle.MoonVoice(hasMark);
             self.dialogBox.Interrupt("Харэ пёрлы жрать!!!", 10);
         }
-        SLOracle.MoonVoice(self);
+        else if (self is SLOracleBehaviorNoMark)
+        {
+            self.AirVoice(UnityEngine.Random.Range(0, 5) switch
+            {
+                0 => SoundID.SL_AI_Talk_1,
+                1 => SoundID.SL_AI_Talk_2,
+                2 => SoundID.SL_AI_Talk_3,
+                3 => SoundID.SL_AI_Talk_4,
+                _ => SoundID.SL_AI_Talk_5
+            });
+        }
     }
 
     private static void PebblesConversation_AddEvents(On.SSOracleBehavior.PebblesConversation.orig_AddEvents orig, SSOracleBehavior.PebblesConversation self)

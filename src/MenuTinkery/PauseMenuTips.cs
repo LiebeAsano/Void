@@ -41,7 +41,7 @@ public class PauseMenuTips
                 {
                     self.controlLabels[i].RemoveSprites();
                     self.RemoveSubObject(self.controlLabels[i]);
-                    self.controlLabels[i].label.text = "";
+                    self.controlLabels[i] = null;
                 }
             }
             self.pickupButtonInstructions.text = $"{menu.Translate("Pick up / Eat / Maul button interactions:") + "\r\n\r\n"}";

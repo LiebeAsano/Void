@@ -1,7 +1,8 @@
 Template: iw_settingstemplate_surface
-WaveSpeed: 0.2399284
-WaveLength: 0.8699642
-WaveAmplitude: 0.000788346
+DangerType: Blizzard
+WaveSpeed: 0.356248
+WaveLength: 0.928124
+WaveAmplitude: 5.605194E-45
 SecondWaveLength: 0.1666667
 SecondWaveAmplitude: 0
 Palette: 202

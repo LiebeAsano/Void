@@ -1,9 +1,4 @@
 Template: iw_settingstemplate_abyss
-WaveSpeed: 0.5
-WaveLength: 1
-WaveAmplitude: 0
-SecondWaveLength: 0.1666667
-SecondWaveAmplitude: 0
 Effects: VoidMelt-0.03866627-20-20, 
 PlacedObjects: LightFixture><226.2844><3786.64><RedLight~17.32051~-10~77, 
 AmbientSounds: OMNI><SO_WAT-DripTap.ogg><728.6804><531.3173><0.4509403><1, OMNI><AM_ENV-SubTerr.ogg><532.1444><532.9297><0.407202><1, OMNI><AM_SUB-BlankState.ogg><348.9919><527.0154><0.3272079><1, 

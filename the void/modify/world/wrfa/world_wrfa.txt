@@ -23,7 +23,10 @@
 [REPLACE]WRFA_F02 : WRFA_SK03, WRFA_A08, WRFA_C06GW, WRFA_B04, WRFA_A09
 
 [FINDLINESTART]WRFA_F01 : 5-Salamander
-[REPLACE]WRFA_F01 : 7-Salamander, 4-Barnacle-5
+[REPLACE]WRFA_F01 : 6-Salamander, 4-Barnacle-5
+
+[FINDLINESTART]WRFA_H01 : 3-Salamander
+[REPLACE]WRFA_H01 : 3-Cicada-2, 4-Salamander, 6-TentaclePlant, 7-TentaclePlant
 
 [MERGE]
 

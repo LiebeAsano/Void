@@ -58,13 +58,36 @@ namespace VoidTemplate
 
         private static void OE_GourmandEnding_Update(ILContext il)
         {
-            ILCursor c = new(il);
+            ILCursor c1 = new(il);
+            if (c1.TryGotoNext(MoveType.After, x => x.MatchStfld<MSCRoomSpecificScript.OE_GourmandEnding>(nameof(MSCRoomSpecificScript.OE_GourmandEnding.spawnedNPCs))))
+            {
+                c1.Emit(OpCodes.Ldarg_0);
+                c1.EmitDelegate((MSCRoomSpecificScript.OE_GourmandEnding self) =>
+                {
+                    if (self.room.game.IsVoidStoryCampaign())
+                    {
+                        AbstractCreature npcGourmand = new(self.room.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.SlugNPC), null, self.room.GetWorldCoordinate(new Vector2(350, 175)), self.room.game.GetNewID());
+                        (npcGourmand.state as PlayerNPCState).forceFullGrown = true;
+                        (npcGourmand.state as PlayerNPCState).slugcatCharacter = MoreSlugcatsEnums.SlugcatStatsName.Gourmand;
+                        new Player(npcGourmand, npcGourmand.world)
+                        {
+                            SlugCatClass = MoreSlugcatsEnums.SlugcatStatsName.Gourmand,
+                            standing = true,
+                            bodyMode = Player.BodyModeIndex.Stand
+                        };
+                        self.room.abstractRoom.AddEntity(npcGourmand);
+                        npcGourmand.RealizeInRoom();
+                        (npcGourmand.abstractAI as SlugNPCAbstractAI).toldToStay = npcGourmand.pos;
+                    }
+                });
+            }
+            ILCursor c2 = new(il);
             for (int i = 0; i < 3; i++)
             {
-                if (c.TryGotoNext(MoveType.After, x => x.MatchCall(typeof(ExtEnum<SlugcatStats.Name>).GetMethod("op_Equality"))))
+                if (c2.TryGotoNext(MoveType.After, x => x.MatchCall(typeof(ExtEnum<SlugcatStats.Name>).GetMethod("op_Equality"))))
                 {
-                    c.Emit(OpCodes.Ldarg_0);
-                    c.EmitDelegate((bool orig, MSCRoomSpecificScript.OE_GourmandEnding self) =>
+                    c2.Emit(OpCodes.Ldarg_0);
+                    c2.EmitDelegate((bool orig, MSCRoomSpecificScript.OE_GourmandEnding self) =>
                     {
                         return orig || self.room.game.IsVoidStoryCampaign();
                     });
@@ -72,16 +95,20 @@ namespace VoidTemplate
                 }
                 else logerr($"{nameof(VoidTemplate)}.{nameof(RoomHooks)}.{nameof(OE_GourmandEnding_Update)}: {i} match error");
             }
-            if (c.TryGotoNext(MoveType.Before, x => x.MatchCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToRedsGameOver))))
+            if (c2.TryGotoNext(MoveType.Before, x => x.MatchCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToRedsGameOver))))
             {
-                c.Emit(OpCodes.Dup);
-                c.EmitDelegate((RainWorldGame game) =>
+                c2.Emit(OpCodes.Dup);
+                c2.EmitDelegate((RainWorldGame game) =>
                 {
                     if (game.IsVoidStoryCampaign() && GameFeatures.IntroScene.TryGet(game, out var outro))
                     {
                         //game.manager.nextSlideshow = outro;
                         RainWorldGame.ForceSaveNewDenLocation(game, "OE_FINAL03", false);
                         game.GetStorySession.saveState.SetVoidEndingTree(true);
+                        for (int i = 0; i < 15; i++)
+                        {
+                            game.GetStorySession.playerSessionRecords[0].kills.Add(new(new(CreatureTemplate.Type.Slugcat, AbstractPhysicalObject.AbstractObjectType.Creature, 0), new(-1, -1), false));
+                        }
                     }
                 });
             }

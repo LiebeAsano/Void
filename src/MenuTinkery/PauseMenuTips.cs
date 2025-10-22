@@ -45,10 +45,10 @@ public class PauseMenuTips
                 }
             }
             self.pickupButtonInstructions.text = $"{menu.Translate("Pick up / Eat / Maul button interactions:") + "\r\n\r\n"}";
-            self.pickupButtonInstructions.text += "  - " + menu.Translate("Tap to pick up object") + "\r\n";
-            self.pickupButtonInstructions.text += "  - " + menu.Translate("Hold to eat / swallow object / maul stunned creature") + "\r\n";
+            self.pickupButtonInstructions.text += "  - " + menu.Translate("Tap to pick up objects") + "\r\n";
+            self.pickupButtonInstructions.text += "  - " + menu.Translate("Hold to eat / swallow objects / maul stunned creature") + "\r\n";
             self.pickupButtonInstructions.text += "  - " + menu.Translate("Press while holding down direction to drop object") + "\r\n";
-            self.pickupButtonInstructions.text += "  - " + menu.Translate("Double tap to switch hands") + "\r\n";
+            self.pickupButtonInstructions.text += "  - " + menu.Translate("Double tap to switch objects in paws") + "\r\n";
             self.pickupButtonInstructions.text += $"{"\r\n\r\n" + menu.Translate("Jump button interactions:") + "\r\n\r\n"}";
             self.pickupButtonInstructions.text += "  - " + menu.Translate("Press while climbing wall + holding up / down direction to jump up / flip") + "\r\n";
             if (pause.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap >= 4)

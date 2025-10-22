@@ -13,6 +13,24 @@ The soul is crying out for new wanderings, but the body still clings to the past
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one.|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового.
 The Void Sea no longer shackles you, and your past is left behind.<LINE>You are ready to make new journeys and explore this vast world.|Пустотное Море больше не сковывает тебя, а твоё прошлое осталось позади.<LINE>Ты готов отправится к новым странствиям и исследовать этот необъятный мир.
 
+Pick up / Eat / Maul button interactions:|Действия кнопки Взять / Съесть / Растерзать:
+Tap to pick up objects|Нажми, чтобы взять предметы
+Hold to eat / swallow objects / maul stunned creature|Удерживай, чтобы есть / заглатывать предметы / растерзать оглушённое существо
+Press while holding down direction to drop object|Нажми, удерживая вниз, чтобы положить предмет
+Double tap to switch objects in paws|Нажми дважды, чтобы сменить предметы в лапах
+
+Jump button interactions:|Действия кнопки Прыгнуть:
+Press while climbing wall + holding up / down direction to jump up / flip|Нажми во время лазания по стене + удерживая направление вверх / вниз, чтобы подпрыгнуть / перевернуться
+Hold while climbing ceil + press left / right direction to flip|Удерживай во время лазания по потолку + нажмите влево / вправо, чтобы перевернуться
+
+Throw button interactions:|Действия кнопки Бросить:
+Press while climbing ceil + holding jump to throw down|Нажми во время лазания по потолку + удерживая прыжок, чтобы бросить вниз
+
+Special button interactions:|Действия кнопки Особенность:
+Tap to switch climbing / running mode|Нажми, чтобы переключить режим лазания / бега
+Hold while climbing wall to charge wall jump|Удерживай во время лазания по стене, чтобы зарядить прыжок
+
+
 //REGIONS
 
 Data Archives|Архивы Данных
@@ -243,6 +261,11 @@ Do you have something interesting to show me?|У тебя есть что-то �
 
 I am sorry, friend, but I cannot remember of any new stories I can tell you.|Мне жаль, дружок, но я не могу вспомнить ни одной новой истории, которую могла бы тебе расскать.
 I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.|Мне неловко просить тебя, но не мог бы ты попросить у Пяти Галек ещё один нейрон, я думаю, он не будет против.
+
+
+
+
+
 
 The Viy|Вий
 THE VIY|ВИЙ

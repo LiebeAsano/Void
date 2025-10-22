@@ -86,18 +86,19 @@ public static class MainMenuScene
         {
             SaveManager.ExternalSaveData.VoidDead = true;
             SaveManager.ExternalSaveData.VoidKarma11 = true;
+            SaveManager.ExternalSaveData.ViyUnlocked = true;
         }
-        if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11))
+        if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked))
         {
-            if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
             else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended)
                 scene = VoidEnums.SceneID.MainMenuSceneMonkSurv;
-            else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneMonkHunt;
-            else if (SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            else if (SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneSurvHunt;
-            else if (SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            else if (SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneHunt;
             else if (SaveManager.ExternalSaveData.MonkAscended)
                 scene = VoidEnums.SceneID.MainMenuSceneMonk;

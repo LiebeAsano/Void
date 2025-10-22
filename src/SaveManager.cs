@@ -339,6 +339,13 @@ public static class SaveManager
             set => SetData(VoidKarma11String, value);
         }
 
+        private const string ViyUnlockedString = "viyunlocked";
+        public static bool ViyUnlocked
+        {
+            get => GetData(ViyUnlockedString, false);
+            set => SetData(ViyUnlockedString, value);
+        }
+
         private const string ViyLungExtendedString = "viylungextended";
         public static bool ViyLungExtended
         {

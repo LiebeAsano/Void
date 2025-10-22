@@ -157,8 +157,10 @@ public static class Grabability
                         if (self is Player)
                         {
                             self.stun = 20;
+                            chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
                         }
-                        chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
+                        if (self is Cicada)
+                            chunk.mass = isGrabbedByVoidViy && self.dead ? 0.05f : originalMass;
                     }
                     else if (self is Watcher.BigMoth bigMoth && bigMoth.Small)
                     {

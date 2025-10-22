@@ -1,6 +1,6 @@
 {"frames": {
 
-"Mimicstarfish_Icon.png":
+"LWMimicstarfish_Icon.png":
 {
 	"frame": {"x":0,"y":0,"w":24,"h":28},
 	"rotated": false,

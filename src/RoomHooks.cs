@@ -66,7 +66,7 @@ namespace VoidTemplate
                 {
                     if (self.room.game.IsVoidStoryCampaign())
                     {
-                        AbstractCreature npcGourmand = new(self.room.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.SlugNPC), null, self.room.GetWorldCoordinate(new Vector2(350, 175)), self.room.game.GetNewID());
+                        AbstractCreature npcGourmand = new(self.room.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.SlugNPC), null, self.room.GetWorldCoordinate(new Vector2(325, 175)), self.room.game.GetNewID());
                         (npcGourmand.state as PlayerNPCState).forceFullGrown = true;
                         (npcGourmand.state as PlayerNPCState).slugcatCharacter = MoreSlugcatsEnums.SlugcatStatsName.Gourmand;
                         new Player(npcGourmand, npcGourmand.world)
@@ -75,12 +75,15 @@ namespace VoidTemplate
                             standing = true,
                             bodyMode = Player.BodyModeIndex.Stand
                         };
+                        npcGourmand.abstractAI.RealAI = new SlugNPCAI(npcGourmand, npcGourmand.world);
                         self.room.abstractRoom.AddEntity(npcGourmand);
                         npcGourmand.RealizeInRoom();
                         (npcGourmand.abstractAI as SlugNPCAbstractAI).toldToStay = npcGourmand.pos;
                     }
                 });
             }
+            else LogExErr("Error in IL hook. Gourmand won't able to appear.");
+
             ILCursor c2 = new(il);
             for (int i = 0; i < 3; i++)
             {

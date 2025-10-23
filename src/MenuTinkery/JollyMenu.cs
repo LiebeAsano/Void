@@ -171,9 +171,9 @@ public static class JollyMenu
         }
     }
 
-    private static void StoryGameSession_CreateJollySlugStats(On.StoryGameSession.orig_CreateJollySlugStats orig, StoryGameSession self, bool m)
+    private static void StoryGameSession_CreateJollySlugStats(On.StoryGameSession.orig_CreateJollySlugStats orig, StoryGameSession self, bool m, bool malnourishedByCreature, int playerNumber)
     {
-        orig(self, m);
+        orig(self, m, malnourishedByCreature, playerNumber);
         PlayerState playerState;
         SlugcatStats slugcatStats = new(self.saveState.saveStateNumber, m);
         for (int i = 0; i < self.game.world.game.Players.Count; i++)

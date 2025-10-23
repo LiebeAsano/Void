@@ -419,7 +419,7 @@ public static class SSOracleBehaviorUpdate
                                 self.SMCorePearl = (self.oracle.room.updateList[num3] as SpearMasterPearl);
                                 if (AbstractPhysicalObject.UsesAPersistantTracker(self.SMCorePearl.abstractPhysicalObject))
                                 {
-                                    (self.oracle.room.game.session as StoryGameSession).AddNewPersistentTracker(self.SMCorePearl.abstractPhysicalObject);
+                                    (self.oracle.room.game.session as StoryGameSession).AddNewPersistentTracker(self.SMCorePearl.abstractPhysicalObject, self.oracle.room.world);
                                     break;
                                 }
                                 break;

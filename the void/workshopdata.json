@@ -8,7 +8,14 @@
   "RequirementNames": "More Slugcats Expansion,SlugBase",
   "Authors": "Liebe Asano",
   "Visibility": "Friends-only",
-  "Tags": [],
+  "Tags": [
+    "Regions",
+    "Campaigns",
+    "Creatures",
+    "Game Mechanics",
+    "Items",
+    "Custom Slugcat"
+  ],
   "WorkshopID": 3343761227,
   "UploadFilesOnly": true,
   "UploadThumbnail": false

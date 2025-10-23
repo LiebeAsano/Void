@@ -69,18 +69,38 @@ public static class Grabability
 
     public static bool CanOneHandGrabVoidViy(Player self, PhysicalObject obj)
     {
-        return self.AreVoidViy() && (obj is LanternMouse || obj is Watcher.Frog || obj is Watcher.Rat || obj is Watcher.Barnacle barnacle && !barnacle.hasShell);
+        if (self == null || obj == null)
+            return false;
+
+        return self.AreVoidViy() && (obj is LanternMouse || obj is Watcher.Frog || obj is Watcher.Rat ||
+               (obj is Watcher.Barnacle barnacle && !barnacle.hasShell));
     }
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {
-        if (CanOneHandGrabVoidViy(self, obj)) 
+        if (self == null || obj == null)
+            return orig(self, obj);
+
+        if (CanOneHandGrabVoidViy(self, obj))
             return Player.ObjectGrabability.OneHand;
-        if (self.AreVoidViy() && (obj is PoleMimic || obj is TentaclePlant))
-            return Player.ObjectGrabability.CantGrab;
-        if (self.AreVoidViy() && (obj is Cicada 
-            || (obj is Player player && player != self && !player.AreVoidViy() && !player.room.game.IsArenaSession) 
-            || obj is Watcher.BigMoth bigMoth && bigMoth.Small))
-            return Player.ObjectGrabability.TwoHands;
+
+        if (self.AreVoidViy())
+        {
+            if (obj is PoleMimic || obj is TentaclePlant)
+                return Player.ObjectGrabability.CantGrab;
+
+            if (obj is Cicada)
+                return Player.ObjectGrabability.TwoHands;
+
+            if (obj is Player player && player != self && !player.AreVoidViy())
+            {
+                if (player.room?.game?.IsArenaSession != true)
+                    return Player.ObjectGrabability.TwoHands;
+            }
+
+            if (obj is Watcher.BigMoth bigMoth && bigMoth.Small)
+                return Player.ObjectGrabability.TwoHands;
+        }
+
         return orig(self, obj);
     }
 
@@ -88,6 +108,12 @@ public static class Grabability
 
     private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
     {
+        if (self == null || self.slatedForDeletetion || self.room == null)
+        {
+            orig(self, eu);
+            return;
+        }
+
         orig(self, eu);
 
         bool isGrabbedByVoidViy = false;
@@ -170,7 +196,7 @@ public static class Grabability
                     {
                         chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
                     }
-                    else if (self is JetFish)
+                    else if (self is JetFish )
                     {
                         chunk.mass = isGrabbedByVoidViy && !inWater ? originalMass * 0.5f : originalMass;
                     }

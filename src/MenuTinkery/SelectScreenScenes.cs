@@ -41,11 +41,11 @@ public static class SelectScreenScenes
 	}
 	private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
 	{
-		if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == VoidEnums.SlugcatID.Void &&
-			self.GetSaveGameData(self.slugcatPageIndex) is SlugcatSelectMenu.SaveGameData saveGameData)
+		if (self.slugcatPages[self.slugcatPageIndex].slugcatNumber == Void &&
+			self.GetSaveGameData(self.slugcatPageIndex) is not null)
 		{
             RainWorld rainWorld = self.manager.rainWorld;
-            SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.manager.menuSetup, false);
+            SaveState save = rainWorld.progression.GetOrInitiateSaveState(Void, null, self.manager.menuSetup, false);
             string text = "CONTINUE";
 			if (self.restartChecked) text = "NEW GAME";
 			else if (save.GetVoidCatDead()) text = "STATISTICS";

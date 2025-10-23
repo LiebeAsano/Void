@@ -1,11 +1,12 @@
 ﻿{
 	"id": "void.lwteam",
 	"name": "Rain world: Last Wish",
-	"version": "0.33.8",
+	"version": "0.33.9",
 	"authors": "LW team",
 	"description": "",
 	"requirements": ["moreslugcats", "watcher", "slime-cubed.slugbase", "crs", "regionkit", "pom", "fisobs"],
 	"requirements_names": ["More Slugcats Expansion", "The Watcher", "SlugBase", "Custom Regions Support", "RegionKit", "Placed Objects Manager", "Fisobs"],
+	"tags": [ "Regions", "Campaigns", "Creatures", "Game Mechainucs", "Items", "Custom Slugcats", "Base", "Downpour", "Watcher" ],
 	"priorities": ["henpemaz_rainmeadow"],
 	"priorities_names": ["Rain Meadow"]
 }

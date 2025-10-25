@@ -21,6 +21,7 @@ public static class PlayerSpawnManager
             && playerRoom.game.IsStorySession
             && playerRoom.game.GetStorySession.saveStateNumber == VoidEnums.SlugcatID.Void
             && playerRoom.game.GetStorySession.saveState is SaveState save
+            && !playerRoom.game.rainWorld.ExpeditionMode
             && !save.GetTeleportationDone())
         {
             if (playerRoom.game.IsVoidStoryCampaign())

@@ -169,7 +169,7 @@ namespace VoidTemplate
             if (self.game != null && self.game.session.characterStats.name == VoidEnums.SlugcatID.Void)
             {
                 SaveState saveState = self.game.GetStorySession.saveState;
-                if (!saveState.GetCeilClimbMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4))
+                if (!saveState.GetCeilClimbMessageShown() && self.game.Players.Exists(x => x.realizedCreature is Player p && p.IsVoid() && p.KarmaCap == 4 && !self.game.rainWorld.ExpeditionMode))
                 {
                     self.AddObject(new Tutorial(self,
                     [

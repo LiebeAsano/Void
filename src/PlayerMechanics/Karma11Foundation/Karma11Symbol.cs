@@ -43,20 +43,23 @@ public static class Karma11Symbol
 	}
 
     private static void SleepAndDeathScreen_ctor(On.Menu.SleepAndDeathScreen.orig_ctor orig, SleepAndDeathScreen self, ProcessManager manager, ProcessManager.ProcessID ID)
-    {
-		SaveState saveState = manager.rainWorld.progression.GetOrInitiateSaveState(SlugcatID.Void, null, manager.rainWorld.processManager.menuSetup, false);
-		if (saveState.saveStateNumber == SlugcatID.Void)
-		{
-			int maxFood = 9 + (saveState.deathPersistentSaveData.karmaCap == 10 ? saveState.GetVoidExtraFood() : 0);
-			int foodToHibernate = 6 + (saveState.GetVoidExtraFood() == 3 ? saveState.GetVoidFoodToHibernate() : 0);
-            if (ID == ProcessID.TokenDecrease
-				|| ID == ProcessManager.ProcessID.SleepScreen
-				&& maxFood == saveState.food + foodToHibernate - 1
-                && saveState.GetVoidFoodToHibernate() < 6
-				&& saveState.GetKarmaToken() > 0)
-				currentKarmaTokens++;
-		}
+    {	
 		orig(self, manager, ID);
+
+        if (self?.saveState == null) return;
+
+        if (self.saveState.saveStateNumber == SlugcatID.Void)
+        {
+            SaveState saveState = manager.rainWorld.progression.GetOrInitiateSaveState(SlugcatID.Void, null, manager.rainWorld.processManager.menuSetup, false);
+            int maxFood = 9 + (saveState.deathPersistentSaveData.karmaCap == 10 ? saveState.GetVoidExtraFood() : 0);
+            int foodToHibernate = 6 + (saveState.GetVoidExtraFood() == 3 ? saveState.GetVoidFoodToHibernate() : 0);
+            if (ID == ProcessID.TokenDecrease
+                || ID == ProcessManager.ProcessID.SleepScreen
+                && maxFood == saveState.food + foodToHibernate - 1
+                && saveState.GetVoidFoodToHibernate() < 6
+                && saveState.GetKarmaToken() > 0)
+                currentKarmaTokens++;
+        }
     }
 
     /// <summary>

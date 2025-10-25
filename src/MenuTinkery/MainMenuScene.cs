@@ -71,69 +71,72 @@ public static class MainMenuScene
     public static void ProcessManager_RequestMainProcessSwitch_ProcessID(On.ProcessManager.orig_RequestMainProcessSwitch_ProcessID orig, ProcessManager self, ProcessManager.ProcessID ID)
     {
         orig(self, ID);
-        MenuScene.SceneID scene;
-        scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
-        if (self.rainWorld.progression.miscProgressionData.monkEndingID == 1 && !SaveManager.ExternalSaveData.MonkAscended)
+        if (ID != VoidEnums.ProcessID.TokenDecrease && ID != ProcessManager.ProcessID.SleepScreen && ID != ProcessManager.ProcessID.DeathScreen)
         {
-            SaveManager.ExternalSaveData.MonkAscended = true;
-        }
-        if (self.rainWorld.progression.miscProgressionData.survivorEndingID == 1 && !SaveManager.ExternalSaveData.SurvAscended)
-        {
-            SaveManager.ExternalSaveData.SurvAscended = true;
-        }
-        SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menuSetup, false);
-        if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10)
-        {
-            SaveManager.ExternalSaveData.VoidDead = true;
-            SaveManager.ExternalSaveData.VoidKarma11 = true;
-            SaveManager.ExternalSaveData.ViyUnlocked = true;
-        }
-        if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked))
-        {
-            if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
-                scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
-            else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended)
-                scene = VoidEnums.SceneID.MainMenuSceneMonkSurv;
-            else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.ViyUnlocked)
-                scene = VoidEnums.SceneID.MainMenuSceneMonkHunt;
-            else if (SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
-                scene = VoidEnums.SceneID.MainMenuSceneSurvHunt;
-            else if (SaveManager.ExternalSaveData.ViyUnlocked)
-                scene = VoidEnums.SceneID.MainMenuSceneHunt;
-            else if (SaveManager.ExternalSaveData.MonkAscended)
-                scene = VoidEnums.SceneID.MainMenuSceneMonk;
-            else if (SaveManager.ExternalSaveData.SurvAscended)
-                scene = VoidEnums.SceneID.MainMenuSceneSurv;
-        }
-        else
-        {
-            if (ModManager.MMF)
+            MenuScene.SceneID scene;
+            scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
+            if (self.rainWorld.progression.miscProgressionData.monkEndingID == 1 && !SaveManager.ExternalSaveData.MonkAscended)
             {
-                if (scene == VoidEnums.SceneID.MainMenuSceneMonkSurvHunt 
-                    || scene == VoidEnums.SceneID.MainMenuSceneMonkSurv
-                    || scene == VoidEnums.SceneID.MainMenuSceneMonkHunt
-                    || scene == VoidEnums.SceneID.MainMenuSceneSurvHunt
-                    || scene == VoidEnums.SceneID.MainMenuSceneHunt
-                    || scene == VoidEnums.SceneID.MainMenuSceneMonk
-                    || scene == VoidEnums.SceneID.MainMenuSceneSurv)
+                SaveManager.ExternalSaveData.MonkAscended = true;
+            }
+            if (self.rainWorld.progression.miscProgressionData.survivorEndingID == 1 && !SaveManager.ExternalSaveData.SurvAscended)
+            {
+                SaveManager.ExternalSaveData.SurvAscended = true;
+            }
+            SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menuSetup, false);
+            if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10)
+            {
+                SaveManager.ExternalSaveData.VoidDead = true;
+                SaveManager.ExternalSaveData.VoidKarma11 = true;
+                SaveManager.ExternalSaveData.ViyUnlocked = true;
+            }
+            if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked))
+            {
+                if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
+                    scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
+                else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended)
+                    scene = VoidEnums.SceneID.MainMenuSceneMonkSurv;
+                else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.ViyUnlocked)
+                    scene = VoidEnums.SceneID.MainMenuSceneMonkHunt;
+                else if (SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
+                    scene = VoidEnums.SceneID.MainMenuSceneSurvHunt;
+                else if (SaveManager.ExternalSaveData.ViyUnlocked)
+                    scene = VoidEnums.SceneID.MainMenuSceneHunt;
+                else if (SaveManager.ExternalSaveData.MonkAscended)
+                    scene = VoidEnums.SceneID.MainMenuSceneMonk;
+                else if (SaveManager.ExternalSaveData.SurvAscended)
+                    scene = VoidEnums.SceneID.MainMenuSceneSurv;
+            }
+            else
+            {
+                if (ModManager.MMF)
+                {
+                    if (scene == VoidEnums.SceneID.MainMenuSceneMonkSurvHunt
+                        || scene == VoidEnums.SceneID.MainMenuSceneMonkSurv
+                        || scene == VoidEnums.SceneID.MainMenuSceneMonkHunt
+                        || scene == VoidEnums.SceneID.MainMenuSceneSurvHunt
+                        || scene == VoidEnums.SceneID.MainMenuSceneHunt
+                        || scene == VoidEnums.SceneID.MainMenuSceneMonk
+                        || scene == VoidEnums.SceneID.MainMenuSceneSurv)
+                    {
+                        scene = MenuScene.SceneID.MainMenu;
+                    }
+                    else
+                    {
+                        scene = self.rainWorld.options.titleBackground;
+                    }
+                }
+                else if (!self.rainWorld.dlcsInstalled.Contains("downpour"))
                 {
                     scene = MenuScene.SceneID.MainMenu;
                 }
                 else
                 {
-                    scene = self.rainWorld.options.titleBackground;
+                    scene = MenuScene.SceneID.MainMenu_Downpour;
                 }
             }
-            else if (!self.rainWorld.dlcsInstalled.Contains("downpour"))
-            {
-                scene = MenuScene.SceneID.MainMenu;
-            }
-            else
-            {
-                scene = MenuScene.SceneID.MainMenu_Downpour;
-            }
+            self.rainWorld.options.titleBackground = scene;
+            self.rainWorld.options.subBackground = scene;
         }
-        self.rainWorld.options.titleBackground = scene;
-        self.rainWorld.options.subBackground = scene;
     }
 }

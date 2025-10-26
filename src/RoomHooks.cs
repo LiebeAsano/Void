@@ -25,6 +25,26 @@ namespace VoidTemplate
             On.MoreSlugcats.MSCRoomSpecificScript.OE_GourmandEnding.Update += On_OE_GourmandEnding_Update;
             On.Player.ctor += Player_ctor;
             On.RainWorldGame.BeatGameMode += RainWorldGame_BeatGameMode;
+            On.AbstractCreatureAI.Update += AbstractCreatureAI_Update;
+            On.AbstractCreatureAI.SetDestination += AbstractCreatureAI_SetDestination;
+        }
+
+        private static void AbstractCreatureAI_SetDestination(On.AbstractCreatureAI.orig_SetDestination orig, AbstractCreatureAI self, WorldCoordinate newDest)
+        {
+            if (self.world.game.overWorld.worldLoader != null && !self.world.game.overWorld.worldLoader.Finished && self.world.game.overWorld.worldLoader.world == self.world)
+            {
+                return;
+            }
+            orig(self, newDest);
+        }
+
+        private static void AbstractCreatureAI_Update(On.AbstractCreatureAI.orig_Update orig, AbstractCreatureAI self, int time)
+        {
+            if (self.world.game.overWorld.worldLoader != null && !self.world.game.overWorld.worldLoader.Finished && self.world.game.overWorld.worldLoader.world == self.world)
+            {
+                return;
+            }
+            orig(self, time);
         }
 
         private static void RainWorldGame_BeatGameMode(On.RainWorldGame.orig_BeatGameMode orig, RainWorldGame game, bool standardVoidSea)
@@ -94,7 +114,6 @@ namespace VoidTemplate
                     {
                         return orig || self.room.game.IsVoidStoryCampaign();
                     });
-                    LogExInf(il.ToString());
                 }
                 else logerr($"{nameof(VoidTemplate)}.{nameof(RoomHooks)}.{nameof(OE_GourmandEnding_Update)}: {i} match error");
             }

@@ -15,6 +15,8 @@ namespace VoidTemplate;
 
 public static class DrawSprites
 {
+    public static readonly Color voidColor = new(0f, 0f, 0.005f);
+
     private static ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();
     public static PlayerGraphiscExtention GetPlayerGExt(this PlayerGraphics graphics) => pGExt.GetOrCreateValue(graphics);
 
@@ -22,8 +24,6 @@ public static class DrawSprites
     {
         //handles tail and other stuff
         On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-        //make tail cling when climbing
-        On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawTail;
 
         On.PlayerGraphics.InitiateSprites += PlayerGraphics_InitiateSprites;
 
@@ -173,7 +173,7 @@ public static class DrawSprites
             sLeaser.sprites[11].scale = 1f;
     }
 
-    private static bool IsTouchingCeiling(Player player)
+    private static bool IsTouchingCeiling(this Player player)
     {
         if (player.room is not null)
         {
@@ -194,7 +194,7 @@ public static class DrawSprites
         return false;
     }
 
-    private static bool IsTouchingDiagonalCeiling(Player player)
+    private static bool IsTouchingDiagonalCeiling(this Player player)
     {
         if (player.room is not null)
         {
@@ -250,15 +250,72 @@ public static class DrawSprites
         }
     }
 
+    private static float[] timeSinceLastForceUpdate = new float[32];
+    private static readonly float forceUpdateInterval = 1f / 40f;
+
     private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
         string originalMarkSpriteName = sLeaser.sprites[11].element.name;
 
+        Player player = self.player;
+        BodyChunk playerBodyChunk0 = player.bodyChunks[0];
+        BodyChunk playerBodyChunk1 = player.bodyChunks[1];
+        #region drawTail
+        //make tail cling when climbing
+        if (player.AreVoidViy())
+        {
+            timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
+
+            if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+                player.bodyMode == Player.BodyModeIndex.WallClimb &&
+                playerBodyChunk0.pos.y < playerBodyChunk1.pos.y) &&
+                player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
+                player.bodyMode != Player.BodyModeIndex.Crawl)
+            {
+                if (timeSinceLastForceUpdate[player.playerState.playerNumber] >= forceUpdateInterval)
+                {
+                    foreach (TailSegment tailSegment in self.tail)
+                    {
+                        Vector2 force = Vector2.zero;
+
+                        if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
+                        {
+                            force = new Vector2(-0.7f, 1.4f);
+                        }
+                        else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
+                        {
+                            force = new Vector2(0.7f, 1.4f);
+                        }
+                        else if (!player.input[0].jmp)
+                        {
+                            if (playerBodyChunk0.pos.x > playerBodyChunk1.pos.x)
+                                force = new Vector2(-0.7f, 0.7f);
+                            else
+                                force = new Vector2(0.7f, 0.7f);
+                        }
+
+                        tailSegment.vel += force;
+                    }
+
+                    timeSinceLastForceUpdate[player.playerState.playerNumber] = 0f;
+                }
+            }
+        }
+        #endregion
+
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
-        if (self.player.IsViy())
+        #region drawTail
+        if (player.AreVoidViy() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+            player.bodyMode == Player.BodyModeIndex.WallClimb)
+        {
+            sLeaser.sprites[4].isVisible = false;
+        }
+        #endregion
+
+        if (player.IsViy())
         { 
-            Utils.ViyColors[self.player.playerState.playerNumber] = sLeaser.sprites[9].color;
+            Utils.ViyColors[player.playerState.playerNumber] = sLeaser.sprites[9].color;
             if (sLeaser.sprites[2] is TriangleMesh viyTail
             && viyTail.shader != FShader.defaultShader)
             {
@@ -266,17 +323,17 @@ public static class DrawSprites
             }
             if (sLeaser.sprites[2] is TriangleMesh viyTail2)
             {
-                viyTail2.color = Utils.ViyColors[self.player.playerState.playerNumber];
+                viyTail2.color = Utils.ViyColors[player.playerState.playerNumber];
             }
         }
-        if (!self.player.IsVoid()) return;
+        if (!player.IsVoid()) return;
 
         string currentMarkSpriteName = sLeaser.sprites[11].element.name;
 
         if (currentMarkSpriteName == originalMarkSpriteName ||
             currentMarkSpriteName.StartsWith("Void"))
         {
-            if (self.player.abstractCreature.world.game.session is StoryGameSession session
+            if (player.abstractCreature.world.game.session is StoryGameSession session
                 && !Utils.DressMySlugcatEnabled)
             {
                 string newSpriteName = GetVoidMarkSpriteName(session, currentMarkSpriteName);
@@ -288,13 +345,13 @@ public static class DrawSprites
         }
 
         #region head
-        if (self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+        if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
             FSprite sprite = sLeaser.sprites[3];
             string headSpriteName = sprite.element.name;
-            if (IsTouchingDiagonalCeiling(self.player))
+            if (player.IsTouchingDiagonalCeiling())
             {
-                if (!self.player.input[0].jmp)
+                if (!player.input[0].jmp)
                 {
 
                     string head = "VoidDCeil-";
@@ -310,9 +367,9 @@ public static class DrawSprites
 
                 }
             }
-            else if (IsTouchingCeiling(self.player))
+            else if (player.IsTouchingCeiling())
             {
-                if (!self.player.input[0].jmp)
+                if (!player.input[0].jmp)
                 {
                     string head = "VoidCeil-";
                     if (Futile.atlasManager.DoesContainElementWithName(head + headSpriteName))
@@ -340,17 +397,14 @@ public static class DrawSprites
             faceSprite.color = new(1f, 0.86f, 0f);
         }
 
-        Utils.VoidColors[self.player.playerState.playerNumber] = faceSprite.color;
+        Utils.VoidColors[player.playerState.playerNumber] = faceSprite.color;
 
-        BodyChunk body_chunk_0 = self.player.bodyChunks[0];
-        BodyChunk body_chunk_1 = self.player.bodyChunks[1];
-
-        if (IsTouchingDiagonalCeiling(self.player)
-            && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+        if (player.IsTouchingDiagonalCeiling()
+            && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
-            if (!self.player.input[0].jmp
-                && self.player.bodyMode != Player.BodyModeIndex.ZeroG
-                && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+            if (!player.input[0].jmp
+                && player.bodyMode != Player.BodyModeIndex.ZeroG
+                && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
             {
 
                 string face = "VoidDCeil-";
@@ -368,13 +422,13 @@ public static class DrawSprites
             }
         }
 
-        else if (IsTouchingCeiling(self.player)
-            && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+        else if (player.IsTouchingCeiling()
+            && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
-            if (!self.player.input[0].jmp
-                && self.player.bodyMode != Player.BodyModeIndex.ZeroG
-                && self.player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
-                && body_chunk_0.pos.y <= body_chunk_1.pos.y + 5)
+            if (!player.input[0].jmp
+                && player.bodyMode != Player.BodyModeIndex.ZeroG
+                && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
+                && playerBodyChunk0.pos.y <= playerBodyChunk1.pos.y + 5)
             {
 
                 string face = "VoidCeil-";
@@ -393,13 +447,13 @@ public static class DrawSprites
         }
         else
         {
-            if (body_chunk_0.pos.y + 10f > body_chunk_1.pos.y
-                || self.player.bodyMode == Player.BodyModeIndex.ZeroG
-                || self.player.bodyMode == Player.BodyModeIndex.Dead
-                || self.player.bodyMode == Player.BodyModeIndex.Stunned
-                || self.player.bodyMode == Player.BodyModeIndex.Crawl)
+            if (playerBodyChunk0.pos.y + 10f > playerBodyChunk1.pos.y
+                || player.bodyMode == Player.BodyModeIndex.ZeroG
+                || player.bodyMode == Player.BodyModeIndex.Dead
+                || player.bodyMode == Player.BodyModeIndex.Stunned
+                || player.bodyMode == Player.BodyModeIndex.Crawl)
             {
-                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
+                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[player.playerState.playerNumber])
                 {
                     string face = "Void-";
                     if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
@@ -434,34 +488,33 @@ public static class DrawSprites
         #endregion
 
         #region echoTail
-        //watcher autosets tail to have a custom watcher shader, which hates color
-        if (sLeaser.sprites[2] is TriangleMesh tail
-            && tail.shader != FShader.defaultShader) 
+        if (sLeaser.sprites[2] is TriangleMesh tail)
         {
-            tail.shader = FShader.defaultShader;
-            
-        }
-        if (sLeaser.sprites[2] is TriangleMesh tail2)
-        {
-            if (self.player.KarmaCap != 10 && !Karma11Update.VoidKarma11)
+            //watcher autosets tail to have a custom watcher shader, which hates color
+            if (tail.shader != FShader.defaultShader)
             {
-                tail2.color = new(0f, 0f, 0.005f);
+                tail.shader = FShader.defaultShader;
+            }
+
+            if (player.KarmaCap != 10 && !Karma11Update.VoidKarma11)
+            {
+                tail.color = new(0f, 0f, 0.005f);
             }
             else if (self.GetPlayerGExt().toEcxoTail < 0.11f)
             {
-                if (tail2.element.name != "Futile_White")
+                if (tail.element.name != "Futile_White")
                 {
-                    tail2.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Futile_White"), tail2.triangles.Length);
+                    tail.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Futile_White"), tail.triangles.Length);
                 }
-                tail2.color = new(0f, 0f, 0.005f);//Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[self.player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
+                tail.color = new(0f, 0f, 0.005f);
             }
             else
             {
-                if (tail2.element.name != "Void-Tail")
+                if (tail.element.name != "Void-Tail")
                 {
-                    tail2.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Void-Tail"), tail2.triangles.Length);
+                    tail.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Void-Tail"), tail.triangles.Length);
                 }
-                tail2.color = Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[self.player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
+                tail.color = Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
             }
         }
 
@@ -477,69 +530,8 @@ public static class DrawSprites
                 || spritename.StartsWith("Legs")
                 || spritename.StartsWith("Head"))
             {
-                sprite.color = new(0f, 0f, 0.005f);
+                sprite.color = voidColor;
             }
-        }
-    }
-
-
-    private static float[] timeSinceLastForceUpdate = new float [32];
-    private static readonly float forceUpdateInterval = 1f / 40f;
-    private static void PlayerGraphics_DrawTail(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
-    {
-
-        Player player = self.player;
-
-        BodyChunk body_chunk_0 = player.bodyChunks[0];
-        BodyChunk body_chunk_1 = player.bodyChunks[1];
-
-        if (player.AreVoidViy())
-        {
-
-            timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
-
-            if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-                player.bodyMode == Player.BodyModeIndex.WallClimb &&
-                body_chunk_0.pos.y < body_chunk_1.pos.y) &&
-                player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
-                player.bodyMode != Player.BodyModeIndex.Crawl)
-            {
-                if (timeSinceLastForceUpdate[player.playerState.playerNumber] >= forceUpdateInterval)
-                {
-                    foreach (TailSegment tailSegment in self.tail)
-                    {
-                        Vector2 force = Vector2.zero;
-
-                        if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
-                        {
-                            force = new Vector2(-0.7f, 1.4f);
-                        }
-                        else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
-                        {
-                            force = new Vector2(0.7f, 1.4f);
-                        }
-                        else if (!player.input[0].jmp)
-                        {
-                            if (body_chunk_0.pos.x > body_chunk_1.pos.x)
-                                force = new Vector2(-0.7f, 0.7f);
-                            else
-                                force = new Vector2(0.7f, 0.7f);
-                        }
-
-                        tailSegment.vel += force;
-                    }
-
-                    timeSinceLastForceUpdate[player.playerState.playerNumber] = 0f;
-                }
-            }
-        }
-
-        orig(self, sLeaser, rCam, timeStacker, camPos);
-
-        if (player.AreVoidViy() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            player.bodyMode == Player.BodyModeIndex.WallClimb)
-        {
-            sLeaser.sprites[4].isVisible = false;
         }
     }
 

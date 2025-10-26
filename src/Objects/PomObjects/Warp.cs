@@ -427,25 +427,13 @@ public class Warp : UpdatableAndDeletable
         private void SafeThreadedLoad(WorldLoader loader)
         {
             loader.NextActivity();
-
             while (!loader.Finished)
             {
-
                 loader.Update();
-
                 if (loader.activity == Activity.SimulateMovement)
                 {
                     loader.NextActivity();
                 }
-
-
-                if (loader.activity == Activity.SimulateMovement)
-                {
-                    loader.NextActivity();
-                }
-
-
-
             }
         }
     }

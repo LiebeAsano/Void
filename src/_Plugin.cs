@@ -37,6 +37,7 @@ class _Plugin : BaseUnityPlugin
 	{
 		logger = Logger;
 		On.RainWorld.OnModsInit += RainWorld_OnModsInit;
+        On.RainWorld.PostModsInit += RainWorld_PostModsInit;
 		On.RainWorld.OnModsDisabled += delegate (On.RainWorld.orig_OnModsDisabled orig, RainWorld self, ModManager.Mod[] newlyDisabledMods)
 	{
     	orig.Invoke(self, newlyDisabledMods);
@@ -73,8 +74,19 @@ class _Plugin : BaseUnityPlugin
 		new MiniEnergyCellFisob()
    ]);
 	}
+	private static bool ModsInited;
 
-	private static bool ModLoaded;
+    private void RainWorld_PostModsInit(On.RainWorld.orig_PostModsInit orig, RainWorld self)
+    {
+		orig(self);
+		if (!ModsInited)
+		{
+			ModsCompatibilty._ModsMeta.OnModsInit();
+			ModsInited = true;
+		}
+    }
+
+    private static bool ModLoaded;
 	private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
 	{
 		orig(self);

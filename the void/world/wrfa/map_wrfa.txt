@@ -103,29 +103,3 @@ Connection: WRFA_SK01,WRFA_SK02,39,10,5,31,0,2
 Connection: WRFA_SK02,WRFA_SK03,95,16,8,51,0,2
 Connection: WRFA_SK03,WRFA_SK04,24,73,27,11,1,3
 Connection: GATE_WRFA_GW,WRFA_C06GW,2,9,148,9,2,0
-
-SpawnMigrationStream: stream1,1563^218,382^-1007,1564^176,409^-1037,None,01,70,30,WRFA_D08
-SpawnMigrationStreamMidpoint: stream1,0,1457^127^1.518478^154^65
-SpawnMigrationStreamMidpoint: stream1,1,1149^183^66.36803^109^144
-SpawnMigrationStreamMidpoint: stream1,2,918^224^1.896187^101^107
-SpawnMigrationStreamMidpoint: stream1,3,896^-57^244.1034^103^89
-SpawnMigrationStreamMidpoint: stream1,4,785^-349^3.0298^224^111
-SpawnMigrationStreamMidpoint: stream1,5,489^-411^-66.85828^83^88
-SpawnMigrationStreamMidpoint: stream1,6,668^-561^-89.30853^167^186
-SpawnMigrationStreamMidpoint: stream1,7,496^-710^-56.86409^127^113
-SpawnMigrationStreamMidpoint: stream1,8,524^-945^-75.33514^49^121
-
-SpawnMigrationStream: stream2,894^506,-2371^775,889^503,-2275^625,None,12,70,30,WRFA_A21
-SpawnMigrationStreamMidpoint: stream2,0,826^285^-14.28615^99^87
-SpawnMigrationStreamMidpoint: stream2,1,541^287^-14.91256^137^69
-SpawnMigrationStreamMidpoint: stream2,2,164^299^-6.491646^197^238
-SpawnMigrationStreamMidpoint: stream2,3,-464^294^-3.731247^225^234
-SpawnMigrationStreamMidpoint: stream2,4,-817^301^-10.81308^75^190
-SpawnMigrationStreamMidpoint: stream2,5,-1214^392^27.74845^18^210
-SpawnMigrationStreamMidpoint: stream2,6,-1551^440^14.83109^100^134
-SpawnMigrationStreamMidpoint: stream2,7,-2022^446^12.99931^157^91
-SpawnMigrationStreamMidpoint: stream2,8,-2312^437^15.1945^81^117
-
-SpawnMigrationStream: stream3,-893^274,-663^22,-919^231,-723^89,None,2,70,30,WRFA_F01
-SpawnMigrationStreamMidpoint: stream3,0,-896^143^-84.57736^68^51
-SpawnMigrationStreamMidpoint: stream3,1,-812^67^253.585^58^75

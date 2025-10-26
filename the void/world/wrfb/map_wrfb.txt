@@ -63,18 +63,3 @@ Connection: WRFB_C13,WRFB_A19,139,21,5,21,0,2
 Connection: WRFB_A19,WRFB_placeholder6,41,6,20,16,0,2
 Connection: WRFB_F04,WRFB_placeholder1,302,19,20,16,0,2
 Connection: WRFB_placeholder2,WRFB_C14,23,13,6,108,3,1
-
-SpawnMigrationStream: stream1,465^108,-1078^16,472^10,-749^93,None,1,70,30,WRFB_A22
-SpawnMigrationStreamMidpoint: stream1,0,725^38^159.1948^131^180
-SpawnMigrationStreamMidpoint: stream1,1,811^-152^12.30135^55^208
-SpawnMigrationStreamMidpoint: stream1,2,308^-153^5.482582^126^235
-SpawnMigrationStreamMidpoint: stream1,3,-204^-150^-11.98549^43^225
-SpawnMigrationStreamMidpoint: stream1,4,-789^-84^-6.3666^317^183
-
-SpawnMigrationStream: stream2,-76^-172,1482^-355,-104^-246,1417^-338,None,01,70,30,WRFB_B12
-SpawnMigrationStreamMidpoint: stream2,0,17^-221^184.964^72^105
-SpawnMigrationStreamMidpoint: stream2,1,394^-243^238.7241^56^64
-SpawnMigrationStreamMidpoint: stream2,2,290^-370^-35.15762^53^48
-SpawnMigrationStreamMidpoint: stream2,3,292^-428^182.213^25^143
-SpawnMigrationStreamMidpoint: stream2,4,573^-441^173.8759^101^202
-SpawnMigrationStreamMidpoint: stream2,5,1274^-451^183.3548^182^265

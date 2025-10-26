@@ -108,35 +108,3 @@ Connection: WARE_H24,WARE_placeholder6,14,63,20,16,2,2
 Connection: WARE_H24,WARE_S28,41,8,15,17,0,2
 Connection: WARE_placeholder8,WARE_I01,23,19,24,4,1,3
 Connection: WARE_placeholder9,WARE_I01,23,13,24,30,3,1
-
-SpawnMigrationStream: stream1,-348^506,1226^-134,-370^321,1068^-103,None,1,70,30,WARE_I14
-SpawnMigrationStreamMidpoint: stream1,0,-81^439^179.5848^158^80
-SpawnMigrationStreamMidpoint: stream1,1,286^434^195.5687^75^58
-SpawnMigrationStreamMidpoint: stream1,2,496^421^178.4969^76^111
-SpawnMigrationStreamMidpoint: stream1,3,804^427^177.4556^98^101
-SpawnMigrationStreamMidpoint: stream1,4,918^355^-85.64246^50^103
-SpawnMigrationStreamMidpoint: stream1,5,790^302^-1.79718^69^108
-SpawnMigrationStreamMidpoint: stream1,6,476^303^3.925949^101^151
-SpawnMigrationStreamMidpoint: stream1,7,369^169^178.581^61^20
-SpawnMigrationStreamMidpoint: stream1,8,511^151^141.9875^72^90
-SpawnMigrationStreamMidpoint: stream1,9,766^138^183.3213^145^35
-SpawnMigrationStreamMidpoint: stream1,10,758^29^-38.91089^33^37
-SpawnMigrationStreamMidpoint: stream1,11,750^-138^200.8129^44^57
-SpawnMigrationStreamMidpoint: stream1,12,964^-167^184.0125^77^71
-
-SpawnMigrationStream: stream2,-1107^-82,-433^-314,-999^-192,-433^-294,None,1,70,30,WARE_H16
-SpawnMigrationStreamMidpoint: stream2,0,-852^-182^173.7966^201^141
-SpawnMigrationStreamMidpoint: stream2,1,-330^-165^203.2315^83^16
-SpawnMigrationStreamMidpoint: stream2,2,-314^-230^267.5469^22^25
-SpawnMigrationStreamMidpoint: stream2,3,-360^-274^-2.389114^30^72
-
-SpawnMigrationStream: stream3,-434^-388,-29^-419,-439^-464,13^-436,None,2,70,30,WARE_H16
-SpawnMigrationStreamMidpoint: stream3,0,-212^-487^179.0197^187^187
-
-SpawnMigrationStream: stream4,-435^281,-256^-590,-345^376,-308^-863,None,1,70,30,WARE_H21
-SpawnMigrationStreamMidpoint: stream4,0,-342^197^228.8888^90^61
-SpawnMigrationStreamMidpoint: stream4,1,-292^-107^229.0504^68^71
-SpawnMigrationStreamMidpoint: stream4,2,-270^-244^263.1581^66^84
-SpawnMigrationStreamMidpoint: stream4,3,-38^-395^226.5946^65^136
-SpawnMigrationStreamMidpoint: stream4,4,-3^-565^-53.35547^53^81
-SpawnMigrationStreamMidpoint: stream4,5,-167^-702^-24.17852^83^103

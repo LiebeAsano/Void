@@ -1,0 +1,80 @@
+WRFB_B01: -149.6701><-279.6222><-33.31347><-176.5143><1><Turbulent Pump><48><74
+WRFB_D01: -217.6701><172.3778><-137.3134><240.4854><1><Turbulent Pump><98><74
+WRFB_D02: 400.3314><-108.6222><211.6869><-38.5144><1><Turbulent Pump><202><35
+WRFB_C01: -147.6701><-213.6223><-299.3136><-266.5145><2><Turbulent Pump><48><112
+WRFB_A10: -308.67><-278.6222><-163.3134><-142.5144><1><Turbulent Pump><48><35
+WRFB_A11: 13.33221><-264.6221><90.68658><-129.5144><1><Turbulent Pump><50><36
+WRFB_D03: -148.6701><-505.6223><-72.31346><-393.5145><0><Turbulent Pump><98><74
+WRFB_B05: 247.2841><2.232105><202.6869><119.4855><1><Turbulent Pump><100><37
+WRFB_F03: -138.67><-50.62216><-136.3134><27.48543><1><Turbulent Pump><150><74
+WRFB_S03: 703.3317><-108.6222><573.6245><-164.4999><2><><48><35
+WRFB_C07: -440.67><118.378><-274.3137><161.4855><1><Turbulent Pump><48><112
+WRFB_D04: -671.67><-108.6222><-581.3126><26.48543><1><Turbulent Pump><202><35
+WRFB_C08: -744.9847><17.16729><-604.2335><164.3802><1><Turbulent Pump><152><35
+WRFB_S04: -904.7805><19.42369><-655.0024><295.4827><2><><48><35
+WRFB_B06: 261.7388><-265.686><223.8724><-188.276><1><Turbulent Pump><100><35
+WRFB_A16: 494.4331><-266.9035><450.1113><-190.4714><1><Turbulent Pump><48><35
+WRFB_C10: 237.923><-475.3291><150.1114><-347.4716><0><Turbulent Pump><152><37
+WRFB_B08: -459.181><-444.8643><-304.3556><-398.6154><0><Turbulent Pump><100><35
+WRFB_S06: -620.181><-444.8643><-430.3556><-405.6154><0><><48><35
+WRFB_C13: 172.922><149.8644><88.52507><264.91><0><Turbulent Pump><152><35
+WRFB_A19: 492.4192><149.925><427.3615><264.6281><0><Turbulent Pump><48><35
+WRFB_F04: 938.3627><-477.9727><477.7958><-347.8925><0><><308><35
+WRFB_placeholder1: 1516.156><-450.2943><1107.848><-343.3022><1><><48><35
+WRFB_placeholder2: -885.844><504.7057><-548.1528><576.6979><0><><48><35
+WRFB_placeholder3: -105.844><426.7057><-6.15288><452.6978><0><><48><35
+WRFB_placeholder4: 870.156><-104.2943><632.8472><-37.3022><0><><48><35
+WRFB_placeholder5: 568.1564><-13.29435><420.8471><121.6978><0><><48><35
+WRFB_placeholder6: 748.1559><121.7057><539.8472><264.6978><1><><48><35
+WRFB_C14: -820.844><247.7057><-547.1528><294.6978><1><><48><112
+GATE_WARB_WRFB: -1057.844><31.70565><-716.1528><172.6978><1><><48><35
+OffScreenDen_WRFB: -1049.532><-505.6223><-497.9776><-69.61539><1><Coral Caves><0><0
+Connection: WRFB_B01,WRFB_F03,42,72,89,27,1,3
+Connection: WRFB_B01,WRFB_C01,25,62,27,58,3,1
+Connection: WRFB_B01,WRFB_A10,3,46,45,26,2,0
+Connection: WRFB_B01,WRFB_A11,45,46,2,22,0,2
+Connection: WRFB_D01,WRFB_placeholder3,91,70,23,13,1,3
+Connection: WRFB_D01,WRFB_C07,2,70,45,107,2,0
+Connection: WRFB_D01,WRFB_C01,56,47,6,106,3,1
+Connection: WRFB_D01,WRFB_C13,93,31,5,19,0,2
+Connection: WRFB_D01,WRFB_F03,4,3,4,70,3,1
+Connection: WRFB_D02,WRFB_S03,194,31,20,31,0,2
+Connection: WRFB_D02,WRFB_F03,3,25,147,25,2,0
+Connection: WRFB_D02,WRFB_placeholder4,197,9,20,16,0,2
+Connection: WRFB_A10,WRFB_D03,2,26,6,67,2,1
+Connection: WRFB_A11,WRFB_B06,47,22,2,22,0,2
+Connection: WRFB_A11,WRFB_D03,41,19,91,64,3,1
+Connection: WRFB_D03,WRFB_B08,1,47,95,8,2,0
+Connection: WRFB_D03,WRFB_C10,96,47,3,18,0,2
+Connection: WRFB_B05,WRFB_F03,2,32,147,68,2,0
+Connection: WRFB_B05,WRFB_placeholder5,95,15,20,16,0,2
+Connection: WRFB_F03,WRFB_C13,90,65,91,23,3,3
+Connection: WRFB_F03,WRFB_D04,3,25,197,25,2,0
+Connection: WRFB_C07,WRFB_C08,6,9,147,4,2,0
+Connection: WRFB_D04,WRFB_C08,12,31,12,5,1,3
+Connection: WRFB_C08,WRFB_C14,51,31,24,3,1,3
+Connection: WRFB_C08,WRFB_S04,36,31,14,30,1,0
+Connection: WRFB_C08,GATE_WARB_WRFB,4,15,45,13,2,0
+Connection: WRFB_B06,WRFB_A16,95,30,4,30,0,2
+Connection: WRFB_B06,WRFB_C10,89,19,83,33,3,1
+Connection: WRFB_C10,WRFB_F04,148,20,5,20,0,2
+Connection: WRFB_B08,WRFB_S06,8,29,13,29,2,0
+Connection: WRFB_C13,WRFB_A19,139,21,5,21,0,2
+Connection: WRFB_A19,WRFB_placeholder6,41,6,20,16,0,2
+Connection: WRFB_F04,WRFB_placeholder1,302,19,20,16,0,2
+Connection: WRFB_placeholder2,WRFB_C14,23,13,6,108,3,1
+
+SpawnMigrationStream: stream1,465^108,-1078^16,472^10,-749^93,None,1,70,30,WRFB_A22
+SpawnMigrationStreamMidpoint: stream1,0,725^38^159.1948^131^180
+SpawnMigrationStreamMidpoint: stream1,1,811^-152^12.30135^55^208
+SpawnMigrationStreamMidpoint: stream1,2,308^-153^5.482582^126^235
+SpawnMigrationStreamMidpoint: stream1,3,-204^-150^-11.98549^43^225
+SpawnMigrationStreamMidpoint: stream1,4,-789^-84^-6.3666^317^183
+
+SpawnMigrationStream: stream2,-76^-172,1482^-355,-104^-246,1417^-338,None,01,70,30,WRFB_B12
+SpawnMigrationStreamMidpoint: stream2,0,17^-221^184.964^72^105
+SpawnMigrationStreamMidpoint: stream2,1,394^-243^238.7241^56^64
+SpawnMigrationStreamMidpoint: stream2,2,290^-370^-35.15762^53^48
+SpawnMigrationStreamMidpoint: stream2,3,292^-428^182.213^25^143
+SpawnMigrationStreamMidpoint: stream2,4,573^-441^173.8759^101^202
+SpawnMigrationStreamMidpoint: stream2,5,1274^-451^183.3548^182^265

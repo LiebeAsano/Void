@@ -1,0 +1,8 @@
+ward_landscape - 1 : 6
+ward_landscape - 2 : 10 : LightEdges
+ward_landscape - 3 : 12
+
+blurMin : 0.1
+blurMax : 0.25
+
+idleDepths : 12

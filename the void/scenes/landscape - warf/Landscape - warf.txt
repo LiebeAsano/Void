@@ -1,0 +1,8 @@
+warf_landscape - 1 : 6
+warf_landscape - 2 : 10 : LightEdges
+warf_landscape - 3 : 12
+
+blurMin : 0.1
+blurMax : 0.25
+
+idleDepths : 12

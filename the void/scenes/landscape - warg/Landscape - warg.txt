@@ -1,0 +1,8 @@
+warg_landscape - 1 : 6
+warg_landscape - 2 : 10 : LightEdges
+warg_landscape - 3 : 12
+
+blurMin : 0.1
+blurMax : 0.25
+
+idleDepths : 12

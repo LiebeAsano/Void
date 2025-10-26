@@ -1,0 +1,8 @@
+wrfb_landscape - 1 : 6
+wrfb_landscape - 2 : 10 : LightEdges
+wrfb_landscape - 3 : 12
+
+blurMin : 0.1
+blurMax : 0.25
+
+idleDepths : 12

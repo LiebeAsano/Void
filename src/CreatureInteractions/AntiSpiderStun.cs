@@ -12,7 +12,7 @@ public static class AntiSpiderStun
 	public static void Hook()
 	{
 		IL.DartMaggot.Update += DartMaggot_Update;
-		On.DartMaggot.Update += DartNaggot_Update2;
+		//On.DartMaggot.Update += DartNaggot_Update2;
 	}
 
     static void logerr(object e) => _Plugin.logger.LogError(e);
@@ -34,11 +34,6 @@ public static class AntiSpiderStun
 				if (maggot.stuckInChunk.owner is Player p && p.AreVoidViy())
 				{
 					var karma = p.KarmaCap;
-
-					if (SaveManager.ExternalSaveData.ViyPoisonImmune && p.IsViy())
-					{
-                        return (int)((float)orig * 0.0f);
-                    }
 
 					if (Karma11Update.VoidKarma11)
 					{

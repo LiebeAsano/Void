@@ -9,6 +9,7 @@ using UnityEngine;
 using VoidTemplate.Useful;
 using static Pom.Pom;
 using static VoidTemplate.Useful.POMUtils;
+using static WorldLoader;
 
 namespace VoidTemplate.Objects.PomObjects;
 
@@ -407,27 +408,45 @@ public class Warp : UpdatableAndDeletable
 
     class ThreadedLoading(Warp warp, Room room, string targetRegionAcronym)
     {
-        private readonly Room room = room;
-        private readonly Warp warp = warp;
-        private readonly string acronym = targetRegionAcronym;
-
         public void Load()
         {
-            WorldLoader worldLoader = new(game: room.game,
-                        playerCharacter: room.game.GetStorySession.characterStats.name,
-                        timelinePosition: SlugcatStats.SlugcatToTimeline(room.game.StoryCharacter),
-                        singleRoomWorld: false,
-                        //this may be wrong, maybe there is no need to wrap
-                        worldName: Region.GetProperRegionAcronym(SlugcatStats.SlugcatToTimeline(room.game.StoryCharacter), acronym),
+                WorldLoader worldLoader = new WorldLoader(
+                    game: room.game,
+                    playerCharacter: room.game.GetStorySession.characterStats.name,
+                    timelinePosition: SlugcatStats.SlugcatToTimeline(room.game.StoryCharacter),
+                    singleRoomWorld: false,
+                    worldName: Region.GetProperRegionAcronym(SlugcatStats.SlugcatToTimeline(room.game.StoryCharacter), targetRegionAcronym),
+                    region: room.game.overWorld.GetRegion(targetRegionAcronym),
+                    setupValues: room.game.setupValues
+                );
 
-                        region: room.game.overWorld.GetRegion(acronym),
-                        setupValues: room.game.setupValues);
-            worldLoader.NextActivity();
-            while (!worldLoader.Finished)
+                SafeThreadedLoad(worldLoader);
+                warp.worldLoader = worldLoader;
+        }
+
+        private void SafeThreadedLoad(WorldLoader loader)
+        {
+            loader.NextActivity();
+
+            while (!loader.Finished)
             {
-                worldLoader.Update();
+
+                loader.Update();
+
+                if (loader.activity == Activity.SimulateMovement)
+                {
+                    loader.NextActivity();
+                }
+
+
+                if (loader.activity == Activity.SimulateMovement)
+                {
+                    loader.NextActivity();
+                }
+
+
+
             }
-            warp.worldLoader = worldLoader;
         }
     }
 

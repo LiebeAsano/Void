@@ -3,6 +3,6 @@
 minkarma : 0
 size : 1
 radius : 4
-echosong : SH
+echosong : ELSE WARD
 room : WARD_E33
 defaultflip : 0

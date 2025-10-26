@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.Useful;
 using static VoidTemplate.OptionInterface.OptionAccessors;
 using static VoidTemplate.Useful.Utils;
@@ -86,7 +87,8 @@ static class PermadeathConditions
 				&& self.parent.moveToKarma == 0));
 		if (!flag && ModManager.MSC && self.parent.displayKarma.x == self.parent.moveToKarma &&
 			self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void
-			&& self.parent.moveToKarma == 0 && self.parent.menu.ID == ProcessManager.ProcessID.DeathScreen)
+			&& self.parent.moveToKarma == 0 && self.parent.menu.ID == ProcessManager.ProcessID.DeathScreen
+			&& PermaDeath)
 		{
 			self.waitForAnimate++;
 			if (self.waitForAnimate >= 50)

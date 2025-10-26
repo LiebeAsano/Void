@@ -1,4 +1,5 @@
-﻿using RWCustom;
+﻿using MoreSlugcats;
+using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,99 @@ public static class DrawSprites
         On.PlayerGraphics.InitiateSprites += PlayerGraphics_InitiateSprites;
 
         On.PlayerGraphics.Update += PlayerGraphics_Update;
+
+        //On.PlayerGraphics.ApplyPalette += PlayerGraphics_ApplyPalette;
+    }
+
+    private static void PlayerGraphics_ApplyPalette(On.PlayerGraphics.orig_ApplyPalette orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
+    {
+        // Если это не Охотник, вызываем оригинальный метод
+        if (self.player?.SlugCatClass != SlugcatStats.Name.Red)
+        {
+            orig(self, sLeaser, rCam, palette);
+            return;
+        }
+
+        try
+        {
+            Color hunterBaseColor = new Color(1f, 0.45f, 0.45f);
+            Color color = hunterBaseColor;
+            Color color2 = new Color(color.r, color.g, color.b);
+
+            if (self.malnourished > 0f)
+            {
+                float num = self.player.Malnourished ? self.malnourished : Mathf.Max(0f, self.malnourished - 0.005f);
+                color2 = Color.Lerp(color2, Color.gray, 0.4f * num);
+            }
+
+            if (self.player.injectedPoison > 0f)
+            {
+                color2 = Color.Lerp(Color.Lerp(color2, self.player.injectedPoisonColor,
+                    Mathf.Clamp01(self.player.injectedPoison) * 0.3f),
+                    new Color(0.5f, 0.5f, 0.5f),
+                    self.player.injectedPoison * 0.1f);
+            }
+
+            color2 = self.HypothermiaColorBlend(color2);
+            self.currentAppliedHypothermia = self.player.Hypothermia;
+
+            if (ModManager.MMF && (self.owner as Player).AI == null)
+            {
+                RainWorld.PlayerObjectBodyColors[self.player.playerState.playerNumber] = color2;
+            }
+
+            if (self.gills != null)
+            {
+                Color effectCol = new Color(0.87451f, 0.17647f, 0.91765f);
+
+                if (!rCam.room.game.setupValues.arenaDefaultColors && !ModManager.CoopAvailable)
+                {
+                    switch (self.player.playerState.playerNumber)
+                    {
+                        case 0:
+                            if (rCam.room.game.IsArenaSession && rCam.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.gameType != DLCSharedEnums.GameTypeID.Challenge)
+                            {
+                                effectCol = new Color(0.25f, 0.65f, 0.82f);
+                            }
+                            break;
+                        case 1:
+                            effectCol = new Color(0.31f, 0.73f, 0.26f);
+                            break;
+                        case 2:
+                            effectCol = new Color(0.6f, 0.16f, 0.6f);
+                            break;
+                        case 3:
+                            effectCol = new Color(0.96f, 0.75f, 0.95f);
+                            break;
+                    }
+                }
+
+                self.gills.SetGillColors(color2, effectCol);
+                self.gills.ApplyPalette(sLeaser, rCam, palette);
+            }
+
+            for (int i = 0; i < sLeaser.sprites.Length; i++)
+            {
+                if (i != 9)
+                {
+                    sLeaser.sprites[i].color = color2;
+                }
+            }
+
+            sLeaser.sprites[11].color = Color.Lerp(color, Color.white, 0.3f);
+            sLeaser.sprites[10].color = color;
+
+            if (self.weaverGraphics != null)
+            {
+                self.weaverGraphics.ApplyPalette(sLeaser, rCam, palette, color2);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Ошибка в ApplyPalette для Охотника: {e}");
+            orig(self, sLeaser, rCam, palette);
+        }
     }
 
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)

@@ -92,7 +92,7 @@ public class Warp : UpdatableAndDeletable
         //if you dare to use this method, be aware that players realize at (10;10) coordinate
         //it used to be (0;0), which really threw off camera logic
         //after using this, change slugcat positions and apply camera change
-        AbstractRoom WorldLoaded(OverWorld overWorld, CustomLoader targetingData)
+        static AbstractRoom WorldLoaded(OverWorld overWorld, CustomLoader targetingData)
         {
             World world = overWorld.activeWorld;
             World newWorld = targetingData.worldLoader.ReturnWorld();
@@ -114,7 +114,7 @@ public class Warp : UpdatableAndDeletable
                 absPly.pos = newWorldCoordinate;
                 absPly.world.GetAbstractRoom(newWorldCoordinate).AddEntity(absPly);
 #nullable enable
-                ShortcutHandler.ShortCutVessel? containingVessel = overWorld.game.shortcuts.transportVessels.FirstOrDefault(x => x.creature == absPly.realizedCreature);
+                ShortcutHandler.ShortCutVessel? containingVessel = absPly.realizedCreature?.inShortcutVessel;
 #nullable disable
 
                 switch (targetingData.warp.ExitInShortcut, containingVessel)
@@ -139,9 +139,8 @@ public class Warp : UpdatableAndDeletable
                 switch (targetingData.warp.ExitInShortcut)
                 {
                     case false
-                        when absPly.realizedCreature is Player { room: not null } p:
+                        when absPly.realizedCreature is Player p:
                         {
-                            p.room.RemoveObject(p);
                             p.PlaceInRoom(targetAbstractRoom.realizedRoom);
                             p.standing = true;
 
@@ -172,14 +171,17 @@ public class Warp : UpdatableAndDeletable
                 List<AbstractCreature> players = realizedDestination.game.Players;
                 if (targetingData.warp.ExitInShortcut)
                 {
-                    RWCustom.IntVector2 pos = realizedDestination.GetTilePosition(warpDestination.Pos);
-                    IEnumerable<ShortcutHandler.ShortCutVessel> playerVessels = overWorld.game.shortcuts.transportVessels.Where(vessel => realizedDestination.game.Players.Any(absply => vessel.creature == absply.realizedCreature));
-                    RWCustom.IntVector2 lastPosOffset = warpDestination.LastRelativePositionForShortcutVessel;
-                    foreach (ShortcutHandler.ShortCutVessel playerVessel in playerVessels)
+                    IntVector2 pos = realizedDestination.GetTilePosition(warpDestination.Pos);
+                    IntVector2 lastPosOffset = warpDestination.LastRelativePositionForShortcutVessel;
+                    foreach (AbstractCreature player in players)
                     {
-                        playerVessel.room = targetAbstractRoom;
-                        playerVessel.pos = pos;
-                        playerVessel.lastPositions[0] = pos + lastPosOffset;
+                        var vessel = player.realizedCreature?.inShortcutVessel;
+                        if (vessel != null)
+                        {
+                            vessel.room = targetAbstractRoom;
+                            vessel.pos = pos;
+                            vessel.lastPositions[0] = pos + lastPosOffset;
+                        }
                     }
                 }
                 else
@@ -354,6 +356,13 @@ public class Warp : UpdatableAndDeletable
                         y = 50.2f
                     };
                     Futile.stage.AddChild(fadeLabel);
+                    foreach (var absPlayer in room.world.game.Players)
+                    {
+                        if (absPlayer.realizedCreature is Player player)
+                        {
+                            player.room?.RemoveObject(player);
+                        }
+                    }
                     state = State.AwaitingWorld;
                 }
                 break;

@@ -81,7 +81,7 @@ class _Plugin : BaseUnityPlugin
 		orig(self);
 		if (!ModsInited)
 		{
-			ModsCompatibilty._ModsMeta.OnModsInit();
+			ModsCompatibilty._ModsMeta.PostModsInit();
 			ModsInited = true;
 		}
     }

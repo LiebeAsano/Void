@@ -3,6 +3,7 @@ using SlugBase.SaveData;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 namespace VoidTemplate;
 
@@ -257,7 +258,9 @@ public static class SaveManager
             {
                 try
                 {
-                    int slot = saveslot ?? RWCustom.Custom.rainWorld.options.saveSlot;
+                    int rwSaveSlot = RWCustom.Custom.rainWorld.options.saveSlot;
+                    if (rwSaveSlot < 0) rwSaveSlot = -(rwSaveSlot + 1);
+                    int slot = saveslot ?? rwSaveSlot;
                     string path = FullPathOfSaveProperty(id);
 
                     if (!File.Exists(path))

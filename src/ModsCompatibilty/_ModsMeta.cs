@@ -8,7 +8,7 @@ namespace VoidTemplate.ModsCompatibilty
 {
     public class _ModsMeta
     {
-        public static void OnModsInit()
+        public static void PostModsInit()
         {
             foreach (var mod in ModManager.ActiveMods)
             {

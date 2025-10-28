@@ -171,7 +171,7 @@ class _Plugin : BaseUnityPlugin
 	{
 
 		//load all sprites which name starts with "Void" in folder "atlas-void" 
-		DirectoryInfo folder = new DirectoryInfo(AssetManager.ResolveDirectory("atlas-void"));
+		DirectoryInfo folder = new(AssetManager.ResolveDirectory("atlas-void"));
 
 		var listOfFiles = folder.GetFiles();
 		foreach (FileInfo file in listOfFiles)

@@ -47,17 +47,17 @@ public static class MainMenuScene
     {
         MenuScene.SceneID scene;
         scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
-        if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11))
+        if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked))
         {
-            if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
             else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended)
                 scene = VoidEnums.SceneID.MainMenuSceneMonkSurv;
-            else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            else if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneMonkHunt;
-            else if (SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            else if (SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneSurvHunt;
-            else if (SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+            else if (SaveManager.ExternalSaveData.ViyUnlocked)
                 scene = VoidEnums.SceneID.MainMenuSceneHunt;
             else if (SaveManager.ExternalSaveData.MonkAscended)
                 scene = VoidEnums.SceneID.MainMenuSceneMonk;
@@ -71,7 +71,7 @@ public static class MainMenuScene
     public static void ProcessManager_RequestMainProcessSwitch_ProcessID(On.ProcessManager.orig_RequestMainProcessSwitch_ProcessID orig, ProcessManager self, ProcessManager.ProcessID ID)
     {
         orig(self, ID);
-        if (ID != VoidEnums.ProcessID.TokenDecrease && ID != ProcessManager.ProcessID.SleepScreen && ID != ProcessManager.ProcessID.DeathScreen)
+        if (ID == ProcessManager.ProcessID.MainMenu)
         {
             MenuScene.SceneID scene;
             scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;
@@ -130,7 +130,7 @@ public static class MainMenuScene
                 {
                     scene = MenuScene.SceneID.MainMenu;
                 }
-                else
+                else 
                 {
                     scene = MenuScene.SceneID.MainMenu_Downpour;
                 }

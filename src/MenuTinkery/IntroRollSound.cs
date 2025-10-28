@@ -6,19 +6,33 @@ using System.Threading.Tasks;
 using VoidTemplate.OptionInterface;
 using Music;
 using MonoMod.Cil;
+using System.CodeDom;
 
 namespace VoidTemplate.MenuTinkery
 {
     public class IntroRollSound
     {
-        public const string voidThemeName = "MainMenuTheme";
+        public const string MainMenuTheme = "MainMenuTheme";
+        public const string MainMenuThemeViy = "MainMenuThemeViy";
 
         public static bool VoidThemeCond
         {
             get
             {
                 return !OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended
-                || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11);
+                || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked);
+            }
+        }
+
+        public static string CurrentMainMenuTheme
+        {
+            get
+            {
+                if (SaveManager.ExternalSaveData.ViyUnlocked)
+                {
+                    return MainMenuThemeViy;
+                }
+                return MainMenuTheme;
             }
         }
 
@@ -33,11 +47,13 @@ namespace VoidTemplate.MenuTinkery
         private static void MusicPlayer_MenuRequestsSong(On.Music.MusicPlayer.orig_MenuRequestsSong orig, MusicPlayer self, string name, float priority, float fadeInTime)
         {
             orig(self, name, priority, fadeInTime);
-            if (self.song != null && self.song.name == voidThemeName)
+            string currentTheme = CurrentMainMenuTheme;
+
+            if (self.song != null && self.song.name == currentTheme)
             {
                 self.song.Loop = true;
             }
-            else if (self.nextSong != null && self.nextSong.name == voidThemeName)
+            else if (self.nextSong != null && self.nextSong.name == currentTheme)
             {
                 self.nextSong.Loop = true;
             }
@@ -52,7 +68,7 @@ namespace VoidTemplate.MenuTinkery
                 {
                     if (VoidThemeCond)
                     {
-                        return voidThemeName;
+                        return CurrentMainMenuTheme;
                     }
                     return rainWorldTheme;
                 });
@@ -64,11 +80,13 @@ namespace VoidTemplate.MenuTinkery
             orig(self, manager, showRegionSpecificBkg);
             if (VoidThemeCond && manager.musicPlayer is MusicPlayer player)
             {
-                if (player.song != null && (player.song.name == voidThemeName || player.song is IntroRollMusic))
+                string currentTheme = CurrentMainMenuTheme;
+
+                if (player.song != null && (player.song.name == currentTheme || player.song is IntroRollMusic))
                 {
                     return;
                 }
-                if (player.nextSong != null && (player.nextSong.name == voidThemeName || player.nextSong is IntroRollMusic))
+                if (player.nextSong != null && (player.nextSong.name == currentTheme || player.nextSong is IntroRollMusic))
                 {
                     return;
                 }
@@ -90,14 +108,14 @@ namespace VoidTemplate.MenuTinkery
             if (VoidThemeCond)
             {
                 self.subTracks.RemoveAt(self.subTracks.Count - 1);
-                self.subTracks.Add(new(self, 1, voidThemeName));
+                self.subTracks.Add(new(self, 1, CurrentMainMenuTheme));
                 self.Loop = true;
             }
         }
 
         public class VoidMenuTheme : Song
         {
-            public VoidMenuTheme(MusicPlayer musicPlayer) : base(musicPlayer, voidThemeName, MusicPlayer.MusicContext.Menu)
+            public VoidMenuTheme(MusicPlayer musicPlayer) : base(musicPlayer, CurrentMainMenuTheme, MusicPlayer.MusicContext.Menu)
             {
                 Loop = true;
             }

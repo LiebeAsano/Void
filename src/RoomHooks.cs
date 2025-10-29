@@ -127,7 +127,7 @@ namespace VoidTemplate
                         //game.manager.nextSlideshow = outro;
                         RainWorldGame.ForceSaveNewDenLocation(game, "OE_FINAL03", false);
                         game.GetStorySession.saveState.SetVoidEndingTree(true);
-                        for (int i = 0; i < 15; i++)
+                        for (int i = 0; i < 8; i++)
                         {
                             game.GetStorySession.playerSessionRecords[0].kills.Add(new(new(CreatureTemplate.Type.Slugcat, AbstractPhysicalObject.AbstractObjectType.Creature, 0), new(-1, -1), false));
                         }

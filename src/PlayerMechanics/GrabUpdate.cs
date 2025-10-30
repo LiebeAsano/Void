@@ -396,7 +396,7 @@ public static class GrabUpdate
             {
                 self.reloadCounter = 0;
             }
-            if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f || ExternalSaveData.ViyLungExtended && self.IsViy()))
+            if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f/* || ExternalSaveData.ViyLungExtended && self.IsViy()*/))
             {
                 flag3 = false;
             }

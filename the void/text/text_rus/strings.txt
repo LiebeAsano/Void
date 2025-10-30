@@ -8,6 +8,7 @@ But you have enough strength to get out of here.|Но у тебя достато
 Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай кнопки 'Направления' и 'Вверх', чтобы взобраться на стену.
 Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
 Your abilities also continue to improve.|Твои способности также продолжают развиваться.
+It is painful... but Karma Flower saves your current cycle.|Это больно... но Кармацвет сохраняет твой текущий цикл.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречена вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left. (To be continued...)|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Тебя не покидает чувство, что осталось лишь последнее желание. (Продолжение следует...)
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one. (To be continued?)|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового. (Продолжение следует?)
@@ -213,12 +214,13 @@ And if you visit NSH, warn him that his next messenger will be killed on the spo
 
 //Case 0
 
-Hi, <CapPlayerName>.|Привет, <CapPlayerName>.
-What are you? You look pretty weird.|Что ты такое? Ты выглядишь немного странно.
-Have you seen my friend? He looks just like you, but I am not sure...|Ты не видел моего друга? Он похож на тебя, но я не уверена...
-Do you have a mark of communication? Did the Five Pebbles give it to you or did you come from faraway lands?|У тебя есть метка связи? Тебе дал её Пять Галек или ты пришёл с далёких земель?
-But I am glad I have a companion. It can be very lonely here, although sometimes I hear someone scavenging in the rubbish.|Но я рада, что у меня теперь есть компаньон. Здесь бывает очень одиноко, хотя я иногда слышу, что кто-то роется в мусоре.
-You can bring me different things, I might tell you something interesting about them.|Ты можешь принести мне разные вещи, я могла бы рассказать что-то интересное о них.
+Hello <CapPlayerName>.|Привет <CapPlayerName>.
+What are you? Your appearance seems... unusual, although familiar.|Что ты такое? Ты выглядишь... необычно, хотя и знакомо.
+I see you have a mark of communication. Did the Five Pebbles give it to you, or maybe someone from faraway lands?|Я вижу, у тебя есть метка связи. Тебе её дал Пять Галек или, может быть, кто-то из далеких земель?
+In any case, it looks like you are capable of long-distance travel. Did you see my friend on the way here, by any chance? He looks just like you, but I am not sure...|В любом случае, похоже, ты способен путешествовать на большие расстояния. Ты случайно не видел моего друга по дороге сюда? Он очень похож на тебя, но я не уверена...
+He left me not so long ago, and... it can be very lonely here, although sometimes I hear someone scavenging in the rubbish.|Он покинул меня не так давно, и... здесь может быть очень одиноко, хотя иногда я слышу, как кто-то роется в мусоре.
+But looks like now I have you to keep me company. If you want to stay longer here, of course.|Но, похоже, теперь ты составишь мне компанию. Если, конечно, захочешь остаться здесь подольше.
+By the way, If you suddenly find something, you can bring it to me. And I might tell you something interesting about it. That is all I can do for now.|Кстати, если ты вдруг что-то найдёшь, можешь принести это мне. И я, возможно, расскажу тебе что-нибудь интересное об этом. Это все, что я могу пока сделать.
 Oh, <CapPlayerName>, you are back!|О, <CapPlayerName>, ты вернулся!
 You have got a mark of communication.|Ты получил метку связи.
 Did Five Pebbles give it to you? He is sick now, you can probably tell by the way he's acting.|Тебе дал её Пять Галек? Он сейчас болен, ты наверное уже понял это по его поведению.
@@ -236,6 +238,15 @@ If you want to learn something new, I will be waiting for you.|Если ты з�
 
 //Case 1
 
+Oh, hi, <CapPlayerName>, you are back!|О, привет, <CapPlayerName>, ты вернулся!
+To be honest, I doubted that I would see you again, but since you are here... let us chat a little.|Честно говоря, я сомневалась, что увижу тебя снова, но раз уж ты здесь... давай немного поболтаем.
+I noticed something curious during your last visit: you really do have two pairs of eyes!<LINE>It is... curious, considering that I did not notice such features in my friend. You are the same species, are not you?|Во время твоего последнего визита я заметила кое-что любопытное: у тебя действительно две пары глаз!<LINE>Это... любопытно, учитывая, что я не замечала таких особенностей у своего друга. Ты принадлежишь к тому же виду, не так ли?
+It is very amusing. Creatures generally need more eyes to better determine the distance to their prey<LINE>and easier navigate through space, but for now it is hard for me to understand where such a difference comes from.|Это очень забавно. Обычно существам нужно больше глаз, чтобы лучше определять расстояние до своей добычи<LINE>и легче ориентироваться в пространстве, но сейчас мне трудно понять, откуда такая разница.
+It looks natural, but I wonder if you were born like this. Even if it is a mutation, it is pretty... selective...|Это выглядит естественно, но мне интересно, родился ли ты таким. Даже если это мутация, она довольно... избирательна...
+So you are a predator? Then I am glad you do not find me tasty. And in that case, <CapPlayerName>,<LINE>I would be grateful if you do not bring your prey here. I do not like to watch violence.|Так ты хищник? Тогда я рада, что ты не находишь меня вкусной. И в таком случае, <CapPlayerName>,<LINE>я была бы признателена, если бы ты не приносил сюда свою добычу. Я не люблю смотреть на насилие.
+Now I have something to think about. As much as my memory will allow me.|Теперь мне есть над чем подумать. Насколько мне позволяет память.
+Maybe you have something to show me?|Может быть, ты хочешь мне что-то показать?
+
 Hi, <CapPlayerName>, you are back!|Привет, <CapPlayerName>, ты вернулся!
 I am not imagining it and you really do have four eyes.|Мне не показалось, у тебя действительно четыре глаза.
 It is very amusing. Creatures generally need more eyes to better determine the distance to their prey.|Это очень забавно. Обычно существа нуждаются в большем количестве глаз, чтобы лучше определять дистанцию до своей добычи.
@@ -245,18 +256,15 @@ I am glad you do not find me tasty. <CapPlayerName>, please do not bring your pr
 //Case 2
 
 Oh, it is you.|О, это ты.
+Hmm, you look hungry, or is it just me?|Хмм, ты выглядишь голодным, или мне только кажется?.
+How are you, <CapPlayerName>? I hope you are doing well.|Как у тебя дела, <CapPlayerName>? Надеюсь, у тебя все хорошо.
+I am so sorry, but I do not have anything here to feed you. I really wish I could offer you something but... In my condition this is no longer possible.|Мне очень жаль, но у меня ничего нет, чем можно было бы тебя накормить. Я бы очень хотела вам что-нибудь предложить, но... В моем состоянии это уже невозможно.
+But that is not the point now, there's not much time left. I wish you a successful hunt, <CapPlayerName>. I would really not want my only companion to starve to death.|Но сейчас это не имеет значния, времени осталось не так много. Желаю тебе удачной охоты, <CapPlayerName>. Я бы очень не хотела, чтобы мой единственный собеседник умер с голоду.
+Come back when you feel better, maybe next cycle. In the meantime I will try to remember something very interesting to tell you.|Возращайся, когда тебе станет лучше, может быть в следующем цикле. А я пока постараюсь вспомнить что-нибудь очень интересное, чтобы рассказать тебе.
+
 How are you, <CapPlayerName>? You look hungry. I am sorry, but I do not have anything to feed you.|Как ты, <CapPlayerName>? Ты выглядишь голодным. Мне жаль, но мне нечем тебя накормить.
 I wish you a successful hunt, I would not want my only companion to starve to death.|Я желаю тебе удачной охоты, я бы не хотела, чтобы мой единственный слушатель умер от голода.
-Come back when you feel better, I will try to tell you an interesting story.|Возвращайся, когда тебе станет лучше, я попытаюсь рассказать тебе интересную историю.
-
-//Case 3
-
-Hi, <CapPlayerName>! Or have I already said that?|Привет, <CapPlayerName>! Или я уже это говорила?
-As I remember, I promised to tell you an interesting story.|Насколько я помню, я обещала рассказать тебе интересную историю.
-I think you realise I was not always in this state. When I was built, I was already conscious,<LINE>I was taught social skills, instilled with new knowledge and generally treated with care.|Я думаю, ты понимаешь, что я не всегда была в таком состоянии. Когда я была построена, я уже была в сознании,<LINE>меня обучали навыкам общения, делились со мной знаниями и в целом относились ко мне с заботой.
-I liked being visited several times per cycle, I felt needed...|Мне нравилось, что меня посещали несколько раз за цикл, я чувствовала себя нужной...
-But that was so long ago, now I just wish the Five Pebbles would get better.|Но это было так давно, сейчас я лишь желаю, чтобы Пяти Галькам стало лучше.
-Do you have something interesting to show me?|У тебя есть что-то интересное показать мне?
+Come back when you feel better, I will try to tell you something interesting.|Возвращайся, когда тебе станет лучше, я попробую рассказать что-нибудь интересное.
 
 I am sorry, friend, but I cannot remember of any new stories I can tell you.|Мне жаль, дружок, но я не могу вспомнить ни одной новой истории, которую могла бы тебе расскать.
 I am embarrassed to ask you, but could you ask Five Pebbles for another neuron, I think he will not mind.|Мне неловко просить тебя, но не мог бы ты попросить у Пяти Галек ещё один нейрон, я думаю, он не будет против.

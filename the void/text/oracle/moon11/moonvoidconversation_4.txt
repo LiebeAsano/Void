@@ -1,6 +1,0 @@
-0 : Hi, <CapPlayerName>! Or have I already said that? : 60
-0 : As I remember, I promised to tell you an interesting story. : 60
-0 : I think you realise I was not always in this state. When I was built, I was already conscious,<LINE>I was taught social skills, instilled with new knowledge and generally treated with care. : 120
-0 : I liked being visited several times per cycle, I felt needed... : 180
-0 : But that was so long ago, now I just wish the Five Pebbles would get better. : 120
-0 : Do you have something interesting to show me? : 60

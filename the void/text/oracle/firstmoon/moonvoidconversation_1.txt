@@ -1,7 +1,7 @@
-0 : Hello there, <CapPlayerName>. : 60
-0 : What are you? Your appearance seems... Unusual, although familiar. : 90
-0 : I see you have received the gift of communication from one of us. Did the Five Pebbles give it to you, or maybe someone from faraway lands? : 60
-0 : In any case, it looks like you are capable of long-distance travel.  Did you see my friend on the way here, by any chance? He looks just like you, but I am not sure... : 120
-0 : He left me not so long ago, and… It can be very lonely here, although sometimes I hear someone scavenging in the rubbish. : 90
-0 : But looks like now I have you to keep me company. If you want to stay longer, of course. : 90
-0 : By the way, If you suddenly find something, you can bring it to me. And I might tell you something interesting about it. That's all I can do for now. : 60
+0 : Hello <CapPlayerName>. : 60
+0 : What are you? Your appearance seems... unusual, although familiar. : 90
+0 : I see you have a mark of communication. Did the Five Pebbles give it to you, or maybe someone from faraway lands? : 60
+0 : In any case, it looks like you are capable of long-distance travel. Did you see my friend on the way here, by any chance? He looks just like you, but I am not sure... : 120
+0 : He left me not so long ago, and... it can be very lonely here, although sometimes I hear someone scavenging in the rubbish. : 90
+0 : But looks like now I have you to keep me company. If you want to stay longer here, of course. : 90
+0 : By the way, If you suddenly find something, you can bring it to me. And I might tell you something interesting about it. That is all I can do for now. : 60

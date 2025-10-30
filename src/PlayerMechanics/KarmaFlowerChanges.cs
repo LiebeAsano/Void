@@ -67,7 +67,7 @@ public static class KarmaFlowerChanges
 
                 if (player.abstractCreature.world.game.IsVoidStoryCampaign())
                 {
-                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !SaveVoidCycle)
+                    if (player.KarmaCap != 10 && !saveState.GetVoidMarkV3() && !SaveVoidCycle && OptionAccessors.PermaDeath)
                     {
                         SaveVoidCycle = true;
                         saveState.SetVoidExtraCycles(saveState.GetVoidExtraCycles() + 1);

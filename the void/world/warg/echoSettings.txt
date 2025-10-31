@@ -3,6 +3,6 @@
 minkarma : 0
 size : 0.9
 radius : 5
-echosong : SH
+echosong : ELSE WARG
 room : WARG_W11
 defaultflip : -1

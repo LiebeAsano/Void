@@ -57,7 +57,7 @@
 		"maul_damage": 3,
 		"karma": 2,
 		"karma_cap": 2,
-		"the_mark": true,
+		"the_mark": false,
 		"the_glow": true,
 		"has_dreams": true,
 		"expedition_enabled": true,

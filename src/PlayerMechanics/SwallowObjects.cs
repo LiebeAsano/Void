@@ -180,7 +180,7 @@ public static class SwallowObjects
         }
         AbstractPhysicalObject potentialPearl = self.objectInStomach;
         orig(self);
-        if (potentialPearl != null && potentialPearl.realizedObject is DataPearl && self.IsVoid() && self.room != null &&
+        /*if (potentialPearl != null && potentialPearl.realizedObject is DataPearl && self.IsVoid() && self.room != null &&
             self.abstractCreature.world.game.session is StoryGameSession session && self.room.physicalObjects[1].Find(i => i is Oracle) is Oracle oracle)
         {
             if (oracle.oracleBehavior is SSOracleBehavior pebbles)
@@ -190,7 +190,7 @@ public static class SwallowObjects
             }
             else if (oracle.oracleBehavior is SLOracleBehavior moon)
                 moon.RegurgitatePearlsInterrupt();
-        }
+        }*/
     }
 
     private static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)

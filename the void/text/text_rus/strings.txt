@@ -137,12 +137,22 @@ Based on the data available I assume you interacted with the void fluid in some 
 In any case, I cannot help you with anything. You came to me too late.|В любом случае, я ничем не могу тебе помочь. Ты пришёл ко мне слишком поздно.
 Supposedly you have less than a cycle to live, so make the most of the time you have left. In the meantime, leave me alone.|Предположительно, тебе осталось жить меньше цикла, так что проведи оставшееся время с пользой. А пока оставь меня в покое.
 
+I have already told you that I cannot help you in any way. Accept your fate and do not waste your time.|Я уже сказал тебе, что я не могу тебе никак помочь. Прими свою судьбу и не трать время попросту.
+Are you still here? Go east to Looks to the Moon.|Ты всё ещё здесь? Отправляйся на восток к Смотрящей на Луну.
+I would suggest you cease wandering around. It is not like you have much time.|Я бы посоветовал тебе перестать бродить по округе. Похоже, у тебя не так уж много времени.
+Have you brought the pearls I need?|Ты принес жемчужины, которые мне нужны?
+Have you brought another pearl?|Ты принёс ещё одну жемчужину?
+The familiar colour, is this the pearl that contains the void liquid researches?|Знакомый цвет, не та ли это жемчужина, в которой содержится исследования пустотной жидкости?
+Did you really find it? This pearl will help us both.|Ты действительно нашел её? Эта жемчужина поможет нам обоим.
+What about the other one?|Что насчёт другой?
+
 //Case 1
 
 ...still alive. I did not expect this outcome.|...всё ещё жив. Я не ожидал такого исхода.
 Your health indicators are still at the same critical level as in the last cycle. One step away from death you continue to live.|Твои показатели здоровья всё ещё на том же критическом уровне, что и в прошлом цикле. Находясь в шаге от смерти, ты всё равно продолжаешь жить.
 Do you delay your death? I will set your mark to collect data about your condition. Probably it helps me find the answer to another problem.|Ты откладываешь свою смерть? Я настрою твою метку, чтобы собрать данные о твоём состоянии. Возможно, это поможет мне найти решение другой проблемы.
-You do not have to do anything, just come back to me after a few cycles.|Тебе ничего не нужно делать, просто вернись ко мне через несколько циклов.
+The procedure requires special precision, therefore do not move, or I might accidentally kill you.|Процедура потребует особой точности, поэтому не двигайся, иначе я могу случайно убить тебя.
+You do not have to do anything, just come back to me in the next cycle.|Тебе ничего не нужно делать, просто вернись ко мне в следующем цикле.
 Otherwise, it will only be easier for me if you do not return.|С другой стороны, мне будет только легче, если ты не вернёшься.
 Now get out of here, I do not need another great problem that does not have a solution.|А теперь убирайся отсюда, мне не нужна ещё одна великая задача, что не имеет решения.
 
@@ -164,11 +174,14 @@ Why are you always being followed by an NSH's overseer? Why is he so interested 
 Oh... it is you... To be precise, what is left of you.|О... это ты... Если быть точнее, то что осталось от тебя.
 Were you able to complete your mission, little creature?|Ты смог завершить свою миссию, маленькое существо?
 Apparently, you do not understand what I mean.|Очевидно, что ты не понимаешь о чём я.
-I will refine your mark so that it can record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak.|Я улучшу твою метку, чтобы она могла записывать разговоры. Отправляйся на восток, Смотрящая на Луну находится там, надеюсь она способна хотя бы говорить.
+Your mark is advanced enough to record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak.|Твоя метка достаточно продвинута, чтобы записывать разговоры. Иди на восток к Смотрящей на Луну, надеюсь, она способна хотя бы говорить.
 Then come back to me, there is a possibility, I can find a solution to your desperate situation.|Затем возвращайся ко мне, существует вероятность, что я смогу найти решение из твоей безвыходной ситуации.
 Now leave me alone for your sake, I have more work to do.|А сейчас оставь меня в покое для твоего же блага, у меня ещё много работы.
 
 // Case 4
+
+Overall, I have enough data to complete my research.|В целом, у меня достаточно данных, чтобы завершить своё исследование.
+I will need some time to finish my preparations, come back to me later.|Мне понадобится некоторое время, чтобы закончить свои приготовления, возращайся ко мне позже.
 
 Come back as soon as you complete my request.|Возвращайся, как только выполнишь мою просьбу.
 I do not see the right records in your mark. Do not worry me about nothing.|Я не вижу в твоей метке нужных записей. Не беспокой меня по пустякам.
@@ -186,6 +199,8 @@ The pearls with the necessary data should have been located in the underground w
 Bring me at least one to continue my work. Go right away and do not waste my time.|Принеси мне хотя бы одну, чтобы я мог продолжить работу. Иди прямо сейчас и не трать моё время.
 
 //Case 5
+You are familiar with the procedure, so do not move too much.|Ты уже знаком с данной процедурой, так что не дёргайся.
+If you wish to leave my complex, head west through the Farm Arrays, your skills will allow you to climb over the Retaining Wall without any problems.|Если ты хочешь покинуть мой комплекс, направляйся на запад через Фермерские массивы, твоих навыков вполне хватит, чтобы без проблем перелезть Подпорную стену.
 
 Is that what I think it is?|Это то, о чём я думаю?
 Excellent, you really are a good messenger.|Превосходно, ты действительно хороший посыльщик.

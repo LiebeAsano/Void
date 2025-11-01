@@ -7,6 +7,7 @@ using VoidTemplate.OptionInterface;
 using Music;
 using MonoMod.Cil;
 using System.CodeDom;
+using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery
 {
@@ -73,6 +74,7 @@ namespace VoidTemplate.MenuTinkery
                     return rainWorldTheme;
                 });
             }
+            else LogExErr("Cannot emit void menu theme");
         }
 
         private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, Menu.MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
@@ -92,10 +94,7 @@ namespace VoidTemplate.MenuTinkery
                 }
                 if (player.song == null)
                 {
-                    player.song = new VoidMenuTheme(manager.musicPlayer)
-                    {
-                        playWhenReady = true
-                    };
+                    player.song = new VoidMenuTheme(manager.musicPlayer, true);
                     return;
                 }
                 player.nextSong = new VoidMenuTheme(manager.musicPlayer);
@@ -115,8 +114,9 @@ namespace VoidTemplate.MenuTinkery
 
         public class VoidMenuTheme : Song
         {
-            public VoidMenuTheme(MusicPlayer musicPlayer) : base(musicPlayer, CurrentMainMenuTheme, MusicPlayer.MusicContext.Menu)
+            public VoidMenuTheme(MusicPlayer musicPlayer, bool playWhenReady = false) : base(musicPlayer, CurrentMainMenuTheme, MusicPlayer.MusicContext.Menu)
             {
+                this.playWhenReady = playWhenReady;
                 Loop = true;
             }
         }

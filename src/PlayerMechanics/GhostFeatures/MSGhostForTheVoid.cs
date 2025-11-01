@@ -55,7 +55,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
             orig(self, eu);
 
             if (self.room?.game?.session is StoryGameSession storyGameSession && storyGameSession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void
-                && self.room.world.region.name == "MS"
+                && self.room.world.region?.name == "MS"
                 && TheVoidCanMeetMSGhost(self.room.world) && !HasMetMSGhost(storyGameSession.saveState.deathPersistentSaveData))
             {
                 GhostPingControlData ghostPingControlData = ghostPingControlDataCWT.GetValue(self, (player) => new GhostPingControlData() { playerLastUpdateRegion = player.room.world.region.name });

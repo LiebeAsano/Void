@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.Useful;
 using static VoidTemplate.OptionInterface.OptionAccessors;
@@ -166,23 +167,26 @@ static class PermadeathConditions
 	}
 	private static void ApplicationQuitGameOver()
 	{
-		RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
-		if (rainWorld != null
-			&& rainWorld.processManager is ProcessManager manager
-			&& manager.currentMainLoop is RainWorldGame game)
+		if (!VoidDreamScript.IsVoidDream)
 		{
-			if (VoidSpecificGameOverCondition(game))
+			RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
+			if (rainWorld != null
+				&& rainWorld.processManager is ProcessManager manager
+				&& manager.currentMainLoop is RainWorldGame game)
 			{
-                SetVoidCatDeadTrue(game);
-            }
-			if (game.GetStorySession.saveState.GetKarmaToken() > 0
-				&& game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-			{
-                var savestate = game.GetStorySession.saveState;
-                savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
-				savestate.SessionEnded(game, false, false);
-            }
-        }
+				if (VoidSpecificGameOverCondition(game))
+				{
+					SetVoidCatDeadTrue(game);
+				}
+				if (game.GetStorySession.saveState.GetKarmaToken() > 0
+					&& game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+				{
+					var savestate = game.GetStorySession.saveState;
+					savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+					savestate.SessionEnded(game, false, false);
+				}
+			}
+		}
 	}
 	private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
 	{
@@ -198,14 +202,18 @@ static class PermadeathConditions
 	private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
 	{
 		orig(self);
-		if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * TicksPerSecond) SetVoidCatDeadTrue(self);
-		if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * TicksPerSecond)
+		if (!VoidDreamScript.IsVoidDream)
 		{
-            var savestate = self.world.game.GetStorySession.saveState;
-            session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
-            savestate.SessionEnded(self.world.game, false, false);
+			if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * TicksPerSecond) SetVoidCatDeadTrue(self);
+			if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * TicksPerSecond)
+			{
+				var savestate = self.world.game.GetStorySession.saveState;
+				session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
+				savestate.SessionEnded(self.world.game, false, false);
+			}
         }
-	}
+		else VoidDreamScript.IsVoidDream = false;
+    }
 	private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
 	{
 		if (self.IsVoidWorld())

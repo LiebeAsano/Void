@@ -133,16 +133,15 @@ public static class SaveManager
     public static int GetVoidFoodToHibernate(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidFoodToHibernate, out int value) ? value : 0;
     public static void SetVoidFoodToHibernate(this SaveState save, int value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidFoodToHibernate, value);
 
-    private static string unlockOEGateForVoid = uniqueprefix + "UnlockOEGateForVoid";
+    private const string unlockOEGateForVoid = uniqueprefix + "UnlockOEGateForVoid";
 
     public static bool GetOEUnlockForVoid(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(unlockOEGateForVoid, out bool value) && value;
     public static void SetOEUnlockForVoid(this SaveState save, bool value) => save.deathPersistentSaveData.GetSlugBaseData().Set(unlockOEGateForVoid, value);
 
-    private static string voidEndingTree = uniqueprefix + "VoidEndingTree";
+    private const string voidEndingTree = uniqueprefix + "VoidEndingTree";
 
     public static bool GetVoidEndingTree(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidEndingTree, out bool value) && value;
     public static void SetVoidEndingTree(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidEndingTree, value);
-
 
     private const string voidPearl = uniqueprefix + "voidPearl";
     private const string rotPearl = uniqueprefix + "rotPearl";

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
@@ -144,9 +145,7 @@ public static class DrawSprites
         //game behaves in a really weird way when you try to touch tail, so we just gonna make a new one and overlay it over the old one
         if (player.AreVoidViy() && (player.KarmaCap == 10 || Karma11Update.VoidKarma11))
         {
-            var tail = sLeaser.sprites[2] as TriangleMesh;
-            //changing tail sprite element
-            tail.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName(self.player.Malnourished ? "Void-MalnourishmentTail" : "Void-Tail"), tail.triangles.Length);
+            var tail = sLeaser.sprites[2] as TriangleMesh;            
             //mapping element to tail
             for (var i = tail.vertices.Length - 1; i >= 0; i--)
             {
@@ -336,52 +335,32 @@ public static class DrawSprites
             if (player.abstractCreature.world.game.session is StoryGameSession session
                 && !Utils.DressMySlugcatEnabled)
             {
-                string newSpriteName = GetVoidMarkSpriteName(session, currentMarkSpriteName);
-                if (Futile.atlasManager.DoesContainElementWithName(newSpriteName))
-                {
-                    sLeaser.sprites[11].element = Futile.atlasManager.GetElementWithName(newSpriteName);
-                }
+                SetVoidSprite(sLeaser.sprites[11], GetVoidMarkSpriteName(session, currentMarkSpriteName), "");
             }
         }
 
         #region head
         if (player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
-            FSprite sprite = sLeaser.sprites[3];
-            string headSpriteName = sprite.element.name;
+            FSprite headSprite = sLeaser.sprites[3];
+            string headSpriteName = headSprite.element.name;
             if (player.IsTouchingDiagonalCeiling())
             {
                 if (!player.input[0].jmp)
                 {
-
-                    string head = "VoidDCeil-";
-                    if (Futile.atlasManager.DoesContainElementWithName(head + headSpriteName))
-                        sprite.element = Futile.atlasManager.GetElementWithName(head + headSpriteName);
+                    SetVoidHeadSprite("VoidDCeil-");
                 }
-                else
-                {
-
-                    string head = "Void-";
-                    if (Futile.atlasManager.DoesContainElementWithName(head + headSpriteName))
-                        sprite.element = Futile.atlasManager.GetElementWithName(head + headSpriteName);
-
-                }
+                else SetVoidHeadSprite("Void-");
             }
             else if (player.IsTouchingCeiling())
             {
                 if (!player.input[0].jmp)
                 {
-                    string head = "VoidCeil-";
-                    if (Futile.atlasManager.DoesContainElementWithName(head + headSpriteName))
-                        sprite.element = Futile.atlasManager.GetElementWithName(head + headSpriteName);
+                    SetVoidHeadSprite("VoidCeil-");
                 }
-                else
-                {
-                    string head = "Void-";
-                    if (Futile.atlasManager.DoesContainElementWithName(head + headSpriteName))
-                        sprite.element = Futile.atlasManager.GetElementWithName(head + headSpriteName);
-                }
+                else SetVoidHeadSprite("Void-");
             }
+            void SetVoidHeadSprite(string spriteName) => SetVoidSprite(headSprite, spriteName, headSpriteName);
         }
         #endregion
 
@@ -398,95 +377,59 @@ public static class DrawSprites
         }
 
         Utils.VoidColors[player.playerState.playerNumber] = faceSprite.color;
-
-        if (player.IsTouchingDiagonalCeiling()
-            && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+        if (!self.player.abstractCreature.GetPlayerState().InDream)
         {
-            if (!player.input[0].jmp
-                && player.bodyMode != Player.BodyModeIndex.ZeroG
-                && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
+            if (player.IsTouchingDiagonalCeiling()
+                && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
             {
-
-                string face = "VoidDCeil-";
-                if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                    faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
-
-            }
-            else
-            {
-
-                string face = "Void-";
-                if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                    faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
-
-            }
-        }
-
-        else if (player.IsTouchingCeiling()
-            && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
-        {
-            if (!player.input[0].jmp
-                && player.bodyMode != Player.BodyModeIndex.ZeroG
-                && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
-                && playerBodyChunk0.pos.y <= playerBodyChunk1.pos.y + 5)
-            {
-
-                string face = "VoidCeil-";
-                if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                    faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
-
-            }
-            else
-            {
-
-                string face = "Void-";
-                if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                    faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
-
-            }
-        }
-        else
-        {
-            if (playerBodyChunk0.pos.y + 10f > playerBodyChunk1.pos.y
-                || player.bodyMode == Player.BodyModeIndex.ZeroG
-                || player.bodyMode == Player.BodyModeIndex.Dead
-                || player.bodyMode == Player.BodyModeIndex.Stunned
-                || player.bodyMode == Player.BodyModeIndex.Crawl)
-            {
-                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[player.playerState.playerNumber])
+                if (!player.input[0].jmp
+                    && player.bodyMode != Player.BodyModeIndex.ZeroG
+                    && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
                 {
-                    string face = "Void-";
-                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                    SetVoidFaceSprite("VoidDCeil-");
+                }
+                else SetVoidFaceSprite("Void-");
+            }
+            else if (player.IsTouchingCeiling()
+                && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            {
+                if (!player.input[0].jmp
+                    && player.bodyMode != Player.BodyModeIndex.ZeroG
+                    && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
+                    && playerBodyChunk0.pos.y <= playerBodyChunk1.pos.y + 5)
+                {
+                    SetVoidFaceSprite("VoidCeil-");
+                }
+                else SetVoidFaceSprite("Void-");
+            }
+            else
+            {
+                if (playerBodyChunk0.pos.y + 10f > playerBodyChunk1.pos.y
+                    || player.bodyMode == Player.BodyModeIndex.ZeroG
+                    || player.bodyMode == Player.BodyModeIndex.Dead
+                    || player.bodyMode == Player.BodyModeIndex.Stunned
+                    || player.bodyMode == Player.BodyModeIndex.Crawl)
+                {
+                    if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[player.playerState.playerNumber])
+                    {
+                        SetVoidFaceSprite("Void-");
+                    }
+                    else SetVoidFaceSprite("VoidA-");
+
                 }
                 else
                 {
-                    string face = "VoidA-";
-                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
+                    if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
+                    {
+                        SetVoidFaceSprite("VoidDown-");
+                    }
+                    else SetVoidFaceSprite("VoidADown-");
                 }
-
             }
-            else
-            {
-                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
-                {
-                    string face = "VoidDown-";
-                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
-                }
-                else
-                {
-                    string face = "VoidADown-";
-                    if (Futile.atlasManager.DoesContainElementWithName(face + faceSpriteName))
-                        faceSprite.element = Futile.atlasManager.GetElementWithName(face + faceSpriteName);
-                }
-
-            }
+            void SetVoidFaceSprite(string spriteName) => SetVoidSprite(faceSprite, spriteName, faceSpriteName);
         }
-
         #endregion
-
+        
         #region echoTail
         if (sLeaser.sprites[2] is TriangleMesh tail)
         {
@@ -532,6 +475,13 @@ public static class DrawSprites
             {
                 sprite.color = voidColor;
             }
+        }
+
+        static void SetVoidSprite(FSprite toSprite, string spriteName, string origSprite)
+        {
+            string sprite = spriteName + origSprite;
+            if (Futile.atlasManager.DoesContainElementWithName(sprite))
+                toSprite.element = Futile.atlasManager.GetElementWithName(sprite);
         }
     }
 

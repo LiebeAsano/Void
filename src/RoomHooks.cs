@@ -2,9 +2,14 @@
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
+using RWCustom;
 using SlugBase;
 using SlugBase.Features;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using VoidTemplate.Objects;
 using static VoidTemplate.Useful.Utils;
@@ -13,6 +18,7 @@ namespace VoidTemplate
 {
     static class RoomHooks
     {
+
         public static void Hook()
         {
             On.RainWorldGame.ctor += RainWorldGame_ctor;
@@ -27,6 +33,149 @@ namespace VoidTemplate
             On.RainWorldGame.BeatGameMode += RainWorldGame_BeatGameMode;
             On.AbstractCreatureAI.Update += AbstractCreatureAI_Update;
             On.AbstractCreatureAI.SetDestination += AbstractCreatureAI_SetDestination;
+            On.OverWorld.LoadFirstWorld += OverWorld_LoadVoidDreamWorld;
+            On.WorldLoader.ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues += WorldLoader_ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues;
+        }
+
+        private static void WorldLoader_ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues(On.WorldLoader.orig_ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues orig, WorldLoader self, RainWorldGame game, SlugcatStats.Name playerCharacter, SlugcatStats.Timeline timelinePosition, bool singleRoomWorld, string worldName, Region region, RainWorldGame.SetupValues setupValues)
+        {
+            if (VoidDreamScript.IsVoidDream)
+            {
+                self.roomAdder = [];
+                self.roomTags = [];
+                self.swarmRoomsList = [];
+                self.sheltersList = [];
+                self.gatesList = [];
+                self.faultyExits = [];
+                self.tempBatBlocks = [];
+                self.spawners = [];
+                self.abstractRooms = [];
+                self.activity = WorldLoader.Activity.Init;
+
+                self.game = game;
+                self.timelinePosition = timelinePosition;
+                self.playerCharacter = playerCharacter;
+                self.creatureStats = new float[ExtEnum<CreatureTemplate.Type>.values.Count + 5];
+                self.ConditionalLinkList = new List<WorldLoader.ConditionalLink>();
+                self.ReplaceRoomNames = new Dictionary<string, string>();
+                float num = 0f;
+                int num2 = 0;
+                float num3 = 0f;
+                float num4 = 0f;
+                if (ModManager.PrecycleModule && game != null)
+                {
+                    num = game.globalRain.preCycleRainPulse_Scale;
+                    if (game.overWorld != null && game.world != null)
+                    {
+                        num2 = game.world.rainCycle.sunDownStartTime;
+                        num3 = game.globalRain.drainWorldFlood;
+                        num4 = game.globalRain.drainWorldFlood;
+                    }
+                }
+                self.world = new World(game, region, worldName, singleRoomWorld);
+                if (game != null)
+                {
+                    game.timeInRegionThisCycle = 0;
+                }
+                if (ModManager.PrecycleModule)
+                {
+                    if (self.game != null && self.game.overWorld != null && self.game.world != null)
+                    {
+                        game.globalRain.preCycleRainPulse_Scale = num;
+                        self.world.rainCycle.sunDownStartTime = num2;
+                        game.globalRain.drainWorldFlood = num3;
+                        game.globalRain.drainWorldFlood = num4;
+                        Custom.Log(new string[]
+                        {
+                "Loaded world, transfering precycle scale",
+                self.game.globalRain.preCycleRainPulse_Scale.ToString()
+                        });
+                    }
+                    else
+                    {
+                        Custom.Log(new string[] { "First world loaded, holding precycle scale." });
+                    }
+                }
+                self.singleRoomWorld = singleRoomWorld;
+                self.worldName = worldName;
+                self.setupValues = setupValues;
+                self.lines = new List<string>();
+                if (!singleRoomWorld)
+                {
+                    string[] array = File.ReadAllLines(AssetManager.ResolveFilePath(string.Concat(new string[]
+                    {
+            "World",
+            Path.DirectorySeparatorChar.ToString(),
+            worldName,
+            Path.DirectorySeparatorChar.ToString(),
+            "world_",
+            worldName,
+            ".txt"
+                    })));
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        string text = WorldLoader.Preprocessing.PreprocessLine(array[i], game, timelinePosition);
+                        if (text != null)
+                        {
+                            self.lines.Add(text);
+                        }
+                    }
+                }
+                if (!singleRoomWorld)
+                {
+                    self.simulateUpdateTicks = 100;
+                }
+                Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
+                for (int j = self.lines.Count - 1; j > 0; j--)
+                {
+                    string[] array2 = Regex.Split(self.lines[j], " : ");
+                    if (array2.Length == 3 && !(array2[1] != "EXCLUSIVEROOM"))
+                    {
+                        if (!dictionary.ContainsKey(array2[2]))
+                        {
+                            dictionary[array2[2]] = [.. array2[0].Split(',')];
+                        }
+                        else
+                        {
+                            dictionary[array2[2]].AddRange(array2[0].Split(new char[] { ',' }));
+                        }
+                        self.lines.RemoveAt(j);
+                    }
+                }
+                if (dictionary.Count > 0)
+                {
+                    int num5 = -1;
+                    for (int k = 0; k < self.lines.Count; k++)
+                    {
+                        if (self.lines[k] == "END CONDITIONAL LINKS")
+                        {
+                            num5 = k - 1;
+                            break;
+                        }
+                    }
+                    if (num5 != -1)
+                    {
+                        foreach (KeyValuePair<string, List<string>> keyValuePair in dictionary)
+                        {
+                            self.lines.Insert(num5, string.Join(",", keyValuePair.Value) + " : EXCLUSIVEROOM : " + keyValuePair.Key);
+                        }
+                    }
+                }
+                MapExporter.WorldLoader_ctor(self, self.lines);
+                return;
+            }
+            orig(self, game, playerCharacter, timelinePosition, singleRoomWorld, worldName, region, setupValues);
+        }
+
+        private static void OverWorld_LoadVoidDreamWorld(On.OverWorld.orig_LoadFirstWorld orig, OverWorld self)
+        {
+            if (VoidDreamScript.IsVoidDream)
+            {
+                self.LoadWorld("SU_A06", self.PlayerCharacterNumber, self.PlayerTimelinePosition, true);
+                self.FIRSTROOM = "SU_A06";
+                return;
+            }
+            orig(self);
         }
 
         private static void AbstractCreatureAI_SetDestination(On.AbstractCreatureAI.orig_SetDestination orig, AbstractCreatureAI self, WorldCoordinate newDest)
@@ -171,6 +320,7 @@ namespace VoidTemplate
 
         private static void RainWorldGame_ctor(On.RainWorldGame.orig_ctor orig, RainWorldGame self, ProcessManager manager)
         {
+            if (VoidDreamScript.IsVoidDream) manager.musicPlayer?.FadeOutAllSongs(5);
             orig(self, manager);
             for (int i = 0; i < self.Players.Count; i++)
             {
@@ -210,7 +360,10 @@ namespace VoidTemplate
                         self.AddObject(new EnqueueMoonDream(self));
                         break;
                 }
-
+            }
+            if (VoidDreamScript.IsVoidDream)
+            {
+                self.AddObject(new VoidDreamScript());
             }
         }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
@@ -52,7 +53,7 @@ public static class Climbing
 
 	private static void Player_UpdateWallJump(On.Player.orig_WallJump orig, Player self, int direction)
 	{
-		if (self.AreVoidViy() && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[self.playerState.playerNumber]))
+		if (self.AreVoidViy() && (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !switchMode[self.playerState.playerNumber]) && !self.abstractCreature.GetPlayerState().InDream)
 		{
 
 			BodyChunk body_chunk_0 = self.bodyChunks[0];
@@ -213,7 +214,7 @@ public static class Climbing
             else switchMode[player.playerState.playerNumber] = !switchMode[player.playerState.playerNumber];
         }
 
-        if (!player.AreVoidViy() || OptionAccessors.ComplexControl && switchMode[player.playerState.playerNumber])
+        if (!player.AreVoidViy() || OptionAccessors.ComplexControl && switchMode[player.playerState.playerNumber] || player.abstractCreature.GetPlayerState().InDream)
 		{
 			orig(player);
 			return;
@@ -399,7 +400,7 @@ public static class Climbing
 		}
 	}
 
-	private static void UpdateBodyMode_CeilCrawl(Player player, PlayerState state)
+	private static void UpdateBodyMode_CeilCrawl(Player player, VoidState state)
 	{
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
@@ -633,13 +634,13 @@ public static class BodyModeIndexExtension
 
 public static class PlayerExtensions
 {
-	private static readonly ConditionalWeakTable<AbstractCreature, PlayerState> PlayerStates = new();
+	private static readonly ConditionalWeakTable<AbstractCreature, VoidState> PlayerStates = new();
 
-	public static PlayerState GetPlayerState(this AbstractCreature player)
+	public static VoidState GetPlayerState(this AbstractCreature player)
 	{
-		if (!PlayerStates.TryGetValue(player, out PlayerState state))
+		if (!PlayerStates.TryGetValue(player, out VoidState state))
 		{
-			state = new PlayerState();
+			state = new VoidState();
 			PlayerStates.Add(player, state);
 		}
 
@@ -647,11 +648,12 @@ public static class PlayerExtensions
 	}
 }
 
-public class PlayerState
+public class VoidState
 {
 	public bool IsCeilCrawling { get; set; } = false;
 	public bool IsWallCrawling { get; set; } = false;
 	public float CeilCrawlStartTime { get; set; } = 0f;
+	public bool InDream { get; } = VoidDreamScript.IsVoidDream;
 }
 
 /*public class PlayerRoomChecker

@@ -7,7 +7,7 @@
   "Requirements": "moreslugcats,slime-cubed.slugbase",
   "RequirementNames": "More Slugcats Expansion,SlugBase",
   "Authors": "Liebe Asano",
-  "Visibility": "Friends-only",
+  "Visibility": "Public",
   "Tags": [
     "Regions",
     "Campaigns",
@@ -16,7 +16,7 @@
     "Items",
     "Custom Slugcat"
   ],
-  "WorkshopID": 3343761227,
+  "WorkshopID": 3127426082,
   "UploadFilesOnly": true,
   "UploadThumbnail": false
 }

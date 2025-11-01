@@ -25,7 +25,7 @@ namespace VoidTemplate;
 [BepInPlugin(MOD_ID, "Void", "0.17.2")]
 class _Plugin : BaseUnityPlugin
 {
-	private const string MOD_ID = "void.lwteam";
+	private const string MOD_ID = "rainworldlastwish";
 
 	/// <summary>
 	/// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs
@@ -157,7 +157,7 @@ class _Plugin : BaseUnityPlugin
 	private static void RegisterPOMObjects()
 	{
 		Objects.PomObjects.TheVoidRoomWideStaggerByGhost.Register();
-		Objects.PomObjects.LizardCorpse.Register();
+		Objects.PomObjects.LizardCorpse.Register();   
 		Objects.PomObjects.AlbinoVultureTriggerSpawner.Register();
         Objects.PomObjects.VultureTriggerSpawner.Register();
 		Objects.PomObjects.Warp.Register();

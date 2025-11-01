@@ -11,7 +11,7 @@ using SlugBase.Features;
 namespace VoidTemplate.Useful;
 public static class Utils
 {
-	public const string ModID = "void.lwteam";
+	public const string ModID = "rainworldlastwish";
 	public const int TicksPerSecond = 40;
 	public static void loginf(object e) => _Plugin.logger.LogInfo(e);
 	public static void logerr(object e) => _Plugin.logger.LogError(e);

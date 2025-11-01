@@ -22,6 +22,7 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate;
 
+[BepInDependency("slime-cubed.slugbase")]
 [BepInPlugin(MOD_ID, "Void", "0.17.2")]
 class _Plugin : BaseUnityPlugin
 {

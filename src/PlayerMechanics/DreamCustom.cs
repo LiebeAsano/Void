@@ -165,7 +165,6 @@ public static class DreamCustom
                         break;
                     }
             }
-            saveState.ForceEnlistDreamInShowQueue(SaveManager.Dream.HunterRot);
         }
         orig(self, saveState, currentRegion, denPosition);
     }

@@ -19,7 +19,7 @@ namespace VoidTemplate.ModsCompatibilty
         public static void Init()
         {
             CreateBloodTextureForVoid();
-            new Hook(bloodEmitterCtor, BloodEmitterHook);
+            new Hook(bloodEmitterCtor, bloodEmitterHook);
         }
 
         public static void CreateBloodTextureForVoid()
@@ -44,7 +44,8 @@ namespace VoidTemplate.ModsCompatibilty
             Futile.atlasManager.LoadAtlasFromTexture(voidBloodTexName + "Tex", voidBloodTexture, false);
         }
 
-        private static void BloodEmitterHook(Action<BloodEmitter, Spear, BodyChunk, float, float> orig, BloodEmitter self, Spear spear, BodyChunk chunk, float velocity, float bleedTime)
+        private static Delegate bloodEmitterHook =
+        (Action<BloodEmitter, Spear, BodyChunk, float, float> orig, BloodEmitter self, Spear spear, BodyChunk chunk, float velocity, float bleedTime) =>
         {
             orig(self, spear, chunk, velocity, bleedTime);
             if (chunk.owner is Player player && player.IsVoid())
@@ -52,6 +53,6 @@ namespace VoidTemplate.ModsCompatibilty
                 self.creatureColor = DrawSprites.voidColor;
                 self.splatterColor = voidBloodTexName;
             }
-        }
+        };
     }
 }

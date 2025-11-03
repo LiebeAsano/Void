@@ -402,3 +402,4 @@ FodyWeavers.xsd
 #custom ignored files
 the\ void/plugins/
 /the void/plugins/VoidTemplate.dll
+the void/thumbnail.png

@@ -18,7 +18,15 @@ namespace VoidTemplate.PlayerMechanics
         private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player self)
         {
             orig(self);
-            if (self.IsVoid())
+            if (self.abstractCreature.GetPlayerState().InDream)
+            {
+                self.slugcatStats.throwingSkill = 2;
+                self.slugcatStats.corridorClimbSpeedFac = 1.25f;
+                self.slugcatStats.poleClimbSpeedFac = 1.25f;
+                self.slugcatStats.runspeedFac = 1.2f;
+                self.slugcatStats.bodyWeightFac = 1.12f;
+            }
+            else if (self.IsVoid())
             {
                 float crawlSpeed;
                 if (self.KarmaCap == 10)

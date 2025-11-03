@@ -7,7 +7,7 @@ using LizardCosmetics;
 
 namespace VoidTemplate.Creatures
 {
-    public class IceLizardGraphics : LizardGraphics
+    public class LWIceLizardGraphics : LizardGraphics
     {
         public float invisTime;
 
@@ -17,7 +17,7 @@ namespace VoidTemplate.Creatures
 
         public bool isVisible = true;
 
-        public IceLizardGraphics(IceLizard ow) : base(ow)
+        public LWIceLizardGraphics(LWIceLizard ow) : base(ow)
         {
             Random.State state = Random.state;
             Random.InitState(ow.abstractCreature.ID.RandomSeed);

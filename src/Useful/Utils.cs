@@ -1,5 +1,4 @@
-﻿global using static VoidTemplate.Useful.Utils;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
 using System.IO;
@@ -18,9 +17,9 @@ public static class Utils
 	public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 	public static string TranslateString(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str);
     
-    public static bool IsVoid(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void;
-    public static bool IsViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Viy;
-    public static bool AreVoidViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void || p.SlugCatClass == VoidEnums.SlugcatID.Viy;
+    public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void;
+    public static bool IsViy(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Viy;
+    public static bool AreVoidViy(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void || p.slugcatStats.name == VoidEnums.SlugcatID.Viy;
     public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;
 	public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
 			&& !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
@@ -38,11 +37,11 @@ public static class Utils
 	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
 	public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
 	{
-		loginf($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:\n{data}");
+		loginf($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
 	}
 	public static void LogExErr(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
 	{
-		logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:\n{data}");
+		logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
 	}
 
     private static bool? dressMySlugcatEnabled = null;

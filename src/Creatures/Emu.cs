@@ -8,13 +8,13 @@ namespace VoidTemplate;
 
 public static class CreatureTemplateType
 {
-    public static CreatureTemplate.Type Mimicstarfish = new CreatureTemplate.Type("Mimicstar", true);
+    public static CreatureTemplate.Type LWMimicstarfish = new CreatureTemplate.Type("LWMimicstar", true);
 
     public static CreatureTemplate.Type Outspector = new(nameof(Outspector), true);
 
     public static CreatureTemplate.Type OutspectorB = new(nameof(OutspectorB), true);
 
-    public static CreatureTemplate.Type IceLizard = new("IceLizard", true);
+    public static CreatureTemplate.Type LWIceLizard = new("LWIceLizard", true);
 
     public static CreatureTemplate.Type DartspiderP = new("DartspiderP", true);
 
@@ -28,10 +28,10 @@ public static class CreatureTemplateType
 
     public static void UnregisterValues()
     {
-        if (Mimicstarfish != null)
+        if (LWMimicstarfish != null)
         {
-            Mimicstarfish.Unregister();
-            Mimicstarfish = null;
+            LWMimicstarfish.Unregister();
+            LWMimicstarfish = null;
         }
         if (Outspector != null)
         {
@@ -43,10 +43,10 @@ public static class CreatureTemplateType
             OutspectorB.Unregister();
             OutspectorB = null;
         }
-        if (IceLizard != null)
+        if (LWIceLizard != null)
         {
-            IceLizard.Unregister();
-            IceLizard = null;
+            LWIceLizard.Unregister();
+            LWIceLizard = null;
         }
         if (DartspiderP != null)
         {

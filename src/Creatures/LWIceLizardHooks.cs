@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace VoidTemplate.Creatures
 {
-    internal class IceLizardHooks
+    internal class LWIceLizardHooks
     {
         public static void Hook()
         {
@@ -22,7 +22,7 @@ namespace VoidTemplate.Creatures
 
         private static Color LizardGraphics_BodyColor(On.LizardGraphics.orig_BodyColor orig, LizardGraphics self, float f)
         {
-            if (self is IceLizardGraphics)
+            if (self is LWIceLizardGraphics)
             {
                 return self.DynamicBodyColor(f);
             }
@@ -31,7 +31,7 @@ namespace VoidTemplate.Creatures
 
         private static Color LizardGraphics_DynamicBodyColor(On.LizardGraphics.orig_DynamicBodyColor orig, LizardGraphics self, float f)
         {
-            if (self is IceLizardGraphics)
+            if (self is LWIceLizardGraphics)
             {
                 return Color.Lerp(self.palette.blackColor, self.whiteCamoColor, self.whiteCamoColorAmount);
             }
@@ -42,7 +42,7 @@ namespace VoidTemplate.Creatures
         {
             new Hook(typeof(LizardGraphics).GetMethod("get_HeadColor1", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic), new Func<Func<LizardGraphics, Color>, LizardGraphics, Color> ((Func<LizardGraphics, Color> orig, LizardGraphics self) =>
             {
-                if (self is IceLizardGraphics ice)
+                if (self is LWIceLizardGraphics ice)
                 {
                     return Color.Lerp(self.palette.blackColor, self.whiteCamoColor, self.whiteCamoColorAmount);
                 }
@@ -50,7 +50,7 @@ namespace VoidTemplate.Creatures
             }));
             new Hook(typeof(LizardGraphics).GetMethod("get_HeadColor2", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic), new Func<Func<LizardGraphics, Color>, LizardGraphics, Color>((Func<LizardGraphics, Color> orig, LizardGraphics self) =>
             {
-                if (self is IceLizardGraphics ice)
+                if (self is LWIceLizardGraphics ice)
                 {
                     return Color.Lerp(self.effectColor, self.whiteCamoColor, self.whiteCamoColorAmount);
                 }
@@ -61,7 +61,7 @@ namespace VoidTemplate.Creatures
         private static LizardGraphics.IndividualVariations LizardGraphics_GenerateIvars(On.LizardGraphics.orig_GenerateIvars orig, LizardGraphics self)
         {
             var iVars = orig(self);
-            if (self is IceLizardGraphics)
+            if (self is LWIceLizardGraphics)
             {
                 iVars.fatness = Mathf.Min(1f, iVars.fatness);
                 iVars.tailFatness = Mathf.Min(1f, iVars.tailFatness);

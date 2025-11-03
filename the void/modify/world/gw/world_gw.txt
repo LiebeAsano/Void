@@ -40,7 +40,7 @@ CREATURES]
 GW_RF02 : 2-Snail-2, 5-Sea Leech-6, 6-Sea Leech-6, 7-Garbage Worm-2
 GW_B08 : 3-CicadaB-1, 4-CicadaA-2, 9-Leech-3, 10-Leech-5, 11-Leech-5, 13-Sea Leech-10, 14-Sea Leech-10
 (Void)GW_LWB02 : 2-Bro
-(Void)GW_LWC01 : 2-MimicStar
+(Void)GW_LWC01 : 2-LWMimicStar
 (Void)GW_LWD01 : 2-Bro
 (Void)GW_B01 : 5-Leech-10, 3-Leech-5, 9-Garbage Worm-2
 (Void)GW_C01 : 10-Garbage Worm-4, 3-Leech-7, 5-Leech-7

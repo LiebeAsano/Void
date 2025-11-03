@@ -37,7 +37,7 @@ Data Archives|Архивы Данных
 The Tumor|Опухоль
 Quantum Research Complex|Комплекс Квантовых Исследований
 Akashic Records|Хроники Акаши
-Retained Wall|Подпорная Стена
+Retaining Wall|Подпорная Стена
 Far Wall|Дальняя Стена
 Icy Wastelands|Ледяные Пустоши
 Communication Array|Массив Связи

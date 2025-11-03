@@ -109,6 +109,7 @@ public static class DreamCustom
     {
         if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
+            //saveState.ForceEnlistDreamInShowQueue(SaveManager.Dream.HunterRot);
             switch (currentRegion)
             {
                 case "LF":
@@ -135,11 +136,6 @@ public static class DreamCustom
             }
             switch (saveState.cycleNumber)
             {
-                case >= 24:
-                    {
-                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.HunterRot);
-                        break;
-                    }
                 case >= 18:
                     {
                         saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidSea);

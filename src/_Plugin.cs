@@ -66,10 +66,10 @@ class _Plugin : BaseUnityPlugin
 
 	Content.Register(
    [
-		new MimicstarfishCritob(),
+		new LWMimicstarfishCritob(),
 		new OutspectorCritob(),
 		new OutspectorBCritob(),
-		new IceLizardCritob(),
+		new LWIceLizardCritob(),
         new DartspiderHCritob(),
         new DartspiderPCritob(),
 		new MiniEnergyCellFisob()

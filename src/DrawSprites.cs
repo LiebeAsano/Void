@@ -18,6 +18,8 @@ public static class DrawSprites
 {
     public static readonly Color voidColor = new(0f, 0f, 0.005f);
 
+    public static readonly Color hunterColor = new(1f, 0.45f, 0.45f);
+
     private static ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();
     public static PlayerGraphiscExtention GetPlayerGExt(this PlayerGraphics graphics) => pGExt.GetOrCreateValue(graphics);
 
@@ -312,6 +314,33 @@ public static class DrawSprites
         }
         #endregion
 
+        if (self.player.abstractCreature.GetPlayerState().InDream)
+        {
+            foreach (var sprite in sLeaser.sprites)
+            {
+                string spritename = sprite.element.name;
+                if (spritename.StartsWith("PlayerArm")
+                    || spritename.StartsWith("OnTopOfTerrainHand")
+                    || spritename.StartsWith("Body")
+                    || spritename.StartsWith("Hips")
+                    || spritename.StartsWith("Legs")
+                    || spritename.StartsWith("Head"))
+                {
+                    sprite.color = hunterColor;
+                }
+                if (spritename.StartsWith("Face"))
+                        sprite.color = voidColor;
+            }
+            if (sLeaser.sprites[2] is TriangleMesh tail3)
+            {
+                if (tail3.shader != FShader.defaultShader)
+                {
+                    tail3.shader = FShader.defaultShader;
+                }
+                    tail3.color = hunterColor;
+            }
+        }
+
         if (player.IsViy())
         { 
             Utils.ViyColors[player.playerState.playerNumber] = sLeaser.sprites[9].color;
@@ -377,57 +406,55 @@ public static class DrawSprites
         }
 
         Utils.VoidColors[player.playerState.playerNumber] = faceSprite.color;
-        if (!self.player.abstractCreature.GetPlayerState().InDream)
+        if (player.IsTouchingDiagonalCeiling()
+            && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
-            if (player.IsTouchingDiagonalCeiling()
-                && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            if (!player.input[0].jmp
+                && player.bodyMode != Player.BodyModeIndex.ZeroG
+                && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
             {
-                if (!player.input[0].jmp
-                    && player.bodyMode != Player.BodyModeIndex.ZeroG
-                    && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam)
-                {
-                    SetVoidFaceSprite("VoidDCeil-");
-                }
-                else SetVoidFaceSprite("Void-");
+                SetVoidFaceSprite("VoidDCeil-");
             }
-            else if (player.IsTouchingCeiling()
-                && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            else SetVoidFaceSprite("Void-");
+        }
+        else if (player.IsTouchingCeiling()
+            && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+        {
+            if (!player.input[0].jmp
+                && player.bodyMode != Player.BodyModeIndex.ZeroG
+                && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
+                && playerBodyChunk0.pos.y <= playerBodyChunk1.pos.y + 5)
             {
-                if (!player.input[0].jmp
-                    && player.bodyMode != Player.BodyModeIndex.ZeroG
-                    && player.bodyMode != Player.BodyModeIndex.ClimbingOnBeam
-                    && playerBodyChunk0.pos.y <= playerBodyChunk1.pos.y + 5)
+                SetVoidFaceSprite("VoidCeil-");
+            }
+            else SetVoidFaceSprite("Void-");
+        }
+        else
+        {
+            if (playerBodyChunk0.pos.y + 10f > playerBodyChunk1.pos.y
+                || player.bodyMode == Player.BodyModeIndex.ZeroG
+                || player.bodyMode == Player.BodyModeIndex.Dead
+                || player.bodyMode == Player.BodyModeIndex.Stunned
+                || player.bodyMode == Player.BodyModeIndex.Crawl)
+            {
+                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[player.playerState.playerNumber])
                 {
-                    SetVoidFaceSprite("VoidCeil-");
+                    SetVoidFaceSprite("Void-");
                 }
-                else SetVoidFaceSprite("Void-");
+                else SetVoidFaceSprite("VoidA-");
+
             }
             else
             {
-                if (playerBodyChunk0.pos.y + 10f > playerBodyChunk1.pos.y
-                    || player.bodyMode == Player.BodyModeIndex.ZeroG
-                    || player.bodyMode == Player.BodyModeIndex.Dead
-                    || player.bodyMode == Player.BodyModeIndex.Stunned
-                    || player.bodyMode == Player.BodyModeIndex.Crawl)
+                if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
                 {
-                    if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[player.playerState.playerNumber])
-                    {
-                        SetVoidFaceSprite("Void-");
-                    }
-                    else SetVoidFaceSprite("VoidA-");
-
+                    SetVoidFaceSprite("VoidDown-");
                 }
-                else
-                {
-                    if (!OptionAccessors.ComplexControl || OptionAccessors.ComplexControl && !Climbing.switchMode[self.player.playerState.playerNumber])
-                    {
-                        SetVoidFaceSprite("VoidDown-");
-                    }
-                    else SetVoidFaceSprite("VoidADown-");
-                }
+                else SetVoidFaceSprite("VoidADown-");
             }
-            void SetVoidFaceSprite(string spriteName) => SetVoidSprite(faceSprite, spriteName, faceSpriteName);
         }
+        void SetVoidFaceSprite(string spriteName) => SetVoidSprite(faceSprite, spriteName, faceSpriteName);
+        
         #endregion
         
         #region echoTail
@@ -473,7 +500,8 @@ public static class DrawSprites
                 || spritename.StartsWith("Legs")
                 || spritename.StartsWith("Head"))
             {
-                sprite.color = voidColor;
+                if (!self.player.abstractCreature.GetPlayerState().InDream)
+                    sprite.color = voidColor;
             }
         }
 

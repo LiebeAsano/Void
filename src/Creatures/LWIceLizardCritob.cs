@@ -12,13 +12,13 @@ using static MonoMod.InlineRT.MonoModRule;
 
 namespace VoidTemplate.Creatures
 {
-    public class IceLizardCritob : Critob
+    public class LWIceLizardCritob : Critob
     {
-        public IceLizardCritob() : base(CreatureTemplateType.IceLizard)
+        public LWIceLizardCritob() : base(CreatureTemplateType.LWIceLizard)
         {
             Icon = new SimpleIcon("Kill_Standard_Lizard", new(0.7f, 0.7f, 0.7f));
             RegisterUnlock(KillScore.Configurable(25), SandboxUnlockID.IceLizard);
-            IceLizardHooks.Hook();
+            LWIceLizardHooks.Hook();
         }
 
         public override ArtificialIntelligence CreateRealizedAI(AbstractCreature acrit)
@@ -28,7 +28,7 @@ namespace VoidTemplate.Creatures
 
         public override Creature CreateRealizedCreature(AbstractCreature acrit)
         {
-            return new IceLizard(acrit, acrit.world);
+            return new LWIceLizard(acrit, acrit.world);
         }
 
         public override CreatureTemplate CreateTemplate()

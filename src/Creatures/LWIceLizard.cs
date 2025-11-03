@@ -7,21 +7,21 @@ using UnityEngine;
 
 namespace VoidTemplate.Creatures
 {
-    public class IceLizard : Lizard
+    public class LWIceLizard : Lizard
     {
         public LizardBreedParams.SpeedMultiplier[] origSpeed;
 
         public LizardBreedParams.SpeedMultiplier[] greenLizardSpeed;
 
-        public IceLizardGraphics IceGraphics
+        public LWIceLizardGraphics IceGraphics
         {
             get
             {
-                return graphicsModule as IceLizardGraphics;
+                return graphicsModule as LWIceLizardGraphics;
             }
         }
 
-        public IceLizard(AbstractCreature abstractCreature, World world) : base(abstractCreature, world)
+        public LWIceLizard(AbstractCreature abstractCreature, World world) : base(abstractCreature, world)
         {
             origSpeed = (LizardBreedParams.SpeedMultiplier[])lizardParams.terrainSpeeds.Clone();
             greenLizardSpeed = (LizardBreedParams.SpeedMultiplier[])(StaticWorld.GetCreatureTemplate(CreatureTemplate.Type.GreenLizard).breedParameters as LizardBreedParams).terrainSpeeds.Clone();
@@ -29,7 +29,7 @@ namespace VoidTemplate.Creatures
 
         public override void InitiateGraphicsModule()
         {
-            graphicsModule ??= new IceLizardGraphics(this);
+            graphicsModule ??= new LWIceLizardGraphics(this);
         }
 
         public override void Update(bool eu)

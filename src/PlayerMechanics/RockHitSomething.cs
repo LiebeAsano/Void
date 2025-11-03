@@ -19,7 +19,7 @@ public static class RockHitSomething
 		{
 			if (creature is Watcher.BigMoth bigMoth && bigMoth.Small) creature.Stun(69);
 
-			if (creature is Mimicstarfish) return orig(self, result, eu);
+			if (creature is LWMimicstarfish) return orig(self, result, eu);
 
             string creatureTypeName = creature.Template.type.ToString();
 

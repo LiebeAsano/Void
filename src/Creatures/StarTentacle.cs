@@ -12,11 +12,11 @@ namespace VoidTemplate;
     public class StarTentacle : Tentacle
     {
 
-        public Mimicstarfish star
+        public LWMimicstarfish star
         {
             get
             {
-                return this.owner as Mimicstarfish;
+                return this.owner as LWMimicstarfish;
             }
         }
 
@@ -49,7 +49,7 @@ namespace VoidTemplate;
             this.task = newTask;
         }
 
-        public StarTentacle(Mimicstarfish star, BodyChunk chunk, float length, int tentacleNumber, Vector2 tentacleDir) : base(star, chunk, length)
+        public StarTentacle(LWMimicstarfish star, BodyChunk chunk, float length, int tentacleNumber, Vector2 tentacleDir) : base(star, chunk, length)
         {
             this.tentacleNumber = tentacleNumber;
             this.tentacleDir = tentacleDir;
@@ -94,9 +94,9 @@ namespace VoidTemplate;
                 this.stun--;
                 this.grabChunk = null;
             }
-            if (Mathf.Pow(Random.value, 0.35f) > (this.star.State as Mimicstarfish.StarState).tentacleHealth[this.tentacleNumber])
+            if (Mathf.Pow(Random.value, 0.35f) > (this.star.State as LWMimicstarfish.StarState).tentacleHealth[this.tentacleNumber])
             {
-                this.stun = Math.Max(this.stun, (int)Mathf.Lerp(-4f, 14f, Mathf.Pow(Random.value, 0.5f + 20f * Mathf.Max(0f, (this.star.State as Mimicstarfish.StarState).tentacleHealth[this.tentacleNumber]))));
+                this.stun = Math.Max(this.stun, (int)Mathf.Lerp(-4f, 14f, Mathf.Pow(Random.value, 0.5f + 20f * Mathf.Max(0f, (this.star.State as LWMimicstarfish.StarState).tentacleHealth[this.tentacleNumber]))));
             }
             if (this.grabChunk != null)
             {
@@ -277,7 +277,7 @@ namespace VoidTemplate;
                                     if (this.star.graphicsModule != null)
                                     {
                                         Tracker.CreatureRepresentation creatureRep = this.star.AI.tracker.RepresentationForObject(realizedCreature, false);
-                                        (this.star.graphicsModule as MimicGraphics).FeelSomethingWithTentacle(creatureRep, this.tChunks[j].pos);
+                                        (this.star.graphicsModule as LWMimicGraphics).FeelSomethingWithTentacle(creatureRep, this.tChunks[j].pos);
                                     }
                                 }
                                 if (realizedCreature.abstractCreature.creatureTemplate.AI && realizedCreature.abstractCreature.abstractAI.RealAI != null && realizedCreature.abstractCreature.abstractAI.RealAI.tracker != null)

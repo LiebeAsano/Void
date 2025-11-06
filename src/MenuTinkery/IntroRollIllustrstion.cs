@@ -4,6 +4,7 @@ using MoreSlugcats;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 using Menu;
+using VoidTemplate.OptionInterface;
 
 namespace VoidTemplate.MenuTinkery
 {
@@ -26,7 +27,10 @@ namespace VoidTemplate.MenuTinkery
                 {
                     if (self.manager.rainWorld.progression.miscProgressionData.currentlySelectedSinglePlayerSlugcat != MoreSlugcatsEnums.SlugcatStatsName.Sofanthiel)
                     {
-                        self.illustrations[2] = new(self, self.pages[0], "", "Void_Title_Card", Vector2.zero, true, false);
+                        if (SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
+                            self.illustrations[2] = new(self, self.pages[0], "", "Viy_Title_Card", Vector2.zero, true, false);
+                        else if (!SaveManager.ExternalSaveData.ViyUnlocked)
+                            self.illustrations[2] = new(self, self.pages[0], "", "Void_Title_Card", Vector2.zero, true, false);
                     }
                 });
             }

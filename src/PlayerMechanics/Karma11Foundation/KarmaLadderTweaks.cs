@@ -29,7 +29,7 @@ public static class KarmaLadderTweaks
 						Karma11Symbol.currentKarmaTokens -= 1;
 						self.karmaLadder.karmaSymbols[10].UpdateDisplayKarma(self.karmaLadder.displayKarma);
 					}
-					else if (self.saveState.GetVoidFoodToHibernate() >= 5)
+					else if (self.saveState.GetVoidFoodToHibernate() >= 6)
 					{
 						if (Karma11Symbol.currentKarmaTokens > 0)
 							self.karmaLadder.NewPhase(KarmaLadder.Phase.Bump);

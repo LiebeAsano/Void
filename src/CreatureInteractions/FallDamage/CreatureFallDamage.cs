@@ -39,6 +39,7 @@ namespace VoidTemplate.CreatureInteractions.FallDamage
                     && self is not MirosBird
                     && self is not DaddyLongLegs
                     && self is not DropBug
+                    && self is not Scavenger
                     && self is not Watcher.Frog)
                 {
                     bool isCaramelLizard = self is Lizard caramel && caramel.Template.type == DLCSharedEnums.CreatureTemplateType.SpitLizard;
@@ -52,7 +53,6 @@ namespace VoidTemplate.CreatureInteractions.FallDamage
                         || self is TubeWorm
                         || self is Centipede centipede && centipede.Small
                         || isCaramelLizard
-                        || self is Scavenger
                         || self is Watcher.Barnacle
                         || self is Watcher.DrillCrab
                         || self is Watcher.Tardigrade)

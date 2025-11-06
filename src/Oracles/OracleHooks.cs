@@ -457,7 +457,10 @@ static class OracleHooks
                 case 3 when !saveState.GetVoidMeetMoon() && !fivePebblesGetOut:
                     {
                         PebbleVoice(self);
-                        self.conversation.events.Add(new Conversation.TextEvent(self.conversation, 60, self.Translate("I would suggest you cease wandering around. It is not like you have much time."), 60));
+                        if (self.conversation?.events != null)
+                        {
+                            self.conversation.events.Add(new Conversation.TextEvent(self.conversation, 60, self.Translate("I would suggest you cease wandering around. It is not like you have much time."), 60));
+                        }
                         fivePebblesGetOut = true;
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);

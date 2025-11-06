@@ -58,7 +58,9 @@ public static class Karma11Update
     {
         orig(self, eu);
         if (self.IsVoid() && self.abstractCreature.world.game.IsVoidStoryCampaign() && !VoidKarma11
-            && self.KarmaCap == 10 && (self.FoodInStomach == 7 - self.abstractCreature?.world?.game?.GetStorySession?.saveState.GetVoidFoodToHibernate() || self.abstractCreature?.world?.game?.GetStorySession?.saveState.GetVoidFoodToHibernate() == 6))
+            && self.KarmaCap == 10 
+            && (self.FoodInStomach >= 7 - self.abstractCreature?.world?.game?.GetStorySession?.saveState.GetVoidFoodToHibernate() 
+            || self.abstractCreature?.world?.game?.GetStorySession?.saveState.GetVoidFoodToHibernate() == 6))
         {
             VoidKarma11 = true;
         }

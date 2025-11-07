@@ -17,6 +17,9 @@ namespace VoidTemplate.ModsCompatibilty
                     case "blood":
                         Blood.Init();
                         break;
+                    case "mosquitoes":
+                        MosquitoCompat.Init();
+                        break;
                 }
             }
         }

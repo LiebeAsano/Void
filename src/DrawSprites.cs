@@ -18,6 +18,8 @@ public static class DrawSprites
 {
     public static readonly Color voidColor = new(0f, 0f, 0.005f);
 
+    public static readonly Color voidFluidColor = new(1f, 0.86f, 0f);
+
     public static readonly Color hunterColor = new(1f, 0.45f, 0.45f);
 
     private static ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VoidTemplate.Useful;
 using UnityEngine;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 
 namespace VoidTemplate.ModsCompatibilty
 {
@@ -30,7 +31,10 @@ namespace VoidTemplate.ModsCompatibilty
             {
                 if (newColors[i].a > 0)
                 {
-                    newColors[i] = DrawSprites.voidColor;
+                    if (Karma11Update.VoidKarma11)
+                        newColors[i] = DrawSprites.voidColor;
+                    else
+                        newColors[i] = DrawSprites.voidFluidColor;
                     newColors[i].a = defaultColors[i].a;
                 }
             }
@@ -50,7 +54,10 @@ namespace VoidTemplate.ModsCompatibilty
             orig(self, spear, chunk, velocity, bleedTime);
             if (chunk.owner is Player player && player.IsVoid())
             {
-                self.creatureColor = DrawSprites.voidColor;
+                if (Karma11Update.VoidKarma11)
+                    self.creatureColor = DrawSprites.voidColor;
+                else
+                    self.creatureColor = DrawSprites.voidFluidColor;
                 self.splatterColor = voidBloodTexName;
             }
         };

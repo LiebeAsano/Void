@@ -2,6 +2,7 @@
 using Mosquitoes;
 using RWCustom;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -11,14 +12,28 @@ namespace VoidTemplate.ModsCompatibilty
 {
     public class MosquitoCompat
     {
-        private static Hook mosquitoStickHook;
-        private static Hook mosquitoBitByPlayerHook;
 
-        private static readonly ConditionalWeakTable<Mosquitoes.Mosquito, VoidInfection> infectedMosquitoes = new();
+        private static readonly ConditionalWeakTable<object, VoidInfection> infectedMosquitoes = new();
 
         public static void Init()
         {
-            MethodInfo stickIntoChunkMethod = typeof(Mosquitoes.Mosquito).GetMethod("StickIntoChunk",
+            Assembly mosquitoAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                .FirstOrDefault(asm => asm.GetName().Name == "Mosquitoes");
+
+            if (mosquitoAssembly == null)
+            {
+                return;
+            }
+
+            Type mosquitoType = mosquitoAssembly.GetType("Mosquitoes.Mosquito");
+            Type mosquitoGraphicsType = mosquitoAssembly.GetType("Mosquitoes.MosquitoGraphics");
+
+            if (mosquitoType == null || mosquitoGraphicsType == null)
+            {
+                return;
+            }
+
+            MethodInfo stickIntoChunkMethod = mosquitoType.GetMethod("StickIntoChunk",
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
                 [typeof(PhysicalObject), typeof(int)],
@@ -26,10 +41,10 @@ namespace VoidTemplate.ModsCompatibilty
 
             if (stickIntoChunkMethod != null)
             {
-                mosquitoStickHook = new Hook(stickIntoChunkMethod, StickIntoChunkHook);
+                new Hook(stickIntoChunkMethod, StickIntoChunkHook);
             }
 
-            MethodInfo updateMethod = typeof(Mosquitoes.Mosquito).GetMethod("Update",
+            MethodInfo updateMethod = mosquitoType.GetMethod("Update",
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
                 [typeof(bool)],
@@ -40,7 +55,7 @@ namespace VoidTemplate.ModsCompatibilty
                 new Hook(updateMethod, UpdateHook);
             }
 
-            MethodInfo applyPaletteMethod = typeof(Mosquitoes.MosquitoGraphics).GetMethod("ApplyPalette",
+            MethodInfo applyPaletteMethod = mosquitoGraphicsType.GetMethod("ApplyPalette",
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
                 [typeof(RoomCamera.SpriteLeaser), typeof(RoomCamera), typeof(RoomPalette)],
@@ -51,7 +66,7 @@ namespace VoidTemplate.ModsCompatibilty
                 new Hook(applyPaletteMethod, ApplyPaletteHook);
             }
 
-            MethodInfo bitByPlayerMethod = typeof(Mosquitoes.Mosquito).GetMethod("BitByPlayer",
+            MethodInfo bitByPlayerMethod = mosquitoType.GetMethod("BitByPlayer",
                 BindingFlags.Public | BindingFlags.Instance,
                 null,
                 [typeof(Creature.Grasp), typeof(bool)],
@@ -59,8 +74,9 @@ namespace VoidTemplate.ModsCompatibilty
 
             if (bitByPlayerMethod != null)
             {
-                mosquitoBitByPlayerHook = new Hook(bitByPlayerMethod, BitByPlayerHook);
+                new Hook(bitByPlayerMethod, BitByPlayerHook);
             }
+
         }
 
         private static readonly Delegate StickIntoChunkHook =

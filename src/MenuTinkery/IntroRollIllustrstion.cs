@@ -31,6 +31,8 @@ namespace VoidTemplate.MenuTinkery
                             self.illustrations[2] = new(self, self.pages[0], "", "Viy_Title_Card", Vector2.zero, true, false);
                         else if (!SaveManager.ExternalSaveData.ViyUnlocked)
                             self.illustrations[2] = new(self, self.pages[0], "", "Void_Title_Card", Vector2.zero, true, false);
+                        else if (Random.value < 0.15f)
+                            self.illustrations[2] = new(self, self.pages[0], "", "Void_Title_Card", Vector2.zero, true, false);
                     }
                 });
             }

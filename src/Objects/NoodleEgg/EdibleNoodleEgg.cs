@@ -21,15 +21,16 @@ public class EdibleNoodleEgg
         sourceEgg = egg;
     }
 
-
     public bool CanEat(Player grabber)
     {
         return (grabber != null && grabber.AreVoidViy()) || shellCrack;
     }
 
-
     public void Bite(Creature.Grasp grasp, bool eu)
     {
+        bool wasFirstBite = bites == 4;
+        Player bitingPlayer = grasp?.grabber as Player;
+
         if (bites == 4)
         {
             sourceEgg.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, grasp.grabber.mainBodyChunk, false, 1f, 0.5f + UnityEngine.Random.value * 0.5f);
@@ -42,23 +43,80 @@ public class EdibleNoodleEgg
         bites--;
         sourceEgg.room.PlaySound((bites != 0) ? SoundID.Slugcat_Bite_Dangle_Fruit : SoundID.Slugcat_Eat_Dangle_Fruit, sourceEgg.firstChunk);
         sourceEgg.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
+
         if (bites < 1)
         {
             grasp.Release();
-            if (grasp.grabber is Player player)
+            if (bitingPlayer != null)
             {
-                if (player.AreVoidViy())
+                if (bitingPlayer.AreVoidViy())
                 {
-                    player.AddFood(OptionAccessors.SimpleFood ? 4 : 2);
+                    bitingPlayer.AddFood(OptionAccessors.SimpleFood ? 4 : 2);
                 }
-                else 
+                else
                 {
-                    player.AddFood(4);
+                    bitingPlayer.AddFood(4);
                 }
             }
             sourceEgg.Destroy();
             sourceEgg.RemoveEdible();
         }
+
+        if (wasFirstBite && bitingPlayer != null && sourceEgg.room != null)
+        {
+            TriggerNeedleWormAggression(bitingPlayer, sourceEgg);
+        }
+    }
+
+    private static void TriggerNeedleWormAggression(Player player, NeedleEgg egg)
+    {
+        if (player.dead || egg.room == null) return;
+
+        int angryWorms = 0;
+
+        foreach (var abstractCreature in egg.room.abstractRoom.creatures)
+        {
+            if (abstractCreature.realizedCreature is BigNeedleWorm worm &&
+                worm.room == egg.room &&
+                worm.Consious &&
+                !worm.dead)
+            {
+                float distance = Vector2.Distance(worm.mainBodyChunk.pos, egg.firstChunk.pos);
+                bool canSee = egg.room.VisualContact(worm.mainBodyChunk.pos, egg.firstChunk.pos);
+
+                if (canSee || distance < 300f)
+                {
+                    MakeWormAggressive(worm, player);
+                    angryWorms++;
+                }
+            }
+        }
+    }
+
+    private static void MakeWormAggressive(BigNeedleWorm worm, Player player)
+    {
+        if (worm.AI is not BigNeedleWormAI ai) return;
+
+        var relationship = ai.creature.state.socialMemory.GetOrInitiateRelationship(player.abstractCreature.ID);
+        relationship.InfluenceTempLike(-0.8f);
+        relationship.InfluenceLike(-0.3f);
+
+        if (ai.tracker.RepresentationForCreature(player.abstractCreature, false) == null)
+        {
+            ai.tracker.SeeCreature(player.abstractCreature);
+        }
+
+        ai.creature.abstractAI.followCreature = player.abstractCreature;
+
+        ai.attackCounter = Mathf.Max(ai.attackCounter, 80);
+
+        ai.behavior = NeedleWormAI.Behavior.Attack;
+
+        if (worm.room != null && worm.attackReady <= 0.8f && worm.swishDir == null)
+        {
+            worm.BigCry();
+        }
+
     }
 }
 

@@ -77,7 +77,6 @@
 				"Fly" : 0.25
 			}
 		},
-		"title_card": "Void_Title_Card",
 		"select_menu_scene": "Slugcat_Void",
 		"death_scene": "Death_Void",
 		"starve_scene": "Death_Void",

@@ -15,41 +15,51 @@ namespace VoidTemplate.ModsCompatibilty
     {
         private const string voidBloodTexName = "VoidSlugcat";
 
-        private static MethodBase bloodEmitterCtor = typeof(BloodEmitter).GetConstructor([typeof(Spear), typeof(BodyChunk), typeof(float), typeof(float)]);
-
         public static void Init()
         {
             CreateBloodTextureForVoid();
-            new Hook(bloodEmitterCtor, bloodEmitterHook);
+            MethodBase bloodEmitterCtor = typeof(BloodEmitter).GetConstructor([typeof(Spear), typeof(BodyChunk), typeof(float), typeof(float)]);
+            new Hook(bloodEmitterCtor, BloodEmitterHook);
         }
 
         public static void CreateBloodTextureForVoid()
         {
-            Color[] defaultColors = BloodMod.bloodTex.GetPixels();
-            Color[] newColors = defaultColors;
-            for (int i = 0; i < defaultColors.Length; i++)
+            Color[] voidColors = BloodMod.bloodTex.GetPixels();
+            for (int i = 0; i < voidColors.Length; i++)
             {
-                if (newColors[i].a > 0)
+                if (voidColors[i].a > 0)
                 {
-                    if (Karma11Update.VoidKarma11)
-                        newColors[i] = DrawSprites.voidColor;
-                    else
-                        newColors[i] = DrawSprites.voidFluidColor;
-                    newColors[i].a = defaultColors[i].a;
-                }
+                    voidColors[i] = DrawSprites.voidColor;
+                }                
             }
+            
             Texture2D voidBloodTexture = new(BloodMod.w, BloodMod.h);
-            voidBloodTexture.SetPixels(newColors);
+            voidBloodTexture.SetPixels(voidColors);
             voidBloodTexture.Apply(true);
             if (Futile.atlasManager.DoesContainAtlas(voidBloodTexName + "Tex"))
             {
                 Futile.atlasManager.UnloadAtlas(voidBloodTexName + "Tex");
             }
             Futile.atlasManager.LoadAtlasFromTexture(voidBloodTexName + "Tex", voidBloodTexture, false);
+            Color[] voidFluidColors = BloodMod.bloodTex.GetPixels();
+            for (int i = 0; i < voidFluidColors.Length; i++)
+            {
+                if (voidFluidColors[i].a > 0)
+                {
+                    voidFluidColors[i] = DrawSprites.voidFluidColor;
+                }
+            }
+            Texture2D voidFluidBloodTexture = new(BloodMod.w, BloodMod.h);
+            voidFluidBloodTexture.SetPixels(voidFluidColors);
+            voidFluidBloodTexture.Apply(true);
+            if (Futile.atlasManager.DoesContainAtlas(voidBloodTexName + "FluidTex"))
+            {
+                Futile.atlasManager.UnloadAtlas(voidBloodTexName + "FluidTex");
+            }
+            Futile.atlasManager.LoadAtlasFromTexture(voidBloodTexName + "FluidTex", voidFluidBloodTexture, false);
         }
 
-        private static Delegate bloodEmitterHook =
-        (Action<BloodEmitter, Spear, BodyChunk, float, float> orig, BloodEmitter self, Spear spear, BodyChunk chunk, float velocity, float bleedTime) =>
+        private static void BloodEmitterHook(Action<BloodEmitter, Spear, BodyChunk, float, float> orig, BloodEmitter self, Spear spear, BodyChunk chunk, float velocity, float bleedTime)
         {
             orig(self, spear, chunk, velocity, bleedTime);
             if (chunk.owner is Player player && player.IsVoid())
@@ -58,8 +68,8 @@ namespace VoidTemplate.ModsCompatibilty
                     self.creatureColor = DrawSprites.voidColor;
                 else
                     self.creatureColor = DrawSprites.voidFluidColor;
-                self.splatterColor = voidBloodTexName;
+                self.splatterColor = voidBloodTexName + (!Karma11Update.VoidKarma11 ? "Fluid" : "");
             }
-        };
+        }
     }
 }

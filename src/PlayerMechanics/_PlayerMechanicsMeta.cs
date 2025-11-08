@@ -64,5 +64,6 @@ public static class _PlayerMechanicsMeta
 		SwallowObjects.Hook();
 		TardigradeResist.Hook();
 		ThrowObject.Hook();
+		VoidViolence.Hook();
 	}
 }

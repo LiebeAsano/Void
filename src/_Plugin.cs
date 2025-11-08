@@ -126,32 +126,8 @@ class _Plugin : BaseUnityPlugin
 			{
 				//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
 			}
-			LoadResources();
-			
-			const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-			Assembly assembly = Assembly.GetAssembly(typeof(_Plugin));
-			foreach (MethodInfo method in assembly.GetTypes().SelectMany(type => type.GetMethods(flags)))
-			{
-				if (method.GetCustomAttribute<RunOnModsInitAttribute>() is not null)
-				{
-					try
-					{
-						method.Invoke(null, null);
-					}
-					catch (Exception ex)
-					{
-						Logger.LogError("Failed to summon RunOnModsInitAttribute " +
-						                $"for method {method.Name} " +
-						                $"from class {(method.DeclaringType is not null
-							                ? method.DeclaringType.FullName
-							                : "not specified by method")}\n" +
-						                $"Exception: {ex}");
-					}
-				}
-			}
-			
+			LoadResources();			
 			ModLoaded = true;
-
 		}
 	}
 
@@ -194,4 +170,3 @@ class _Plugin : BaseUnityPlugin
 	}
 
 }
-public class RunOnModsInitAttribute : Attribute { }

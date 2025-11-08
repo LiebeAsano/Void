@@ -12,8 +12,6 @@ namespace VoidTemplate.PlayerMechanics
 {
     public static class VoidViolence
     {
-        [RunOnModsInit]
-        [UsedImplicitly]
         public static void Hook()
         {
             On.Creature.Violence += Creature_Violence;

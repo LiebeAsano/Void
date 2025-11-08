@@ -41,6 +41,7 @@ namespace VoidTemplate.ModsCompatibilty
                 Futile.atlasManager.UnloadAtlas(voidBloodTexName + "Tex");
             }
             Futile.atlasManager.LoadAtlasFromTexture(voidBloodTexName + "Tex", voidBloodTexture, false);
+
             Color[] voidFluidColors = BloodMod.bloodTex.GetPixels();
             for (int i = 0; i < voidFluidColors.Length; i++)
             {
@@ -49,6 +50,7 @@ namespace VoidTemplate.ModsCompatibilty
                     voidFluidColors[i] = DrawSprites.voidFluidColor;
                 }
             }
+
             Texture2D voidFluidBloodTexture = new(BloodMod.w, BloodMod.h);
             voidFluidBloodTexture.SetPixels(voidFluidColors);
             voidFluidBloodTexture.Apply(true);

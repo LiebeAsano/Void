@@ -23,6 +23,8 @@ using VoidTemplate.Useful;
 namespace VoidTemplate;
 
 [BepInDependency("slime-cubed.slugbase")]
+[BepInDependency("LeeMoriya.Blood", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency("ratrat.mosquitoesplugin", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(MOD_ID, "Void", "0.17.2")]
 class _Plugin : BaseUnityPlugin
 {

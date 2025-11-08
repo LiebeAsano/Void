@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Watcher;
 
 namespace VoidTemplate.CreatureInteractions.FallDamage
 {
@@ -27,22 +28,19 @@ namespace VoidTemplate.CreatureInteractions.FallDamage
                 float hardSpeed = 35;
                 float deathSpeed = 60;
 
-                bool isCyanLizard = self is Lizard cyan && cyan.Template.type == CreatureTemplate.Type.CyanLizard;
-
                 if (self is not Player 
                     && self is not StowawayBug 
                     && self is not Vulture 
-                    && self is not Watcher.BigMoth 
+                    && self is not BigMoth 
                     && self is not NeedleWorm 
-                    && !isCyanLizard 
+                    && self.Template.type != CreatureTemplate.Type.CyanLizard
                     && self is not Yeek 
                     && self is not MirosBird
                     && self is not DaddyLongLegs
                     && self is not DropBug
                     && self is not Scavenger
-                    && self is not Watcher.Frog)
+                    && self is not Frog)
                 {
-                    bool isCaramelLizard = self is Lizard caramel && caramel.Template.type == DLCSharedEnums.CreatureTemplateType.SpitLizard;
 
                     if (self is LanternMouse
                         || self is BigSpider
@@ -52,10 +50,10 @@ namespace VoidTemplate.CreatureInteractions.FallDamage
                         || self is JetFish
                         || self is TubeWorm
                         || self is Centipede centipede && centipede.Small
-                        || isCaramelLizard
-                        || self is Watcher.Barnacle
-                        || self is Watcher.DrillCrab
-                        || self is Watcher.Tardigrade)
+                        || self.Template.type == DLCSharedEnums.CreatureTemplateType.SpitLizard
+                        || self is Barnacle
+                        || self is DrillCrab
+                        || self is Tardigrade)
                         speed *= 0.5f;
                     BodyChunk bodyChunk = self.bodyChunks[chunk];
                     if (speed > deathSpeed && direction.y < 0 && self.grabbedBy.Count == 0)

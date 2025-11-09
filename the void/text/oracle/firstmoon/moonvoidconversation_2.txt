@@ -1,9 +1,9 @@
 0 : Oh, hi, <CapPlayerName>, you are back! : 60
-0 : To be honest, I doubted that I would see you again, but since you are here... let us chat a little. : 60
+0 : To be honest, I doubted that I would see you again, but since you are here... let's chat a little. : 60
 0 : ... : 60
-0 : I noticed something curious during your last visit: you really do have two pairs of eyes!<LINE>It is... curious, considering that I did not notice such features in my friend. You are the same species, are not you? : 60
-0 : It is very amusing. Creatures generally need more eyes to better determine the distance to their prey<LINE>and easier navigate through space, but for now it is hard for me to understand where such a difference comes from. : 60
-0 : It looks natural, but I wonder if you were born like this. Even if it is a mutation, it is pretty... selective... : 120
-0 : So you are a predator? Then I am glad you do not find me tasty. And in that case, <CapPlayerName>,<LINE>I would be grateful if you do not bring your prey here. I do not like to watch violence. : 120
+0 : I noticed something curious during your last visit: you really do have two pairs of eyes!<LINE>It is... curious, considering that I did not notice such features in my friend. You are the same species, are you not? : 60
+0 : It is very interesting. Creatures generally need more eyes to better determine the distance to their prey<LINE>and to help navigate through space, but for now it is hard for me to understand where such a difference comes from. : 60
+0 : It looks natural, but I wonder if you were born like this. Even if it is a mutation, it is very... selective. : 120
+0 : So, are you a predator? Then I am glad you do not find me tasty. And in that case, <CapPlayerName>,<LINE>I would be grateful if you did not bring your prey here. I do not like to watch violence. : 120
 0 : Now I have something to think about. As much as my memory will allow me. : 120
-0 : Maybe you have something to show me? : 120 
+0 : Maybe you have something to show me? : 120

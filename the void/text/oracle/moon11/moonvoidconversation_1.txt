@@ -1,11 +1,9 @@
 SPECEVENT : MoonVoice
-0 : Hi, <CapPlayerName>... : 60
-0 : Your attunement has disapperied... : 60
+0 : Hello, <CapPlayerName>... : 60
+0 : Your attunement has disappeared... : 60
 SPECEVENT : MoonVoice
-0 : Do you understand me without a mark of communication? : 60
+0 : Do you understand me, then? : 60
+0 : What has happened to you in the last few cycles? Are you feeling alright? : 120
 SPECEVENT : MoonVoice
-0 : What is happened to you in these few cycles? Are you feeling all right? : 120
-SPECEVENT : MoonVoice
-0 : I hope you are okay, but on the bright side you look a little better. : 120
-SPECEVENT : MoonVoice
-0 : If you want to learn something new, I will be waiting for you. : 120
+0 : I hope you are okay, but at least you look a little better. : 120
+0 : If you want to learn anything new, I will be waiting for you. I appreciate your gifts. : 120

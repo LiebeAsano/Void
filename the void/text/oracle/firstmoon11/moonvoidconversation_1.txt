@@ -1,12 +1,11 @@
 SPECEVENT : MoonVoice
-0 : Hi... : 60
+0 : Hello there. : 60
 0 : Your attunement is missing... : 60
 SPECEVENT : MoonVoice
-0 : Do you understand me without a mark of communication? : 60
-SPECEVENT : MoonVoice
-0 : Who taught you our language? Your thinking skills are truly amazing. : 60
+0 : Do you understand me without the mark of communication? : 60
+0 : Who taught you our language? Your cognitive skills are truly amazing. : 60
 SPECEVENT : MoonVoice
 0 : What brings you to me? As you can see, my condition does not leave the best impression. : 120
 0 : . . . : 60
 SPECEVENT : MoonVoice
-0 : You must be very curious to come here. Bring the pearls to me, I can read them to you. : 120
+0 : You must be very curious to have came here. If you bring me pearls, I can read them to you. : 120

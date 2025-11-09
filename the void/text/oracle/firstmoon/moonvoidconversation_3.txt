@@ -1,6 +1,6 @@
 0 : Oh, it is you. : 60
 0 : How are you, <CapPlayerName>? I hope you are doing well. : 120
-0 : Hmm, you look hungry, or is it just me? : 60
+0 : Hmm, you look hungry. Or is it just me? : 60
 0 : I am so sorry, but I do not have anything here to feed you. I really wish I could offer you something but... In my condition this is no longer possible. : 120
-0 : But that is not the point now, there's not much time left. I wish you a successful hunt, <CapPlayerName>. I would really not want my only companion to starve to death. : 60
-0 : Come back when you feel better, maybe next cycle. In the meantime I will try to remember something very interesting to tell you. : 120
+0 : But that is not the point. There's not much time left. I wish you a successful hunt, <CapPlayerName>. I would hate it if my only companion were to starve to death. : 60
+0 : Come back when you feel better, maybe next cycle. In the meantime I will try to remember something interesting to tell you. : 120

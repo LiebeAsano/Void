@@ -5,6 +5,6 @@
 0 : Oh... it is you... To be precise, what is left of you. : 60
 0 : Were you able to complete your mission, little creature? : 120
 0 : Apparently, you do not understand what I mean. : 60
-0 : Your mark is advanced enough to record conversations. Go to the east, Look to the Moon is there, I hope she is able to at least speak. : 60
-0 : Then come back to me, there is a possibility, I can find a solution to your desperate situation. : 60
-0 : Now leave me alone for your sake, I have more work to do. : 60
+0 : Your mark is advanced enough to record conversations. Go to the east: you will find Looks to the Moon there. I hope she is able to at least speak. : 60
+0 : Then come back to me: There is a possibility I can find a solution to your desperate situation. : 60
+0 : Now leave me alone, for your sake: I have more work to do. : 60

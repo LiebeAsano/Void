@@ -1254,7 +1254,7 @@ public static class SLOracle
     internal static void MoonVoice(SLOracleBehaviorHasMark self)
     {
         SoundID randomTalk = SoundID.SL_AI_Talk_1;
-        switch (UnityEngine.Random.Range(0, 3))
+        switch (UnityEngine.Random.Range(0, 5))
         {
             case 0:
                 randomTalk = SoundID.SL_AI_Talk_1;
@@ -1264,6 +1264,12 @@ public static class SLOracle
                 break;
             case 2:
                 randomTalk = SoundID.SL_AI_Talk_3;
+                break;
+            case 3:
+                randomTalk = SoundID.SL_AI_Talk_4;
+                break;
+            case 4:
+                randomTalk = SoundID.SL_AI_Talk_5;
                 break;
         }
         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)

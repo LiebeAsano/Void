@@ -66,11 +66,11 @@ namespace VoidTemplate.ModsCompatibilty
             orig(self, spear, chunk, velocity, bleedTime);
             if (chunk.owner is Player player && player.IsVoid())
             {
-                if (Karma11Update.VoidKarma11)
+                if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
                     self.creatureColor = DrawSprites.voidColor;
                 else
                     self.creatureColor = DrawSprites.voidFluidColor;
-                self.splatterColor = voidBloodTexName + (!Karma11Update.VoidKarma11 ? "Fluid" : "");
+                self.splatterColor = voidBloodTexName + (player.KarmaCap != 10 && !Karma11Update.VoidKarma11 ? "Fluid" : "");
             }
         }
     }

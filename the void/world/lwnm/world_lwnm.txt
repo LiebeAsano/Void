@@ -1,0 +1,7 @@
+ROOMS
+LWNM_VoidNightmare : LWNM_s01
+LWNM_s01 : LWNM_VoidNightmare : SHELTER
+END ROOMS
+CREATURES
+LWNM_VoidNightmare : 2-HunterDaddy
+END CREATURES

@@ -400,6 +400,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 #custom ignored files
-the\ void/plugins/
-/the void/plugins/VoidTemplate.dll
+/the\ void/plugins/*.dll
+/the\ void/plugins/*.pdb
 /the\ void/thumbnail.png

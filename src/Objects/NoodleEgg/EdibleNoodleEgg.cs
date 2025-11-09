@@ -10,16 +10,11 @@ using VoidTemplate.CreatureInteractions;
 
 namespace VoidTemplate.Objects.NoodleEgg;
 
-public class EdibleNoodleEgg
+public class EdibleNoodleEgg(NeedleEgg egg)
 {
     public int bites = 4;
     public bool shellCrack = false;
-    public NeedleEgg sourceEgg;
-
-    public EdibleNoodleEgg(NeedleEgg egg)
-    {
-        sourceEgg = egg;
-    }
+    public NeedleEgg sourceEgg = egg;
 
     public bool CanEat(Player grabber)
     {
@@ -135,7 +130,7 @@ public static class EdibleNoodleEggCWT
 
     public static void RemoveEdible(this NeedleEgg egg)
     {
-        if (edibleEgg.TryGetValue(egg, out var edible))
+        if (edibleEgg.TryGetValue(egg, out _))
         {
             edibleEgg.Remove(egg);
         }

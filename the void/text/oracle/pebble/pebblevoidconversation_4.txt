@@ -1,2 +1,2 @@
 60 : Overall, I have enough data to complete my research. : 0
-60 : I will need some time to finish my preparations, come back to me later. : 0
+60 : I will need some time to finish my preparations, so come back to me later. : 0

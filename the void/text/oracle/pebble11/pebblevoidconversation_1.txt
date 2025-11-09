@@ -1,8 +1,6 @@
 SPECEVENT : PebbleVoice
-0 : Is this someone's evil joke? : 60
+0 : Is this some sort of joke? : 60
+0 : The purposed organism that has adapted to replace blood with void fluid continues to taunt me. : 120
 SPECEVENT : PebbleVoice
-0 : The purposed organism that has adapted to the void fluid and uses it instead of blood... : 120
-SPECEVENT : PebbleVoice
-0 : I was once again reminded of the meaninglessness of my existence... : 120
-SPECEVENT : PebbleVoice
-0 : Do not come back to me anymore or you will meet your death in this room. : 60
+0 : I am once again reminded of the meaninglessness of my existence... : 120
+0 : Do not come back here, or you will meet your death in this room. This is your only warning. : 60

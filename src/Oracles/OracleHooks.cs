@@ -404,7 +404,7 @@ static class OracleHooks
                         if (miscData.SSaiConversationsHad == 3 && !saveState.GetVoidMeetMoon() && !fivePebblesGetOut)
                         {
                             PebbleVoice(self);
-                            self.conversation.events.Add(new Conversation.TextEvent(self.conversation, 60, self.Translate("Are you still here? Go east to Looks to the Moon."), 60));
+                            self.dialogBox.NewMessage(self.Translate("Are you still here? Go east to Looks to the Moon."), 60);
                             fivePebblesGetOut = true;
                             if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                                 self.NewAction(self.afterGiveMarkAction);
@@ -1338,7 +1338,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                             "void_glyphs_4",
                             "void_glyphs_5"
                         }, 30);
-                        this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment...".TranslateString(), 60);
+                        this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment.".TranslateString(), 60);
                     }
                     this.communicationPause = 330;
                     break;

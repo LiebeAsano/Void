@@ -29,7 +29,9 @@ namespace VoidTemplate.ModsCompatibilty
             {
                 if (voidColors[i].a > 0)
                 {
+                    float alpha = voidColors[i].a;
                     voidColors[i] = DrawSprites.voidColor;
+                    voidColors[i].a = alpha;
                 }                
             }
             
@@ -47,7 +49,9 @@ namespace VoidTemplate.ModsCompatibilty
             {
                 if (voidFluidColors[i].a > 0)
                 {
+                    float alpha = voidFluidColors[i].a;
                     voidFluidColors[i] = DrawSprites.voidFluidColor;
+                    voidFluidColors[i].a = alpha;
                 }
             }
 

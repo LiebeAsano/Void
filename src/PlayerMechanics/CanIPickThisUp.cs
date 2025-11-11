@@ -17,7 +17,8 @@ public static class CanIPickThisUp
 	{
 		On.Player.CanIPickThisUp += Player_CanIPickThisUp;
 		On.Player.CanIPickThisUp += Player_CanIPickThisSpear;
-        //On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
+        On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
+        On.Player.IsCreatureImmuneToPlayerGrabStun += Player_IsCreatureImmuneToPlayerGrabStun;
         On.Player.SlugOnBack.SlugToBack += Player_SlugToBack;
         On.Player.SlugOnBack.Update += SlugOnBack_Update;
         On.Player.Update += Player_Update;
@@ -157,7 +158,13 @@ public static class CanIPickThisUp
 
     private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)
     {
-        if (grabCheck is Player player && player.AreVoidViy()) return false;
+        if (grabCheck is BigMoth bigMoth && bigMoth.Small) return true;
+        return orig(self, grabCheck);
+    }
+
+    private static bool Player_IsCreatureImmuneToPlayerGrabStun(On.Player.orig_IsCreatureImmuneToPlayerGrabStun orig, Player self, Creature grabCheck)
+    {
+        if (grabCheck is BigMoth bigMoth && bigMoth.Small) return true;
         return orig(self, grabCheck);
     }
 

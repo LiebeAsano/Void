@@ -224,7 +224,13 @@ public static class GrabUpdate
                 if (self.input[0].pckp && self.grasps[num11] != null && (self.grasps[num11].grabbed is Pomegranate || self.grasps[num11].grabbed is Cicada cicada && cicada.Consious || self.grasps[num11].grabbed is Creature && self.CanMaulCreature(self.grasps[num11].grabbed as Creature) || self.maulTimer > 0))
                 {
                     self.maulTimer++;
-                    if (self.grasps[num11].grabbed is Creature cr && cr != self && cr is not Cicada)
+                    if (self.grasps[num11].grabbed is Creature cr 
+                    && cr != self 
+                    && cr is not Cicada 
+                    && cr is not JetFish
+                    && (cr is not Watcher.BigMoth 
+                    || cr is Watcher.BigMoth bigMoth
+                    && !bigMoth.Small))
                         cr.Stun(60);
                     self.MaulingUpdate(num11);
                     if (self.spearOnBack != null)

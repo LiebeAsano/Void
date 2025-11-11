@@ -20,7 +20,9 @@ namespace VoidTemplate.ModsCompatibilty
                     case "mosquitoes":
                         MosquitoCompat.Init();
                         break;
-                    case "incompatible mod":
+                    case "SimplifiedMoveset":
+                        throw new LWIncompatibleModException(mod.name);
+                    case "swalloweverything":
                         throw new LWIncompatibleModException(mod.name);
                 }
             }

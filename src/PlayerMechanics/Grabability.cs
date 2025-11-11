@@ -7,6 +7,7 @@ using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
@@ -22,7 +23,6 @@ public static class Grabability
         On.Creature.Update += Creature_Update;
         On.Player.CanIPickThisUp += Player_CanIPickThisUp;
         On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
-        On.SlugcatHand.Update += SlugcatHand_Update;
         //allows hand switching when holding big object
         //IL.Player.GrabUpdate += Player_GrabUpdate;
     }
@@ -89,16 +89,16 @@ public static class Grabability
                 return Player.ObjectGrabability.CantGrab;
 
             if (obj is Cicada)
-                return Player.ObjectGrabability.TwoHands;
+                return Player.ObjectGrabability.Drag;
 
             if (obj is Player player && player != self && !player.AreVoidViy())
             {
                 if (player.room?.game?.IsArenaSession != true)
-                    return Player.ObjectGrabability.TwoHands;
+                    return Player.ObjectGrabability.Drag;
             }
 
             if (obj is Watcher.BigMoth bigMoth && bigMoth.Small)
-                return Player.ObjectGrabability.TwoHands;
+                return Player.ObjectGrabability.Drag;
         }
 
         return orig(self, obj);
@@ -118,18 +118,13 @@ public static class Grabability
 
         bool isGrabbedByVoidViy = false;
         bool maulTimer = false;
-        bool inWater = false;
 
         if (self.grabbedBy != null)
         {
             foreach (var grasp in self.grabbedBy)
             {
-                if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy() && self is not TubeWorm)
+                if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
                 {
-                    if (grabberPlayer.mainBodyChunk.submersion >= 0.5f)
-                    {
-                        inWater = true;
-                    }
                     if (grabberPlayer.maulTimer == 0)
                         maulTimer = true;
                     isGrabbedByVoidViy = true;
@@ -145,7 +140,7 @@ public static class Grabability
                             }
                         }
                     }
-                    else if (self is not Player && self is not JetFish)
+                    else if (self is not Player && (self is not TubeWorm || self is TubeWorm tubeWorm && !tubeWorm.dead))
                     {
                         if (self.State is HealthState)
                         {
@@ -178,14 +173,14 @@ public static class Grabability
             {
                 if (originalChunks.TryGetValue(chunk, out var originalMass))
                 {
-                    if (self is Player player || self is Cicada)
+                    if (self is Player player || self is Cicada || self is JetFish)
                     {
                         if (self is Player)
                         {
                             self.stun = 20;
                             chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
                         }
-                        if (self is Cicada)
+                        if (self is Cicada || self is JetFish)
                             chunk.mass = isGrabbedByVoidViy && self.dead ? 0.05f : originalMass;
                     }
                     else if (self is Watcher.BigMoth bigMoth && bigMoth.Small)
@@ -195,10 +190,6 @@ public static class Grabability
                     else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is Scavenger)
                     {
                         chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
-                    }
-                    else if (self is JetFish )
-                    {
-                        chunk.mass = isGrabbedByVoidViy && !inWater ? originalMass * 0.5f : originalMass;
                     }
                 }
             }
@@ -218,21 +209,6 @@ public static class Grabability
 
     public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
     {
-        if (self.AreVoidViy())
-        {
-            if (self.grasps[0]?.grabbed is Player || self.grasps[1]?.grabbed is Player)
-            {
-                return false;
-            }
-            if (self.grasps[0]?.grabbed is Cicada || self.grasps[1]?.grabbed is Cicada)
-            {
-                return false;
-            }
-            if (self.grasps[0]?.grabbed is Watcher.BigMoth bigMoth && bigMoth.Small || self.grasps[1]?.grabbed is Watcher.BigMoth bigMoth1 && bigMoth1.Small)
-            {
-                return false;
-            }
-        }
         if (obj is Player player && player.IsViy() && player.Consious)
         {
             return false;
@@ -249,8 +225,4 @@ public static class Grabability
         return grabCheck is Watcher.BigMoth bigMoth && bigMoth.Small || orig(self, grabCheck);
     }
 
-    public static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)
-    {
-        orig(self);
-    }
 }

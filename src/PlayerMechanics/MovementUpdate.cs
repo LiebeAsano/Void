@@ -605,7 +605,7 @@ public static class MovementUpdate
                         {
                             if (self.KarmaCap == 9 || Karma11Update.VoidKarma11)
                             {
-                                self.superLaunchJump += 20;
+                                self.superLaunchJump += 10;
                             }
                             else if (self.KarmaCap >= 4 && !Karma11Update.VoidKarma11)
                             {

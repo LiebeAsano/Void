@@ -116,7 +116,7 @@ Eat as much as you want, from now I will no longer store important information h
 //Case 0
 
 Good try, but it is not for you.|Хорошая попытка, но это не для тебя.
-Did someone send a messenger to me?|Неужели кто-то прислал ко мне посыльного?
+Did someone send a messenger to me?|Неужели кто-то прислал ко мне гонца?
 It does not have a mark.|На нем нет метки.
 It is just another pest was able to get into my structure.|Это просто еще один вредитель, который смог проникнуть в мою структуру.
 You look unnatural.|Ты выглядишь неестественно.

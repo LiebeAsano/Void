@@ -1212,24 +1212,24 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
         base.NewAction(oldAction, newAction);
         if (oldAction == MeetVoid_Texting)
         {
-            this.chatLabel.Hide();
+            chatLabel.Hide();
         }
-        if ((oldAction == MeetVoid_FirstImages) && this.showImage != null)
+        if ((oldAction == MeetVoid_FirstImages) && showImage != null)
         {
-            this.showImage.Destroy();
-            this.showImage = null;
+            showImage.Destroy();
+            showImage = null;
         }
         if (newAction == MeetVoid_Curious)
         {
-            this.owner.investigateAngle = Mathf.Lerp(-70f, 70f, UnityEngine.Random.value);
-            this.owner.invstAngSpeed = Mathf.Lerp(0.4f, 0.8f, UnityEngine.Random.value) * ((UnityEngine.Random.value < 0.5f) ? -1f : 1f);
+            owner.investigateAngle = Mathf.Lerp(-70f, 70f, UnityEngine.Random.value);
+            owner.invstAngSpeed = Mathf.Lerp(0.4f, 0.8f, UnityEngine.Random.value) * ((UnityEngine.Random.value < 0.5f) ? -1f : 1f);
             return;
         }
         if (newAction == MeetVoid_Texting)
         {
-            this.communicationPause = 170;
-            this.chatLabel.pos = this.showMediaPos;
-            this.chatLabel.lastPos = this.showMediaPos;
+            communicationPause = 170;
+            chatLabel.pos = showMediaPos;
+            chatLabel.lastPos = showMediaPos;
             return;
         }
         if (newAction == MeetVoid_Init && owner.conversation == null)
@@ -1240,59 +1240,59 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
 
     public override void Deactivate()
     {
-        this.chatLabel.Hide();
-        this.showImage?.Destroy();
-        this.Voice = null;
+        chatLabel.Hide();
+        showImage?.Destroy();
+        Voice = null;
         base.Deactivate();
     }
 
     private void NextCommunication()
     {
-        Custom.Log(new string[]
-        {
-            string.Format("New com att: {0} {1}", base.action, this.communicationIndex)
-        });
+        Custom.Log(
+        [
+            string.Format("New com att: {0} {1}", action, communicationIndex)
+        ]);
         //UnityEngine.Debug.Log("NextCommu");
-        if (base.action == MeetVoid_Talking)
+        if (action == MeetVoid_Talking)
         {
-            switch (this.communicationIndex)
+            switch (communicationIndex)
             {
                 case 0:
-                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_1, oracle.firstChunk);
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
-                        this.dialogBox.Interrupt("Did someone send a messenger to me?".TranslateString(), 60);
+                        dialogBox.Interrupt("Did someone send a messenger to me?".TranslateString(), 60);
                     }
-                    this.Voice.requireActiveUpkeep = true;
-                    this.communicationPause = 10;
+                    Voice.requireActiveUpkeep = true;
+                    communicationPause = 10;
                     break;
                 case 1:
-                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_2, base.oracle.firstChunk);
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_2, oracle.firstChunk);
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
-                        this.dialogBox.Interrupt("It does not have a mark.".TranslateString(), 30);
-                        this.dialogBox.NewMessage("It is just another pest was able to get into my structure.".TranslateString(), 30);
+                        dialogBox.Interrupt("It does not have a mark.".TranslateString(), 30);
+                        dialogBox.NewMessage("It is just another pest was able to get into my structure.".TranslateString(), 30);
                     }
-                    this.Voice.requireActiveUpkeep = true;
-                    this.communicationPause = 70;
+                    Voice.requireActiveUpkeep = true;
+                    communicationPause = 70;
                     break;
                 case 2:
-                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_3, oracle.firstChunk);
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
-                        this.dialogBox.Interrupt("You look unnatural.".TranslateString(), 60);
-                        this.dialogBox.NewMessage("What happened to you? There are clear signs of external interference here.".TranslateString(), 60);
+                        dialogBox.Interrupt("You look unnatural.".TranslateString(), 60);
+                        dialogBox.NewMessage("What happened to you? There are clear signs of external interference here.".TranslateString(), 60);
                     }
-                    this.Voice.requireActiveUpkeep = true;
+                    Voice.requireActiveUpkeep = true;
                     break;
                 case 3:
-                    this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_4, base.oracle.firstChunk);
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_4, oracle.firstChunk);
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
-                        this.dialogBox.Interrupt("A rather strange creature.".TranslateString(), 60);
+                        dialogBox.Interrupt("A rather strange creature.".TranslateString(), 60);
                     }
-                    this.Voice.requireActiveUpkeep = true;
-                    this.communicationPause = 140;
+                    Voice.requireActiveUpkeep = true;
+                    communicationPause = 140;
                     break;
             }
         }

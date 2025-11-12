@@ -18,5 +18,6 @@ public static class _CreatureInteractionsMeta
         WormGrassEaten.Hook();
 		EdibleMoths.Hook();
 		FallDamage.CreatureFallDamage.Hook();
+		HunterDaddyGraphicsHooks.Hook();
 	}
 }

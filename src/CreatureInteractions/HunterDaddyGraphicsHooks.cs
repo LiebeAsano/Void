@@ -29,7 +29,7 @@ namespace VoidTemplate.CreatureInteractions
             orig(self, eu);
             if (self.GetDaddyExt().isVoidDaddy && self.room != null && Random.Range(0, 3500) == 0)
             {
-                self.room.PlaySound(Random.Range(0, 2) switch
+                self.room.PlaySound(Random.Range(0, 3) switch
                 {
                     0 => WatcherEnums.WatcherSoundID.RotLiz_Vocalize,
                     1 => WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A,

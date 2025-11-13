@@ -3,5 +3,5 @@ overseersSpawnChance: 0.0
 overseersMin: 0
 overseersMax: 0
 Subregion: Nightmare
-corruptionEffectColor: 0.5,0.2,0.2
+corruptionEffectColor: 0.5,0.0,0.0
 corruptionEyeColor: 1, 0.867, 0

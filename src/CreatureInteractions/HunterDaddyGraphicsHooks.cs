@@ -27,7 +27,7 @@ namespace VoidTemplate.CreatureInteractions
         private static void DaddyLongLegs_Update(On.DaddyLongLegs.orig_Update orig, DaddyLongLegs self, bool eu)
         {
             orig(self, eu);
-            if (self.GetDaddyExt().isVoidDaddy && self.room != null && Random.Range(0, 3500) == 0)
+            if (self.GetDaddyExt().isVoidDaddy && !self.dead && self.room != null && Random.Range(0, 3500) == 0)
             {
                 self.room.PlaySound(Random.Range(0, 3) switch
                 {

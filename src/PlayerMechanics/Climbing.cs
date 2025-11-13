@@ -654,6 +654,7 @@ public class VoidState
 	public bool IsWallCrawling { get; set; } = false;
 	public float CeilCrawlStartTime { get; set; } = 0f;
 	public bool InDream { get; } = VoidDreamScript.IsVoidDream;
+	public Stack<AbstractPhysicalObject> SwallowedObjects { get; } = [];
 }
 
 /*public class PlayerRoomChecker

@@ -214,7 +214,7 @@ public static class Climbing
             else switchMode[player.playerState.playerNumber] = !switchMode[player.playerState.playerNumber];
         }
 
-        if (!player.AreVoidViy() || OptionAccessors.ComplexControl && switchMode[player.playerState.playerNumber] || player.abstractCreature.GetPlayerState().InDream)
+        if (!player.AreVoidViy() || OptionAccessors.ComplexControl && switchMode[player.playerState.playerNumber] || VoidDreamScript.IsVoidDream)
 		{
 			orig(player);
 			return;

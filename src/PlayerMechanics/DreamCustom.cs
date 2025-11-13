@@ -109,7 +109,7 @@ public static class DreamCustom
     {
         if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            //saveState.ForceEnlistDreamInShowQueue(SaveManager.Dream.HunterRot);
+            saveState.ForceEnlistDreamInShowQueue(SaveManager.Dream.HunterRot);
             switch (currentRegion)
             {
                 case "LF":

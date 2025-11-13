@@ -316,7 +316,7 @@ public static class DrawSprites
         }
         #endregion
 
-        if (self.player.abstractCreature.GetPlayerState().InDream)
+        if (VoidDreamScript.IsVoidDream)
         {
             foreach (var sprite in sLeaser.sprites)
             {

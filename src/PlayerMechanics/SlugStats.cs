@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 
@@ -18,13 +19,13 @@ namespace VoidTemplate.PlayerMechanics
         private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player self)
         {
             orig(self);
-            if (self.abstractCreature.GetPlayerState().InDream)
+            if (VoidDreamScript.IsVoidDream)
             {
-                self.slugcatStats.throwingSkill = 2;
-                self.slugcatStats.corridorClimbSpeedFac = 1.25f;
-                self.slugcatStats.poleClimbSpeedFac = 1.25f;
-                self.slugcatStats.runspeedFac = 1.2f;
-                self.slugcatStats.bodyWeightFac = 1.12f;
+                self.slugcatStats.throwingSkill = 1;
+                self.slugcatStats.corridorClimbSpeedFac = 1.0f;
+                self.slugcatStats.poleClimbSpeedFac = 1.0f;
+                self.slugcatStats.runspeedFac = 1.0f;
+                self.slugcatStats.bodyWeightFac = 1.0f;
             }
             else if (self.IsVoid())
             {

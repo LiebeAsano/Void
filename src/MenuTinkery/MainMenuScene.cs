@@ -71,10 +71,9 @@ public static class MainMenuScene
     public static void ProcessManager_RequestMainProcessSwitch_ProcessID(On.ProcessManager.orig_RequestMainProcessSwitch_ProcessID orig, ProcessManager self, ProcessManager.ProcessID ID)
     {
         orig(self, ID);
-        if (!OptionAccessors.DisableMenuBackGround && ID == ProcessManager.ProcessID.MainMenu)
+        if (ID == ProcessManager.ProcessID.MainMenu)
         {
-            MenuScene.SceneID scene;
-            scene = MenuScene.SceneID.Empty;
+            MenuScene.SceneID scene = self.rainWorld.options.titleBackground;
             if (self.rainWorld.progression.miscProgressionData.monkEndingID == 1 && !SaveManager.ExternalSaveData.MonkAscended)
             {
                 SaveManager.ExternalSaveData.MonkAscended = true;
@@ -90,7 +89,7 @@ public static class MainMenuScene
                 SaveManager.ExternalSaveData.VoidKarma11 = true;
                 SaveManager.ExternalSaveData.ViyUnlocked = true;
             }
-            if (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked)
+            if (!OptionAccessors.DisableMenuBackGround && (SaveManager.ExternalSaveData.MonkAscended || SaveManager.ExternalSaveData.SurvAscended || SaveManager.ExternalSaveData.ViyUnlocked))
             {
                 if (SaveManager.ExternalSaveData.MonkAscended && SaveManager.ExternalSaveData.SurvAscended && SaveManager.ExternalSaveData.ViyUnlocked)
                     scene = VoidEnums.SceneID.MainMenuSceneMonkSurvHunt;

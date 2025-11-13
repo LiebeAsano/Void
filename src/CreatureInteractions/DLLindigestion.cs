@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using VoidTemplate.Objects;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
@@ -42,7 +43,8 @@ public static class DLLindigestion
 		{
 			if (eatObject.chunk.owner is Player player
 				&& player.IsVoid()
-				&& player.dead)
+				&& player.dead
+				&& !self.HDmode)
 			{
                 DestroyBody(player);
                 await Task.Delay(3000);

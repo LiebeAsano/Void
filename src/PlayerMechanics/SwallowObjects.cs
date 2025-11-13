@@ -157,6 +157,7 @@ public static class SwallowObjects
 
     public static Dictionary<int, List<string>> pearlIDsInPlayerStomaches = [];
 
+    public static Dictionary<int, List<AbstractPhysicalObject>> ObjectInPlayerStomaches = [];
     private static void Player_Regurgitate(On.Player.orig_Regurgitate orig, Player self)
     {
         if (self.IsVoid()

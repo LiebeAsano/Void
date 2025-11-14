@@ -44,24 +44,31 @@ public class RedOverlay : CosmeticSprite
 
         SoundID meow = SoundID.None;
 
-        switch (Random.Range(0, 5))
+        if (VoidDreamScript.IsVoidDream)
         {
-            case 0:
-                meow = Watcher.WatcherEnums.WatcherSoundID.RotLiz_Vocalize;
-                break;
-            case 1:
-                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A;
-                break;
-            case 2:
-                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
-                break;
-            case 3:
-                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
-                break;
-            case 4:
-                meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
-                break;
+            meow = SoundID.Reds_Illness_LOOP;
         }
+        else
+        {
+            switch (Random.Range(0, 5))
+            {
+                case 0:
+                    meow = Watcher.WatcherEnums.WatcherSoundID.RotLiz_Vocalize;
+                    break;
+                case 1:
+                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A;
+                    break;
+                case 2:
+                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
+                    break;
+                case 3:
+                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
+                    break;
+                case 4:
+                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
+                    break;
+            }
+        }   
 
         if (soundLoop is null && fade > 0f)
         {

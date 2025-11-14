@@ -171,8 +171,8 @@ namespace VoidTemplate
         {
             if (VoidDreamScript.IsVoidDream)
             {
-                self.LoadWorld("SU_A06", self.PlayerCharacterNumber, self.PlayerTimelinePosition, true);
-                self.FIRSTROOM = "SU_A06";
+                self.LoadWorld("LWNM_VoidNightmare", self.PlayerCharacterNumber, self.PlayerTimelinePosition, true);
+                self.FIRSTROOM = "LWNM_VoidNightmare";
                 return;
             }
             orig(self);

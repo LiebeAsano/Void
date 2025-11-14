@@ -328,7 +328,29 @@ public static class DrawSprites
                     || spritename.StartsWith("Legs")
                     || spritename.StartsWith("Head"))
                 {
-                    sprite.color = hunterColor;
+                    if (VoidDreamScript.IsVoidDream)
+                {
+                    if (SlugStats.illness <= 1800)
+                    {
+                        sprite.color = hunterColor;
+                    }
+                    else if (SlugStats.illness <= 3600)
+                    {
+                        sprite.color = new(1f, 0.5f, 0.5f);
+                    }
+                    else if (SlugStats.illness <= 5400)
+                    {
+                        sprite.color = new(1f, 0.55f, 0.55f);
+                    }
+                    else if (SlugStats.illness <= 7200)
+                    {
+                        sprite.color = new(1f, 0.6f, 0.6f);
+                    }
+                    else
+                    {
+                        sprite.color = new(1f, 0.65f, 0.65f);
+                    }
+                }
                 }
                 if (spritename.StartsWith("Face"))
                         sprite.color = voidColor;
@@ -339,7 +361,30 @@ public static class DrawSprites
                 {
                     tail3.shader = FShader.defaultShader;
                 }
-                    tail3.color = hunterColor;
+                if (VoidDreamScript.IsVoidDream)
+                {
+                    if (SlugStats.illness <= 1800)
+                    {
+                        tail3.color = hunterColor;
+                    }
+                    else if (SlugStats.illness <= 3600)
+                    {
+                        tail3.color = new(1f, 0.5f, 0.5f);
+                    }
+                    else if (SlugStats.illness <= 5400)
+                    {
+                        tail3.color = new(1f, 0.55f, 0.55f);
+                    }
+                    else if (SlugStats.illness <= 7200)
+                    {
+                        tail3.color = new(1f, 0.6f, 0.6f);
+                    }
+                    else
+                    {
+                        tail3.color = new(1f, 0.65f, 0.65f);
+                    }
+                }
+                
             }
         }
 

@@ -58,10 +58,11 @@ namespace VoidTemplate.CreatureInteractions
         private static void DaddyLongLegs_ctor(On.DaddyLongLegs.orig_ctor orig, DaddyLongLegs self, AbstractCreature abstractCreature, World world)
         {
             orig(self, abstractCreature, world);
-
+            if (self.HDmode && VoidDreamScript.IsVoidDream)
+            {
                 self.GetDaddyExt().isVoidDaddy = true;
                 self.effectColor = self.eyeColor = Color.red;
-            
+            }
         }
 
         private static Color DaddyGraphics_RotBodyColor(On.DaddyGraphics.orig_RotBodyColor orig, DaddyGraphics self)
@@ -93,6 +94,7 @@ namespace VoidTemplate.CreatureInteractions
         {
             if (self.GetDaddyExt().isVoidDaddy)
             {
+                damage *= 2f;
                 if (hitAppendage != null)
                 {
                     damage /= (self.SizeClass ? 2.2f : 1.7f);

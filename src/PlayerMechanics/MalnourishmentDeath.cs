@@ -1,6 +1,5 @@
 ﻿using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
-using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -24,7 +23,7 @@ public static class MalnourishmentDeath
 			Malnourished++;
 		}
 
-		if (Malnourished >= 440)
+		if (Malnourished >= 440 && SlugStats.illness < 7200)
 		{
 			self.slugcatStats.malnourished = false;
 			Malnourished = 0;

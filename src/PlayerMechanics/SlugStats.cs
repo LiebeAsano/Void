@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
@@ -16,16 +17,66 @@ namespace VoidTemplate.PlayerMechanics
             On.Player.UpdateBodyMode += Player_UpdateBodyMode;
         }
 
+        public static int illness;
+
         private static void Player_UpdateBodyMode(On.Player.orig_UpdateBodyMode orig, Player self)
         {
             orig(self);
+            if (!VoidDreamScript.IsVoidDream)
+            {
+                illness = 0;
+            }
             if (VoidDreamScript.IsVoidDream)
             {
-                self.slugcatStats.throwingSkill = 1;
-                self.slugcatStats.corridorClimbSpeedFac = 1.0f;
-                self.slugcatStats.poleClimbSpeedFac = 1.0f;
-                self.slugcatStats.runspeedFac = 1.0f;
-                self.slugcatStats.bodyWeightFac = 1.0f;
+                illness++;
+                if (illness <= 1800)
+                {
+                    if (illness == 1800)
+                        HunterSpasms.Spasm(self, 10f, 1f);
+                    self.slugcatStats.throwingSkill = 2;
+                    self.slugcatStats.corridorClimbSpeedFac = 1.25f;
+                    self.slugcatStats.poleClimbSpeedFac = 1.25f;
+                    self.slugcatStats.runspeedFac = 1.2f;
+                    self.slugcatStats.bodyWeightFac = 1.12f;
+                }
+                else if (illness <= 3600)
+                {
+                    if (illness == 3600)
+                        HunterSpasms.Spasm(self, 10f, 1f);
+                    self.slugcatStats.throwingSkill = 1;
+                    self.slugcatStats.corridorClimbSpeedFac = 1.1f;
+                    self.slugcatStats.poleClimbSpeedFac = 1.1f;
+                    self.slugcatStats.runspeedFac = 1.1f;
+                    self.slugcatStats.bodyWeightFac = 1.05f;
+                }
+                else if (illness <= 5400)
+                {
+                    if (illness == 5400)
+                        HunterSpasms.Spasm(self, 10f, 1f);
+                    self.slugcatStats.throwingSkill = 1;
+                    self.slugcatStats.corridorClimbSpeedFac = 1.0f;
+                    self.slugcatStats.poleClimbSpeedFac = 1.0f;
+                    self.slugcatStats.runspeedFac = 1.0f;
+                    self.slugcatStats.bodyWeightFac = 1.0f;
+                }
+                else if (illness <= 7200)
+                {
+                    if (illness == 7200)
+                        HunterSpasms.Spasm(self, 10f, 1f);
+                    self.slugcatStats.throwingSkill = 0;
+                    self.slugcatStats.corridorClimbSpeedFac = 0.9f;
+                    self.slugcatStats.poleClimbSpeedFac = 0.9f;
+                    self.slugcatStats.runspeedFac = 0.9f;
+                    self.slugcatStats.bodyWeightFac = 0.9f;
+                }
+                else
+                {
+                    self.slugcatStats.throwingSkill = 0;
+                    self.slugcatStats.corridorClimbSpeedFac = 0.8f;
+                    self.slugcatStats.poleClimbSpeedFac = 0.8f;
+                    self.slugcatStats.runspeedFac = 0.8f;
+                    self.slugcatStats.bodyWeightFac = 0.8f;
+                }
             }
             else if (self.IsVoid())
             {

@@ -1,5 +1,4 @@
-﻿using Kittehface.Build;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using VoidTemplate.Objects;
+using VoidTemplate.PlayerMechanics;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate
@@ -35,6 +35,51 @@ namespace VoidTemplate
             On.AbstractCreatureAI.SetDestination += AbstractCreatureAI_SetDestination;
             On.OverWorld.LoadFirstWorld += OverWorld_LoadVoidDreamWorld;
             On.WorldLoader.ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues += WorldLoader_ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues;
+            On.OverWorld.GetRegion_string += OverWorld_GetRegion_string_FIX;
+            IL.Player.SpitOutOfShortCut += Player_SpitOutOfShortCut_FIX;
+            IL.Player.Update += Player_Update;
+        }
+
+        private static void Player_Update(ILContext il)
+        {
+            ILCursor c = new(il);
+            ILLabel cancel = c.DefineLabel();
+            if (c.TryGotoNext(MoveType.After,
+                x => x.MatchLdfld<World>("region"),
+                x => x.MatchBrfalse(out cancel)))
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate((Player self) =>
+                {
+                    return self.abstractCreature.world.regionState != null;
+                });
+                c.Emit(OpCodes.Brfalse, cancel);
+            }
+            else LogExErr("IL Hook match error");
+        }
+
+        private static void Player_SpitOutOfShortCut_FIX(ILContext il)
+        {
+            ILCursor c = new(il);
+            ILLabel cancel = c.DefineLabel();
+            if (c.TryGotoNext(MoveType.After,
+                x => x.MatchLdfld<World>("region"),
+                x => x.MatchBrfalse(out cancel)))
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate((Player self) =>
+                {
+                    return self.abstractCreature.world.regionState != null;
+                });
+                c.Emit(OpCodes.Brfalse, cancel);
+            }
+            else LogExErr("IL Hook match error");
+        }
+
+        private static Region OverWorld_GetRegion_string_FIX(On.OverWorld.orig_GetRegion_string orig, OverWorld self, string rName)
+        {
+            rName = Regex.Split(rName, "_")[0];
+            return orig(self, rName);
         }
 
         private static void WorldLoader_ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues(On.WorldLoader.orig_ctor_RainWorldGame_Name_Timeline_bool_string_Region_SetupValues orig, WorldLoader self, RainWorldGame game, SlugcatStats.Name playerCharacter, SlugcatStats.Timeline timelinePosition, bool singleRoomWorld, string worldName, Region region, RainWorldGame.SetupValues setupValues)

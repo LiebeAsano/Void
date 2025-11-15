@@ -149,7 +149,7 @@ public static class DrawSprites
         //game behaves in a really weird way when you try to touch tail, so we just gonna make a new one and overlay it over the old one
         if (player.AreVoidViy() && (player.KarmaCap == 10 || Karma11Update.VoidKarma11))
         {
-            var tail = sLeaser.sprites[2] as TriangleMesh;            
+            var tail = sLeaser.sprites[2] as TriangleMesh;
             //mapping element to tail
             for (var i = tail.vertices.Length - 1; i >= 0; i--)
             {
@@ -316,7 +316,7 @@ public static class DrawSprites
         }
         #endregion
 
-        if (VoidDreamScript.IsVoidDream)
+        if (player.AreVoidViy() && player.abstractCreature.GetPlayerState().InDream)
         {
             foreach (var sprite in sLeaser.sprites)
             {
@@ -327,8 +327,6 @@ public static class DrawSprites
                     || spritename.StartsWith("Hips")
                     || spritename.StartsWith("Legs")
                     || spritename.StartsWith("Head"))
-                {
-                    if (VoidDreamScript.IsVoidDream)
                 {
                     if (SlugStats.illness <= 1800)
                     {
@@ -350,10 +348,10 @@ public static class DrawSprites
                     {
                         sprite.color = new(1f, 0.65f, 0.65f);
                     }
-                }
+
                 }
                 if (spritename.StartsWith("Face"))
-                        sprite.color = voidColor;
+                    sprite.color = voidColor;
             }
             if (sLeaser.sprites[2] is TriangleMesh tail3)
             {
@@ -361,35 +359,32 @@ public static class DrawSprites
                 {
                     tail3.shader = FShader.defaultShader;
                 }
-                if (VoidDreamScript.IsVoidDream)
+
+                if (SlugStats.illness <= 1800)
                 {
-                    if (SlugStats.illness <= 1800)
-                    {
-                        tail3.color = hunterColor;
-                    }
-                    else if (SlugStats.illness <= 3600)
-                    {
-                        tail3.color = new(1f, 0.5f, 0.5f);
-                    }
-                    else if (SlugStats.illness <= 5400)
-                    {
-                        tail3.color = new(1f, 0.55f, 0.55f);
-                    }
-                    else if (SlugStats.illness <= 7200)
-                    {
-                        tail3.color = new(1f, 0.6f, 0.6f);
-                    }
-                    else
-                    {
-                        tail3.color = new(1f, 0.65f, 0.65f);
-                    }
+                    tail3.color = hunterColor;
                 }
-                
+                else if (SlugStats.illness <= 3600)
+                {
+                    tail3.color = new(1f, 0.5f, 0.5f);
+                }
+                else if (SlugStats.illness <= 5400)
+                {
+                    tail3.color = new(1f, 0.55f, 0.55f);
+                }
+                else if (SlugStats.illness <= 7200)
+                {
+                    tail3.color = new(1f, 0.6f, 0.6f);
+                }
+                else
+                {
+                    tail3.color = new(1f, 0.65f, 0.65f);
+                }
             }
         }
 
         if (player.IsViy())
-        { 
+        {
             Utils.ViyColors[player.playerState.playerNumber] = sLeaser.sprites[9].color;
             if (sLeaser.sprites[2] is TriangleMesh viyTail
             && viyTail.shader != FShader.defaultShader)
@@ -501,9 +496,9 @@ public static class DrawSprites
             }
         }
         void SetVoidFaceSprite(string spriteName) => SetVoidSprite(faceSprite, spriteName, faceSpriteName);
-        
+
         #endregion
-        
+
         #region echoTail
         if (sLeaser.sprites[2] is TriangleMesh tail)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoreSlugcats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -24,6 +25,16 @@ namespace VoidTemplate.CreatureInteractions
             On.DaddyGraphics.HunterDummy.ApplyPalette += HunterDummy_ApplyPalette;
             On.DaddyLongLegs.Update += DaddyLongLegs_Update;
             On.DaddyLongLegs.Violence += DaddyLongLegs_Violence;
+            On.DaddyTentacle.ctor += DaddyTentacle_ctor;
+        }
+
+        private static void DaddyTentacle_ctor(On.DaddyTentacle.orig_ctor orig, DaddyTentacle self, Creature daddy, DaddyLongLegs.IHaveRotParts rotOwner, BodyChunk chunk, float length, int tentacleNumber, Vector2 tentacleDir)
+        {
+            if (daddy is DaddyLongLegs dll && dll.GetDaddyExt().isVoidDaddy)
+            {
+                length *= 2;
+            }
+            orig(self, daddy, rotOwner, chunk, length, tentacleNumber, tentacleDir);
         }
 
         private static void DaddyLongLegs_Update(On.DaddyLongLegs.orig_Update orig, DaddyLongLegs self, bool eu)
@@ -57,10 +68,13 @@ namespace VoidTemplate.CreatureInteractions
 
         private static void DaddyLongLegs_ctor(On.DaddyLongLegs.orig_ctor orig, DaddyLongLegs self, AbstractCreature abstractCreature, World world)
         {
-            orig(self, abstractCreature, world);
-            if (self.HDmode && VoidDreamScript.IsVoidDream)
+            if (abstractCreature.creatureTemplate.type == MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy && VoidDreamScript.IsVoidDream)
             {
                 self.GetDaddyExt().isVoidDaddy = true;
+            }
+            orig(self, abstractCreature, world);
+            if (self.GetDaddyExt().isVoidDaddy)
+            {
                 self.effectColor = self.eyeColor = Color.red;
             }
         }
@@ -152,6 +166,6 @@ namespace VoidTemplate.CreatureInteractions
 
     public class DaddyExt
     {
-        public bool isVoidDaddy;
+        public bool isVoidDaddy = true;
     }
 }

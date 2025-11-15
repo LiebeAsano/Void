@@ -27,10 +27,10 @@ namespace VoidTemplate.Objects
                 room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap =
                 room.game.GetStorySession.saveState.deathPersistentSaveData.karma = 10;
                 hunter = room.game.Players[0];
-                hunter.Move(new(room.abstractRoom.index, -1, -1, 1));
+                hunter.Move(new(room.abstractRoom.index, -1, -1, 0));
                 for (int i = 0; i < 2; i++)
                 {
-                    AbstractSpear spear = new(room.world, null, room.GetWorldCoordinate(room.ShortcutLeadingToNode(1).StartTile), room.game.GetNewID(), false);
+                    AbstractSpear spear = new(room.world, null, room.GetWorldCoordinate(room.ShortcutLeadingToNode(0).StartTile), room.game.GetNewID(), false);
                     room.abstractRoom.AddEntity(spear);
                     spear.RealizeInRoom();
                 }
@@ -45,7 +45,7 @@ namespace VoidTemplate.Objects
             if (daddyPuppet == null)
             {
                 daddyPuppet = new(room.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy), null, new(room.world.offScreenDen.index, -1, -1, 0), room.world.game.GetNewID());
-                daddyPuppet.Move(new(room.abstractRoom.index, -1, -1, 0));
+                daddyPuppet.Move(new(room.abstractRoom.index, -1, -1, 1));
             }
             if (hunter != null && daddyPuppet != null)
             {

@@ -17,9 +17,9 @@ public static class Utils
 	public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 	public static string TranslateString(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str);
     
-    public static bool IsVoid(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void;
-    public static bool IsViy(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Viy;
-    public static bool AreVoidViy(this Player p) => p.slugcatStats.name == VoidEnums.SlugcatID.Void || p.slugcatStats.name == VoidEnums.SlugcatID.Viy;
+    public static bool IsVoid(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void;
+    public static bool IsViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Viy;
+    public static bool AreVoidViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void || p.SlugCatClass == VoidEnums.SlugcatID.Viy;
     public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;
 	public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
 			&& !(ModManager.Expedition && game.rainWorld.ExpeditionMode));

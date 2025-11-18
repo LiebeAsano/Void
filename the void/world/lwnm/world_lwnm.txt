@@ -1,7 +1,3 @@
 ROOMS
-LWNM_VoidNightmare : LWNM_s01
-LWNM_s01 : LWNM_VoidNightmare : SHELTER
+LWNM_VoidNightmare : DISCONNECTED
 END ROOMS
-CREATURES
-LWNM_VoidNightmare : 1-HunterDaddy
-END CREATURES

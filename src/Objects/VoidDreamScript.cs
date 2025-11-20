@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using VoidTemplate.PlayerMechanics;
 
 namespace VoidTemplate.Objects
@@ -44,8 +45,9 @@ namespace VoidTemplate.Objects
             }
             if (daddyPuppet == null)
             {
-                daddyPuppet = new(room.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy), null, new(room.world.offScreenDen.index, -1, -1, 0), room.world.game.GetNewID());
-                daddyPuppet.Move(new(room.abstractRoom.index, -1, -1, 1));
+                daddyPuppet = new(room.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy), null, room.GetWorldCoordinate(new Vector2(1642, 292)), room.world.game.GetNewID());
+                room.abstractRoom.AddEntity(daddyPuppet);
+                daddyPuppet.RealizeInRoom();
             }
             if (hunter != null && daddyPuppet != null)
             {

@@ -12,13 +12,14 @@ public static class MalnourishmentDeath
 
 	public static int Malnourished = 0;
 
-    private static void Malnourishment_Death(On.Player.orig_Update orig, Player self, bool eu)
+	private static void Malnourishment_Death(On.Player.orig_Update orig, Player self, bool eu)
 	{
 		orig(self, eu);
 		if (self.IsVoid()
 		   && self.room is not null
-		   && self.room.game.IsVoidWorld()
-		   && self.Malnourished)
+		   && (self.room.game.IsVoidWorld()
+		   || self.abstractCreature.GetPlayerState().InDream)
+           && self.Malnourished)
 		{
 			Malnourished++;
 		}
@@ -32,6 +33,7 @@ public static class MalnourishmentDeath
         if (self.IsVoid()
 		   && self.room is not null
 		   && !self.room.game.IsVoidWorld()
-		   && self.Malnourished) self.Die();
+		   && self.Malnourished
+		   && !self.abstractCreature.GetPlayerState().InDream) self.Die();
     }
 }

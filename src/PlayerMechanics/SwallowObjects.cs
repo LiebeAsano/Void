@@ -23,7 +23,6 @@ public static class SwallowObjects
         On.SlugcatHand.Update += SlugcatHand_Update;
         On.PlayerGraphics.Update += PlayerGraphics_Update;
         On.Player.MaulingUpdate += Player_MaulingUpdate;
-        On.Player.ctor += Player_ctor;
         On.StoryGameSession.ctor += StoryGameSession_ctor;
     }
 
@@ -362,91 +361,6 @@ public static class SwallowObjects
         }
     }
 
-    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
-    {
-        orig(self, abstractCreature, world);
-        if (self.IsVoid())
-        {
-            if (!pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out _))
-            {
-                pearlIDsInPlayerStomaches[self.playerState.playerNumber] = [];
-            }
-            if (self.objectInStomach is AbstractPhysicalObject absObj && absObj.type != null)
-            {
-
-                var itemInStomach = absObj.type.value;
-
-                if (itemInStomach == "WaterNut"
-                        || itemInStomach == "FirecrackerPlant"
-                        || itemInStomach == "FlyLure"
-                        || itemInStomach == "FlareBomb"
-                        || itemInStomach == "PuffBall"
-                        || itemInStomach == "BubbleGrass"
-                        || itemInStomach == "Lantern")
-                {
-                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                    {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
-                        self.AddQuarterFood();
-                    }
-                    if (self.room.game.IsArenaSession)
-                    {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
-                        self.AddFood(1);
-                    }
-                }
-                else if (itemInStomach == "SporePlant")
-                {
-                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                    {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood)
-                            self.AddFood(2);
-                        else
-                            self.AddFood(1);
-                    }
-                }
-                else if (itemInStomach == "Hazer"
-                    || itemInStomach == "VultureGrub")
-                {
-                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                    {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood || self.room.game.IsArenaSession)
-                            self.AddFood(1);
-                        else
-                        {
-                            self.AddQuarterFood();
-                            self.AddQuarterFood();
-                        }
-                    }
-                }
-                else if (itemInStomach == "NeedleEgg")
-                {
-                    if (self.slugcatStats.foodToHibernate > self.FoodInStomach)
-                    {
-                        self.objectInStomach.Destroy();
-                        self.objectInStomach = null;
-                        if (OptionInterface.OptionAccessors.SimpleFood)
-                            self.AddFood(4);
-                        else
-                            self.AddFood(2);
-                    }
-                }
-                else
-                {
-                    self.objectInStomach.Destroy();
-                    self.objectInStomach = null;
-                }
-            }
-        }
-
-    }
-
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
         orig(self, saveStateNumber, game);
@@ -458,5 +372,6 @@ public static class SwallowObjects
         if (player.AreVoidViy())
             player.abstractCreature.GetPlayerState().SwallowedObjects.Push(obj);
     }
+
 }
 

@@ -10,6 +10,7 @@ using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
+using Watcher;
 using static Room;
 
 namespace VoidTemplate;
@@ -27,105 +28,11 @@ public static class DrawSprites
 
     public static void Hook()
     {
-        //handles tail and other stuff
         On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
 
         On.PlayerGraphics.InitiateSprites += PlayerGraphics_InitiateSprites;
 
         On.PlayerGraphics.Update += PlayerGraphics_Update;
-
-        //On.PlayerGraphics.ApplyPalette += PlayerGraphics_ApplyPalette;
-    }
-
-    private static void PlayerGraphics_ApplyPalette(On.PlayerGraphics.orig_ApplyPalette orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
-    {
-        // Если это не Охотник, вызываем оригинальный метод
-        if (self.player?.SlugCatClass != SlugcatStats.Name.Red)
-        {
-            orig(self, sLeaser, rCam, palette);
-            return;
-        }
-
-        try
-        {
-            Color hunterBaseColor = new Color(1f, 0.45f, 0.45f);
-            Color color = hunterBaseColor;
-            Color color2 = new Color(color.r, color.g, color.b);
-
-            if (self.malnourished > 0f)
-            {
-                float num = self.player.Malnourished ? self.malnourished : Mathf.Max(0f, self.malnourished - 0.005f);
-                color2 = Color.Lerp(color2, Color.gray, 0.4f * num);
-            }
-
-            if (self.player.injectedPoison > 0f)
-            {
-                color2 = Color.Lerp(Color.Lerp(color2, self.player.injectedPoisonColor,
-                    Mathf.Clamp01(self.player.injectedPoison) * 0.3f),
-                    new Color(0.5f, 0.5f, 0.5f),
-                    self.player.injectedPoison * 0.1f);
-            }
-
-            color2 = self.HypothermiaColorBlend(color2);
-            self.currentAppliedHypothermia = self.player.Hypothermia;
-
-            if (ModManager.MMF && (self.owner as Player).AI == null)
-            {
-                RainWorld.PlayerObjectBodyColors[self.player.playerState.playerNumber] = color2;
-            }
-
-            if (self.gills != null)
-            {
-                Color effectCol = new Color(0.87451f, 0.17647f, 0.91765f);
-
-                if (!rCam.room.game.setupValues.arenaDefaultColors && !ModManager.CoopAvailable)
-                {
-                    switch (self.player.playerState.playerNumber)
-                    {
-                        case 0:
-                            if (rCam.room.game.IsArenaSession && rCam.room.game.GetArenaGameSession.arenaSitting.gameTypeSetup.gameType != DLCSharedEnums.GameTypeID.Challenge)
-                            {
-                                effectCol = new Color(0.25f, 0.65f, 0.82f);
-                            }
-                            break;
-                        case 1:
-                            effectCol = new Color(0.31f, 0.73f, 0.26f);
-                            break;
-                        case 2:
-                            effectCol = new Color(0.6f, 0.16f, 0.6f);
-                            break;
-                        case 3:
-                            effectCol = new Color(0.96f, 0.75f, 0.95f);
-                            break;
-                    }
-                }
-
-                self.gills.SetGillColors(color2, effectCol);
-                self.gills.ApplyPalette(sLeaser, rCam, palette);
-            }
-
-            for (int i = 0; i < sLeaser.sprites.Length; i++)
-            {
-                if (i != 9)
-                {
-                    sLeaser.sprites[i].color = color2;
-                }
-            }
-
-            sLeaser.sprites[11].color = Color.Lerp(color, Color.white, 0.3f);
-            sLeaser.sprites[10].color = color;
-
-            if (self.weaverGraphics != null)
-            {
-                self.weaverGraphics.ApplyPalette(sLeaser, rCam, palette, color2);
-            }
-
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Ошибка в ApplyPalette для Охотника: {e}");
-            orig(self, sLeaser, rCam, palette);
-        }
     }
 
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)
@@ -146,11 +53,10 @@ public static class DrawSprites
         orig(self, sLeaser, rCam);
         Player player = self.player;
 
-        //game behaves in a really weird way when you try to touch tail, so we just gonna make a new one and overlay it over the old one
         if (player.AreVoidViy() && (player.KarmaCap == 10 || Karma11Update.VoidKarma11))
         {
             var tail = sLeaser.sprites[2] as TriangleMesh;
-            //mapping element to tail
+
             for (var i = tail.vertices.Length - 1; i >= 0; i--)
             {
                 var perc = i / 2 / (float)(tail.vertices.Length / 2);
@@ -168,73 +74,12 @@ public static class DrawSprites
 
                 tail.UVvertices[i] = uv;
             }
-            //color to match face color for jolly/arena purposes
+
             tail.color = sLeaser.sprites[9].color;
         }
 
         if (self.player.IsVoid() && !Utils.DressMySlugcatEnabled)
             sLeaser.sprites[11].scale = 1f;
-    }
-
-    private static bool IsTouchingCeiling(this Player player)
-    {
-        if (player.room is not null)
-        {
-            BodyChunk body_chunk_0 = player.bodyChunks[0];
-            BodyChunk body_chunk_1 = player.bodyChunks[1];
-
-            Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(0, body_chunk_0.rad + 5);
-            Vector2 upperPosition_1 = body_chunk_1.pos + new Vector2(0, body_chunk_1.rad + 5);
-
-            IntVector2 tileAbove_0 = player.room.GetTilePosition(upperPosition_0);
-            IntVector2 tileAbove_1 = player.room.GetTilePosition(upperPosition_1);
-
-            bool isSolid_0 = player.room.GetTile(tileAbove_0).Solid;
-            bool isSolid_1 = player.room.GetTile(tileAbove_1).Solid;
-
-            return isSolid_0 || isSolid_1;
-        }
-        return false;
-    }
-
-    private static bool IsTouchingDiagonalCeiling(this Player player)
-    {
-        if (player.room is not null)
-        {
-            BodyChunk body_chunk_0 = player.bodyChunks[0];
-            BodyChunk body_chunk_1 = player.bodyChunks[1];
-
-            Vector2[] directions = {
-            new(0, 1)
-            };
-
-            foreach (var direction in directions)
-            {
-                Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
-                Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
-
-                IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
-                IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
-
-                SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
-                SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
-
-                bool isDiagonal = (slopeDirection_0 == SlopeDirection.UpLeft ||
-                           slopeDirection_0 == SlopeDirection.UpRight ||
-                           slopeDirection_0 == SlopeDirection.DownLeft ||
-                           slopeDirection_0 == SlopeDirection.DownRight ||
-                           slopeDirection_1 == SlopeDirection.UpLeft ||
-                           slopeDirection_1 == SlopeDirection.UpRight ||
-                           slopeDirection_1 == SlopeDirection.DownLeft ||
-                           slopeDirection_1 == SlopeDirection.DownRight);
-
-                if (isDiagonal)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private static string GetVoidMarkSpriteName(StoryGameSession session, string baseSpriteName)
@@ -308,15 +153,39 @@ public static class DrawSprites
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
+        if (self.player.room.game.IsVoidWorld())
+        {
+            if (self.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
+                && self.player.AI != null)
+            {
+                foreach (var sprite in sLeaser.sprites)
+                {
+                    string spritename = sprite.element.name;
+                    if (spritename.StartsWith("PlayerArm")
+                        || spritename.StartsWith("OnTopOfTerrainHand")
+                        || spritename.StartsWith("Body")
+                        || spritename.StartsWith("Hips")
+                        || spritename.StartsWith("Legs")
+                        || spritename.StartsWith("Head"))
+                        sprite.color = hunterColor;
+                    if (spritename.StartsWith("Face"))
+                        sprite.color = voidColor;
+                }
+                if (sLeaser.sprites[2] is TriangleMesh tail2)
+                {
+                    tail2.color = hunterColor;
+                }
+            }
+        }
         #region drawTail
         if (player.AreVoidViy() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            player.bodyMode == Player.BodyModeIndex.WallClimb)
+        player.bodyMode == Player.BodyModeIndex.WallClimb)
         {
             sLeaser.sprites[4].isVisible = false;
         }
         #endregion
 
-        if (player.AreVoidViy() && player.abstractCreature.GetPlayerState().InDream)
+        if (player.abstractCreature.GetPlayerState().InDream)
         {
             foreach (var sprite in sLeaser.sprites)
             {
@@ -338,15 +207,15 @@ public static class DrawSprites
                     }
                     else if (SlugStats.illness <= 5400)
                     {
-                        sprite.color = new(1f, 0.55f, 0.55f);
+                        sprite.color = new(1f, 0.53f, 0.53f);
                     }
                     else if (SlugStats.illness <= 7200)
                     {
-                        sprite.color = new(1f, 0.6f, 0.6f);
+                        sprite.color = new(1f, 0.56f, 0.56f);
                     }
                     else
                     {
-                        sprite.color = new(1f, 0.65f, 0.65f);
+                        sprite.color = new(1f, 0.6f, 0.6f);
                     }
 
                 }
@@ -396,7 +265,7 @@ public static class DrawSprites
                 viyTail2.color = Utils.ViyColors[player.playerState.playerNumber];
             }
         }
-        if (!player.IsVoid()) return;
+        if (!player.IsVoid() || player.abstractCreature.GetPlayerState().InDream) return;
 
         string currentMarkSpriteName = sLeaser.sprites[11].element.name;
 
@@ -415,7 +284,7 @@ public static class DrawSprites
         {
             FSprite headSprite = sLeaser.sprites[3];
             string headSpriteName = headSprite.element.name;
-            if (player.IsTouchingDiagonalCeiling())
+            if (Climbing.IsTouchingCeiling(player))
             {
                 if (!player.input[0].jmp)
                 {
@@ -423,7 +292,7 @@ public static class DrawSprites
                 }
                 else SetVoidHeadSprite("Void-");
             }
-            else if (player.IsTouchingCeiling())
+            else if (Climbing.IsTouchingCeiling(player))
             {
                 if (!player.input[0].jmp)
                 {
@@ -448,7 +317,7 @@ public static class DrawSprites
         }
 
         Utils.VoidColors[player.playerState.playerNumber] = faceSprite.color;
-        if (player.IsTouchingDiagonalCeiling()
+        if (Climbing.IsTouchingDiagonalCeiling(player)
             && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
             if (!player.input[0].jmp
@@ -459,7 +328,7 @@ public static class DrawSprites
             }
             else SetVoidFaceSprite("Void-");
         }
-        else if (player.IsTouchingCeiling()
+        else if (Climbing.IsTouchingCeiling(player)
             && player.bodyMode == BodyModeIndexExtension.CeilCrawl)
         {
             if (!player.input[0].jmp

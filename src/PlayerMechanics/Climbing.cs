@@ -123,7 +123,7 @@ public static class Climbing
 	}
 
 
-	private static bool IsTouchingDiagonalCeiling(Player player)
+    public static bool IsTouchingDiagonalCeiling(Player player)
 	{
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
@@ -158,7 +158,7 @@ public static class Climbing
 		return false;
 	}
 
-	private static bool IsTouchingCeiling(Player player)
+    public static bool IsTouchingCeiling(Player player)
 	{
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
@@ -177,7 +177,7 @@ public static class Climbing
 
 	private static readonly float CeilCrawlDuration = 0.2f;
 
-	private static int[] flipTimer = new int [32];
+	private static readonly int[] flipTimer = new int [32];
 	private const int ticksToFlip = 10;
 
 	public static bool[] gamepadController = new bool [32];
@@ -288,9 +288,9 @@ public static class Climbing
             {
                 player.diveForce = Mathf.Min(1f, player.diveForce + 0.09f);
                 BodyChunk mainBodyChunk = player.mainBodyChunk;
-                mainBodyChunk.vel.y = mainBodyChunk.vel.y - 1.2f * player.diveForce;
+                mainBodyChunk.vel.y -= 1.2f * player.diveForce;
                 BodyChunk bodyChunk3 = player.bodyChunks[1];
-                bodyChunk3.vel.y = bodyChunk3.vel.y + 1.2f * player.diveForce;
+                bodyChunk3.vel.y += 1.2f * player.diveForce;
             }
         }
 
@@ -346,7 +346,7 @@ public static class Climbing
                  player.bodyMode != Player.BodyModeIndex.Crawl)))
         {
             player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-            UpdateBodyMode_CeilCrawl(player, state);
+            UpdateBodyMode_CeilCrawl(player);
             state.IsCeilCrawling = true;
 
             state.CeilCrawlStartTime = Time.realtimeSinceStartup -
@@ -364,7 +364,7 @@ public static class Climbing
 				if (elapsedTime < CeilCrawlDuration)
 				{
 					player.bodyMode = BodyModeIndexExtension.CeilCrawl;
-					UpdateBodyMode_CeilCrawl(player, state);
+					UpdateBodyMode_CeilCrawl(player);
 				}
 				else
 				{
@@ -400,7 +400,7 @@ public static class Climbing
 		}
 	}
 
-	private static void UpdateBodyMode_CeilCrawl(Player player, VoidState state)
+	private static void UpdateBodyMode_CeilCrawl(Player player)
 	{
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
@@ -550,7 +550,7 @@ public static class Climbing
 						bonus = 1f;
 				else if (Karma11Update.VoidKarma11)
 					bonus = 1.25f;
-				if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+				if (body_chunk_0.pos.y > body_chunk_1.pos.y + 5f)
 				{
 					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
 					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
@@ -638,6 +638,7 @@ public static class PlayerExtensions
 
 	public static VoidState GetPlayerState(this AbstractCreature player)
 	{
+
 		if (!PlayerStates.TryGetValue(player, out VoidState state))
 		{
 			state = new VoidState();
@@ -647,7 +648,6 @@ public static class PlayerExtensions
 		return state;
 	}
 }
-
 public class VoidState
 {
 	public bool IsCeilCrawling { get; set; } = false;

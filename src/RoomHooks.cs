@@ -101,8 +101,8 @@ namespace VoidTemplate
                 self.timelinePosition = timelinePosition;
                 self.playerCharacter = playerCharacter;
                 self.creatureStats = new float[ExtEnum<CreatureTemplate.Type>.values.Count + 5];
-                self.ConditionalLinkList = new List<WorldLoader.ConditionalLink>();
-                self.ReplaceRoomNames = new Dictionary<string, string>();
+                self.ConditionalLinkList = [];
+                self.ReplaceRoomNames = [];
                 float num = 0f;
                 int num2 = 0;
                 float num3 = 0f;
@@ -130,25 +130,25 @@ namespace VoidTemplate
                         self.world.rainCycle.sunDownStartTime = num2;
                         game.globalRain.drainWorldFlood = num3;
                         game.globalRain.drainWorldFlood = num4;
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                 "Loaded world, transfering precycle scale",
                 self.game.globalRain.preCycleRainPulse_Scale.ToString()
-                        });
+                        ]);
                     }
                     else
                     {
-                        Custom.Log(new string[] { "First world loaded, holding precycle scale." });
+                        Custom.Log(["First world loaded, holding precycle scale."]);
                     }
                 }
                 self.singleRoomWorld = singleRoomWorld;
                 self.worldName = worldName;
                 self.setupValues = setupValues;
-                self.lines = new List<string>();
+                self.lines = [];
                 if (!singleRoomWorld)
                 {
-                    string[] array = File.ReadAllLines(AssetManager.ResolveFilePath(string.Concat(new string[]
-                    {
+                    string[] array = File.ReadAllLines(AssetManager.ResolveFilePath(string.Concat(
+                    [
             "World",
             Path.DirectorySeparatorChar.ToString(),
             worldName,
@@ -156,7 +156,7 @@ namespace VoidTemplate
             "world_",
             worldName,
             ".txt"
-                    })));
+                    ])));
                     for (int i = 0; i < array.Length; i++)
                     {
                         string text = WorldLoader.Preprocessing.PreprocessLine(array[i], game, timelinePosition);
@@ -170,7 +170,7 @@ namespace VoidTemplate
                 {
                     self.simulateUpdateTicks = 100;
                 }
-                Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
+                Dictionary<string, List<string>> dictionary = [];
                 for (int j = self.lines.Count - 1; j > 0; j--)
                 {
                     string[] array2 = Regex.Split(self.lines[j], " : ");
@@ -182,7 +182,7 @@ namespace VoidTemplate
                         }
                         else
                         {
-                            dictionary[array2[2]].AddRange(array2[0].Split(new char[] { ',' }));
+                            dictionary[array2[2]].AddRange(array2[0].Split([',']));
                         }
                         self.lines.RemoveAt(j);
                     }

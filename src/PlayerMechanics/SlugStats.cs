@@ -32,7 +32,7 @@ namespace VoidTemplate.PlayerMechanics
                 if (illness <= 1800)
                 {
                     if (illness == 1800)
-                        HunterSpasms.Spasm(self, 10f, 1f);
+                        HunterSpasms.Spasm(self, 10f, 0.5f);
                     self.slugcatStats.throwingSkill = 2;
                     self.slugcatStats.corridorClimbSpeedFac = 1.25f;
                     self.slugcatStats.poleClimbSpeedFac = 1.25f;
@@ -42,7 +42,7 @@ namespace VoidTemplate.PlayerMechanics
                 else if (illness <= 3600)
                 {
                     if (illness == 3600)
-                        HunterSpasms.Spasm(self, 10f, 1f);
+                        HunterSpasms.Spasm(self, 10f, 0.5f);
                     self.slugcatStats.throwingSkill = 1;
                     self.slugcatStats.corridorClimbSpeedFac = 1.1f;
                     self.slugcatStats.poleClimbSpeedFac = 1.1f;
@@ -52,7 +52,7 @@ namespace VoidTemplate.PlayerMechanics
                 else if (illness <= 5400)
                 {
                     if (illness == 5400)
-                        HunterSpasms.Spasm(self, 10f, 1f);
+                        HunterSpasms.Spasm(self, 10f, 0.5f);
                     self.slugcatStats.throwingSkill = 1;
                     self.slugcatStats.corridorClimbSpeedFac = 1.0f;
                     self.slugcatStats.poleClimbSpeedFac = 1.0f;
@@ -62,7 +62,7 @@ namespace VoidTemplate.PlayerMechanics
                 else if (illness <= 7200)
                 {
                     if (illness == 7200)
-                        HunterSpasms.Spasm(self, 10f, 1f);
+                        HunterSpasms.Spasm(self, 10f, 0.5f);
                     self.slugcatStats.throwingSkill = 0;
                     self.slugcatStats.corridorClimbSpeedFac = 0.9f;
                     self.slugcatStats.poleClimbSpeedFac = 0.9f;

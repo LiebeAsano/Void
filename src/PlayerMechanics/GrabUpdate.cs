@@ -423,7 +423,11 @@ public static class GrabUpdate
                 self.swallowAndRegurgitateCounter++;
                 for (int num14 = 0; num14 < 2; num14++)
                 {
-                    if (self.swallowAndRegurgitateCounter > 110 && (self.objectInStomach != null || self.abstractCreature.GetPlayerState().SwallowedObjects.Count > 0 || SwallowObjects.pearlIDsInPlayerStomaches[self.playerState.playerNumber].Count > 0))
+                    if (self.swallowAndRegurgitateCounter > 110 &&
+                       (self.objectInStomach != null ||
+                        self.abstractCreature.GetPlayerState().SwallowedObjects.Count > 0 ||
+                        (SwallowObjects.pearlIDsInPlayerStomaches.TryGetValue(self.playerState.playerNumber, out var pearls) &&
+                        pearls != null && pearls.Count > 0)))
                     {
                         if (self.abstractCreature.world.game.IsStorySession && self.abstractCreature.world.game.GetStorySession.saveState.GetVoidMarkV3())
                         {

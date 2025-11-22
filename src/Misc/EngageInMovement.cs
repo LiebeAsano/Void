@@ -106,14 +106,21 @@ public static class EngageInMovement
 				}
 				else
 				{
-					slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 0f), -player.flipDirection, 2, false);
+					slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -15f), -player.flipDirection, 2, false);
 					return false;
 				}
 			}
-
-			slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -10f), -player.flipDirection, 2, false);
-			return false;
-		}
+            if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+			{
+				slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -10f), -player.flipDirection, 2, false);
+                return false;
+            }
+			else
+            {
+                slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 5f), -player.flipDirection, 2, false);
+                return false;
+            }
+        }
 
 		return orig(slugcat_hand);
 	}

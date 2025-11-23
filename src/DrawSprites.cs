@@ -153,7 +153,7 @@ public static class DrawSprites
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
-        if (self.player.room.game.IsVoidWorld())
+        if (self.player.abstractCreature.world.game.IsVoidWorld())
         {
             if (self.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
                 && self.player.AI != null)

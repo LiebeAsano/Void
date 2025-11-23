@@ -38,6 +38,42 @@ namespace VoidTemplate
             On.OverWorld.GetRegion_string += OverWorld_GetRegion_string_FIX;
             IL.Player.SpitOutOfShortCut += Player_SpitOutOfShortCut_FIX;
             IL.Player.Update += Player_Update;
+            On.Music.PlayerThreatTracker.Update += FixWorldMusic;
+        }
+
+        private static void FixWorldMusic(On.Music.PlayerThreatTracker.orig_Update orig, Music.PlayerThreatTracker self)
+        {
+            orig(self);
+            if (VoidDreamScript.IsVoidDream && self.musicPlayer.manager.currentMainLoop is RainWorldGame game && game.Players[self.playerNumber].realizedCreature is Player player && player.room != null && player.room.world.singleRoomWorld)
+            {
+                if (player.room.abstractRoom.index != self.room)
+                {
+                    self.lastLastRoom = self.lastRoom;
+                    self.lastRoom = self.room;
+                    self.room = player.room.abstractRoom.index;
+                    if (self.room != self.lastLastRoom)
+                    {
+                        self.roomSwitches++;
+                        string text2 = ((player.room.world.region.regionParams.proceduralMusicBank == "") ? player.room.world.region.name : player.room.world.region.regionParams.proceduralMusicBank);
+                        if (text2 != self.region)
+                        {
+                            self.region = text2;
+                            self.musicPlayer.NewRegion(self.region);
+                        }
+                    }
+                }
+                if (self.roomSwitches > 0 && self.roomSwitchDelay > 0)
+                {
+                    self.roomSwitchDelay--;
+                    if (self.roomSwitchDelay < 1)
+                    {
+                        self.musicPlayer.song?.PlayerToNewRoom();
+                        self.musicPlayer.nextSong?.PlayerToNewRoom();
+                        self.roomSwitchDelay = UnityEngine.Random.Range(80, 400);
+                        self.roomSwitches--;
+                    }
+                }
+            }
         }
 
         private static void Player_Update(ILContext il)

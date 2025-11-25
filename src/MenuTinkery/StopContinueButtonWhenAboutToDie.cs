@@ -19,7 +19,7 @@ public static class StopContinueButtonWhenAboutToDie
 		//forcing watching animation when going to karma 1 as void
 		On.Menu.SleepAndDeathScreen.GetDataFromGame += SleepAndDeathScreen_GetDataFromGame;
 		//preventing button being clicked until button has flickered for a bit
-		_ = new Hook(typeof(Menu.SleepAndDeathScreen).GetProperty(nameof(SleepAndDeathScreen.ButtonsGreyedOut)).GetGetMethod(), ButtonsGreyedOut);
+		new Hook(typeof(Menu.SleepAndDeathScreen).GetProperty(nameof(SleepAndDeathScreen.ButtonsGreyedOut)).GetGetMethod(), ButtonsGreyedOut);
 	}
 
 	private static bool ButtonsGreyedOut(Func<SleepAndDeathScreen, bool> orig, SleepAndDeathScreen self)

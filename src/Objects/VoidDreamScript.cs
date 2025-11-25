@@ -69,7 +69,7 @@ namespace VoidTemplate.Objects
                 }
                 shortcutsHide = true;
             }
-            daddyPuppet.abstractAI.RealAI?.tracker.SeeCreature(hunter);
+            daddyPuppet.abstractAI.SetDestination(hunter.pos);
             if (hunter.state.dead || daddyPuppet.state.dead)
             {
                 room.game.VoidDreamEnd();

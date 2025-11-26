@@ -30,6 +30,7 @@ namespace VoidTemplate
             IL.MoreSlugcats.MSCRoomSpecificScript.OE_GourmandEnding.Update += OE_GourmandEnding_Update;
             On.MoreSlugcats.MSCRoomSpecificScript.OE_GourmandEnding.Update += On_OE_GourmandEnding_Update;
             On.Player.ctor += Player_ctor;
+            On.Player.Update += On_Player_Update;
             On.RainWorldGame.BeatGameMode += RainWorldGame_BeatGameMode;
             On.AbstractCreatureAI.Update += AbstractCreatureAI_Update;
             On.AbstractCreatureAI.SetDestination += AbstractCreatureAI_SetDestination;
@@ -293,6 +294,23 @@ namespace VoidTemplate
             if (self.IsVoid() && abstractCreature.Room.name == "OE_FINAL03")
             {
                 self.sleepCounter = 100;
+            }
+        }
+
+        private static void On_Player_Update(On.Player.orig_Update orig, Player self, bool eu)
+        {
+            orig(self, eu);
+            if (self.room.game.IsVoidWorld())
+            {
+                if (self.abstractCreature?.Room?.name == "OE_FINAL03")
+                {
+                    if (self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
+                        && self.AI != null)
+                    {
+                        self.standing = true;
+                        self.sleepCounter = 0;
+                    }
+                }
             }
         }
 

@@ -15,11 +15,14 @@ public static class Karma11Update
 {
     public static void Hook()
     {
+        On.StoryGameSession.ctor += StoryGameSession_ctor;
         On.Player.ctor += Player_ctor;
         On.Player.Update += Player_Update;
     }
 
     public static bool VoidKarma11 = false;
+
+    public static bool VoidNightmare = false;
 
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
@@ -64,5 +67,15 @@ public static class Karma11Update
         {
             VoidKarma11 = true;
         }
+        if (self.abstractCreature.GetPlayerState().InDream)
+        {
+            VoidNightmare = true;
+        }
+    }
+
+    private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+    {
+        orig(self, saveStateNumber, game);
+        VoidNightmare = false;
     }
 }

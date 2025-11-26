@@ -15,11 +15,11 @@ public static class SaintKarmaImmunity
     public static void Hook()
     {
         //gives stun instead of death at karma 11
-        On.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint1;
+        On.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
         //IL.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
     }
 
-    private static void Player_ClassMechanicsSaint1(On.Player.orig_ClassMechanicsSaint orig, Player self)
+    private static void Player_ClassMechanicsSaint(On.Player.orig_ClassMechanicsSaint orig, Player self)
     {
         float num2 = 60f;
         Vector2 vector3 = new(self.mainBodyChunk.pos.x + self.burstX, self.mainBodyChunk.pos.y + self.burstY + 60f);
@@ -45,6 +45,10 @@ public static class SaintKarmaImmunity
                                 {
                                     flag3 = true;
                                 }
+                            }
+                            if (physicalObject is DaddyLongLegs)
+                            {
+                                flag3 = true;
                             }
                         }
                     }
@@ -84,8 +88,13 @@ public static class SaintKarmaImmunity
                                     }
                                     if ((physicalObject as Player).IsViy())
                                     {
-                                        (physicalObject as Player).Stun(100);
+                                        (physicalObject as Player).Stun(10);
                                     }
+                                }
+                                if (physicalObject is DaddyLongLegs)
+                                {
+                                    flag2 = true;
+                                    (physicalObject as DaddyLongLegs).Stun(10);
                                 }
                             }
                         }

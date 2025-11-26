@@ -40,7 +40,7 @@ namespace VoidTemplate
 				{
 					sceneID = VoidEnums.SceneID.SleepSceneMark;
 				}
-				else if (self.IsSleepScreen && !Karma11Update.VoidKarma11)
+				else if (self.IsSleepScreen && !Karma11Update.VoidKarma11 && !Karma11Update.VoidNightmare)
 				{
 					sceneID = VoidEnums.SceneID.SleepScene;
 				}

@@ -44,8 +44,9 @@ public static class VoidEnums
 			StaticDeath11 = new("Static_Death_Void11");
 			StaticEnd = new("Static_End_Scene_Void");
 			StaticEnd11 = new("Static_End_Scene_Void11");
+            StaticSlugcat = new("Static_Slugcat_Scene_Void");
 
-			UnlockedSlugcat = new("Slugcat_Void");
+            UnlockedSlugcat = new("Slugcat_Void");
 			LockedSlugcat = new("Slugcat_Void_Dark");
 			KarmaDeath = new("karma_death_void");
 			KarmaDeath11 = new("karma_death_void_karma11");
@@ -55,8 +56,10 @@ public static class VoidEnums
 			SelectEnding11Scene = new("End_Scene_Void11");
 			SelectKarma5Scene = new("Scene_Five_Karma_Void");
 			SelectKarma11Scene = new("Scene_Eleven_Karma_Void");
+            SelectSlugpupsScene = new("Scene_Slugpups_Void");
+            SelectSlugpups11Scene = new("Scene_Slugpups_Void11");
 
-			MainMenuSceneMonk = new("Main_Menu_Scene_Monk");
+            MainMenuSceneMonk = new("Main_Menu_Scene_Monk");
             MainMenuSceneSurv = new("Main_Menu_Scene_Surv");
             MainMenuSceneHunt = new("Main_Menu_Scene_Hunt");
             MainMenuSceneMonkSurv = new("Main_Menu_Scene_MonkSurv");
@@ -75,6 +78,7 @@ public static class VoidEnums
 		public static MenuScene.SceneID StaticEnd11;
 		public static MenuScene.SceneID StaticDeath;
 		public static MenuScene.SceneID StaticDeath11;
+		public static MenuScene.SceneID StaticSlugcat;
 
 		public static MenuScene.SceneID UnlockedSlugcat;
 		public static MenuScene.SceneID LockedSlugcat;
@@ -86,8 +90,10 @@ public static class VoidEnums
 		public static MenuScene.SceneID SelectFPScene;
 		public static MenuScene.SceneID SelectKarma5Scene;
 		public static MenuScene.SceneID SelectKarma11Scene;
+        public static MenuScene.SceneID SelectSlugpupsScene;
+        public static MenuScene.SceneID SelectSlugpups11Scene;
 
-		public static MenuScene.SceneID Farm;
+        public static MenuScene.SceneID Farm;
 		public static MenuScene.SceneID HunterRot;
 		public static MenuScene.SceneID Moon;
 		public static MenuScene.SceneID NSH;

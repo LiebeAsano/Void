@@ -23,6 +23,8 @@ public static class DrawSprites
 
     public static readonly Color hunterColor = new(1f, 0.45f, 0.45f);
 
+    public static readonly Color gourmandColor = new(0.94f, 0.76f, 0.59f);
+
     private static ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();
     public static PlayerGraphiscExtention GetPlayerGExt(this PlayerGraphics graphics) => pGExt.GetOrCreateValue(graphics);
 
@@ -167,13 +169,13 @@ public static class DrawSprites
                         || spritename.StartsWith("Hips")
                         || spritename.StartsWith("Legs")
                         || spritename.StartsWith("Head"))
-                        sprite.color = hunterColor;
+                        sprite.color = gourmandColor;
                     if (spritename.StartsWith("Face"))
                         sprite.color = voidColor;
                 }
                 if (sLeaser.sprites[2] is TriangleMesh tail2)
                 {
-                    tail2.color = hunterColor;
+                    tail2.color = gourmandColor;
                 }
             }
         }

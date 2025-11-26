@@ -41,7 +41,7 @@ namespace VoidTemplate.CreatureInteractions
         {
             orig(self, eu);
 
-            if (self.GetDaddyExt().isVoidDaddy && self.room != null && UnityEngine.Random.Range(0, 3500) == 0)
+            if (self.GetDaddyExt().isVoidDaddy && self.room != null && UnityEngine.Random.Range(0, 4000) == 0)
             {
                 self.room.PlaySound(UnityEngine.Random.Range(0, 3) switch
                 {
@@ -71,6 +71,10 @@ namespace VoidTemplate.CreatureInteractions
             if (abstractCreature.creatureTemplate.type == MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy && VoidDreamScript.IsVoidDream)
             {
                 self.GetDaddyExt().isVoidDaddy = true;
+            }
+            else
+            {
+                self.GetDaddyExt().isVoidDaddy = false;
             }
             orig(self, abstractCreature, world);
             if (self.GetDaddyExt().isVoidDaddy)
@@ -115,7 +119,7 @@ namespace VoidTemplate.CreatureInteractions
                     (self.State as DaddyLongLegs.DaddyState).tentacleHealth[hitAppendage.appendage.appIndex] -= damage;
                     damage = 0f;
                 }
-                damage /= ((ModManager.DLCShared && self.abstractCreature.superSizeMe) ? 4f : 1f);
+                damage /= (ModManager.DLCShared && self.abstractCreature.superSizeMe) ? 4f : 1f;
                 if (!self.RippleViolenceCheck(source))
                 {
                     return;
@@ -145,6 +149,15 @@ namespace VoidTemplate.CreatureInteractions
                 }
                 self.stunDamageType = type;
                 self.stunDamageType = Creature.DamageType.None;
+                if (damage >= 4f && type == Creature.DamageType.Explosion)
+                {
+                    self.room.PlaySound(UnityEngine.Random.Range(0, 3) switch
+                    {
+                        0 => WatcherEnums.WatcherSoundID.RotLiz_Vocalize,
+                        1 => WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A,
+                        _ => WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B
+                    }, self.firstChunk.pos, self.abstractPhysicalObject);
+                }
                 if (self.State is HealthState)
                 {
                     (self.State as HealthState).health -= num;

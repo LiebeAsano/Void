@@ -17,6 +17,7 @@ public static class MenuHooks
 	private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
 	private const string TextIfDead11 = "Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one. (To be continued?)";
 	private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left. (To be continued...)";
+    private const string TextIfSlugEnding = "The hunger is sated, but the void inside still cries out.<LINE>After destroying the colony, you continue your journey in search of survivors.";
     private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
 	public static void Hook()
 	{
@@ -32,19 +33,6 @@ public static class MenuHooks
 		//fix for select menu dying when there is no karma and food meter for the page
 		IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
 	}
-
-    private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
-    {
-		if (manager.rainWorld.progression.miscProgressionData.monkEndingID == 1 && !SaveManager.ExternalSaveData.MonkAscended)
-		{
-			SaveManager.ExternalSaveData.MonkAscended = true;
-		}
-		if (manager.rainWorld.progression.miscProgressionData.survivorEndingID == 1 && ! SaveManager.ExternalSaveData.SurvAscended)
-		{
-			SaveManager.ExternalSaveData.SurvAscended = true;
-		}
-		orig(self, manager, showRegionSpecificBkg);
-    }
 
     private static void SlugcatPageContinue_Update(MonoMod.Cil.ILContext il)
     {
@@ -91,7 +79,8 @@ public static class MenuHooks
 			SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
 			if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticDeath11;
 			else if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
-            else if (save.GetVoidEndingTree()) self.sceneID = VoidEnums.SceneID.StaticEnd;
+            else if (save.GetVoidEndingTree()) self.sceneID = VoidEnums.SceneID.StaticSlugcat;
+            else if (save.GetEndingEncountered()) self.sceneID = VoidEnums.SceneID.StaticEnd;
             else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticEnd11;
 			else self.sceneID = VoidEnums.SceneID.StaticEnd;
 		}
@@ -155,6 +144,7 @@ public static class MenuHooks
 			string text;
 			if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) text = TextIfDead11;
 			else if (save.GetVoidCatDead()) text = TextIfDead;
+			else if (save.GetVoidEndingTree()) text = TextIfSlugEnding;
 			else text = TextIfEnding;
             var textlabel = new MenuLabel(menu, self, text.TranslateStringComplex(), new Vector2(-1000f, self.imagePos.y - 249f - 60f + VerticalOffset / 2f), new Vector2(400f, 60f), true);
 			textlabel.label.alignment = FLabelAlignment.Center;

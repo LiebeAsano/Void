@@ -17,7 +17,7 @@ public static class MenuHooks
 	private const string TextIfDead = "The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.";
 	private const string TextIfDead11 = "Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one. (To be continued?)";
 	private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left. (To be continued...)";
-    private const string TextIfSlugEnding = "The hunger is sated, but the void inside still cries out.<LINE>After destroying the colony, you continue your journey in search of survivors.";
+    private const string TextIfSlugEnding = "The hunger is sated, but the void inside still cries out. After destroying<LINE>the colony, you continue your journey in search of survivors.";
     private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
 	public static void Hook()
 	{

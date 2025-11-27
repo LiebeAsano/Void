@@ -45,7 +45,7 @@ public static class DreamAssociatedSound
 			{
 				if (self.dreamID == HunterRotDream || (self.scene != null && self.scene.sceneID == VoidEnums.SceneID.HunterRot))
 				{
-					return 1500;
+					return 1360;
 				}
 				return orig;
 			});

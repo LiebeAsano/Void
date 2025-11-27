@@ -22,7 +22,7 @@ public static class CustomSleepMusic
 
         if (self.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            if (self.IsSleepScreen && (self.saveState.GetVoidMarkV3() || Karma11Update.VoidKarma11))
+            if (self.IsSleepScreen && (self.saveState.GetVoidMarkV3() || Karma11Update.VoidKarma11 || Karma11Update.VoidNightmare))
             {
                 self.soundLoop?.Destroy();
                 self.mySoundLoopID = VoidEnums.SoundID.SleepMarkSound;

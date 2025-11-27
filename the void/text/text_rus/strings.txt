@@ -12,7 +12,7 @@ It is painful... but Karma Flower saves your current cycle.|Это больно.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречена вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left. (To be continued...)|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Тебя не покидает чувство, что осталось лишь последнее желание. (Продолжение следует...)
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one. (To be continued?)|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового. (Продолжение следует?)
-The hunger is sated, but the void inside still cries out.<LINE>After destroying the colony, you continue your journey in search of survivors.|Голод утолён, а пустота внутри всё ещё вопит.<LINE>Уничтожив колонию, ты продолжаешь своё путешествие в поисках выживших.
+The hunger is sated, but the void inside still cries out. After destroying<LINE>the colony, you continue your journey in search of survivors.|Голод утолён, а пустота внутри всё ещё вопит. Уничтожив колонию,<LINE>ты продолжаешь своё путешествие в поисках выживших.
 
 Pick up / Eat / Maul button interactions:|Действия кнопки Взять / Съесть / Растерзать:
 Tap to pick up objects|Нажми, чтобы взять предметы
@@ -164,8 +164,6 @@ It is you again.|Это снова ты.
 I had hoped that this problem would resolve itself, but apparently it has not.|Я надеялся, что проблема разрешится сама собой, но, видимо, это не так.
 The mark is slightly damaged, but the data is still intact.|Метка слегка повреждена, но данные ещё целы.
 It is quite interesting...|Это довольно интересно...
-Half your vital organs are missing and a tumor takes their place?|Половина жизненно важных огранов отсутствует, а их место занимает опухоль?
-Although, it would be easier for me if you do not return.|Хотя это больше похоже на симбиоз между организмами. Оно заменяет клетки, растворенные пустотной жидкостью.
 Even such a decision has its limits, sooner or later your genes will be permanently damaged and you will not wake up in the next cycle.|Даже у такого решения есть свои пределы, рано или поздно твои гены будут окончательно повреждены, и ты уже не проснёшься в следующем цикле.
 I have found out what I wanted, now get lost, I have spent too much time on you already.|Я выяснил то, что хотел, теперь проваливай, я и так потратил на тебя слишком много времени.
 

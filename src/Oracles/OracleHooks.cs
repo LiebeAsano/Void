@@ -14,6 +14,7 @@ using static VoidTemplate.Oracles.OracleHooks;
 using System.Data.SqlTypes;
 using MonoMod.RuntimeDetour;
 using VoidTemplate.Objects;
+using VoidTemplate.PlayerMechanics;
 
 namespace VoidTemplate.Oracles;
 
@@ -747,11 +748,12 @@ static class OracleHooks
 
                     self.oracle.room.PlaySound(SoundID.SS_AI_Give_The_Mark_Boom, 0f, 1f, 1f);
 
-                    if (self.player.input[0].y != 0 || self.player.input[0].x != 0 || self.player.input[0].jmp)
+                    if ((self.player.input[0].y != 0 || self.player.input[0].x != 0 || self.player.input[0].jmp) && self.player.bodyMode != Player.BodyModeIndex.WallClimb && self.player.bodyMode != BodyModeIndexExtension.CeilCrawl
+                        || (self.player.input[0].y != 0 || self.player.input[0].jmp) && self.player.bodyMode == Player.BodyModeIndex.WallClimb
+                        || (self.player.input[0].x != 0 || self.player.input[0].jmp) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
                     {
                         self.player.Die();
                     }
-
                     break;
                 }
             case "GiveMarkV3":
@@ -766,7 +768,9 @@ static class OracleHooks
 
                     self.player.AddFood(9);
 
-                    if (self.player.input[0].y != 0 || self.player.input[0].x != 0 || self.player.input[0].jmp)
+                    if ((self.player.input[0].y != 0 || self.player.input[0].x != 0 || self.player.input[0].jmp) && self.player.bodyMode != Player.BodyModeIndex.WallClimb && self.player.bodyMode != BodyModeIndexExtension.CeilCrawl
+                        || (self.player.input[0].y != 0 || self.player.input[0].jmp) && self.player.bodyMode == Player.BodyModeIndex.WallClimb
+                        || (self.player.input[0].x != 0 || self.player.input[0].jmp) && self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
                     {
                         self.player.Die();
                     }

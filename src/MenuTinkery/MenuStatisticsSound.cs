@@ -16,7 +16,8 @@ public static class MenuStatisticsSound
 			{ "Static_Death_Void11",  "StaticDeathSound11" },
 			{ "Static_End_Scene_Void", "StaticEndSound" },
 			{ "Static_End_Scene_Void11", "StaticEndSound11" },
-		};
+            { "Static_Slugcat_Scene_Void", "StaticSlugcatSound" },
+        };
 	}
 
 	private static void KarmaLadderScreen_Singal(On.Menu.KarmaLadderScreen.orig_Singal orig, Menu.KarmaLadderScreen self, Menu.MenuObject sender, string message)

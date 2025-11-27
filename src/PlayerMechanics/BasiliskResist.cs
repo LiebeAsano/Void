@@ -22,11 +22,12 @@ public class BasiliskResist
     {
         if (self.mushroomCounter > 0 &&
             self.AreVoidViy() &&
-            !self.chatlog)
+            !self.chatlog &&
+            !self.abstractCreature.GetPlayerState().InDream)
         {
             self.mushroomCounter = 0;
         }
-        if (self.injectedPoison > 0 && self.AreVoidViy())
+        if (self.injectedPoison > 0 && self.AreVoidViy() && !self.abstractCreature.GetPlayerState().InDream)
         {
             int karma = self.KarmaCap;
             if (Karma11Update.VoidKarma11)
@@ -38,7 +39,7 @@ public class BasiliskResist
 
     private static void Creature_InjectPoison(On.Creature.orig_InjectPoison orig, Creature self, float amount, Color poisonColor)
     {
-        if (self is Player player && player.AreVoidViy())
+        if (self is Player player && player.AreVoidViy() && !player.abstractCreature.GetPlayerState().InDream)
         {
             int karma = player.KarmaCap;
             if (Karma11Update.VoidKarma11)

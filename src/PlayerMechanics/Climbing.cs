@@ -158,6 +158,41 @@ public static class Climbing
 		return false;
 	}
 
+    public static bool IsNotTouchingDiagonalCeiling(Player player)
+    {
+        BodyChunk body_chunk_0 = player.bodyChunks[0];
+        BodyChunk body_chunk_1 = player.bodyChunks[1];
+
+        Vector2[] directions = [
+        new Vector2(0, 1)
+        ];
+
+        foreach (var direction in directions)
+        {
+            Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
+            Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
+
+            IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
+            IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
+
+            // Использование IdentifySlope для определения диагонального тайла
+            SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
+            SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
+
+            bool isDiagonal = (slopeDirection_0 == SlopeDirection.DownLeft ||
+                       slopeDirection_0 == SlopeDirection.DownRight ||
+                       slopeDirection_1 == SlopeDirection.DownLeft ||
+                       slopeDirection_1 == SlopeDirection.DownRight);
+
+            if (isDiagonal)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static bool IsTouchingCeiling(Player player)
 	{
 		BodyChunk body_chunk_0 = player.bodyChunks[0];
@@ -175,7 +210,24 @@ public static class Climbing
 		return isSolid_0 || isSolid_1;
 	}
 
-	private static readonly float CeilCrawlDuration = 0.2f;
+    public static bool IsNotTouchingCeiling(Player player)
+    {
+        BodyChunk body_chunk_0 = player.bodyChunks[0];
+        BodyChunk body_chunk_1 = player.bodyChunks[1];
+
+        Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(0, body_chunk_0.rad + 5);
+        Vector2 upperPosition_1 = body_chunk_1.pos + new Vector2(0, body_chunk_1.rad + 5);
+
+        IntVector2 tileAbove_0 = player.room.GetTilePosition(upperPosition_0);
+        IntVector2 tileAbove_1 = player.room.GetTilePosition(upperPosition_1);
+
+        bool isSolid_0 = player.room.GetTile(tileAbove_0).Solid;
+        bool isSolid_1 = player.room.GetTile(tileAbove_1).Solid;
+
+        return isSolid_0 || isSolid_1;
+    }
+
+    private static readonly float CeilCrawlDuration = 0.2f;
 
 	private static readonly int[] flipTimer = new int [32];
 	private const int ticksToFlip = 10;

@@ -12,7 +12,7 @@ static class EdibleChanges
 
 	private static void Mushroom_EatenByPlayer(On.Mushroom.orig_BitByPlayer orig, Mushroom self, Creature.Grasp grasp, bool eu)
 	{
-		if (grasp.grabber is Player player && (player.IsVoid() || player.IsViy()))
+		if (grasp.grabber is Player player && (player.IsVoid() || player.IsViy() && !player.abstractCreature.GetPlayerState().InDream))
 		{
 			self.firstChunk.MoveFromOutsideMyUpdate(eu, grasp.grabber.mainBodyChunk.pos);
 			grasp.Release();

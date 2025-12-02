@@ -528,10 +528,7 @@ public static class SSOracleBehaviorUpdate
                     (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma = (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
                     for (int num4 = 0; num4 < self.oracle.room.game.cameras.Length; num4++)
                     {
-                        if (self.oracle.room.game.cameras[num4].hud.karmaMeter != null)
-                        {
-                            self.oracle.room.game.cameras[num4].hud.karmaMeter.UpdateGraphic();
-                        }
+                        self.oracle.room.game.cameras[num4].hud.karmaMeter?.UpdateGraphic();
                     }
                 }
                 if (ModManager.CoopAvailable && !flag5)

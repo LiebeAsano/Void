@@ -7,7 +7,7 @@
 		{ "name": "soul", "pos": [0,0], "depth": 15, "shader": "Basic" },
 		{ "name": "hunter", "pos": [0,0], "depth": 20, "shader": "Basic" },
 		{ "name": "rot", "pos": [0,0], "depth": 20, "shader": "Basic" },
-		{ "name": "dust", "pos": [0,0], "depth": 12, "shader": "Basic" },
+		{ "name": "dust", "pos": [0,0], "depth": 6, "shader": "Basic" },
 		{ "name": "souls", "pos": [0,0], "depth": 9, "shader": "Basic" },
 		{ "name": "blackfog", "pos": [-30,-30], "depth": -1, "shader": "Basic" }
 	],

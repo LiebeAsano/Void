@@ -34,6 +34,7 @@ public static class PlayerSpawnManager
             if (currentRoomIndex == NewSpawnPoint.room)
             {
                 save.SetTeleportationDone(true);
+                SaveManager.ExternalSaveData.VoidPermaNightmare = 0;
                 self.abstractCreature.pos = NewSpawnPoint;
                 Vector2 newPosition = self.room.MiddleOfTile(NewSpawnPoint.x, NewSpawnPoint.y);
                 Array.ForEach(self.bodyChunks, x => x.pos = newPosition);
@@ -103,7 +104,7 @@ public static class PlayerSpawnManager
 		}
 	}
 
-	private static readonly WorldCoordinate originalSpawnPoint = new WorldCoordinate(-1, 27, 13, 0);
+	private static readonly WorldCoordinate originalSpawnPoint = new(-1, 27, 13, 0);
 
 	static void InitializeTargetRoomID(Room room)
 	{

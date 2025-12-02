@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using Random = UnityEngine.Random;
 
@@ -10,7 +11,7 @@ namespace VoidTemplate.PlayerMechanics;
 
 public static class KarmaFlowerChanges
 {
-    private static ConditionalWeakTable<KarmaFlower, KarmaFlowerExtention> flowerExt = new();
+    private static readonly ConditionalWeakTable<KarmaFlower, KarmaFlowerExtention> flowerExt = new();
     public static KarmaFlowerExtention GetFlowerExt(this KarmaFlower flower) => flowerExt.GetOrCreateValue(flower);
 
     public static void Initiate()
@@ -25,7 +26,7 @@ public static class KarmaFlowerChanges
     {
         orig(self, eu);
         if (self.grabbedBy.Count > 0 && self.grabbedBy[0].grabber is Player player && player.IsVoid() && 
-            self.AbstrConsumable.world.game.session is StoryGameSession session && session.saveState.GetVoidFoodToHibernate() == 6)
+            self.AbstrConsumable.world.game.session is StoryGameSession session && (session.saveState.GetVoidFoodToHibernate() == 6 || Karma11Update.VoidPermaNightmare))
         {
             if (self.GetFlowerExt().toVoidColor < 1) self.GetFlowerExt().toVoidColor += 0.00005f;
             Color voidColor = new(0, 0, 0.005f);
@@ -85,7 +86,7 @@ public static class KarmaFlowerChanges
                         }
                     }
 
-                    if (self.bites == 1 && player.KarmaCap == 10 && saveState.GetVoidFoodToHibernate() < 6 && !player.IsViy())
+                    if (self.bites == 1 && player.KarmaCap == 10 && saveState.GetVoidFoodToHibernate() < 6 && !Karma11Update.VoidPermaNightmare && !player.IsViy())
                     {
                         int newTokenCount = Math.Min(5, saveState.GetKarmaToken() + 1);
                         saveState.SetKarmaToken(newTokenCount);

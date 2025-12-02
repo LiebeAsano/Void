@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
+using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.VoidEnums;
 
@@ -32,12 +33,16 @@ public static class Karma11Symbol
 		return result;
 	}
 
-	private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, RWCustom.IntVector2 k)
+	private static string KarmaMeter_KarmaSymbolSprite(On.HUD.KarmaMeter.orig_KarmaSymbolSprite orig, bool small, IntVector2 k)
 	{
 		if (k.x == 10)
 		{
 			string res = $"atlas-void/KarmaToken{Mathf.Clamp(currentKarmaTokens, 0, 5)}" + (small ? "Small" : "Big");
-			return res;
+			if (ExternalSaveData.VoidPermaNightmare == 2 && small)
+                res = $"atlas-void/KarmaToken0" + "Small";
+			if (Karma11Update.VoidBigViyKarma && !small)
+                res = $"atlas-void/KarmaToken0" + "Big";
+            return res;
 		}
 		return orig(small, k);
 	}
@@ -57,7 +62,8 @@ public static class Karma11Symbol
                 || ID == ProcessManager.ProcessID.SleepScreen
                 && maxFood == saveState.food + foodToHibernate - 1
                 && saveState.GetVoidFoodToHibernate() < 6
-                && saveState.GetKarmaToken() > 0)
+                && saveState.GetKarmaToken() > 0
+				&& ExternalSaveData.VoidPermaNightmare != 2)
                 currentKarmaTokens++;
         }
     }

@@ -180,16 +180,11 @@ public static class SaveManager
         VoidNSH,
         VoidSea
     }
-    public struct DreamData
+    public struct DreamData(bool HasShowConditions = false, bool WasShown = false)
     {
-        public DreamData(bool HasShowConditions = false, bool WasShown = false)
-        {
-            this.HasShowConditions = HasShowConditions;
-            this.WasShown = WasShown;
-        }
-        public bool HasShowConditions;
-        public bool WasShown;
-        public override string ToString()
+        public bool HasShowConditions = HasShowConditions;
+        public bool WasShown = WasShown;
+        public override readonly string ToString()
         {
             return $"met conditions: {HasShowConditions}, was shown: {WasShown}";
         }
@@ -229,8 +224,7 @@ public static class SaveManager
     public static void DelistConvulsion(this SaveState save, string roomname)
     {
         var slugbase = save.miscWorldSaveData.GetSlugBaseData();
-        List<string> list;
-        if (slugbase.TryGet(convulsionList, out list)) list.Add(roomname);
+        if (slugbase.TryGet(convulsionList, out List<string> list)) list.Add(roomname);
         else list = [roomname];
         slugbase.Set(convulsionList, list);
     }
@@ -240,7 +234,7 @@ public static class SaveManager
     {
 #nullable enable
         const string SaveFolder = "modsavedata";
-        private static readonly object fileLock = new object();
+        private static readonly object fileLock = new();
 
         static string PathToSaves()
         {
@@ -305,7 +299,7 @@ public static class SaveManager
                         });
                     }
 
-                    dataPerSave ??= new Dictionary<int, T>();
+                    dataPerSave ??= [];
                     dataPerSave[slot] = value;
 
                     string newRawData = JsonConvert.SerializeObject(dataPerSave, Formatting.Indented);
@@ -339,6 +333,13 @@ public static class SaveManager
         {
             get => GetData(VoidKarma11String, false);
             set => SetData(VoidKarma11String, value);
+        }
+
+        private const string VoidPermaNightmareString = "voidpermanightmare";
+        public static int VoidPermaNightmare
+        {
+            get => GetData(VoidPermaNightmareString, 0);
+            set => SetData(VoidPermaNightmareString, value);
         }
 
         private const string ViyUnlockedString = "viyunlocked";

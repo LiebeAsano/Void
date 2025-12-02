@@ -13,84 +13,71 @@ namespace VoidTemplate.PlayerMechanics
     {
         public static void Hook()
         {
-            On.Spider.Update += Spider_Update;
-            On.Player.ctor += Player_ctor;
+            On.Spider.Attached += Spider_Attached;
         }
 
-        private static int[] SpiderKiller = new int[32];
-
-        private static void Spider_Update(On.Spider.orig_Update orig, Spider self, bool eu)
-        {
-            if (self.grasps[0] != null && self.grasps[0].grabbed is Player player && player.AreVoidViy())
-            {
-                SpiderVoidAttached(self);
-                if (SpiderKiller[player.playerState.playerNumber] >= 240)
-                {
-                    self.Die();
-                    SpiderKiller[player.playerState.playerNumber] = 0;
-                }
-                return;
-            }
-            orig(self, eu);
-        }
-
-        private static void SpiderVoidAttached(Spider self)
+        private static void Spider_Attached(On.Spider.orig_Attached orig, Spider self)
         {
             BodyChunk bodyChunk = self.grasps[0].grabbed.bodyChunks[self.grasps[0].chunkGrabbed];
             self.graphicsAttachedToBodyChunk = bodyChunk;
-            if (bodyChunk.owner is Creature)
+            if (bodyChunk.owner is Player player && player.IsVoid())
             {
-                if (!(bodyChunk.owner as Creature).dead)
+                if (bodyChunk.owner is Creature)
                 {
-                    float num = 0f;
-                    if (bodyChunk.owner is Creature)
+                    if (!(bodyChunk.owner as Creature).dead)
                     {
-                        for (int i = 0; i < bodyChunk.owner.grabbedBy.Count; i++)
+                        float num = 0f;
+                        if (bodyChunk.owner is Creature)
                         {
-                            if (bodyChunk.owner.grabbedBy[i].grabber is Spider)
+                            for (int i = 0; i < bodyChunk.owner.grabbedBy.Count; i++)
                             {
-                                num += bodyChunk.owner.grabbedBy[i].grabber.TotalMass;
+                                if (bodyChunk.owner.grabbedBy[i].grabber is Spider)
+                                {
+                                    num += bodyChunk.owner.grabbedBy[i].grabber.TotalMass;
+                                }
                             }
                         }
                     }
-                }
-                else if (UnityEngine.Random.value < 0.001f)
-                {
-                    (bodyChunk.owner as Creature).leechedOut = true;
-                }
-            }
-            if (self.centipede != null)
-            {
-                self.centipede.lightAdaption = 1f;
-            }
-            Vector2 a = Custom.DirVec(self.mainBodyChunk.pos, bodyChunk.pos);
-            float num2 = Vector2.Distance(self.mainBodyChunk.pos, bodyChunk.pos);
-            float num3 = self.mainBodyChunk.rad + bodyChunk.rad;
-            float num4 = self.mainBodyChunk.mass / (self.mainBodyChunk.mass + bodyChunk.mass);
-            self.mainBodyChunk.vel += a * (num2 - num3) * (1f - num4);
-            self.mainBodyChunk.pos += a * (num2 - num3) * (1f - num4);
-            bodyChunk.vel -= a * (num2 - num3) * num4;
-            bodyChunk.pos -= a * (num2 - num3) * num4;
-            for (int j = 0; j < self.grasps[0].grabbed.bodyChunks.Length; j++)
-            {
-                self.PushOutOfChunk(self.grasps[0].grabbed.bodyChunks[j]);
-            }
-            for (int k = 0; k < self.grasps[0].grabbed.grabbedBy.Count; k++)
-            {
-                if (self.grasps[0].grabbed.grabbedBy[k].grabber != self)
-                {
-                    for (int l = 0; l < self.grasps[0].grabbed.grabbedBy[k].grabber.bodyChunks.Length; l++)
+                    else if (UnityEngine.Random.value < 0.001f)
                     {
-                        self.PushOutOfChunk(self.grasps[0].grabbed.grabbedBy[k].grabber.bodyChunks[l]);
+                        (bodyChunk.owner as Creature).leechedOut = true;
                     }
                 }
+                if (self.centipede != null)
+                {
+                    self.centipede.lightAdaption = 1f;
+                }
+                Vector2 a = Custom.DirVec(self.mainBodyChunk.pos, bodyChunk.pos);
+                float num2 = Vector2.Distance(self.mainBodyChunk.pos, bodyChunk.pos);
+                float num3 = self.mainBodyChunk.rad + bodyChunk.rad;
+                float num4 = self.mainBodyChunk.mass / (self.mainBodyChunk.mass + bodyChunk.mass);
+                self.mainBodyChunk.vel += a * (num2 - num3) * (1f - num4);
+                self.mainBodyChunk.pos += a * (num2 - num3) * (1f - num4);
+                bodyChunk.vel -= a * (num2 - num3) * num4;
+                bodyChunk.pos -= a * (num2 - num3) * num4;
+                for (int j = 0; j < self.grasps[0].grabbed.bodyChunks.Length; j++)
+                {
+                    self.PushOutOfChunk(self.grasps[0].grabbed.bodyChunks[j]);
+                }
+                for (int k = 0; k < self.grasps[0].grabbed.grabbedBy.Count; k++)
+                {
+                    if (self.grasps[0].grabbed.grabbedBy[k].grabber != self)
+                    {
+                        for (int l = 0; l < self.grasps[0].grabbed.grabbedBy[k].grabber.bodyChunks.Length; l++)
+                        {
+                            self.PushOutOfChunk(self.grasps[0].grabbed.grabbedBy[k].grabber.bodyChunks[l]);
+                        }
+                    }
+                }
+                if (((bodyChunk.owner as Player).IsVoid() && UnityEngine.Random.value < 0.01f) || UnityEngine.Random.value < 0.00083333335f || (bodyChunk.owner as Creature).enteringShortCut != null || self.centipede == null || self.centipede.totalMass < bodyChunk.owner.TotalMass)
+                {
+                    self.Die();
+                }
             }
-        }
-
-        private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
-        {
-            orig(self, abstractCreature, world);
-            SpiderKiller[self.playerState.playerNumber] = 0;
+            else
+            {
+                orig(self);
+            }
         }
     }
 }

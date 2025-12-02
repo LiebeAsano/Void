@@ -22,7 +22,6 @@ static class OracleHooks
 {
     public static void Hook()
     {
-        //new Hook(typeof(OverseerGraphics).GetProperty(nameof(OverseerGraphics.MainColor)).GetGetMethod(), CustomColor);
         On.StoryGameSession.ctor += StoryGameSession_ctor;
         On.SSOracleBehavior.SeePlayer += SSOracleBehavior_SeePlayer;
         On.SSOracleBehavior.NewAction += SSOracleBehavior_NewAction;
@@ -37,12 +36,6 @@ static class OracleHooks
     {
         orig(self, saveStateNumber, game);
         fivePebblesGetOut = false;
-    }
-
-    private static Color CustomColor(Func<OverseerGraphics, Color> orig, OverseerGraphics self)
-    {
-        var color = orig(self);
-        return new Color(1, 1, 1);
     }
 
     private static bool fivePebblesGetOut = false;
@@ -114,10 +107,7 @@ static class OracleHooks
                 (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma = (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karmaCap;
                 for (int num4 = 0; num4 < self.oracle.room.game.cameras.Length; num4++)
                 {
-                    if (self.oracle.room.game.cameras[num4].hud.karmaMeter != null)
-                    {
-                        self.oracle.room.game.cameras[num4].hud.karmaMeter.UpdateGraphic();
-                    }
+                    self.oracle.room.game.cameras[num4].hud.karmaMeter?.UpdateGraphic();
                 }
 
                 if (ModManager.CoopAvailable)
@@ -208,7 +198,7 @@ static class OracleHooks
     public static SSOracleBehavior.Action MeetVoid_Curious = new("MeetVoid_Curious", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidTalk = new("VoidTalk", true);
     public static SSOracleBehavior.SubBehavior.SubBehavID VoidScan = new("VoidScan", true);
-    public static List<ProjectedImage> Void_projectImages = new();
+    public static List<ProjectedImage> Void_projectImages = [];
     #endregion
 
     public static void EatPearlsInterrupt(this SSOracleBehavior self)
@@ -239,7 +229,7 @@ static class OracleHooks
 
     public static void RegurgitatePearlsInterrupt(this SSOracleBehavior self)
     {
-        if (self.oracle.ID == Oracle.OracleID.SL) return;  //only works for FP
+        if (self.oracle.ID == Oracle.OracleID.SL) return;
         if (self.conversation != null)
         {
             self.conversation.paused = true;
@@ -618,7 +608,23 @@ static class OracleHooks
                         }
                         break;
                     }
-                case > 4:
+                case 5:
+                    {
+                        if (self.action != MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty)
+                        {
+                            self.NewAction(MoreSlugcatsEnums.SSOracleBehaviorAction.Pebbles_SlumberParty);
+                            if (!fivePebblesGetOut)
+                            {
+                                self.dialogBox.NewMessage(self.Translate("Did you tell your rotund friend about me?"), 60);
+                                self.dialogBox.NewMessage(self.Translate("I'm not here to help everyone and everything. Call off your kin and head west."), 60);
+                                self.dialogBox.NewMessage(self.Translate("I've already opened the gate to leave my complex."), 60);
+                            }
+                            miscData.SSaiConversationsHad--;
+                            saveState.SetOEUnlockForVoid(true);
+                        }
+                        break;
+                    }
+                case > 5:
                     {
                         if (self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                             self.NewAction(self.afterGiveMarkAction);
@@ -1306,10 +1312,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
         }
         else if (base.action == MeetVoid_FirstImages)
         {
-            if (this.showImage != null)
-            {
-                this.showImage.Destroy();
-            }
+            this.showImage?.Destroy();
 
             switch (this.communicationIndex)
             {
@@ -1328,20 +1331,20 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                     {
                         this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
-                        this.showImage = base.oracle.myScreen.AddImage(new List<string>
-                        {
+                        this.showImage = base.oracle.myScreen.AddImage(
+                        [
                             "void_glyphs_3",
                             "void_glyphs_5"
-                        }, 30);
+                        ], 30);
                     }
                     else
                     {
                         this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
-                        this.showImage = base.oracle.myScreen.AddImage(new List<string>
-                        {
+                        this.showImage = base.oracle.myScreen.AddImage(
+                        [
                             "void_glyphs_4",
                             "void_glyphs_5"
-                        }, 30);
+                        ], 30);
                         this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment.".TranslateString(), 60);
                     }
                     this.communicationPause = 330;
@@ -1367,7 +1370,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
         {
             this.owner.lookPoint = base.player.DangerPos;
         }
-        Vector2 vector = new Vector2(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
+        Vector2 vector = new(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
         if (this.owner.CommunicatePosScore(vector) + 40f < this.owner.CommunicatePosScore(this.owner.nextPos) && !Custom.DistLess(vector, this.owner.nextPos, 30f))
         {
             this.owner.SetNewDestination(vector);

@@ -15,7 +15,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 {
     public static class FoodMeterPipsChange
     {
-        private static ConditionalWeakTable<FoodMeter, FoodMeterExtention> meterExt = new();
+        private static readonly ConditionalWeakTable<FoodMeter, FoodMeterExtention> meterExt = new();
 
         public static FoodMeterExtention GetMeterExt(this FoodMeter meter) => meterExt.GetOrCreateValue(meter);
             
@@ -78,7 +78,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
         private static void QuarterPipShower_Draw(On.HUD.FoodMeter.QuarterPipShower.orig_Draw orig, FoodMeter.QuarterPipShower self, float timeStacker)
         {
             orig(self, timeStacker);
-            if (self.owner.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !self.owner.IsPupFoodMeter && self.owner.showCount >= self.owner.survivalLimit && self.owner.showCount < self.owner.circles.Count)
+            if (self.owner.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !self.owner.IsPupFoodMeter && self.owner.showCount >= self.owner.survivalLimit - player.abstractCreature?.world?.game?.GetStorySession?.saveState?.GetVoidFoodToHibernate() * 2 && self.owner.showCount < self.owner.circles.Count)
             {
                 self.quarterPips.color = new(0, 0, 0.005f);
                 self.quarterPips.scale = (self.owner.circles[self.owner.showCount].circles[0].rad + 3) / 8f;

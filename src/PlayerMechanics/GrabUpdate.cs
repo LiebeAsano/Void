@@ -107,14 +107,14 @@ public static class GrabUpdate
                     }
                     num8++;
                 }
-                if ((num5 == -1 || (self.FoodInStomach >= self.MaxFoodInStomach && self.grasps[num5].grabbed is not KarmaFlower && self.grasps[num5].grabbed is not Mushroom)) && (self.objectInStomach == null || self.CanPutSpearToBack || self.CanPutSlugToBack))
+                if ((num5 == -1 || (self.FoodInStomach >= self.MaxFoodInStomach && self.grasps[num5].grabbed is not KarmaFlower && self.grasps[num5].grabbed is not Mushroom)) && (self.objectInStomach == null || self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream))
                 {
                     int num9 = 0;
                     while (num7 < 0 && num4 < 0  && num9 < 2)
                     {
                         if (self.grasps[num9] != null)
                         {
-                            if (self.CanPutSpearToBack && self.grasps[num9].grabbed is Spear)
+                            if (self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream && self.grasps[num9].grabbed is Spear)
                             {
                                 num4 = num9;
                             }
@@ -198,7 +198,7 @@ public static class GrabUpdate
             }
             else
             {
-                if (self.CanPutSpearToBack)
+                if (self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream)
                 {
                     for (int m = 0; m < 2; m++)
                     {
@@ -678,7 +678,7 @@ public static class GrabUpdate
             }
             else if (self.pickUpCandidate != null)
             {
-                if (self.pickUpCandidate is Spear && self.CanPutSpearToBack && ((self.grasps[0] != null && self.Grabability(self.grasps[0].grabbed) >= Player.ObjectGrabability.BigOneHand) || (self.grasps[1] != null && self.Grabability(self.grasps[1].grabbed) >= Player.ObjectGrabability.BigOneHand) || (self.grasps[0] != null && self.grasps[1] != null)))
+                if (self.pickUpCandidate is Spear && self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream && ((self.grasps[0] != null && self.Grabability(self.grasps[0].grabbed) >= Player.ObjectGrabability.BigOneHand) || (self.grasps[1] != null && self.Grabability(self.grasps[1].grabbed) >= Player.ObjectGrabability.BigOneHand) || (self.grasps[0] != null && self.grasps[1] != null)))
                 {
                     Custom.Log(
                     [

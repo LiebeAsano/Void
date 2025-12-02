@@ -106,7 +106,7 @@ public static class EngageInMovement
 				}
 				else
 				{
-					slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -15f), -player.flipDirection, 2, false);
+					slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, -30f), -player.flipDirection, 2, false);
 					return false;
 				}
 			}
@@ -117,7 +117,7 @@ public static class EngageInMovement
             }
 			else
             {
-                slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 5f), -player.flipDirection, 2, false);
+                slugcat_hand.FindGrip(player.room, attached_position, attached_position, 100f, attached_position + new Vector2(0.0f, 20f), -player.flipDirection, 2, false);
                 return false;
             }
         }

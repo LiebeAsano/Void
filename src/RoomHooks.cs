@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics;
+using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate
@@ -282,8 +283,8 @@ namespace VoidTemplate
         {
             if (standardVoidSea)
             {
-                if (game.StoryCharacter == SlugcatStats.Name.White) SaveManager.ExternalSaveData.SurvAscended = true;
-                else if (game.StoryCharacter == SlugcatStats.Name.Yellow) SaveManager.ExternalSaveData.MonkAscended = true;
+                if (game.StoryCharacter == SlugcatStats.Name.White) ExternalSaveData.SurvAscended = true;
+                else if (game.StoryCharacter == SlugcatStats.Name.Yellow) ExternalSaveData.MonkAscended = true;
             }
             orig(game, standardVoidSea);
         }
@@ -300,12 +301,12 @@ namespace VoidTemplate
         private static void On_Player_Update(On.Player.orig_Update orig, Player self, bool eu)
         {
             orig(self, eu);
-            if (self.room.game.IsVoidWorld())
+            if (self.room?.game?.IsVoidWorld() == true)
             {
                 if (self.abstractCreature?.Room?.name == "OE_FINAL03")
                 {
-                    if (self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
-                        && self.AI != null)
+                    if (self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Gourmand &&
+                        self.AI != null)
                     {
                         self.standing = true;
                         self.sleepCounter = 0;
@@ -374,6 +375,12 @@ namespace VoidTemplate
                     {
                         //game.manager.nextSlideshow = outro;
                         RainWorldGame.ForceSaveNewDenLocation(game, "OE_FINAL03", false);
+                        if (game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                        {
+                            game.GetStorySession.saveState.SetVoidExtraFood(3);
+                            game.GetStorySession.saveState.SetVoidFoodToHibernate(6);
+                            ExternalSaveData.VoidPermaNightmare = 2;
+                        }
                         game.GetStorySession.saveState.SetVoidEndingTree(true);
                         for (int i = 0; i < 8; i++)
                         {

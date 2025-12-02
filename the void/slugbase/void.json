@@ -51,7 +51,7 @@
 			}
 		},
 		"auto_grab_batflies": false,
-		"back_spear": false,
+		"back_spear": true,
 		"can_maul": true,
 		"perma_unlock_gates": false,
 		"maul_damage": 3,

@@ -7,13 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.Objects;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using Watcher;
+using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.CreatureInteractions
 {
     public static class HunterDaddyGraphicsHooks
     {
-        private static ConditionalWeakTable<DaddyLongLegs, DaddyExt> daddyCWT = new();
+        private static readonly ConditionalWeakTable<DaddyLongLegs, DaddyExt> daddyCWT = new();
 
         public static DaddyExt GetDaddyExt(this DaddyLongLegs daddy) => daddyCWT.GetValue(daddy, _ => new());
 
@@ -41,7 +43,7 @@ namespace VoidTemplate.CreatureInteractions
         {
             orig(self, eu);
 
-            if (self.GetDaddyExt().isVoidDaddy && self.room != null && UnityEngine.Random.Range(0, 4000) == 0)
+            if (self.GetDaddyExt().isVoidDaddy && self.room != null && UnityEngine.Random.Range(0, 3200) == 0)
             {
                 self.room.PlaySound(UnityEngine.Random.Range(0, 3) switch
                 {
@@ -163,11 +165,15 @@ namespace VoidTemplate.CreatureInteractions
                     (self.State as HealthState).health -= num;
                     if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f)))
                     {
+                        Karma11Update.VoidPermaNightmare = false;
+                        ExternalSaveData.VoidPermaNightmare = 1;
                         self.Die();
                     }
                 }
                 if (num >= self.Template.instantDeathDamageLimit)
                 {
+                    Karma11Update.VoidPermaNightmare = false;
+                    ExternalSaveData.VoidPermaNightmare = 1;
                     self.Die();
                 }
             }

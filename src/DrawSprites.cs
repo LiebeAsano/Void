@@ -25,7 +25,7 @@ public static class DrawSprites
 
     public static readonly Color gourmandColor = new(0.94f, 0.76f, 0.59f);
 
-    private static ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();
+    private static readonly ConditionalWeakTable<PlayerGraphics, PlayerGraphiscExtention> pGExt = new();
     public static PlayerGraphiscExtention GetPlayerGExt(this PlayerGraphics graphics) => pGExt.GetOrCreateValue(graphics);
 
     public static void Hook()
@@ -100,7 +100,7 @@ public static class DrawSprites
         }
     }
 
-    private static float[] timeSinceLastForceUpdate = new float[32];
+    private static readonly float[] timeSinceLastForceUpdate = new float[32];
     private static readonly float forceUpdateInterval = 1f / 40f;
 
     private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)

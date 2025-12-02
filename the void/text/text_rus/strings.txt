@@ -210,13 +210,9 @@ Anyway, I need another pearl. It stores data about an unfortunate development.|�
 The problem is that it was washed away along with other samples, its approximate location is the Garbage Wastes.|Проблема в том, что её смыло вместе с другими образцами, и её примерное местонахождение - Мусорная Свалка.
 You should be careful, my samples have an aggressive form of behavior...|Будь осторожен, мои образцы имеют агрессивную форму поведения...
 
-//Case 6
-
-I recognise this colour... there is a serious crack in the pearl.|Я узнаю этот цвет... в жемчужине есть серьёзная трещина.
-It will take time to recover the corrupted data, but these records will also help me to slow down the infection of my structure.|На восстановление повреждённых данных потребуется время, но эти записи помогут мне замедлить заражение моей структуры.
-Are you still here?|Ты всё ещё здесь?
-Come back another time, I need to be alone to finish the preparations.|Приходи в другой раз, мне нужно побыть одному, чтобы закончить приготовления.
-
+Did you tell your rotund friend about me?|Это ты рассказал своему округлому другу обо мне?
+I'm not here to help everyone and everything. Call off your kin and head west.|Я не занимаюсь здесь помощью всему и вся. Отзови своих сородичей и отправляйся на запад.
+I've already opened the gate to leave my complex.|Я уже открыл ворота, чтобы покинуть мой комплекс.
 //Case 7
 
 Are you feeling better? Changes will become apparent over time.|Ты чувствуешь себя лучше? Изменения могут проявить себя со временем.

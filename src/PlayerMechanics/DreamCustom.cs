@@ -45,7 +45,6 @@ public static class DreamCustom
             {
                 Players = [.. list]
             };
-            VoidDreamScript.StateAfterDream = game.session.Players[0].state.alive ? 1 : 2;
             game.manager.musicPlayer?.FadeOutAllSongs(20f);
             game.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SleepScreen, 10f);
         }
@@ -109,27 +108,23 @@ public static class DreamCustom
     {
         if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            //saveState.ForceEnlistDreamInShowQueue(SaveManager.Dream.HunterRot);
             switch (currentRegion)
             {
                 case "LF":
                     {
-                        int random = UnityEngine.Random.Range(0, 3);
-                        if (random == 0)
+                        if (UnityEngine.Random.Range(0, 3) == 0)
                             saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
                         break;
                     }
                 case "SI":
                     {
-                        int random = UnityEngine.Random.Range(0, 3);
-                        if (random == 0)
+                        if (UnityEngine.Random.Range(0, 3) == 0)
                             saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
                         break;
                     }
                 case "SB":
                     {
-                        int random = UnityEngine.Random.Range(0, 3);
-                        if (random == 0)
+                        if (UnityEngine.Random.Range(0, 3) == 0)
                             saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
                         break;
                     }
@@ -156,8 +151,13 @@ public static class DreamCustom
             {
                 case 10:
                     {
-                        if (Karma11Update.VoidKarma11)
+                        if (saveState.GetKarmaToken() < 5)
                             saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
+                        if (Karma11Update.VoidKarma11
+                            && saveState.GetVoidFoodToHibernate() < 6
+                            && !saveState.GetVoidEndingTree()
+                            && UnityEngine.Random.Range(0, 11) == 0)
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.HunterRot);
                         break;
                     }
             }

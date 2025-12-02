@@ -10,8 +10,10 @@ using System.Linq;
 using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static VoidTemplate.OptionInterface.OptionAccessors;
+using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 using Object = UnityEngine.Object;
 
@@ -58,7 +60,7 @@ static class PermadeathConditions
 
 	private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)
 	{
-		ILCursor c = new ILCursor(il);
+		ILCursor c = new(il);
 		if (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(0),
 			i => i.MatchLdcI4(4)))
 		{
@@ -195,6 +197,7 @@ static class PermadeathConditions
             && rainWorldGame.IsVoidStoryCampaign()
             && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
 			|| session.saveState.GetKarmaToken() == 0
+			|| Karma11Update.VoidPermaNightmare
             || session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && !session.saveState.GetVoidMarkV3() && PermaDeath)
             && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
 	}

@@ -63,6 +63,10 @@ public static class FoodChange
                 self.SetKarmaToken(0);
             }
         }
+        if (game.IsVoidStoryCampaign() && ExternalSaveData.VoidPermaNightmare == 2)
+        {
+            self.SetKarmaToken(0);
+        }
         orig(self, game, survived, newMalnourished);
     }
 
@@ -160,7 +164,7 @@ public static class FoodChange
             x => x.MatchLdfld(out _)))
         {
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<int, ShelterDoor, int>>((int orig, ShelterDoor self) =>
+            c.EmitDelegate<Func<int, ShelterDoor, int>>((orig, self) =>
             {
                 var game = self.room?.game;
                 if (game == null) return orig;

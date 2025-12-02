@@ -125,7 +125,10 @@ public static class Climbing
 
     public static bool IsTouchingDiagonalCeiling(Player player)
 	{
-		BodyChunk body_chunk_0 = player.bodyChunks[0];
+        if (player?.room == null)
+            return false;
+
+        BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 
 		Vector2[] directions = [
@@ -140,9 +143,8 @@ public static class Climbing
 			IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
 			IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
 
-			// Использование IdentifySlope для определения диагонального тайла
-			SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
-			SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
+			SlopeDirection slopeDirection_0 = player.room?.IdentifySlope(tileDiagonal_0);
+			SlopeDirection slopeDirection_1 = player.room?.IdentifySlope(tileDiagonal_1);
 
 			bool isDiagonal = (slopeDirection_0 == SlopeDirection.DownLeft ||
 					   slopeDirection_0 == SlopeDirection.DownRight ||
@@ -158,44 +160,12 @@ public static class Climbing
 		return false;
 	}
 
-    public static bool IsNotTouchingDiagonalCeiling(Player player)
-    {
-        BodyChunk body_chunk_0 = player.bodyChunks[0];
-        BodyChunk body_chunk_1 = player.bodyChunks[1];
-
-        Vector2[] directions = [
-        new Vector2(0, 1)
-        ];
-
-        foreach (var direction in directions)
-        {
-            Vector2 checkPosition_0 = body_chunk_0.pos + direction * (body_chunk_0.rad + 10);
-            Vector2 checkPosition_1 = body_chunk_1.pos + direction * (body_chunk_1.rad + 10);
-
-            IntVector2 tileDiagonal_0 = player.room.GetTilePosition(checkPosition_0);
-            IntVector2 tileDiagonal_1 = player.room.GetTilePosition(checkPosition_1);
-
-            // Использование IdentifySlope для определения диагонального тайла
-            SlopeDirection slopeDirection_0 = player.room.IdentifySlope(tileDiagonal_0);
-            SlopeDirection slopeDirection_1 = player.room.IdentifySlope(tileDiagonal_1);
-
-            bool isDiagonal = (slopeDirection_0 == SlopeDirection.DownLeft ||
-                       slopeDirection_0 == SlopeDirection.DownRight ||
-                       slopeDirection_1 == SlopeDirection.DownLeft ||
-                       slopeDirection_1 == SlopeDirection.DownRight);
-
-            if (isDiagonal)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static bool IsTouchingCeiling(Player player)
 	{
-		BodyChunk body_chunk_0 = player.bodyChunks[0];
+        if (player?.room == null)
+            return false;
+
+        BodyChunk body_chunk_0 = player.bodyChunks[0];
 		BodyChunk body_chunk_1 = player.bodyChunks[1];
 
 		Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(0, body_chunk_0.rad + 5);
@@ -210,21 +180,33 @@ public static class Climbing
 		return isSolid_0 || isSolid_1;
 	}
 
-    public static bool IsNotTouchingCeiling(Player player)
+    public static bool IsNotTouchingWall(Player player)
     {
+        if (player?.room == null)
+            return false;
+
         BodyChunk body_chunk_0 = player.bodyChunks[0];
         BodyChunk body_chunk_1 = player.bodyChunks[1];
 
-        Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(0, body_chunk_0.rad + 5);
-        Vector2 upperPosition_1 = body_chunk_1.pos + new Vector2(0, body_chunk_1.rad + 5);
+        Vector2 upperPosition_0 = body_chunk_0.pos + new Vector2(20, -20);
+        Vector2 upperPosition_1 = body_chunk_1.pos + new Vector2(20, -20);
+
+        Vector2 upperPosition_2 = body_chunk_0.pos + new Vector2(-20, -20);
+        Vector2 upperPosition_3 = body_chunk_1.pos + new Vector2(-20, -20);
 
         IntVector2 tileAbove_0 = player.room.GetTilePosition(upperPosition_0);
         IntVector2 tileAbove_1 = player.room.GetTilePosition(upperPosition_1);
 
+        IntVector2 tileAbove_2 = player.room.GetTilePosition(upperPosition_2);
+        IntVector2 tileAbove_3 = player.room.GetTilePosition(upperPosition_3);
+
         bool isSolid_0 = player.room.GetTile(tileAbove_0).Solid;
         bool isSolid_1 = player.room.GetTile(tileAbove_1).Solid;
 
-        return isSolid_0 || isSolid_1;
+        bool isSolid_2 = player.room.GetTile(tileAbove_2).Solid;
+        bool isSolid_3 = player.room.GetTile(tileAbove_3).Solid;
+
+        return isSolid_0 && isSolid_1 || isSolid_2 && isSolid_3;
     }
 
     private static readonly float CeilCrawlDuration = 0.2f;
@@ -602,15 +584,23 @@ public static class Climbing
 						bonus = 1f;
 				else if (Karma11Update.VoidKarma11)
 					bonus = 1.25f;
-				if (body_chunk_0.pos.y > body_chunk_1.pos.y + 5f)
+				if (body_chunk_0.pos.y > body_chunk_1.pos.y + 10f)
 				{
 					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
 					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
 				}
 				else
 				{
-					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, -player.input[0].y * 1.5f, 0.1f);
-					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, -player.input[0].y * 1.5f, 0.1f);
+					if (IsNotTouchingWall(player))
+					{
+                        body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, -player.input[0].y * 2.5f * bonus, 0.3f);
+                        body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, -player.input[0].y * 2.5f * bonus, 0.3f);
+                    }
+					else
+					{
+                        body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, -player.input[0].y * 1.5f, 0.1f);
+                        body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, -player.input[0].y * 1.5f, 0.1f);
+                    }			
 				}
 				++player.animationFrame;
 			}

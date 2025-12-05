@@ -40,8 +40,6 @@ public static class Karma11Symbol
 			string res = $"atlas-void/KarmaToken{Mathf.Clamp(currentKarmaTokens, 0, 5)}" + (small ? "Small" : "Big");
 			if (ExternalSaveData.VoidPermaNightmare == 2 && small)
                 res = $"atlas-void/KarmaToken0" + "Small";
-			if (Karma11Update.VoidBigViyKarma && !small)
-                res = $"atlas-void/KarmaToken0" + "Big";
             return res;
 		}
 		return orig(small, k);

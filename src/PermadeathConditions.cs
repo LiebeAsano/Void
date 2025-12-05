@@ -109,17 +109,20 @@ static class PermadeathConditions
 			if (self.manager.upcomingProcess != null) return;
 
 			self.manager.musicPlayer?.FadeOutAllSongs(20f);
-            /*if (self.manager.nextSlideshow != null)
+			/*if (self.manager.nextSlideshow != null)
 			{
 				self.manager.statsAfterCredits = true;
 				self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlideShow);
 				return;
 			}*/
+
+			bool treeEnding = false;
+
             for (int i = 0; i < self.Players.Count; i++)
             {
-				if (self.Players[i].Room.name == "OE_FINAL03") return;
+				if (self.Players[i].Room.name == "OE_FINAL03") treeEnding = true;
             }
-            if (VoidSpecificGameOverCondition(self))
+            if (VoidSpecificGameOverCondition(self) && !treeEnding)
 			{
                 self.GetStorySession.saveState.redExtraCycles = true;
                 self.GetStorySession.saveState.SetVoidCatDead(true);

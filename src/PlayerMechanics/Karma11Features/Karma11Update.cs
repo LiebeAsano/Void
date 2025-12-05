@@ -22,7 +22,6 @@ public static class Karma11Update
     public static bool VoidKarma11 { get; set; }
     public static bool VoidNightmare { get; set; }
     public static bool VoidPermaNightmare { get; set; }
-    public static bool VoidBigViyKarma { get; set; }
 
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
@@ -39,7 +38,6 @@ public static class Karma11Update
                 ExternalSaveData.VoidKarma11 = true;
                 VoidKarma11 = ExternalSaveData.VoidPermaNightmare != 0;
                 VoidPermaNightmare = ExternalSaveData.VoidPermaNightmare == 2;
-                VoidBigViyKarma = ExternalSaveData.VoidPermaNightmare == 2;
             }
             else
             {

@@ -584,7 +584,7 @@ public static class Climbing
 						bonus = 1f;
 				else if (Karma11Update.VoidKarma11)
 					bonus = 1.25f;
-				if (body_chunk_0.pos.y > body_chunk_1.pos.y + 10f)
+				if (body_chunk_0.pos.y > body_chunk_1.pos.y + 6f)
 				{
 					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
 					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);

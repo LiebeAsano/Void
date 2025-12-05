@@ -310,6 +310,7 @@ namespace VoidTemplate
                     {
                         self.standing = true;
                         self.sleepCounter = 0;
+                        self.bodyMode = Player.BodyModeIndex.Stand;
                     }
                 }
             }
@@ -379,7 +380,7 @@ namespace VoidTemplate
                         {
                             game.GetStorySession.saveState.SetVoidExtraFood(3);
                             game.GetStorySession.saveState.SetVoidFoodToHibernate(6);
-                            ExternalSaveData.VoidPermaNightmare = 2;
+                            game.GetStorySession.saveState.SetKarmaToken(0);
                         }
                         game.GetStorySession.saveState.SetVoidEndingTree(true);
                         for (int i = 0; i < 8; i++)

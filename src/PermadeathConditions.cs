@@ -117,7 +117,7 @@ static class PermadeathConditions
 			}*/
             for (int i = 0; i < self.Players.Count; i++)
             {
-				if (self.Players[i].Room.name == "OE_FINAL_03") return;
+				if (self.Players[i].Room.name == "OE_FINAL03") return;
             }
             if (VoidSpecificGameOverCondition(self))
 			{

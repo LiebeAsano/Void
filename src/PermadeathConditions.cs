@@ -115,6 +115,10 @@ static class PermadeathConditions
 				self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlideShow);
 				return;
 			}*/
+            for (int i = 0; i < self.Players.Count; i++)
+            {
+				if (self.Players[i].Room.name == "OE_FINAL_03") return;
+            }
             if (VoidSpecificGameOverCondition(self))
 			{
                 self.GetStorySession.saveState.redExtraCycles = true;

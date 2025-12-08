@@ -478,7 +478,14 @@ public static class GrabUpdate
                                     && pearl.abstractPhysicalObject is DataPearl.AbstractDataPearl abstractPearl
                                     && self.abstractCreature.world.game.GetStorySession is not null)
                                 {
-                                    SwallowObjects.pearlIDsInPlayerStomaches[self.playerState.playerNumber].Add(abstractPearl.dataPearlType.value);
+                                    int playerNumber = self.playerState.playerNumber;
+
+                                    if (!SwallowObjects.pearlIDsInPlayerStomaches.ContainsKey(playerNumber))
+                                    {
+                                        SwallowObjects.pearlIDsInPlayerStomaches[playerNumber] = [];
+                                    }
+
+                                    SwallowObjects.pearlIDsInPlayerStomaches[playerNumber].Add(abstractPearl.dataPearlType.value);
                                     self.abstractCreature.world.game.GetStorySession.saveState.SetStomachPearls(SwallowObjects.pearlIDsInPlayerStomaches);
                                 }
                                 self.bodyChunks[0].pos += Custom.DirVec(self.grasps[graspIndex].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;

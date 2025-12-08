@@ -1,22 +1,64 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
+using Watcher;
 using RWCustom;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VoidTemplate.OptionInterface;
 using static MonoMod.InlineRT.MonoModRule;
 using static VoidTemplate.Useful.Utils;
+using VoidTemplate.Creatures.VoidDaddyAdnProtoViy;
 
 namespace VoidTemplate.PlayerMechanics;
 
 public static class SaintKarmaImmunity
 {
+    public static int[] deathCounter = [-1, -1, -1, -1];
+
     public static void Hook()
     {
         //gives stun instead of death at karma 11
         On.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
         //IL.Player.ClassMechanicsSaint += Player_ClassMechanicsSaint;
+        On.Player.Update += Player_Update_Void_To_Daddy;
+        On.Player.ctor += Player_ctor;
+    }
+
+    private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
+    {
+        orig(self, abstractCreature, world);
+        deathCounter[self.playerState.playerNumber] = -1;
+    }
+
+    private static void Player_Update_Void_To_Daddy(On.Player.orig_Update orig, Player self, bool eu)
+    {
+        orig(self, eu);
+        if (self.IsVoid() && deathCounter[self.playerState.playerNumber] > -1 && self.room != null)
+        {
+            deathCounter[self.playerState.playerNumber]++;
+            if (deathCounter[self.playerState.playerNumber] == 220)
+            {
+                /*self.room.AddObject(new ShockWave(self.firstChunk.pos, 350f, 0.285f, 200, true));
+                self.room.AddObject(new ShockWave(self.firstChunk.pos, 750f, 0.185f, 180, false));*/
+                self.room.PlaySound(WatcherEnums.WatcherSoundID.RotLiz_Vocalize, self.firstChunk.pos, self.abstractCreature);
+            }
+            if (deathCounter[self.playerState.playerNumber] >= 240)
+            {
+                AbstractCreature daddy = new(self.abstractCreature.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy), null, self.abstractCreature.pos, self.abstractCreature.world.game.GetNewID());
+                (daddy.state as DaddyLongLegs.DaddyState).GetDaddyExt().daddyType = DaddyExt.VoidDaddyType.ProtoViy;
+                self.abstractCreature.Room.AddEntity(daddy);
+                daddy.RealizeInRoom();
+                daddy.realizedCreature.Stun(50);
+                foreach (var tentacle in (daddy.realizedCreature as DaddyLongLegs).tentacles)
+                {
+                    tentacle.Reset(tentacle.connectedChunk.pos);
+                }
+                self.Destroy();
+                deathCounter[self.playerState.playerNumber] = -1;
+            }
+        }
     }
 
     private static void Player_ClassMechanicsSaint(On.Player.orig_ClassMechanicsSaint orig, Player self)
@@ -50,9 +92,12 @@ public static class SaintKarmaImmunity
                             {
                                 flag3 = true;
                             }
+                            if (flag3) break;
                         }
                     }
+                    if (flag3) break;
                 }
+                if (flag3) break;
             }
         }
         if (self.killFac >= 0.99f && flag3)
@@ -71,36 +116,44 @@ public static class SaintKarmaImmunity
                     PhysicalObject physicalObject = self.room.physicalObjects[i][j];
                     if (physicalObject != self)
                     {
+                        bool flagged = false;
                         foreach (BodyChunk bodyChunk in physicalObject.bodyChunks)
                         {
                             if (Custom.DistLess(bodyChunk.pos, vector2, num + bodyChunk.rad) && self.room.VisualContact(bodyChunk.pos, vector2))
                             {
                                 bodyChunk.vel += Custom.RNV() * 36f;
-                                if (physicalObject is Player)
+                                if (!flagged)
                                 {
-                                    if (!(physicalObject as Player).dead && ((physicalObject as Player).IsVoid() || (physicalObject as Player).IsViy()))
+                                    if (physicalObject is Player player)
                                     {
+                                        if (!player.dead && player.AreVoidViy())
+                                        {
+                                            flagged = true;
+                                            flag2 = true;
+                                            if (player.IsVoid())
+                                            {
+                                                player.Die();
+                                                deathCounter[player.playerState.playerNumber] = 0;
+                                            }
+                                        }
+                                        if (player.IsViy())
+                                        {
+                                            player.Stun(10);
+                                        }
+                                    }
+                                    if (physicalObject is DaddyLongLegs pDaddy)
+                                    {
+                                        flagged = true;
                                         flag2 = true;
+                                        pDaddy.Stun(10);
                                     }
-                                    if ((physicalObject as Player).IsVoid())
-                                    {
-                                        (physicalObject as Player).Stun(200);
-                                    }
-                                    if ((physicalObject as Player).IsViy())
-                                    {
-                                        (physicalObject as Player).Stun(10);
-                                    }
-                                }
-                                if (physicalObject is DaddyLongLegs)
-                                {
-                                    flag2 = true;
-                                    (physicalObject as DaddyLongLegs).Stun(10);
                                 }
                             }
                         }
                     }
                 }
             }
+
             if (flag2)
             {
                 self.room.PlaySound(SoundID.Firecracker_Bang, self.mainBodyChunk, false, 1f, 0.75f + UnityEngine.Random.value);

@@ -10,6 +10,7 @@ using VoidTemplate.OptionInterface;
 using static MonoMod.InlineRT.MonoModRule;
 using static VoidTemplate.Useful.Utils;
 using VoidTemplate.Creatures.VoidDaddyAdnProtoViy;
+using VoidTemplate.PlayerMechanics.Karma11Features;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -104,6 +105,8 @@ public static class SaintKarmaImmunity
         {
             float num = 60f;
             Vector2 vector2 = new(self.mainBodyChunk.pos.x + self.burstX, self.mainBodyChunk.pos.y + self.burstY + 60f);
+            Vector2 saintVector = new(self.mainBodyChunk.pos.x, self.mainBodyChunk.pos.y);
+            bool selfSaint = false;
             bool flag2 = false;
             for (int i = 0; i < self.room.physicalObjects.Length; i++)
             {
@@ -121,7 +124,6 @@ public static class SaintKarmaImmunity
                         {
                             if (Custom.DistLess(bodyChunk.pos, vector2, num + bodyChunk.rad) && self.room.VisualContact(bodyChunk.pos, vector2))
                             {
-                                bodyChunk.vel += Custom.RNV() * 36f;
                                 if (!flagged)
                                 {
                                     if (physicalObject is Player player)
@@ -132,8 +134,17 @@ public static class SaintKarmaImmunity
                                             flag2 = true;
                                             if (player.IsVoid())
                                             {
-                                                player.Die();
-                                                deathCounter[player.playerState.playerNumber] = 0;
+                                                if (player.KarmaCap == 10 || Karma11Update.VoidKarma11)
+                                                {
+                                                    self.Stun(200);
+                                                    selfSaint = true;
+                                                }
+                                                else
+                                                {
+                                                    player.Die();
+                                                    deathCounter[player.playerState.playerNumber] = 0;
+                                                    bodyChunk.vel += Custom.RNV() * 36f;
+                                                }
                                             }
                                         }
                                         if (player.IsViy())
@@ -151,6 +162,13 @@ public static class SaintKarmaImmunity
                             }
                         }
                     }
+                    if (selfSaint)
+                    {
+                        foreach (BodyChunk bodyChunk in self.bodyChunks)
+                        {
+                            bodyChunk.vel += Custom.RNV() * 36f;
+                        }
+                    }
                 }
             }
 
@@ -165,7 +183,10 @@ public static class SaintKarmaImmunity
             }
             for (int n = 0; n < 20; n++)
             {
-                self.room.AddObject(new Spark(vector2, Custom.RNV() * UnityEngine.Random.value * 40f, new Color(1f, 1f, 1f), null, 30, 120));
+                if (!selfSaint)
+                    self.room.AddObject(new Spark(vector2, Custom.RNV() * UnityEngine.Random.value * 40f, new Color(1f, 1f, 1f), null, 30, 120));
+                else
+                    self.room.AddObject(new Spark(saintVector, Custom.RNV() * UnityEngine.Random.value * 40f, new Color(1f, 1f, 1f), null, 30, 120));
             }
             self.killFac = 0f;
             self.killWait = 0f;

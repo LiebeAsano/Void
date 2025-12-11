@@ -74,9 +74,16 @@ namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
 
         private static void DaddyTentacle_ctor(On.DaddyTentacle.orig_ctor orig, DaddyTentacle self, Creature daddy, DaddyLongLegs.IHaveRotParts rotOwner, BodyChunk chunk, float length, int tentacleNumber, Vector2 tentacleDir)
         {
-            if (daddy is DaddyLongLegs dll && dll.GetDaddyExt().IsVoidDaddy)
+            if (daddy is DaddyLongLegs dll)
             {
-                length *= 2;
+                if (dll.GetDaddyExt().IsVoidDaddy)
+                {
+                    length *= 2;
+                }
+                else if (dll.GetDaddyExt().IsProtoViy)
+                {
+                    length = 160;
+                }
             }
             orig(self, daddy, rotOwner, chunk, length, tentacleNumber, tentacleDir);
         }
@@ -203,6 +210,8 @@ namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
 
         public int biteCooldown;
 
+        public Color? myColor;
+
         public bool HaveType
         {
             get => daddyType != VoidDaddyType.None;
@@ -222,6 +231,7 @@ namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
         {
             get
             {
+                if (myColor != null) return myColor.Value;
                 if (IsProtoViy) return DrawSprites.voidFluidColor;
                 return Color.red;
             }

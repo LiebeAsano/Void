@@ -49,6 +49,7 @@ public static class SaintKarmaImmunity
             {
                 AbstractCreature daddy = new(self.abstractCreature.world, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy), null, self.abstractCreature.pos, self.abstractCreature.world.game.GetNewID());
                 (daddy.state as DaddyLongLegs.DaddyState).GetDaddyExt().daddyType = DaddyExt.VoidDaddyType.ProtoViy;
+                (daddy.state as DaddyLongLegs.DaddyState).GetDaddyExt().myColor = VoidColors[self.playerState.playerNumber];
                 self.abstractCreature.Room.AddEntity(daddy);
                 daddy.RealizeInRoom();
                 daddy.realizedCreature.Stun(50);

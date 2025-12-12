@@ -19,7 +19,7 @@ public class TardigradeResist
 
     private static void Tardigrade_BitByPlayer(On.Watcher.Tardigrade.orig_BitByPlayer orig, Watcher.Tardigrade self, Creature.Grasp grasp, bool eu)
     {
-        if (grasp.grabber is Player player && (player.IsVoid() || player.IsViy()))
+        if (grasp.grabber is Player player && (player.AreVoidViy()))
         {
             int karma = player.KarmaCap;
             if (player.KarmaCap == 10)

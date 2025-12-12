@@ -18,7 +18,7 @@ public static class LeechIndigestion
 
 		if (Array.Exists(self.grasps, grasp => grasp is not null 
 		&& grasp.grabbed is Player player
-		&& (player.IsVoid() || player.IsViy()) 
+		&& (player.AreVoidViy()) 
 		&& self != null 
 		&& self.room != null))
 		{

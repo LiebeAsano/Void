@@ -20,7 +20,7 @@ public static class DLLindigestion
         foreach (var eatObject in self.eatObjects)
         {
             if (eatObject.chunk.owner is Player player
-                && (player.IsVoid() || player.IsViy())
+                && (player.AreVoidViy())
                 && player.dead)
             {
                 DestroyBody(player);

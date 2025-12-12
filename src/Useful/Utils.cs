@@ -1,11 +1,12 @@
-﻿using Mono.Cecil.Cil;
+﻿using Menu;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using SlugBase.Features;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Menu;
 using UnityEngine;
-using SlugBase.Features;
 
 namespace VoidTemplate.Useful;
 public static class Utils
@@ -19,7 +20,9 @@ public static class Utils
 
     public static bool IsVoid(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void;
     public static bool IsViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Viy;
-    public static bool AreVoidViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void || p.SlugCatClass == VoidEnums.SlugcatID.Viy;
+    public static bool IsProtoViy(this Player player) => player.SlugCatClass == VoidEnums.SlugcatID.ProtoViy;
+    public static bool AreVoidViy(this Player p) => p.SlugCatClass == VoidEnums.SlugcatID.Void || p.SlugCatClass == VoidEnums.SlugcatID.Viy || p.SlugCatClass == VoidEnums.SlugcatID.ProtoViy;
+
     public static bool IsVoidWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void;
 	public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
 			&& !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
@@ -32,8 +35,10 @@ public static class Utils
 
     public static Color[] ViyColors = new Color[32];
 
+    public static readonly Dictionary<AbstractCreature, Color> ProtoViyEyeColors = [];
+
     //stolen with permission from Henpemaz' https://github.com/henpemaz/Rain-Meadow/blob/main/RainMeadow.Logging.cs
-	private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
+    private static string LogTime() { return ((int)(Time.time * 1000)).ToString(); }
 	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
 	public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
 	{

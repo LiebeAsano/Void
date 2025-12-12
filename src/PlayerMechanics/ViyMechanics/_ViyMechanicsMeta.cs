@@ -11,6 +11,8 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
     {
         public static void Hook()
         {
+            ProtoViyAI.Hook();
+            ProtoViyGraphics.Hook();
             ViyBitByPlayer.Hook();
             ViyMaul.Hook();
             ViyTail.Hook();

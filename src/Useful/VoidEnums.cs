@@ -225,9 +225,11 @@ public static class VoidEnums
 		{
 			Void = new("Void");
 			Viy = new("Viy");
-		}
+            ProtoViy = new("ProtoViy", false);
+        }
 		public static SlugcatStats.Name Void;
         public static SlugcatStats.Name Viy;
+		public static SlugcatStats.Name ProtoViy;
     }
 
 	public static class ProcessID

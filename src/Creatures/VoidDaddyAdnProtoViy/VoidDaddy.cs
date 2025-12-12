@@ -96,7 +96,7 @@ namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
             {
                 self.GetDaddyExt().biteCooldown--;
             }
-            if (self.GetDaddyExt().HaveType && self.room != null && UnityEngine.Random.Range(0, 4000) == 0)
+            if (self.GetDaddyExt().HaveType && self.room != null && UnityEngine.Random.Range(0, 3400) == 0)
             {
                 self.room.PlaySound(UnityEngine.Random.Range(0, 3) switch
                 {

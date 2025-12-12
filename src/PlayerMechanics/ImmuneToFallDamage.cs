@@ -17,7 +17,7 @@ public static class ImmuneToFallDamage
     private static void Player_Update(On.Player.orig_UpdateMSC orig, Player self)
     {
         orig(self);
-        if (self.IsVoid() || self.IsViy())
+        if (self.AreVoidViy())
         {
             bool hasGuardian = false;
             if (self.room != null)

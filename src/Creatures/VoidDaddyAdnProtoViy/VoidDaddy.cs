@@ -186,15 +186,21 @@ namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
                     (self.State as HealthState).health -= num;
                     if (self.Template.quickDeath && (UnityEngine.Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || (self.State as HealthState).health < 0f && UnityEngine.Random.value < 0.33f))
                     {
-                        Karma11Update.VoidPermaNightmare = false;
-                        ExternalSaveData.VoidPermaNightmare = 1;
+                        if (self.GetDaddyExt().IsVoidDaddy)
+                        {
+                            Karma11Update.VoidPermaNightmare = false;
+                            ExternalSaveData.VoidPermaNightmare = 1;
+                        }
                         self.Die();
                     }
                 }
                 if (num >= self.Template.instantDeathDamageLimit)
                 {
-                    Karma11Update.VoidPermaNightmare = false;
-                    ExternalSaveData.VoidPermaNightmare = 1;
+                    if (self.GetDaddyExt().IsVoidDaddy)
+                    {
+                        Karma11Update.VoidPermaNightmare = false;
+                        ExternalSaveData.VoidPermaNightmare = 1;
+                    }
                     self.Die();
                 }
             }

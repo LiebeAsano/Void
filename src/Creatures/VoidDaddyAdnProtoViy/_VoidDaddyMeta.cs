@@ -10,6 +10,8 @@ namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
     {
         public static void Hook()
         {
+            ProtoViyAbstractAI.Hook();
+            ProtoViyDaddyAI.Hook();
             VoidDaddy.Hook();
             VoidDaddyGraphics.Hook();
         }

@@ -9,7 +9,7 @@ using UnityEngine;
 using VoidTemplate.OptionInterface;
 using static MonoMod.InlineRT.MonoModRule;
 using static VoidTemplate.Useful.Utils;
-using VoidTemplate.Creatures.VoidDaddyAdnProtoViy;
+using VoidTemplate.Creatures.VoidDaddyAndProtoViy;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 
 namespace VoidTemplate.PlayerMechanics;

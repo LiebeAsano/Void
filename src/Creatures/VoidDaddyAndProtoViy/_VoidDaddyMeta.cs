@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
+namespace VoidTemplate.Creatures.VoidDaddyAndProtoViy
 {
     public class _VoidDaddyMeta
     {

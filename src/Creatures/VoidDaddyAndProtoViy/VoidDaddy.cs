@@ -12,7 +12,8 @@ using VoidTemplate.PlayerMechanics.Karma11Features;
 using Watcher;
 using static VoidTemplate.SaveManager;
 
-namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
+namespace VoidTemplate.Creatures.VoidDaddyAndProtoViy
+
 {
     public static class VoidDaddy
     {

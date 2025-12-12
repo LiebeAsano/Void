@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using RWCustom;
 
-namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
+namespace VoidTemplate.Creatures.VoidDaddyAndProtoViy
+
 {
     public class VoidDaddyGraphics
     {

@@ -1,7 +1,8 @@
 ﻿using RWCustom;
 using UnityEngine;
 
-namespace VoidTemplate.Creatures.VoidDaddyAdnProtoViy
+namespace VoidTemplate.Creatures.VoidDaddyAndProtoViy
+
 {
     public static class ProtoViyAbstractAI
     {

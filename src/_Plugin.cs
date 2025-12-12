@@ -122,7 +122,7 @@ class _Plugin : BaseUnityPlugin
 			OptionInterface._OIMeta.Initialize();
 			Objects.NoodleEgg._NoodleEggMeta.Hook();
 			DiscordChurch._DiscordMeta.Init();
-			Creatures.VoidDaddyAdnProtoViy._VoidDaddyMeta.Hook();
+			Creatures.VoidDaddyAndProtoViy._VoidDaddyMeta.Hook();
 
 			RegisterPOMObjects();
 			if (DevEnabled)

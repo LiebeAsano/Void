@@ -63,6 +63,62 @@ public static class SaintKarmaImmunity
         }
     }
 
+    /*private static void Player_Update_Void_To_Daddy(On.Player.orig_Update orig, Player self, bool eu)
+    {
+        orig(self, eu);
+
+        if (self.IsVoid() && deathCounter[self.playerState.playerNumber] > -1 && self.room != null)
+        {
+            deathCounter[self.playerState.playerNumber]++;
+
+            if (deathCounter[self.playerState.playerNumber] == 220)
+            {
+                self.room.PlaySound(WatcherEnums.WatcherSoundID.RotLiz_Vocalize, self.firstChunk.pos, self.abstractCreature);
+            }
+
+            if (deathCounter[self.playerState.playerNumber] >= 240)
+            {
+                Color eyeColor = VoidColors[self.playerState.playerNumber];
+
+                AbstractCreature protoViy = new(
+                    self.abstractCreature.world,
+                    StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.SlugNPC),
+                    null,
+                    self.abstractCreature.pos,
+                    self.abstractCreature.world.game.GetNewID()
+                );
+
+                if (protoViy.state is PlayerNPCState npcState)
+                {
+                    npcState.forceFullGrown = true;
+                    npcState.slugcatCharacter = VoidEnums.SlugcatID.ProtoViy;
+                }
+
+                new Player(protoViy, protoViy.world)
+                {
+                    SlugCatClass = VoidEnums.SlugcatID.ProtoViy,
+                    standing = true,
+                    bodyMode = Player.BodyModeIndex.Stand
+                };
+
+                protoViy.abstractAI.RealAI = new SlugNPCAI(protoViy, protoViy.world);
+
+                self.abstractCreature.Room.AddEntity(protoViy);
+                protoViy.RealizeInRoom();
+
+                if (protoViy.abstractAI is SlugNPCAbstractAI slugNpcAI)
+                {
+                    slugNpcAI.toldToStay = protoViy.pos;
+                }
+
+                self.Destroy();
+                deathCounter[self.playerState.playerNumber] = -1;
+
+                ProtoViyEyeColors[protoViy] = eyeColor;
+            }
+        }
+    }*/
+
     private static void Player_ClassMechanicsSaint(On.Player.orig_ClassMechanicsSaint orig, Player self)
     {
         float num2 = 60f;

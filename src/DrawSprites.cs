@@ -3,6 +3,7 @@ using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.Objects;
@@ -47,6 +48,62 @@ public static class DrawSprites
             {
                 self.GetPlayerGExt().toEcxoTail = 1f;
             }
+        }
+        if (self?.player == null) return;
+            UpdateVoidDeadGlow(self);
+    }
+
+    private static FieldInfo _cachedGlowField;
+
+    private class BaseGlow
+    {
+        public float rad;
+        public float alpha;
+    }
+
+    private static readonly ConditionalWeakTable<PlayerGraphics, BaseGlow> baseGlow =
+        new();
+
+    private static void UpdateVoidDeadGlow(PlayerGraphics self)
+    {
+        var player = self.player;
+        if (player == null || !player.IsVoid()) return;
+        if (player.abstractCreature?.GetPlayerState().InDream == true) return;
+
+        LightSource glow = self.lightSource;
+        if (glow == null) return;
+
+        int pn = player.playerState?.playerNumber ?? -1;
+        if (pn < 0 || SaintKarmaImmunity.deathCounter == null || pn >= SaintKarmaImmunity.deathCounter.Length) return;
+
+        var bg = baseGlow.GetValue(self, _ => new BaseGlow());
+
+        if (!player.dead)
+        {
+            if (glow.setRad > 0f) bg.rad = (float)glow.setRad;
+            else if (glow.rad > 0f) bg.rad = glow.rad;
+
+            if (glow.setAlpha > 0f) bg.alpha = (float)glow.setAlpha;
+            else if (glow.alpha > 0f) bg.alpha = glow.alpha;
+
+            return;
+        }
+
+        int dc = SaintKarmaImmunity.deathCounter[pn];
+        float k = Mathf.Clamp01(dc / 240f);
+        float t = Mathf.SmoothStep(1f, 0f, k);
+
+        float baseRad = (bg.rad > 0.01f) ? bg.rad : Mathf.Max((float)glow.setRad, glow.rad);
+        float baseAlpha = (bg.alpha > 0.01f) ? bg.alpha : Mathf.Max((float)glow.setAlpha, glow.alpha);
+
+        glow.setRad = baseRad * t;
+        glow.setAlpha = baseAlpha * t;
+
+        if (dc >= 240)
+        {
+            glow.setRad = 0f;
+            glow.setAlpha = 0f;
+
         }
     }
 

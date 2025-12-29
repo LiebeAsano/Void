@@ -222,7 +222,7 @@ public static class Climbing
 	public static int[] switchTimer = new int [32];
 
     private static readonly ConditionalWeakTable<Player, StrongBox<int>> rightLeft = new();
-
+	    
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
 	{
 		orig(self, abstractCreature, world);
@@ -584,7 +584,7 @@ public static class Climbing
 						bonus = 1f;
 				else if (Karma11Update.VoidKarma11)
 					bonus = 1.25f;
-				if (body_chunk_0.pos.y > body_chunk_1.pos.y + 6f)
+				if (body_chunk_0.pos.y >= body_chunk_1.pos.y)
 				{
 					body_chunk_0.vel.y = Mathf.Lerp(body_chunk_0.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);
 					body_chunk_1.vel.y = Mathf.Lerp(body_chunk_1.vel.y, player.input[0].y * 2.5f * bonus, 0.3f);

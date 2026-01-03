@@ -169,6 +169,8 @@ public static class VoidEnums
 
 			UIPitch1 = new("UI_Pitch1", true);
             UIPitch2 = new("UI_Pitch2", true);
+
+            ProtoViyScreamSound = new("Proto_Viy_Scream_Sound", true);
         }
 
         public static global::SoundID HalcyonMemories;
@@ -190,6 +192,8 @@ public static class VoidEnums
 
         public static global::SoundID UIPitch1;
         public static global::SoundID UIPitch2;
+
+        public static global::SoundID ProtoViyScreamSound;
     }
 	public static class ConversationID
 	{

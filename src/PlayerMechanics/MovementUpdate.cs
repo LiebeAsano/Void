@@ -603,11 +603,11 @@ public static class MovementUpdate
                     {
                         if (self.superLaunchJump < 20)
                         {
-                            if (self.KarmaCap == 9 || Karma11Update.VoidKarma11)
+                            if ((self.KarmaCap == 9 || Karma11Update.VoidKarma11) && !self.abstractCreature.GetPlayerState().InDream)
                             {
                                 self.superLaunchJump += 10;
                             }
-                            else if (self.KarmaCap >= 4 && !Karma11Update.VoidKarma11)
+                            else if (self.KarmaCap >= 4 && !Karma11Update.VoidKarma11 && !self.abstractCreature.GetPlayerState().InDream)
                             {
                                 self.superLaunchJump += 2;
                             }

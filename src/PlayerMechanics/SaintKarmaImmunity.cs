@@ -46,8 +46,10 @@ public static class SaintKarmaImmunity
                 self.room.PlaySound(VoidEnums.SoundID.ProtoViyScreamSound, self.firstChunk.pos, self.abstractCreature);
                 foreach (AbstractCreature creature in self.room.abstractRoom.creatures)
                 {
-                    if (creature.realizedCreature is Player player && !player.AreVoidViy() || creature.realizedCreature is not Player)
+                    if (creature.realizedCreature is not Player)
                         creature.realizedCreature?.Stun(120);
+                    if (creature.realizedCreature is Player player && !player.AreVoidViy())
+                        player.SaintStagger(120);
                 }
             }
             if (deathCounter[self.playerState.playerNumber] >= 240)

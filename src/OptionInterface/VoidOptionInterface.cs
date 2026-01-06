@@ -9,8 +9,8 @@ namespace VoidTemplate.OptionInterface;
 public class VoidOptionInterface : global::OptionInterface
 {
 	const int marginBetweenVerticalElements = 30;
-	static Color MediumGrey = new Color(0.66f, 0.64f, 0.70f);
-	static Color CheatingColor = new Color(0.85f, 0.35f, 0.4f);
+	static Color MediumGrey = new(0.66f, 0.64f, 0.70f);
+	static Color CheatingColor = new(0.85f, 0.35f, 0.4f);
 
 	public override void Initialize()
 	{
@@ -26,7 +26,8 @@ public class VoidOptionInterface : global::OptionInterface
 			(cfgArenaAscensionStun, MediumGrey)
 			]);
 		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 340), options: [
-			(cfgNerfBlizzardLizard, MediumGrey),
+            (cfgFallDamage, MediumGrey),
+            (cfgNerfBlizzardLizard, MediumGrey),
             (cfgComplexControl, MediumGrey),
             (cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, CheatingColor),

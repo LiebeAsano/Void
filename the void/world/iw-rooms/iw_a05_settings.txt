@@ -1,9 +1,8 @@
-Template: iw_settingstemplate_surface
 RainIntensity: 0.2034763
 RumbleIntensity: 0
-WaveSpeed: 0.5011685
-WaveLength: 0.9994158
-WaveAmplitude: 0.0003268646
+WaveSpeed: 0.499249
+WaveLength: 0.9996245
+WaveAmplitude: 0.0003518891
 SecondWaveLength: 0.1666667
 SecondWaveAmplitude: 0
 Clouds: 0.5026607
@@ -11,4 +10,5 @@ Grime: 0.7087979
 RandomItemDensity: 0.6005319
 RandomItemSpearChance: 0.3005321
 Effects: SandPuffs-0-280.4333-127.4698, 
+PlacedObjects: CustomDecal><163.3596><201.3803><-15.6521~111.8573~221.4219~156.6792~267.6667~-234.0698~45.53333~160.7896~0~1~0~rustb2~0.7037241~1~0.3711953~1~0.4949281~0.9743891~0.4485281~0.9666562, CustomDecal><592.4907><-29.78538><14.22919~390.7489~301.1052~336.6782~264.8207~-3.557297~-747.7428~29.16978~0~0.4045397~0~rustb3~0.06959865~1~0.3789285~1~1~0.9743891~1~0.9666562, 
 AmbientSounds: SPOT><AM_WIN-StrongWnd2.ogg><29.31642><211.43><0.3453352><1><-27.12317><547.9655><279.8207><-167.6866><0><0.3319972, 

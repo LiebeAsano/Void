@@ -244,4 +244,9 @@ public static class VoidEnums
 		}
 		public static ProcessManager.ProcessID TokenDecrease;
 	}
+
+	public static class SlugcatTimeline
+	{
+		public static SlugcatStats.Timeline VoidTimeline = new("Void");
+	}
 }

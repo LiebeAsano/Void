@@ -123,6 +123,7 @@ class _Plugin : BaseUnityPlugin
 			Objects.NoodleEgg._NoodleEggMeta.Hook();
 			DiscordChurch._DiscordMeta.Init();
 			Creatures.VoidDaddyAndProtoViy._VoidDaddyMeta.Hook();
+			RainCycleChanges._RainCycleMeta.Init();
 
 			RegisterPOMObjects();
 			if (DevEnabled)

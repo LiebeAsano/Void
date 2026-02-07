@@ -41,8 +41,6 @@ public static class SaintKarmaImmunity
             deathCounter[self.playerState.playerNumber]++;
             if (deathCounter[self.playerState.playerNumber] == 220)
             {
-                /*self.room.AddObject(new ShockWave(self.firstChunk.pos, 350f, 0.285f, 200, true));
-                self.room.AddObject(new ShockWave(self.firstChunk.pos, 750f, 0.185f, 180, false));*/
                 self.room.PlaySound(VoidEnums.SoundID.ProtoViyScreamSound, self.firstChunk.pos, self.abstractCreature);
                 foreach (AbstractCreature creature in self.room.abstractRoom.creatures)
                 {

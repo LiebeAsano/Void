@@ -159,12 +159,12 @@ namespace VoidTemplate.RainCycleChanges
         {
             orig(self, hud, fContainer);
             World world = (hud.owner as Player).abstractCreature.world;
-            if (world.rainCycle.GetRainCycleExt().AfterCycleStarted)
+            if (world.rainCycle.GetRainCycleExt().PostCycleStarted)
             {
                 self.GetAfterCycleMode().Value = true;
                 self.lastPos = self.pos;
                 self.timePerCircle = 2400;
-                int num = world.rainCycle.GetRainCycleExt().afterCycleLength / self.timePerCircle;
+                int num = world.rainCycle.GetRainCycleExt().postCycleLength / self.timePerCircle;
                 self.circles = new HUDCircle[num];
                 for (int i = 0; i < self.circles.Length; i++)
                 {

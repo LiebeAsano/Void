@@ -14,7 +14,7 @@ using SlugBase.Features;
 
 namespace VoidTemplate.RainCycleChanges
 {
-    public static class RainCyclePlus
+    public static class PostRainCycle
     {
         private static ConditionalWeakTable<RainCycle, RainCycleExt> rainCycleExt = new();
 
@@ -41,9 +41,11 @@ namespace VoidTemplate.RainCycleChanges
         private static void GlobalRain_ResetRain(On.GlobalRain.orig_ResetRain orig, GlobalRain self)
         {
             orig(self);
-            self.game.world.rainCycle.GetRainCycleExt().subtractedFood = 0;
-            self.game.world.rainCycle.GetRainCycleExt().stunned = 0;
-            self.game.world.rainCycle.GetRainCycleExt().myTimer = 0;
+            var postCycle = self.game.world.rainCycle.GetRainCycleExt();
+            postCycle.subtractedFood = 0;
+            postCycle.stunned = 0;
+            postCycle.myTimer = 0;
+            postCycle.metersReplaced = false;
             self.GetRainPulseRef().Value = 0;
             for (int i = 0; i < self.game.cameras.Length; i++)
             {
@@ -64,11 +66,11 @@ namespace VoidTemplate.RainCycleChanges
 
         public class RainCycleExt
         {
-            public const int maxAfterCyceleTicks = 14400; // 30 minutes is 72000 ticks
+            public const int postAfterCyceleTicks = 14400; // 30 minutes is 72000 ticks
 
             public RainCycle owner;
 
-            public int afterCycleLength;
+            public int postCycleLength;
 
             public int myTimer;
 
@@ -90,36 +92,36 @@ namespace VoidTemplate.RainCycleChanges
                 }
             }
 
-            public bool AfterCycleStarted
+            public bool PostCycleStarted
             {
                 get
                 {
-                    return owner.deathRainHasHit && GRain.deathRain.deathRainMode == GlobalRain.DeathRain.DeathRainMode.Mayhem;
+                    return GRain.deathRain?.deathRainMode == GlobalRain.DeathRain.DeathRainMode.Mayhem;
                 }
             }
 
-            public float AmountLeft { get => (float)(afterCycleLength - myTimer) / afterCycleLength; }
+            public float AmountLeft { get => (float)(postCycleLength - myTimer) / postCycleLength; }
 
             public bool TimeToLockShelters
             {
                 get => myTimer > 2400;
             }
 
-            public bool AllowToSubtractFood { get => myTimer > 4800 && myTimer <= (afterCycleLength - 4800); }
+            public bool AllowToSubtractFood { get => myTimer > 4800 && myTimer <= (postCycleLength - 4800); }
 
             public int TimeToStartNewCycle
             {
                 get
                 {
-                    return afterCycleLength - myTimer;
+                    return postCycleLength - myTimer;
                 }
             }
 
             public RainCycleExt(RainCycle owner)
             {
                 this.owner = owner;
-                afterCycleLength = maxAfterCyceleTicks;// - owner.cycleLength;
-                subtractFoodInterval = (afterCycleLength - 9600) / owner.world.game.session.characterStats.foodToHibernate;
+                postCycleLength = postAfterCyceleTicks;// - owner.cycleLength;
+                subtractFoodInterval = (postCycleLength - 9600) / owner.world.game.session.characterStats.foodToHibernate;
             }
 
             public void AfterCycleUpdate()
@@ -129,7 +131,7 @@ namespace VoidTemplate.RainCycleChanges
                     myShelterFinder = new(owner.world);
                     new Thread(StartToMapThread).Start();
                 }
-                if (AfterCycleStarted && myShelterFinder.done)
+                if (PostCycleStarted && myShelterFinder.done)
                 {
                     if (!metersReplaced)
                     {
@@ -180,6 +182,22 @@ namespace VoidTemplate.RainCycleChanges
                             GRain.drainWorldFlood = 0;
                         }
                         GRain.ResetRain();
+                        for (int i = 0; i < owner.world.abstractRooms.Length; i++)
+                        {
+                            var room = owner.world.abstractRooms[i];
+                            for (int j = 0; j < room.creatures.Count; j++)
+                            {
+                                room.creatures[j].state.CycleTick();
+                            }
+                            for (int j = 0; j < room.entitiesInDens.Count; j++)
+                            {
+                                if (room.entitiesInDens[j] is AbstractCreature crit)
+                                {
+                                    crit.state.CycleTick();
+                                }
+                            }
+                        }
+
                         for (int i = 0; i < owner.world.activeRooms.Count; i++)
                         {
                             Room room = owner.world.activeRooms[i];

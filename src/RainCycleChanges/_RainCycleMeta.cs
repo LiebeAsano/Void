@@ -11,7 +11,7 @@ namespace VoidTemplate.RainCycleChanges
         public static void Init()
         {
             DeadlessRain.Hook();
-            RainCyclePlus.Hook();
+            PostRainCycle.Hook();
             ShortcutHooks.Hook();
             RainMeterHooks.Hook();
             FoodMeterHooks.Hook();

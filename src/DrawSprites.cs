@@ -53,8 +53,6 @@ public static class DrawSprites
             UpdateVoidDeadGlow(self);
     }
 
-    private static FieldInfo _cachedGlowField;
-
     private class BaseGlow
     {
         public float rad;

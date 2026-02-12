@@ -41,9 +41,14 @@ public static class SaintKarmaImmunity
             deathCounter[self.playerState.playerNumber]++;
             if (deathCounter[self.playerState.playerNumber] == 220)
             {
-                /*self.room.AddObject(new ShockWave(self.firstChunk.pos, 350f, 0.285f, 200, true));
-                self.room.AddObject(new ShockWave(self.firstChunk.pos, 750f, 0.185f, 180, false));*/
-                self.room.PlaySound(WatcherEnums.WatcherSoundID.RotLiz_Vocalize, self.firstChunk.pos, self.abstractCreature);
+                self.room.PlaySound(VoidEnums.SoundID.ProtoViyScreamSound, self.firstChunk.pos, self.abstractCreature);
+                foreach (AbstractCreature creature in self.room.abstractRoom.creatures)
+                {
+                    if (creature.realizedCreature is not Player)
+                        creature.realizedCreature?.Stun(120);
+                    if (creature.realizedCreature is Player player && !player.AreVoidViy())
+                        player.SaintStagger(120);
+                }
             }
             if (deathCounter[self.playerState.playerNumber] >= 240)
             {
@@ -52,7 +57,7 @@ public static class SaintKarmaImmunity
                 (daddy.state as DaddyLongLegs.DaddyState).GetDaddyExt().myColor = VoidColors[self.playerState.playerNumber];
                 self.abstractCreature.Room.AddEntity(daddy);
                 daddy.RealizeInRoom();
-                daddy.realizedCreature.Stun(50);
+                daddy.realizedCreature.Stun(40);
                 foreach (var tentacle in (daddy.realizedCreature as DaddyLongLegs).tentacles)
                 {
                     tentacle.Reset(tentacle.connectedChunk.pos);

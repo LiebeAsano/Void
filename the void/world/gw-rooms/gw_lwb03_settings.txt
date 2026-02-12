@@ -1,0 +1,9 @@
+Template: gw_settingstemplate_inside
+Clouds: 0.06586356
+Grime: 0.6005319
+EffectColorA: 18
+EffectColorB: 13
+Effects: Desaturation-0.06959915-20-20, Brightness-0.03866594-25.01978-72.6875, Darkness-0.1082654-283.2791-22.17396, Contrast-0.07733287-278.2989-81.93645, WaterGlowworm-0.409862-25.01981-129.6042, 
+PlacedObjects: LightSource><498.0861><84.85884><1~White~93.91254~158.3396~50~86.60254~0~0~None~0~0, WaterNut><699.4375><976.2513><0~0~2~3, WaterNut><667.2493><947.6105><0~0~2~3, WaterNut><263.4389><906.2053><0~0~2~3, WaterNut><239.201><903.3096><0~0~2~3, InsectGroup><744.517><1213.035><197.074~136.2844~17.7865~34.15002~StandardFly~0.5, BubbleGrass><590.5759><1264.26><0~0~4~9, BubbleGrass><853.012><1258.683><0~0~4~9, 
+AmbientSounds: OMNI><AM_ENV-LightWind.ogg><749.5018><521.0228><0.4072007><1, SPOT><AM_IND-DeepHum.ogg><737.6003><307.6249><0.5><1><116.2628><1430.295><38.63632><-47.45013><0><0.1850659, OMNI><AM_ENV-WinterTrees.ogg><749.2025><385.2396><0.5077329><1, 
+FadePalette: 208, 0.2010641, 0.3015961

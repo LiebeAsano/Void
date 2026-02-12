@@ -7,7 +7,7 @@ namespace VoidTemplate.Creatures.VoidDaddyAndProtoViy
 {
     public static class ProtoViyDaddyAI
     {
-        private static readonly Dictionary<DaddyTentacle, bool> WasGrabbing = new();
+        private static readonly Dictionary<DaddyTentacle, bool> WasGrabbing = [];
 
         public static void Hook()
         {

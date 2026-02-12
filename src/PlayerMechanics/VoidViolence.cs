@@ -64,7 +64,8 @@ namespace VoidTemplate.PlayerMechanics
                         Damage = 0f;
                     }
                 }
-                if (source != null && source.owner is BigNeedleWorm)
+                if (source != null && source.owner is BigNeedleWorm
+                    || type == Creature.DamageType.Explosion)
                 {
                     player.playerState.permanentDamageTracking += Damage;
                 }
@@ -86,12 +87,9 @@ namespace VoidTemplate.PlayerMechanics
                         self.Die();
                     }
                 }
-                else
+                else if (Damage >= self.Template.instantDeathDamageLimit)
                 {
-                    if (Damage >= self.Template.instantDeathDamageLimit)
-                    {
-                        self.Die();
-                    }
+                    self.Die();
                 }
 
             }

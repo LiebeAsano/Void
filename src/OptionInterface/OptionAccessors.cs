@@ -10,10 +10,11 @@ public static class OptionAccessors
     public static bool SaintArenaSpears => cfgSaintArenaSpears.Value;
 	public static bool SaintArenaAscension => cfgSaintArenaAscension.Value;
     public static bool ArenaAscensionStun => cfgArenaAscensionStun.Value;
+
+    public static bool FallDamage => cfgFallDamage.Value;
     public static bool NerfBlizzardLizard => cfgNerfBlizzardLizard.Value;
     public static bool SimpleFood => cfgSimpleFood.Value;
     public static bool GamepadController => cfgGamepadController.Value;
-
     public static bool ComplexControl => cfgComplexControl.Value;
     public static bool PermaDeath => !cfgNoPermaDeath.Value;
 	public static bool ForceUnlockCampaign => cfgForceUnlockCampaign.Value;
@@ -27,6 +28,7 @@ public static class OptionAccessors
     internal static Configurable<bool> cfgSaintArenaSpears;
 	internal static Configurable<bool> cfgSaintArenaAscension;
     internal static Configurable<bool> cfgArenaAscensionStun;
+    internal static Configurable<bool> cfgFallDamage;
     internal static Configurable<bool> cfgNerfBlizzardLizard;
     internal static Configurable<bool> cfgGamepadController;
     internal static Configurable<bool> cfgComplexControl;

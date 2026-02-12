@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
+using VoidTemplate.RainCycleChanges;
 using VoidTemplate.Useful;
 using static VoidTemplate.Useful.Utils;
 
@@ -18,7 +19,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
         private static readonly ConditionalWeakTable<FoodMeter, FoodMeterExtention> meterExt = new();
 
         public static FoodMeterExtention GetMeterExt(this FoodMeter meter) => meterExt.GetOrCreateValue(meter);
-            
+
         public static bool ReqFoodPip(this FoodMeter.MeterCircle pip)
         {
             if (pip.meter.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !pip.meter.IsPupFoodMeter)
@@ -33,7 +34,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
 
             return false;
         }
-        
+
 
         public static void Hook()
         {
@@ -148,8 +149,18 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
             {
                 if (self.foodPlopped)
                 {
-                    self.circles[0].sprite.color = new(1f, 0.86f, 0f);
+                    if (self.meter.hud.owner is Player player 
+                        && self.number >= self.meter.lastCount - self.meter.survivalLimit + player.abstractCreature.world.rainCycle.GetRainCycleExt().subtractedFood 
+                        && player.abstractCreature.world.rainCycle.GetRainCycleExt().AllowToSubtractFood)
+                    {
+                        self.circles[0].sprite.color = Color.red;
+                    }
+                    else
+                    {
+                        self.circles[0].sprite.color = new(1f, 0.86f, 0f);
+                    }
                     self.circles[1].sprite.color = new(0, 0, 0.005f);
+
                     if (self.circles[1].sprite.shader == self.circles[1].basicShader)
                         self.circles[1].sprite.scale = (self.circles[1].snapRad + 4.6f) / 8f;
                 }

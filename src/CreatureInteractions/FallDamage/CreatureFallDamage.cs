@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.OptionInterface;
 using Watcher;
 
 namespace VoidTemplate.CreatureInteractions.FallDamage
@@ -21,7 +22,7 @@ namespace VoidTemplate.CreatureInteractions.FallDamage
         private static void Creature_TerrainImpact(On.Creature.orig_TerrainImpact orig, Creature self, int chunk, IntVector2 direction, float speed, bool firstContact)
         {
             orig(self, chunk, direction, speed, firstContact);
-            if (firstContact)
+            if (firstContact && OptionAccessors.FallDamage)
             {
                 float softSpeed = 3;
                 float mediumSpeed = 16;

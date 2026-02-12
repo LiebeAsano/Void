@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
-using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -25,8 +24,8 @@ public static class ExplosiveResist
             {
                 Karma = 10;
             }
-            float StunResist = 1f - 0.035f * Karma;
-            float DamageResist = 1f - 0.035f * Karma;
+            float StunResist = 1f - 0.06f * (Karma + 1);
+            float DamageResist = 1f - 0.06f * (Karma + 1);
             stunBonus *= StunResist;
             damage *= DamageResist;
         }

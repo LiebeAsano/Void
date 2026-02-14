@@ -158,8 +158,7 @@ namespace VoidTemplate.RainCycleChanges
         private static void RainMeter_ctor(On.HUD.RainMeter.orig_ctor orig, RainMeter self, HUD.HUD hud, FContainer fContainer)
         {
             orig(self, hud, fContainer);
-            World world = (hud.owner as Player).abstractCreature.world;
-            if (world.rainCycle.GetRainCycleExt().PostCycleStarted)
+            if (hud.owner is Player { abstractCreature.world: var world } && world.rainCycle.GetRainCycleExt().PostCycleStarted)
             {
                 self.GetAfterCycleMode().Value = true;
                 self.lastPos = self.pos;

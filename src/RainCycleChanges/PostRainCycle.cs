@@ -66,7 +66,7 @@ namespace VoidTemplate.RainCycleChanges
 
         public class RainCycleExt
         {
-            public const int postAfterCyceleTicks = 14400; // 30 minutes is 72000 ticks
+            public const int postAfterCyceleTicks = 72000; // 30 minutes is 72000 ticks
 
             public RainCycle owner;
 
@@ -120,7 +120,11 @@ namespace VoidTemplate.RainCycleChanges
             public RainCycleExt(RainCycle owner)
             {
                 this.owner = owner;
-                postCycleLength = postAfterCyceleTicks;// - owner.cycleLength;
+                postCycleLength = postAfterCyceleTicks - owner.cycleLength;
+                if (postCycleLength <= 0)
+                {
+                    postCycleLength = 14400;
+                }
                 subtractFoodInterval = (postCycleLength - 9600) / owner.world.game.session.characterStats.foodToHibernate;
             }
 

@@ -16,6 +16,8 @@ public static class CreatureTemplateType
 
     public static CreatureTemplate.Type LWIceLizard = new("LWIceLizard", true);
 
+    public static CreatureTemplate.Type LWRainLizard = new("LWRainLizard", true);
+
     public static CreatureTemplate.Type DartspiderP = new("DartspiderP", true);
 
     public static CreatureTemplate.Type DartspiderH = new("DartspiderH", true);

@@ -71,7 +71,8 @@ class _Plugin : BaseUnityPlugin
 		new LWMimicstarfishCritob(),
 		new OutspectorCritob(),
 		new OutspectorBCritob(),
-		new LWIceLizardCritob(),
+		new LWIceLizardCritob(CreatureTemplateType.LWIceLizard),
+		new LWIceLizardCritob(CreatureTemplateType.LWRainLizard),
         new DartspiderHCritob(),
         new DartspiderPCritob(),
 		new MiniEnergyCellFisob()

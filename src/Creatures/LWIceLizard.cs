@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.CreatureInteractions;
 
 namespace VoidTemplate.Creatures
 {
@@ -12,6 +13,14 @@ namespace VoidTemplate.Creatures
         public LizardBreedParams.SpeedMultiplier[] origSpeed;
 
         public LizardBreedParams.SpeedMultiplier[] greenLizardSpeed;
+
+        public bool IsRainLizard
+        {
+            get
+            {
+                return abstractCreature.GetPostCycleFlag().Value;
+            }
+        }
 
         public LWIceLizardGraphics IceGraphics
         {

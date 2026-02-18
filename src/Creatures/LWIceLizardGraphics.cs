@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using LizardCosmetics;
+using VoidTemplate.Misc;
 
 namespace VoidTemplate.Creatures
 {
@@ -17,10 +18,21 @@ namespace VoidTemplate.Creatures
 
         public bool isVisible = true;
 
+        public LWIceLizard IceLizard { get => lizard as LWIceLizard; }
+
         public LWIceLizardGraphics(LWIceLizard ow) : base(ow)
         {
             Random.State state = Random.state;
             Random.InitState(ow.abstractCreature.ID.RandomSeed);
+            if (IceLizard.IsRainLizard)
+            {
+                System.Array.Resize(ref limbs, limbs.Length + 2);
+                System.Array.Resize(ref bodyParts, bodyParts.Length + 2);
+                int index1 = limbs.Length - 2;
+                bodyParts[bodyParts.Length - 2] = limbs[index1] = new LizardLimb(this, lizard.bodyChunks[1], index1, 2.5f, 0.7f, 0.99f, lizard.lizardParams.limbSpeed, lizard.lizardParams.limbQuickness, null);
+                int index2 = limbs.Length - 1;
+                bodyParts[bodyParts.Length - 1] = limbs[index2] = new LizardLimb(this, lizard.bodyChunks[1], index2, 2.5f, 0.7f, 0.99f, lizard.lizardParams.limbSpeed, lizard.lizardParams.limbQuickness, limbs[index1]);
+            }
             int num = startOfExtraSprites + extraSprites;
             if (cosmetics.Any(x => x is not LongShoulderScales) && Random.value < 0.9f)
             {

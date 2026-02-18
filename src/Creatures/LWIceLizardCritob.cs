@@ -7,6 +7,7 @@ using Fisobs.Core;
 using Fisobs.Creatures;
 using Fisobs.Sandbox;
 using UnityEngine;
+using VoidTemplate.CreatureInteractions;
 using Watcher;
 using static MonoMod.InlineRT.MonoModRule;
 
@@ -14,9 +15,9 @@ namespace VoidTemplate.Creatures
 {
     public class LWIceLizardCritob : Critob
     {
-        public LWIceLizardCritob() : base(CreatureTemplateType.LWIceLizard)
+        public LWIceLizardCritob(CreatureTemplate.Type type) : base(type)
         {
-            Icon = new SimpleIcon("Kill_Standard_Lizard", new(0.7f, 0.7f, 0.7f));
+            Icon = new IceLizardIcon();
             RegisterUnlock(KillScore.Configurable(25), SandboxUnlockID.IceLizard);
             LWIceLizardHooks.Hook();
         }
@@ -38,7 +39,7 @@ namespace VoidTemplate.Creatures
             creatureTemplate.name = CreatureName;
             LizardBreedParams lizardBreedParams = creatureTemplate.breedParameters as LizardBreedParams;
             lizardBreedParams.template = Type;
-            lizardBreedParams.standardColor = Color.white;
+            lizardBreedParams.standardColor = Type == CreatureTemplateType.LWRainLizard ? Color.blue : Color.white;
             if (lizardBreedParams.tongue == true)
             {
                 lizardBreedParams.tongue = false;
@@ -70,7 +71,12 @@ namespace VoidTemplate.Creatures
 
         public override CreatureState CreateState(AbstractCreature acrit)
         {
-            return new LizardState(acrit);
+            var state = new LizardState(acrit);
+            if (Type == CreatureTemplateType.LWRainLizard)
+            {
+                System.Array.Resize(ref state.limbHealth, state.limbHealth.Length + 2);
+            }
+            return state;
         }
 
         public override CreatureTemplate.Type ArenaFallback()
@@ -80,6 +86,38 @@ namespace VoidTemplate.Creatures
                 return CreatureTemplate.Type.GreenLizard;
             }
             return CreatureTemplate.Type.PinkLizard;
+        }
+
+        /*public override void Init(AbstractCreature acrit, World world, WorldCoordinate pos, EntityID id)
+        {
+            if (Type == CreatureTemplateType.LWRainLizard) acrit.GetPostCycleFlag().Value = true;
+        }*/
+
+        public class IceLizardIcon : Icon
+        {
+
+            public override int Data(AbstractPhysicalObject apo)
+            {
+                if ((apo as AbstractCreature).creatureTemplate.type == CreatureTemplateType.LWRainLizard)
+                {
+                    return 1;
+                }
+                return 0;
+            }
+
+            public override Color SpriteColor(int data)
+            {
+                if (data == 1)
+                {
+                    return Color.blue;
+                }
+                return new(0.7f, 0.7f, 0.7f);
+            }
+
+            public override string SpriteName(int data)
+            {
+                return "Kill_Standard_Lizard";
+            }
         }
     }
 }

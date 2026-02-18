@@ -12,12 +12,18 @@ namespace VoidTemplate.Creatures
 {
     internal class LWIceLizardHooks
     {
+        private static bool inited;
+
         public static void Hook()
         {
-            On.LizardGraphics.GenerateIvars += LizardGraphics_GenerateIvars;
-            On.LizardGraphics.DynamicBodyColor += LizardGraphics_DynamicBodyColor;
-            On.LizardGraphics.BodyColor += LizardGraphics_BodyColor;
-            HeadColor12Hook();
+            if (!inited)
+            {
+                On.LizardGraphics.GenerateIvars += LizardGraphics_GenerateIvars;
+                On.LizardGraphics.DynamicBodyColor += LizardGraphics_DynamicBodyColor;
+                On.LizardGraphics.BodyColor += LizardGraphics_BodyColor;
+                HeadColor12Hook();
+                inited = true;
+            }
         }
 
         private static Color LizardGraphics_BodyColor(On.LizardGraphics.orig_BodyColor orig, LizardGraphics self, float f)

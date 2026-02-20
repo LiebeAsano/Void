@@ -23,13 +23,63 @@ namespace VoidTemplate.RainCycleChanges
             On.GlobalRain.Update += GlobalRain_Update;
         }
 
+        private sealed class RainMayhemState
+        {
+            public float ox;
+            public float oy;
+            public float smoothI;
+        }
+
+        private static readonly ConditionalWeakTable<GlobalRain, RainMayhemState> _mayhemStates = new();
+
         private static void GlobalRain_Update(On.GlobalRain.orig_Update orig, GlobalRain self)
         {
             orig(self);
-            if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void && self.deathRain != null && self.deathRain.deathRainMode == GlobalRain.DeathRain.DeathRainMode.Mayhem)
+
+            if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void &&
+                self.deathRain != null &&
+                self.deathRain.deathRainMode == GlobalRain.DeathRain.DeathRainMode.Mayhem)
             {
-                self.GetRainPulseRef().Value += 0.025f;
-                self.Intensity = Mathf.Abs(Mathf.Cos(self.GetRainPulseRef().Value));
+                var st = _mayhemStates.GetValue(self, _ =>
+                {
+                    return new RainMayhemState
+                    {
+                        ox = UnityEngine.Random.value * 1000f,
+                        oy = UnityEngine.Random.value * 1000f,
+                        smoothI = 0f
+                    };
+                });
+
+                ref float t = ref self.GetRainPulseRef().Value;
+                t += 0.005f;
+
+                float fbm = 0f;
+                float amp = 1f;
+                float freq = 0.06f;
+                float norm = 0f;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    fbm += amp * Mathf.PerlinNoise(st.ox + t * freq, st.oy + t * freq * 1.17f);
+                    norm += amp;
+                    amp *= 0.5f;
+                    freq *= 2f;
+                }
+                fbm /= norm;
+
+                float gust = Mathf.PerlinNoise(st.ox + 777.7f, st.oy + t * 0.015f);
+                float gustMul = Mathf.Lerp(0.55f, 1.35f, Mathf.SmoothStep(0f, 1f, gust));
+
+                float pulse = 0.5f + 0.5f * Mathf.Sin(t * 0.9f + fbm * 6.28318f);
+
+                float target = fbm * 0.75f + pulse * 0.25f;          
+                target = Mathf.SmoothStep(0f, 1f, target);
+                target = Mathf.Pow(target, 0.85f) * gustMul;
+                target = Mathf.Clamp01(target);
+
+                st.smoothI = Mathf.Lerp(st.smoothI, target, 0.08f);
+
+                self.Intensity = st.smoothI;
             }
         }
 

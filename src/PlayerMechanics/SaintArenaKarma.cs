@@ -26,6 +26,6 @@ public static class SaintArenaKarma
 			c.EmitDelegate<Predicate<Player>>((Player p) => SaintArenaAscension && p.room.game.IsArenaSession);
 			c.Emit(OpCodes.Brtrue, label);
 		}
-		else logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(SaintArenaKarma)}.{nameof(Player_ClassMechanicsSaint)}: karma match failed. saint won't get karma abilities at arena");
+		else Logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(SaintArenaKarma)}.{nameof(Player_ClassMechanicsSaint)}: karma match failed. saint won't get karma abilities at arena");
 	}
 }

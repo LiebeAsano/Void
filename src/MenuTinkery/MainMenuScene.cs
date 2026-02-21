@@ -40,7 +40,7 @@ public static class MainMenuScene
             c.MoveAfterLabels();
             c.Emit(OpCodes.Br, cancel);
         }
-        else logerr($"{nameof(MenuTinkery)}.{nameof(MainMenuScene)}.{nameof(MainMenu_ctor)}: match error");
+        else Logerr($"{nameof(MenuTinkery)}.{nameof(MainMenuScene)}.{nameof(MainMenu_ctor)}: match error");
     }
 
     public static MenuScene.SceneID MainMenu_BackgroundScene(On.Menu.MainMenu.orig_BackgroundScene orig, MainMenu self)

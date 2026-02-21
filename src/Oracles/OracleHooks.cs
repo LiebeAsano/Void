@@ -345,7 +345,7 @@ static class OracleHooks
             var need = miscData.SSaiConversationsHad < OracleConversation.cycleLingers.Length
                 ? OracleConversation.cycleLingers[miscData.SSaiConversationsHad]
                 : -1;
-            loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
+            Loginf($"HadConv: {miscData.SSaiConversationsHad}, Cycle: {saveState.cycleNumber}, LastCycle: {saveState.GetLastMeetCycles()}, NeedCycle: {need}");
             if (VoidPearl(self.oracle.room) is not null && RotPearl(self.oracle.room) is not null)
             {
                 saveState.SetVoidPearl(true);

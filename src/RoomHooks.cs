@@ -365,7 +365,7 @@ namespace VoidTemplate
                         return orig || self.room.game.IsVoidStoryCampaign();
                     });
                 }
-                else logerr($"{nameof(VoidTemplate)}.{nameof(RoomHooks)}.{nameof(OE_GourmandEnding_Update)}: {i} match error");
+                else Logerr($"{nameof(VoidTemplate)}.{nameof(RoomHooks)}.{nameof(OE_GourmandEnding_Update)}: {i} match error");
             }
             if (c2.TryGotoNext(MoveType.Before, x => x.MatchCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToRedsGameOver))))
             {
@@ -390,7 +390,7 @@ namespace VoidTemplate
                     }
                 });
             }
-            else logerr($"{nameof(VoidTemplate)}.{nameof(RoomHooks)}.{nameof(OE_GourmandEnding_Update)}: 4 match error");
+            else Logerr($"{nameof(VoidTemplate)}.{nameof(RoomHooks)}.{nameof(OE_GourmandEnding_Update)}: 4 match error");
         }
 
         private static void World_ctor(On.World.orig_ctor orig, World self, RainWorldGame game, Region region, string name, bool singleRoomWorld)

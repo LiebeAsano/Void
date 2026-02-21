@@ -36,7 +36,7 @@ namespace VoidTemplate.MenuTinkery
                     }
                 });
             }
-            else logerr($"{nameof(MenuTinkery)}.{nameof(IntroRollIllustrstion)}.{nameof(IntroRoll_ctor)}: match error");
+            else Logerr($"{nameof(MenuTinkery)}.{nameof(IntroRollIllustrstion)}.{nameof(IntroRoll_ctor)}: match error");
         }
     }
 }

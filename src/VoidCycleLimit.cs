@@ -65,7 +65,7 @@ namespace VoidTemplate
             }
             else
             {
-                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(SlugcatPageContinue_ctor)}: first match failed");
+                Logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(SlugcatPageContinue_ctor)}: first match failed");
             }
         }
 
@@ -88,7 +88,7 @@ namespace VoidTemplate
             }
             else
             {
-                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay)}: first match failed");
+                Logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(DialogBackupSaveInfo_PopulateSaveSlotInfoDisplay)}: first match failed");
             }
         }
 
@@ -194,7 +194,7 @@ namespace VoidTemplate
             }
             else
             {
-                logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(CycleLabel_UpdateCycleText)}: first match failed");
+                Logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(VoidCycleLimit)}.{nameof(CycleLabel_UpdateCycleText)}: first match failed");
             }
         }
 

@@ -1236,7 +1236,7 @@ public static class SLOracle
                         };
                         hoveringPearl.PlaceInRoom(roomref);
                     }
-                    else logerr("attempting event HoverPearl while moon is not holding pearl");
+                    else Logerr("attempting event HoverPearl while moon is not holding pearl");
                     break;
                 }
             /*case "AsyncHover":

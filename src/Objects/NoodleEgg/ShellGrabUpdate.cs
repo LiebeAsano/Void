@@ -47,12 +47,12 @@ public static class ShellGrabUpdate
             }
             else
             {
-                logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: second match failed");
+                Logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: second match failed");
             }
         }
         else
         {
-            logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: first match failed");
+            Logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(ShellGrabUpdate)}.{nameof(Player_GrabUpdate)}: first match failed");
         }
     }
 

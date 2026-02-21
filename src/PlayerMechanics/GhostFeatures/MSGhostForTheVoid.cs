@@ -136,7 +136,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
                 }
             }
 
-            logerr("Failed to patch Room.Loaded logics for GhostSpot. The Void may receive erroneus Ghost Hunch.");
+            Logerr("Failed to patch Room.Loaded logics for GhostSpot. The Void may receive erroneus Ghost Hunch.");
         }
 
         private static bool DoNotPlayGhostHunch(Room self)
@@ -186,7 +186,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
             }
             else
             {
-                logerr("Failed to IL-hook MS Ghost campaign availability check, MS Ghost won't be available for The Void");
+                Logerr("Failed to IL-hook MS Ghost campaign availability check, MS Ghost won't be available for The Void");
             }
         }
 

@@ -55,7 +55,7 @@ public static class ReadPearls
             }
             else
             {
-                logerr($"{nameof(Oracles)}.{nameof(ReadPearls)}.{nameof(CRSHook)}: match failed");
+                Logerr($"{nameof(Oracles)}.{nameof(ReadPearls)}.{nameof(CRSHook)}: match failed");
             }
         });
     }
@@ -155,7 +155,7 @@ public static class ReadPearls
             }
             catch (Exception ex)
             {
-                logerr($"{nameof(Oracles)}.{nameof(ReadPearls)}.{nameof(Conversation_LoadEventsFromFile_int_Name_bool_int)}: TEXT ERROR {ex.Message}");
+                Logerr($"{nameof(Oracles)}.{nameof(ReadPearls)}.{nameof(Conversation_LoadEventsFromFile_int_Name_bool_int)}: TEXT ERROR {ex.Message}");
                 self.events.Add(new Conversation.TextEvent(self, 0, "LAST WISH TEXT ERROR", 100));
             }
         }

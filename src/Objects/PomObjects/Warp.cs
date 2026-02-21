@@ -18,7 +18,7 @@ public class Warp : UpdatableAndDeletable
     public static void Register()
     {
         ManagedField[] exposedFields = [
-            defaultVectorField,
+            DefaultVectorField,
             new StringField(targetRoomName, "SS_D08"),
             new FloatField(timeToFadeIn, 1f, 200f, 60f, increment: 1f, displayName: "fadein time"),
             new FloatField(timeToFadeOut, 1f, 200f, 60f, increment: 1f, displayName: "fadeout time"),

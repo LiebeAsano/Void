@@ -115,7 +115,7 @@ namespace VoidTemplate.PlayerMechanics.Karma11Features
                     return circle;
                 });
             }
-            else logerr($"{nameof(Karma11Features)}.{nameof(FoodMeterPipsChange)}.{nameof(MeterCircle_Update)}: match failed");
+            else Logerr($"{nameof(Karma11Features)}.{nameof(FoodMeterPipsChange)}.{nameof(MeterCircle_Update)}: match failed");
         }
 
         private static void MeterCircle_AddCircles(On.HUD.FoodMeter.MeterCircle.orig_AddCircles orig, FoodMeter.MeterCircle self)

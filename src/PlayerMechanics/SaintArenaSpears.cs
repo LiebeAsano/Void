@@ -32,7 +32,7 @@ public static class SaintArenaSpears
 		}
 		else
 		{
-			logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(SaintArenaSpears)}.{nameof(Player_ThrowObject)}: first match failed");
+			Logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(SaintArenaSpears)}.{nameof(Player_ThrowObject)}: first match failed");
 		}
 		if (c.TryGotoNext(MoveType.After,
 			q => q.MatchLdsfld<MoreSlugcats.MoreSlugcatsEnums.SlugcatStatsName>("Saint"),
@@ -47,7 +47,7 @@ public static class SaintArenaSpears
 		}
 		else
 		{
-			logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(SaintArenaSpears)}.{nameof(Player_ThrowObject)}: second match failed");
+			Logerr($"{nameof(VoidTemplate.PlayerMechanics)}.{nameof(SaintArenaSpears)}.{nameof(Player_ThrowObject)}: second match failed");
 		}
 	}
 }

@@ -63,12 +63,12 @@ public static class ConversationParser
 		{
 			string error = $"failed to find conversation file by path {path}";
 			result.Add(new Conversation.TextEvent(conversation, 0, $"failed to find conversation file by path {path}", 200));
-			logerr(error);
+			Logerr(error);
 		}
 	}
 	static void ErrorIntoLogsAndDialogue(Conversation conversation, List<Conversation.DialogueEvent> events, string error)
 	{
 		events.Add(new Conversation.TextEvent(conversation, 0, error, 200));
-		logerr(error);
+		Logerr(error);
 	}
 }

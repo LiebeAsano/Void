@@ -22,19 +22,19 @@ namespace VoidTemplate.RainCycleChanges
 
         public static void Hook()
         {
-            On.StoryGameSession.ctor += StoryGameSession_ctor;
+            On.Player.ctor += Player_ctor;
             On.RainCycle.Update += RainCycle_Update;
             On.GlobalRain.ResetRain += GlobalRain_ResetRain;
             On.OverWorld.WorldLoaded += OverWorld_WorldLoaded;
         }
 
-        private static bool startMalnourished;
+        private static readonly bool[] startMalnourished = new bool[32];
 
-        private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+        private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
         {
-            orig(self, saveStateNumber, game);
-            startMalnourished = game.Players[0].realizedCreature is Player player && player.Malnourished; 
-        }
+            orig(self, abstractCreature, world);
+            startMalnourished[self.playerState.playerNumber] = self.Malnourished;
+        }        
 
         private static void OverWorld_WorldLoaded(On.OverWorld.orig_WorldLoaded orig, OverWorld self, bool warpUsed)
         {
@@ -169,7 +169,7 @@ namespace VoidTemplate.RainCycleChanges
                         {
                             player.SubtractFood(1);
                         }
-                        else if (!owner.world.game.GetStorySession.saveState.GetVoidMarkV3() || startMalnourished)
+                        else if (!owner.world.game.GetStorySession.saveState.GetVoidMarkV3() || startMalnourished[player.playerState.playerNumber])
                         {
                             player.Die();
                         }

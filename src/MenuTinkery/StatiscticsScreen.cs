@@ -33,7 +33,7 @@ public class StatiscticsScreen
         }
         else
         {
-            logerr($"{nameof(MenuTinkery)}.{nameof(StatiscticsScreen)}.{nameof(StoryGameStatisticsScreen_TickerIsDone)}: match error.");
+            Logerr($"{nameof(MenuTinkery)}.{nameof(StatiscticsScreen)}.{nameof(StoryGameStatisticsScreen_TickerIsDone)}: match error.");
         }
     }
 }

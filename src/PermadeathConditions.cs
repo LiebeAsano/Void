@@ -47,7 +47,7 @@ static class PermadeathConditions
 			c.EmitDelegate<Func<RainWorldGame, bool>>(VoidSpecificGameOverCondition);
 			c.Emit(OpCodes.Brtrue, bubbleStart);
 		}
-		else logerr("IL failed to match.\n" + new StackTrace().ToString());
+		else Logerr("IL failed to match.\n" + new StackTrace().ToString());
 		if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
 		{
 			c.Emit(OpCodes.Br, bubbleEnd);
@@ -55,7 +55,7 @@ static class PermadeathConditions
 			c.EmitDelegate((RainWorldGame game) => game.GoToRedsGameOver());
 			c.MarkLabel(bubbleEnd);
 		}
-		else logerr("IL failed to match.\n" + new StackTrace().ToString());
+		else Logerr("IL failed to match.\n" + new StackTrace().ToString());
 	}
 
 	private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)

@@ -13,8 +13,8 @@ public static class Utils
 {
 	public const string ModID = "rainworldlastwish";
 	public const int TicksPerSecond = 40;
-	public static void loginf(object e) => _Plugin.logger.LogInfo(e);
-	public static void logerr(object e) => _Plugin.logger.LogError(e);
+	public static void Loginf(object e) => _Plugin.logger.LogInfo(e);
+	public static void Logerr(object e) => _Plugin.logger.LogError(e);
 	public static string TranslateStringComplex(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str).Replace("<LINE>", "\n");
 	public static string TranslateString(this string str) => RWCustom.Custom.rainWorld.inGameTranslator.Translate(str);
 
@@ -42,11 +42,11 @@ public static class Utils
 	private static string LogDOT() { return DateTime.Now.ToUniversalTime().TimeOfDay.ToString().Substring(0, 8); }
 	public static void LogExInf(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
 	{
-		loginf($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
+		Loginf($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
 	}
 	public static void LogExErr(object data, [CallerFilePath] string callerFile = "", [CallerMemberName] string callerName = "")
 	{
-		logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
+		Logerr($"{LogDOT()}|{LogTime()}|{callerFile}.{callerName}:{data}");
 	}
 
     private static bool? dressMySlugcatEnabled = null;
@@ -87,5 +87,5 @@ public static class POMUtils
         return isAboveLine;
     }
 
-    public static Pom.Pom.Vector2ArrayField defaultVectorField => new Pom.Pom.Vector2ArrayField("trigger zone", 4, true, Pom.Pom.Vector2ArrayField.Vector2ArrayRepresentationType.Polygon, Vector2.zero, Vector2.right * 20f, (Vector2.right + Vector2.up) * 20f, Vector2.up * 20f);
+    public static Pom.Pom.Vector2ArrayField DefaultVectorField => new("trigger zone", 4, true, Pom.Pom.Vector2ArrayField.Vector2ArrayRepresentationType.Polygon, Vector2.zero, Vector2.right * 20f, (Vector2.right + Vector2.up) * 20f, Vector2.up * 20f);
 }

@@ -58,7 +58,7 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
             }
 			else
 			{
-				logerr("Failed to match for ghost encounter karma update. Void will fail to receive karma cap of 10 from MS Ghost and extra cycles from other ghosts.");
+				Logerr("Failed to match for ghost encounter karma update. Void will fail to receive karma cap of 10 from MS Ghost and extra cycles from other ghosts.");
 			}
 		}
 

@@ -9,7 +9,7 @@ public class TriggeredSpasm : UpdatableAndDeletable
     public static void Register()
     {
         RegisterFullyManagedObjectType( [
-        defaultVectorField,
+        DefaultVectorField,
         new FloatField(length, 1f, 20f, 10f, displayName: "Duration"),
         new FloatField(severity, 0f, 1f, 0.5f, 0.05f, displayName: "Strength"),
         new IntegerField(conversationsHad, 0, 20, 0, ManagedFieldWithPanel.ControlType.slider, "SS Conversations had")

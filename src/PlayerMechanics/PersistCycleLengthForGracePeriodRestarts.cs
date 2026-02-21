@@ -24,7 +24,7 @@ namespace VoidTemplate.PlayerMechanics
 				{
 					if (slugBaseSaveData.TryGet(PERSISTED_CYCLE_LENGTH_SLUGBASE_KEY, out int cycleLength))
 					{
-						loginf($"Grace period restart cycle length of {cycleLength} restored");
+						Loginf($"Grace period restart cycle length of {cycleLength} restored");
 
 						slugBaseSaveData.Remove(PERSISTED_CYCLE_LENGTH_SLUGBASE_KEY);
 						self.cycleLength = cycleLength;
@@ -36,14 +36,14 @@ namespace VoidTemplate.PlayerMechanics
 
 		private static void RainWorldGame_ExitGame(On.RainWorldGame.orig_ExitGame orig, RainWorldGame self, bool asDeath, bool asQuit)
 		{
-			loginf($"Called Exit Game with asDeath: {asDeath}, asQuit: {asQuit}, clock: {self.clock}");
+			Loginf($"Called Exit Game with asDeath: {asDeath}, asQuit: {asQuit}, clock: {self.clock}");
 
 			if (self.clock <= 1200 && (self.StoryCharacter == VoidEnums.SlugcatID.Void || self.StoryCharacter == VoidEnums.SlugcatID.Viy))
 			{
 				SlugBaseSaveData slugBaseSaveData = self.manager.rainWorld.progression?.currentSaveState?.deathPersistentSaveData?.GetSlugBaseData();
 				if (slugBaseSaveData != null)
 				{
-					loginf($"Grace period restart cycle length of {self.world.rainCycle.cycleLength} saved");
+					Loginf($"Grace period restart cycle length of {self.world.rainCycle.cycleLength} saved");
 
 					slugBaseSaveData.Set(PERSISTED_CYCLE_LENGTH_SLUGBASE_KEY, self.world.rainCycle.cycleLength);
 				}

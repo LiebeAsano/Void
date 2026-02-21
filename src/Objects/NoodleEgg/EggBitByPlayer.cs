@@ -39,12 +39,12 @@ namespace VoidTemplate.Objects.NoodleEgg
                 }
                 else
                 {
-                    logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(_NoodleEggMeta)}.{nameof(SlugcatHand_Update)}: second match failed");
+                    Logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(_NoodleEggMeta)}.{nameof(SlugcatHand_Update)}: second match failed");
                 }
             }
             else
             {
-                logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(_NoodleEggMeta)}.{nameof(SlugcatHand_Update)}: first match failed");
+                Logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(_NoodleEggMeta)}.{nameof(SlugcatHand_Update)}: first match failed");
             }
         }
 
@@ -78,7 +78,7 @@ namespace VoidTemplate.Objects.NoodleEgg
             }
             else
             {
-                logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(_NoodleEggMeta)}.{nameof(Player_BiteEdibleObject)}: first match failed");
+                Logerr($"{nameof(VoidTemplate.Objects.NoodleEgg)}.{nameof(_NoodleEggMeta)}.{nameof(Player_BiteEdibleObject)}: first match failed");
             }
         }
     }

@@ -17,7 +17,7 @@ using UnityEngine;
 
 public static class DeadlessRain
 {
-    private sealed class RainState
+    public sealed class RainState
     {
         public float ox;
         public float oy;
@@ -25,7 +25,7 @@ public static class DeadlessRain
         public float t;
     }
 
-    private static readonly ConditionalWeakTable<GlobalRain, RainState> _states = new();
+    public static readonly ConditionalWeakTable<GlobalRain, RainState> _states = new();
 
     private static RainState GetState(GlobalRain rain) => _states.GetValue(rain, _ =>
         new RainState

@@ -41,15 +41,19 @@ namespace VoidTemplate.RainCycleChanges
         private static void GlobalRain_ResetRain(On.GlobalRain.orig_ResetRain orig, GlobalRain self)
         {
             orig(self);
+
             var postCycle = self.game.world.rainCycle.GetRainCycleExt();
             postCycle.subtractedFood = 0;
             postCycle.stunned = 0;
             postCycle.myTimer = 0;
             postCycle.metersReplaced = false;
-            self.GetRainPulseRef().Value = 0;
+
+            if (DeadlessRain._states.TryGetValue(self, out var st)) st.t = 0f;
+
             for (int i = 0; i < self.game.cameras.Length; i++)
             {
-                if (self.game.cameras[i].hud is HUD.HUD { rainMeter: not null } hud && hud.rainMeter.GetAfterCycleMode().Value)
+                if (self.game.cameras[i].hud is HUD.HUD { rainMeter: not null } hud &&
+                    hud.rainMeter.GetAfterCycleMode().Value)
                 {
                     hud.rainMeter.slatedForDeletion = true;
                     hud.AddPart(new RainMeter(hud, hud.fContainers[1]));

@@ -9,7 +9,7 @@ Clouds: 1
 Grime: 0
 BkgDroneVolume: 0
 BkgDroneNoThreatVolume: 1
-Palette: 24
+Palette: 25
 EffectColorA: 0
 EffectColorB: 12
 Effects: ZeroG-1-20-20, CorruptionSpores-0.2608696-17-80, BrokenZeroG-0-278-21, ZeroGSpecks-0.2934783-279-79, 

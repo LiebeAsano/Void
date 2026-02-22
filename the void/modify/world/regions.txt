@@ -1,3 +1,4 @@
 [ADD]LR
 [ADD]IW
 [ADD]LWNM
+[ADD]LWSS

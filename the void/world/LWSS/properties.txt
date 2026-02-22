@@ -5,8 +5,6 @@ overseersMin: 0
 overseersMax: 0
 Subregion: No Significant Harassment
 Subregion: No Significant Harassment (Memory Conflux)
-Subregion: No Significant Harassment (Communication Node)
-Subregion: No Significant Harassment (Treatment Plant)
-Subregion: No Significant Harassment (Power Node)
+Subregion: No Significant Harassment (Modulation Node)
 playerGuideOverseerSpawnChance: 0.0
-Room Setting Templates: nsh, whitish, energy
+Room Setting Templates: nsh, light, dark

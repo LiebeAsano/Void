@@ -1,11 +1,6 @@
-﻿using Menu.Remix.MixedUI;
-using RWCustom;
-using System;
+﻿using RWCustom;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
@@ -15,54 +10,128 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public Player player;
 
         public ViyTentacle[] tentacles = new ViyTentacle[5];
-
         public ViyRotGraphics graphics;
 
         public Vector2 moveDirection;
 
         public int notFollowingPathToCurrentGoalCounter;
-
         public float unconditionalSupport;
-
         public bool moving;
 
         public bool rotMode = false;
-
         public int rotModeTransformTime;
 
-        public Room room
-        {
-            get
-            {
-                return player.room;
-            }
-        }
+        public bool allowUp;
 
-        public Vector2 VecInput
-        {
-            get
-            {
-                return new Vector2(player.input[0].x, player.input[0].y);
-            }
-        }
+        private readonly Dictionary<IntVector2, int> _claimedTiles = [];
+        private readonly IntVector2?[] _tentacleClaim = new IntVector2?[5];
+
+        public Room Room => player.room;
+        public Vector2 VecInput => new(player.input[0].x, player.input[0].y);
 
         public ViyRotModule(Player player)
         {
             this.player = player;
+
             for (int i = 0; i < 5; i++)
             {
-                tentacles[i] = new(player, this, player.mainBodyChunk, 160, Custom.DegToVec(Mathf.Lerp(0, 360, i / 5)));
+                tentacles[i] = new ViyTentacle(
+                    player,
+                    this,
+                    player.mainBodyChunk,
+                    220f,
+                    Custom.DegToVec(Mathf.Lerp(0f, 360f, i / 5f))
+                )
+                {
+                    tentacleIndex = i
+                };
             }
-            graphics = new(this);
+
+            moveDirection = Vector2.right;
+
+            graphics = new ViyRotGraphics(this);
             NewRoom(player.room);
         }
 
         public void NewRoom(Room newRoom)
         {
+            _claimedTiles.Clear();
+            for (int i = 0; i < _tentacleClaim.Length; i++)
+                _tentacleClaim[i] = null;
+
             for (int i = 0; i < 5; i++)
             {
                 tentacles[i].NewRoom(newRoom);
+                tentacles[i].Reset(player.mainBodyChunk.pos);
             }
+        }
+
+        internal bool IsTileClaimedByOther(int requesterIndex, IntVector2 tile)
+            => _claimedTiles.TryGetValue(tile, out int owner) && owner != requesterIndex;
+
+        internal bool TryClaimTile(int requesterIndex, IntVector2 tile)
+        {
+            if (_claimedTiles.TryGetValue(tile, out int owner))
+                return owner == requesterIndex;
+
+            ReleaseTile(requesterIndex);
+
+            _claimedTiles[tile] = requesterIndex;
+            _tentacleClaim[requesterIndex] = tile;
+            return true;
+        }
+
+        internal void ReleaseTile(int requesterIndex)
+        {
+            IntVector2? cur = _tentacleClaim[requesterIndex];
+            if (cur.HasValue && _claimedTiles.TryGetValue(cur.Value, out int owner) && owner == requesterIndex)
+                _claimedTiles.Remove(cur.Value);
+
+            _tentacleClaim[requesterIndex] = null;
+        }
+
+        internal void SyncClaimFromGrabDest(int tentacleIndex, IntVector2? grabDest)
+        {
+            if (!grabDest.HasValue)
+            {
+                ReleaseTile(tentacleIndex);
+                return;
+            }
+
+            if (_tentacleClaim[tentacleIndex].HasValue && _tentacleClaim[tentacleIndex].Value == grabDest.Value)
+                return;
+
+            if (!TryClaimTile(tentacleIndex, grabDest.Value))
+                tentacles[tentacleIndex].RequestRetarget();
+        }
+
+        private void UpdateMoveDirection()
+        {
+            Vector2 inp = VecInput;
+            moving = player.input[0].x != 0 || player.input[0].y != 0;
+
+            allowUp = player.input[0].y > 0;
+
+            Vector2 target = (inp != Vector2.zero) ? inp.normalized : Vector2.zero;
+
+            if (moving)
+            {
+                moveDirection = Vector2.Lerp(moveDirection, target, 0.35f);
+            }
+            else
+            {
+                Vector2 idleTarget = new(moveDirection.x, 0f);
+                if (idleTarget.sqrMagnitude > 0.0001f) idleTarget.Normalize();
+
+                moveDirection = Vector2.Lerp(moveDirection, idleTarget, 0.25f);
+                moveDirection.y = Mathf.Lerp(moveDirection.y, 0f, 0.55f);
+            }
+
+            if (!allowUp && moveDirection.y > 0f)
+                moveDirection.y = 0f;
+
+            if (moveDirection.sqrMagnitude < 0.0001f)
+                moveDirection = Vector2.zero;
         }
 
         public void Update()
@@ -73,48 +142,57 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 if (rotMode)
                 {
                     for (int i = 0; i < 5; i++)
-                    {
                         for (int j = 0; j < tentacles[i].tChunks.Length; j++)
-                        {
-                            tentacles[i].tChunks[j].pos = Vector2.Lerp(tentacles[i].tChunks[j].pos, player.mainBodyChunk.pos, Mathf.InverseLerp(0, 80, rotModeTransformTime));
-                        }
-                    }
+                            tentacles[i].tChunks[j].pos = Vector2.Lerp(
+                                tentacles[i].tChunks[j].pos,
+                                player.mainBodyChunk.pos,
+                                Mathf.InverseLerp(0, 80, rotModeTransformTime));
                 }
             }
             else if (rotModeTransformTime > 0)
             {
                 rotModeTransformTime--;
             }
+
             if (rotModeTransformTime >= 80)
             {
                 rotModeTransformTime = 0;
                 SwitchTentacleMode();
             }
 
-            if (rotMode)
+            if (!rotMode)
+                return;
+
+            UpdateMoveDirection();
+
+            unconditionalSupport = Mathf.Max(0f, unconditionalSupport - 0.025f);
+            player.standing = false;
+
+            for (int i = 0; i < 5; i++)
+                SyncClaimFromGrabDest(i, tentacles[i].grabDest);
+
+            int legsGrabbing = 0;
+            for (int i = 0; i < 5; i++)
             {
-                unconditionalSupport = Mathf.Max(0f, unconditionalSupport - 0.025f);
-                player.standing = false;
-                int legsGrabbing = 0;
-                for (int i = 0; i < 5; i++)
-                {
-                    tentacles[i].Update();
-                    if (tentacles[i].atGrabDest)
-                    {
-                        legsGrabbing++;
-                    }
-                }
-                if (player.Consious)
-                {
-                    Act(legsGrabbing);
-                    player.bodyMode = BodyModeIndexExtension.Rot;
-                }
+                tentacles[i].Update();
+                if (tentacles[i].atGrabDest)
+                    legsGrabbing++;
+
+                SyncClaimFromGrabDest(i, tentacles[i].grabDest);
+            }
+
+            if (player.Consious)
+            {
+                Act(legsGrabbing);
+                player.bodyMode = BodyModeIndexExtension.Rot;
             }
         }
 
         public void SwitchTentacleMode()
         {
             rotMode = !rotMode;
+            rotModeTransformTime = 0;
+
             if (rotMode)
             {
                 graphics.Reset();
@@ -123,41 +201,43 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
             else
             {
+                _claimedTiles.Clear();
+                for (int i = 0; i < _tentacleClaim.Length; i++)
+                    _tentacleClaim[i] = null;
+
                 player.bodyMode = Player.BodyModeIndex.Default;
             }
-            room.PlaySound(SoundID.Daddy_And_Bro_Tentacle_Grab_Creature, player.mainBodyChunk.pos, player.abstractCreature);
+
+            Room.PlaySound(SoundID.Daddy_And_Bro_Tentacle_Grab_Creature, player.mainBodyChunk.pos, player.abstractCreature);
         }
 
         public void Act(int legsGrabbing)
         {
             float num3 = 1.1f;
-            Vector2 endPos = player.mainBodyChunk.pos + VecInput * 40;
+
+            Vector2 rawInp = VecInput;
+
+            Vector2 dir = (moveDirection == Vector2.zero) ? rawInp : moveDirection;
+            if (!allowUp && dir.y > 0f) dir.y = 0f;
+            if (dir != Vector2.zero) dir.Normalize();
+
+            Vector2 endPos = player.mainBodyChunk.pos + dir * 40f;
 
             if (!moving)
             {
                 unconditionalSupport = 1f;
-                if (legsGrabbing > tentacles.Length / 2)
-                {
-                    num3 = 1f;
-                }
-                else
-                {
-                    num3 = 0.5f + Mathf.Lerp(0f, 0.5f, legsGrabbing / (tentacles.Length / 2));
-                }
+                if (legsGrabbing > tentacles.Length / 2) num3 = 1f;
+                else num3 = 0.5f + Mathf.Lerp(0f, 0.5f, legsGrabbing / (tentacles.Length / 2f));
             }
             else if (legsGrabbing < tentacles.Length / 2)
             {
-                num3 *= Mathf.Lerp(0.6f, 1f, legsGrabbing / (tentacles.Length / 2));
+                num3 *= Mathf.Lerp(0.6f, 1f, legsGrabbing / (tentacles.Length / 2f));
             }
 
             if (notFollowingPathToCurrentGoalCounter < 200 && Custom.Dist(endPos, player.mainBodyChunk.pos) > 20f)
-            {
                 notFollowingPathToCurrentGoalCounter++;
-            }
             else if (notFollowingPathToCurrentGoalCounter > 0)
-            {
                 notFollowingPathToCurrentGoalCounter--;
-            }
 
             if (notFollowingPathToCurrentGoalCounter > 100)
             {
@@ -165,74 +245,99 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 while (num4 < player.bodyChunks.Length && legsGrabbing == 0)
                 {
                     if (player.bodyChunks[num4].ContactPoint.x != 0 || player.bodyChunks[num4].ContactPoint.y != 0)
-                    {
                         legsGrabbing = 1;
-                    }
                     num4++;
                 }
             }
 
             if (legsGrabbing > tentacles.Length / 2 && moving)
             {
-                float num6 = float.MinValue;
-                int num7 = -1;
-                for (int num8 = 0; num8 < tentacles.Length; num8++)
+                float bestRelease = float.MinValue;
+                int idx = -1;
+                for (int i = 0; i < tentacles.Length; i++)
                 {
-                    if (tentacles[num8].atGrabDest && tentacles[num8].ReleaseScore() > num6)
+                    if (tentacles[i].atGrabDest && tentacles[i].ReleaseScore() > bestRelease)
                     {
-                        num6 = tentacles[num8].ReleaseScore();
-                        num7 = num8;
+                        bestRelease = tentacles[i].ReleaseScore();
+                        idx = i;
                     }
                 }
-                if (num7 > -1)
+                if (idx > -1)
                 {
                     List<IntVector2> list = null;
-                    tentacles[num7].UpdateClimbGrabPos(ref list);
+                    tentacles[idx].UpdateClimbGrabPos(ref list);
+                    SyncClaimFromGrabDest(idx, tentacles[idx].grabDest);
                 }
             }
 
-            float num9 = 0f;
-            float num10 = 0f;
-            for (int num11 = 0; num11 < tentacles.Length; num11++)
+            float grip = 0f;
+            for (int i = 0; i < tentacles.Length; i++)
             {
-                float num12 = Mathf.Pow(tentacles[num11].chunksGripping, 0.5f);
-                if (tentacles[num11].atGrabDest && tentacles[num11].grabDest != null)
-                {
-                    num10 += Mathf.Pow(Mathf.InverseLerp(-0.1f, 0.85f, Vector2.Dot(((moveDirection.y < 0) ? player.mainBodyChunk.pos - tentacles[num11].floatGrabDest.Value : tentacles[num11].floatGrabDest.Value - player.mainBodyChunk.pos).normalized, moveDirection)), 0.8f) / tentacles.Length;
-                    num12 = Mathf.Lerp(num12, 1f, 0.75f);
-                }
-                num9 += num12 / tentacles.Length;
+                float g = Mathf.Pow(tentacles[i].chunksGripping, 0.5f);
+
+                if (tentacles[i].atGrabDest && tentacles[i].grabDest != null)
+                    g = Mathf.Lerp(g, 1f, 0.75f);
+
+                grip += g / tentacles.Length;
             }
-            num10 = Mathf.Pow(num10 * num9, 0.8f);
-            num9 = Mathf.Pow(num9, 0.3f);
-            num9 = Mathf.Max(num9, unconditionalSupport);
-            num10 = Mathf.Max(num10, unconditionalSupport);
 
-            player.mainBodyChunk.vel *= Mathf.Lerp(1f, 0.95f, num9);
-            player.mainBodyChunk.vel.y += (player.gravity - player.buoyancy * player.mainBodyChunk.submersion) * num9 * num3 * 2;
+            float dirSupport = Mathf.Pow(grip, 0.8f);
+            grip = Mathf.Pow(grip, 0.3f);
+            grip = Mathf.Max(grip, unconditionalSupport);
+            dirSupport = Mathf.Max(dirSupport, unconditionalSupport);
 
-            moving = player.input[0].x != 0 || player.input[0].y != 0;
+            player.mainBodyChunk.vel *= Mathf.Lerp(1f, 0.95f, grip);
+            player.mainBodyChunk.vel.y += (player.gravity - player.buoyancy * player.mainBodyChunk.submersion) * grip * num3 * 2f;
+
             if (moving)
             {
-                if (Custom.ManhattanDistance(player.abstractCreature.pos, Custom.MakeWorldCoordinate(new((int)endPos.x / 20, (int)endPos.y / 20), player.abstractCreature.Room.index)) < 3)
-                {
-                    player.mainBodyChunk.vel += Vector2.ClampMagnitude(room.MiddleOfTile((int)endPos.x / 20, (int)endPos.y / 20) - player.mainBodyChunk.pos, 30) / 30 * 0.25f * num10;
-                }
-                player.GoThroughFloors = room.GetWorldCoordinate(endPos).y < room.GetWorldCoordinate(player.mainBodyChunk.pos).y;
-                player.mainBodyChunk.vel += Custom.DirVec(player.mainBodyChunk.pos, room.MiddleOfTile(endPos)) * 0.25f * num10;
+                Vector2 v2 = Custom.DirVec(player.mainBodyChunk.pos, Room.MiddleOfTile(endPos)) * 0.25f * dirSupport;
+
+                if (!allowUp) v2.y = Mathf.Min(0f, v2.y);
+                else v2.y *= 0.60f;
+
+                player.mainBodyChunk.vel += v2;
+
+                player.GoThroughFloors = Room.GetWorldCoordinate(endPos).y < Room.GetWorldCoordinate(player.mainBodyChunk.pos).y;
             }
-            
-            moveDirection = VecInput;
+
+            if (!allowUp)
+            {
+                float lift = 0f;
+                int c = 0;
+                for (int i = 0; i < tentacles.Length; i++)
+                {
+                    if (tentacles[i].atGrabDest && tentacles[i].floatGrabDest != null)
+                    {
+                        float dy = tentacles[i].floatGrabDest.Value.y - player.mainBodyChunk.pos.y;
+                        if (dy > 0f)
+                        {
+                            lift += dy;
+                            c++;
+                        }
+                    }
+                }
+
+                if (c > 0)
+                {
+                    lift /= c;
+                    float anti = Mathf.InverseLerp(10f, 140f, lift);
+                    player.mainBodyChunk.vel.y -= anti * 2.2f;
+                }
+
+                const float maxUpVelNoUp = 1.25f;
+                for (int i = 0; i < player.bodyChunks.Length; i++)
+                    if (player.bodyChunks[i].vel.y > maxUpVelNoUp)
+                        player.bodyChunks[i].vel.y = maxUpVelNoUp;
+            }
         }
     }
 
     public static class RotCWT
     {
-        internal static ConditionalWeakTable<Player, ViyRotModule> rotModule = new();
+        public static readonly ConditionalWeakTable<Player, ViyRotModule> rotModule = new();
 
         public static bool TryGetRot(this Player player, out ViyRotModule rotControl)
-        {
-            return rotModule.TryGetValue(player, out rotControl);
-        }
+            => rotModule.TryGetValue(player, out rotControl);
     }
 }

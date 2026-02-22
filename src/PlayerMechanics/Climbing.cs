@@ -443,7 +443,7 @@ public static class Climbing
 		float climbSpeed = 1f + 0.05f * player.KarmaCap;
 		if (player.KarmaCap == 10 || player.IsViy())
 		{
-			if (Karma11Update.VoidKarma11)
+			if (Karma11Update.VoidKarma11 || player.IsViy())
 				climbSpeed = 1.5f;
 			else
 				climbSpeed = 1f;
@@ -578,7 +578,7 @@ public static class Climbing
 				float bonus = 1f + (0.025f * player.KarmaCap);
 
 				if (player.KarmaCap == 10 || player.IsViy())
-					if (Karma11Update.VoidKarma11)
+					if (Karma11Update.VoidKarma11 || player.IsViy())
 						bonus = 1.25f;
 					else
 						bonus = 1f;

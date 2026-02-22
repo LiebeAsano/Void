@@ -39,7 +39,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                     player,
                     this,
                     player.mainBodyChunk,
-                    160f,
+                    220f,
                     Custom.DegToVec(Mathf.Lerp(0f, 360f, i / 5f))
                 )
                 {

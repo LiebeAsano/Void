@@ -9,19 +9,19 @@ using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 {
-    public class ViyTentacleGraphics : RopeGraphic
+    public class ViyTentacleGraphics(ViyTentacle tentacle, int firstSprite) : RopeGraphic((int)(tentacle.idealLength / 10f))
     {
-        public int spriteIndex;
+        public int spriteIndex = firstSprite;
 
-        public int sprites;
+        public int sprites = 1;
 
-        public ViyTentacle tentacle;
+        public ViyTentacle tentacle = tentacle;
 
-        public Player player
+        public Player Player
         {
             get
             {
-                return tentacle.player;
+                return tentacle.Player;
             }
         }
 
@@ -31,13 +31,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 return new(0, 0, 0.005f);
             }
-        }
-
-        public ViyTentacleGraphics(ViyTentacle tentacle, int firstSprite) : base((int)(tentacle.idealLength / 10f))
-        {
-            this.tentacle = tentacle;
-            this.spriteIndex = firstSprite;
-            sprites = 1;
         }
 
         public override void InitiateSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)

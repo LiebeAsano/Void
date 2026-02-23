@@ -32,9 +32,11 @@ public static class DeadlessRain
         {
             ox = UnityEngine.Random.value * 1000f,
             oy = UnityEngine.Random.value * 1000f,
-            smoothI = 0f,
+            smoothI = 1f,
             t = 0f
         });
+
+    public static bool TryGetState(this GlobalRain rain, out RainState state) => _states.TryGetValue(rain, out state);
 
     public static void Hook()
     {

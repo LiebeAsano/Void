@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using UnityEngine;
 using SlugBase.Features;
+using MonoMod.RuntimeDetour;
 
 namespace VoidTemplate.RainCycleChanges
 {
@@ -26,6 +27,20 @@ namespace VoidTemplate.RainCycleChanges
             On.RainCycle.Update += RainCycle_Update;
             On.GlobalRain.ResetRain += GlobalRain_ResetRain;
             On.OverWorld.WorldLoaded += OverWorld_WorldLoaded;
+            On.GlobalRain.Update += GlobalRain_Update;
+        }
+
+        private static void GlobalRain_Update(On.GlobalRain.orig_Update orig, GlobalRain self)
+        {
+            orig(self);
+            if (self.game.world.rainCycle.GetRainCycleExt().PostCycleStarted)
+            {
+                if (self.TryGetState(out var st) && st.smoothI < 0.5 && self.flood >= 0)
+                {
+                    self.flood -= 2 * self.floodSpeed;
+                }
+                self.flood = Mathf.Lerp(self.flood, 0, Mathf.InverseLerp(0.85f, 1, self.game.world.rainCycle.GetRainCycleExt().Progress));
+            }
         }
 
         private static readonly bool[] startMalnourished = new bool[32];
@@ -50,14 +65,13 @@ namespace VoidTemplate.RainCycleChanges
         private static void GlobalRain_ResetRain(On.GlobalRain.orig_ResetRain orig, GlobalRain self)
         {
             orig(self);
-
             var postCycle = self.game.world.rainCycle.GetRainCycleExt();
             postCycle.subtractedFood = 0;
             postCycle.stunned = 0;
             postCycle.myTimer = 0;
             postCycle.metersReplaced = false;
 
-            if (DeadlessRain._states.TryGetValue(self, out var st)) st.t = 0f;
+            if (self.TryGetState(out var st)) st.t = 0f;
 
             for (int i = 0; i < self.game.cameras.Length; i++)
             {
@@ -114,6 +128,8 @@ namespace VoidTemplate.RainCycleChanges
             }
 
             public float AmountLeft { get => (float)(postCycleLength - myTimer) / postCycleLength; }
+
+            public float Progress { get => Mathf.InverseLerp(0, postCycleLength, myTimer); }
 
             public bool TimeToLockShelters
             {

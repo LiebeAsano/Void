@@ -27,6 +27,16 @@ namespace VoidTemplate.CreatureInteractions
             On.RainTracker.Update += RainTracker_Update;
             On.AbstractCreature.InDenUpdate += AbstractCreature_InDenUpdate;
             IL.AbstractCreature.IsEnteringDen += AbstractCreature_IsEnteringDen;
+            On.Creature.Update += Creature_Update;
+        }
+
+        private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
+        {
+            if (self.abstractCreature.GetPostCycleFlag().Value)
+            {
+                self.rainDeath = 0;
+            }
+            orig(self, eu);
         }
 
         private static void AbstractCreature_IsEnteringDen(ILContext il)

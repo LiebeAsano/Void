@@ -136,7 +136,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void Update()
         {
-            if (player.Consious && player.input[0].spec && player.input[0].y < 0)
+            if (player.Consious && player.input[0].spec && player.input[0].y == 0 && player.input[0].x == 0)
             {
                 rotModeTransformTime++;
                 if (rotMode)
@@ -151,7 +151,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
             else if (rotModeTransformTime > 0)
             {
-                rotModeTransformTime--;
+                rotModeTransformTime = 0;
             }
 
             if (rotModeTransformTime >= 80)

@@ -9,7 +9,7 @@ public static class ViyTail
 {
 	public static void Hook()
 	{
-		On.PlayerGraphics.ctor += PlayerGraphics_ctor;
+		//On.PlayerGraphics.ctor += PlayerGraphics_ctor;
 	}
 
 	const int amountOfTailSegments = 6;
@@ -34,6 +34,7 @@ public static class ViyTail
 
 			self.tail = new TailSegment[amountOfTailSegments];
 			var tail = self.tail;
+
 			for(int i = 0; i < tail.Length; i++)
 			{
 				//percentage of going through tail
@@ -58,7 +59,7 @@ public static class ViyTail
 				bodypartslist.Add(tail[i]);
 			}
 
-			self.bodyParts = bodypartslist.ToArray();
+			self.bodyParts = [.. bodypartslist];
         }
 	}
 }

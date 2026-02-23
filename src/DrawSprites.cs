@@ -166,7 +166,7 @@ public static class DrawSprites
         BodyChunk playerBodyChunk0 = player.bodyChunks[0];
         BodyChunk playerBodyChunk1 = player.bodyChunks[1];
         #region drawTail
-        //make tail cling when climbing
+
         if (player.AreVoidViy())
         {
             timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
@@ -315,13 +315,35 @@ public static class DrawSprites
             if (sLeaser.sprites[2] is TriangleMesh viyTail
             && viyTail.shader != FShader.defaultShader)
             {
-                viyTail.shader = FShader.defaultShader;
+                viyTail.shader = FShader.defaultShader;  
             }
             if (sLeaser.sprites[2] is TriangleMesh viyTail2)
             {
+
+                if (viyTail2.element.name != "Void-Tail")
+                    viyTail2.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Void-Tail"), viyTail2.triangles.Length);
+
+                for (var i = viyTail2.vertices.Length - 1; i >= 0; i--)
+                {
+                    var perc = i / 2 / (float)(viyTail2.vertices.Length / 2);
+
+                    Vector2 uv;
+                    if (i % 2 == 0)
+                        uv = new Vector2(perc, 0f);
+                    else if (i < viyTail2.vertices.Length - 1)
+                        uv = new Vector2(perc, 1f);
+                    else
+                        uv = new Vector2(1f, 0f);
+
+                    uv.x = Mathf.Lerp(viyTail2.element.uvBottomLeft.x, viyTail2.element.uvTopRight.x, uv.x);
+                    uv.y = Mathf.Lerp(viyTail2.element.uvBottomLeft.y, viyTail2.element.uvTopRight.y, uv.y);
+
+                    viyTail2.UVvertices[i] = uv;
+                }
                 viyTail2.color = Utils.ViyColors[player.playerState.playerNumber];
-            }
+            } 
         }
+
         if (!player.IsVoid() || player.abstractCreature.GetPlayerState().InDream) return;
 
         string currentMarkSpriteName = sLeaser.sprites[11].element.name;

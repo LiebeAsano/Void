@@ -11,7 +11,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
     {
         public static void Hook()
         {
-            On.Player.ctor += Player_ctor;
+            //On.Player.ctor += Player_ctor;
         }
 
         private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)

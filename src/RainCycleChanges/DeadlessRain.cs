@@ -101,6 +101,7 @@ public static class DeadlessRain
 
         if (loaded && !self.isTemplate &&
             timelinePoint == VoidEnums.SlugcatTimeline.VoidTimeline &&
+            self.DangerType != RoomRain.DangerType.None &&
             self.DangerType != DLCSharedEnums.RoomRainDangerType.Blizzard &&
             self.DangerType != WatcherEnums.WatcherDangerType.Sandstorm)
         {
@@ -118,8 +119,11 @@ public static class DeadlessRain
                 rumble = 0.06f;
             }
 
-            self.RainIntensity = intensity;
-            self.RumbleIntensity = rumble;
+            if (self.RainIntensity > intensity)
+                self.RainIntensity = intensity;
+
+            if (self.RumbleIntensity > rumble)
+                self.RumbleIntensity = rumble;
         }
 
         return loaded;

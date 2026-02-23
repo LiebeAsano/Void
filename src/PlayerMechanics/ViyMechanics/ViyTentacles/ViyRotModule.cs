@@ -16,6 +16,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public int notFollowingPathToCurrentGoalCounter;
         public float unconditionalSupport;
+        public float maxUpVelNoUp;
         public bool moving;
 
         public bool rotMode = false;
@@ -322,10 +323,32 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 {
                     lift /= c;
                     float anti = Mathf.InverseLerp(10f, 140f, lift);
-                    player.mainBodyChunk.vel.y -= anti * 2.2f;
+                    player.mainBodyChunk.vel.y += anti * 2.5f;
                 }
 
-                const float maxUpVelNoUp = 1.25f;
+                var input = player.input[0];
+                bool idleInput = input.x == 0 && input.y == 0;
+                bool holdingTile = false;
+
+                for (int i = 0; i < tentacles.Length; i++)
+                {
+                    if (tentacles[i].atGrabDest && tentacles[i].grabDest != null)
+                    {
+                        holdingTile = true;
+                        break;
+                    }
+                }
+
+                if (idleInput && holdingTile)
+                {
+                    float dy = player.mainBodyChunk.pos.y - player.mainBodyChunk.lastPos.y;
+
+                    if (dy > 0f)
+                        maxUpVelNoUp -= (dy > 0.03f) ? 0.03f : 0.01f;
+                    else if (dy < 0f)
+                        maxUpVelNoUp += (dy < -0.03f) ? 0.03f : 0.01f;
+                }
+
                 for (int i = 0; i < player.bodyChunks.Length; i++)
                     if (player.bodyChunks[i].vel.y > maxUpVelNoUp)
                         player.bodyChunks[i].vel.y = maxUpVelNoUp;

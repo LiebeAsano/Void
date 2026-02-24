@@ -23,6 +23,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public int rotModeTransformTime;
 
         public bool allowUp;
+        public bool allowDown;
 
         private readonly Dictionary<IntVector2, int> _claimedTiles = [];
         private readonly IntVector2?[] _tentacleClaim = new IntVector2?[5];
@@ -106,12 +107,55 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 tentacles[tentacleIndex].RequestRetarget();
         }
 
+        private void TryDropFromCeiling()
+        {
+            if (!moving || VecInput.y >= 0) return;
+
+            int anchored = 0;
+            int anchoredAbove = 0;
+            int failedSearch = 0;
+
+            for (int i = 0; i < tentacles.Length; i++)
+            {
+                var t = tentacles[i];
+
+                if (t.atGrabDest && t.grabDest != null && t.floatGrabDest != null)
+                {
+                    anchored++;
+                    if (t.floatGrabDest.Value.y > player.mainBodyChunk.pos.y + 5f)
+                        anchoredAbove++;
+                }
+
+                if (t.foundNoGrabPos > 20)
+                    failedSearch++;
+            }
+
+            if (anchored > 0
+                && anchoredAbove >= Mathf.CeilToInt(anchored * 0.8f)
+                && failedSearch >= 3)
+            {
+                for (int i = 0; i < tentacles.Length; i++)
+                {
+                    var t = tentacles[i];
+                    if (t.atGrabDest && t.floatGrabDest != null
+                        && t.floatGrabDest.Value.y > player.mainBodyChunk.pos.y + 5f)
+                    {
+                        t.ForceReleaseGrabTile();
+                        SyncClaimFromGrabDest(i, null);
+                    }
+                }
+
+                unconditionalSupport = 0f;
+            }
+        }
+
         private void UpdateMoveDirection()
         {
             Vector2 inp = VecInput;
             moving = player.input[0].x != 0 || player.input[0].y != 0;
 
             allowUp = player.input[0].y > 0;
+            allowDown = player.input[0].y < 0;
 
             Vector2 target = (inp != Vector2.zero) ? inp.normalized : Vector2.zero;
 
@@ -147,7 +191,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                             tentacles[i].tChunks[j].pos = Vector2.Lerp(
                                 tentacles[i].tChunks[j].pos,
                                 player.mainBodyChunk.pos,
-                                Mathf.InverseLerp(0, 80, rotModeTransformTime));
+                                Mathf.InverseLerp(0, 40, rotModeTransformTime));
                 }
             }
             else if (rotModeTransformTime > 0)
@@ -155,7 +199,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 rotModeTransformTime = 0;
             }
 
-            if (rotModeTransformTime >= 80)
+            if (rotModeTransformTime >= 40)
             {
                 rotModeTransformTime = 0;
                 SwitchTentacleMode();
@@ -221,6 +265,8 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             Vector2 dir = (moveDirection == Vector2.zero) ? rawInp : moveDirection;
             if (!allowUp && dir.y > 0f) dir.y = 0f;
             if (dir != Vector2.zero) dir.Normalize();
+
+            TryDropFromCeiling();
 
             Vector2 endPos = player.mainBodyChunk.pos + dir * 40f;
 
@@ -304,28 +350,30 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
             if (!allowUp)
             {
-                float lift = 0f;
-                int c = 0;
-                for (int i = 0; i < tentacles.Length; i++)
+                if (!allowDown)
                 {
-                    if (tentacles[i].atGrabDest && tentacles[i].floatGrabDest != null)
+                    float lift = 0f;
+                    int c = 0;
+                    for (int i = 0; i < tentacles.Length; i++)
                     {
-                        float dy = tentacles[i].floatGrabDest.Value.y - player.mainBodyChunk.pos.y;
-                        if (dy > 0f)
+                        if (tentacles[i].atGrabDest && tentacles[i].floatGrabDest != null)
                         {
-                            lift += dy;
-                            c++;
+                            float dy = tentacles[i].floatGrabDest.Value.y - player.mainBodyChunk.pos.y;
+                            if (dy > 0f)
+                            {
+                                lift += dy;
+                                c++;
+                            }
                         }
                     }
-                }
 
-                if (c > 0)
-                {
-                    lift /= c;
-                    float anti = Mathf.InverseLerp(10f, 140f, lift);
-                    player.mainBodyChunk.vel.y += anti * 2.5f;
+                    if (c > 0)
+                    {
+                        lift /= c;
+                        float anti = Mathf.InverseLerp(10f, 140f, lift);
+                        player.mainBodyChunk.vel.y += anti * 10;
+                    }
                 }
-
                 var input = player.input[0];
                 bool idleInput = input.x == 0 && input.y == 0;
                 bool holdingTile = false;

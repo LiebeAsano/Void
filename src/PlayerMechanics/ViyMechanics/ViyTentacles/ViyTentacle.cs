@@ -291,7 +291,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             float score = 100f / dist;
 
             if (IsBeamTile(tile))
-                score *= 3.0f;
+                score *= 1.0f;
 
             if (grabDest != null && tile == grabDest.Value)
                 score *= 1.35f;
@@ -310,6 +310,18 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
 
             return score;
+        }
+
+        public void ForceReleaseGrabTile()
+        {
+            if (grabDest == null && floatGrabDest == null)
+                return;
+
+            floatGrabDest = null;
+            atGrabDest = false;
+
+            backtrackFrom = -1;
+            lastBackTrack = false;
         }
 
         public void ConsiderGrabPos(Vector2 testPos, Vector2 idealGrabPos)

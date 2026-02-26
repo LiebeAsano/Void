@@ -1,5 +1,9 @@
 Template: NONE
 DangerType: None
+Clouds: 0
+BkgDroneVolume: 0
+RandomItemSpearChance: 0
 Palette: 23
-Effects: SunBlock-1-589.9999-501, SuperStructureProjector-1-591.9999-564, SSSwarmers-0.05434782-589.9999-440, SSMusic-0.1086956-593.9999-628, ZeroG-1-589.9999-386, ZeroGSpecks-0.5-586.9999-332, 
-PlacedObjects: LightFixture><1268.784><205.962><RedLight~17.32051~-10~3, LightSource><1174.482><601.7597><0.5050725~Environment~198.4968~67.98441~50~86.60254~0~0~Fade~0.1880095~0, SuperStructureFuses><230.9498><350.5094><205~22, ProjectedStars><651.5702><389.4125><2~101, DeepProcessing><568.0992><315.5764><-1~147~151.0001~154~175~1~-256~-140~0.3586957~0.6956522~0.5, EnergySwirl><651.9426><389.304><Environment~0~100~50~86.60254~0.3369569, PWLightrod><559.55><301.2496><-311.6795~148~0.2608696~45~245.2174~0.2065217~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1~1~0.3913043~1, 
+EffectColorB: 1
+Effects: ZeroG-1-20-20, SunBlock-1-280-21, ZeroGSpecks-0.2608696-801-22, SuperStructureProjector-0.5-537-24, SSMusic-0.05958889-1068-23, SSSwarmers-0.1086956-20-78, 
+PlacedObjects: SuperStructureFuses><228.566><351.8285><207~21, SuperStructureFuses><431.132><591.3497><83~23, SuperStructureFuses><289.8059><550.5485><19~85, SuperStructureFuses><1831.575><429.4355><142~43, SuperStructureFuses><1591.7><210.2571><119.9999~40, ProjectedStars><648.3652><393.4135><0~92, CoralStem><600.4376><320.94><16~31, LightFixture><2062.558><646.6913><RedLight~17.32051~-10~59, LightFixture><1871.587><212.3198><RedLight~17.32051~-10~19, LightFixture><74.39261><262.3313><RedLight~17.32051~-10~85, LightFixture><1056.665><209.613><RedLight~17.32051~-10~62, LightSource><377.5682><507.4167><0.6630442~EffectColor2~421~159~50~86.60254~0~0~Fade~0.5~0, LightSource><9.964691><724.6969><1~Environment~0~100~50~86.60254~0~0~None~0~0, LightSource><409.5784><75.43402><1~Environment~20~167~50~86.60254~0~0~None~0~0, LightSource><1532.568><129.4382><0.3043472~Environment~-35~119~50~86.60254~0~0~None~0~0, LightSource><1729.447><632.8073><1~Environment~0~100~50~86.60254~0~0~None~0~0, PWLightrod><651.4751><388.8016><-173.6795~-279~0.2826087~45~88.26085~0.2065224~1~0.358695~1, 

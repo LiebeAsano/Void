@@ -20,6 +20,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public bool moving;
 
         public bool rotMode = false;
+        public bool switchModeReset;
         public int rotModeTransformTime;
 
         public bool allowUp;
@@ -181,7 +182,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void Update()
         {
-            if (player.Consious && player.input[0].spec && player.input[0].y == 0 && player.input[0].x == 0)
+            if (player.Consious && !switchModeReset && player.input[0].spec && player.input[0].y == 0 && player.input[0].x == 0)
             {
                 rotModeTransformTime++;
                 if (rotMode)
@@ -203,6 +204,11 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 rotModeTransformTime = 0;
                 SwitchTentacleMode();
+            }
+
+            if (!player.input[0].spec)
+            {
+                switchModeReset = false;
             }
 
             if (!rotMode)
@@ -236,6 +242,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public void SwitchTentacleMode()
         {
             rotMode = !rotMode;
+            switchModeReset = true;
             rotModeTransformTime = 0;
 
             if (rotMode)
@@ -252,7 +259,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
                 player.bodyMode = Player.BodyModeIndex.Default;
             }
-
+            
             Room.PlaySound(SoundID.Daddy_And_Bro_Tentacle_Grab_Creature, player.mainBodyChunk.pos, player.abstractCreature);
         }
 
@@ -335,6 +342,29 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
             player.mainBodyChunk.vel *= Mathf.Lerp(1f, 0.95f, grip);
             player.mainBodyChunk.vel.y += (player.gravity - player.buoyancy * player.mainBodyChunk.submersion) * grip * num3 * 2f;
+
+            if (player.bodyChunks[1].ContactPoint.y == -1 && player.mainBodyChunk.ContactPoint.y != -1 && VecInput.y < 0)
+            {
+                int rotateDir = player.flipDirection;
+                if (player.bodyChunks[0].pos.x > player.bodyChunks[1].pos.x)
+                {
+                    rotateDir = 1;
+                }
+                else if (player.bodyChunks[0].pos.x < player.bodyChunks[1].pos.x)
+                {
+                    rotateDir = -1;
+                }
+                player.bodyChunks[1].vel.x -= rotateDir / 3f;
+                player.bodyChunks[0].vel += new Vector2(rotateDir * 0.4f, -1.5f);
+            }
+            if (player.input[0].x != 0 && player.IsTileSolid(0, player.input[0].x, 0) && !player.IsTileSolid(1, player.input[0].x, 0))
+            {
+                player.bodyChunks[1].vel.x += player.input[0].x;
+            }
+            else if (player.input[0].x != 0 && player.bodyChunks[0].pos.y > player.bodyChunks[1].pos.y && !player.IsTileSolid(0, player.input[0].x, 0) && player.IsTileSolid(1, player.input[0].x, 0))
+            {
+                player.bodyChunks[0].vel.x += player.input[0].x;
+            }
 
             if (moving)
             {

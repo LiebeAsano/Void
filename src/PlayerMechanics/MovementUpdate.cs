@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
+using VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -21,16 +22,34 @@ public static class MovementUpdate
         On.Player.MovementUpdate += Player_MovementUpdate;
     }
 
-    public static int[] superWallJump = new int[32]; 
+    public static int[] superWallJump = new int[32];
     private static void Player_MovementUpdate(On.Player.orig_MovementUpdate orig, Player self, bool eu)
     {
         if (self.AreVoidViy())
         {
+            self.DirectIntoHoles();
             if (self.bodyMode == BodyModeIndexExtension.Rot)
             {
+                if (self.shortcutDelay < 1 && (!ModManager.MSC || (self.onBack == null && (self.grabbedBy.Count == 0 || !(self.grabbedBy[0].grabber is Player)))))
+                {
+                    for (int num18 = 0; num18 < 2; num18++)
+                    {
+                        if (self.enteringShortCut == null && self.room.GetTile(self.bodyChunks[num18].pos).Terrain == Room.Tile.TerrainType.ShortcutEntrance && self.room.shortcutData(self.room.GetTilePosition(self.bodyChunks[num18].pos)).shortCutType != ShortcutData.Type.DeadEnd && self.room.shortcutData(self.room.GetTilePosition(self.bodyChunks[num18].pos)).shortCutType != ShortcutData.Type.CreatureHole && self.room.shortcutData(self.room.GetTilePosition(self.bodyChunks[num18].pos)).shortCutType != ShortcutData.Type.NPCTransportation)
+                        {
+                            IntVector2 intVector = self.room.ShorcutEntranceHoleDirection(self.room.GetTilePosition(self.bodyChunks[num18].pos));
+                            if (self.input[0].x == -intVector.x && self.input[0].y == -intVector.y)
+                            {
+                                self.enteringShortCut = new IntVector2?(self.room.GetTilePosition(self.bodyChunks[num18].pos));
+                                if (ModManager.MSC && self.tongue != null && self.tongue.Attached)
+                                {
+                                    self.tongue.Release();
+                                }
+                            }
+                        }
+                    }
+                }
                 return;
             }
-            self.DirectIntoHoles();
             if (self.rocketJumpFromBellySlide && self.animation != Player.AnimationIndex.RocketJump)
             {
                 self.rocketJumpFromBellySlide = false;
@@ -671,7 +690,7 @@ public static class MovementUpdate
             else if (self.canWallJump != 0 && self.wantToJump > 0 && self.input[0].x != -Math.Sign(self.canWallJump))
             {
                 self.WallJump(Math.Sign(self.canWallJump));
-                self.wantToJump = 0; 
+                self.wantToJump = 0;
             }
             else if (self.jumpChunkCounter > 0 && self.wantToJump > 0)
             {

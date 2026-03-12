@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MoreSlugcats;
-using UnityEngine;
+﻿using UnityEngine;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -18,12 +12,14 @@ public static class ElectricSpearResist
 
     private static void ElectricSpear_Electrocute(On.MoreSlugcats.ElectricSpear.orig_Electrocute orig, MoreSlugcats.ElectricSpear self, PhysicalObject otherObject)
     {
-        if (otherObject is Player player && (player.IsVoid() || player.IsViy()))
+        if (otherObject is not Player player || !player.AreVoidViy())
         {
-            self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, self.firstChunk.pos);
-            self.room.AddObject(new Explosion.ExplosionLight(self.firstChunk.pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
+            orig(self, otherObject);
             return;
         }
-        orig(self, otherObject);
+
+        var pos = self.firstChunk.pos;
+        self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, pos);
+        self.room.AddObject(new Explosion.ExplosionLight(pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
     }
 }

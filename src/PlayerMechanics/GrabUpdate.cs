@@ -219,193 +219,197 @@ public static class GrabUpdate
             {
                 num11 = 1;
             }
-            if (ModManager.MSC && SlugcatStats.SlugcatCanMaul(self.SlugCatClass))
+        if (ModManager.MSC && SlugcatStats.SlugcatCanMaul(self.SlugCatClass))
+        {
+            if (self.input[0].pckp && self.grasps[num11] != null && (self.grasps[num11].grabbed is Pomegranate || self.grasps[num11].grabbed is Cicada cicada && cicada.Consious || self.grasps[num11].grabbed is Creature && self.CanMaulCreature(self.grasps[num11].grabbed as Creature) || self.maulTimer > 0))
             {
-                if (self.input[0].pckp && self.grasps[num11] != null && (self.grasps[num11].grabbed is Pomegranate || self.grasps[num11].grabbed is Cicada cicada && cicada.Consious || self.grasps[num11].grabbed is Creature && self.CanMaulCreature(self.grasps[num11].grabbed as Creature) || self.maulTimer > 0))
-                {
-                    self.maulTimer++;
-                    if (self.grasps[num11].grabbed is Creature cr 
-                    && cr != self 
-                    && cr is not Cicada 
-                    && cr is not JetFish
-                    && (cr is not Watcher.BigMoth 
-                    || cr is Watcher.BigMoth bigMoth
-                    && !bigMoth.Small))
-                        cr.Stun(60);
-                    self.MaulingUpdate(num11);
-                    if (self.spearOnBack != null)
-                    {
-                        self.spearOnBack.increment = false;
-                        self.spearOnBack.interactionLocked = true;
-                    }
-                    if (self.grasps[num11] != null && self.maulTimer % 40 == 0)
-                    {
-                        self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
-                        self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
-                        Custom.Log(
-                        [
-                        "Mauled target"
-                        ]);
-                        Pomegranate pomegranate = self.grasps[num11].grabbed as Pomegranate;
-                        if (self.grasps[num11].grabbed is Creature && !(self.grasps[num11].grabbed as Creature).dead)
-                        {
-                            for (int num12 = UnityEngine.Random.Range(8, 14); num12 >= 0; num12--)
-                            {
-                                self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[num11].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[num11].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(self.grasps[num11].grabbed.firstChunk.pos, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
-                            }
-                            Creature creature = self.grasps[num11].grabbed as Creature;
-                            BodyChunk hitChunk = self.grasps[num11].grabbedChunk;
-                            float damage = 2f;
-                            creature.SetKillTag(self.abstractCreature);
-                            if (creature is Lizard && self.IsViy())
-                            {
-                                if (hitChunk != null && hitChunk.index == 0)
-                                {
-                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 20, 50f);
-                                }
-                                else
-                                {
-                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 4, 50f);
-                                }
-                            }
-                            if (creature is Lizard && self.IsVoid())
-                            {
-                                if (hitChunk != null && hitChunk.index == 0)
-                                {
-                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 5, 50f);
-                                }
-                                else
-                                {
-                                    creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 1.5f, 33f);
-                                }
-                            }
-                            if (creature is not Lizard && self.IsVoid())
-                            {
-                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage, 50f);
-                            }
-                            creature.stun = 5;
-                            if (creature.abstractCreature.creatureTemplate.type == DLCSharedEnums.CreatureTemplateType.Inspector)
-                            {
-                                creature.Die();
-                            }
-                        }
-                        if (pomegranate is not null)
-                        {
-                            pomegranate.Smash();
-                            if (pomegranate.abstractPhysicalObject is Pomegranate.AbstractPomegranate abstractPom)
-                            {
-                                abstractPom.smashed = true;
-                                abstractPom.disconnected = true;
-                                abstractPom.Consume();
-                            }
-                        }
-                        self.maulTimer = 0;
-                        self.wantToPickUp = 0;
-                        if (self.grasps[num11] != null)
-                        {
-                            self.TossObject(num11, eu);
-                            self.ReleaseGrasp(num11);
-                        }
-                        self.standing = true;
-                    }
-                    return;
-                }
-                if (self.grasps[num11] != null && self.grasps[num11].grabbed is Creature && (self.grasps[num11].grabbed as Creature).Consious && !self.IsCreatureLegalToHoldWithoutStun(self.grasps[num11].grabbed as Creature))
-                {
-                    Custom.Log(
-                    [
-                    "Lost hold of live mauling target"
-                    ]);
-                    self.maulTimer = 0;
-                    self.wantToPickUp = 0;
-                    self.ReleaseGrasp(num11);
-                    return;
-                }
-            }
-            if (self.input[0].pckp && self.grasps[num11] != null && self.grasps[num11].grabbed is Creature && self.CanEatMeat(self.grasps[num11].grabbed as Creature) && (self.grasps[num11].grabbed as Creature).Template.meatPoints > 0)
-            {
-                self.eatMeat++;
-                self.EatMeatUpdate(num11);
-                if (!ModManager.MMF)
-                {
-                }
+                self.maulTimer++;
+                if (self.grasps[num11].grabbed is Creature cr
+                && cr != self
+                && cr is not Cicada
+                && cr is not JetFish
+                && (cr is not Watcher.BigMoth
+                || cr is Watcher.BigMoth bigMoth
+                && !bigMoth.Small))
+                    cr.Stun(60);
+                self.MaulingUpdate(num11);
                 if (self.spearOnBack != null)
                 {
                     self.spearOnBack.increment = false;
                     self.spearOnBack.interactionLocked = true;
                 }
-                if (self.grasps[num11] != null && self.eatMeat % 80 == 0 && ((self.grasps[num11].grabbed as Creature).State.meatLeft <= 0 || self.FoodInStomach >= self.MaxFoodInStomach))
+                if (self.grasps[num11] != null && self.maulTimer % 40 == 0)
                 {
-                    self.eatMeat = 0;
+                    self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
+                    self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
+                    Custom.Log(
+                    [
+                    "Mauled target"
+                    ]);
+                    Pomegranate pomegranate = self.grasps[num11].grabbed as Pomegranate;
+                    if (self.grasps[num11].grabbed is Creature && !(self.grasps[num11].grabbed as Creature).dead)
+                    {
+                        for (int num12 = UnityEngine.Random.Range(8, 14); num12 >= 0; num12--)
+                        {
+                            self.room.AddObject(new WaterDrip(Vector2.Lerp(self.grasps[num11].grabbedChunk.pos, self.mainBodyChunk.pos, UnityEngine.Random.value) + self.grasps[num11].grabbedChunk.rad * Custom.RNV() * UnityEngine.Random.value, Custom.RNV() * 6f * UnityEngine.Random.value + Custom.DirVec(self.grasps[num11].grabbed.firstChunk.pos, (self.mainBodyChunk.pos + (self.graphicsModule as PlayerGraphics).head.pos) / 2f) * 7f * UnityEngine.Random.value + Custom.DegToVec(Mathf.Lerp(-90f, 90f, UnityEngine.Random.value)) * UnityEngine.Random.value * self.EffectiveRoomGravity * 7f, false));
+                        }
+                        Creature creature = self.grasps[num11].grabbed as Creature;
+                        BodyChunk hitChunk = self.grasps[num11].grabbedChunk;
+                        float damage = 2f;
+                        creature.SetKillTag(self.abstractCreature);
+                        if (creature is Lizard && self.IsViy())
+                        {
+                            if (hitChunk != null && hitChunk.index == 0)
+                            {
+                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 7.5f, 75f);
+                            }
+                            else
+                            {
+                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 3, 50f);
+                            }
+                        }
+                        if (creature is Lizard && self.IsVoid())
+                        {
+                            if (hitChunk != null && hitChunk.index == 0)
+                            {
+                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 5, 50f);
+                            }
+                            else
+                            {
+                                creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 2f, 33f);
+                            }
+                        }
+                        if (creature is not Lizard && self.IsVoid())
+                        {
+                            creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage, 50f);
+                        }
+                        if (creature is not Lizard && self.IsViy())
+                        {
+                            creature.Violence(self.bodyChunks[0], new Vector2?(new Vector2(0f, 0f)), self.grasps[num11].grabbedChunk, null, Creature.DamageType.Bite, damage * 1.5f, 50f);
+                        }
+                        creature.stun = 5;
+                        if (creature.abstractCreature.creatureTemplate.type == DLCSharedEnums.CreatureTemplateType.Inspector)
+                        {
+                            creature.Die();
+                        }
+                    }
+                    if (pomegranate is not null)
+                    {
+                        pomegranate.Smash();
+                        if (pomegranate.abstractPhysicalObject is Pomegranate.AbstractPomegranate abstractPom)
+                        {
+                            abstractPom.smashed = true;
+                            abstractPom.disconnected = true;
+                            abstractPom.Consume();
+                        }
+                    }
+                    self.maulTimer = 0;
                     self.wantToPickUp = 0;
-                    self.TossObject(num11, eu);
-                    self.ReleaseGrasp(num11);
+                    if (self.grasps[num11] != null)
+                    {
+                        self.TossObject(num11, eu);
+                        self.ReleaseGrasp(num11);
+                    }
                     self.standing = true;
                 }
                 return;
             }
-            if (!self.input[0].pckp && self.grasps[num11] != null && self.eatMeat > 60)
+            if (self.grasps[num11] != null && self.grasps[num11].grabbed is Creature && (self.grasps[num11].grabbed as Creature).Consious && !self.IsCreatureLegalToHoldWithoutStun(self.grasps[num11].grabbed as Creature))
+            {
+                Custom.Log(
+                [
+                "Lost hold of live mauling target"
+                ]);
+                self.maulTimer = 0;
+                self.wantToPickUp = 0;
+                self.ReleaseGrasp(num11);
+                return;
+            }
+        }
+        if (self.input[0].pckp && self.grasps[num11] != null && self.grasps[num11].grabbed is Creature && self.CanEatMeat(self.grasps[num11].grabbed as Creature) && (self.grasps[num11].grabbed as Creature).Template.meatPoints > 0)
+        {
+            self.eatMeat++;
+            self.EatMeatUpdate(num11);
+            if (!ModManager.MMF)
+            {
+            }
+            if (self.spearOnBack != null)
+            {
+                self.spearOnBack.increment = false;
+                self.spearOnBack.interactionLocked = true;
+            }
+            if (self.grasps[num11] != null && self.eatMeat % 80 == 0 && ((self.grasps[num11].grabbed as Creature).State.meatLeft <= 0 || self.FoodInStomach >= self.MaxFoodInStomach))
             {
                 self.eatMeat = 0;
                 self.wantToPickUp = 0;
                 self.TossObject(num11, eu);
                 self.ReleaseGrasp(num11);
                 self.standing = true;
-                return;
             }
-            self.eatMeat = Custom.IntClamp(self.eatMeat - 1, 0, 50);
-            self.maulTimer = Custom.IntClamp(self.maulTimer - 1, 0, 20);
-            if (!ModManager.MMF || self.input[0].y == 0 || self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            return;
+        }
+        if (!self.input[0].pckp && self.grasps[num11] != null && self.eatMeat > 60)
+        {
+            self.eatMeat = 0;
+            self.wantToPickUp = 0;
+            self.TossObject(num11, eu);
+            self.ReleaseGrasp(num11);
+            self.standing = true;
+            return;
+        }
+        self.eatMeat = Custom.IntClamp(self.eatMeat - 1, 0, 50);
+        self.maulTimer = Custom.IntClamp(self.maulTimer - 1, 0, 20);
+        if (!ModManager.MMF || self.input[0].y == 0 || self.input[0].y != 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
+        {
+            if (flag2 && self.eatCounter > 0)
             {
-                if (flag2 && self.eatCounter > 0)
+                if (ModManager.DLCShared)
                 {
-                    if (ModManager.DLCShared)
-                    {
-                        bool canEat = num5 > -1 && self.grasps[num5] != null && ((self.grasps[num5].grabbed is GooieDuck gd && gd.bites == 6) || (self.grasps[num5].grabbed is NeedleEgg egg && egg.GetEdible().bites == 4));
+                    bool canEat = num5 > -1 && self.grasps[num5] != null && ((self.grasps[num5].grabbed is GooieDuck gd && gd.bites == 6) || (self.grasps[num5].grabbed is NeedleEgg egg && egg.GetEdible().bites == 4));
 
-                        if (!canEat || self.timeSinceSpawned % 2 == 0)
-                        {
-                            self.eatCounter--;
-                        }
-                        if (canEat && self.FoodInStomach < self.MaxFoodInStomach)
-                        {
-                            (self.graphicsModule as PlayerGraphics).BiteStruggle(num5);
-                        }
-                    }
-                    else
+                    if (!canEat || self.timeSinceSpawned % 2 == 0)
                     {
                         self.eatCounter--;
                     }
+                    if (canEat && self.FoodInStomach < self.MaxFoodInStomach)
+                    {
+                        (self.graphicsModule as PlayerGraphics).BiteStruggle(num5);
+                    }
                 }
-                else if (!flag2 && self.eatCounter < 40)
+                else
                 {
-                    self.eatCounter++;
+                    self.eatCounter--;
                 }
             }
-            if (flag4 && self.input[0].y == 0)
+            else if (!flag2 && self.eatCounter < 40)
             {
-                self.reloadCounter++;
-                if (self.reloadCounter > 40)
-                {
-                    (self.grasps[num2].grabbed as JokeRifle).ReloadRifle(self.grasps[num].grabbed);
-                    BodyChunk mainBodyChunk = self.mainBodyChunk;
-                    mainBodyChunk.vel.y += 4f;
-                    self.room.PlaySound(SoundID.Gate_Clamp_Lock, self.mainBodyChunk, false, 0.5f, 3f + UnityEngine.Random.value);
-                    AbstractPhysicalObject abstractPhysicalObject = self.grasps[num].grabbed.abstractPhysicalObject;
-                    self.ReleaseGrasp(num);
-                    abstractPhysicalObject.realizedObject.RemoveFromRoom();
-                    abstractPhysicalObject.Room.RemoveEntity(abstractPhysicalObject);
-                    self.reloadCounter = 0;
-                }
+                self.eatCounter++;
             }
-            else
+        }
+        if (flag4 && self.input[0].y == 0)
+        {
+            self.reloadCounter++;
+            if (self.reloadCounter > 40)
             {
+                (self.grasps[num2].grabbed as JokeRifle).ReloadRifle(self.grasps[num].grabbed);
+                BodyChunk mainBodyChunk = self.mainBodyChunk;
+                mainBodyChunk.vel.y += 4f;
+                self.room.PlaySound(SoundID.Gate_Clamp_Lock, self.mainBodyChunk, false, 0.5f, 3f + UnityEngine.Random.value);
+                AbstractPhysicalObject abstractPhysicalObject = self.grasps[num].grabbed.abstractPhysicalObject;
+                self.ReleaseGrasp(num);
+                abstractPhysicalObject.realizedObject.RemoveFromRoom();
+                abstractPhysicalObject.Room.RemoveEntity(abstractPhysicalObject);
                 self.reloadCounter = 0;
             }
-            if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f/* || ExternalSaveData.ViyLungExtended && self.IsViy()*/))
-            {
-                flag3 = false;
-            }
+        }
+        else
+        {
+            self.reloadCounter = 0;
+        }
+        if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f/* || ExternalSaveData.ViyLungExtended && self.IsViy()*/))
+        {
+            flag3 = false;
+        }
         if (flag3)
         {
             if (self.craftingObject)

@@ -26,8 +26,7 @@ public static class RottenDangleResist
             }
             if (edible is DangleFruit && (edible as DangleFruit).AbstrConsumable.rotted)
             {
-                self.AddQuarterFood();
-                self.AddQuarterFood();
+                self.AddFood(1);
                 return;
             }
         }

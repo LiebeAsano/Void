@@ -43,7 +43,7 @@ namespace VoidTemplate.RainCycleChanges
                 {
                     if (self.entranceSprites[i, 0] is FSprite sprite && (sprite.element.name == "ShortcutShelter" || sprite.element.name == "ShortcutAShelter"))
                     {
-                        sprite.color = Color.red;
+                        sprite.color = Color.black;
                     }
                 }
             }

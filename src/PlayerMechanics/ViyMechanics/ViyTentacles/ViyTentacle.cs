@@ -291,7 +291,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             float score = 100f / dist;
 
             if (IsBeamTile(tile))
-                score *= 1.0f;
+                score *= 1.35f;
 
             if (grabDest != null && tile == grabDest.Value)
                 score *= 1.35f;

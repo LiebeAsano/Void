@@ -25,14 +25,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             }
         }
 
-        public Color ViyBodyColor
-        {
-            get
-            {
-                return new(0, 0, 0.005f);
-            }
-        }
-
         public override void InitiateSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
         {
             sLeaser.sprites[spriteIndex] = TriangleMesh.MakeLongMeshAtlased(segments.Length, false, true);
@@ -76,7 +68,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                     triangleMesh.MoveVertice(i * 4 + 3, vector2 + a * currentWidth - camPos);
                     vector = vector2;
                 }
-                Color body = ViyBodyColor;
+                Color body = DrawSprites.voidColor;
                 Color eyes = sLeaser.sprites[9].color;
                 int num = 0;
                 for (int i = 0; i < triangleMesh.vertices.Length; i++)

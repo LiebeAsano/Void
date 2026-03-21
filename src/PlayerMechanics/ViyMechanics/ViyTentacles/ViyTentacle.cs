@@ -37,6 +37,10 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         private bool _forceRetarget;
 
+        public BodyChunk currentSupportChunk;
+
+        public BodyChunk testBodyChunk;
+
         public Player Player => owner as Player;
 
         public ViyTentacle(Player player, ViyRotModule rotControl, BodyChunk connectedChunk, float length, Vector2 tentacleDir)
@@ -57,6 +61,12 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             secondaryGrabPos = new IntVector2((int)(connectedChunk.pos.x / Tile), (int)(connectedChunk.pos.y / Tile));
 
             debugViz = false;
+        }
+
+        public override void NewRoom(Room room)
+        {
+            base.NewRoom(room);
+            currentSupportChunk = null;
         }
 
         public void RequestRetarget()
@@ -92,7 +102,8 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         private bool IsValidGrabTile(IntVector2 t)
         {
             if (room.GetTile(t).IsSolid()) return false;
-            return IsBeamTile(t) || HasSolidNeighbor4(t);
+            var chunk = testBodyChunk ?? currentSupportChunk;
+            return IsBeamTile(t) || HasSolidNeighbor4(t) || (chunk != null && Custom.DistLess(room.MiddleOfTile(t), room.MiddleOfTile(chunk.pos), chunk.rad));
         }
 
         private Vector2 SnapToBeam(Vector2 pos)
@@ -110,7 +121,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         public override void Update()
         {
             base.Update();
-
             limp = !Player.Consious;
 
             for (int i = 0; i < tChunks.Length; i++)
@@ -164,27 +174,17 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
             Vector2 baseDir = ((Vector2)Vector3.Slerp(tentacleDir, moveDir, dirBlend)).normalized;
             idealGrabPos = FloatBase + baseDir * idealLength * 0.7f;
-
-            float explore = Mathf.InverseLerp(0f, 140f, foundNoGrabPos);
-
-            Vector2 perp = new(-baseDir.y, baseDir.x);
-            Vector2[] rayDirs =
-            [
-                baseDir,
-                (baseDir + perp * 0.35f).normalized,
-                (baseDir - perp * 0.35f).normalized
-            ];
-
-            bool foundAny = false;
-
-            for (int r = 0; r < rayDirs.Length; r++)
+            bool chunkControl = false;
+            if (!rotControl.moving && rotControl.currentSupportCreature != null)
             {
-                Vector2 rnd = Custom.RNV();
-                Vector2 dir = ((Vector2)Vector3.Slerp(rayDirs[r], rnd, explore * 0.65f)).normalized;
+                if (currentSupportChunk != null && currentSupportChunk.owner != rotControl.currentSupportCreature)
+                    currentSupportChunk = null;
+                chunkControl = true;
+                currentSupportChunk ??= rotControl.currentSupportCreature.mainBodyChunk;
+                //var climbChunk = (currentSupportChunk ?? rotControl.currentSupportCreature.mainBodyChunk);
+                Vector2 target = currentSupportChunk.pos;
 
-                float reach = idealLength * Mathf.Lerp(0.75f, 1.25f, explore);
-                Vector2 target = FloatBase + dir * reach;
-
+                bool foundNewChunk = false;
                 int count;
                 for (count = SharedPhysics.RayTracedTilesArray(FloatBase, target, _cachedRays1);
                      count >= _cachedRays1.Length;
@@ -192,34 +192,136 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 {
                     Array.Resize(ref _cachedRays1, _cachedRays1.Length + 100);
                 }
-
-                for (int j = 0; j < count - 1; j++)
+                for (int i = 0; i < count - 1; i++)
                 {
-                    IntVector2 tile = _cachedRays1[j];
-                    IntVector2 next = _cachedRays1[j + 1];
+                    var tile = _cachedRays1[i];
 
-                    if (room.GetTile(next).IsSolid())
+                    for (int k = 0; k < rotControl.currentSupportCreature.bodyChunks.Length; k++)
                     {
-                        Vector2 p = Custom.RestrictInRect(target, room.TileRect(tile).Shrink(1));
-                        ConsiderGrabPos(p, idealGrabPos);
-                        foundAny = true;
-                        break;
-                    }
+                        var chunk = rotControl.currentSupportCreature.bodyChunks[k];
+                        if (Custom.DistLess(room.MiddleOfTile(chunk.pos), room.MiddleOfTile(tile), chunk.rad))
+                        {
+                            testBodyChunk = chunk;
+                            float test = GrabPosScore(chunk.pos, idealGrabPos);
+                            float cur = GrabPosScore(preliminaryGrabDest, idealGrabPos);
 
-                    var t = room.GetTile(tile);
-                    if (t.horizontalBeam || t.verticalBeam)
-                    {
-                        Vector2 p = room.MiddleOfTile(tile);
-                        ConsiderGrabPos(p, idealGrabPos);
-                        foundAny = true;
+                            if (test > cur * 1.05f)
+                            {
+                                currentSupportChunk = chunk;
+                                preliminaryGrabDest = chunk.pos;
+                                foundNewChunk = true;
+                            }
+                        }
                     }
                 }
+                
+                if (floatGrabDest != null)
+                {
+                    if (Custom.DistLess(room.MiddleOfTile(grabDest.Value), room.MiddleOfTile(currentSupportChunk.pos), currentSupportChunk.rad))
+                        atGrabDest = true;
+                    else
+                    {
+                        atGrabDest = false;
+                        floatGrabDest = null;
+                    }
+                }
+                if (!foundNewChunk)
+                    preliminaryGrabDest = currentSupportChunk.pos;
             }
+            else
+            {
+                float explore = Mathf.InverseLerp(0f, 140f, foundNoGrabPos);
 
-            if (foundAny) foundNoGrabPos = 0;
-            else foundNoGrabPos++;
+                Vector2 perp = new(-baseDir.y, baseDir.x);
+                Vector2[] rayDirs =
+                [
+                    baseDir,
+                    (baseDir + perp * 0.35f).normalized,
+                    (baseDir - perp * 0.35f).normalized
+                ];
 
+                bool foundAny = false;
+                List<Deer> deerList = [];
+                for (int i = 0; i < room.abstractRoom.creatures.Count; i++)
+                {
+                    if (room.abstractRoom.creatures[i].realizedCreature is Deer deer)
+                    {
+                        deerList.Add(deer);
+                    }
+                }
+                for (int r = 0; r < rayDirs.Length; r++)
+                {
+                    Vector2 rnd = Custom.RNV();
+                    Vector2 dir = ((Vector2)Vector3.Slerp(rayDirs[r], rnd, explore * 0.65f)).normalized;
+
+                    float reach = idealLength * Mathf.Lerp(0.75f, 1.25f, explore);
+                    Vector2 target = FloatBase + dir * reach;
+
+                    int count;
+                    for (count = SharedPhysics.RayTracedTilesArray(FloatBase, target, _cachedRays1);
+                         count >= _cachedRays1.Length;
+                         count = SharedPhysics.RayTracedTilesArray(FloatBase, target, _cachedRays1))
+                    {
+                        Array.Resize(ref _cachedRays1, _cachedRays1.Length + 100);
+                    }
+
+
+                    for (int j = 0; j < count - 1; j++)
+                    {
+                        IntVector2 tile = _cachedRays1[j];
+                        IntVector2 next = _cachedRays1[j + 1];
+
+                        if (rotControl.moving && currentSupportChunk == null)
+                        {
+                            bool breakAll = false;
+                            for (int i = 0; i < deerList.Count; i++)
+                            {
+                                for (int k = 0; k < deerList[i].bodyChunks.Length; k++)
+                                {
+                                    var chunk = deerList[i].bodyChunks[k];
+                                    if (Custom.DistLess(room.MiddleOfTile(chunk.pos), room.MiddleOfTile(tile), chunk.rad))
+                                    {
+                                        testBodyChunk = chunk;
+                                        float test = GrabPosScore(chunk.pos, idealGrabPos);
+                                        float cur = GrabPosScore(preliminaryGrabDest, idealGrabPos);
+
+                                        if (test > cur * 1.05f)
+                                        {
+                                            rotControl.currentSupportCreature = deerList[i];
+                                            currentSupportChunk = chunk;
+                                            preliminaryGrabDest = chunk.pos;
+                                        }
+                                        foundAny = true;
+                                        breakAll = true;
+                                    }
+                                }
+                            }
+                            testBodyChunk = null;
+                            if (breakAll) break;
+                        }
+                        if (room.GetTile(next).IsSolid())
+                        {
+                            Vector2 p = Custom.RestrictInRect(target, room.TileRect(tile).Shrink(1));
+                            ConsiderGrabPos(p, idealGrabPos);
+                            foundAny = true;
+                            break;
+                        }
+
+                        var t = room.GetTile(tile);
+                        if (t.horizontalBeam || t.verticalBeam)
+                        {
+                            Vector2 p = room.MiddleOfTile(tile);
+                            ConsiderGrabPos(p, idealGrabPos);
+                            foundAny = true;
+                        }
+                    }
+                }
+
+                if (foundAny) foundNoGrabPos = 0;
+                else foundNoGrabPos++;
+            }
             bool hasSecondary = secondaryGrabBackTrackCounter < 200 && SecondaryGrabPosScore(secondaryGrabPos) > 0f;
+
 
             for (int k = 0; k < tChunks.Length; k++)
             {
@@ -227,9 +329,9 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
                 StickToTerrain(tChunks[k]);
 
-                if (grabDest != null)
+                if (floatGrabDest != null)
                 {
-                    if (!atGrabDest && Custom.DistLess(tChunks[k].pos, floatGrabDest.Value, Tile))
+                    if (!chunkControl && !atGrabDest && Custom.DistLess(tChunks[k].pos, floatGrabDest.Value, Tile))
                         atGrabDest = true;
 
                     if (tChunks[k].currentSegment <= grabPath.Count || !hasSecondary)
@@ -252,14 +354,24 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
                 }
             }
 
-            if (grabDest != null)
+            if (floatGrabDest != null)
             {
                 for (int tries = 0; tries < 3; tries++)
                     ConsiderSecondaryGrabPos(grabDest.Value + new IntVector2(UnityEngine.Random.Range(-6, 7), UnityEngine.Random.Range(-6, 7)));
             }
 
-            if (_forceRetarget || grabDest == null || !atGrabDest || rotControl.IsTileClaimedByOther(tentacleIndex, grabDest.Value))
+            if (chunkControl || _forceRetarget || floatGrabDest == null || !atGrabDest || rotControl.IsTileClaimedByOther(tentacleIndex, grabDest.Value))
                 UpdateClimbGrabPos(ref path);
+            if (!chunkControl && currentSupportChunk != null && floatGrabDest != null && !Custom.DistLess(room.MiddleOfTile(grabDest.Value), room.MiddleOfTile(currentSupportChunk.pos), currentSupportChunk.rad))
+            {
+                currentSupportChunk = null;
+            }
+            if (floatGrabDest != null && chunkControl)
+            {
+                Tip.vel *= 0;
+                Tip.pos = Vector2.Lerp(Tip.pos, floatGrabDest.Value, 0.35f);
+                connectedChunk.pos += tChunks[1].vel / 5f;
+            }
         }
 
         public float ReleaseScore()
@@ -293,7 +405,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             if (IsBeamTile(tile))
                 score *= 1.35f;
 
-            if (grabDest != null && tile == grabDest.Value)
+            if (floatGrabDest != null && tile == grabDest.Value)
                 score *= 1.35f;
 
             if (HasSolidNeighbor4(tile))
@@ -314,7 +426,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public void ForceReleaseGrabTile()
         {
-            if (grabDest == null && floatGrabDest == null)
+            if (floatGrabDest == null)
                 return;
 
             floatGrabDest = null;
@@ -335,7 +447,9 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             float cur = GrabPosScore(preliminaryGrabDest, idealGrabPos);
 
             if (test > cur * 1.05f)
+            {
                 preliminaryGrabDest = testPos;
+            }
         }
 
         public void UpdateClimbGrabPos(ref List<IntVector2> path)
@@ -343,7 +457,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             Vector2 bestPos = SnapToBeam(preliminaryGrabDest);
             float bestScore = GrabPosScore(bestPos, idealGrabPos);
 
-            if (grabDest != null && !rotControl.IsTileClaimedByOther(tentacleIndex, grabDest.Value))
+            if (floatGrabDest != null && !rotControl.IsTileClaimedByOther(tentacleIndex, grabDest.Value))
             {
                 Vector2 curPos = SnapToBeam(room.MiddleOfTile(grabDest.Value));
                 float curScore = GrabPosScore(curPos, idealGrabPos);
@@ -410,7 +524,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
         public float SecondaryGrabPosScore(IntVector2 testPos)
         {
-            if (grabDest == null) return 0f;
+            if (floatGrabDest == null) return 0f;
             if (testPos.FloatDist(BasePos) < 7f) return 0f;
 
             if (!IsValidGrabTile(testPos)) return 0f;

@@ -1,4 +1,5 @@
 ﻿using RWCustom;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -29,8 +30,11 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
         private readonly Dictionary<IntVector2, int> _claimedTiles = [];
         private readonly IntVector2?[] _tentacleClaim = new IntVector2?[5];
 
+        public Creature currentSupportCreature;
+
         public Room Room => player.room;
         public Vector2 VecInput => new(player.input[0].x, player.input[0].y);
+
 
         public ViyRotModule(Player player)
         {
@@ -53,7 +57,8 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             moveDirection = Vector2.right;
 
             graphics = new ViyRotGraphics(this);
-            NewRoom(player.room);
+            if (player.room != null)
+                NewRoom(player.room);
         }
 
         public void NewRoom(Room newRoom)
@@ -213,6 +218,23 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
             if (!rotMode)
                 return;
+            if (currentSupportCreature != null)
+            {
+                int notGrabbingSupportCreature = 0;
+                for (int i = 0; i < tentacles.Length; i++)
+                {
+                    if (tentacles[i].currentSupportChunk == null) notGrabbingSupportCreature += 1;
+                }
+                if (notGrabbingSupportCreature == tentacles.Length)
+                {
+                    for (int i = 0; i < tentacles.Length; i++)
+                    {
+                        tentacles[i].ForceReleaseGrabTile();
+                        ReleaseTile(i);
+                    }
+                    currentSupportCreature = null;
+                }
+            }
 
             UpdateMoveDirection();
 
@@ -329,7 +351,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
             {
                 float g = Mathf.Pow(tentacles[i].chunksGripping, 0.5f);
 
-                if (tentacles[i].atGrabDest && tentacles[i].grabDest != null)
+                if (tentacles[i].atGrabDest && tentacles[i].floatGrabDest != null)
                     g = Mathf.Lerp(g, 1f, 0.75f);
 
                 grip += g / tentacles.Length;
@@ -410,7 +432,7 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics.ViyTentacles
 
                 for (int i = 0; i < tentacles.Length; i++)
                 {
-                    if (tentacles[i].atGrabDest && tentacles[i].grabDest != null)
+                    if (tentacles[i].atGrabDest && tentacles[i].floatGrabDest != null)
                     {
                         holdingTile = true;
                         break;

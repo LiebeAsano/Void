@@ -13,6 +13,8 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
         {
             //ProtoViyAI.Hook();
             //ProtoViyGraphics.Hook();
+            Viy3rdBodyChunk.Hook();
+            ViyAdaptation.Hook();
             ViyBitByPlayer.Hook();
             ViyMaul.Hook();
             ViyTail.Hook();
@@ -21,7 +23,6 @@ namespace VoidTemplate.PlayerMechanics.ViyMechanics
             VoidViySwitch.Hook();
             ViyTentacles.TentaclesPlayerHooks.Hook();
             ViyTentacles.TentaclesPlayerGraphicsHooks.Hook();
-            Viy3rdBodyChunk.Hook();
         }
     }
 }

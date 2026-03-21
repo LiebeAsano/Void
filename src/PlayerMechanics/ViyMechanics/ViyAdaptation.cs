@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using VoidTemplate.PlayerMechanics.Karma11Features;
+﻿using RWCustom;
+using UnityEngine;
 using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
@@ -19,6 +19,7 @@ public static class ViyAdaptation
 
     public static bool ViyLungExtended;
     public static bool ViyPoisonImmune;
+    public static bool ViyDartMaggotImmune; 
     public static int ViyExplosiveImmune;
 
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
@@ -28,6 +29,7 @@ public static class ViyAdaptation
         {
             ViyLungExtended = ExternalSaveData.ViyLungExtended;
             ViyPoisonImmune = ExternalSaveData.ViyPoisonImmune;
+            ViyDartMaggotImmune = ExternalSaveData.ViyDartMaggotImmune;
             ViyExplosiveImmune = ExternalSaveData.ViyExplosiveImmune;
         }
     }
@@ -41,10 +43,10 @@ public static class ViyAdaptation
                 self.slugcatStats.lungsFac = 0.0f;          
             else if (self.room.game.IsViyStoryCampaign())
             {
-                int random = 1;
+                bool random = false;
                 if (self.mainBodyChunk.submersion >= 1f)       
-                    random = Random.Range(0, 20000);
-                if (random == 0)
+                    random = Random.Range(0, 20000) == 0;
+                if (random)
                 {
                     _ = new Objects.KarmaRotator(self.abstractCreature.Room.realizedRoom);
                     ViyLungExtended = true;
@@ -66,18 +68,69 @@ public static class ViyAdaptation
 
     private static void DartNaggot_Update(On.DartMaggot.orig_Update orig, DartMaggot self, bool eu)
     {
-        if (self.mode == DartMaggot.Mode.StuckInChunk && self.stuckInChunk.owner is Player player && player.IsViy())
+        if (self.mode == DartMaggot.Mode.StuckInChunk &&
+            self.stuckInChunk != null &&
+            self.stuckInChunk.owner is Player player &&
+            player.IsViy())
         {
             if (!ViyPoisonImmune && player.room.game.IsViyStoryCampaign())
             {
-                int random = Random.Range(0, 10000);
-                if (random == 0)
+                if (Random.Range(0, 1000) == 0)
                 {
                     _ = new Objects.KarmaRotator(player.abstractCreature.Room.realizedRoom);
                     ViyPoisonImmune = true;
                 }
             }
+
+            if (!ViyDartMaggotImmune && ViyPoisonImmune && player.room.game.IsViyStoryCampaign())
+            {
+                if (Random.Range(0, 1500) == 0)
+                {
+                    _ = new Objects.KarmaRotator(player.abstractCreature.Room.realizedRoom);
+                    ViyDartMaggotImmune = true;
+                }
+            }
+
+            if (ViyDartMaggotImmune)
+            {
+                BodyChunk stuckChunk = self.stuckInChunk;
+
+                Vector2 incomingDir = Custom.RotateAroundOrigo(self.stuckDir, Custom.VecToDeg(stuckChunk.Rotation));
+                if (incomingDir == Vector2.zero)
+                    incomingDir = self.needleDir;
+                if (incomingDir == Vector2.zero)
+                    incomingDir = Custom.RNV();
+
+                Vector2 bounceDir = -incomingDir.normalized;
+
+                for (int i = self.abstractPhysicalObject.stuckObjects.Count - 1; i >= 0; i--)
+                {
+                    if (self.abstractPhysicalObject.stuckObjects[i] is DartMaggot.DartMaggotStick stick &&
+                        stick.A == self.abstractPhysicalObject)
+                    {
+                        self.abstractPhysicalObject.stuckObjects[i].Deactivate();
+                    }
+                }
+
+                self.stuckInChunk = null;
+
+                float pushOut = stuckChunk.rad + self.firstChunk.rad + 2f;
+                self.firstChunk.pos = stuckChunk.pos + bounceDir * pushOut;
+                self.firstChunk.lastPos = self.firstChunk.pos;
+                self.firstChunk.lastLastPos = self.firstChunk.pos;
+
+                self.firstChunk.vel = stuckChunk.vel + bounceDir * 18f;
+
+                self.needleDir = bounceDir;
+                self.lastNeedleDir = bounceDir;
+                self.ResetBody(bounceDir);
+
+                self.ChangeMode(DartMaggot.Mode.Free);
+
+                self.room.PlaySound(SoundID.Dart_Maggot_Bounce_Off_Wall, self.firstChunk);
+            }
         }
+
         orig(self, eu);
     }
 
@@ -102,6 +155,7 @@ public static class ViyAdaptation
         {
             ExternalSaveData.ViyLungExtended = ViyLungExtended;
             ExternalSaveData.ViyPoisonImmune = ViyPoisonImmune;
+            ExternalSaveData.ViyDartMaggotImmune = ViyDartMaggotImmune;
             ExternalSaveData.ViyExplosiveImmune = ViyExplosiveImmune;
         }
         orig(self, malnourished, fromWarpPoint);

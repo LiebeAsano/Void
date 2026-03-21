@@ -362,6 +362,13 @@ public static class SaveManager
             set => SetData(ViyPoisonImmuneString, value);
         }
 
+        private const string ViyDartMaggotImmuneString = "viydartmaggotimmune";
+        public static bool ViyDartMaggotImmune
+        {
+            get => GetData(ViyDartMaggotImmuneString, false);
+            set => SetData(ViyDartMaggotImmuneString, value);
+        }
+
         private const string ViyExplosiveImmuneString = "viyexplosiveimmune";
 
         public static int ViyExplosiveImmune

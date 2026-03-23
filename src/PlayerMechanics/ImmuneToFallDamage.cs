@@ -88,48 +88,33 @@ public static class ImmuneToFallDamage
 
     private static bool CanPreparePerfectLanding(Player self)
     {
-        if (self.dead || !self.Consious || self.stun > 0)
+        if (self == null || self.dead || !self.Consious || self.room == null)
             return false;
 
-        if (self.room == null || self.bodyChunks == null || self.bodyChunks.Length == 0)
-            return false;
-
-        if (self.bodyMode == Player.BodyModeIndex.Crawl)
-            return false;
-
-        if (self.bodyMode == Player.BodyModeIndex.ClimbingOnBeam)
-            return false;
-
-        if (self.bodyMode == BodyModeIndexExtension.CeilCrawl)
-            return false;
-
-        if (self.animation == Player.AnimationIndex.HangFromBeam)
+        if (self.stun > 0 || self.grabbedBy.Count > 0)
             return false;
 
         if (self.Submersion > 0.5f)
             return false;
 
-        if (self.grabbedBy.Count > 0)
+        BodyChunk upper = self.bodyChunks[0];
+        BodyChunk lower = self.bodyChunks[1];
+
+        if (Mathf.Min(upper.vel.y, lower.vel.y) > -6f)
             return false;
 
-        return self.firstChunk.vel.y < -6f;
-    }
-
-    private static bool HitGroundSoon(Player self)
-    {
-        if (self.room == null)
+        bool upperAirborne = upper.ContactPoint.y >= 0;
+        bool lowerAirborne = lower.ContactPoint.y >= 0;
+        if (!upperAirborne && !lowerAirborne)
             return false;
 
-        Vector2 pos = self.firstChunk.pos;
+        if (self.upperBodyFramesOffGround < 2 && self.lowerBodyFramesOffGround < 2)
+            return false;
 
-        for (int i = 1; i <= 6; i++)
-        {
-            IntVector2 tile = self.room.GetTilePosition(pos + new Vector2(0f, -20f * i));
-            if (self.room.GetTile(tile).Solid)
-                return true;
-        }
+        if (self.bodyMode == Player.BodyModeIndex.ZeroG)
+            return false;
 
-        return false;
+        return true;
     }
 
     private static void ApplyLandingOutcome(Player self, float speed, bool perfectLanding)

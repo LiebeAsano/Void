@@ -29,7 +29,7 @@ namespace VoidTemplate.MenuTinkery
         {
             get
             {
-                if (SaveManager.ExternalSaveData.ViyUnlocked)
+                if (SaveManager.ExternalSaveData.VoidDead && SaveManager.ExternalSaveData.VoidKarma11)
                 {
                     return MainMenuThemeViy;
                 }

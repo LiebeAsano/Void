@@ -25,10 +25,9 @@ namespace VoidTemplate;
 [BepInDependency("slime-cubed.slugbase")]
 [BepInDependency("LeeMoriya.Blood", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("ratrat.mosquitoesplugin", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInPlugin(MOD_ID, "Void", "0.17.2")]
+[BepInPlugin(Utils.ModID, "Void", "0.17.2")]
 class _Plugin : BaseUnityPlugin
 {
-	private const string MOD_ID = "rainworldlastwish";
 
 	/// <summary>
 	/// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs

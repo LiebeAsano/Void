@@ -75,7 +75,7 @@ public static class ViyAdaptation
         {
             if (!ViyPoisonImmune && player.room.game.IsViyStoryCampaign())
             {
-                if (Random.Range(0, 1000) == 0)
+                if (Random.Range(0, 10000) == 0)
                 {
                     _ = new Objects.KarmaRotator(player.abstractCreature.Room.realizedRoom);
                     ViyPoisonImmune = true;
@@ -84,7 +84,7 @@ public static class ViyAdaptation
 
             if (!ViyDartMaggotImmune && ViyPoisonImmune && player.room.game.IsViyStoryCampaign())
             {
-                if (Random.Range(0, 1500) == 0)
+                if (Random.Range(0, 15000) == 0)
                 {
                     _ = new Objects.KarmaRotator(player.abstractCreature.Room.realizedRoom);
                     ViyDartMaggotImmune = true;

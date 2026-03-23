@@ -34,13 +34,13 @@ public static class ImmuneToFallDamage
         if (!self.AreVoidViy() || self.room == null)
             return;
 
+        if (!CanPreparePerfectLanding(self))
+            return;
+
         LandingData data = landingData.GetOrCreateValue(self);
 
         if (data.PerfectLandingBuffer > 0)
             data.PerfectLandingBuffer--;
-
-        if (!CanPreparePerfectLanding(self))
-            return;
 
         if (self.input[0].y < 0 && self.input[1].y >= 0 && data.PerfectLandingBuffer == 0)
         {

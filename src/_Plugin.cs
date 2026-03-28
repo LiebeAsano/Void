@@ -124,6 +124,8 @@ class _Plugin : BaseUnityPlugin
 			DiscordChurch._DiscordMeta.Init();
 			Creatures.VoidDaddyAndProtoViy._VoidDaddyMeta.Hook();
 			RainCycleChanges._RainCycleMeta.Init();
+			
+			Defender._Meta.Init();
 
 			RegisterPOMObjects();
 			if (DevEnabled)

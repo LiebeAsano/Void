@@ -25,6 +25,35 @@ namespace VoidTemplate
             On.ShortcutGraphics.Draw += ShortcutGraphics_Draw;
             On.ShortcutHelper.Update += ShortcutHelper_Update;
             On.Room.BlinkShortCut += Room_BlinkShortCut;
+            On.WorldLoader.CreatingWorld += WorldLoader_CreatingWorld;
+        }
+
+        private static void WorldLoader_CreatingWorld(On.WorldLoader.orig_CreatingWorld orig, WorldLoader self)
+        {
+            orig(self);
+            if (self.game.IsVoidWorld() || self.game.IsViyWorld())
+            {
+                if (!self.world.TryGetShortcutBlock(out var block))
+                {
+                    block = new();
+                    self.world.CreateShortcutBlock(block);
+                }    
+                for (int rm = 0; rm < self.world.abstractRooms.Length; rm++)
+                {
+                    var room = self.world.abstractRooms[rm];
+
+                    if (room == self.world.offScreenDen)
+                        continue;
+
+                    for (int cnct = 0; cnct < room.connections.Length; cnct++)
+                    {
+                        if (block.GetBlockedShortcut(room, cnct) == null && room.connections[cnct] > -1)
+                        {
+                            block.blockedShortcuts.Add(new(room, cnct));
+                        }
+                    }
+                }
+            }
         }
 
         private static void Room_BlinkShortCut(On.Room.orig_BlinkShortCut orig, Room self, int shortcut, int secondary, float blinkFac)
@@ -173,14 +202,20 @@ namespace VoidTemplate
             {
                 if (node <= -1) return false;
 
+                BlockedShortcut blockedShortcut = GetBlockedShortcut(room, node);
+                if (blockedShortcut != null) return blockedShortcut.blockTime > 0;
+
+                return false;
+            }
+
+            public BlockedShortcut GetBlockedShortcut(AbstractRoom room, int node)
+            {
                 for (int i = 0; i < blockedShortcuts.Count; i++)
                 {
                     if (blockedShortcuts[i].CompareRoomAndNode(room, node))
-                    {
-                        return blockedShortcuts[i].blockTime > 0;
-                    }
+                        return blockedShortcuts[i];
                 }
-                return false;
+                return null;
             }
 
             public class BlockedShortcut
@@ -205,6 +240,14 @@ namespace VoidTemplate
                     room2 = fromRoom.world.GetAbstractRoom(fromRoom.connections[toRoom2Node]);
                     node1 = toRoom2Node;
                     node2 = room2.ExitIndex(fromRoom.index);
+                }
+
+                public BlockedShortcut(AbstractRoom room1, AbstractRoom room2)
+                {
+                    this.room1 = room1;
+                    this.room2 = room2;
+                    node1 = room1.ExitIndex(room2.index);
+                    node2 = room2.ExitIndex(room1.index);
                 }
 
                 public void Block()
@@ -232,6 +275,11 @@ namespace VoidTemplate
                 public bool CompareRoomAndNode(AbstractRoom room, int node)
                 {
                     return (room1 == room && node1 == node) || (room2 == room && node2 == node);
+                }
+
+                public bool ComareRooms(AbstractRoom r1, AbstractRoom r2)
+                {
+                    return (room1 == r1 && room2 == r2) || (room2 == r1 && room1 == r2);
                 }
             }
         }

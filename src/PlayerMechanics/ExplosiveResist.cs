@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -17,17 +13,16 @@ public static class ExplosiveResist
 
     private static void Creature_Violence(On.Creature.orig_Violence orig, Creature self, BodyChunk source, Vector2? directionAndMomentum, BodyChunk hitChunk, PhysicalObject.Appendage.Pos hitAppendage, Creature.DamageType type, float damage, float stunBonus)
     {
-        if (self is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void && type == Creature.DamageType.Explosion)
+        if (self is Player player && player.IsVoid() && type == Creature.DamageType.Explosion)
         {
             int Karma = player.KarmaCap;
-            if (Karma11Update.VoidKarma11)
-            {
-                Karma = 10;
-            }
-            float StunResist = 1f - 0.06f * (Karma + 1);
-            float DamageResist = 1f - 0.06f * (Karma + 1);
-            stunBonus *= StunResist;
-            damage *= DamageResist;
+            if (Karma == 10)
+                if (Karma11Update.VoidKarma11)
+                    Karma = 10;
+                else
+                    Karma = 0;
+            stunBonus *= 1f - 0.066f * (Karma + 1);
+            damage *= 1f - 0.066f * (Karma + 1);
         }
         orig(self, source, directionAndMomentum, hitChunk, hitAppendage, type, damage, stunBonus);
     }

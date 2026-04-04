@@ -25,153 +25,154 @@ namespace VoidTemplate;
 [BepInDependency("slime-cubed.slugbase")]
 [BepInDependency("LeeMoriya.Blood", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("ratrat.mosquitoesplugin", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInPlugin(MOD_ID, "Void", "0.17.2")]
+[BepInPlugin(Utils.ModID, "Void", "0.17.2")]
 class _Plugin : BaseUnityPlugin
 {
-	private const string MOD_ID = "rainworldlastwish";
 
-	/// <summary>
-	/// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs
-	/// </summary>
-	public static ManualLogSource logger;
+    /// <summary>
+    /// this logger will automatically prepend all logs with mod name. Logs into bepinex logs rather than console logs
+    /// </summary>
+    public static ManualLogSource logger;
 
-	public static bool DevEnabled = false;
-	public void OnEnable()
-	{
-		logger = Logger;
-		On.RainWorld.OnModsInit += RainWorld_OnModsInit;
-        On.RainWorld.PostModsInit += RainWorld_PostModsInit;
-		On.RainWorld.OnModsDisabled += delegate (On.RainWorld.orig_OnModsDisabled orig, RainWorld self, ModManager.Mod[] newlyDisabledMods)
-	{
-    	orig.Invoke(self, newlyDisabledMods);
-    for (int i = 0; i < newlyDisabledMods.Length; i++)
+    public static bool DevEnabled = false;
+    public void OnEnable()
     {
-        
-            if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.Mimicstarfish))
+        logger = Logger;
+        On.RainWorld.OnModsInit += RainWorld_OnModsInit;
+        On.RainWorld.PostModsInit += RainWorld_PostModsInit;
+        On.RainWorld.OnModsDisabled += delegate (On.RainWorld.orig_OnModsDisabled orig, RainWorld self, ModManager.Mod[] newlyDisabledMods)
+        {
+            orig.Invoke(self, newlyDisabledMods);
+            for (int i = 0; i < newlyDisabledMods.Length; i++)
             {
-                MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.Mimicstarfish);
-            }
-			if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.Outspector))
-			{
-				MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.Outspector);
-			}
-			if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.OutspectorB))
-			{
-				MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.OutspectorB);
-			}
-			MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.IceLizard);
-			MultiplayerUnlocks.ItemUnlockList.Remove(SandboxUnlockID.MiniEnergyCell);
-			CreatureTemplateType.UnregisterValues();
-            SandboxUnlockID.UnregisterValues();
-    }
-	};
 
-	Content.Register(
-   [
-		new LWMimicstarfishCritob(),
-		new OutspectorCritob(),
-		new OutspectorBCritob(),
-		new LWIceLizardCritob(CreatureTemplateType.LWIceLizard),
-		new LWIceLizardCritob(CreatureTemplateType.LWRainLizard),
+                if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.Mimicstarfish))
+                {
+                    MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.Mimicstarfish);
+                }
+                if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.Outspector))
+                {
+                    MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.Outspector);
+                }
+                if (MultiplayerUnlocks.CreatureUnlockList.Contains(SandboxUnlockID.OutspectorB))
+                {
+                    MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.OutspectorB);
+                }
+                MultiplayerUnlocks.CreatureUnlockList.Remove(SandboxUnlockID.IceLizard);
+                MultiplayerUnlocks.ItemUnlockList.Remove(SandboxUnlockID.MiniEnergyCell);
+                CreatureTemplateType.UnregisterValues();
+                SandboxUnlockID.UnregisterValues();
+            }
+        };
+
+        Content.Register(
+        [
+            new LWMimicstarfishCritob(),
+        new OutspectorCritob(),
+        new OutspectorBCritob(),
+        new LWIceLizardCritob(CreatureTemplateType.LWIceLizard),
+        new LWIceLizardCritob(CreatureTemplateType.LWRainLizard),
         new DartspiderHCritob(),
         new DartspiderPCritob(),
-		new MiniEnergyCellFisob()
-   ]);
-	}
-	private static bool ModsInited;
+        new MiniEnergyCellFisob()
+        ]);
+    }
+    private static bool ModsInited;
 
     private void RainWorld_PostModsInit(On.RainWorld.orig_PostModsInit orig, RainWorld self)
     {
-		orig(self);
-		if (!ModsInited)
-		{
-			ModsCompatibilty._ModsMeta.PostModsInit();
-			ModsInited = true;
-		}
+        orig(self);
+        if (!ModsInited)
+        {
+            ModsCompatibilty._ModsMeta.PostModsInit();
+            ModsInited = true;
+        }
     }
 
     private static bool ModLoaded;
-	private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
-	{
-		orig(self);
-		if (!ModLoaded)
-		{
-			VoidEnums.RegisterEnums();
+    private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
+    {
+        orig(self);
+        if (!ModLoaded)
+        {
+            VoidEnums.RegisterEnums();
 
-			if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
-			{
-				DevEnabled = true;
-			}
-			AddQuaterFood.Hook();
-			CycleEnd.Hook();
-			DrawSprites.Hook();
-			PlayerSpawnManager.ApplyHooks();
-			PermadeathConditions.Hook();
-			Oracles._OracleMeta.Hook();
-			KarmaHooks.Hook();
-			RoomHooks.Hook();
-			MenuTinkery._MenuMeta.Startup();
-			CreatureInteractions._CreatureInteractionsMeta.Hook();
-			PersistCycleLengthForGracePeriodRestarts.Hook();
-			_GhostFeaturesMeta.Hook();
-			_Karma11FeaturesMeta.Hook();
-			_Karma11FoundationMeta.Hook();
-			_PlayerMechanicsMeta.Hook();
-			_MiscMeta.Hook();
-			_ViyMechanicsMeta.Hook();
-			VoidCycleLimit.Hook();
-			OptionInterface._OIMeta.Initialize();
-			Objects.NoodleEgg._NoodleEggMeta.Hook();
-			DiscordChurch._DiscordMeta.Init();
-			Creatures.VoidDaddyAndProtoViy._VoidDaddyMeta.Hook();
-			RainCycleChanges._RainCycleMeta.Init();
+            if (File.Exists(AssetManager.ResolveFilePath("void.dev")))
+            {
+                DevEnabled = true;
+            }
+            AddQuaterFood.Hook();
+            CycleEnd.Hook();
+            DrawSprites.Hook();
+            PlayerSpawnManager.ApplyHooks();
+            PermadeathConditions.Hook();
+            Oracles._OracleMeta.Hook();
+            KarmaHooks.Hook();
+            RoomHooks.Hook();
+            MenuTinkery._MenuMeta.Startup();
+            CreatureInteractions._CreatureInteractionsMeta.Hook();
+            PersistCycleLengthForGracePeriodRestarts.Hook();
+            _GhostFeaturesMeta.Hook();
+            _Karma11FeaturesMeta.Hook();
+            _Karma11FoundationMeta.Hook();
+            _PlayerMechanicsMeta.Hook();
+            _MiscMeta.Hook();
+            _ViyMechanicsMeta.Hook();
+            VoidCycleLimit.Hook();
+            OptionInterface._OIMeta.Initialize();
+            Objects.NoodleEgg._NoodleEggMeta.Hook();
+            DiscordChurch._DiscordMeta.Init();
+            Creatures.VoidDaddyAndProtoViy._VoidDaddyMeta.Hook();
+            RainCycleChanges._RainCycleMeta.Init();
+            ShortcutBlocker.Hook();
 
-			RegisterPOMObjects();
-			if (DevEnabled)
-			{
-				//On.RainWorldGame.Update += RainWorldGame_TestUpdate;
-			}
-			LoadResources();			
-			ModLoaded = true;
-		}
-	}
-
-	private static void RegisterPOMObjects()
-	{
-		Objects.PomObjects.TheVoidRoomWideStaggerByGhost.Register();
-		Objects.PomObjects.LizardCorpse.Register();   
-		Objects.PomObjects.AlbinoVultureTriggerSpawner.Register();
-        Objects.PomObjects.VultureTriggerSpawner.Register();
-		Objects.PomObjects.Warp.Register();
-		Objects.PomObjects.TriggeredSpasm.Register();
-		Objects.PomObjects.MiniEnergyCellSpawner.Register();
-		Objects.PomObjects.TrainCellTrigger.Register();
+            RegisterPOMObjects();
+            if (DevEnabled)
+            {
+                //On.RainWorldGame.Update += RainWorldGame_TestUpdate;
+            }
+            LoadResources();
+            ModLoaded = true;
+        }
     }
 
-	// Load any resources, such as sprites or sounds
-	private void LoadResources()
-	{
+    private static void RegisterPOMObjects()
+    {
+        Objects.PomObjects.TheVoidRoomWideStaggerByGhost.Register();
+        Objects.PomObjects.LizardCorpse.Register();
+        Objects.PomObjects.AlbinoVultureTriggerSpawner.Register();
+        Objects.PomObjects.VultureTriggerSpawner.Register();
+        Objects.PomObjects.Warp.Register();
+        Objects.PomObjects.TriggeredSpasm.Register();
+        Objects.PomObjects.MiniEnergyCellSpawner.Register();
+        Objects.PomObjects.TrainCellTrigger.Register();
+        Objects.PomObjects.ShortcutBlockMark.Register();
+    }
 
-		//load all sprites which name starts with "Void" in folder "atlas-void" 
-		DirectoryInfo folder = new(AssetManager.ResolveDirectory("atlas-void"));
+    // Load any resources, such as sprites or sounds
+    private void LoadResources()
+    {
 
-		var listOfFiles = folder.GetFiles();
-		foreach (FileInfo file in listOfFiles)
-		{
-			if (file.Extension == ".png")
-			{
-				if (Array.Exists(listOfFiles, file2 => NameWithoutExtension(file2) == NameWithoutExtension(file) && file2.Extension == ".txt"))
-				{
-					Futile.atlasManager.LoadAtlas("atlas-void/" + NameWithoutExtension(file));
-				}
-				else
-				{
-					Futile.atlasManager.LoadImage("atlas-void/" + NameWithoutExtension(file));
-				}
-			}
-		}
+        //load all sprites which name starts with "Void" in folder "atlas-void" 
+        DirectoryInfo folder = new(AssetManager.ResolveDirectory("atlas-void"));
 
-		static string NameWithoutExtension(FileInfo f) => f.Name.Split('.')[0];
-	}
+        var listOfFiles = folder.GetFiles();
+        foreach (FileInfo file in listOfFiles)
+        {
+            if (file.Extension == ".png")
+            {
+                if (Array.Exists(listOfFiles, file2 => NameWithoutExtension(file2) == NameWithoutExtension(file) && file2.Extension == ".txt"))
+                {
+                    Futile.atlasManager.LoadAtlas("atlas-void/" + NameWithoutExtension(file));
+                }
+                else
+                {
+                    Futile.atlasManager.LoadImage("atlas-void/" + NameWithoutExtension(file));
+                }
+            }
+        }
+
+        static string NameWithoutExtension(FileInfo f) => f.Name.Split('.')[0];
+    }
 
 }

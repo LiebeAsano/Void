@@ -1,17 +1,7 @@
-﻿using Kittehface.Framework20;
-using Menu;
+﻿using Menu;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using UnityEngine;
 using VoidTemplate.OptionInterface;
-using Watcher;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery;

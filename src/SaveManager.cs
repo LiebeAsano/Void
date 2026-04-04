@@ -271,7 +271,6 @@ public static class SaveManager
                 }
                 catch (Exception ex)
                 {
-                    // Логируй ошибку здесь
                     Console.WriteLine($"Error reading save data: {ex.Message}");
                     return defaultValue;
                 }
@@ -361,6 +360,21 @@ public static class SaveManager
         {
             get => GetData(ViyPoisonImmuneString, false);
             set => SetData(ViyPoisonImmuneString, value);
+        }
+
+        private const string ViyDartMaggotImmuneString = "viydartmaggotimmune";
+        public static bool ViyDartMaggotImmune
+        {
+            get => GetData(ViyDartMaggotImmuneString, false);
+            set => SetData(ViyDartMaggotImmuneString, value);
+        }
+
+        private const string ViyExplosiveImmuneString = "viyexplosiveimmune";
+
+        public static int ViyExplosiveImmune
+        {
+            get => GetData(ViyExplosiveImmuneString, 0);
+            set => SetData(ViyExplosiveImmuneString, value);
         }
 
         private const string MonkAscendedString = "monkascended";

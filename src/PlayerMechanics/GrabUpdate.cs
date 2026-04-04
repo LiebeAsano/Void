@@ -157,7 +157,7 @@ public static class GrabUpdate
                     {
                         self.spearOnBack.increment = true;
                     }
-                    else if ((num7 > -1 || self.objectInStomach != null || self.IsVoid() || self.IsViy()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
+                    else if ((num7 > -1 || self.objectInStomach != null || self.AreVoidViy()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
                     {
                         flag3 = true;
                     }

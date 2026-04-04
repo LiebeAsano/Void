@@ -38,7 +38,7 @@
 		"world_state": ["Void","Red"],
 		"start_room": "SH_A12",
 		"diet": {"base": "Gourmand"},
-		"select_menu_scene": "Slugcat_Void",
+		"select_menu_scene": "Slugcat_Protector",
 		"death_scene": "Death_Void",
 		"starve_scene": "Death_Void"
 	}

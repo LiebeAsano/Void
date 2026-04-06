@@ -41,12 +41,9 @@ public static class ViyAdaptation
         {
             if (ViyLungExtended)            
                 self.slugcatStats.lungsFac = 0.0f;          
-            else if (self.room.game.IsViyStoryCampaign())
+            else if (self.room.game.IsViyStoryCampaign() && self.mainBodyChunk.submersion >= 1f)
             {
-                bool random = false;
-                if (self.mainBodyChunk.submersion >= 1f)       
-                    random = Random.Range(0, 20000) == 0;
-                if (random)
+                if (Random.Range(0, 20000) == 0)
                 {
                     _ = new Objects.KarmaRotator(self.abstractCreature.Room.realizedRoom);
                     ViyLungExtended = true;

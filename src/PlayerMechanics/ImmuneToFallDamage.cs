@@ -17,9 +17,9 @@ public static class ImmuneToFallDamage
 
     private const int PerfectLandingWindow = 15;
 
-    private const float SafeFallSpeed = 20f;
+    private const float SafeFallSpeed = 30f;
     private const float MediumFallSpeed = 40f;
-    private const float HeavyFallSpeed = 60f;
+    private const float HeavyFallSpeed = 50f;
 
     public static void Hook()
     {
@@ -50,7 +50,7 @@ public static class ImmuneToFallDamage
 
     private static void Player_TerrainImpact(On.Player.orig_TerrainImpact orig, Player self, int chunk, IntVector2 direction, float speed, bool firstContact)
     {
-        if (!self.AreVoidViy() || self.room == null || HasTempleGuard(self.room))
+        if (!self.IsVoid() || self.room == null || HasTempleGuard(self.room))
         {
             orig(self, chunk, direction, speed, firstContact);
             return;
@@ -162,8 +162,6 @@ public static class ImmuneToFallDamage
         float volume = Mathf.InverseLerp(SafeFallSpeed, HeavyFallSpeed + 8f, speed);
 
         self.room.PlaySound(SoundID.Slugcat_Roll_Init, self.mainBodyChunk, false, Mathf.Lerp(0.5f, 1.1f, volume), Mathf.Lerp(1.2f, 0.9f, volume));
-
-        self.room.AddObject(new ExplosionSpikes(self.room, self.mainBodyChunk.pos, 4, 3f, 5f, 4f, 4, Color.white));
     }
 
     private static void PlayNormalLandingFeedback(Player self, float speed)

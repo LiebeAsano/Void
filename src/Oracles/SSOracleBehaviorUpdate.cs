@@ -21,6 +21,7 @@ public static class SSOracleBehaviorUpdate
         if (self.oracle.room.game.StoryCharacter != VoidEnums.SlugcatID.Void)
         {
             orig(self, eu);
+            return;
         }
         if (ModManager.MMF && self.player != null && self.player.dead && self.currSubBehavior.ID != SSOracleBehavior.SubBehavior.SubBehavID.ThrowOut && self.oracle.room.game.Players.Count == 1)
         {

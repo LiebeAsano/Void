@@ -5,18 +5,38 @@
   "authors": "LW team",
   "description": "",
   "requirements": [
-    "moreslugcats", "watcher", "slime-cubed.slugbase", "crs", "regionkit", "pom", "fisobs"
+    "moreslugcats",
+    "watcher",
+    "slime-cubed.slugbase",
+    "crs",
+    "regionkit",
+    "pom",
+    "fisobs"
   ],
   "requirements_names": [
-    "More Slugcats Expansion","The Watcher","SlugBase","Custom Regions Support","RegionKit","Placed Objects Manager","Fisobs"
+    "More Slugcats Expansion",
+    "The Watcher",
+    "SlugBase",
+    "Custom Regions Support",
+    "RegionKit",
+    "Placed Objects Manager",
+    "Fisobs"
   ],
   "tags": [
-    "Regions", "Campaigns", "Creatures", "Game Mechanics", "Items", "Custom Slugcat", "Base", "Downpour", "Watcher"
+    "Regions",
+    "Campaigns",
+    "Creatures",
+    "Game Mechanics",
+    "Items",
+    "Custom Slugcat",
+    "Base",
+    "Downpour",
+    "Watcher"
   ],
   "priorities": [
-    "henpemaz_rainmeadow","coral.caves", "HallowedGrotto", "theroot_will", "np.aetherforall"
+    "henpemaz_rainmeadow","coral.caves", "HallowedGrotto", "theroot_will"
   ],
   "priorities_names": [
-    "Rain Meadow","Coral Caves", "Hallowed Grotto", "The Root", "Aether Ridge For All"
+    "Rain Meadow","Coral Caves", "Hallowed Grotto", "The Root"
   ]
 }

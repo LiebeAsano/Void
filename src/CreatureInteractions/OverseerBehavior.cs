@@ -7,7 +7,7 @@ public static class OverseerBehavior
 {
     public static void Hook()
     {
-        // Ваш существующий хук
+
         On.OverseerCommunicationModule.Update += OverseerCommunicationModule_Update;
     }
 

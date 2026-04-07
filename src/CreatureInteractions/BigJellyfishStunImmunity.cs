@@ -2,8 +2,7 @@
 using MonoMod.Cil;
 using MoreSlugcats;
 using System;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Runtime.CompilerServices;
 using VoidTemplate.Useful;
 using static VoidTemplate.Useful.Utils;
 
@@ -11,6 +10,13 @@ namespace VoidTemplate.CreatureInteractions;
 
 public class BigJellyfishStunImmunity
 {
+    private sealed class JellyState
+    {
+        public int deathTimer;
+    }
+
+    private static readonly ConditionalWeakTable<BigJellyFish, JellyState> jellyStates = new();
+
     public static void Hook()
     {
         IL.MoreSlugcats.BigJellyFish.Update += BigJellyFish_Update;
@@ -31,28 +37,23 @@ public class BigJellyfishStunImmunity
         {
             c.Emit(OpCodes.Ldarg_0);
             c.Emit(OpCodes.Ldloc, 16);
-            c.EmitDelegate<Func<BigJellyFish, int, bool>>((BigJellyFish jellyfish, int inspectedGrasp) =>
+            c.EmitDelegate<Func<BigJellyFish, int, bool>>((jellyfish, inspectedGrasp) =>
             jellyfish.latchOnToBodyChunks[inspectedGrasp].owner is Player p && (p.AreVoidViy()));
             c.Emit(OpCodes.Brtrue, label);
         }
         else LogExErr("failed to find place checking for creature stun in IL; void will be unintentionally vulnerable to MSC big jellyfish");
     }
 
-    private static Dictionary<AbstractCreature, int> jellyfishDeathTimers = new Dictionary<AbstractCreature, int>();
-
     private static void BigJellyFish_ConsumeCreateUpdate(On.MoreSlugcats.BigJellyFish.orig_ConsumeCreateUpdate orig, BigJellyFish self)
     {
         orig(self);
+
         for (int i = self.consumedCreatures.Count - 1; i >= 0; i--)
         {
-            var creature = self.consumedCreatures[i];
-
-            if (creature is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+            if (self.consumedCreatures[i] is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
             {
-                if (!jellyfishDeathTimers.ContainsKey(self.abstractCreature))
-                {
-                    jellyfishDeathTimers.Add(self.abstractCreature, 180);
-                }
+                jellyStates.GetOrCreateValue(self).deathTimer = 180;
+                break;
             }
         }
     }
@@ -60,19 +61,20 @@ public class BigJellyfishStunImmunity
     private static void BigJellyFish_Update2(On.MoreSlugcats.BigJellyFish.orig_Update orig, BigJellyFish self, bool eu)
     {
         orig(self, eu);
-        if (jellyfishDeathTimers.TryGetValue(self.abstractCreature, out int timer))
-        {
-            timer -= 1;
 
-            if (timer <= 0)
-            {
-                self.Die();
-                jellyfishDeathTimers.Remove(self.abstractCreature);
-            }
-            else
-            {
-                jellyfishDeathTimers[self.abstractCreature] = timer;
-            }
+        if (!jellyStates.TryGetValue(self, out var state) || state.deathTimer <= 0)
+            return;
+
+        if (self.slatedForDeletetion || self.room == null)
+        {
+            state.deathTimer = 0;
+            return;
+        }
+
+        state.deathTimer--;
+        if (state.deathTimer <= 0)
+        {
+            self.Die();
         }
     }
 }

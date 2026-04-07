@@ -1,251 +1,419 @@
 ﻿using Menu;
-using Mono.Cecil.Cil;
-using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using VoidTemplate.Objects;
-using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static VoidTemplate.OptionInterface.OptionAccessors;
-using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 using Object = UnityEngine.Object;
-
 
 namespace VoidTemplate;
 
 static class PermadeathConditions
 {
-	public static void Hook()
-	{
-		On.RainWorldGame.GameOver += GenericGameOver;
-		On.RainWorldGame.GoToRedsGameOver += RainWorldGame_GoToRedsGameOver;
-		On.Menu.KarmaLadder.KarmaSymbol.Update += PulsateKarmaSymbol;
-		//On.Menu.SlugcatSelectMenu.SlugcatPage.AddImage += SlugcatPage_AddImage;
-		On.RainWorldGame.ExitToMenu += ExitToMenuGameOver;
-		Application.quitting += ApplicationQuitGameOver;
+    public static void Hook()
+    {
+        On.RainWorldGame.GameOver += GenericGameOver;
+        On.RainWorldGame.GoToDeathScreen += RainWorldGame_GoToDeathScreen;
+        On.RainWorldGame.GoToStarveScreen += RainWorldGame_GoToStarveScreen;
+        On.RainWorldGame.GoToRedsGameOver += RainWorldGame_GoToRedsGameOver;
+        On.RainWorldGame.ExitToMenu += ExitToMenuGameOver;
 
-		IL.Menu.KarmaLadderScreen.GetDataFromGame += KarmaLadderScreen_GetDataFixMSCStupidBug;
-		IL.HUD.TextPrompt.Update += TextPrompt_Update;
-	}
+        On.Menu.KarmaLadder.KarmaSymbol.Update += PulsateKarmaSymbol;
 
-	private static void TextPrompt_Update(ILContext il)
-	{
-		ILCursor c = new(il);
-		var bubbleStart = c.DefineLabel();
-		var bubbleEnd = c.DefineLabel();
-		// this code makes it so that exiting game with void in prepermadeath conditions leads you to game over screen
-		if (c.TryGotoNext(MoveType.Before, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
-		{
-			c.Emit(OpCodes.Dup);
-			c.EmitDelegate<Func<RainWorldGame, bool>>(VoidSpecificGameOverCondition);
-			c.Emit(OpCodes.Brtrue, bubbleStart);
-		}
-		else Logerr("IL failed to match.\n" + new StackTrace().ToString());
-		if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt<RainWorldGame>(nameof(RainWorldGame.GoToDeathScreen))))
-		{
-			c.Emit(OpCodes.Br, bubbleEnd);
-			c.MarkLabel(bubbleStart);
-			c.EmitDelegate((RainWorldGame game) => game.GoToRedsGameOver());
-			c.MarkLabel(bubbleEnd);
-		}
-		else Logerr("IL failed to match.\n" + new StackTrace().ToString());
-	}
+        On.HUD.TextPrompt.EnterGameOverMode += TextPrompt_EnterGameOverMode;
 
-	private static void KarmaLadderScreen_GetDataFixMSCStupidBug(ILContext il)
-	{
-		ILCursor c = new(il);
-		if (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(0),
-			i => i.MatchLdcI4(4)))
-		{
-			c.Emit(OpCodes.Ldarg_0);
-			c.Emit(OpCodes.Ldarg_1);
-			c.EmitDelegate<Func<int, KarmaLadderScreen, KarmaLadderScreen.SleepDeathScreenDataPackage, int>>(
-			(re, self, package) =>
-			{
-				if (package.saveState != null && package.saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
-					if (self.ID == ProcessManager.ProcessID.GhostScreen)
-						return self.preGhostEncounterKarmaCap;
-					else
-						return self.karma.y;
-				return re;
-			});
-		}
-
-	}
-
-	private static void PulsateKarmaSymbol(On.Menu.KarmaLadder.KarmaSymbol.orig_Update orig, KarmaLadder.KarmaSymbol self)
-	{
-
-		var flag = ModManager.MSC
-			&& self.parent.displayKarma.x == self.parent.moveToKarma
-			&& (self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.KarmaToMinScreen || self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.VengeanceGhostScreen || (ModManager.Expedition
-				&& self.menu.manager.rainWorld.ExpeditionMode
-				&& self.parent.moveToKarma == 0));
-		if (!flag && ModManager.MSC && self.parent.displayKarma.x == self.parent.moveToKarma &&
-			self.menu is KarmaLadderScreen screen && screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void
-			&& self.parent.moveToKarma == 0 && self.parent.menu.ID == ProcessManager.ProcessID.DeathScreen
-			&& PermaDeath)
-		{
-			self.waitForAnimate++;
-			if (self.waitForAnimate >= 50)
-				if (self.displayKarma.x == 0)
-					self.pulsateCounter++;
-		}
-		orig(self);
-	}
-
-	private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
-	{
-		if (self.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void
-			&& !(ModManager.Expedition && self.rainWorld.ExpeditionMode))
-		{
-			if (self.manager.upcomingProcess != null) return;
-
-			self.manager.musicPlayer?.FadeOutAllSongs(20f);
-			/*if (self.manager.nextSlideshow != null)
-			{
-				self.manager.statsAfterCredits = true;
-				self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlideShow);
-				return;
-			}*/
-
-			bool treeEnding = false;
-
-            for (int i = 0; i < self.Players.Count; i++)
-            {
-				if (self.Players[i].Room.name == "OE_FINAL03") treeEnding = true;
-            }
-            if (VoidSpecificGameOverCondition(self) && !treeEnding)
-			{
-                self.GetStorySession.saveState.redExtraCycles = true;
-                self.GetStorySession.saveState.SetVoidCatDead(true);
-            }
-
-			if (ModManager.CoopAvailable)
-			{
-				int num = 0;
-				using IEnumerator<Player> enumerator =
-					(from x in self.session.game.Players select x.realizedCreature as Player).GetEnumerator();
-				while (enumerator.MoveNext())
-				{
-					Player player = enumerator.Current;
-					self.GetStorySession.saveState.AppendCycleToStatistics(player, self.GetStorySession, true, num);
-					num++;
-				}
-			}
-			else
-				self.GetStorySession.saveState.AppendCycleToStatistics(self.Players[0].realizedCreature as Player, self.GetStorySession, true, 0);
-
-
-			self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
-			self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
-			return;
-		}
-		orig(self);
-	}
-	#region GameOverConditions
-	public static void SetVoidCatDeadTrue(RainWorldGame game)
-	{
-		if (game.StoryCharacter == VoidEnums.SlugcatID.Void
-			&& game.IsStorySession
-			&& game.GetStorySession.saveState is SaveState save
-			&& PermaDeath)
-		{
-			Player player = null;
-			foreach (var abstractPlayer in game.Players)
-			{
-				if (abstractPlayer.realizedCreature is Player mainPlayer)
-				{
-					player = mainPlayer;
-					break;
-				}
-			}
-			var savestate = player.abstractCreature.world.game.GetStorySession.saveState;
-            if (player.KarmaCap == 10) savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
-			save.SetVoidCatDead(true);
-			save.redExtraCycles = true;
-			game.rainWorld.progression.SaveWorldStateAndProgression(false);
-		}
-	}
-	private static void ApplicationQuitGameOver()
-	{
-		if (!VoidDreamScript.IsVoidDream)
-		{
-			RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
-			if (rainWorld != null
-				&& rainWorld.processManager is ProcessManager manager
-				&& manager.currentMainLoop is RainWorldGame game)
-			{
-				if (VoidSpecificGameOverCondition(game))
-				{
-					SetVoidCatDeadTrue(game);
-				}
-				if (game.GetStorySession.saveState.GetKarmaToken() > 0
-					&& game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-				{
-					var savestate = game.GetStorySession.saveState;
-					savestate.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
-					savestate.SessionEnded(game, false, false);
-				}
-			}
-		}
-	}
-	private static bool VoidSpecificGameOverCondition(RainWorldGame rainWorldGame)
-	{
-		return rainWorldGame.session is StoryGameSession session
-			&& session.characterStats.name == VoidEnums.SlugcatID.Void
-            && rainWorldGame.IsVoidStoryCampaign()
-            && (session.saveState.deathPersistentSaveData.karma == 0 && PermaDeath
-			|| session.saveState.GetKarmaToken() == 0
-			|| Karma11Update.VoidPermaNightmare
-            || session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) && session.saveState.deathPersistentSaveData.karmaCap != 10 && !session.saveState.GetVoidMarkV3() && PermaDeath)
-            && !(ModManager.Expedition && rainWorldGame.rainWorld.ExpeditionMode);
-	}
-
-	private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
-	{
-		orig(self);
-		if (!VoidDreamScript.IsVoidDream)
-		{
-			if (VoidSpecificGameOverCondition(self) && self.world.rainCycle.timer > 30 * TicksPerSecond) SetVoidCatDeadTrue(self);
-			if (self.session is StoryGameSession session && self.world.rainCycle.timer > 30 * TicksPerSecond)
-			{
-				var savestate = self.world.game.GetStorySession.saveState;
-				session.saveState.SetKarmaToken(Math.Max(0, savestate.GetKarmaToken() - 1));
-				savestate.SessionEnded(self.world.game, false, false);
-			}
-        }
-		else VoidDreamScript.IsVoidDream = false;
+        Application.quitting += ApplicationQuitGameOver;
     }
-	private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
-	{
-		if (self.IsVoidWorld())
-		{
-			if (ModManager.CoopAvailable && self.rainWorld.options.JollyPlayerCount > 1)
-			{
-				if (!self.JollyGameOverEvaluator(dependentOnGrasp))
-				{
-					return;
-				}
-			}
-			if (!self.playedGameOverSound && dependentOnGrasp == null)
-			{
-				self.cameras[0].hud.PlaySound(SoundID.HUD_Game_Over_Prompt);
-				self.playedGameOverSound = true;
-			}
-			if (VoidSpecificGameOverCondition(self) && dependentOnGrasp == null)
-			{
-				self.GoToRedsGameOver();
-			}
-		}
-		orig(self, dependentOnGrasp);
-	}
-	#endregion
+
+    #region Core conditions
+
+    private static bool IsVoidStoryGame(RainWorldGame game)
+    {
+        return game != null
+            && game.IsStorySession
+            && game.GetStorySession != null
+            && game.GetStorySession.saveState != null
+            && game.GetStorySession.saveState.saveStateNumber == VoidEnums.SlugcatID.Void
+            && game.IsVoidStoryCampaign()
+            && !(ModManager.Expedition && game.rainWorld.ExpeditionMode);
+    }
+
+    private static bool VoidSpecificGameOverCondition(RainWorldGame game)
+    {
+        if (!IsVoidStoryGame(game))
+            return false;
+
+        StoryGameSession session = game.GetStorySession;
+        SaveState save = session.saveState;
+
+        return
+            (save.deathPersistentSaveData.karma == 0 && PermaDeath)
+            || save.GetKarmaToken() == 0
+            || Karma11Update.VoidPermaNightmare
+            || (
+                save.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(save)
+                && save.deathPersistentSaveData.karmaCap != 10
+                && !save.GetVoidMarkV3()
+                && PermaDeath
+            );
+    }
+
+    public static void SetVoidCatDeadTrue(RainWorldGame game)
+    {
+        if (!IsVoidStoryGame(game) || !PermaDeath)
+            return;
+
+        SaveState save = game.GetStorySession.saveState;
+
+        Player player = null;
+        foreach (AbstractCreature abstractPlayer in game.Players)
+        {
+            if (abstractPlayer?.realizedCreature is Player realizedPlayer)
+            {
+                player = realizedPlayer;
+                break;
+            }
+        }
+
+        if (player != null && player.KarmaCap == 10)
+        {
+            save.SetKarmaToken(Math.Max(0, save.GetKarmaToken() - 1));
+        }
+
+        save.SetVoidCatDead(true);
+        save.redExtraCycles = true;
+        game.rainWorld.progression.SaveWorldStateAndProgression(false);
+    }
+
+    private static bool IsTreeEnding(RainWorldGame game)
+    {
+        if (game?.Players == null)
+            return false;
+
+        for (int i = 0; i < game.Players.Count; i++)
+        {
+            if (game.Players[i]?.Room != null && game.Players[i].Room.name == "OE_FINAL03")
+                return true;
+        }
+
+        return false;
+    }
+
+    #endregion
+
+    #region Main hooks
+
+    private static void GenericGameOver(On.RainWorldGame.orig_GameOver orig, RainWorldGame self, Creature.Grasp dependentOnGrasp)
+    {
+        if (!IsVoidStoryGame(self))
+        {
+            orig(self, dependentOnGrasp);
+            return;
+        }
+
+        if (ModManager.CoopAvailable && self.rainWorld.options.JollyPlayerCount > 1)
+        {
+            orig(self, dependentOnGrasp);
+            return;
+        }
+
+        if (!self.playedGameOverSound && dependentOnGrasp == null && self.cameras[0].hud != null)
+        {
+            self.cameras[0].hud.PlaySound(SoundID.HUD_Game_Over_Prompt);
+            self.playedGameOverSound = true;
+        }
+
+        if (VoidSpecificGameOverCondition(self) && dependentOnGrasp == null)
+        {
+            self.GoToRedsGameOver();
+            return;
+        }
+
+        self.GetStorySession.PlaceKarmaFlowerOnDeathSpot();
+
+        if (self.cameras[0].hud != null)
+        {
+            if (self.Players[0].realizedCreature != null)
+            {
+                Player player = self.Players[0].realizedCreature as Player;
+
+                if (self.Players[0].realizedCreature.room != null)
+                {
+                    self.cameras[0].hud.InitGameOverMode(
+                        dependentOnGrasp,
+                        player.FoodInStomach,
+                        self.Players[0].pos.room,
+                        Custom.RestrictInRect(
+                            player.mainBodyChunk.pos,
+                            self.Players[0].realizedCreature.room.RoomRect.Grow(50f)
+                        )
+                    );
+                }
+                else
+                {
+                    self.cameras[0].hud.InitGameOverMode(
+                        dependentOnGrasp,
+                        player.FoodInStomach,
+                        self.Players[0].pos.room,
+                        player.mainBodyChunk.pos
+                    );
+                }
+            }
+            else
+            {
+                self.cameras[0].hud.InitGameOverMode(
+                    dependentOnGrasp,
+                    0,
+                    self.Players[0].pos.room,
+                    new Vector2(0f, 0f)
+                );
+            }
+        }
+
+        self.manager.musicPlayer?.DeathEvent();
+    }
+
+    private static void RainWorldGame_GoToDeathScreen(On.RainWorldGame.orig_GoToDeathScreen orig, RainWorldGame self)
+    {
+        if (!IsVoidStoryGame(self))
+        {
+            orig(self);
+            return;
+        }
+
+        if (VoidSpecificGameOverCondition(self))
+        {
+            self.GoToRedsGameOver();
+            return;
+        }
+
+        self.GetStorySession.saveState.SessionEnded(self, false, false);
+        self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.DeathScreen);
+    }
+
+    private static void RainWorldGame_GoToStarveScreen(On.RainWorldGame.orig_GoToStarveScreen orig, RainWorldGame self)
+    {
+        if (!IsVoidStoryGame(self))
+        {
+            orig(self);
+            return;
+        }
+
+        if (VoidSpecificGameOverCondition(self))
+        {
+            self.GoToRedsGameOver();
+            return;
+        }
+
+        self.GetStorySession.PlaceKarmaFlowerOnDeathSpot();
+        self.GetStorySession.saveState.SessionEnded(self, false, false);
+        self.manager.musicPlayer?.DeathEvent();
+        self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.StarveScreen);
+    }
+
+    private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
+    {
+        if (!IsVoidStoryGame(self))
+        {
+            orig(self);
+            return;
+        }
+
+        if (self.manager.upcomingProcess != null)
+            return;
+
+        self.manager.musicPlayer?.FadeOutAllSongs(20f);
+
+        /*if (self.manager.nextSlideshow != null)
+          {
+            self.manager.statsAfterCredits = true;
+            self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlideShow);
+            return;
+          }*/
+
+        bool treeEnding = IsTreeEnding(self);
+
+        if (VoidSpecificGameOverCondition(self) && !treeEnding)
+        {
+            self.GetStorySession.saveState.redExtraCycles = true;
+            self.GetStorySession.saveState.SetVoidCatDead(true);
+        }
+
+        if (ModManager.CoopAvailable)
+        {
+            int num = 0;
+            using IEnumerator<Player> enumerator =
+                (from x in self.session.game.Players select x.realizedCreature as Player).GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                Player player = enumerator.Current;
+                self.GetStorySession.saveState.AppendCycleToStatistics(player, self.GetStorySession, true, num);
+                num++;
+            }
+        }
+        else
+        {
+            self.GetStorySession.saveState.AppendCycleToStatistics(
+                self.Players[0].realizedCreature as Player,
+                self.GetStorySession,
+                true,
+                0
+            );
+        }
+
+        self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
+        self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
+    }
+
+    #endregion
+
+    #region Exit / quit behavior
+
+    private static void ExitToMenuGameOver(On.RainWorldGame.orig_ExitToMenu orig, RainWorldGame self)
+    {
+        orig(self);
+
+        if (VoidDreamScript.IsVoidDream)
+        {
+            VoidDreamScript.IsVoidDream = false;
+            return;
+        }
+
+        if (!IsVoidStoryGame(self))
+            return;
+
+        if (self.world != null && self.world.rainCycle != null && self.world.rainCycle.timer > 30 * TicksPerSecond)
+        {
+            if (VoidSpecificGameOverCondition(self))
+            {
+                SetVoidCatDeadTrue(self);
+            }
+
+            StoryGameSession session = self.GetStorySession;
+            SaveState save = session.saveState;
+
+            save.SetKarmaToken(Math.Max(0, save.GetKarmaToken() - 1));
+            save.SessionEnded(self, false, false);
+        }
+    }
+
+    private static void ApplicationQuitGameOver()
+    {
+        if (VoidDreamScript.IsVoidDream)
+            return;
+
+        RainWorld rainWorld = Object.FindObjectOfType<RainWorld>();
+        if (rainWorld == null)
+            return;
+
+        if (rainWorld.processManager is not ProcessManager manager)
+            return;
+
+        if (manager.currentMainLoop is not RainWorldGame game)
+            return;
+
+        if (!IsVoidStoryGame(game))
+            return;
+
+        if (VoidSpecificGameOverCondition(game))
+        {
+            SetVoidCatDeadTrue(game);
+        }
+
+        SaveState save = game.GetStorySession.saveState;
+        if (save.GetKarmaToken() > 0 && save.deathPersistentSaveData.karmaCap == 10)
+        {
+            save.SetKarmaToken(Math.Max(0, save.GetKarmaToken() - 1));
+            save.SessionEnded(game, false, false);
+        }
+    }
+
+    #endregion
+
+    #region UI
+
+    private static void PulsateKarmaSymbol(On.Menu.KarmaLadder.KarmaSymbol.orig_Update orig, KarmaLadder.KarmaSymbol self)
+    {
+        bool vanillaFlag = ModManager.MSC
+            && self.parent.displayKarma.x == self.parent.moveToKarma
+            && (self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.KarmaToMinScreen
+                || self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.VengeanceGhostScreen
+                || (ModManager.Expedition
+                    && self.parent.menu.manager.rainWorld.ExpeditionMode
+                    && self.parent.moveToKarma == 0));
+
+        if (!vanillaFlag
+            && ModManager.MSC
+            && self.parent.displayKarma.x == self.parent.moveToKarma
+            && self.menu is KarmaLadderScreen screen
+            && screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void
+            && self.parent.moveToKarma == 0
+            && self.parent.menu.ID == ProcessManager.ProcessID.DeathScreen
+            && PermaDeath)
+        {
+            self.waitForAnimate++;
+            if (self.waitForAnimate >= 50 && self.displayKarma.x == 0)
+            {
+                self.pulsateCounter++;
+            }
+        }
+
+        orig(self);
+    }
+
+    #endregion
+
+    private static void TextPrompt_EnterGameOverMode(On.HUD.TextPrompt.orig_EnterGameOverMode orig, HUD.TextPrompt self, Creature.Grasp dependentOnGrasp, int foodInStomach, int deathRoom, Vector2 deathPos)
+    {
+        orig(self, dependentOnGrasp, foodInStomach, deathRoom, deathPos);
+
+        if (self.hud.owner is not Player player || player.room == null || player.room.game == null)
+            return;
+
+        if (!player.IsVoid() || !player.room.game.IsVoidWorld())
+            return;
+
+        if (player.dead)
+        {
+            if (VoidSpecificGameOverCondition(player.room.game))
+                self.gameOverString = "";
+            else
+            {
+                int random = UnityEngine.Random.Range(0, 6);
+                switch (random)
+                {
+                    case 0:
+                        self.gameOverString = player.Karma == 1 ? "I cannot anymore..." : "It is painfull...";
+                        break;
+                    case 1:
+                        self.gameOverString = Karma11Update.VoidKarma11 ? "This is mine..." : "I am hungry...";
+                        break;
+                    case 2:
+                        self.gameOverString = player.room.game.GetStorySession.saveState.GetVoidMarkV3() ? "Still part of you..." : "We are a single entity...";
+                        break;
+                    case 3:
+                        self.gameOverString = "You have died.";
+                        break;
+                    case 4:
+                        self.gameOverString = "The void claims another soul.";
+                        break;
+                    case 5:
+                        self.gameOverString = "Your journey ends here.";
+                        break;
+                }
+                    
+            }
+        }
+        else
+        {
+            self.gameOverString = "Fight to get out of the grip by clicking PICK UP";
+        }
+    }
 }

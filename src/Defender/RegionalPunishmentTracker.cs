@@ -59,7 +59,7 @@ public class RegionalPunishmentTracker
 
 static class PunishmentExtensions
 {
-    static void Punish(this World world, CreatureTemplate.Type type)
+    public static void Punish(this World world, CreatureTemplate.Type type)
     {
         RegionalPunishmentTracker p;
         if (!RegionalPunishmentTracker.RPTField.TryGetValue(world, out p))
@@ -70,13 +70,12 @@ static class PunishmentExtensions
         p.Punish(type);
     }
 
-    static bool IsAfraidOfDefender(this Creature crit)
+    public static bool IsAfraidOfDefender(this Creature crit)
     {
         World world = crit.abstractCreature.world;
-        RegionalPunishmentTracker p;
-        if (!RegionalPunishmentTracker.RPTField.TryGetValue(world, out p))
+        if (!RegionalPunishmentTracker.RPTField.TryGetValue(world, out RegionalPunishmentTracker p))
         {
-            p = new(world);
+            p = new RegionalPunishmentTracker(world);
             RegionalPunishmentTracker.RPTField.Add(world, p);
         }
         return p.IsAfraid(crit.Template.type);

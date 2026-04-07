@@ -1,17 +1,12 @@
 ﻿using Discord;
-using Fisobs;
 using Menu;
 using MoreSlugcats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
-using static AssetBundles.AssetBundleManager;
-using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.DiscordChurch
 {
@@ -26,8 +21,12 @@ namespace VoidTemplate.DiscordChurch
         public static bool[] leftshelter = new bool[32];
         public static string oldSmallImage;
         public static string oldSmallText;
+
         private static float timeSinceLastForceUpdate = 0f;
-        private static readonly float forceUpdateInterval = 1f / 4;
+        private static readonly float forceUpdateInterval = 1f / 4f;
+        private static readonly long _gameStartTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        private static bool hooksInstalled;
 
         private static readonly Dictionary<Player.BodyModeIndex, string> BodyModeToSlugMode = new()
         {
@@ -45,24 +44,43 @@ namespace VoidTemplate.DiscordChurch
             { BodyModeIndexExtension.CeilCrawl, "Ceil climbing" }
         };
 
-
-        private static readonly long _gameStartTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        private static int[] killScores;
 
         public static void Hook()
         {
+            if (hooksInstalled) return;
+            hooksInstalled = true;
+
             On.Menu.MainMenu.Update += MainMenu_Update;
             On.Player.Update += Player_Update;
             On.Player.Destroy += Player_Destroy;
             On.Player.ctor += Player_ctor;
+            On.RainWorldGame.ShutDownProcess += RainWorldGame_ShutDownProcess;
+        }
+
+        private static void RainWorldGame_ShutDownProcess(On.RainWorldGame.orig_ShutDownProcess orig, RainWorldGame self)
+        {
+            try
+            {
+                ShutdownDiscord();
+            }
+            finally
+            {
+                orig(self);
+            }
         }
 
         private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
         {
             orig(self, abstractCreature, world);
-            leftshelter[self.playerState.playerNumber] = false;
+
+            int playerNumber = GetPlayerNumberSafe(self);
+            if (playerNumber >= 0 && playerNumber < leftshelter.Length)
+            {
+                leftshelter[playerNumber] = false;
+            }
         }
 
-        private static int[] killScores;
         private static int[] KillScores()
         {
             int count = ExtEnum<MultiplayerUnlocks.SandboxUnlockID>.values.Count;
@@ -78,6 +96,7 @@ namespace VoidTemplate.DiscordChurch
                 SandboxSettingsInterface.DefaultKillScores(ref killScores);
                 killScores[(int)MultiplayerUnlocks.SandboxUnlockID.Slugcat] = 1;
             }
+
             return killScores;
         }
 
@@ -94,13 +113,13 @@ namespace VoidTemplate.DiscordChurch
                 return num;
             }
 
-            var sandboxUnlockID = MultiplayerUnlocks.SandboxUnlockForSymbolData(iconData);
+            MultiplayerUnlocks.SandboxUnlockID sandboxUnlockID = MultiplayerUnlocks.SandboxUnlockForSymbolData(iconData);
             if (sandboxUnlockID == null)
             {
                 return 0;
             }
 
-            var scores = KillScores();
+            int[] scores = KillScores();
             if (sandboxUnlockID.Index >= 0 && sandboxUnlockID.Index < scores.Length)
             {
                 return scores[sandboxUnlockID.Index];
@@ -120,19 +139,21 @@ namespace VoidTemplate.DiscordChurch
             bool isRed = s.saveStateNumber == SlugcatStats.Name.Red;
             bool isArtificer = s.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Artificer;
 
-            int baseScore = s.totFood
-                          + deathData.survives * 10
-                          + s.kills.Sum(kvp => KillScore(kvp.Key) * kvp.Value)
-                          - (deathData.deaths * 3 + deathData.quits * 3 + s.totTime / 60)
-                          + (deathData.ascended ? 300 : 0)
-                          + (s.miscWorldSaveData.moonRevived ? 100 : 0)
-                          + (s.miscWorldSaveData.pebblesSeenGreenNeuron ? 40 : 0);
+            int baseScore =
+                s.totFood +
+                deathData.survives * 10 +
+                s.kills.Sum(kvp => KillScore(kvp.Key) * kvp.Value) -
+                (deathData.deaths * 3 + deathData.quits * 3 + s.totTime / 60) +
+                (deathData.ascended ? 300 : 0) +
+                (s.miscWorldSaveData.moonRevived ? 100 : 0) +
+                (s.miscWorldSaveData.pebblesSeenGreenNeuron ? 40 : 0);
 
-            int bonusScore = (!isArtificer ? deathData.friendsSaved * 15 : 0)
-                          + (!isRed ? s.miscWorldSaveData.SLOracleState.significantPearls.Count * 20 : 0)
-                          + (!isRed && !isArtificer && s.miscWorldSaveData.SSaiConversationsHad > 0 ? 40 : 0)
-                          + (!isRed && !isArtificer && s.miscWorldSaveData.SLOracleState.playerEncounters > 0 ? 40 : 0)
-                          + (deathData.winState.GetTracker(MoreSlugcatsEnums.EndgameID.Gourmand, false) is WinState.GourFeastTracker tracker && tracker.GoalFullfilled ? 300 : 0);
+            int bonusScore =
+                (!isArtificer ? deathData.friendsSaved * 15 : 0) +
+                (!isRed ? s.miscWorldSaveData.SLOracleState.significantPearls.Count * 20 : 0) +
+                (!isRed && !isArtificer && s.miscWorldSaveData.SSaiConversationsHad > 0 ? 40 : 0) +
+                (!isRed && !isArtificer && s.miscWorldSaveData.SLOracleState.playerEncounters > 0 ? 40 : 0) +
+                (deathData.winState.GetTracker(MoreSlugcatsEnums.EndgameID.Gourmand, false) is WinState.GourFeastTracker tracker && tracker.GoalFullfilled ? 300 : 0);
 
             return baseScore + bonusScore;
         }
@@ -141,63 +162,36 @@ namespace VoidTemplate.DiscordChurch
         {
             orig(self, eu);
 
-            timeSinceLastForceUpdate += Time.deltaTime;
-            if (timeSinceLastForceUpdate < forceUpdateInterval || OptionAccessors.DisableRPC || self.playerState.permaDead) return;
-
-            if (!discordInited)
+            if (self == null || self.playerState == null || self.playerState.permaDead)
             {
-                TryInitiateDiscord();
-                timeSinceLastForceUpdate = 0f;
                 return;
             }
 
-            TryDiscordCallBack();
-
-            var activity = new Activity
+            if (!ShouldUpdateNow())
             {
-                Timestamps = { Start = _gameStartTimestamp },
-                Assets = { LargeImage = self.SlugCatClass.value.ToLower() }
-            };
+                return;
+            }
 
-            UpdateActivityBasedOnGameSession(self, ref activity);
-
-            activityManager.UpdateActivity(activity, result =>
+            if (!EnsureDiscordReady())
             {
-                if (result != Result.Ok)
-                    Debug.LogError($"Discord RP update failed: {result}");
-            });
+                return;
+            }
 
-            timeSinceLastForceUpdate = 0f;
+            UpdatePresenceForPlayer(self);
         }
 
         private static void Player_Destroy(On.Player.orig_Destroy orig, Player self)
         {
             dead = true;
-            if (!OptionAccessors.DisableRPC)
+
+            if (!OptionAccessors.DisableRPC && self != null)
             {
-                if (!discordInited)
+                if (EnsureDiscordReady())
                 {
-                    TryInitiateDiscord();
-                    timeSinceLastForceUpdate = 0f;
-                    return;
+                    UpdatePresenceForPlayer(self);
                 }
-
-                TryDiscordCallBack();
-
-                var activity = new Activity
-                {
-                    Timestamps = { Start = _gameStartTimestamp },
-                    Assets = { LargeImage = self.SlugCatClass.value.ToLower() }
-                };
-
-                UpdateActivityBasedOnGameSession(self, ref activity);
-
-                activityManager.UpdateActivity(activity, result =>
-                {
-                    if (result != Result.Ok)
-                        Debug.LogError($"Discord RP update failed: {result}");
-                });
             }
+
             orig(self);
         }
 
@@ -212,67 +206,134 @@ namespace VoidTemplate.DiscordChurch
             else if (self.abstractCreature?.world?.game?.session is ArenaGameSession)
             {
                 activity.Details = $"{slugMode} in Arena";
+                activity.State = string.Empty;
+                activity.Assets.LargeText = "Arena";
+            }
+            else
+            {
+                activity.Details = slugMode;
+                activity.State = string.Empty;
             }
         }
 
         private static string GetSlugMode(Player self)
         {
-            if (self.Stunned) return "Stunned";
-            if (self.dead || dead) return "Dead";
-
-            if (self.room?.abstractRoom?.shelter ?? false)
+            if (self == null)
             {
-                if (dead) return "Dead";
-                if (starvation) return leftshelter[self.playerState.playerNumber] ? "Starving" : "Waking up";
-                if (sleeping) return "Sleeping";
+                return "Standing";
             }
 
-            return BodyModeToSlugMode.TryGetValue(self.bodyMode, out var mode) ? mode : "Standing";
+            if (self.Stunned)
+            {
+                return "Stunned";
+            }
+
+            if (self.dead || dead)
+            {
+                return "Dead";
+            }
+
+            bool inShelter = self.room?.abstractRoom?.shelter ?? false;
+            int playerNumber = GetPlayerNumberSafe(self);
+
+            if (inShelter)
+            {
+                if (dead)
+                {
+                    return "Dead";
+                }
+
+                if (starvation)
+                {
+                    bool hasLeftShelter = playerNumber >= 0 &&
+                                          playerNumber < leftshelter.Length &&
+                                          leftshelter[playerNumber];
+
+                    return hasLeftShelter ? "Starving" : "Waking up";
+                }
+
+                if (sleeping)
+                {
+                    return "Sleeping";
+                }
+            }
+
+            return BodyModeToSlugMode.TryGetValue(self.bodyMode, out string mode) ? mode : "Standing";
         }
 
         private static void UpdateStorySessionActivity(Player self, StoryGameSession story, ref Activity activity, string slugMode)
         {
-            string regionName = self.room?.abstractRoom?.subregionName ??
-                               (self.room?.world != null ? Region.GetRegionFullName(self.room.world.name, story.saveStateNumber) : "Depths"); 
+            string regionName = self.room?.abstractRoom?.subregionName;
+
+            if (string.IsNullOrEmpty(regionName))
+            {
+                regionName = self.room?.world != null
+                    ? Region.GetRegionFullName(self.room.world.name, story.saveStateNumber)
+                    : "Depths";
+            }
 
             UpdateShelterStatus(self, story);
 
             activity.State = $"{slugMode} in {regionName}";
             activity.Details = BuildActivityDetails(self, story);
             activity.Assets.LargeText = $"Story: The {SlugcatStats.getSlugcatName(story.saveStateNumber)}";
-            if (!self.room?.abstractRoom?.shelter ?? false)
+
+            bool inShelter = self.room?.abstractRoom?.shelter ?? false;
+            if (!inShelter)
             {
-                activity.Assets.SmallImage = oldSmallImage = $"{(self.KarmaCap == 10 ? $"protection{story.saveState.GetKarmaToken()}" : $"karma{self.Karma}{(self.Karma < 5 ? "" : $"{self.KarmaCap}")}")}";
-                activity.Assets.SmallText = oldSmallText = $"{(story.saveState.deathPersistentSaveData.karma < 10 ? "Karma" : "Protection")}: " +
-                       $"{(story.saveState.deathPersistentSaveData.karma < 10 ?
-                           $"[{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]" :
-                           $"[{story.saveState.GetKarmaToken()}/5]")}";
+                activity.Assets.SmallImage = oldSmallImage = GetSmallImage(self, story);
+                activity.Assets.SmallText = oldSmallText = GetSmallText(story);
             }
             else
             {
-                activity.Assets.SmallImage = oldSmallImage;
-                activity.Assets.SmallText = oldSmallText;
+                activity.Assets.SmallImage = oldSmallImage ?? string.Empty;
+                activity.Assets.SmallText = oldSmallText ?? string.Empty;
             }
         }
 
         private static void UpdateShelterStatus(Player self, StoryGameSession story)
         {
-            if (self.room?.abstractRoom?.shelter ?? false)
+            bool inShelter = self.room?.abstractRoom?.shelter ?? false;
+            int playerNumber = GetPlayerNumberSafe(self);
+
+            if (inShelter)
             {
                 if (self.Consious)
                 {
-                    var rainCycle = story.game.world.rainCycle;
-                    if (self.abstractCreature.world.game.GetStorySession.saveState.malnourished && rainCycle.cycleLength - rainCycle.timer <= 0)
+                    RainCycle rainCycle = story.game.world.rainCycle;
+
+                    if (story.saveState.malnourished && rainCycle.cycleLength - rainCycle.timer <= 0)
+                    {
                         dead = true;
+                        starvation = false;
+                        sleeping = false;
+                    }
                     else if (self.FoodInStomach < self.slugcatStats.foodToHibernate)
+                    {
                         starvation = true;
+                        sleeping = false;
+                        dead = false;
+                    }
                     else if (self.readyForWin)
+                    {
                         sleeping = true;
+                        starvation = false;
+                        dead = false;
+                    }
+                    else
+                    {
+                        starvation = false;
+                        sleeping = false;
+                    }
                 }
             }
             else
             {
-                leftshelter[self.playerState.playerNumber] = true;
+                if (playerNumber >= 0 && playerNumber < leftshelter.Length)
+                {
+                    leftshelter[playerNumber] = true;
+                }
+
                 starvation = false;
                 sleeping = false;
                 dead = false;
@@ -281,11 +342,12 @@ namespace VoidTemplate.DiscordChurch
 
         private static string BuildActivityDetails(Player self, StoryGameSession story)
         {
-            var saveState = story.saveState;
-            var rainCycle = story.game.world.rainCycle;
-            var timeToRain = (rainCycle.cycleLength - rainCycle.timer) / (40 * 60);
-            var minutesText = timeToRain > 1 ? "mins" : "min";
-            var rainText = timeToRain <= 0 ? "Rain is coming" : $"Rain in {timeToRain} {minutesText}";
+            SaveState saveState = story.saveState;
+            RainCycle rainCycle = story.game.world.rainCycle;
+
+            int timeToRain = (rainCycle.cycleLength - rainCycle.timer) / (40 * 60);
+            string minutesText = timeToRain == 1 ? "min" : "mins";
+            string rainText = timeToRain <= 0 ? "Rain is coming" : $"Rain in {timeToRain} {minutesText}";
 
             return $"Food: [{self.FoodInStomach}/{self.slugcatStats.foodToHibernate}] | " +
                    $"{rainText} | " +
@@ -298,48 +360,197 @@ namespace VoidTemplate.DiscordChurch
         {
             orig(self);
 
-            timeSinceLastForceUpdate += Time.deltaTime;
-            if (timeSinceLastForceUpdate < forceUpdateInterval || OptionAccessors.DisableRPC) return;
-
-            if (!discordInited)
+            if (!ShouldUpdateNow())
             {
-                TryInitiateDiscord();
-                timeSinceLastForceUpdate = 0f;
                 return;
             }
 
-            TryDiscordCallBack();
-
-            activityManager.UpdateActivity(new Activity
+            if (!EnsureDiscordReady())
             {
-                Details = "Wandering in Main Menu",
-                Timestamps = { Start = _gameStartTimestamp },
-                Assets = { LargeImage = "lastwish_rpc_thumbnail" }
-            }, _ => { });
+                return;
+            }
 
-            timeSinceLastForceUpdate = 0f;
+            try
+            {
+                activityManager.UpdateActivity(new Activity
+                {
+                    Details = "Wandering in Main Menu",
+                    Timestamps = { Start = _gameStartTimestamp },
+                    Assets = { LargeImage = "lastwish_rpc_thumbnail" }
+                }, result =>
+                {
+                    if (result != Result.Ok)
+                    {
+                        Debug.LogError($"Discord RP update failed: {result}");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[DISCORD RPC] Main menu update exception: {e}");
+                ShutdownDiscord();
+            }
         }
 
         public static void TryDiscordCallBack()
         {
-            try { discord.RunCallbacks(); }
-            catch { discordInited = false; }
+            if (!discordInited || discord == null)
+            {
+                return;
+            }
+
+            try
+            {
+                discord.RunCallbacks();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[DISCORD RPC] Callback failed: {e}");
+                ShutdownDiscord();
+            }
         }
 
         public static void TryInitiateDiscord()
         {
+            if (OptionAccessors.DisableRPC)
+            {
+                ShutdownDiscord();
+                return;
+            }
+
+            if (discordInited && discord != null && activityManager != null)
+            {
+                return;
+            }
+
+            ShutdownDiscord();
+
             try
             {
                 discord = new Discord.Discord(1393296386568753202, (ulong)CreateFlags.NoRequireDiscord);
-                discordInited = discord != null;
+                activityManager = discord.GetActivityManager();
+                discordInited = discord != null && activityManager != null;
+
                 if (discordInited)
                 {
                     discord.SetLogHook(LogLevel.Info, (level, message) =>
-                        UnityEngine.Debug.Log($"[DISCORD RPC {level}] {message}"));
-                    activityManager = discord.GetActivityManager();
+                        Debug.Log($"[DISCORD RPC {level}] {message}"));
                 }
             }
-            catch { discordInited = false; }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[DISCORD RPC] Init failed: {e}");
+                ShutdownDiscord();
+            }
+        }
+
+        private static bool ShouldUpdateNow()
+        {
+            if (OptionAccessors.DisableRPC)
+            {
+                return false;
+            }
+
+            timeSinceLastForceUpdate += Time.deltaTime;
+            if (timeSinceLastForceUpdate < forceUpdateInterval)
+            {
+                return false;
+            }
+
+            timeSinceLastForceUpdate = 0f;
+            return true;
+        }
+
+        private static bool EnsureDiscordReady()
+        {
+            if (!discordInited || discord == null || activityManager == null)
+            {
+                TryInitiateDiscord();
+            }
+
+            if (!discordInited || discord == null || activityManager == null)
+            {
+                return false;
+            }
+
+            TryDiscordCallBack();
+            return discordInited && discord != null && activityManager != null;
+        }
+
+        private static void UpdatePresenceForPlayer(Player self)
+        {
+            try
+            {
+                Activity activity = new()
+                {
+                    Timestamps = { Start = _gameStartTimestamp },
+                    Assets = { LargeImage = self.SlugCatClass.value.ToLowerInvariant() }
+                };
+
+                UpdateActivityBasedOnGameSession(self, ref activity);
+
+                activityManager.UpdateActivity(activity, result =>
+                {
+                    if (result != Result.Ok)
+                    {
+                        Debug.LogError($"Discord RP update failed: {result}");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[DISCORD RPC] Player update exception: {e}");
+                ShutdownDiscord();
+            }
+        }
+
+        private static void ShutdownDiscord()
+        {
+            discordInited = false;
+            activityManager = null;
+
+            if (discord != null)
+            {
+                try
+                {
+                    discord.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[DISCORD RPC] Dispose failed: {e}");
+                }
+                finally
+                {
+                    discord = null;
+                }
+            }
+        }
+
+        private static int GetPlayerNumberSafe(Player self)
+        {
+            return self?.playerState?.playerNumber ?? -1;
+        }
+
+        private static string GetSmallImage(Player self, StoryGameSession story)
+        {
+            if (self.KarmaCap == 10)
+            {
+                return $"protection{story.saveState.GetKarmaToken()}";
+            }
+
+            return self.Karma < 5
+                ? $"karma{self.Karma}"
+                : $"karma{self.Karma}{self.KarmaCap}";
+        }
+
+        private static string GetSmallText(StoryGameSession story)
+        {
+            if (story.saveState.deathPersistentSaveData.karma < 10)
+            {
+                return $"Karma: [{story.saveState.deathPersistentSaveData.karma + 1}/{story.saveState.deathPersistentSaveData.karmaCap + 1}]";
+            }
+
+            return $"Protection: [{story.saveState.GetKarmaToken()}/5]";
         }
     }
 }

@@ -1,14 +1,8 @@
-﻿using CoralBrain;
-using IL.Watcher;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MoreSlugcats;
-using RWCustom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEngine;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;

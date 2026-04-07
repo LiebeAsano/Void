@@ -1,39 +1,31 @@
-﻿using Mono.Cecil;
-using System;
-using System.Runtime.CompilerServices;
+﻿using System;
 using UnityEngine;
+using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics.Karma11Features;
-using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
 
 public static class GraspSave
 {
-	const int secondsToStunViy = 10;
-    const int secondsToStunOnK10 = 20;
-	const int secondsToStunBelowK10 = 30;
-
 
 	public static void Hook()
 	{
-		On.Player.Grabbed += Player_Grabbed;
 		On.Creature.Update += Creature_Update;
-	}
+        On.Player.checkInput += Player_checkInput;
+    }
 
-	private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
+    private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
 	{
 		orig(self, eu);
-		if (grabbers.TryGetValue(self.abstractCreature, out var grabbedVoidsTimers) && !(self is Player player && player.AreVoidViy()))
+		if (!(self is Player player && player.AreVoidViy()))
 		{
 			Array.ForEach(self.grasps, grasp =>
 			{
 				if (grasp != null
 				&& grasp.grabbed is Player playerInGrasp
-				&& playerInGrasp.AreVoidViy()
-                && grabbedVoidsTimers.TryGetValue(playerInGrasp.abstractCreature, out var timerOfBeingGrasped))
+				&& playerInGrasp.AreVoidViy())
 				{
-                    timerOfBeingGrasped.Value++;
                     self.SetKillTag(playerInGrasp.abstractCreature);
 					if (self is not null && self is not Player)
 					{
@@ -57,50 +49,40 @@ public static class GraspSave
 							}
 						}
 					}
-                    
-					if (timerOfBeingGrasped.Value > TicksUntilStun(playerInGrasp))
+
+                    if (playerInGrasp.input[0].pckp && !playerInGrasp.input[1].pckp && !playerInGrasp.dead && UnityEngine.Random.Range(0, Karma11Update.VoidKarma11 ? 150 : 250) == 0)
 					{
-						self.Stun(TicksPerSecond * 5);
-						if (playerInGrasp.IsViy() && !playerInGrasp.dead)
-						{
-                            self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
-                            self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
-                            self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Bite, 2.5f, 250f);
-                        }
-						timerOfBeingGrasped.Value = 0;
+						self.Stun(20);
+                        self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
+                        self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
+                        self.Violence(self.mainBodyChunk, new Vector2?(new Vector2(0f, 0f)), self.mainBodyChunk, null, Creature.DamageType.Bite, 1f, 30f);
 					}
 				}
 			});
-		} 
-	}
-
-    static int TicksUntilStun(Player p)
-	{
-		if (p.slugcatStats.name == VoidEnums.SlugcatID.Viy)
-		{
-			return TicksPerSecond * secondsToStunViy;
-
-        }
-		return TicksPerSecond * (Karma11Update.VoidKarma11 ? secondsToStunOnK10 : secondsToStunBelowK10);
-	}
-
-	static ConditionalWeakTable<AbstractCreature, ConditionalWeakTable<AbstractCreature, StrongBox<int>>> grabbers = new();
-	private static void Player_Grabbed(On.Player.orig_Grabbed orig, Player self, Creature.Grasp grasp)
-	{
-		orig(self, grasp);
-		if (self.AreVoidViy())
-		{
-            if (!grabbers.TryGetValue(grasp.grabber.abstractCreature, out ConditionalWeakTable<AbstractCreature, StrongBox<int>> grabbedVoidsTimers))
-            {
-                grabbedVoidsTimers = new();
-                grabbers.Add(grasp.grabber.abstractCreature, grabbedVoidsTimers);
-            }
-
-            if (!grabbedVoidsTimers.TryGetValue(self.abstractCreature, out _))
-			{
-				grabbedVoidsTimers.Add(self.abstractCreature, new(0));
-			}
-
 		}
 	}
+
+    private static void Player_checkInput(On.Player.orig_checkInput orig, Player self)
+    {
+        bool shouldReadInputInStun =
+            self.AreVoidViy() &&
+            !self.dead &&
+            self.stun > 0 &&
+            self.grabbedBy != null &&
+            self.grabbedBy.Count > 0;
+
+        if (!shouldReadInputInStun)
+        {
+            orig(self);
+            return;
+        }
+
+        int savedStun = self.stun;
+
+        self.stun = 0;
+        orig(self);
+        self.stun = savedStun;
+    }
 }
+	
+

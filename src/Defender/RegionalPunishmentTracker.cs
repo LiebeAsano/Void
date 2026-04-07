@@ -80,4 +80,15 @@ static class PunishmentExtensions
         }
         return p.IsAfraid(crit.Template.type);
     }
+
+    public static bool IsAfraidOfDefender(this AbstractCreature crit)
+    {
+        World world = crit.world;
+        if (!RegionalPunishmentTracker.RPTField.TryGetValue(world, out RegionalPunishmentTracker p))
+        {
+            p = new RegionalPunishmentTracker(world);
+            RegionalPunishmentTracker.RPTField.Add(world, p);
+        }
+        return p.IsAfraid(crit.creatureTemplate.type);
+    }
 }

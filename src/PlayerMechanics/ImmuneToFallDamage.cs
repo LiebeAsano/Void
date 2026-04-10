@@ -1,8 +1,8 @@
 ﻿using RWCustom;
-using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.Useful;
+using VoidTemplate.Objects;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -15,11 +15,11 @@ public static class ImmuneToFallDamage
 
     private static readonly ConditionalWeakTable<Player, LandingData> landingData = new();
 
-    private const int PerfectLandingWindow = 15;
+    private const int PerfectLandingWindow = 40;
 
-    private const float SafeFallSpeed = 30f;
-    private const float MediumFallSpeed = 40f;
-    private const float HeavyFallSpeed = 50f;
+    private const float SafeFallSpeed = 40f;
+    private const float MediumFallSpeed = 60f;
+    private const float HeavyFallSpeed = 80f;
 
     public static void Hook()
     {
@@ -42,7 +42,7 @@ public static class ImmuneToFallDamage
         if (data.PerfectLandingBuffer > 0)
             data.PerfectLandingBuffer--;
 
-        if (self.input[0].y < 0 && self.input[1].y >= 0 && data.PerfectLandingBuffer == 0)
+        if (self.input[0].y < 0)
         {
             data.PerfectLandingBuffer = PerfectLandingWindow;
         }
@@ -65,12 +65,9 @@ public static class ImmuneToFallDamage
         LandingData data = landingData.GetOrCreateValue(self);
         bool perfectLanding = data.PerfectLandingBuffer > 0;
 
-        int oldImmune = self.immuneToFallDamage;
-        self.immuneToFallDamage = Math.Max(oldImmune, 1);
+        self.immuneToFallDamage = 1;
 
         orig(self, chunk, direction, speed, firstContact);
-
-        self.immuneToFallDamage = oldImmune;
 
         ApplyLandingOutcome(self, speed, perfectLanding);
 
@@ -97,20 +94,6 @@ public static class ImmuneToFallDamage
         if (self.Submersion > 0.5f)
             return false;
 
-        BodyChunk upper = self.bodyChunks[0];
-        BodyChunk lower = self.bodyChunks[1];
-
-        if (Mathf.Min(upper.vel.y, lower.vel.y) > -6f)
-            return false;
-
-        bool upperAirborne = upper.ContactPoint.y >= 0;
-        bool lowerAirborne = lower.ContactPoint.y >= 0;
-        if (!upperAirborne && !lowerAirborne)
-            return false;
-
-        if (self.upperBodyFramesOffGround < 2 && self.lowerBodyFramesOffGround < 2)
-            return false;
-
         if (self.bodyMode == Player.BodyModeIndex.ZeroG)
             return false;
 
@@ -129,6 +112,17 @@ public static class ImmuneToFallDamage
             if (!perfectLanding)
             {
                 self.Stun(25);
+                if (self.abstractCreature.world.game.IsVoidStoryCampaign())
+                {
+                    if (!self.abstractCreature.world.game.GetStorySession.saveState.GetFallMessageShown())
+                    {
+                        self.room.AddObject(new Tutorial(self.room,
+                        [
+                            new("Press the 'Down' button before landing to reduce the fall damage.", 33, 333)
+                        ]));
+                        self.abstractCreature.world.game.GetStorySession.saveState.SetFallMessageShown(true);
+                    }
+                }
             }
             return;
         }
@@ -139,19 +133,33 @@ public static class ImmuneToFallDamage
             {
                 self.playerState.permanentDamageTracking += 0.75f;
                 self.Stun(75);
+                if (self.abstractCreature.world.game.IsVoidStoryCampaign())
+                {
+                    if (!self.abstractCreature.world.game.GetStorySession.saveState.GetKarmaFlowerMessageShown())
+                    {
+                        self.room.AddObject(new Tutorial(self.room,
+                        [
+                            new("Press the 'Down' button before landing to reduce the fall damage.", 33, 333)
+                        ]));
+                        self.abstractCreature.world.game.GetStorySession.saveState.SetKarmaFlowerMessageShown(true);
+                    }
+                }
+            }
+            else
+            {
+                self.Stun(25);
+                self.playerState.permanentDamageTracking += 0.25f;
             }
             return;
         }
 
         if (perfectLanding)
         {
-            self.playerState.permanentDamageTracking += 0.5f;
-            self.Stun(50);
+            self.playerState.permanentDamageTracking += 0.75f;
+            self.Stun(75);
         }
         else
             self.Die();
-        
-        
     }
 
     private static void PlayPerfectLandingFeedback(Player self, float speed)

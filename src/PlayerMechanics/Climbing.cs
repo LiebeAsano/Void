@@ -632,7 +632,6 @@ public static class Climbing
 		body_chunk_1.vel.y += body_chunk_1.submersion * player.EffectiveRoomGravity;
 
 		if (player.animationFrame <= 20) return;
-		player.room?.PlaySound(SoundID.Slugcat_Crawling_Step, player.mainBodyChunk);
 		player.animationFrame = 0;
 	}
 

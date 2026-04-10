@@ -37,6 +37,9 @@ public static class SaveManager
     public static bool GetKarmaFlowerMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(karmaFlowerShown, out bool shown) && shown;
     public static void SetKarmaFlowerMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(karmaFlowerShown, value);
 
+    public static bool GetFallMessageShown(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(karmaFlowerShown, out bool shown) && shown;
+    public static void SetFallMessageShown(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(karmaFlowerShown, value);
+
     public static bool GetStartClimbingMessageShown(this SaveState saveState) => saveState.miscWorldSaveData.GetSlugBaseData().TryGet(startClimbingMessageShown, out bool shown) && shown;
     public static void SetStartClimbingMessageShown(this SaveState saveState, bool value) => saveState.miscWorldSaveData.GetSlugBaseData().Set(startClimbingMessageShown, value);
 

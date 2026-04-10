@@ -30,10 +30,11 @@ public static class _OIMeta
         OptionAccessors.cfgGamepadController = voidOI.config.Bind<bool>(uniqueprefix + "GamepadController", false, new ConfigurableInfo("Makes easier to climb the ceiling using a gamepad. Tap 'Special' to ceiling climb", tags: "Gamepad controller"));
         //#warning to be implemented
         OptionAccessors.cfgSimpleFood = voidOI.config.Bind<bool>(uniqueprefix + "SimpleFood", false, new ConfigurableInfo("Gives you whole pips when eating food instead of half pips", tags: "Simplified hunger"));
+        OptionAccessors.cfgShortcutBlocker = voidOI.config.Bind<bool>(uniqueprefix + "ShortcutBlocker", false, new ConfigurableInfo("The shortcut no longer wears out when using by Void", tags: "Disable block shortcut"));
         OptionAccessors.cfgNoPermaDeath = voidOI.config.Bind<bool>(uniqueprefix + "NonPermaDeath", false, new ConfigurableInfo("Disables permadeath for Void from losing all karma or limit cycles", tags: "Disable permadeath"));
 		OptionAccessors.cfgForceUnlockCampaign = voidOI.config.Bind<bool>(uniqueprefix + "UnlockCampaign", false, new ConfigurableInfo("Removes the requirement to complete as Hunter to play this mod", tags: "Unlock campaign"));
-		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 15, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign", new ConfigAcceptableRange<int>(1, 99),tags: "Void Cycles"));
-        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 3, new ConfigurableInfo("Changes the amount of bonus cycles Void can receive from the echo", new ConfigAcceptableRange<int>(1, 99), tags: "Void Bonus Cycles"));
+		OptionAccessors.cfgPermaDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "PermaDeathCycle", 15, new ConfigurableInfo("Changes the amount of cycles Void starts with in their campaign", new ConfigAcceptableRange<int>(1, 99),tags: "Void cycles"));
+        OptionAccessors.cfgEchoDeathCycle = voidOI.config.Bind<int>(uniqueprefix + "EchoDeathCycle", 3, new ConfigurableInfo("Changes the amount of bonus cycles Void can receive from the echo", new ConfigAcceptableRange<int>(1, 99), tags: "Void bonus cycles"));
 
     }
 }

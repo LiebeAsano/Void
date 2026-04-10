@@ -17,7 +17,7 @@ public static class UIExtensions
 	private static void GenerateColoredCheckbox(this OpTab opTab, Configurable<bool> configurable, Vector2 pos,
 		Color color)
 	{
-		OpCheckBox opCheckBox = new OpCheckBox(configurable, pos)
+		OpCheckBox opCheckBox = new(configurable, pos)
 		{
 			description = configurable.info.description.TranslateStringComplex()
 		};
@@ -36,16 +36,18 @@ public static class UIExtensions
 		Color color)
 	{
 		
-		OpUpdown opUpdown = new OpUpdown(configurable, pos, sizeOfTab)
+		OpUpdown opUpdown = new(configurable, pos, sizeOfTab)
 		{
 			description = configurable.info.description.TranslateStringComplex()
 		};
-		OpLabel opLabel = new(pos: pos + new Vector2(sizeOfTab + 6, 1),
-			size: new Vector2(240f, 30f),
-			text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "")
-			.TranslateStringComplex(),
-			FLabelAlignment.Left);
-        opLabel.color = color;
+        OpLabel opLabel = new(pos: pos + new Vector2(sizeOfTab + 6, 1),
+            size: new Vector2(240f, 30f),
+            text: (configurable.info.Tags.Length > 0 ? configurable.info.Tags[0] as string : "")
+            .TranslateStringComplex(),
+            FLabelAlignment.Left)
+        {
+            color = color
+        };
         opUpdown.colorEdge = color;
 		opUpdown.colorText = color;
 		opTab.AddItems([opUpdown, opLabel]);

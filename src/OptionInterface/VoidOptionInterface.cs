@@ -31,6 +31,7 @@ public class VoidOptionInterface : global::OptionInterface
             (cfgComplexControl, MediumGrey),
             (cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, CheatingColor),
+			(cfgShortcutBlocker, CheatingColor),
 			(cfgNoPermaDeath, CheatingColor),
 			(cfgForceUnlockCampaign, CheatingColor),
 			(cfgPermaDeathCycle, CheatingColor),

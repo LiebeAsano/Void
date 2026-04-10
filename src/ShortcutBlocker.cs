@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using VoidTemplate.OptionInterface;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate
@@ -31,7 +32,7 @@ namespace VoidTemplate
         {
             orig(self);
 
-            if (self.game.IsVoidWorld() || self.game.IsViyWorld())
+            if (!OptionAccessors.ShortcutBlocker)
             {
                 if (!self.world.TryGetShortcutBlock(out var block))
                 {
@@ -87,7 +88,7 @@ namespace VoidTemplate
                     if (absPlayer == null || absPlayer.realizedCreature == null)
                         continue;
 
-                    if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.AreVoidViy())
+                    if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid())
                         continue;
 
                     RecentShortcutExit exit = player.GetRecentExit();
@@ -116,7 +117,7 @@ namespace VoidTemplate
                     if (absPlayer == null || absPlayer.realizedCreature == null)
                         continue;
 
-                    if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.AreVoidViy())
+                    if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid())
                         continue;
 
                     RecentShortcutExit exit = player.GetRecentExit();
@@ -158,7 +159,7 @@ namespace VoidTemplate
                     if (absPlayer == null || absPlayer.realizedCreature == null)
                         continue;
 
-                    if (absPlayer.realizedCreature is not Player player || !player.AreVoidViy())
+                    if (absPlayer.realizedCreature is not Player player || !player.IsVoid())
                         continue;
 
                     RecentShortcutExit exit = player.GetRecentExit();
@@ -292,6 +293,15 @@ namespace VoidTemplate
                             shortcut.Unlock();
                         }
                     }
+                    else if (shortcut.passCount > 0 && shortcut.passCountResetTimer > 0)
+                    {
+                        shortcut.passCountResetTimer--;
+
+                        if (shortcut.passCountResetTimer <= 0)
+                        {
+                            shortcut.ResetPassCount();
+                        }
+                    }
                 }
             }
         }
@@ -305,7 +315,7 @@ namespace VoidTemplate
             IntVector2 shortcutDir = default;
 
             if (voidPlayer != null &&
-                voidPlayer.AreVoidViy() &&
+                voidPlayer.IsVoid() &&
                 self.abstractCreature != null &&
                 self.abstractCreature.world != null &&
                 self.abstractCreature.world.TryGetShortcutBlock(out var block) &&
@@ -323,7 +333,7 @@ namespace VoidTemplate
 
             orig(self, pos, newRoom, spitOutAllSticks);
 
-            if (voidPlayer == null || !voidPlayer.AreVoidViy() || hitBlock == null || exitNode < 0)
+            if (voidPlayer == null || !voidPlayer.IsVoid() || hitBlock == null || exitNode < 0)
                 return;
 
             RecentShortcutExit exit = voidPlayer.GetRecentExit();
@@ -335,7 +345,7 @@ namespace VoidTemplate
 
             if (!sameExitRecently)
             {
-                hitBlock.passCount++;
+                hitBlock.RegisterPass();
 
                 if (hitBlock.passCount > 4)
                 {
@@ -446,7 +456,10 @@ namespace VoidTemplate
 
                 public int blockTime;
                 public int passCount;
+                public int passCountResetTimer;
                 public float signalCycle;
+
+                public const int PassCountResetDelay = 1200;
 
                 public BlockedShortcut(AbstractRoom fromRoom, int toRoom2Node)
                 {
@@ -464,9 +477,22 @@ namespace VoidTemplate
                     node2 = room2.ExitIndex(room1.index);
                 }
 
+                public void RegisterPass()
+                {
+                    passCount++;
+                    passCountResetTimer = PassCountResetDelay;
+                }
+
+                public void ResetPassCount()
+                {
+                    passCount = 0;
+                    passCountResetTimer = 0;
+                    signalCycle = 0f;
+                }
+
                 public void Block()
                 {
-                    blockTime = 600;
+                    blockTime = Random.Range(400, 801);
 
                     if (room1.realizedRoom is Room rRoom)
                     {
@@ -487,13 +513,13 @@ namespace VoidTemplate
                     }
 
                     passCount = 0;
+                    passCountResetTimer = 0;
                     signalCycle = 0f;
                 }
 
                 public void Unlock()
                 {
                     room1.realizedRoom?.lockedShortcuts.Remove(room1.realizedRoom.ShortcutLeadingToNode(node1).StartTile);
-
                     room2.realizedRoom?.lockedShortcuts.Remove(room2.realizedRoom.ShortcutLeadingToNode(node2).StartTile);
                 }
 

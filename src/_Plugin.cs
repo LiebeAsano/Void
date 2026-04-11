@@ -113,6 +113,7 @@ class _Plugin : BaseUnityPlugin
             _Karma11FeaturesMeta.Hook();
             _Karma11FoundationMeta.Hook();
             _PlayerMechanicsMeta.Hook();
+            PlayerMechanics.HunterMechanics._HunterMechanics.Hook();
             _MiscMeta.Hook();
             _ViyMechanicsMeta.Hook();
             VoidCycleLimit.Hook();

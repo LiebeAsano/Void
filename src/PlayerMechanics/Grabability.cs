@@ -77,11 +77,11 @@ public static class Grabability
         if (CanOneHandGrabVoidViy(self, obj))
             return Player.ObjectGrabability.OneHand;
 
+        if (obj is PoleMimic || obj is TentaclePlant)
+            return Player.ObjectGrabability.CantGrab;
+
         if (self.AreVoidViy())
         {
-            if (obj is PoleMimic || obj is TentaclePlant)
-                return Player.ObjectGrabability.CantGrab;
-
             if (obj is Cicada)
                 return Player.ObjectGrabability.Drag;
 

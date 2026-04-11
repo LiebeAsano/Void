@@ -9,10 +9,13 @@ Hold down the 'Direction' and 'Up' buttons to climb the wall.|Удерживай
 Your body is strong enough to climb on any surface.|Твоё тело достаточно окрепло, чтобы лазать по любым поверхностям.
 Your abilities also continue to improve.|Твои способности также продолжают развиваться.
 It is painful... but Karma Flower saves your current cycle.|Это больно... но Кармацвет сохраняет твой текущий цикл.
+Press the 'Down' button before landing to reduce the fall damage.|Нажми кнопку 'Вниз' перед приземлением, чтобы снизить урон от падения.
 The vessel could not withstand the impact of the void liquid.<LINE>Now the soul is doomed to relive his last cycles forever.|Сосуд не выдержал воздействие пустотной жидкости.<LINE>Теперь душа обречена вечно переживать свои последние циклы.
 The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left. (To be continued...)|Душа взывает к новым странствиям, но тело всё ещё цепляется за прошлое.<LINE>Тебя не покидает чувство, что осталось лишь последнее желание. (Продолжение следует...)
 Even after leaving the cycle, life continues to go on as usual.<LINE>The death of another monster leads to the birth of a new one. (To be continued?)|Даже выйдя из цикла, жизнь продолжает идти своим чередом.<LINE>Смерть очередного монстра приводит к рождению нового. (Продолжение следует?)
 The hunger is sated, but the void inside still cries out. After destroying<LINE>the colony, you continue your journey in search of survivors.|Голод утолён, а пустота внутри всё ещё вопит. Уничтожив колонию,<LINE>ты продолжаешь своё путешествие в поисках выживших.
+
+Game Start - |Начало
 
 Pick up / Eat / Maul button interactions:|Действия кнопки Взять / Съесть / Растерзать:
 Tap to pick up objects|Нажми, чтобы взять предметы
@@ -60,20 +63,26 @@ Allows Saint to throw spears in arena|Позволяет Святому кида
 Saint's ascension stuns instead of kills|Возвышение Святого оглушает, а не убивает
 
 ~ Assist ~|~ Помощь ~
+Fall damage|Урон от падения
 Weakened blizzard lizard|Ослабленный буреящер
 Complex control|Усложнённое управление
-Simplified hunger|Упрощённый голод
 Gamepad controller|Управление для геймпада
+Simplified hunger|Упрощённый голод
+
+Disable block shortcut|Отключить блокировку труб
 Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
+Enables fall damage for all creatures|Включает урон от падения для всех существ
 Disables shield and removes instant death from blizzard beam|Отключает щит и убирает мгновенную смерть от морозного луча
 Allows Void to switch move set between climbing and running. Tap 'Special' to switch mode|Позволяет Пустотному переключаться между режимами лазания и бега. Нажмите 'Особенность', чтобы переключить режим
+
+The shortcut no longer wears out when using by Void|Трубы больше не изнашиваются при использовании Пустотным
 Gives you whole pips when eating food instead of half pips|При употреблении пищи вы получаете целые ячейки вместо половинок
 Makes easier to climb the ceiling using a gamepad. Tap 'Special' to ceiling climb|Упрощает лазание по потолку используя геймпад. Нажмите 'Особенность', чтобы лазать по потолку
 Disables permadeath for Void from losing all karma or limit cycles|Отключает перманентную смерть для Пустотного
 Removes the requirement to complete as Hunter to play this mod|Отменяет требование в прохождении за Охотника, чтобы сыграть в этот мод
-Void Cycles|Циклы Пустотного
-Void Bonus Cycles|Бонусные Циклы Пустотного
+Void cycles|Циклы Пустотного
+Void bonus cycles|Бонусные циклы Пустотного
 Changes the amount of cycles Void starts with in their campaign|Изменить количество циклов, с которыми начинает кампанию Пустотный
 Changes the amount of bonus cycles Void can receive from the echo|Изменить количество бонусных циклов, которые может получить Пустотный от отголоска
 //PICK INTERRUPT MESSAGES

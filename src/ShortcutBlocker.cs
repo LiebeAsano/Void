@@ -208,6 +208,8 @@ namespace VoidTemplate
                         {
                             exit.lastCountedRoom = null;
                             exit.lastCountedNode = -1;
+                            exit.lastCountedWasRoomShortcut = false;
+                            exit.lastCountedShortcutTile = default;
                         }
                     }
                 }
@@ -350,71 +352,116 @@ namespace VoidTemplate
         private static void Creature_SpitOutOfShortCut(On.Creature.orig_SpitOutOfShortCut orig, Creature self, IntVector2 pos, Room newRoom, bool spitOutAllSticks)
         {
             Player voidPlayer = self as Player;
-            if (voidPlayer != null && voidPlayer.IsVoid() && voidPlayer.room != null && !self.inShortcut)
-            {
-                var transportShortcutBlock = self.room.GetRoomShortcutBlock().GetShortcutBlock(pos);
-                
-                if (transportShortcutBlock != null)
-                {
-                    transportShortcutBlock.RegisterPass();
 
-                    if (transportShortcutBlock.passCount > 4)
-                    {
-                        transportShortcutBlock.Block();
-                    }
-                }
-            }
-            WorldShortcutBlock.BlockedRoomExit hitBlock = null;
+            RoomTransportShortcutBlocker.RoomShortcutBlock localHitBlock = null;
+            IntVector2 localLockedTile = default;
+            IntVector2 localShortcutDir = default;
+
+            WorldShortcutBlock.BlockedRoomExit worldHitBlock = null;
             int exitNode = -1;
-            IntVector2 lockedTile = default;
-            IntVector2 shortcutDir = default;
+            IntVector2 worldLockedTile = default;
+            IntVector2 worldShortcutDir = default;
 
-            if (voidPlayer != null &&
-                voidPlayer.IsVoid() &&
-                self.abstractCreature != null &&
-                self.abstractCreature.world != null &&
-                self.abstractCreature.world.TryGetShortcutBlock(out var block) &&
-                TryResolveExitNode(newRoom, pos, out exitNode))
+            if (voidPlayer != null && voidPlayer.IsVoid() && newRoom != null)
             {
-                hitBlock = block.GetBlockedShortcut(newRoom.abstractRoom, exitNode);
+                localHitBlock = newRoom.GetRoomShortcutBlock().GetShortcutBlock(pos);
 
-                if (hitBlock != null)
+                if (localHitBlock != null)
                 {
-                    ShortcutData exitShortcut = newRoom.ShortcutLeadingToNode(exitNode);
-                    lockedTile = exitShortcut.StartTile;
-                    shortcutDir = newRoom.ShorcutEntranceHoleDirection(lockedTile);
+                    localLockedTile = pos;
+                    localShortcutDir = newRoom.ShorcutEntranceHoleDirection(localLockedTile);
+                }
+
+                if (self.abstractCreature != null &&
+                    self.abstractCreature.world != null &&
+                    self.abstractCreature.world.TryGetShortcutBlock(out var worldBlock) &&
+                    TryResolveExitNode(newRoom, pos, out exitNode))
+                {
+                    worldHitBlock = worldBlock.GetBlockedShortcut(newRoom.abstractRoom, exitNode);
+
+                    if (worldHitBlock != null)
+                    {
+                        ShortcutData exitShortcut = newRoom.ShortcutLeadingToNode(exitNode);
+                        worldLockedTile = exitShortcut.StartTile;
+                        worldShortcutDir = newRoom.ShorcutEntranceHoleDirection(worldLockedTile);
+                    }
                 }
             }
 
             orig(self, pos, newRoom, spitOutAllSticks);
 
-            if (voidPlayer == null || !voidPlayer.IsVoid() || hitBlock == null || exitNode < 0)
+            if (voidPlayer == null || !voidPlayer.IsVoid() || newRoom == null)
                 return;
 
             RecentShortcutExit exit = voidPlayer.GetRecentExit();
 
-            bool sameExitRecently =
+            if (localHitBlock != null)
+            {
+                bool sameLocalExitRecently =
+                    exit.countDebounce > 0 &&
+                    exit.lastCountedRoom == newRoom.abstractRoom &&
+                    exit.lastCountedWasRoomShortcut &&
+                    SameTile(exit.lastCountedShortcutTile, localLockedTile);
+
+                if (!sameLocalExitRecently)
+                {
+                    localHitBlock.RegisterPass();
+
+                    if (localHitBlock.passCount > 4)
+                    {
+                        localHitBlock.Block();
+                    }
+
+                    exit.lastCountedRoom = newRoom.abstractRoom;
+                    exit.lastCountedNode = -1;
+                    exit.lastCountedWasRoomShortcut = true;
+                    exit.lastCountedShortcutTile = localLockedTile;
+                    exit.countDebounce = 10;
+                }
+
+                exit.room = newRoom;
+                exit.lockedTile = localLockedTile;
+                exit.shortcutDir = localShortcutDir;
+                exit.timer = 20;
+
+                voidPlayer.enteringShortCut = null;
+
+                for (int i = 0; i < voidPlayer.bodyChunks.Length; i++)
+                {
+                    voidPlayer.bodyChunks[i].vel = Vector2.zero;
+                }
+
+                return;
+            }
+
+            if (worldHitBlock == null || exitNode < 0)
+                return;
+
+            bool sameWorldExitRecently =
                 exit.countDebounce > 0 &&
                 exit.lastCountedRoom == newRoom.abstractRoom &&
+                !exit.lastCountedWasRoomShortcut &&
                 exit.lastCountedNode == exitNode;
 
-            if (!sameExitRecently)
+            if (!sameWorldExitRecently)
             {
-                hitBlock.RegisterPass();
+                worldHitBlock.RegisterPass();
 
-                if (hitBlock.passCount > 4)
+                if (worldHitBlock.passCount > 4)
                 {
-                    hitBlock.Block();
+                    worldHitBlock.Block();
                 }
 
                 exit.lastCountedRoom = newRoom.abstractRoom;
                 exit.lastCountedNode = exitNode;
+                exit.lastCountedWasRoomShortcut = false;
+                exit.lastCountedShortcutTile = default;
                 exit.countDebounce = 10;
             }
 
             exit.room = newRoom;
-            exit.lockedTile = lockedTile;
-            exit.shortcutDir = shortcutDir;
+            exit.lockedTile = worldLockedTile;
+            exit.shortcutDir = worldShortcutDir;
             exit.timer = 20;
 
             voidPlayer.enteringShortCut = null;
@@ -472,6 +519,9 @@ namespace VoidTemplate
             public AbstractRoom lastCountedRoom;
             public int lastCountedNode = -1;
             public int countDebounce;
+
+            public bool lastCountedWasRoomShortcut;
+            public IntVector2 lastCountedShortcutTile;
         }
 
         public abstract class VoidShortcutBlock
@@ -556,11 +606,7 @@ namespace VoidTemplate
                 return false;
             }
 
-            public void AddShortcut(IntVector2 shortcut)
-            {
-                var sData = room.shortcutData(shortcut);
-                blockedShorcuts.Add(new(room, shortcut));
-            }
+            public void AddShortcut(IntVector2 shortcut) => blockedShorcuts.Add(new(room, shortcut));
 
             public class RoomShortcutBlock : VoidShortcutBlock
             {

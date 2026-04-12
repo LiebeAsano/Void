@@ -19,6 +19,34 @@ public static class Grabability
         On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         //allows hand switching when holding big object
         //IL.Player.GrabUpdate += Player_GrabUpdate;
+        IL.Player.GraphicsModuleUpdated += Player_GraphicsModuleUpdated;
+        On.Creature.Grasp.Release += Grasp_Release;
+    }
+
+    private static void Grasp_Release(On.Creature.Grasp.orig_Release orig, Creature.Grasp self)
+    {
+        orig(self);
+        if (self.grabber is Player p && p.AreVoidViy() && self.grabbed is Creature)
+        {
+            self.grabbed.CollideWithObjects = true;
+        }
+    }
+
+    private static void Player_GraphicsModuleUpdated(ILContext il)
+    {
+        ILCursor c = new(il);
+        ILLabel skip = null;
+        if (c.TryGotoNext(MoveType.After,
+            x => x.MatchIsinst<Player>(),
+            x => x.MatchBrfalse(out skip)))
+        {
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate((Player self) =>
+            {
+                return !self.AreVoidViy();
+            });
+            c.Emit(OpCodes.Brfalse, skip);
+        }
     }
 
     private static void Player_Movement(ILContext il)
@@ -87,8 +115,8 @@ public static class Grabability
 
             if (obj is Player player && player != self && !player.AreVoidViy())
             {
-                if (player.room?.game?.IsArenaSession != true)
-                    return Player.ObjectGrabability.Drag;
+                //if (player.room?.game?.IsArenaSession != true)
+                    return Player.ObjectGrabability.OneHand;
             }
 
             if (obj is Watcher.BigMoth bigMoth && bigMoth.Small)
@@ -134,7 +162,7 @@ public static class Grabability
                             }
                         }
                     }
-                    else if (self is not Player && (self is not TubeWorm || self is TubeWorm tubeWorm && !tubeWorm.dead))
+                    else if (self is not Player && (self is not TubeWorm tubeWorm || !tubeWorm.dead))
                     {
                         if (self.State is HealthState)
                         {
@@ -145,6 +173,10 @@ public static class Grabability
                                 self.Die();
                             }
                         }
+                    }
+                    if (grabberPlayer.Grabability(self) == Player.ObjectGrabability.OneHand && (!(self.Template.smallCreature || (self is Centipede centi && centi.Small))))
+                    {
+                        self.CollideWithObjects = false;
                     }
                     break;
                 }

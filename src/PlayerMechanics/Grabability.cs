@@ -49,46 +49,6 @@ public static class Grabability
         }
     }
 
-    private static void Player_Movement(ILContext il)
-    {
-        var cursor = new ILCursor(il);
-
-        while (cursor.TryGotoNext(
-            i => i.MatchLdflda<PhysicalObject>("dynamicRunSpeed"),
-            i => i.MatchLdcR4(3.6f),
-            i => i.MatchStfld<float[]>("[1]")
-            ))
-        {
-            cursor.Index += 3;
-
-            cursor.Emit(OpCodes.Ldarg_0);
-            cursor.EmitDelegate<Action<Player>>(self =>
-            {
-                if (self.slugcatStats.name == VoidEnums.SlugcatID.Void)
-                {
-                    self.dynamicRunSpeed[0] *= 10f;
-                    self.dynamicRunSpeed[1] *= 10f;
-                }
-            });
-        }
-    }
-
-    private static void Player_GrabUpdate(MonoMod.Cil.ILContext il)
-    {
-        ILCursor c = new(il);
-        ILLabel skipGrababilityCheck = c.DefineLabel();
-        if (c.TryGotoNext(x => x.MatchCall(typeof(Player).GetMethod(nameof(Player.Grabability), bindingAttr: System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)))
-            && c.TryGotoNext(MoveType.After, x => x.MatchLdcI4(3))
-            && c.TryGotoPrev(MoveType.After, x => x.MatchBrfalse(out skipGrababilityCheck)))
-        {
-            LogExInf("applying hooke");
-            c.Emit(OpCodes.Ldarg, 0);
-            c.EmitDelegate<Predicate<Player>>((player) => player.IsVoid());
-            c.Emit(OpCodes.Brtrue, skipGrababilityCheck);
-        }
-        else LogExErr("search for grabability check failed. Void won't be able to swap hands with heavy objects");
-    }
-
     public static bool CanOneHandGrabVoidViy(Player self, PhysicalObject obj)
     {
         if (self == null || obj == null)

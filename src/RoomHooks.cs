@@ -2,16 +2,13 @@
 using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
-using SlugBase;
 using SlugBase.Features;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using VoidTemplate.Objects;
-using VoidTemplate.PlayerMechanics;
 using static VoidTemplate.SaveManager;
 using static VoidTemplate.Useful.Utils;
 
@@ -427,14 +424,29 @@ namespace VoidTemplate
 
         private static void RainWorldGame_ctor(On.RainWorldGame.orig_ctor orig, RainWorldGame self, ProcessManager manager)
         {
-            if (VoidDreamScript.IsVoidDream) manager.musicPlayer?.FadeOutAllSongs(5);
+            if (VoidDreamScript.IsVoidDream)
+                manager.musicPlayer?.FadeOutAllSongs(5);
+
             orig(self, manager);
+
+            if (self?.world == null || self.Players == null)
+                return;
+
+            AbstractRoom oeFinal03 = self.world.GetAbstractRoom("OE_FINAL03");
+            if (oeFinal03 == null)
+                return;
+
+            var spawnPos = Room.StaticGetTilePosition(new Vector2(325, 175));
+
             for (int i = 0; i < self.Players.Count; i++)
             {
-                if (self.Players[i].Room.name == "OE_FINAL03")
+                AbstractCreature absPlayer = self.Players[i];
+                if (absPlayer == null)
+                    continue;
+
+                if (absPlayer.pos.room == oeFinal03.index)
                 {
-                    var spawnPos = Room.StaticGetTilePosition(new Vector2(325, 175));
-                    self.Players[i].pos.Tile = new(spawnPos.x, spawnPos.y + i);
+                    absPlayer.pos.Tile = new IntVector2(spawnPos.x, spawnPos.y + i);
                 }
             }
         }

@@ -15,7 +15,7 @@ public class Ending : UpdatableAndDeletable
 	/// this should be between 0 and 1
 	/// </summary>
 	const float cameraMoveSteepnessModifier = 0.15f;
-	static Vector2 desiredCamOffset = new Vector2(0, 4500);
+	static Vector2 desiredCamOffset = new(0, 4500);
 	static Vector2 initialcampos;
 	private enum State
 	{

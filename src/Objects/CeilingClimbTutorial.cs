@@ -32,23 +32,16 @@ public class Tutorial : UpdatableAndDeletable
 		slatedForDeletetion = true;
 	}
 
-	public class Message
-	{
-		public readonly string text;
-		public readonly int wait;
-		public readonly int time;
+	public class Message(string text, int waitTime, int holdTime)
+    {
+		public readonly string text = text;
+		public readonly int wait = waitTime;
+		public readonly int time = holdTime;
 
-		public Message(string text, int waitTime, int holdTime)
-		{
-			this.text = text;
-			wait = waitTime;
-			time = holdTime;
-		}
-
-		public Message(string text) : this(text, 0, 160)
+        public Message(string text) : this(text, 0, 160)
 		{
 		}
 	}
 
-	private Message[] messageList;
+	private readonly Message[] messageList;
 }

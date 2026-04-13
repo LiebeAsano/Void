@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VoidTemplate.Objects;
+﻿using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;

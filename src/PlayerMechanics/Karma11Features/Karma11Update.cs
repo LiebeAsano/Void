@@ -1,11 +1,4 @@
-﻿using RegionKit.Modules.Objects;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VoidTemplate.Objects;
+﻿using VoidTemplate.Objects;
 using VoidTemplate.Useful;
 using static VoidTemplate.SaveManager;
 
@@ -37,12 +30,15 @@ public static class Karma11Update
             {
                 ExternalSaveData.VoidKarma11 = true;
                 VoidKarma11 = ExternalSaveData.VoidPermaNightmare != 0;
-                VoidPermaNightmare = ExternalSaveData.VoidPermaNightmare == 2;
+                VoidPermaNightmare = ExternalSaveData.VoidPermaNightmare == 2 ||
+                                     game.GetStorySession.saveState.GetVoidFoodToHibernate() == 6
+                                     || VoidKarma11 && !game.IsVoidStoryCampaign();
             }
             else
             {
                 ExternalSaveData.VoidKarma11 = false;
                 VoidKarma11 = false;
+                game.GetStorySession.saveState.SetKarmaToken(5);
             }
         }
         else
@@ -71,8 +67,7 @@ public static class Karma11Update
         {
             int voidFoodToHibernate = self.abstractCreature?.world?.game?.GetStorySession?.saveState?.GetVoidFoodToHibernate() ?? 0;
 
-            VoidKarma11 = self.FoodInStomach >= 7 - voidFoodToHibernate ||
-                          voidFoodToHibernate == 6;
+            VoidKarma11 = self.FoodInStomach >= 7 - voidFoodToHibernate;
         }
     }
 }

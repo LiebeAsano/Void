@@ -274,7 +274,7 @@ namespace VoidTemplate
                 for (int i = 0; i < roomBlock.blockedShorcuts.Count; i++)
                 {
                     var shortcut = roomBlock.blockedShorcuts[i];
-                    if (shortcut.passCount == 4 || shortcut.blockTime > 0)
+                    if (shortcut.passCount == shortcut.maxPassCount || shortcut.blockTime > 0)
                     {
                         int index1 = self.room.shortcutsIndex.IndexfOf(shortcut.blockedShrotcut1);
                         int index2 = self.room.shortcutsIndex.IndexfOf(shortcut.blockedShrotcut2);
@@ -285,22 +285,22 @@ namespace VoidTemplate
                         {
                             FSprite sprite1 = self.entranceSprites[index1, 0];
                             if (sprite1 != null)
-                                sprite1.color = (shortcut.passCount == 4) ? Color.Lerp(sprite1.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
+                                sprite1.color = (shortcut.passCount == shortcut.maxPassCount) ? Color.Lerp(sprite1.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
 
                             FSprite sprite2 = self.entranceSprites[index1, 1];
                             if (sprite2 != null)
-                                sprite2.color = (shortcut.passCount == 4) ? Color.Lerp(sprite2.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
+                                sprite2.color = (shortcut.passCount == shortcut.maxPassCount) ? Color.Lerp(sprite2.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
                         }
 
                         if (index2 > -1)
                         {
                             FSprite sprite1 = self.entranceSprites[index2, 0];
                             if (sprite1 != null)
-                                sprite1.color = (shortcut.passCount == 4) ? Color.Lerp(sprite1.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
+                                sprite1.color = (shortcut.passCount == shortcut.maxPassCount) ? Color.Lerp(sprite1.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
 
                             FSprite sprite2 = self.entranceSprites[index2, 1];
                             if (sprite2 != null)
-                                sprite2.color = (shortcut.passCount == 4) ? Color.Lerp(sprite2.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
+                                sprite2.color = (shortcut.passCount == shortcut.maxPassCount) ? Color.Lerp(sprite2.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
                         }
                     }
                 }
@@ -309,7 +309,7 @@ namespace VoidTemplate
                     for (int i = 0; i < block.blockedShortcuts.Count; i++)
                     {
                         WorldShortcutBlock.BlockedRoomExit shortcut = block.blockedShortcuts[i];
-                        if (shortcut.passCount == 4 || shortcut.blockTime > 0)
+                        if (shortcut.passCount == shortcut.maxPassCount || shortcut.blockTime > 0)
                         {
                             int index = -1;
 
@@ -324,11 +324,11 @@ namespace VoidTemplate
 
                                 FSprite sprite1 = self.entranceSprites[index, 0];
                                 if (sprite1 != null)
-                                    sprite1.color = (shortcut.passCount == 4) ? Color.Lerp(sprite1.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
+                                    sprite1.color = (shortcut.passCount == shortcut.maxPassCount) ? Color.Lerp(sprite1.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
 
                                 FSprite sprite2 = self.entranceSprites[index, 1];
                                 if (sprite2 != null)
-                                    sprite2.color = (shortcut.passCount == 4) ? Color.Lerp(sprite2.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
+                                    sprite2.color = (shortcut.passCount == shortcut.maxPassCount) ? Color.Lerp(sprite2.color, DrawSprites.voidColor, lerp) : DrawSprites.voidColor;
                             }
                         }
                     }
@@ -407,7 +407,7 @@ namespace VoidTemplate
                 {
                     localHitBlock.RegisterPass();
 
-                    if (localHitBlock.passCount > 4)
+                    if (localHitBlock.passCount > localHitBlock.maxPassCount)
                     {
                         localHitBlock.Block();
                     }
@@ -447,7 +447,7 @@ namespace VoidTemplate
             {
                 worldHitBlock.RegisterPass();
 
-                if (worldHitBlock.passCount > 4)
+                if (worldHitBlock.passCount > worldHitBlock.maxPassCount)
                 {
                     worldHitBlock.Block();
                 }
@@ -530,6 +530,10 @@ namespace VoidTemplate
 
             public int blockTime;
 
+            public int maxPassCount = 4;
+
+            public bool maxRegister = false;
+
             public int passCount;
 
             public int passCountResetTimer;
@@ -538,7 +542,7 @@ namespace VoidTemplate
 
             public void Update()
             {
-                if (passCount == 4)
+                if (passCount == maxPassCount)
                 {
                     signalCycle += 0.011111111f;
                 }
@@ -565,12 +569,18 @@ namespace VoidTemplate
 
             public void RegisterPass()
             {
+                if (!maxRegister)
+                {
+                    maxPassCount = Random.Range(3, 8);
+                    maxRegister = true;
+                }
                 passCount++;
                 passCountResetTimer = PassCountResetDelay;
             }
 
             public void ResetPassCount()
             {
+                maxRegister = false;
                 passCount = 0;
                 passCountResetTimer = 0;
                 signalCycle = 0f;

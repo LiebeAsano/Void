@@ -1,18 +1,12 @@
 ﻿using MoreSlugcats;
 using RWCustom;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using VoidTemplate.Objects;
 using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
-using Watcher;
-using static Room;
 
 namespace VoidTemplate;
 
@@ -384,7 +378,6 @@ public static class DrawSprites
         #endregion
 
         #region face
-        //face sprite logic
         FSprite faceSprite = sLeaser.sprites[9];
         string faceSpriteName = faceSprite.element.name;
         if (self.player.room is not null
@@ -450,7 +443,6 @@ public static class DrawSprites
         #region echoTail
         if (sLeaser.sprites[2] is TriangleMesh tail)
         {
-            //watcher autosets tail to have a custom watcher shader, which hates color
             if (tail.shader != FShader.defaultShader)
             {
                 tail.shader = FShader.defaultShader;

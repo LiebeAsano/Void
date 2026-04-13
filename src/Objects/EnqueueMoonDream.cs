@@ -11,8 +11,8 @@ public class EnqueueMoonDream : UpdatableAndDeletable
 		absPlayers = room.game.Players;
 		saveState = room.game.GetStorySession.saveState;
 	}
-	List<AbstractCreature> absPlayers = null;
-	SaveState saveState;
+    private readonly List<AbstractCreature> absPlayers = null;
+    private readonly SaveState saveState;
 	public override void Update(bool eu)
 	{
 		base.Update(eu);

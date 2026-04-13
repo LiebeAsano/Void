@@ -11,7 +11,7 @@ using UnityEngine;
 namespace VoidTemplate.Useful;
 public static class Utils
 {
-	public const string ModID = "rainworldlastwish";
+	public const string ModID = "rainworldlastwishtest";
 	public const int TicksPerSecond = 40;
 	public static void Loginf(object e) => _Plugin.logger.LogInfo(e);
 	public static void Logerr(object e) => _Plugin.logger.LogError(e);
@@ -27,8 +27,10 @@ public static class Utils
 	public static bool IsVoidStoryCampaign(this RainWorldGame game) => (game.IsVoidWorld()
 			&& !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
 	public static bool IsViyWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Viy;
-    public static bool IsViyStoryCampaign(this RainWorldGame game) => (game.IsViyWorld()
-            && !(ModManager.Expedition && game.rainWorld.ExpeditionMode));
+    public static bool IsViyStoryCampaign(this RainWorldGame game) => game.IsViyWorld()
+            && !(ModManager.Expedition && game.rainWorld.ExpeditionMode);
+    public static bool AreVoidViyWorld(this RainWorldGame game) => game.StoryCharacter == VoidEnums.SlugcatID.Void || game.StoryCharacter == VoidEnums.SlugcatID.Viy;
+
     public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
 
     public static Color[] VoidColors = new Color[32];

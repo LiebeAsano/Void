@@ -1,11 +1,8 @@
 ﻿using Menu;
 using RWCustom;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using VoidTemplate.PlayerMechanics.Karma11Features;
 using static VoidTemplate.SaveManager;
-using static VoidTemplate.Useful.Utils;
 using static VoidTemplate.VoidEnums;
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;

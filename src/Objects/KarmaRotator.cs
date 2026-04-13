@@ -9,7 +9,7 @@ namespace VoidTemplate.Objects;
 public class KarmaRotator : UpdatableAndDeletable
 {
 	
-	private FSprite karmaSprite => karmaMeter.karmaSprite;
+	private FSprite KarmaSprite => karmaMeter.karmaSprite;
 	private readonly int ticksToRotate;
 	private readonly float rotationDegrees;
     private readonly KarmaMeter karmaMeter;
@@ -48,12 +48,12 @@ public class KarmaRotator : UpdatableAndDeletable
 		//getting fancy curve that dictates rotation progression
 		float rotationProgress = FunctionOfRotationProgress(progress);
 		//un-normalizing rotation progression
-		karmaSprite.rotation = rotationProgress * rotationDegrees;
+		KarmaSprite.rotation = rotationProgress * rotationDegrees;
 		lifetimeTicks++;
 		if (lifetimeTicks > ticksToRotate)
 		{
 			slatedForDeletetion = true;
-			karmaSprite.rotation = 0;
+			KarmaSprite.rotation = 0;
         }
 	}
 }

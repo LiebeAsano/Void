@@ -3,7 +3,6 @@ using SlugBase.SaveData;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace VoidTemplate;
 
@@ -13,14 +12,12 @@ public static class SaveManager
     private const string teleportationDone = uniqueprefix + "TeleportationDone";
     private const string messageShown = uniqueprefix + "MessageShown";
     private const string karmaFlowerShown = uniqueprefix + "MessageShown";
-    private const string punishDeath = uniqueprefix + "NonPermaDeath";
     private const string startClimbingMessageShown = uniqueprefix + "StartClimbingMessageShown";
 
     const string endingDone = uniqueprefix + "EndingDone";
     private const string voidCatDead = uniqueprefix + "VoidCatDead";
     private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
     private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
-    private const string saveVoidCycle = uniqueprefix + "SaveVoidCycle";
     private const string hasHadFirstCycleAsViy = uniqueprefix + "ViyFirstCycle";
 
 

@@ -33,6 +33,24 @@ public static class Utils
 
     public static bool KarmaKapCheck(this Player p, int karmaRequirement) => p.KarmaCap >= karmaRequirement;
 
+    public static SoundID ViyVoiceBad()
+    {
+        switch (UnityEngine.Random.Range(0, 4))
+        {
+            case 0:
+                return VoidEnums.SoundID.ViyVoiceBad1;
+            case 1:
+                return VoidEnums.SoundID.ViyVoiceBad2;
+            case 2:
+                return VoidEnums.SoundID.ViyVoiceBad3;
+            case 3:
+                return VoidEnums.SoundID.ViyVoiceBad4;
+            default:
+                break;
+        }
+        return VoidEnums.SoundID.ProtoViyScreamSound;
+    }
+
     public static Color[] VoidColors = new Color[32];
 
     public static Color[] ViyColors = new Color[32];

@@ -507,7 +507,7 @@ public static class KarmaFlowerChanges
                     }
                 }
 
-                //player.room.PlaySound(Utils.ViyVoiceBad(), player.bodyChunks[0]);
+                player.room.PlaySound(Utils.ViyVoiceBad(), player.bodyChunks[0]);
                 player.SaintStagger(240);
                 player.Stun(240);
                 grasp.Release();

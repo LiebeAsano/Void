@@ -26,4 +26,9 @@
 [ADD]UI_Pitch1/dopplerFac=0 : UIPitch1/vol=0.25
 [ADD]UI_Pitch2/dopplerFac=0 : UIPitch2/vol=0.25
 
-[ADD]Proto_Viy_Scream_Sound/dopplerFac=0 : ProtoViyScreamSound/vol=0.25
+[ADD]Proto_Viy_Scream_Sound/dopplerFac=0 : ProtoViyScreamSound/vol=0.75
+ 
+[ADD]Viy_Voice_Bad1/dopplerFac=0 : ViyVoiceBad1/vol=0.75
+[ADD]Viy_Voice_Bad2/dopplerFac=0 : ViyVoiceBad2/vol=0.75
+[ADD]Viy_Voice_Bad3/dopplerFac=0 : ViyVoiceBad3/vol=0.75
+[ADD]Viy_Voice_Bad4/dopplerFac=0 : ViyVoiceBad4/vol=0.75

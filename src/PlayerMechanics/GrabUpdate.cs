@@ -176,11 +176,8 @@ public static class GrabUpdate
                     if (self.FoodInStomach < self.MaxFoodInStomach || self.grasps[num5].grabbed is KarmaFlower || self.grasps[num5].grabbed is Mushroom)
                     {
                         flag3 = false;
-                        if (self.spearOnBack != null)
-                        {
-                            self.spearOnBack.increment = false;
-                        }
-                        if (self.eatCounter < 1)
+                        self.spearOnBack?.increment = false;
+                        if (self.eatCounter < 1 && self.grasps[num5].grabbed is KarmaFlower karmaFlower && !karmaFlower.GetFlowerExt().voidRot)
                         {
                             self.eatCounter = 15;
                             self.BiteEdibleObject(eu);

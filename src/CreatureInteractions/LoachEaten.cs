@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions
@@ -12,7 +13,6 @@ namespace VoidTemplate.CreatureInteractions
 
         private static readonly ConditionalWeakTable<Watcher.Loach, LoachState> loachStates = new();
 
-        private const int KillDelay = 6 * 40;
 
         public static void Hook()
         {
@@ -34,7 +34,7 @@ namespace VoidTemplate.CreatureInteractions
                     player.IsVoid())
                 {
                     player.Destroy();
-                    loachStates.GetOrCreateValue(self).killTimer = KillDelay;
+                    loachStates.GetOrCreateValue(self).killTimer = UnityEngine.Random.Range(160, 321);
                     break;
                 }
             }

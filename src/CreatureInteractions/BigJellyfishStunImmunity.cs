@@ -52,7 +52,7 @@ public class BigJellyfishStunImmunity
         {
             if (self.consumedCreatures[i] is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
             {
-                jellyStates.GetOrCreateValue(self).deathTimer = 180;
+                jellyStates.GetOrCreateValue(self).deathTimer = UnityEngine.Random.Range(160, 321);
                 break;
             }
         }

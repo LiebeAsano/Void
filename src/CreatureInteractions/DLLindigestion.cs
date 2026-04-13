@@ -40,7 +40,7 @@ public static class DLLindigestion
             {
                 DestroyBody(player);
                 var state = stowawayStates.GetOrCreateValue(self);
-                state.killTimer = 3 * 40;
+                state.killTimer = UnityEngine.Random.Range(160, 321);
                 state.finishEating = true;
                 triggered = true;
                 break;
@@ -86,7 +86,7 @@ public static class DLLindigestion
             {
                 DestroyBody(player);
                 var state = dllStates.GetOrCreateValue(self);
-                state.killTimer = 3 * 40;
+                state.killTimer = UnityEngine.Random.Range(120, 201);
                 state.finishEating = true;
                 triggered = true;
                 break;

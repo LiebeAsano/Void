@@ -13,8 +13,6 @@ public static class LeechIndigestion
 
     private static readonly ConditionalWeakTable<Leech, LeechState> leechStates = new();
 
-    private const int KillDelay = 6 * 40;
-
     public static void Hook()
     {
         On.Leech.Attached += OnLeechAttached;
@@ -33,7 +31,7 @@ public static class LeechIndigestion
                 grasp.grabbed is Player player &&
                 player.AreVoidViy()))
         {
-            leechStates.GetOrCreateValue(self).killTimer = KillDelay;
+            leechStates.GetOrCreateValue(self).killTimer = UnityEngine.Random.Range(160, 321);
         }
     }
 

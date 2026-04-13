@@ -24,7 +24,7 @@ public static class BigMothDrinks
 
         if (self.drinkChunk?.owner is Player player && player.IsVoid())
         {
-            states.GetOrCreateValue(self).killTimer = 6 * 40;
+            states.GetOrCreateValue(self).killTimer = UnityEngine.Random.Range(160, 321);
         }
     }
 

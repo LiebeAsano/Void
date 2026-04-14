@@ -4,6 +4,7 @@ using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using RWCustom;
 using MoreSlugcats;
+using VoidTemplate.PlayerMechanics.ViyMechanics;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -400,7 +401,7 @@ public static class GrabUpdate
         {
             self.reloadCounter = 0;
         }
-        if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f/* || ExternalSaveData.ViyLungExtended && self.IsViy()*/))
+        if (ModManager.MMF && self.mainBodyChunk.submersion >= 0.5f && !(ViyAdaptation.ViyLungExtended && self.IsViy()))
         {
             flag3 = false;
         }
@@ -437,7 +438,7 @@ public static class GrabUpdate
                             }
                             else
                             {
-                                self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
+                                self.firstChunk.vel += new Vector2(Random.Range(-1f, 1f), 0f);
                                 self.Stun(60);
                             }
                         }
@@ -454,14 +455,11 @@ public static class GrabUpdate
                             }
                             else
                             {
-                                self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
+                                self.firstChunk.vel += new Vector2(Random.Range(-1f, 1f), 0f);
                                 self.Stun(60);
                             }
                         }
-                        if (self.spearOnBack != null)
-                        {
-                            self.spearOnBack.interactionLocked = true;
-                        }
+                        self.spearOnBack?.interactionLocked = true;
                         self.swallowAndRegurgitateCounter = 0;
                     }
                     else if (self.swallowAndRegurgitateCounter > 90)
@@ -488,10 +486,7 @@ public static class GrabUpdate
                                 }
                                 self.bodyChunks[0].pos += Custom.DirVec(self.grasps[graspIndex].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;
                                 self.SwallowObject(graspIndex);
-                                if (self.spearOnBack != null)
-                                {
-                                    self.spearOnBack.interactionLocked = true;
-                                }
+                                self.spearOnBack?.interactionLocked = true;
                                 self.swallowAndRegurgitateCounter = 0;
                                 (self.graphicsModule as PlayerGraphics).swallowing = 20;
                                 break;

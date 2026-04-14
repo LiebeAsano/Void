@@ -186,7 +186,6 @@ namespace VoidTemplate
                     }
                 }
 
-                // Небольшой анти-реэнтри сразу после spit out.
                 if (!blockedAttempt && exit.timer > 0 && exit.room == self.room && player.enteringShortCut != null)
                 {
                     if (SameTile(player.enteringShortCut.Value, exit.lockedTile))

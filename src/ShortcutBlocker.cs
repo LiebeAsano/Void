@@ -116,8 +116,6 @@ namespace VoidTemplate
             bool worldHaveBlock = self.room.world.TryGetShortcutBlock(out var worldBlock);
             RoomTransportShortcutBlocker localBlocker = self.room.GetRoomShortcutBlock();
 
-            // МЯГКАЯ блокировка для void-игрока:
-            // отменяем вход, но НЕ меняем ни vel, ни pos.
             if (self.room.game.Players != null)
             {
                 for (int i = 0; i < self.room.game.Players.Count; i++)
@@ -172,7 +170,6 @@ namespace VoidTemplate
                 }
             }
 
-            // Для НЕ-игроков оставляем мягкое отталкивание у входа.
             for (int pusher = 0; pusher < self.pushers.Count; pusher++)
             {
                 ShortcutHelper.ShortcutPusher currentPusher = self.pushers[pusher];

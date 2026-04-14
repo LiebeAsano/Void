@@ -271,7 +271,8 @@ public static class KarmaFlowerChanges
 
         if (self.grabbedBy.Count > 0 &&
             self.grabbedBy[0].grabber is Player player &&
-            player.IsVoid())
+            player.IsVoid() &&
+            Karma11Update.VoidNightmare)
         {
             var ext = self.GetFlowerExt();
             ext.voidRot = true;

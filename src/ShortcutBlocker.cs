@@ -36,6 +36,7 @@ namespace VoidTemplate
         private static void Room_Update(On.Room.orig_Update orig, Room self)
         {
             orig(self);
+
             var block = self.GetRoomShortcutBlock();
             for (int i = 0; i < block.blockedShorcuts.Count; i++)
             {
@@ -46,10 +47,12 @@ namespace VoidTemplate
         private static void Room_ShortCutsReady(On.Room.orig_ShortCutsReady orig, Room self)
         {
             orig(self);
+
             var block = self.GetRoomShortcutBlock();
             for (int i = 0; i < self.shortcuts.Length; i++)
             {
-                if (self.shortcuts[i].shortCutType == ShortcutData.Type.Normal && block.GetShortcutBlock(self.shortcuts[i].StartTile) == null)
+                if (self.shortcuts[i].shortCutType == ShortcutData.Type.Normal &&
+                    block.GetShortcutBlock(self.shortcuts[i].StartTile) == null)
                 {
                     block.AddShortcut(self.shortcuts[i].StartTile);
                 }
@@ -124,8 +127,7 @@ namespace VoidTemplate
                     {
                         if (self.room.lockedShortcuts.Contains(exit.lockedTile))
                         {
-                            temporarilyUnlocked ??= [];
-
+                            temporarilyUnlocked ??= new List<IntVector2>();
                             temporarilyUnlocked.Add(exit.lockedTile);
                             self.room.lockedShortcuts.Remove(exit.lockedTile);
                         }
@@ -136,37 +138,6 @@ namespace VoidTemplate
             }
 
             orig(self, eu);
-
-            if (self.room != null && self.room.game != null && self.room.game.Players != null)
-            {
-                for (int i = 0; i < self.room.game.Players.Count; i++)
-                {
-                    AbstractCreature absPlayer = self.room.game.Players[i];
-                    if (absPlayer == null || absPlayer.realizedCreature == null)
-                        continue;
-
-                    if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid())
-                        continue;
-
-                    RecentShortcutExit exit = player.GetRecentExit();
-                    if (exit.timer > 0 && exit.room == self.room)
-                    {
-                        player.enteringShortCut = null;
-
-                        Vector2 dir = exit.shortcutDir.ToVector2();
-                        Vector2 target = self.room.MiddleOfTile(exit.lockedTile + exit.shortcutDir);
-
-                        for (int c = 0; c < player.bodyChunks.Length; c++)
-                        {
-                            BodyChunk chunk = player.bodyChunks[c];
-                            Vector2 wantedPos = target + dir * (10f + chunk.rad);
-
-                            chunk.pos = Vector2.Lerp(chunk.pos, wantedPos, 0.5f);
-                            chunk.vel = Vector2.Lerp(chunk.vel, Vector2.zero, 0.85f);
-                        }
-                    }
-                }
-            }
 
             if (temporarilyUnlocked != null)
             {
@@ -215,14 +186,15 @@ namespace VoidTemplate
                 }
             }
 
-            bool worldHaveBlock = self.room.world.TryGetShortcutBlock(out var block);
+            bool worldHaveBlock = self.room.world.TryGetShortcutBlock(out var block2);
 
             for (int pusher = 0; pusher < self.pushers.Count; pusher++)
             {
                 ShortcutHelper.ShortcutPusher currentPusher = self.pushers[pusher];
                 ShortcutData data = self.room.shortcutData(currentPusher.shortCutPos);
 
-                if (self.room.GetRoomShortcutBlock().ShortcutBlocked(currentPusher.shortCutPos) || worldHaveBlock && block.RoomAndNodeBlocked(self.room.abstractRoom, data.destNode))
+                if (self.room.GetRoomShortcutBlock().ShortcutBlocked(currentPusher.shortCutPos) ||
+                    (worldHaveBlock && block2.RoomAndNodeBlocked(self.room.abstractRoom, data.destNode)))
                 {
                     for (int creature = 0; creature < self.room.abstractRoom.creatures.Count; creature++)
                     {
@@ -261,7 +233,6 @@ namespace VoidTemplate
                     }
                 }
             }
-
         }
 
         private static void ShortcutGraphics_Draw(On.ShortcutGraphics.orig_Draw orig, ShortcutGraphics self, float timeStacker, Vector2 camPos)
@@ -304,6 +275,7 @@ namespace VoidTemplate
                         }
                     }
                 }
+
                 if (self.room.world.TryGetShortcutBlock(out var block))
                 {
                     for (int i = 0; i < block.blockedShortcuts.Count; i++)
@@ -403,6 +375,8 @@ namespace VoidTemplate
                     exit.lastCountedWasRoomShortcut &&
                     SameTile(exit.lastCountedShortcutTile, localLockedTile);
 
+                bool blockedNow = false;
+
                 if (!sameLocalExitRecently)
                 {
                     localHitBlock.RegisterPass();
@@ -410,6 +384,7 @@ namespace VoidTemplate
                     if (localHitBlock.passCount > localHitBlock.maxPassCount)
                     {
                         localHitBlock.Block();
+                        blockedNow = true;
                     }
 
                     exit.lastCountedRoom = newRoom.abstractRoom;
@@ -431,6 +406,11 @@ namespace VoidTemplate
                     voidPlayer.bodyChunks[i].vel = Vector2.zero;
                 }
 
+                if (blockedNow)
+                {
+                    PushPlayerFromShortcut(voidPlayer, newRoom, localLockedTile, localShortcutDir);
+                }
+
                 return;
             }
 
@@ -443,6 +423,8 @@ namespace VoidTemplate
                 !exit.lastCountedWasRoomShortcut &&
                 exit.lastCountedNode == exitNode;
 
+            bool worldBlockedNow = false;
+
             if (!sameWorldExitRecently)
             {
                 worldHitBlock.RegisterPass();
@@ -450,6 +432,7 @@ namespace VoidTemplate
                 if (worldHitBlock.passCount > worldHitBlock.maxPassCount)
                 {
                     worldHitBlock.Block();
+                    worldBlockedNow = true;
                 }
 
                 exit.lastCountedRoom = newRoom.abstractRoom;
@@ -469,6 +452,31 @@ namespace VoidTemplate
             for (int i = 0; i < voidPlayer.bodyChunks.Length; i++)
             {
                 voidPlayer.bodyChunks[i].vel = Vector2.zero;
+            }
+
+            if (worldBlockedNow)
+            {
+                PushPlayerFromShortcut(voidPlayer, newRoom, worldLockedTile, worldShortcutDir);
+            }
+        }
+
+        private static void PushPlayerFromShortcut(Player player, Room room, IntVector2 lockedTile, IntVector2 shortcutDir)
+        {
+            if (player == null || room == null)
+                return;
+
+            player.enteringShortCut = null;
+
+            Vector2 dir = shortcutDir.ToVector2();
+            Vector2 target = room.MiddleOfTile(lockedTile + shortcutDir);
+
+            for (int i = 0; i < player.bodyChunks.Length; i++)
+            {
+                BodyChunk chunk = player.bodyChunks[i];
+                Vector2 wantedPos = target + dir * (10f + chunk.rad);
+
+                chunk.pos = Vector2.Lerp(chunk.pos, wantedPos, 1f);
+                chunk.vel = Vector2.Lerp(chunk.vel, Vector2.zero, 2f);
             }
         }
 
@@ -529,15 +537,10 @@ namespace VoidTemplate
             public const int PassCountResetDelay = 1200;
 
             public int blockTime;
-
             public int maxPassCount = 4;
-
             public bool maxRegister = false;
-
             public int passCount;
-
             public int passCountResetTimer;
-
             public float signalCycle;
 
             public void Update()
@@ -574,6 +577,7 @@ namespace VoidTemplate
                     maxPassCount = Random.Range(3, 8);
                     maxRegister = true;
                 }
+
                 passCount++;
                 passCountResetTimer = PassCountResetDelay;
             }
@@ -595,7 +599,7 @@ namespace VoidTemplate
         {
             public readonly Room room = room;
 
-            public List<RoomShortcutBlock> blockedShorcuts = [];
+            public List<RoomShortcutBlock> blockedShorcuts = new();
 
             public RoomShortcutBlock GetShortcutBlock(IntVector2 shortcut)
             {
@@ -616,14 +620,12 @@ namespace VoidTemplate
                 return false;
             }
 
-            public void AddShortcut(IntVector2 shortcut) => blockedShorcuts.Add(new(room, shortcut));
+            public void AddShortcut(IntVector2 shortcut) => blockedShorcuts.Add(new RoomShortcutBlock(room, shortcut));
 
             public class RoomShortcutBlock : VoidShortcutBlock
             {
                 public readonly Room room;
-
                 public readonly IntVector2 blockedShrotcut1;
-
                 public readonly IntVector2 blockedShrotcut2;
 
                 public RoomShortcutBlock(Room room, IntVector2 roomShortcut)
@@ -662,7 +664,7 @@ namespace VoidTemplate
 
         public class WorldShortcutBlock
         {
-            public List<BlockedRoomExit> blockedShortcuts = [];
+            public List<BlockedRoomExit> blockedShortcuts = new();
 
             public bool RoomAndNodeBlocked(AbstractRoom room, int node)
             {

@@ -37,11 +37,7 @@ public static class DrawSprites
         orig(self);
         if (self.player.IsVoid() && (Karma11Update.VoidKarma11 || self.player.KarmaCap == 10 && self.player.dead) && self.GetPlayerGExt().toEcxoTail < 1)
         {
-            self.GetPlayerGExt().toEcxoTail += 0.005f;
-            if (!self.player.abstractCreature.Room.world.game.IsVoidStoryCampaign())
-            {
-                self.GetPlayerGExt().toEcxoTail = 1f;
-            }
+            self.GetPlayerGExt().toEcxoTail = 1f;
         }
         if (self?.player == null) return;
             UpdateVoidDeadGlow(self);
@@ -53,8 +49,7 @@ public static class DrawSprites
         public float alpha;
     }
 
-    private static readonly ConditionalWeakTable<PlayerGraphics, BaseGlow> baseGlow =
-        new();
+    private static readonly ConditionalWeakTable<PlayerGraphics, BaseGlow> baseGlow = new();
 
     private static void UpdateVoidDeadGlow(PlayerGraphics self)
     {
@@ -452,7 +447,7 @@ public static class DrawSprites
             {
                 tail.color = new(0f, 0f, 0.005f);
             }
-            else if (self.GetPlayerGExt().toEcxoTail < 0.11f)
+            else if (self.GetPlayerGExt().toEcxoTail < 0.75f)
             {
                 if (tail.element.name != "Futile_White")
                 {
@@ -466,7 +461,7 @@ public static class DrawSprites
                 {
                     tail.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Void-Tail"), tail.triangles.Length);
                 }
-                tail.color = Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
+                tail.color = Utils.VoidColors[player.playerState.playerNumber];
             }
         }
 

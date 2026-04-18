@@ -3,6 +3,7 @@ using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.PlayerMechanics;
@@ -21,6 +22,21 @@ public static class Grabability
         //IL.Player.GrabUpdate += Player_GrabUpdate;
         IL.Player.GraphicsModuleUpdated += Player_GraphicsModuleUpdated;
         On.Creature.Grasp.Release += Grasp_Release;
+        On.Player.IsCreatureImmuneToPlayerGrabStun += Player_IsCreatureImmuneToPlayerGrabStun;
+        On.Player.TerrainImpact += Player_TerrainImpact;
+    }
+
+    private static void Player_TerrainImpact(On.Player.orig_TerrainImpact orig, Player self, int chunk, RWCustom.IntVector2 direction, float speed, bool firstContact)
+    {
+        if (self.grabbedBy.Count > 0 && self.grabbedBy[0].grabber is Player player && player.AreVoidViy() && !self.Consious)
+            speed = 0;
+        orig(self, chunk, direction, speed, firstContact);
+    }
+
+    private static bool Player_IsCreatureImmuneToPlayerGrabStun(On.Player.orig_IsCreatureImmuneToPlayerGrabStun orig, Player self, Creature grabCheck)
+    {
+        if (self.AreVoidViy() && grabCheck is Player) return false;
+        return orig(self, grabCheck);
     }
 
     private static void Grasp_Release(On.Creature.Grasp.orig_Release orig, Creature.Grasp self)
@@ -75,8 +91,8 @@ public static class Grabability
 
             if (obj is Player player && player != self && !player.AreVoidViy())
             {
-                //if (player.room?.game?.IsArenaSession != true)
-                    return Player.ObjectGrabability.OneHand;
+                if (player.room?.game?.IsArenaSession != true)
+                return Player.ObjectGrabability.OneHand;
             }
 
             if (obj is Watcher.BigMoth bigMoth && bigMoth.Small)
@@ -86,7 +102,7 @@ public static class Grabability
         return orig(self, obj);
     }
 
-    private static readonly Dictionary<Creature, Dictionary<BodyChunk, float>> OriginalMasses = [];
+    private static readonly ConditionalWeakTable<Creature, float[]> OriginalMasses = new();
 
     private static void Creature_Update(On.Creature.orig_Update orig, Creature self, bool eu)
     {
@@ -142,54 +158,45 @@ public static class Grabability
                 }
             }
         }
-
-        if (isGrabbedByVoidViy && !OriginalMasses.ContainsKey(self))
+        float[] origChunkMasses = null;
+        if (!OriginalMasses.TryGetValue(self, out origChunkMasses) && isGrabbedByVoidViy)
         {
-            var chunkMasses = new Dictionary<BodyChunk, float>();
+            origChunkMasses = new float[self.bodyChunks.Length];
+            OriginalMasses.Add(self, origChunkMasses);
             foreach (var chunk in self.bodyChunks)
             {
-                chunkMasses[chunk] = chunk.mass;
+                origChunkMasses[chunk.index] = chunk.mass;
             }
-            OriginalMasses[self] = chunkMasses;
         }
 
-        if (OriginalMasses.TryGetValue(self, out var originalChunks))
+        if (origChunkMasses != null)
         {
             foreach (var chunk in self.bodyChunks)
             {
-                if (originalChunks.TryGetValue(chunk, out var originalMass))
+                float originalMass = origChunkMasses[chunk.index];
+
+                if (self is Player)
                 {
-                    if (self is Player player || self is Cicada || self is JetFish)
-                    {
-                        if (self is Player)
-                        {
-                            self.stun = 20;
-                            chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
-                        }
-                        if (self is Cicada || self is JetFish)
-                            chunk.mass = isGrabbedByVoidViy && self.dead ? 0.05f : originalMass;
-                    }
-                    else if (self is Watcher.BigMoth bigMoth && bigMoth.Small)
-                    {
-                        chunk.mass = isGrabbedByVoidViy ? originalMass * 0.25f : originalMass;
-                    }
-                    else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is Scavenger)
-                    {
-                        chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
-                    }
+                    chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
+                }
+                else if (self is Cicada || self is JetFish)
+                {
+                    chunk.mass = isGrabbedByVoidViy && self.dead ? 0.05f : originalMass;
+                }
+                else if (self is Watcher.BigMoth bigMoth && bigMoth.Small)
+                {
+                    chunk.mass = isGrabbedByVoidViy ? originalMass * 0.25f : originalMass;
+                }
+                else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is Scavenger)
+                {
+                    chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
                 }
             }
-
-            if (!isGrabbedByVoidViy)
-            {
-                OriginalMasses.Remove(self);
-            }
         }
 
-        var deadEntries = OriginalMasses.Keys.Where(c => c.slatedForDeletetion || c.room == null).ToList();
-        foreach (var deadCreature in deadEntries)
+        if (!isGrabbedByVoidViy)
         {
-            OriginalMasses.Remove(deadCreature);
+            OriginalMasses.Remove(self);
         }
     }
 

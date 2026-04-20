@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Permissions;
 using VoidTemplate.Creatures;
 using VoidTemplate.Misc;
+using VoidTemplate.Objects.MarkItem;
 using VoidTemplate.Objects.SingularityRock;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
@@ -71,7 +72,8 @@ class _Plugin : BaseUnityPlugin
         new LWIceLizardCritob(CreatureTemplateType.LWRainLizard),
         new DartspiderHCritob(),
         new DartspiderPCritob(),
-        new MiniEnergyCellFisob()
+        new MiniEnergyCellFisob(),
+        new MarkFisobs()
         ]);
     }
     private static bool ModsInited;

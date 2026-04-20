@@ -14,6 +14,7 @@ public static class VoidEnums
 		ConversationID.Register();
 		SlugcatID.Register();
 		ProcessID.Register();
+		_ = MiscTalkItem.VoidMark;
     }
 
 	public static class SceneID
@@ -259,4 +260,11 @@ public static class VoidEnums
 	{
 		public static SlugcatStats.Timeline VoidTimeline = new("Void");
 	}
+
+	public static class MiscTalkItem
+	{
+		public static SLOracleBehaviorHasMark.MiscItemType VoidMark = new("VoidMark");
+        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV2 = new("VoidMarkV2");
+        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV3 = new("VoidMarkV3");
+    }
 }

@@ -5,14 +5,56 @@ using VoidTemplate.Useful;
 using RWCustom;
 using MoreSlugcats;
 using VoidTemplate.PlayerMechanics.ViyMechanics;
+using VoidTemplate.Objects.MarkItem;
+using VoidTemplate.Objects;
+using UnityEngine.Rendering;
+using System.Runtime.CompilerServices;
 
 namespace VoidTemplate.PlayerMechanics;
 
 public static class GrabUpdate
 {
+    private static ConditionalWeakTable<Player, StrongBox<int>> markRegConunter = new();
+
+    public static StrongBox<int> GetMarkRegCounter(this Player player) => markRegConunter.GetOrCreateValue(player);
+
     public static void Hook()
     {
         On.Player.GrabUpdate += Player_GrabUpdate;
+    }
+
+    public static void RegurgitateMark(this Player player, StoryGameSession storySession)
+    {
+        Mark.MarkAbstract mark = new(player.room.world, player.abstractCreature.pos, player.room.game.GetNewID())
+        {
+            markType = storySession.saveState.GetVoidMarkV3() ? Mark.MarkType.V3 : storySession.saveState.GetVoidMarkV2() ? Mark.MarkType.V2 : Mark.MarkType.Normal
+        };
+        player.room.abstractRoom.AddEntity(mark);
+        mark.RealizeInRoom();
+        Vector2 vector = player.bodyChunks[0].pos;
+        Vector2 vector2 = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
+        if (Mathf.Abs(player.bodyChunks[0].pos.y - player.bodyChunks[1].pos.y) > Mathf.Abs(player.bodyChunks[0].pos.x - player.bodyChunks[1].pos.x) && player.bodyChunks[0].pos.y > player.bodyChunks[1].pos.y)
+        {
+            vector += Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos) * 5f;
+            vector2 *= -1f;
+            vector2.x += 0.4f * player.flipDirection;
+            vector2.Normalize();
+        }
+        mark.realizedObject.firstChunk.HardSetPosition(vector);
+        mark.realizedObject.firstChunk.vel = Vector2.ClampMagnitude((vector2 * 2f + Custom.RNV() * Random.value) / mark.realizedObject.firstChunk.mass, 0.75f);
+        player.bodyChunks[0].pos -= vector2 * 2f;
+        player.bodyChunks[0].vel -= vector2 * 2f;
+        if (player.graphicsModule != null)
+        {
+            (player.graphicsModule as PlayerGraphics).head.vel += Custom.RNV() * (Random.value * 3f);
+        }
+        player.Stun(200);
+        player.room.AddObject(new CreatureSpasmer(player, false, 200));
+        player.aerobicLevel = 1.5f;
+        player.exhausted = true;
+        player.SetMalnourished(true, false);
+        HunterSpasms.Spasm(player, 10, 0.5f);
+        storySession.saveState.deathPersistentSaveData.theMark = false;
     }
 
     private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
@@ -27,7 +69,8 @@ public static class GrabUpdate
             || (self.input[0].x != 0 && self.input[0].y == 0 && self.bodyMode == Player.BodyModeIndex.WallClimb)
             || (self.input[0].x == 0 && self.input[0].y == 0 && !self.input[0].jmp && !self.input[0].thrw)
             || (ModManager.MMF && self.input[0].x == 0 && self.input[0].y == 1 && !self.input[0].jmp && !self.input[0].thrw
-            && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam)))
+            && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam))
+            || (self.input[0].x == 0 && self.input[0].y == -1 && !self.input[0].jmp && !self.input[0].thrw && self.room.game.session is StoryGameSession s && s.saveState.deathPersistentSaveData.theMark))
             && (self.mainBodyChunk.submersion < 0.5f);
         bool flag2 = false;
         bool flag3 = false;
@@ -404,6 +447,20 @@ public static class GrabUpdate
         if (ModManager.MMF && self.mainBodyChunk.submersion >= 0.5f && !(ViyAdaptation.ViyLungExtended && self.IsViy()))
         {
             flag3 = false;
+        }
+        if (self.room.game.session is StoryGameSession session && session.saveState.deathPersistentSaveData.theMark && self.input[0].pckp && self.input[0].y < 0 && self.bodyChunks[1].ContactPoint.y < 0)
+        {
+            self.GetMarkRegCounter().Value++;
+            if (self.GetMarkRegCounter().Value > 110)
+            {
+                self.RegurgitateMark(session);
+                self.GetMarkRegCounter().Value = 0;
+            }
+            flag3 = false;
+        }
+        else
+        {
+            self.GetMarkRegCounter().Value = 0;
         }
         if (flag3)
         {

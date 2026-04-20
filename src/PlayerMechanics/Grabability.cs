@@ -158,8 +158,7 @@ public static class Grabability
                 }
             }
         }
-        float[] origChunkMasses = null;
-        if (!OriginalMasses.TryGetValue(self, out origChunkMasses) && isGrabbedByVoidViy)
+        if (!OriginalMasses.TryGetValue(self, out float[] origChunkMasses) && isGrabbedByVoidViy)
         {
             origChunkMasses = new float[self.bodyChunks.Length];
             OriginalMasses.Add(self, origChunkMasses);

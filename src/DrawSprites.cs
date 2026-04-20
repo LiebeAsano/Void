@@ -40,7 +40,17 @@ public static class DrawSprites
             self.GetPlayerGExt().toEcxoTail = 1f;
         }
         if (self?.player == null) return;
-            UpdateVoidDeadGlow(self);
+
+        if (timeSinceLastForceUpdate[self.player.playerState.playerNumber] >= forceUpdateInterval)
+        {
+            if (!self.player.AreVoidViy() && self.player.GetPlayerExt().voidPoisonBody && self.GetPlayerGExt().poisonDark < 1f)
+            {
+                self.GetPlayerGExt().poisonDark += 0.000125f;
+            }
+            timeSinceLastForceUpdate[self.player.playerState.playerNumber] = 0f;
+        }
+
+        UpdateVoidDeadGlow(self);
     }
 
     private class BaseGlow
@@ -156,9 +166,10 @@ public static class DrawSprites
         BodyChunk playerBodyChunk1 = player.bodyChunks[1];
         #region drawTail
 
+        timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
+
         if (player.AreVoidViy())
         {
-            timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
 
             if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
                 player.bodyMode == Player.BodyModeIndex.WallClimb &&
@@ -224,8 +235,8 @@ public static class DrawSprites
             }
         }
         #region drawTail
-        if (player.AreVoidViy() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-        player.bodyMode == Player.BodyModeIndex.WallClimb)
+        if (player.AreVoidViy() && (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+        player.bodyMode == Player.BodyModeIndex.WallClimb))
         {
             sLeaser.sprites[4].isVisible = false;
         }
@@ -298,6 +309,48 @@ public static class DrawSprites
             }
         }
 
+        if (timeSinceLastForceUpdate[self.player.playerState.playerNumber] >= forceUpdateInterval)
+        {
+            float poisonDark = self.GetPlayerGExt().poisonDark;
+            if (poisonDark > 0.001f && !player.AreVoidViy())
+            {
+                foreach (var sprite in sLeaser.sprites)
+                {
+                    if (sprite?.element == null) continue;
+                    string spriteName = sprite.element.name;
+                    if (spriteName.StartsWith("PlayerArm")
+                        || spriteName.StartsWith("OnTopOfTerrainHand")
+                        || spriteName.StartsWith("Body")
+                        || spriteName.StartsWith("Hips")
+                        || spriteName.StartsWith("Legs")
+                        || spriteName.StartsWith("Head"))
+                    {
+                        if (!self.GetPlayerGExt().poisoned[sprite.element.indexInAtlas])
+                        {
+                            self.GetPlayerGExt().poisoned[sprite.element.indexInAtlas] = true;
+
+                        }
+                        //sprite.color = Color.Lerp(self.GetPlayerGExt().oldColor, voidColor, poisonDark);
+                    }
+                    else if (sLeaser.sprites[2] is not TriangleMesh)
+                    {
+                        //sprite.color = Color.Lerp(self.GetPlayerGExt().oldColor, voidFluidColor, poisonDark);
+                    }
+                }
+
+                if (sLeaser.sprites[2] is TriangleMesh tail2
+                && tail2.shader != FShader.defaultShader)
+                {
+                    tail2.shader = FShader.defaultShader;
+                }
+
+                if (sLeaser.sprites[2] is TriangleMesh tail3)
+                {
+                    tail3.color = Color.Lerp(tail3.color, voidColor, poisonDark);
+                }
+            }
+            timeSinceLastForceUpdate[self.player.playerState.playerNumber] = 0f;
+        }
         if (player.IsViy())
         {
             Utils.ViyColors[player.playerState.playerNumber] = sLeaser.sprites[9].color;
@@ -493,5 +546,8 @@ public static class DrawSprites
     public class PlayerGraphiscExtention
     {
         public float toEcxoTail;
+        public float poisonDark;
+        public bool[] poisoned = [];
+        public Color[] oldColor = [];
     }
 }

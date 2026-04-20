@@ -31,8 +31,7 @@ public static class Karma11Update
                 ExternalSaveData.VoidKarma11 = true;
                 VoidKarma11 = ExternalSaveData.VoidPermaNightmare != 0;
                 VoidPermaNightmare = ExternalSaveData.VoidPermaNightmare == 2 ||
-                                     game.GetStorySession.saveState.GetVoidFoodToHibernate() == 6
-                                     || VoidKarma11 && !game.IsVoidStoryCampaign();
+                                     game.GetStorySession.saveState.GetVoidFoodToHibernate() == 6;
             }
             else
             {
@@ -44,8 +43,8 @@ public static class Karma11Update
         else
         {
             VoidKarma11 = ExternalSaveData.VoidKarma11 &&
-                          ExternalSaveData.VoidPermaNightmare != 0 &&
                           !VoidDreamScript.IsVoidDream;
+            VoidPermaNightmare = VoidKarma11;
         }
 
         if (self.abstractCreature.GetPlayerState().InDream)

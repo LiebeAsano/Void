@@ -14,7 +14,10 @@ namespace VoidTemplate.PlayerMechanics;
 public static class KarmaFlowerChanges
 {
     private static readonly ConditionalWeakTable<KarmaFlower, KarmaFlowerExtention> flowerExt = new();
+    private static readonly ConditionalWeakTable<Player, PlayerExtention> playerExt = new();
+
     public static KarmaFlowerExtention GetFlowerExt(this KarmaFlower flower) => flowerExt.GetOrCreateValue(flower);
+    public static PlayerExtention GetPlayerExt(this Player player) => playerExt.GetOrCreateValue(player);
 
     private const int VanillaPetalCount = 4;
     private const int VoidPetalCount = 5;
@@ -31,6 +34,8 @@ public static class KarmaFlowerChanges
     public static void Initiate()
     {
         On.Player.ctor += Player_ctor;
+        On.Player.Update += Plyaer_Update;
+
         On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
         On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
 
@@ -115,7 +120,7 @@ public static class KarmaFlowerChanges
             return;
 
         if (ext.toVoidColor < 1f)
-            ext.toVoidColor = Mathf.Min(1f, ext.toVoidColor + 0.0002f);
+            ext.toVoidColor = Mathf.Min(1f, ext.toVoidColor + 0.00025f);
 
         Color targetVoid = new(0f, 0f, 0.005f);
         SetFlowerColor(self, Color.Lerp(GetFlowerColor(self), targetVoid, ext.toVoidColor));
@@ -272,7 +277,7 @@ public static class KarmaFlowerChanges
         if (self.grabbedBy.Count > 0 &&
             self.grabbedBy[0].grabber is Player player &&
             player.IsVoid() &&
-            Karma11Update.VoidNightmare)
+            Karma11Update.VoidPermaNightmare)
         {
             var ext = self.GetFlowerExt();
             ext.voidRot = true;
@@ -328,7 +333,6 @@ public static class KarmaFlowerChanges
     private static void DrawVoidFlower(
         KarmaFlower self,
         RoomCamera.SpriteLeaser sLeaser,
-        RoomCamera rCam,
         float timeStacker,
         Vector2 camPos)
     {
@@ -463,7 +467,7 @@ public static class KarmaFlowerChanges
         if (sLeaser?.sprites == null)
             return;
 
-        DrawVoidFlower(self, sLeaser, rCam, timeStacker, camPos);
+        DrawVoidFlower(self, sLeaser, timeStacker, camPos);
     }
 
     public static bool SaveVoidCycle = false;
@@ -471,8 +475,42 @@ public static class KarmaFlowerChanges
     private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
     {
         orig(self, abstractCreature, world);
+
+        var ext = self.GetPlayerExt();
+        ext.voidPoisonBody = false;
+        ext.voidPoisonWeaknessApplied = false;
+
         if (self.abstractCreature.world.game.IsVoidStoryCampaign())
             SaveVoidCycle = false;
+    }
+
+    private static void Plyaer_Update(On.Player.orig_Update orig, Player self, bool eu)
+    {
+        orig(self, eu);
+
+        var ext = self.GetPlayerExt();
+
+        bool shouldBeWeakened = !self.AreVoidViy() && ext.voidPoisonBody;
+
+        if (shouldBeWeakened && !ext.voidPoisonWeaknessApplied)
+        {
+            self.SetMalnourished(true, true);
+            ext.voidPoisonWeaknessApplied = true;
+        }
+        else if (!shouldBeWeakened && ext.voidPoisonWeaknessApplied)
+        {
+            self.SetMalnourished(false, true);
+            ext.voidPoisonWeaknessApplied = false;
+        }
+
+        if (shouldBeWeakened && self.playerState is not null)
+        {
+            self.playerState.permanentDamageTracking += 0.000125f;
+            if (self.playerState.permanentDamageTracking >= 1.0f)
+            {
+                self.Die();
+            }
+        }
     }
 
     private static int Player_FoodInRoom_Room_bool(On.Player.orig_FoodInRoom_Room_bool orig, Player self, Room checkRoom, bool eatAndDestroy)
@@ -499,16 +537,18 @@ public static class KarmaFlowerChanges
                 if (player.room.game.session is StoryGameSession &&
                     !(player.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.reinforcedKarma)
                 {
-                    if ((player.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma > 0 &&
-                        !player.abstractCreature.world.game.IsVoidStoryCampaign())
+                    if (!player.abstractCreature.world.game.IsVoidStoryCampaign())
                     {
-                        (player.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma--;
-                        for (int rooms = 0; rooms < player.room.game.cameras.Length; rooms++)
-                            player.room.game.cameras[rooms].hud.karmaMeter?.UpdateGraphic();
+                        if ((player.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma > 0)
+                        {
+                            (player.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.karma--;
+                            for (int rooms = 0; rooms < player.room.game.cameras.Length; rooms++)
+                                player.room.game.cameras[rooms].hud.karmaMeter?.UpdateGraphic();
+                        }
                     }
                 }
-
                 player.room.PlaySound(Utils.ViyVoiceBad(), player.bodyChunks[0]);
+                player.GetPlayerExt().voidPoisonBody = true;
                 player.SaintStagger(240);
                 player.Stun(240);
                 grasp.Release();
@@ -591,5 +631,11 @@ public static class KarmaFlowerChanges
         public bool voidRot;
         public bool voidRotApplied;
         public KarmaFlower.Part extraPetal;
+    }
+
+    public class PlayerExtention
+    {
+        public bool voidPoisonBody = false;
+        public bool voidPoisonWeaknessApplied = false;
     }
 }

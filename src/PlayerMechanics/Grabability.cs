@@ -173,12 +173,7 @@ public static class Grabability
             foreach (var chunk in self.bodyChunks)
             {
                 float originalMass = origChunkMasses[chunk.index];
-
-                if (self is Player)
-                {
-                    chunk.mass = isGrabbedByVoidViy && maulTimer ? 0.05f : originalMass;
-                }
-                else if (self is Cicada || self is JetFish)
+                if (self is Cicada || self is JetFish)
                 {
                     chunk.mass = isGrabbedByVoidViy && self.dead ? 0.05f : originalMass;
                 }
@@ -186,7 +181,7 @@ public static class Grabability
                 {
                     chunk.mass = isGrabbedByVoidViy ? originalMass * 0.25f : originalMass;
                 }
-                else if (self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is Scavenger)
+                else if (self is Player || self is Lizard || self is Centipede || self is DropBug || self is BigNeedleWorm || self is BigSpider || self is Scavenger)
                 {
                     chunk.mass = isGrabbedByVoidViy ? originalMass * 0.5f : originalMass;
                 }

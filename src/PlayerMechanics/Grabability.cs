@@ -115,7 +115,6 @@ public static class Grabability
         orig(self, eu);
 
         bool isGrabbedByVoidViy = false;
-        bool maulTimer = false;
 
         if (self.grabbedBy != null)
         {
@@ -123,8 +122,6 @@ public static class Grabability
             {
                 if (grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
                 {
-                    if (grabberPlayer.maulTimer == 0)
-                        maulTimer = true;
                     isGrabbedByVoidViy = true;
                     if (self is Player player && !player.AreVoidViy())
                     {

@@ -26,7 +26,8 @@ IW_F06 : IW_E01, IW_E02
 IW_E02 : IW_F06, IW_E03
 IW_E03 : IW_E04, IW_E02
 IW_E04 : DISCONNECTED, IW_E03
-IW_D04 : DISCONNECTED, IW_F07
+IW_D04 : IW_I04, IW_F07
+IW_I04 : DISCONNECTED, IW_D04
 
 IW_TempEdgeWest : DISCONNECTED : NOTRACKERS
 IW_TempEdgeSouth : : DISCONNECTED : NOTRACKERS
@@ -54,6 +55,7 @@ OFFSCREEN : 0-Scavenger-7, 0-EliteScavenger-2-{Ignore Cycle}, 0-MirosVulture-1-{
 IW_D01 : 5-Caramel-1-{Ignore Cycle}
 IW_G02 : 2-Strawberry-{Ignore Cycle}, 5-DropBug
 IW_C01 : 3-SmallCentipede-3, 5-SmallCentipede-2
+IW_I04 : 2-WhiteLizard
 
 //Communication Array
 

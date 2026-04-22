@@ -146,6 +146,7 @@ public static class SaveManager
     private const string voidPearl = uniqueprefix + "voidPearl";
     private const string rotPearl = uniqueprefix + "rotPearl";
     private const string voidQuest = uniqueprefix + "voidQuest";
+    private const string getVoidMark = uniqueprefix + "getVoidMark";
     private const string voidMarkV2 = uniqueprefix + "voidMarkV2";
     private const string voidMarkV3 = uniqueprefix + "voidMarkV3";
 
@@ -155,6 +156,9 @@ public static class SaveManager
     public static void SetRotPearl(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(rotPearl, value);
     public static bool GetVoidQuest(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidQuest, out bool voidquest) && voidquest;
     public static void SetVoidQuest(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidQuest, value);
+
+    public static bool GetGetVoidMark(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(getVoidMark, out bool getvoidmark) && getvoidmark;
+    public static void SetGetVoidMark(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(getVoidMark, value);
 
     public static bool GetVoidMarkV2(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidMarkV2, out bool voidmark2) && voidmark2;
     public static void SetVoidMarkV2(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(voidMarkV2, value);

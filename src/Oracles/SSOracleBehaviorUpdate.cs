@@ -459,6 +459,8 @@ public static class SSOracleBehaviorUpdate
                         self.player.Stun(40);
                     }
                     (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.theMark = true;
+                    (self.oracle.room.game.session as StoryGameSession).saveState.SetGetVoidMark(true);
+
                 }
                 if (self.oracle.room.game.StoryCharacter == SlugcatStats.Name.Red)
                 {

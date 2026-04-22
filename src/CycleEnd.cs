@@ -1,4 +1,5 @@
-﻿using Mono.Cecil.Cil;
+﻿using Discord;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
 using VoidTemplate.OptionInterface;
@@ -12,11 +13,19 @@ public static class CycleEnd
 	private static void log(object e) => _Plugin.logger.LogInfo(e);
 	public static void Hook()
 	{
+		On.StoryGameSession.ctor += StoryGameSession_ctor;
 		On.ShelterDoor.Close += CycleEndLogic;
 		//On.RainWorldGame.Update += RainWorldGame_Update;
 		//IL.ShelterDoor.Update += ShelterDoor_Update;
         On.RainWorldGame.Win += RainWorldGame_Win;
 	}
+
+    private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
+    {
+        orig(self, saveStateNumber, game);
+		if (game.IsVoidStoryCampaign() && !game.GetStorySession.saveState.GetGetVoidMark())
+			game.GetStorySession.saveState.deathPersistentSaveData.theMark = false;
+    }
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
     {

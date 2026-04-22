@@ -21,6 +21,11 @@ public static class DontEatVoid
                 self.Die();
                 break;
             }
+            if (grasp?.grabbed is Player prey2 && prey2.GetPlayerExt().voidPoisonBody)
+            {
+                self.GetPlayerExt().voidPoisonBody = true;
+                break;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using MonoMod.Cil;
 using System;
 using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate;
@@ -21,17 +22,26 @@ public static class CycleEnd
     {
 		if (self.manager.upcomingProcess == null)
 		{
-			if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
+            if (self.IsVoidStoryCampaign() && KarmaFlowerChanges.SaveVoidCycle)
+            {
+                self.GetStorySession.saveState.SetVoidExtraCycles(self.GetStorySession.saveState.GetVoidExtraCycles() + 1);
+            }
+            if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
 			{
 				self.GoToDeathScreen();
 				return;
 			}
-			if (self.IsVoidStoryCampaign() && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) && OptionAccessors.PermaDeath && self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && !self.GetStorySession.saveState.GetVoidMarkV3())
+			if (self.IsVoidStoryCampaign() && 
+				self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) &&
+				OptionAccessors.PermaDeath && 
+				self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && 
+				!self.GetStorySession.saveState.GetVoidMarkV3()
+				&& !KarmaFlowerChanges.SaveVoidCycle)
 			{
 				self.GoToRedsGameOver();
 				return;
 			}
-		}
+        }
         orig(self, malnourished, fromWarpPoint);
 
     }

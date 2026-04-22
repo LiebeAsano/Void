@@ -3,9 +3,6 @@ using System.Linq;
 
 namespace VoidTemplate.Objects;
 
-
-
-
 public class TutorialTrigger : UpdatableAndDeletable
 {
 

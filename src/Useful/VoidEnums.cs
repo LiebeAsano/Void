@@ -14,6 +14,7 @@ public static class VoidEnums
 		ConversationID.Register();
 		SlugcatID.Register();
 		ProcessID.Register();
+		_ = MiscTalkItem.VoidMark;
     }
 
 	public static class SceneID
@@ -171,6 +172,11 @@ public static class VoidEnums
             UIPitch2 = new("UI_Pitch2", true);
 
             ProtoViyScreamSound = new("Proto_Viy_Scream_Sound", true);
+
+            ViyVoiceBad1 = new("Viy_Voice_Bad1", true);
+            ViyVoiceBad2 = new("Viy_Voice_Bad2", true);
+            ViyVoiceBad3 = new("Viy_Voice_Bad3", true);
+            ViyVoiceBad4 = new("Viy_Voice_Bad4", true);
         }
 
         public static global::SoundID HalcyonMemories;
@@ -194,6 +200,11 @@ public static class VoidEnums
         public static global::SoundID UIPitch2;
 
         public static global::SoundID ProtoViyScreamSound;
+
+        public static global::SoundID ViyVoiceBad1;
+        public static global::SoundID ViyVoiceBad2;
+        public static global::SoundID ViyVoiceBad3;
+        public static global::SoundID ViyVoiceBad4;
     }
 	public static class ConversationID
 	{
@@ -249,4 +260,11 @@ public static class VoidEnums
 	{
 		public static SlugcatStats.Timeline VoidTimeline = new("Void");
 	}
+
+	public static class MiscTalkItem
+	{
+		public static SLOracleBehaviorHasMark.MiscItemType VoidMark = new("VoidMark");
+        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV2 = new("VoidMarkV2");
+        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV3 = new("VoidMarkV3");
+    }
 }

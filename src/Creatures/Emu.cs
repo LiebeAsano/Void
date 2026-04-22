@@ -28,6 +28,8 @@ public static class CreatureTemplateType
 
     public static AbstractPhysicalObject.AbstractObjectType MiniEnergyCell = new("MiniEnergyCell", true);
 
+    public static AbstractPhysicalObject.AbstractObjectType Mark = new("Mark", true);
+
     public static void UnregisterValues()
     {
         if (LWMimicstarfish != null)

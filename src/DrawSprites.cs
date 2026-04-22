@@ -37,14 +37,17 @@ public static class DrawSprites
         orig(self);
         if (self.player.IsVoid() && (Karma11Update.VoidKarma11 || self.player.KarmaCap == 10 && self.player.dead) && self.GetPlayerGExt().toEcxoTail < 1)
         {
-            self.GetPlayerGExt().toEcxoTail += 0.005f;
-            if (!self.player.abstractCreature.Room.world.game.IsVoidStoryCampaign())
-            {
-                self.GetPlayerGExt().toEcxoTail = 1f;
-            }
+            self.GetPlayerGExt().toEcxoTail = 1f;
         }
+
         if (self?.player == null) return;
-            UpdateVoidDeadGlow(self);
+
+        if (!self.player.AreVoidViy() && self.player.GetPlayerExt().voidPoisonBody && self.player.playerState is not null)
+        {
+            self.GetPlayerGExt().poisonDark = (float)self.player.playerState.permanentDamageTracking;
+        }
+
+        UpdateVoidDeadGlow(self);
     }
 
     private class BaseGlow
@@ -53,8 +56,7 @@ public static class DrawSprites
         public float alpha;
     }
 
-    private static readonly ConditionalWeakTable<PlayerGraphics, BaseGlow> baseGlow =
-        new();
+    private static readonly ConditionalWeakTable<PlayerGraphics, BaseGlow> baseGlow = new();
 
     private static void UpdateVoidDeadGlow(PlayerGraphics self)
     {
@@ -149,9 +151,6 @@ public static class DrawSprites
         }
     }
 
-    private static readonly float[] timeSinceLastForceUpdate = new float[32];
-    private static readonly float forceUpdateInterval = 1f / 40f;
-
     private static void PlayerGraphics_DrawSprites(On.PlayerGraphics.orig_DrawSprites orig, PlayerGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
         string originalMarkSpriteName = sLeaser.sprites[11].element.name;
@@ -163,7 +162,6 @@ public static class DrawSprites
 
         if (player.AreVoidViy())
         {
-            timeSinceLastForceUpdate[player.playerState.playerNumber] += Time.deltaTime;
 
             if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
                 player.bodyMode == Player.BodyModeIndex.WallClimb &&
@@ -171,33 +169,30 @@ public static class DrawSprites
                 player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
                 player.bodyMode != Player.BodyModeIndex.Crawl)
             {
-                if (timeSinceLastForceUpdate[player.playerState.playerNumber] >= forceUpdateInterval)
+
+                foreach (TailSegment tailSegment in self.tail)
                 {
-                    foreach (TailSegment tailSegment in self.tail)
+                    Vector2 force = Vector2.zero;
+
+                    if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
                     {
-                        Vector2 force = Vector2.zero;
-
-                        if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
-                        {
-                            force = new Vector2(-0.7f, 1.4f);
-                        }
-                        else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
-                        {
-                            force = new Vector2(0.7f, 1.4f);
-                        }
-                        else if (!player.input[0].jmp)
-                        {
-                            if (playerBodyChunk0.pos.x > playerBodyChunk1.pos.x)
-                                force = new Vector2(-0.7f, 0.7f);
-                            else
-                                force = new Vector2(0.7f, 0.7f);
-                        }
-
-                        tailSegment.vel += force;
+                        force = new Vector2(-0.7f, 1.4f);
+                    }
+                    else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
+                    {
+                        force = new Vector2(0.7f, 1.4f);
+                    }
+                    else if (!player.input[0].jmp)
+                    {
+                        if (playerBodyChunk0.pos.x > playerBodyChunk1.pos.x)
+                            force = new Vector2(-0.7f, 0.7f);
+                        else
+                            force = new Vector2(0.7f, 0.7f);
                     }
 
-                    timeSinceLastForceUpdate[player.playerState.playerNumber] = 0f;
+                    tailSegment.vel += force;
                 }
+
             }
         }
         #endregion
@@ -229,8 +224,8 @@ public static class DrawSprites
             }
         }
         #region drawTail
-        if (player.AreVoidViy() && player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-        player.bodyMode == Player.BodyModeIndex.WallClimb)
+        if (player.AreVoidViy() && (player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+        player.bodyMode == Player.BodyModeIndex.WallClimb))
         {
             sLeaser.sprites[4].isVisible = false;
         }
@@ -303,13 +298,66 @@ public static class DrawSprites
             }
         }
 
+        var ext = self.GetPlayerGExt();
+        if (ext.poisoned == null || ext.poisoned.Length != sLeaser.sprites.Length)
+        {
+            ext.poisoned = new bool[sLeaser.sprites.Length];
+            ext.oldColor = new Color[sLeaser.sprites.Length];
+        }
+
+        float poisonDark = ext.poisonDark;
+        if (poisonDark > 0.001f && !player.AreVoidViy())
+        {
+            for (int i = 0; i < sLeaser.sprites.Length; i++)
+            {
+                var sprite = sLeaser.sprites[i];
+                if (sprite?.element == null) continue;
+
+                string spriteName = sprite.element.name;
+
+                if (!ext.poisoned[i])
+                {
+                    ext.poisoned[i] = true;
+                    ext.oldColor[i] = sprite.color;
+                }
+
+                bool blackPart =
+                    spriteName.StartsWith("PlayerArm") ||
+                    spriteName.StartsWith("OnTopOfTerrainHand") ||
+                    spriteName.StartsWith("Body") ||
+                    spriteName.StartsWith("Hips") ||
+                    spriteName.StartsWith("Legs") ||
+                    spriteName.StartsWith("Head");
+
+                if (blackPart)
+                {
+                    sprite.color = Color.Lerp(ext.oldColor[i], voidColor, poisonDark);
+                }
+                else if (!blackPart)
+                {
+                    sprite.color = Color.Lerp(ext.oldColor[i], voidFluidColor, poisonDark);
+                }
+            }
+
+            if (sLeaser.sprites[2] is TriangleMesh tail3)
+            {
+                if (tail3.shader != FShader.defaultShader)
+                    tail3.shader = FShader.defaultShader;
+                if (!ext.poisoned[2])
+                {
+                    ext.poisoned[2] = true;
+                    ext.oldColor[2] = tail3.color;
+                }
+                tail3.color = Color.Lerp(ext.oldColor[2], voidColor, poisonDark);
+            }
+        }
         if (player.IsViy())
         {
             Utils.ViyColors[player.playerState.playerNumber] = sLeaser.sprites[9].color;
             if (sLeaser.sprites[2] is TriangleMesh viyTail
             && viyTail.shader != FShader.defaultShader)
             {
-                viyTail.shader = FShader.defaultShader;  
+                viyTail.shader = FShader.defaultShader;
             }
             if (sLeaser.sprites[2] is TriangleMesh viyTail2)
             {
@@ -335,7 +383,7 @@ public static class DrawSprites
                     viyTail2.UVvertices[i] = uv;
                 }
                 viyTail2.color = Utils.ViyColors[player.playerState.playerNumber];
-            } 
+            }
         }
 
         if (!player.IsVoid() || player.abstractCreature.GetPlayerState().InDream) return;
@@ -452,7 +500,7 @@ public static class DrawSprites
             {
                 tail.color = new(0f, 0f, 0.005f);
             }
-            else if (self.GetPlayerGExt().toEcxoTail < 0.11f)
+            else if (self.GetPlayerGExt().toEcxoTail < 0.75f)
             {
                 if (tail.element.name != "Futile_White")
                 {
@@ -466,7 +514,7 @@ public static class DrawSprites
                 {
                     tail.Init(FFacetType.Triangle, Futile.atlasManager.GetElementWithName("Void-Tail"), tail.triangles.Length);
                 }
-                tail.color = Color.Lerp(new(0f, 0f, 0.005f), Utils.VoidColors[player.playerState.playerNumber], self.GetPlayerGExt().toEcxoTail);
+                tail.color = Utils.VoidColors[player.playerState.playerNumber];
             }
         }
 
@@ -498,5 +546,8 @@ public static class DrawSprites
     public class PlayerGraphiscExtention
     {
         public float toEcxoTail;
+        public float poisonDark;
+        public bool[] poisoned = [];
+        public Color[] oldColor = [];
     }
 }

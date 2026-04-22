@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Permissions;
 using VoidTemplate.Creatures;
 using VoidTemplate.Misc;
+using VoidTemplate.Objects.MarkItem;
 using VoidTemplate.Objects.SingularityRock;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.GhostFeatures;
@@ -22,7 +23,8 @@ namespace VoidTemplate;
 [BepInDependency("slime-cubed.slugbase")]
 [BepInDependency("LeeMoriya.Blood", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("ratrat.mosquitoesplugin", BepInDependency.DependencyFlags.SoftDependency)]
-[BepInPlugin(Utils.ModID, "Void", "0.17.2")]
+[BepInDependency("dressmyslugcat", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInPlugin(Utils.ModID, "Void", "1.1.0")]
 class _Plugin : BaseUnityPlugin
 {
 
@@ -71,7 +73,8 @@ class _Plugin : BaseUnityPlugin
         new LWIceLizardCritob(CreatureTemplateType.LWRainLizard),
         new DartspiderHCritob(),
         new DartspiderPCritob(),
-        new MiniEnergyCellFisob()
+        new MiniEnergyCellFisob(),
+        new MarkFisobs()
         ]);
     }
     private static bool ModsInited;

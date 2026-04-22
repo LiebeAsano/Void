@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VoidTemplate.Objects;
+using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
+using static RegionKit.Modules.Particles.V1.PBehaviourModule;
 using static VoidTemplate.OptionInterface.OptionAccessors;
 using static VoidTemplate.Useful.Utils;
 using Object = UnityEngine.Object;
@@ -382,7 +384,9 @@ static class PermadeathConditions
 
         if (player.dead)
         {
-            if (VoidSpecificGameOverCondition(player.room.game))
+            if (player.KarmaCap < 4 || player.room.game.GetStorySession.saveState.GetVoidMarkV3())
+                self.gameOverString = "...";
+            else if (VoidSpecificGameOverCondition(player.room.game))
                 self.gameOverString = "";
             else
             {
@@ -390,30 +394,40 @@ static class PermadeathConditions
                 switch (random)
                 {
                     case 0:
-                        self.gameOverString = player.Karma == 1 ? "I cannot anymore..." : "It is painfull...";
+                        self.gameOverString = player.Karma == 1 ? "Сannot anymore..." : "It is painfull...";
                         break;
                     case 1:
-                        self.gameOverString = Karma11Update.VoidKarma11 ? "This is mine..." : "I am hungry...";
+                        self.gameOverString = Karma11Update.VoidKarma11 ? "This is not your anymore." : "Hungry...";
                         break;
                     case 2:
-                        self.gameOverString = player.room.game.GetStorySession.saveState.GetVoidMarkV3() ? "Still part of you..." : "We are a single entity...";
+                        self.gameOverString = player.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark
+                            ? "Rip it out..."
+                            : player.Karma == 10 ? "It is so quiet." : "The endless hum...";
                         break;
                     case 3:
-                        self.gameOverString = "You have died.";
+                        self.gameOverString = player.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark
+                            ? KarmaFlowerChanges.SaveVoidCycle
+                                ? "A single entity..."
+                                : "Betrayer..."
+                            : !Karma11Update.VoidKarma11
+                                ? KarmaFlowerChanges.SaveVoidCycle
+                                    ? "Stop eating that..."
+                                    : "Need more cycles..."
+                                : "Who are you?";
+                        if (!Karma11Update.VoidKarma11) player.room.PlaySound(ViyVoiceBad());
                         break;
                     case 4:
-                        self.gameOverString = "The void claims another soul.";
+                        self.gameOverString = player.room.game.GetStorySession.saveState.GetKarmaToken() == 1 ? "Do not get in the way." : "Do not understand...";
                         break;
                     case 5:
-                        self.gameOverString = "Your journey ends here.";
+                        self.gameOverString = UnityEngine.Random.Range(0, 2) == 0 ? "Do not share feelings..." : "No memories...";
                         break;
                 }
-                    
             }
         }
         else
         {
-            self.gameOverString = "Fight to get out of the grip by clicking PICK UP";
+            self.gameOverString = "Fight to get out of the grip by fast clicking PICK UP";
         }
     }
 }

@@ -1,23 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static VoidTemplate.SaveManager;
-using UnityEngine;
+﻿using UnityEngine;
 using VoidTemplate.Objects.NoodleEgg;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using RWCustom;
 using MoreSlugcats;
+using VoidTemplate.PlayerMechanics.ViyMechanics;
+using VoidTemplate.Objects.MarkItem;
+using VoidTemplate.Objects;
+using UnityEngine.Rendering;
+using System.Runtime.CompilerServices;
 
 namespace VoidTemplate.PlayerMechanics;
 
 public static class GrabUpdate
 {
+    private static ConditionalWeakTable<Player, StrongBox<int>> markRegConunter = new();
+
+    public static StrongBox<int> GetMarkRegCounter(this Player player) => markRegConunter.GetOrCreateValue(player);
+
     public static void Hook()
     {
         On.Player.GrabUpdate += Player_GrabUpdate;
+    }
+
+    public static void RegurgitateMark(this Player player, StoryGameSession storySession)
+    {
+        Mark.MarkAbstract mark = new(player.room.world, player.abstractCreature.pos, player.room.game.GetNewID())
+        {
+            markType = storySession.saveState.GetVoidMarkV3() ? Mark.MarkType.V3 : storySession.saveState.GetVoidMarkV2() ? Mark.MarkType.V2 : Mark.MarkType.Normal
+        };
+        player.room.abstractRoom.AddEntity(mark);
+        mark.RealizeInRoom();
+        Vector2 vector = player.bodyChunks[0].pos;
+        Vector2 vector2 = Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos);
+        if (Mathf.Abs(player.bodyChunks[0].pos.y - player.bodyChunks[1].pos.y) > Mathf.Abs(player.bodyChunks[0].pos.x - player.bodyChunks[1].pos.x) && player.bodyChunks[0].pos.y > player.bodyChunks[1].pos.y)
+        {
+            vector += Custom.DirVec(player.bodyChunks[1].pos, player.bodyChunks[0].pos) * 5f;
+            vector2 *= -1f;
+            vector2.x += 0.4f * player.flipDirection;
+            vector2.Normalize();
+        }
+        mark.realizedObject.firstChunk.HardSetPosition(vector);
+        mark.realizedObject.firstChunk.vel = Vector2.ClampMagnitude((vector2 * 2f + Custom.RNV() * Random.value) / mark.realizedObject.firstChunk.mass, 0.75f);
+        player.bodyChunks[0].pos -= vector2 * 2f;
+        player.bodyChunks[0].vel -= vector2 * 2f;
+        if (player.graphicsModule != null)
+        {
+            (player.graphicsModule as PlayerGraphics).head.vel += Custom.RNV() * (Random.value * 3f);
+        }
+        player.Stun(200);
+        player.room.AddObject(new CreatureSpasmer(player, false, 200));
+        player.aerobicLevel = 1.5f;
+        player.exhausted = true;
+        player.SetMalnourished(true, false);
+        HunterSpasms.Spasm(player, 10, 0.5f);
+        storySession.saveState.deathPersistentSaveData.theMark = false;
     }
 
     private static void Player_GrabUpdate(On.Player.orig_GrabUpdate orig, Player self, bool eu)
@@ -27,168 +64,118 @@ public static class GrabUpdate
             orig(self, eu);
             return;
         }
-            self.spearOnBack?.Update(eu);
-            bool flag = ((self.input[0].y != 0 && self.input[0].x == 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
-                || (self.input[0].x != 0 && self.input[0].y == 0 && self.bodyMode == Player.BodyModeIndex.WallClimb)
-                || (self.input[0].x == 0 && self.input[0].y == 0 && !self.input[0].jmp && !self.input[0].thrw)
-                || (ModManager.MMF && self.input[0].x == 0 && self.input[0].y == 1 && !self.input[0].jmp && !self.input[0].thrw
-                && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam)))
-                && (self.mainBodyChunk.submersion < 0.5f);
-            bool flag2 = false;
-            bool flag3 = false;
-            self.craftingObject = false;
-            int num = -1;
-            int num2 = -1;
-            bool flag4 = false;
-            if (self.input[0].pckp && !self.input[1].pckp && self.switchHandsProcess == 0f && !self.isSlugpup)
+        self.spearOnBack?.Update(eu);
+        bool flag = ((self.input[0].y != 0 && self.input[0].x == 0 && self.bodyMode == BodyModeIndexExtension.CeilCrawl)
+            || (self.input[0].x != 0 && self.input[0].y == 0 && self.bodyMode == Player.BodyModeIndex.WallClimb)
+            || (self.input[0].x == 0 && self.input[0].y == 0 && !self.input[0].jmp && !self.input[0].thrw)
+            || (ModManager.MMF && self.input[0].x == 0 && self.input[0].y == 1 && !self.input[0].jmp && !self.input[0].thrw
+            && (self.bodyMode != Player.BodyModeIndex.ClimbingOnBeam || self.animation == Player.AnimationIndex.BeamTip || self.animation == Player.AnimationIndex.StandOnBeam))
+            || (self.input[0].x == 0 && self.input[0].y == -1 && !self.input[0].jmp && !self.input[0].thrw && self.room.game.session is StoryGameSession s && s.saveState.deathPersistentSaveData.theMark))
+            && (self.mainBodyChunk.submersion < 0.5f);
+        bool flag2 = false;
+        bool flag3 = false;
+        self.craftingObject = false;
+        int num = -1;
+        int num2 = -1;
+        bool flag4 = false;
+        if (self.input[0].pckp && !self.input[1].pckp && self.switchHandsProcess == 0f && !self.isSlugpup)
+        {
+            bool flag5 = self.grasps[0] != null || self.grasps[1] != null;
+            if (flag5)
             {
-                bool flag5 = self.grasps[0] != null || self.grasps[1] != null;
-                if (flag5)
+                if (self.switchHandsCounter == 0)
                 {
-                    if (self.switchHandsCounter == 0)
-                    {
-                        self.switchHandsCounter = 15;
-                    }
-                    else
-                    {
-                        self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Init, self.mainBodyChunk);
-                        self.switchHandsProcess = 0.01f;
-                        self.wantToPickUp = 0;
-                        self.noPickUpOnRelease = 20;
-                    }
+                    self.switchHandsCounter = 15;
                 }
                 else
                 {
-                    self.switchHandsProcess = 0f;
+                    self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Init, self.mainBodyChunk);
+                    self.switchHandsProcess = 0.01f;
+                    self.wantToPickUp = 0;
+                    self.noPickUpOnRelease = 20;
                 }
             }
-            if (self.switchHandsProcess > 0f)
+            else
             {
-                float num3 = self.switchHandsProcess;
-                self.switchHandsProcess += 0.083333336f;
-                if (num3 < 0.5f && self.switchHandsProcess >= 0.5f)
+                self.switchHandsProcess = 0f;
+            }
+        }
+        if (self.switchHandsProcess > 0f)
+        {
+            float num3 = self.switchHandsProcess;
+            self.switchHandsProcess += 0.083333336f;
+            if (num3 < 0.5f && self.switchHandsProcess >= 0.5f)
+            {
+                self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Complete, self.mainBodyChunk);
+                self.SwitchGrasps(0, 1);
+            }
+            if (self.switchHandsProcess >= 1f)
+            {
+                self.switchHandsProcess = 0f;
+            }
+        }
+        int num4 = -1;
+        int num5 = -1;
+        if (flag)
+        {
+            int num7 = -1;
+            if (ModManager.MSC)
+            {
+                for (int i = 0; i < 2; i++)
                 {
-                    self.room.PlaySound(SoundID.Slugcat_Switch_Hands_Complete, self.mainBodyChunk);
-                    self.SwitchGrasps(0, 1);
-                }
-                if (self.switchHandsProcess >= 1f)
-                {
-                    self.switchHandsProcess = 0f;
+                    if (self.grasps[i] != null)
+                    {
+                        if (self.grasps[i].grabbed is JokeRifle)
+                        {
+                            num2 = i;
+                        }
+                        else if (JokeRifle.IsValidAmmo(self.grasps[i].grabbed))
+                        {
+                            num = i;
+                        }
+                    }
                 }
             }
-            int num4 = -1;
-            int num5 = -1;
-            if (flag)
+            int num8 = 0;
+            while (num5 < 0 && num8 < 2 && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
             {
-                int num7 = -1;
-                if (ModManager.MSC)
+                if (self.grasps[num8] != null && ((self.grasps[num8].grabbed is IPlayerEdible && (self.grasps[num8].grabbed as IPlayerEdible).Edible) || self.grasps[num8].grabbed is NeedleEgg))
                 {
-                    for (int i = 0; i < 2; i++)
+                    num5 = num8;
+                }
+                num8++;
+            }
+            if ((num5 == -1 || (self.FoodInStomach >= self.MaxFoodInStomach && self.grasps[num5].grabbed is not KarmaFlower && self.grasps[num5].grabbed is not Mushroom)) && (self.objectInStomach == null || self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream))
+            {
+                int num9 = 0;
+                while (num7 < 0 && num4 < 0 && num9 < 2)
+                {
+                    if (self.grasps[num9] != null)
                     {
-                        if (self.grasps[i] != null)
+                        if (self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream && self.grasps[num9].grabbed is Spear)
                         {
-                            if (self.grasps[i].grabbed is JokeRifle)
-                            {
-                                num2 = i;
-                            }
-                            else if (JokeRifle.IsValidAmmo(self.grasps[i].grabbed))
-                            {
-                                num = i;
-                            }
+                            num4 = num9;
+                        }
+                        else if (self.CanBeSwallowed(self.grasps[num9].grabbed))
+                        {
+                            num7 = num9;
                         }
                     }
+                    num9++;
                 }
-                int num8 = 0;
-                while (num5 < 0 && num8 < 2 && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
+            }
+            if (num5 > -1 && self.noPickUpOnRelease < 1)
+            {
+                if (!self.input[0].pckp)
                 {
-                    if (self.grasps[num8] != null && ((self.grasps[num8].grabbed is IPlayerEdible && (self.grasps[num8].grabbed as IPlayerEdible).Edible) || self.grasps[num8].grabbed is NeedleEgg))
+                    int num10 = 1;
+                    while (num10 < 10 && self.input[num10].pckp)
                     {
-                        num5 = num8;
+                        num10++;
                     }
-                    num8++;
-                }
-                if ((num5 == -1 || (self.FoodInStomach >= self.MaxFoodInStomach && self.grasps[num5].grabbed is not KarmaFlower && self.grasps[num5].grabbed is not Mushroom)) && (self.objectInStomach == null || self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream))
-                {
-                    int num9 = 0;
-                    while (num7 < 0 && num4 < 0  && num9 < 2)
+                    if (num10 > 1 && num10 < 10)
                     {
-                        if (self.grasps[num9] != null)
-                        {
-                            if (self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream && self.grasps[num9].grabbed is Spear)
-                            {
-                                num4 = num9;
-                            }
-                            else if (self.CanBeSwallowed(self.grasps[num9].grabbed))
-                            {
-                                num7 = num9;
-                            }
-                        }
-                        num9++;
-                    }
-                }
-                if (num5 > -1 && self.noPickUpOnRelease < 1)
-                {
-                    if (!self.input[0].pckp)
-                    {
-                        int num10 = 1;
-                        while (num10 < 10 && self.input[num10].pckp)
-                        {
-                            num10++;
-                        }
-                        if (num10 > 1 && num10 < 10)
-                        {
-                            self.PickupPressed();
-                        }
-                    }
-                }
-                else if (self.input[0].pckp && !self.input[1].pckp)
-                {
-                    self.PickupPressed();
-                }
-                if (self.input[0].pckp)
-                {
-                    if (ModManager.MSC && (self.FreeHand() == -1 || self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Artificer) && self.GraspsCanBeCrafted())
-                    {
-                        self.craftingObject = true;
-                        flag3 = true;
-                        num5 = -1;
-                    }
-                    else if (num4 > -1 || self.CanRetrieveSpearFromBack)
-                    {
-                        self.spearOnBack.increment = true;
-                    }
-                    else if ((num7 > -1 || self.objectInStomach != null || self.AreVoidViy()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
-                    {
-                        flag3 = true;
-                    }
-                    if (num > -1 && num2 > -1)
-                    {
-                        flag4 = true;
-                    }
-                }
-                if (num5 > -1 && self.wantToPickUp < 1 && (self.input[0].pckp || self.eatCounter <= 15) && self.Consious && Custom.DistLess(self.mainBodyChunk.pos, self.mainBodyChunk.lastPos, 3.6f))
-                {
-                    if (self.graphicsModule != null)
-                    {
-                        (self.graphicsModule as PlayerGraphics).LookAtObject(self.grasps[num5].grabbed);
-                    }
-                    flag2 = true;
-                    if (self.FoodInStomach < self.MaxFoodInStomach || self.grasps[num5].grabbed is KarmaFlower || self.grasps[num5].grabbed is Mushroom)
-                    {
-                        flag3 = false;
-                        if (self.spearOnBack != null)
-                        {
-                            self.spearOnBack.increment = false;
-                        }
-                        if (self.eatCounter < 1)
-                        {
-                            self.eatCounter = 15;
-                            self.BiteEdibleObject(eu);
-                        }
-                    }
-                    else if (self.eatCounter < 20 && self.room.game.cameras[0].hud != null)
-                    {
-                        self.room.game.cameras[0].hud.foodMeter.RefuseFood();
+                        self.PickupPressed();
                     }
                 }
             }
@@ -196,29 +183,80 @@ public static class GrabUpdate
             {
                 self.PickupPressed();
             }
-            else
+            if (self.input[0].pckp)
             {
-                if (self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream)
+                if (ModManager.MSC && (self.FreeHand() == -1 || self.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Artificer) && self.GraspsCanBeCrafted())
                 {
-                    for (int m = 0; m < 2; m++)
-                    {
-                        if (self.grasps[m] != null && self.grasps[m].grabbed is Spear)
-                        {
-                            num4 = m;
-                            break;
-                        }
-                    }
+                    self.craftingObject = true;
+                    flag3 = true;
+                    num5 = -1;
                 }
-                if (self.input[0].pckp && (num4 > -1 || self.CanRetrieveSpearFromBack))
+                else if (num4 > -1 || self.CanRetrieveSpearFromBack)
                 {
                     self.spearOnBack.increment = true;
                 }
+                else if ((num7 > -1 || self.objectInStomach != null || self.AreVoidViy()) && (!ModManager.MSC || self.SlugCatClass != MoreSlugcatsEnums.SlugcatStatsName.Spear))
+                {
+                    flag3 = true;
+                }
+                if (num > -1 && num2 > -1)
+                {
+                    flag4 = true;
+                }
             }
-            int num11 = 0;
-            if (ModManager.MMF && (self.grasps[0] == null || self.grasps[0].grabbed is not Creature) && self.grasps[1] != null && self.grasps[1].grabbed is Creature)
+            if (num5 > -1 && self.wantToPickUp < 1 && (self.input[0].pckp || self.eatCounter <= 15) && self.Consious && Custom.DistLess(self.mainBodyChunk.pos, self.mainBodyChunk.lastPos, 3.6f))
             {
-                num11 = 1;
+                if (self.graphicsModule != null)
+                {
+                    (self.graphicsModule as PlayerGraphics).LookAtObject(self.grasps[num5].grabbed);
+                }
+                flag2 = true;
+                var grabbed = self.grasps[num5].grabbed;
+
+                if (self.FoodInStomach < self.MaxFoodInStomach || grabbed is KarmaFlower || grabbed is Mushroom)
+                {
+                    flag3 = false;
+                    self.spearOnBack?.increment = false;
+
+                    if (self.eatCounter < 1 && !(grabbed is KarmaFlower kf && kf.GetFlowerExt().voidRot))
+                    {
+                        self.eatCounter = 15;
+                        self.BiteEdibleObject(eu);
+                    }
+                }
+                else if (self.eatCounter < 20 && self.room.game.cameras[0].hud != null)
+                {
+                    self.room.game.cameras[0].hud.foodMeter.RefuseFood();
+                }
             }
+        }
+        else if (self.input[0].pckp && !self.input[1].pckp)
+        {
+            self.PickupPressed();
+        }
+        else
+        {
+            if (self.CanPutSpearToBack && self.abstractCreature.GetPlayerState().InDream)
+            {
+                for (int m = 0; m < 2; m++)
+                {
+                    if (self.grasps[m] != null && self.grasps[m].grabbed is Spear)
+                    {
+                        num4 = m;
+                        break;
+                    }
+                }
+            }
+            if (self.input[0].pckp && (num4 > -1 || self.CanRetrieveSpearFromBack))
+            {
+                self.spearOnBack.increment = true;
+            }
+        }
+        int num11 = 0;
+        if (ModManager.MMF && (self.grasps[0] == null || self.grasps[0].grabbed is not Creature) && self.grasps[1] != null && self.grasps[1].grabbed is Creature)
+        {
+            num11 = 1;
+        }
         if (ModManager.MSC && SlugcatStats.SlugcatCanMaul(self.SlugCatClass))
         {
             if (self.input[0].pckp && self.grasps[num11] != null && (self.grasps[num11].grabbed is Pomegranate || self.grasps[num11].grabbed is Cicada cicada && cicada.Consious || self.grasps[num11].grabbed is Creature && self.CanMaulCreature(self.grasps[num11].grabbed as Creature) || self.maulTimer > 0))
@@ -406,9 +444,23 @@ public static class GrabUpdate
         {
             self.reloadCounter = 0;
         }
-        if (ModManager.MMF && (self.mainBodyChunk.submersion >= 0.5f/* || ExternalSaveData.ViyLungExtended && self.IsViy()*/))
+        if (ModManager.MMF && self.mainBodyChunk.submersion >= 0.5f && !(ViyAdaptation.ViyLungExtended && self.IsViy()))
         {
             flag3 = false;
+        }
+        if (self.room.game.session is StoryGameSession session && session.saveState.deathPersistentSaveData.theMark && self.input[0].pckp && self.input[0].y < 0 && self.bodyChunks[1].ContactPoint.y < 0)
+        {
+            self.GetMarkRegCounter().Value++;
+            if (self.GetMarkRegCounter().Value > 110)
+            {
+                self.RegurgitateMark(session);
+                self.GetMarkRegCounter().Value = 0;
+            }
+            flag3 = false;
+        }
+        else
+        {
+            self.GetMarkRegCounter().Value = 0;
         }
         if (flag3)
         {
@@ -443,7 +495,7 @@ public static class GrabUpdate
                             }
                             else
                             {
-                                self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
+                                self.firstChunk.vel += new Vector2(Random.Range(-1f, 1f), 0f);
                                 self.Stun(60);
                             }
                         }
@@ -460,14 +512,11 @@ public static class GrabUpdate
                             }
                             else
                             {
-                                self.firstChunk.vel += new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f);
+                                self.firstChunk.vel += new Vector2(Random.Range(-1f, 1f), 0f);
                                 self.Stun(60);
                             }
                         }
-                        if (self.spearOnBack != null)
-                        {
-                            self.spearOnBack.interactionLocked = true;
-                        }
+                        self.spearOnBack?.interactionLocked = true;
                         self.swallowAndRegurgitateCounter = 0;
                     }
                     else if (self.swallowAndRegurgitateCounter > 90)
@@ -494,10 +543,7 @@ public static class GrabUpdate
                                 }
                                 self.bodyChunks[0].pos += Custom.DirVec(self.grasps[graspIndex].grabbed.firstChunk.pos, self.bodyChunks[0].pos) * 2f;
                                 self.SwallowObject(graspIndex);
-                                if (self.spearOnBack != null)
-                                {
-                                    self.spearOnBack.interactionLocked = true;
-                                }
+                                self.spearOnBack?.interactionLocked = true;
                                 self.swallowAndRegurgitateCounter = 0;
                                 (self.graphicsModule as PlayerGraphics).swallowing = 20;
                                 break;

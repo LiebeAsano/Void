@@ -135,8 +135,8 @@ public static class SaveManager
 
     private const string unlockOEGateForVoid = uniqueprefix + "UnlockOEGateForVoid";
 
-    public static bool GetOEUnlockForVoid(this SaveState save) => save.deathPersistentSaveData.GetSlugBaseData().TryGet(unlockOEGateForVoid, out bool value) && value;
-    public static void SetOEUnlockForVoid(this SaveState save, bool value) => save.deathPersistentSaveData.GetSlugBaseData().Set(unlockOEGateForVoid, value);
+    public static bool GetOEUnlockForVoid(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(unlockOEGateForVoid, out bool value) && value;
+    public static void SetOEUnlockForVoid(this SaveState save, bool value) => save.miscWorldSaveData.GetSlugBaseData().Set(unlockOEGateForVoid, value);
 
     private const string voidEndingTree = uniqueprefix + "VoidEndingTree";
 

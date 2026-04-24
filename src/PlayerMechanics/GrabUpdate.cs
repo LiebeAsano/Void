@@ -54,6 +54,7 @@ public static class GrabUpdate
         player.exhausted = true;
         player.SetMalnourished(true, false);
         HunterSpasms.Spasm(player, 10, 0.5f);
+        CycleEnd.changedMark = true;
         storySession.saveState.deathPersistentSaveData.theMark = false;
     }
 

@@ -98,7 +98,7 @@ public static class SSOracleBehaviorUpdate
         {
             self.timeSinceSeenPlayer++;
         }
-        if (self.pearlPickupReaction && self.timeSinceSeenPlayer > 300 && self.oracle.room.game.IsStorySession && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark && (!(self.currSubBehavior is SSOracleBehavior.ThrowOutBehavior) || self.action == SSOracleBehavior.Action.ThrowOut_Polite_ThrowOut))
+        if (self.pearlPickupReaction && self.timeSinceSeenPlayer > 300 && self.oracle.room.game.IsStorySession && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark && (self.currSubBehavior is not SSOracleBehavior.ThrowOutBehavior || self.action == SSOracleBehavior.Action.ThrowOut_Polite_ThrowOut))
         {
             bool flag = false;
             if (self.player != null)
@@ -227,10 +227,7 @@ public static class SSOracleBehaviorUpdate
         {
             return;
         }
-        if (self.conversation != null)
-        {
-            self.conversation.Update();
-        }
+        self.conversation?.Update();
         if (!self.currSubBehavior.CurrentlyCommunicating && (!ModManager.MSC || self.pearlConversation == null))
         {
             self.pathProgression = Mathf.Min(1f, self.pathProgression + 1f / Mathf.Lerp(40f + self.pathProgression * 80f, Vector2.Distance(self.lastPos, self.nextPos) / 5f, 0.5f));
@@ -255,10 +252,10 @@ public static class SSOracleBehaviorUpdate
                 {
                     if (self.player.grasps[m] != null && self.player.grasps[m].grabbed is NSHSwarmer)
                     {
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                             "PEBBLES SEE GREEN NEURON"
-                        });
+                        ]);
                         self.SeePlayer();
                         break;
                     }
@@ -458,8 +455,8 @@ public static class SSOracleBehaviorUpdate
                     {
                         self.player.Stun(40);
                     }
+                    CycleEnd.changedMark = true;
                     (self.oracle.room.game.session as StoryGameSession).saveState.deathPersistentSaveData.theMark = true;
-                    (self.oracle.room.game.session as StoryGameSession).saveState.SetGetVoidMark(true);
 
                 }
                 if (self.oracle.room.game.StoryCharacter == SlugcatStats.Name.Red)
@@ -467,33 +464,20 @@ public static class SSOracleBehaviorUpdate
                     self.oracle.room.game.GetStorySession.saveState.redExtraCycles = true;
                     if (self.oracle.room.game.cameras[0].hud != null)
                     {
-                        if (self.oracle.room.game.cameras[0].hud.textPrompt != null)
-                        {
-                            self.oracle.room.game.cameras[0].hud.textPrompt.cycleTick = 0;
-                        }
-                        if (self.oracle.room.game.cameras[0].hud.map != null && self.oracle.room.game.cameras[0].hud.map.cycleLabel != null)
-                        {
-                            self.oracle.room.game.cameras[0].hud.map.cycleLabel.UpdateCycleText();
-                        }
+                        self.oracle.room.game.cameras[0].hud.textPrompt?.cycleTick = 0;
+                        self.oracle.room.game.cameras[0].hud.map?.cycleLabel?.UpdateCycleText();
                     }
-                    if (self.player.redsIllness != null)
-                    {
-                        self.player.redsIllness.GetBetter();
-                    }
+                    self.player.redsIllness?.GetBetter();
                     if (ModManager.CoopAvailable)
                     {
                         foreach (AbstractCreature abstractCreature in self.oracle.room.game.AlivePlayers)
                         {
                             if (abstractCreature.Room == self.oracle.room.abstractRoom)
                             {
-                                Player player4 = abstractCreature.realizedCreature as Player;
-                                if (player4 != null)
+                                if (abstractCreature.realizedCreature is Player player4)
                                 {
                                     RedsIllness redsIllness = player4.redsIllness;
-                                    if (redsIllness != null)
-                                    {
-                                        redsIllness.GetBetter();
-                                    }
+                                    redsIllness?.GetBetter();
                                 }
                             }
                         }
@@ -505,10 +489,10 @@ public static class SSOracleBehaviorUpdate
                     }
                     else
                     {
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                             "PEBBLES HAS ALREADY GIVEN RED ONE KARMA CAP STEP"
-                        });
+                        ]);
                     }
                 }
                 else if (ModManager.MSC && self.oracle.room.game.StoryCharacter == MoreSlugcatsEnums.SlugcatStatsName.Gourmand)
@@ -520,10 +504,10 @@ public static class SSOracleBehaviorUpdate
                     }
                     else
                     {
-                        Custom.Log(new string[]
-                        {
+                        Custom.Log(
+                        [
                             "PEBBLES HAS ALREADY GIVEN GOURMAND ONE KARMA CAP STEP"
-                        });
+                        ]);
                     }
                 }
                 if (!flag5)
@@ -582,10 +566,7 @@ public static class SSOracleBehaviorUpdate
             if (self.inActionCounter >= 500 || (flag5 && self.inActionCounter > 310))
             {
                 self.NewAction(self.afterGiveMarkAction);
-                if (self.conversation != null)
-                {
-                    self.conversation.paused = false;
-                }
+                self.conversation?.paused = false;
             }
         }
         self.Move();
@@ -640,12 +621,12 @@ public static class SSOracleBehaviorUpdate
                         if (self.inspectPearl == null && (self.conversation == null || flag6) && physicalObject is DataPearl && (physicalObject as DataPearl).grabbedBy.Count == 0 && ((physicalObject as DataPearl).AbstractPearl.dataPearlType != DataPearl.AbstractDataPearl.DataPearlType.PebblesPearl || (self.oracle.ID == MoreSlugcatsEnums.OracleID.DM && ((physicalObject as DataPearl).AbstractPearl as PebblesPearl.AbstractPebblesPearl).color >= 0)) && !self.readDataPearlOrbits.Contains((physicalObject as DataPearl).AbstractPearl) && flag7 && self.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark && !self.talkedAboutThisSession.Contains(physicalObject.abstractPhysicalObject.ID))
                         {
                             self.inspectPearl = (physicalObject as DataPearl);
-                            if (!(self.inspectPearl is SpearMasterPearl) || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
+                            if (self.inspectPearl is not SpearMasterPearl || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
                             {
-                                Custom.Log(new string[]
-                                {
+                                Custom.Log(
+                                [
                                     string.Format("---------- INSPECT PEARL TRIGGERED: {0}", self.inspectPearl.AbstractPearl.dataPearlType)
-                                });
+                                ]);
                                 if (self.inspectPearl is SpearMasterPearl)
                                 {
                                     self.LockShortcuts();
@@ -771,7 +752,7 @@ public static class SSOracleBehaviorUpdate
                             && !self.talkedAboutThisSession.Contains(physicalObject.abstractPhysicalObject.ID))
                         {
                             self.inspectPearl = (physicalObject as DataPearl);
-                            if (!(self.inspectPearl is SpearMasterPearl) || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
+                            if (self.inspectPearl is not SpearMasterPearl || !(self.inspectPearl.AbstractPearl as SpearMasterPearl.AbstractSpearMasterPearl).broadcastTagged)
                             {
                                 Custom.Log(
                                 [

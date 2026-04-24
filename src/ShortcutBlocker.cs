@@ -125,7 +125,7 @@ namespace VoidTemplate
                 if (absPlayer == null || absPlayer.realizedCreature == null)
                     continue;
 
-                if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid())
+                if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid() || self.room.abstractRoom.name == "SS_AI")
                     continue;
 
                 removedVoidPlayers.Add(new RemovedVoidPlayer(player, absPlayer, i));

@@ -10,37 +10,41 @@ namespace VoidTemplate;
 
 public static class CycleEnd
 {
+	public static bool changedMark;
 	private static void log(object e) => _Plugin.logger.LogInfo(e);
 	public static void Hook()
 	{
-		On.StoryGameSession.ctor += StoryGameSession_ctor;
 		On.ShelterDoor.Close += CycleEndLogic;
 		//On.RainWorldGame.Update += RainWorldGame_Update;
 		//IL.ShelterDoor.Update += ShelterDoor_Update;
+		On.StoryGameSession.ctor += StoryGameSession_ctor;
         On.RainWorldGame.Win += RainWorldGame_Win;
-	}
+        On.SaveState.SessionEnded += SaveState_SessionEnded;
+    }
 
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
-        orig(self, saveStateNumber, game);
-		if (game.IsVoidStoryCampaign() && !game.GetStorySession.saveState.GetGetVoidMark())
-			game.GetStorySession.saveState.deathPersistentSaveData.theMark = false;
+		orig(self, saveStateNumber, game);
+		if (game.IsVoidStoryCampaign())
+		{
+			changedMark = false;
+		}
     }
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
     {
 		if (self.manager.upcomingProcess == null)
 		{
-            if (self.IsVoidStoryCampaign() && KarmaFlowerChanges.SaveVoidCycle)
-            {
-                self.GetStorySession.saveState.SetVoidExtraCycles(self.GetStorySession.saveState.GetVoidExtraCycles() + 1);
-            }
             if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
 			{
 				self.GoToDeathScreen();
 				return;
 			}
-			if (self.IsVoidStoryCampaign() && 
+            if (self.IsVoidStoryCampaign() && KarmaFlowerChanges.SaveVoidCycle)
+            {
+                self.GetStorySession.saveState.SetVoidExtraCycles(self.GetStorySession.saveState.GetVoidExtraCycles() + 1);
+            }
+            if (self.IsVoidStoryCampaign() && 
 				self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState) &&
 				OptionAccessors.PermaDeath && 
 				self.Players[0].realizedCreature is Player p2 && p2.KarmaCap != 10 && 
@@ -86,8 +90,6 @@ public static class CycleEnd
 		else _Plugin.logger.LogError($"IL hook starting at CycleEnd:41, shelter door update, starve logic tinker, failed to apply");
 	}
 
-	private const int timeToWait = Utils.TicksPerSecond * 3;
-
 	private static void CycleEndLogic(On.ShelterDoor.orig_Close orig, ShelterDoor self)
 	{
 		orig(self);
@@ -108,7 +110,10 @@ public static class CycleEnd
 					&& session.characterStats.name == VoidEnums.SlugcatID.Void
 					&& (!ModManager.Expedition || !self.room.game.rainWorld.ExpeditionMode))
 					{
-						if (((session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) || session.saveState.deathPersistentSaveData.karma == 0) && OptionAccessors.PermaDeath) || savestate.GetKarmaToken() == 0) game.GoToRedsGameOver();
+						if (((session.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(session.saveState) || 
+							  session.saveState.deathPersistentSaveData.karma == 0) && OptionAccessors.PermaDeath) || 
+							  savestate.GetKarmaToken() == 0) 
+							game.GoToRedsGameOver();
 					}
 
 				}
@@ -116,4 +121,18 @@ public static class CycleEnd
 		}
 	}
 
+    private static void SaveState_SessionEnded(On.SaveState.orig_SessionEnded orig, SaveState self, RainWorldGame game, bool survived, bool newMalnourished)
+    {
+        if (game != null && game.IsVoidStoryCampaign())
+		{
+			if (changedMark)
+			{
+				if (!survived) self.deathPersistentSaveData.theMark = !self.deathPersistentSaveData.theMark;
+
+                changedMark = false;
+            }
+        }
+
+        orig(self, game, survived, newMalnourished);
+    }
 }

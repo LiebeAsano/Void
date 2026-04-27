@@ -1,0 +1,10 @@
+WaveSpeed: 0.8038998
+WaveLength: 0.8480501
+WaveAmplitude: 0.02298774
+SecondWaveLength: 0.1666667
+SecondWaveAmplitude: 0
+Clouds: 0.2551973
+Grime: 0.2061373
+EffectColorA: 18
+Effects: Darkness-0.1082653-20-20, 
+FadePalette: 7, 0.1623973, 0.1623973, 0.1391973, 0.1778644, 0.1778644, 0.1701315, 0.1546671, 0.1623973

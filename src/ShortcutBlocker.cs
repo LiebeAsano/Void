@@ -122,10 +122,11 @@ namespace VoidTemplate
             for (int i = self.room.game.Players.Count - 1; i >= 0; i--)
             {
                 AbstractCreature absPlayer = self.room.game.Players[i];
+
                 if (absPlayer == null || absPlayer.realizedCreature == null)
                     continue;
 
-                if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid() || self.room.abstractRoom.name == "SS_AI")
+                if (absPlayer.realizedCreature is not Player player || player.room != self.room || !player.IsVoid())
                     continue;
 
                 removedVoidPlayers.Add(new RemovedVoidPlayer(player, absPlayer, i));
@@ -138,111 +139,373 @@ namespace VoidTemplate
             {
                 RemovedVoidPlayer entry = removedVoidPlayers[i];
                 int insertIndex = Mathf.Clamp(entry.index, 0, self.room.game.Players.Count);
-                self.room.game.Players.Insert(insertIndex, entry.abstractCreature);
+
+                if (!self.room.game.Players.Contains(entry.abstractCreature))
+                    self.room.game.Players.Insert(insertIndex, entry.abstractCreature);
             }
 
-            bool worldHaveBlock = self.room.world.TryGetShortcutBlock(out var worldBlock);
             RoomTransportShortcutBlocker localBlocker = self.room.GetRoomShortcutBlock();
+            WorldShortcutBlock worldBlock = null;
+            bool worldHaveBlock = self.room.world != null && self.room.world.TryGetShortcutBlock(out worldBlock);
 
             for (int i = 0; i < removedVoidPlayers.Count; i++)
             {
                 Player player = removedVoidPlayers[i].player;
-                RecentShortcutExit exit = player.GetRecentExit();
 
-                if (exit.timer > 0)
+                if (player == null || player.room != self.room || !player.IsVoid())
+                    continue;
+
+                UpdateVoidRecentExit(player);
+
+                UpdateVoidPlayerAgainstVanillaLocksExceptVoidLocks(self, player, localBlocker, worldHaveBlock, worldBlock);
+
+                HandleVoidBlockedShortcutAttempt(self.room, player, localBlocker, worldHaveBlock, worldBlock);
+            }
+
+            for (int i = 0; i < self.pushers.Count; i++)
+            {
+                self.pushers[i].swell = Custom.LerpAndTick(
+                    self.pushers[i].swell,
+                    self.pushers[i].swellUp ? 1f : 0f,
+                    0.02f,
+                    0.033333335f
+                );
+
+                self.pushers[i].swellUp = false;
+            }
+
+            PushNonPlayersAwayFromVoidBlockedShortcuts(self, localBlocker, worldHaveBlock, worldBlock);
+        }
+
+        private static void UpdateVoidPlayerAgainstVanillaLocksExceptVoidLocks(ShortcutHelper self, Player player, RoomTransportShortcutBlocker localBlocker, bool worldHaveBlock, WorldShortcutBlock worldBlock)
+        {
+            if (self.room == null || player == null || !player.Consious || ShortcutHelper.CanBePulledIntoShortcut(player))
+                return;
+
+            IntVector2 inputDir = new(player.input[0].x, player.input[0].y);
+
+            bool challengeExitClosed = false;
+
+            if (ModManager.ChallengeModule &&
+                self.room.world.game.IsArenaSession &&
+                self.room.world.game.GetArenaGameSession.arenaSitting.gameTypeSetup.gameType == DLCSharedEnums.GameTypeID.Challenge &&
+                !self.room.world.game.GetArenaGameSession.exitManager.ExitsOpen())
+            {
+                challengeExitClosed = true;
+            }
+
+            for (int j = 0; j < self.pushers.Count; j++)
+            {
+                ShortcutHelper.ShortcutPusher pusher = self.pushers[j];
+
+                bool voidBlocked = IsVoidBlockedShortcutForPusher(self.room, localBlocker, worldHaveBlock, worldBlock, pusher);
+                bool vanillaBlocked = false;
+
+                if (challengeExitClosed)
                 {
-                    exit.timer--;
-                    if (exit.timer <= 0)
-                    {
-                        exit.room = null;
-                    }
+                    vanillaBlocked = true;
+
+                    if (!self.room.shortcutData(pusher.shortCutPos).ToNode)
+                        vanillaBlocked = false;
                 }
 
-                if (exit.countDebounce > 0)
-                {
-                    exit.countDebounce--;
-                    if (exit.countDebounce <= 0)
-                    {
-                        exit.lastCountedRoom = null;
-                        exit.lastCountedNode = -1;
-                        exit.lastCountedWasRoomShortcut = false;
-                        exit.lastCountedShortcutTile = default;
-                    }
-                }
+                if (!vanillaBlocked && !voidBlocked && self.room.lockedShortcuts.Contains(pusher.shortCutPos))
+                    vanillaBlocked = true;
 
-                bool blockedAttempt = false;
-
-                if (player.enteringShortCut != null)
-                {
-                    IntVector2 entering = player.enteringShortCut.Value;
-
-                    if (localBlocker.ShortcutBlocked(entering))
-                    {
-                        blockedAttempt = true;
-                    }
-                    else if (worldHaveBlock && TryResolveExitNode(self.room, entering, out int node) && worldBlock.RoomAndNodeBlocked(self.room.abstractRoom, node))
-                    {
-                        blockedAttempt = true;
-                    }
-                }
-
-                if (!blockedAttempt && exit.timer > 0 && exit.room == self.room && player.enteringShortCut != null)
-                {
-                    if (SameTile(player.enteringShortCut.Value, exit.lockedTile))
-                    {
-                        blockedAttempt = true;
-                    }
-                }
-
-                if (blockedAttempt)
+                if (voidBlocked &&
+                    player.enteringShortCut != null &&
+                    player.enteringShortCut.Value == pusher.shortCutPos)
                 {
                     player.enteringShortCut = null;
                     player.shortcutDelay = Mathf.Max(player.shortcutDelay, 8);
                 }
-            }
 
-            for (int pusher = 0; pusher < self.pushers.Count; pusher++)
-            {
-                ShortcutHelper.ShortcutPusher currentPusher = self.pushers[pusher];
-                ShortcutData data = self.room.shortcutData(currentPusher.shortCutPos);
-
-                bool localBlocked = localBlocker.ShortcutBlocked(currentPusher.shortCutPos);
-                bool worldBlocked = worldHaveBlock && worldBlock.RoomAndNodeBlocked(self.room.abstractRoom, data.destNode);
-
-                if (localBlocked || worldBlocked)
+                if (vanillaBlocked &&
+                    player.enteringShortCut != null &&
+                    player.enteringShortCut.Value == pusher.shortCutPos)
                 {
-                    for (int creature = 0; creature < self.room.abstractRoom.creatures.Count; creature++)
+                    player.enteringShortCut = null;
+                }
+
+                if ((pusher.wrongHole || vanillaBlocked) &&
+                    (!pusher.floor || player.GoThroughFloors) &&
+                    (pusher.shortcutDir.y <= 0 ||
+                     (!(player.animation == Player.AnimationIndex.BellySlide) &&
+                      !(player.animation == Player.AnimationIndex.DownOnFours))))
+                {
+                    bool pushingAgainstShortcut =
+                        (inputDir.x != 0 && inputDir.x == -pusher.shortcutDir.x) ||
+                        (inputDir.y != 0 && inputDir.y == -pusher.shortcutDir.y);
+
+                    bool canSoftPush =
+                        player.input[0].jmp ||
+                        player.jumpBoost > 0f ||
+                        pusher.validNeighbors.Count > 0;
+
+                    if (player.enteringShortCut != null &&
+                        player.enteringShortCut.Value == pusher.shortCutPos)
                     {
-                        Creature crit = self.room.abstractRoom.creatures[creature].realizedCreature;
-                        if (crit != null && crit is not Player)
+                        player.enteringShortCut = null;
+                    }
+
+                    for (int k = 0; k < player.bodyChunks.Length; k++)
+                    {
+                        BodyChunk chunk = player.bodyChunks[k];
+
+                        if (pushingAgainstShortcut &&
+                            player.input[0].jmp &&
+                            !player.input[1].jmp &&
+                            Custom.DistLess(pusher.pushPos, chunk.pos, 30f + chunk.rad))
                         {
-                            if (crit.enteringShortCut != null && crit.enteringShortCut.Value == currentPusher.shortCutPos)
-                            {
-                                crit.enteringShortCut = null;
-                            }
+                            chunk.vel = Vector2.Lerp(
+                                chunk.vel,
+                                pusher.shortcutDir.ToVector2() * 6f +
+                                new Vector2(0f, pusher.shortcutDir.x != 0 ? 6f : 0f),
+                                0.5f
+                            );
+                        }
+                        else if (canSoftPush)
+                        {
+                            float pushRadius =
+                                20f +
+                                chunk.rad +
+                                Custom.LerpMap(pusher.swell, 0.5f, 1f, -5f, 10f, 3f) -
+                                ((inputDir.y != 0 && inputDir.y == -pusher.shortcutDir.y) ? 5f : 0f);
 
-                            for (int chunk = 0; chunk < crit.bodyChunks.Length; chunk++)
-                            {
-                                float num3 = 10f + crit.bodyChunks[chunk].rad;
+                            pusher.swellUp =
+                                Custom.DistLess(
+                                    pusher.pushPos,
+                                    chunk.pos,
+                                    Mathf.Max(20f + chunk.rad, pushRadius - 1f)
+                                ) &&
+                                pushingAgainstShortcut;
 
-                                if (crit.bodyChunks[chunk].pos.y > currentPusher.pushPos.y - num3 &&
-                                    crit.bodyChunks[chunk].pos.y < currentPusher.pushPos.y + num3 &&
-                                    crit.bodyChunks[chunk].pos.x > currentPusher.pushPos.x - num3 &&
-                                    crit.bodyChunks[chunk].pos.x < currentPusher.pushPos.x + num3)
+                            if (Custom.DistLess(pusher.pushPos, chunk.pos, pushRadius))
+                            {
+                                float pushFac = Mathf.InverseLerp(
+                                    pushRadius - (pushingAgainstShortcut ? 2.5f : 5f),
+                                    pushRadius - 20f,
+                                    Vector2.Distance(pusher.pushPos, chunk.pos)
+                                );
+
+                                if (pusher.validNeighbors.Count > 0 && pushingAgainstShortcut)
                                 {
-                                    if (currentPusher.shortcutDir.x != 0)
+                                    pusher.PushPlayerTowardsValidNeighbor(player, pushFac);
+                                }
+                                else
+                                {
+                                    chunk.vel *= Mathf.Lerp(1f, 0.5f, pushFac);
+                                    chunk.vel.y += player.gravity * self.room.gravity * pushFac;
+
+                                    Vector2 push =
+                                        Vector3.Slerp(
+                                            Custom.DirVec(pusher.pushPos, chunk.pos),
+                                            pusher.shortcutDir.ToVector2(),
+                                            0.9f
+                                        ) *
+                                        ((pushingAgainstShortcut ? 3f : 0.9f) * pushFac);
+
+                                    chunk.vel += push;
+                                    chunk.pos += push;
+
+                                    if (pushingAgainstShortcut && pusher.shortcutDir.x != 0)
                                     {
-                                        float push = currentPusher.pushPos.x + num3 * currentPusher.shortcutDir.x - crit.bodyChunks[chunk].pos.x;
-                                        crit.bodyChunks[chunk].vel.x += push;
-                                        crit.bodyChunks[chunk].pos.x += push;
-                                    }
-                                    else
-                                    {
-                                        float push = currentPusher.pushPos.y + num3 * currentPusher.shortcutDir.y - crit.bodyChunks[chunk].pos.y;
-                                        crit.bodyChunks[chunk].vel.y += push;
-                                        crit.bodyChunks[chunk].pos.y += push;
+                                        chunk.vel.y = Mathf.Lerp(
+                                            chunk.vel.y,
+                                            Mathf.Clamp(chunk.vel.y, -2f, 20f),
+                                            0.75f
+                                        );
                                     }
                                 }
+                            }
+                        }
+
+                        if (player.rollDirection != 0 &&
+                            pusher.shortcutDir.x == -player.rollDirection &&
+                            Custom.DistLess(pusher.pushPos, chunk.pos, 30f + chunk.rad))
+                        {
+                            player.rollDirection = 0;
+                            player.animation = Player.AnimationIndex.None;
+                            player.rollCounter = 0;
+                        }
+
+                        float hardPushRadius = 10f + chunk.rad;
+
+                        if (vanillaBlocked)
+                            hardPushRadius *= Mathf.InverseLerp(0f, 500f, player.timeSinceSpawned);
+
+                        if (chunk.pos.y > pusher.pushPos.y - hardPushRadius &&
+                            chunk.pos.y < pusher.pushPos.y + hardPushRadius &&
+                            chunk.pos.x > pusher.pushPos.x - hardPushRadius &&
+                            chunk.pos.x < pusher.pushPos.x + hardPushRadius)
+                        {
+                            if (pusher.shortcutDir.x != 0)
+                            {
+                                float push =
+                                    pusher.pushPos.x +
+                                    hardPushRadius * pusher.shortcutDir.x -
+                                    chunk.pos.x;
+
+                                chunk.vel.x += push;
+                                chunk.pos.x += push;
+                            }
+                            else
+                            {
+                                float push =
+                                    pusher.pushPos.y +
+                                    hardPushRadius * pusher.shortcutDir.y -
+                                    chunk.pos.y;
+
+                                chunk.vel.y += push;
+                                chunk.pos.y += push;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void HandleVoidBlockedShortcutAttempt(Room room, Player player, RoomTransportShortcutBlocker localBlocker, bool worldHaveBlock, WorldShortcutBlock worldBlock)
+        {
+            if (room == null || player == null)
+                return;
+
+            RecentShortcutExit exit = player.GetRecentExit();
+            bool blockedAttempt = false;
+
+            if (player.enteringShortCut != null)
+            {
+                IntVector2 entering = player.enteringShortCut.Value;
+                blockedAttempt = IsVoidBlockedShortcutTile(room, entering, localBlocker, worldHaveBlock, worldBlock);
+            }
+
+            if (!blockedAttempt &&
+                exit.timer > 0 &&
+                exit.room == room &&
+                player.enteringShortCut != null &&
+                SameTile(player.enteringShortCut.Value, exit.lockedTile) &&
+                IsVoidBlockedShortcutTile(room, exit.lockedTile, localBlocker, worldHaveBlock, worldBlock))
+            {
+                blockedAttempt = true;
+            }
+
+            if (blockedAttempt)
+            {
+                player.enteringShortCut = null;
+                player.shortcutDelay = Mathf.Max(player.shortcutDelay, 8);
+            }
+        }
+
+        private static bool IsVoidBlockedShortcutTile(
+            Room room,
+            IntVector2 shortcutTile,
+            RoomTransportShortcutBlocker localBlocker,
+            bool worldHaveBlock,
+            WorldShortcutBlock worldBlock)
+        {
+            if (room == null)
+                return false;
+
+            if (localBlocker != null && localBlocker.ShortcutBlocked(shortcutTile))
+                return true;
+
+            if (worldHaveBlock &&
+                worldBlock != null &&
+                TryResolveExitNode(room, shortcutTile, out int node) &&
+                worldBlock.RoomAndNodeBlocked(room.abstractRoom, node))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsVoidBlockedShortcutForPusher(
+            Room room,
+            RoomTransportShortcutBlocker localBlocker,
+            bool worldHaveBlock,
+            WorldShortcutBlock worldBlock,
+            ShortcutHelper.ShortcutPusher pusher)
+        {
+            if (room == null || pusher == null)
+                return false;
+
+            return IsVoidBlockedShortcutTile(room, pusher.shortCutPos, localBlocker, worldHaveBlock, worldBlock);
+        }
+
+        private static void UpdateVoidRecentExit(Player player)
+        {
+            RecentShortcutExit exit = player.GetRecentExit();
+
+            if (exit.timer > 0)
+            {
+                exit.timer--;
+
+                if (exit.timer <= 0)
+                    exit.room = null;
+            }
+
+            if (exit.countDebounce > 0)
+            {
+                exit.countDebounce--;
+
+                if (exit.countDebounce <= 0)
+                {
+                    exit.lastCountedRoom = null;
+                    exit.lastCountedNode = -1;
+                    exit.lastCountedWasRoomShortcut = false;
+                    exit.lastCountedShortcutTile = default;
+                }
+            }
+        }
+
+        private static void PushNonPlayersAwayFromVoidBlockedShortcuts(
+            ShortcutHelper self,
+            RoomTransportShortcutBlocker localBlocker,
+            bool worldHaveBlock,
+            WorldShortcutBlock worldBlock)
+        {
+            if (self.room == null || self.room.abstractRoom == null)
+                return;
+
+            for (int pusherIndex = 0; pusherIndex < self.pushers.Count; pusherIndex++)
+            {
+                ShortcutHelper.ShortcutPusher pusher = self.pushers[pusherIndex];
+
+                if (!IsVoidBlockedShortcutForPusher(self.room, localBlocker, worldHaveBlock, worldBlock, pusher))
+                    continue;
+
+                for (int creatureIndex = 0; creatureIndex < self.room.abstractRoom.creatures.Count; creatureIndex++)
+                {
+                    Creature crit = self.room.abstractRoom.creatures[creatureIndex].realizedCreature;
+
+                    if (crit == null || crit is Player)
+                        continue;
+
+                    if (crit.enteringShortCut != null && crit.enteringShortCut.Value == pusher.shortCutPos)
+                        crit.enteringShortCut = null;
+
+                    for (int chunkIndex = 0; chunkIndex < crit.bodyChunks.Length; chunkIndex++)
+                    {
+                        BodyChunk chunk = crit.bodyChunks[chunkIndex];
+                        float pushRadius = 10f + chunk.rad;
+
+                        if (chunk.pos.y > pusher.pushPos.y - pushRadius &&
+                            chunk.pos.y < pusher.pushPos.y + pushRadius &&
+                            chunk.pos.x > pusher.pushPos.x - pushRadius &&
+                            chunk.pos.x < pusher.pushPos.x + pushRadius)
+                        {
+                            if (pusher.shortcutDir.x != 0)
+                            {
+                                float push = pusher.pushPos.x + pushRadius * pusher.shortcutDir.x - chunk.pos.x;
+                                chunk.vel.x += push;
+                                chunk.pos.x += push;
+                            }
+                            else
+                            {
+                                float push = pusher.pushPos.y + pushRadius * pusher.shortcutDir.y - chunk.pos.y;
+                                chunk.vel.y += push;
+                                chunk.pos.y += push;
                             }
                         }
                     }
@@ -345,6 +608,8 @@ namespace VoidTemplate
 
             if (voidPlayer != null && voidPlayer.IsVoid() && newRoom != null)
             {
+                // GetShortcutBlock/GetBlockedShortcut возвращают объект-отслеживатель даже когда blockTime == 0.
+                // Это нужно для подсчёта проходов, но НЕ должно само по себе включать мягкую блокировку.
                 localHitBlock = newRoom.GetRoomShortcutBlock().GetShortcutBlock(pos);
 
                 if (localHitBlock != null)
@@ -384,14 +649,12 @@ namespace VoidTemplate
                     exit.lastCountedWasRoomShortcut &&
                     SameTile(exit.lastCountedShortcutTile, localLockedTile);
 
-                if (!sameLocalExitRecently)
+                if (localHitBlock.blockTime <= 0 && !sameLocalExitRecently)
                 {
                     localHitBlock.RegisterPass();
 
                     if (localHitBlock.passCount > localHitBlock.maxPassCount)
-                    {
                         localHitBlock.Block();
-                    }
 
                     exit.lastCountedRoom = newRoom.abstractRoom;
                     exit.lastCountedNode = -1;
@@ -399,6 +662,9 @@ namespace VoidTemplate
                     exit.lastCountedShortcutTile = localLockedTile;
                     exit.countDebounce = 10;
                 }
+
+                if (localHitBlock.blockTime <= 0)
+                    return;
 
                 exit.room = newRoom;
                 exit.lockedTile = localLockedTile;
@@ -409,9 +675,7 @@ namespace VoidTemplate
                 voidPlayer.shortcutDelay = Mathf.Max(voidPlayer.shortcutDelay, 8);
 
                 for (int i = 0; i < voidPlayer.bodyChunks.Length; i++)
-                {
                     voidPlayer.bodyChunks[i].vel *= 0f;
-                }
 
                 return;
             }
@@ -425,14 +689,12 @@ namespace VoidTemplate
                 !exit.lastCountedWasRoomShortcut &&
                 exit.lastCountedNode == exitNode;
 
-            if (!sameWorldExitRecently)
+            if (worldHitBlock.blockTime <= 0 && !sameWorldExitRecently)
             {
                 worldHitBlock.RegisterPass();
 
                 if (worldHitBlock.passCount > worldHitBlock.maxPassCount)
-                {
                     worldHitBlock.Block();
-                }
 
                 exit.lastCountedRoom = newRoom.abstractRoom;
                 exit.lastCountedNode = exitNode;
@@ -440,6 +702,9 @@ namespace VoidTemplate
                 exit.lastCountedShortcutTile = default;
                 exit.countDebounce = 10;
             }
+
+            if (worldHitBlock.blockTime <= 0)
+                return;
 
             exit.room = newRoom;
             exit.lockedTile = worldLockedTile;
@@ -450,9 +715,7 @@ namespace VoidTemplate
             voidPlayer.shortcutDelay = Mathf.Max(voidPlayer.shortcutDelay, 8);
 
             for (int i = 0; i < voidPlayer.bodyChunks.Length; i++)
-            {
                 voidPlayer.bodyChunks[i].vel *= 0f;
-            }
         }
 
         private static bool TryResolveExitNode(Room room, IntVector2 pos, out int node)
@@ -529,13 +792,12 @@ namespace VoidTemplate
             {
                 if (passCount == maxPassCount)
                 {
-                    signalCycle += 0.011111111f;
+                    signalCycle += 0.033333333f;
                 }
 
                 if (blockTime > 0)
                 {
                     blockTime--;
-
                     if (blockTime == 0)
                     {
                         Unlock();
@@ -713,7 +975,6 @@ namespace VoidTemplate
                 public override void Unlock()
                 {
                     room1.realizedRoom?.lockedShortcuts.Remove(room1.realizedRoom.ShortcutLeadingToNode(node1).StartTile);
-
                     room2.realizedRoom?.lockedShortcuts.Remove(room2.realizedRoom.ShortcutLeadingToNode(node2).StartTile);
                 }
 

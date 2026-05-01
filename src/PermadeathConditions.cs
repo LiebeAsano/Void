@@ -400,7 +400,7 @@ static class PermadeathConditions
                         self.gameOverString = Karma11Update.VoidKarma11 ? "This is not your anymore." : "Hungry...";
                         break;
                     case 2:
-                        self.gameOverString = player.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark
+                        self.gameOverString = player.room.game.GetStorySession.saveState.deathPersistentSaveData.theMark && player.room.game.GetStorySession.saveState.GetViyMarkAvoidMessage()
                             ? "Rip it out..."
                             : player.Karma == 10 ? "It is so quiet." : "The endless hum...";
                         break;
@@ -414,7 +414,7 @@ static class PermadeathConditions
                                     ? "Stop eating that..."
                                     : "Need more cycles..."
                                 : "Who are you?";
-                        if (!Karma11Update.VoidKarma11) player.room.PlaySound(ViyVoiceBad());
+                        if (Karma11Update.VoidKarma11) player.room.PlaySound(ViyVoiceBad());
                         break;
                     case 4:
                         self.gameOverString = player.room.game.GetStorySession.saveState.GetKarmaToken() == 1 ? "Do not get in the way." : "Do not understand...";
@@ -427,7 +427,7 @@ static class PermadeathConditions
         }
         else
         {
-            self.gameOverString = "Fight to get out of the grip by fast clicking PICK UP";
+            self.gameOverString = "Fight to get out of the grip by fast clicking 'Pick up'";
         }
     }
 }

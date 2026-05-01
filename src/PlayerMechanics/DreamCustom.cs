@@ -112,14 +112,12 @@ public static class DreamCustom
             {
                 case "LF":
                     {
-                        if (UnityEngine.Random.Range(0, 3) == 0)
-                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
                         break;
                     }
                 case "SI":
                     {
-                        if (UnityEngine.Random.Range(0, 3) == 0)
-                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
+                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
                         break;
                     }
                 case "SB":

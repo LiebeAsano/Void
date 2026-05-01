@@ -47,7 +47,70 @@ public static class DrawSprites
             self.GetPlayerGExt().poisonDark = (float)self.player.playerState.permanentDamageTracking;
         }
 
+        ApplyVoidViyTailForce(self);
+
         UpdateVoidDeadGlow(self);
+    }
+
+    private static void ApplyVoidViyTailForce(PlayerGraphics self)
+    {
+        Player player = self.player;
+        if (player == null || !player.AreVoidViy())
+            return;
+
+        if (self.tail == null)
+            return;
+
+        BodyChunk bodyChunk0 = player.bodyChunks[0];
+        BodyChunk bodyChunk1 = player.bodyChunks[1];
+
+        bool ceilCrawl =
+            player.bodyMode == BodyModeIndexExtension.CeilCrawl;
+
+        bool wallClimbHeadLower =
+            player.bodyMode == Player.BodyModeIndex.WallClimb &&
+            bodyChunk0.pos.y < bodyChunk1.pos.y;
+
+        if (!ceilCrawl && !wallClimbHeadLower)
+            return;
+
+        if (player.bodyMode == Player.BodyModeIndex.CorridorClimb ||
+            player.bodyMode == Player.BodyModeIndex.Crawl)
+            return;
+
+        Vector2 force = Vector2.zero;
+
+        if (player.bodyMode == Player.BodyModeIndex.WallClimb)
+        {
+            if (player.input[0].x < 0)
+            {
+                force = new Vector2(-0.7f, 1.4f);
+            }
+            else if (player.input[0].x > 0)
+            {
+                force = new Vector2(0.7f, 1.4f);
+            }
+            else if (!player.input[0].jmp)
+            {
+                force = bodyChunk0.pos.x > bodyChunk1.pos.x
+                    ? new Vector2(-0.7f, 0.7f)
+                    : new Vector2(0.7f, 0.7f);
+            }
+        }
+        else if (!player.input[0].jmp)
+        {
+            force = bodyChunk0.pos.x > bodyChunk1.pos.x
+                ? new Vector2(-0.7f, 0.7f)
+                : new Vector2(0.7f, 0.7f);
+        }
+
+        if (force == Vector2.zero)
+            return;
+
+        foreach (TailSegment tailSegment in self.tail)
+        {
+            tailSegment.vel += force;
+        }
     }
 
     private class BaseGlow
@@ -158,44 +221,6 @@ public static class DrawSprites
         Player player = self.player;
         BodyChunk playerBodyChunk0 = player.bodyChunks[0];
         BodyChunk playerBodyChunk1 = player.bodyChunks[1];
-        #region drawTail
-
-        if (player.AreVoidViy())
-        {
-
-            if ((player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-                player.bodyMode == Player.BodyModeIndex.WallClimb &&
-                playerBodyChunk0.pos.y < playerBodyChunk1.pos.y) &&
-                player.bodyMode != Player.BodyModeIndex.CorridorClimb &&
-                player.bodyMode != Player.BodyModeIndex.Crawl)
-            {
-
-                foreach (TailSegment tailSegment in self.tail)
-                {
-                    Vector2 force = Vector2.zero;
-
-                    if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x < 0)
-                    {
-                        force = new Vector2(-0.7f, 1.4f);
-                    }
-                    else if (player.bodyMode == Player.BodyModeIndex.WallClimb && player.input[0].x > 0)
-                    {
-                        force = new Vector2(0.7f, 1.4f);
-                    }
-                    else if (!player.input[0].jmp)
-                    {
-                        if (playerBodyChunk0.pos.x > playerBodyChunk1.pos.x)
-                            force = new Vector2(-0.7f, 0.7f);
-                        else
-                            force = new Vector2(0.7f, 0.7f);
-                    }
-
-                    tailSegment.vel += force;
-                }
-
-            }
-        }
-        #endregion
 
         orig(self, sLeaser, rCam, timeStacker, camPos);
 
@@ -531,7 +556,10 @@ public static class DrawSprites
                 || spritename.StartsWith("Head"))
             {
                 if (!self.player.abstractCreature.GetPlayerState().InDream)
+                {
                     sprite.color = voidColor;
+                }
+                sLeaser.sprites[11].color = voidFluidColor;
             }
         }
 

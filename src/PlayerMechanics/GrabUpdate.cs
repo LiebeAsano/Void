@@ -7,14 +7,13 @@ using MoreSlugcats;
 using VoidTemplate.PlayerMechanics.ViyMechanics;
 using VoidTemplate.Objects.MarkItem;
 using VoidTemplate.Objects;
-using UnityEngine.Rendering;
 using System.Runtime.CompilerServices;
 
 namespace VoidTemplate.PlayerMechanics;
 
 public static class GrabUpdate
 {
-    private static ConditionalWeakTable<Player, StrongBox<int>> markRegConunter = new();
+    private static readonly ConditionalWeakTable<Player, StrongBox<int>> markRegConunter = new();
 
     public static StrongBox<int> GetMarkRegCounter(this Player player) => markRegConunter.GetOrCreateValue(player);
 
@@ -48,12 +47,17 @@ public static class GrabUpdate
         {
             (player.graphicsModule as PlayerGraphics).head.vel += Custom.RNV() * (Random.value * 3f);
         }
+        if (player.playerState != null)
+        {
+            player.playerState.permanentDamageTracking += 0.9f;
+        }
         player.Stun(200);
         player.room.AddObject(new CreatureSpasmer(player, false, 200));
+        player.room.PlaySound(SoundID.Zapper_Zap, player.bodyChunks[0], false, 0.5f, 1f);
         player.aerobicLevel = 1.5f;
         player.exhausted = true;
         player.SetMalnourished(true, false);
-        HunterSpasms.Spasm(player, 10, 0.5f);
+        HunterSpasms.Spasm(player, 10, 1f);
         CycleEnd.changedMark = true;
         storySession.saveState.deathPersistentSaveData.theMark = false;
     }
@@ -449,7 +453,11 @@ public static class GrabUpdate
         {
             flag3 = false;
         }
-        if (self.room.game.session is StoryGameSession session && session.saveState.deathPersistentSaveData.theMark && self.input[0].pckp && self.input[0].y < 0 && self.bodyChunks[1].ContactPoint.y < 0)
+        if (self.room.game.session is StoryGameSession session &&
+            session.saveState.deathPersistentSaveData.theMark && 
+            self.input[0].pckp && self.input[0].y < 0 && 
+            self.bodyChunks[1].ContactPoint.y < 0 &&
+            session.saveState.GetViyMarkAvoid())
         {
             self.GetMarkRegCounter().Value++;
             if (self.GetMarkRegCounter().Value > 110)

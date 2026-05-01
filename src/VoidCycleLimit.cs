@@ -1,17 +1,6 @@
-﻿using HUD;
-using Menu;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using RWCustom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VoidTemplate.OptionInterface;
-using VoidTemplate.PlayerMechanics;
-using static HUD.Map;
-using static Menu.SlugcatSelectMenu;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate

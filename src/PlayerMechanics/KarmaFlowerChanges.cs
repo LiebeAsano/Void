@@ -503,7 +503,7 @@ public static class KarmaFlowerChanges
             ext.voidPoisonWeaknessApplied = false;
         }
 
-        if (shouldBeWeakened && self.playerState is not null)
+        if (shouldBeWeakened && self.playerState != null)
         {
             self.playerState.permanentDamageTracking += 0.000125f;
             if (self.playerState.permanentDamageTracking >= 1.0f)

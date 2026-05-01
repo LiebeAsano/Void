@@ -32,7 +32,7 @@ public static class Spasm
                     && !self.GetStorySession.saveState.GetVoidMarkV3()
                     && !KarmaFlowerChanges.SaveVoidCycle)
                 {
-                    float MaxSize = 220000f;
+                    float MaxSize = self.GetStorySession.saveState.deathPersistentSaveData.theMark ? 110000f : 220000f;
                     float Lenght = 10f;
                     MaxSize = MaxSize * 0.1f * player.KarmaCap;
 
@@ -48,6 +48,24 @@ public static class Spasm
                     {
                         self.GetStorySession.saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Rot);
                         HunterSpasms.Spasm(player, Lenght, 1f);
+                        if (self.GetStorySession.saveState.deathPersistentSaveData.theMark)
+                        {
+                            if (!self.GetStorySession.saveState.GetViyMarkAvoidMessage())
+                            {
+                                player.room.AddObject(new Tutorial(player.room,
+                                [
+                                    new("Foreign flesh...", 0, 222),
+                                    new("Must be removed...", 0, 222),
+                                    new("Press 'Down' and 'Pick up' to get rid of the mark of communication.", 0, 444)
+                                ]));
+                                self.GetStorySession.saveState.SetViyMarkAvoid(true);
+                                self.GetStorySession.saveState.SetViyMarkAvoidMessage(true);
+                            }
+                        }
+                        else
+                        {
+
+                        }
                     }
                 }
                 break;

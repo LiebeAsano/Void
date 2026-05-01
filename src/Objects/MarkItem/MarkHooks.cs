@@ -20,15 +20,15 @@ namespace VoidTemplate.Objects.MarkItem
         {
             if (self.describeItem == VoidEnums.MiscTalkItem.VoidMark)
             {
-                self.events.Add(new Conversation.TextEvent(self, 10, "Нормальная метка", 0));
+                //self.events.Add(new Conversation.TextEvent(self, 10, "Нормальная метка", 0));
             }
             else if (self.describeItem == VoidEnums.MiscTalkItem.VoidMarkV2)
             {
-                self.events.Add(new Conversation.TextEvent(self, 10, "Метка версии 2", 0));
+                //self.events.Add(new Conversation.TextEvent(self, 10, "Метка версии 2", 0));
             }
             else if (self.describeItem == VoidEnums.MiscTalkItem.VoidMarkV3)
             {
-                self.events.Add(new Conversation.TextEvent(self, 10, "Метка версии 3", 0));
+                //self.events.Add(new Conversation.TextEvent(self, 10, "Метка версии 3", 0));
             }
             else
                 orig(self);

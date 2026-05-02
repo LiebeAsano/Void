@@ -459,11 +459,7 @@ namespace VoidTemplate
             }
         }
 
-        private static void PushNonPlayersAwayFromVoidBlockedShortcuts(
-            ShortcutHelper self,
-            RoomTransportShortcutBlocker localBlocker,
-            bool worldHaveBlock,
-            WorldShortcutBlock worldBlock)
+        private static void PushNonPlayersAwayFromVoidBlockedShortcuts(ShortcutHelper self, RoomTransportShortcutBlocker localBlocker, bool worldHaveBlock, WorldShortcutBlock worldBlock)
         {
             if (self.room == null || self.room.abstractRoom == null)
                 return;
@@ -608,8 +604,6 @@ namespace VoidTemplate
 
             if (voidPlayer != null && voidPlayer.IsVoid() && newRoom != null)
             {
-                // GetShortcutBlock/GetBlockedShortcut возвращают объект-отслеживатель даже когда blockTime == 0.
-                // Это нужно для подсчёта проходов, но НЕ должно само по себе включать мягкую блокировку.
                 localHitBlock = newRoom.GetRoomShortcutBlock().GetShortcutBlock(pos);
 
                 if (localHitBlock != null)

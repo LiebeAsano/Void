@@ -3,10 +3,6 @@ using Menu;
 using RWCustom;
 using UnityEngine;
 using MoreSlugcats;
-using static VoidTemplate.Useful.Utils;
-using MonoMod.Cil;
-using Mono.Cecil.Cil;
-using System;
 
 public static class PermaDeathScreen
 {

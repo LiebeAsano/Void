@@ -108,57 +108,57 @@ public static class DreamCustom
     {
         if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            switch (currentRegion)
+            if (saveState.deathPersistentSaveData.karmaCap != 10)
             {
-                case "LF":
-                    {
-                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
-                        break;
-                    }
-                case "SI":
-                    {
-                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
-                        break;
-                    }
-                case "SB":
-                    {
-                        if (UnityEngine.Random.Range(0, 3) == 0)
-                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
-                        break;
-                    }
+                switch (currentRegion)
+                {
+                    case "LF":
+                        {
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Farm);
+                            break;
+                        }
+                    case "SI":
+                        {
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sky);
+                            break;
+                        }
+                    case "SB":
+                        {
+                            if (UnityEngine.Random.Range(0, 3) == 0)
+                                saveState.EnlistDreamIfNotSeen(SaveManager.Dream.Sub);
+                            break;
+                        }
+                }
+                switch (saveState.cycleNumber)
+                {
+                    case >= 18:
+                        {
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidSea);
+                            break;
+                        }
+                    case >= 12:
+                        {
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidBody);
+                            break;
+                        }
+                    case >= 6:
+                        {
+                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.NSH);
+                            break;
+                        }
+                }
             }
-            switch (saveState.cycleNumber)
+            else
             {
-                case >= 18:
-                    {
-                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidSea);
-                        break;
-                    }
-                case >= 12:
-                    {
-                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidBody);
-                        break;
-                    }
-                case >= 6:
-                    {
-                        saveState.EnlistDreamIfNotSeen(SaveManager.Dream.NSH);
-                        break;
-                    }
+                if (saveState.GetKarmaToken() < 5)
+                    saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
+                if (Karma11Update.VoidKarma11
+                    && saveState.GetVoidFoodToHibernate() < 6
+                    && !saveState.GetVoidEndingTree()
+                    && UnityEngine.Random.Range(0, 11) == 0)
+                    saveState.EnlistDreamIfNotSeen(SaveManager.Dream.HunterRot);
             }
-            switch (saveState.deathPersistentSaveData.karmaCap)
-            {
-                case 10:
-                    {
-                        if (saveState.GetKarmaToken() < 5)
-                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
-                        if (Karma11Update.VoidKarma11
-                            && saveState.GetVoidFoodToHibernate() < 6
-                            && !saveState.GetVoidEndingTree()
-                            && UnityEngine.Random.Range(0, 11) == 0)
-                            saveState.EnlistDreamIfNotSeen(SaveManager.Dream.HunterRot);
-                        break;
-                    }
-            }
+                
         }
         orig(self, saveState, currentRegion, denPosition);
     }

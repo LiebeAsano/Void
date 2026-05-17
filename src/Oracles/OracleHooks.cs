@@ -1179,10 +1179,15 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                         "extra talk"
                     ]);
                     Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_5, oracle.firstChunk);
-                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    /*if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
                     {
                         dialogBox.Interrupt(". . .".TranslateString(), 60);
                         dialogBox.NewMessage("I can see by your face that you understand me.".TranslateString(), 60);
+                    }*/
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    {
+                        dialogBox.Interrupt(". . .".TranslateString(), 60);
+                        dialogBox.NewMessage("? ??? ??? ?? ???? ???? ???? ??? ?????????? ??.".TranslateString(), 60);
                     }
                     Voice.requireActiveUpkeep = true;
                 }
@@ -1264,6 +1269,10 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     {
                         dialogBox.Interrupt("Did someone send a messenger to me?".TranslateString(), 60);
                     }*/
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    {
+                        dialogBox.Interrupt("??? ??????? ???? ? ????????? ?? ???".TranslateString(), 60);
+                    }
                     Voice.requireActiveUpkeep = true;
                     communicationPause = 10;
                     break;
@@ -1274,6 +1283,11 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                         dialogBox.Interrupt("It does not have a mark.".TranslateString(), 30);
                         dialogBox.NewMessage("It is just another pest was able to get into my structure.".TranslateString(), 30);
                     }*/
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    {
+                        dialogBox.Interrupt("?? ???? ??? ???? ? ????.".TranslateString(), 30);
+                        dialogBox.NewMessage("?? ?? ???? ??????? ???? ??? ???? ?? ??? ???? ?? ?????????.".TranslateString(), 30);
+                    }
                     Voice.requireActiveUpkeep = true;
                     communicationPause = 70;
                     break;
@@ -1284,6 +1298,11 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                         dialogBox.Interrupt("You look unnatural.".TranslateString(), 60);
                         dialogBox.NewMessage("What happened to you? There are clear signs of external interference here.".TranslateString(), 60);
                     }*/
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    {
+                        dialogBox.Interrupt("??? ???? ?????????.".TranslateString(), 60);
+                        dialogBox.NewMessage("???? ???????? ?? ???? ????? ??? ????? ????? ?? ???????? ???????????? ????.".TranslateString(), 60);
+                    }
                     Voice.requireActiveUpkeep = true;
                     break;
                 case 3:
@@ -1292,37 +1311,41 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     {
                         dialogBox.Interrupt("A rather strange creature.".TranslateString(), 60);
                     }*/
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                    {
+                        dialogBox.Interrupt("? ?????? ??????? ????????.".TranslateString(), 60);
+                    }
                     Voice.requireActiveUpkeep = true;
                     communicationPause = 140;
                     break;
             }
         }
-        else if (base.action == MeetVoid_Texting)
+        else if (action == MeetVoid_Texting)
         {
-            this.chatLabel.NewPhrase(this.communicationIndex);
+            chatLabel.NewPhrase(communicationIndex);
         }
-        else if (base.action == MeetVoid_FirstImages)
+        else if (action == MeetVoid_FirstImages)
         {
-            this.showImage?.Destroy();
+            showImage?.Destroy();
 
-            switch (this.communicationIndex)
+            switch (communicationIndex)
             {
                 case 0:
-                    this.showImage = base.oracle.myScreen.AddImage("aiimg1_void");
-                    this.communicationPause = 380;
+                    showImage = oracle.myScreen.AddImage("aiimg1_void");
+                    communicationPause = 380;
                     break;
                 case 1:
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
-                        this.showImage = base.oracle.myScreen.AddImage("aiimg2_void");
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap == 10)
+                        showImage = oracle.myScreen.AddImage("aiimg2_void");
                     else
-                        this.showImage = base.oracle.myScreen.AddImage("aiimg3_void");
-                    this.communicationPause = 290;
+                        showImage = oracle.myScreen.AddImage("aiimg3_void");
+                    communicationPause = 290;
                     break;
                 case 2:
-                    if (this.oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
+                    if (oracle.room.game.GetStorySession.saveState.deathPersistentSaveData.karmaCap != 10)
                     {
-                        this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_1, base.oracle.firstChunk);
-                        this.showImage = base.oracle.myScreen.AddImage(
+                        Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_1, oracle.firstChunk);
+                        showImage = oracle.myScreen.AddImage(
                         [
                             "void_glyphs_3",
                             "void_glyphs_5"
@@ -1330,80 +1353,81 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
                     }
                     else
                     {
-                        this.Voice = base.oracle.room.PlaySound(SoundID.SS_AI_Talk_3, base.oracle.firstChunk);
-                        this.showImage = base.oracle.myScreen.AddImage(
+                        Voice = oracle.room.PlaySound(SoundID.SS_AI_Talk_3, oracle.firstChunk);
+                        showImage = oracle.myScreen.AddImage(
                         [
                             "void_glyphs_4",
                             "void_glyphs_5"
                         ], 30);
                         //this.dialogBox.Interrupt("Three... four spirals. The genes are twisted into a super-dense structure. This form is almost immune to the external environment.".TranslateString(), 60);
+                        dialogBox.Interrupt("?????... ???? ???????. ??? ????? ??? ??????? ???? ? ?????-????? ?????????. ???? ???? ?? ?????? ?????? ?? ??? ??????? ???????????.".TranslateString(), 60);
                     }
-                    this.communicationPause = 330;
+                    communicationPause = 330;
                     break;
             }
 
-            if (this.showImage != null)
+            if (showImage != null)
             {
-                base.oracle.room.PlaySound(SoundID.SS_AI_Image, 0f, 1f, 1f);
-                this.showImage.lastPos = this.showMediaPos;
-                this.showImage.pos = this.showMediaPos;
-                this.showImage.lastAlpha = 0f;
-                this.showImage.alpha = 0f;
-                this.showImage.setAlpha = new float?(1f);
+                oracle.room.PlaySound(SoundID.SS_AI_Image, 0f, 1f, 1f);
+                showImage.lastPos = showMediaPos;
+                showImage.pos = showMediaPos;
+                showImage.lastAlpha = 0f;
+                showImage.alpha = 0f;
+                showImage.setAlpha = new float?(1f);
             }
         }
-        this.communicationIndex++;
+        communicationIndex++;
     }
 
     public void ShowMediaMovementBehavior()
     {
-        if (base.player != null)
+        if (player != null)
         {
-            this.owner.lookPoint = base.player.DangerPos;
+            owner.lookPoint = player.DangerPos;
         }
-        Vector2 vector = new(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
-        if (this.owner.CommunicatePosScore(vector) + 40f < this.owner.CommunicatePosScore(this.owner.nextPos) && !Custom.DistLess(vector, this.owner.nextPos, 30f))
+        Vector2 vector = new(UnityEngine.Random.value * oracle.room.PixelWidth, UnityEngine.Random.value * oracle.room.PixelHeight);
+        if (owner.CommunicatePosScore(vector) + 40f < owner.CommunicatePosScore(owner.nextPos) && !Custom.DistLess(vector, owner.nextPos, 30f))
         {
-            this.owner.SetNewDestination(vector);
+            owner.SetNewDestination(vector);
         }
-        this.consistentShowMediaPosCounter += (int)Custom.LerpMap(Vector2.Distance(this.showMediaPos, this.idealShowMediaPos), 0f, 200f, 1f, 10f);
-        vector = new Vector2(UnityEngine.Random.value * base.oracle.room.PixelWidth, UnityEngine.Random.value * base.oracle.room.PixelHeight);
-        if (this.ShowMediaScore(vector) + 40f < this.ShowMediaScore(this.idealShowMediaPos))
+        consistentShowMediaPosCounter += (int)Custom.LerpMap(Vector2.Distance(showMediaPos, idealShowMediaPos), 0f, 200f, 1f, 10f);
+        vector = new Vector2(UnityEngine.Random.value * oracle.room.PixelWidth, UnityEngine.Random.value * oracle.room.PixelHeight);
+        if (ShowMediaScore(vector) + 40f < ShowMediaScore(idealShowMediaPos))
         {
-            this.idealShowMediaPos = vector;
-            this.consistentShowMediaPosCounter = 0;
+            idealShowMediaPos = vector;
+            consistentShowMediaPosCounter = 0;
         }
-        vector = this.idealShowMediaPos + Custom.RNV() * UnityEngine.Random.value * 40f;
-        if (this.ShowMediaScore(vector) + 20f < this.ShowMediaScore(this.idealShowMediaPos))
+        vector = idealShowMediaPos + Custom.RNV() * UnityEngine.Random.value * 40f;
+        if (ShowMediaScore(vector) + 20f < ShowMediaScore(idealShowMediaPos))
         {
-            this.idealShowMediaPos = vector;
-            this.consistentShowMediaPosCounter = 0;
+            idealShowMediaPos = vector;
+            consistentShowMediaPosCounter = 0;
         }
-        if (this.consistentShowMediaPosCounter > 300)
+        if (consistentShowMediaPosCounter > 300)
         {
-            this.showMediaPos = Vector2.Lerp(this.showMediaPos, this.idealShowMediaPos, 0.1f);
-            this.showMediaPos = Custom.MoveTowards(this.showMediaPos, this.idealShowMediaPos, 10f);
+            showMediaPos = Vector2.Lerp(showMediaPos, idealShowMediaPos, 0.1f);
+            showMediaPos = Custom.MoveTowards(showMediaPos, idealShowMediaPos, 10f);
         }
     }
 
     private float ShowMediaScore(Vector2 tryPos)
     {
-        if (base.oracle.room.GetTile(tryPos).Solid || base.player == null)
+        if (oracle.room.GetTile(tryPos).Solid || player == null)
         {
             return float.MaxValue;
         }
-        float num = Mathf.Abs(Vector2.Distance(tryPos, base.player.DangerPos) - 250f);
-        num -= Math.Min((float)base.oracle.room.aimap.getTerrainProximity(tryPos), 9f) * 30f;
-        num -= Vector2.Distance(tryPos, this.owner.nextPos) * 0.5f;
-        for (int i = 0; i < base.oracle.arm.joints.Length; i++)
+        float num = Mathf.Abs(Vector2.Distance(tryPos, player.DangerPos) - 250f);
+        num -= Math.Min(oracle.room.aimap.getTerrainProximity(tryPos), 9f) * 30f;
+        num -= Vector2.Distance(tryPos, owner.nextPos) * 0.5f;
+        for (int i = 0; i < oracle.arm.joints.Length; i++)
         {
-            num -= Mathf.Min(Vector2.Distance(tryPos, base.oracle.arm.joints[i].pos), 100f) * 10f;
+            num -= Mathf.Min(Vector2.Distance(tryPos, oracle.arm.joints[i].pos), 100f) * 10f;
         }
-        if (base.oracle.graphicsModule != null)
+        if (oracle.graphicsModule != null)
         {
-            for (int j = 0; j < (base.oracle.graphicsModule as OracleGraphics).umbCord.coord.GetLength(0); j += 3)
+            for (int j = 0; j < (oracle.graphicsModule as OracleGraphics).umbCord.coord.GetLength(0); j += 3)
             {
-                num -= Mathf.Min(Vector2.Distance(tryPos, (base.oracle.graphicsModule as OracleGraphics).umbCord.coord[j, 0]), 100f);
+                num -= Mathf.Min(Vector2.Distance(tryPos, (oracle.graphicsModule as OracleGraphics).umbCord.coord[j, 0]), 100f);
             }
         }
         return num;
@@ -1413,7 +1437,7 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
     {
         get
         {
-            return base.CurrentlyCommunicating || this.Voice != null || (base.action == SSOracleBehavior.Action.MeetWhite_Texting && !this.chatLabel.finishedShowingMessage) || this.showImage != null;
+            return base.CurrentlyCommunicating || Voice != null || (action == SSOracleBehavior.Action.MeetWhite_Texting && !chatLabel.finishedShowingMessage) || showImage != null;
         }
     }
 

@@ -42,7 +42,7 @@ public static class MenuHooks
 		if (c.TryGotoNext(MoveType.After, x => x.MatchCallOrCallvirt(typeof(HUD.HUD).GetMethod(nameof(HUD.HUD.Update)))))
 		{
 			c.Emit(OpCodes.Ldarg_0);
-			c.EmitDelegate<Predicate<SlugcatSelectMenu.SlugcatPageContinue>>((SlugcatSelectMenu.SlugcatPageContinue page) => (page.hud.foodMeter == null));
+			c.EmitDelegate<Predicate<SlugcatSelectMenu.SlugcatPageContinue>>(page => (page.hud.foodMeter == null));
 			c.Emit(OpCodes.Brtrue, bubblestart);
 			c.Emit(OpCodes.Br, bubbleend);
 			c.MarkLabel(bubblestart);
@@ -71,22 +71,39 @@ public static class MenuHooks
 		}
 		orig(self, menu, owner, pageIndex, slugcatNumber);
 	}
-	private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
-	{
-		if (self.owner?.menu is StoryGameStatisticsScreen && RainWorld.lastActiveSaveSlot == VoidEnums.SlugcatID.Void)
-		{
-			RainWorld rainWorld = self.menu.manager.rainWorld;
-			SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
-			if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticDeath11;
-			else if (save.GetVoidCatDead()) self.sceneID = VoidEnums.SceneID.StaticDeath;
-            else if (save.GetVoidEndingTree()) self.sceneID = VoidEnums.SceneID.StaticSlugcat;
-            else if (save.GetEndingEncountered()) self.sceneID = VoidEnums.SceneID.StaticEnd;
-            else if (save.GetEndingEncountered() && save.deathPersistentSaveData.karmaCap == 10) self.sceneID = VoidEnums.SceneID.StaticEnd11;
-			else self.sceneID = VoidEnums.SceneID.StaticEnd;
-		}
-		orig(self);
-	}
-	private static void MakeTextScroll(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_GrafUpdate orig, SlugcatSelectMenu.SlugcatPageContinue self, float timeStacker)
+    private static void StatisticsSceneReplacement(On.Menu.MenuScene.orig_BuildScene orig, MenuScene self)
+    {
+        if (self.owner?.menu is StoryGameStatisticsScreen)
+        {
+            RainWorld rainWorld = self.menu.manager.rainWorld;
+
+            if (rainWorld.progression.PlayingAsSlugcat == VoidEnums.SlugcatID.Void)
+            {
+                SaveState save = rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menu.manager.menuSetup, false);
+
+                bool dead = save.GetVoidCatDead();
+                bool karma10 = save.deathPersistentSaveData.karmaCap == 10;
+                bool treeEnding = save.GetVoidEndingTree();
+                bool ending = save.GetEndingEncountered();
+
+                if (dead && karma10)
+                    self.sceneID = VoidEnums.SceneID.StaticDeath11;
+                else if (dead)
+                    self.sceneID = VoidEnums.SceneID.StaticDeath;
+                else if (treeEnding)
+                    self.sceneID = VoidEnums.SceneID.StaticSlugcat;
+                else if (ending && karma10)
+                    self.sceneID = VoidEnums.SceneID.StaticEnd11;
+                else if (ending)
+                    self.sceneID = VoidEnums.SceneID.StaticEnd;
+                else
+                    self.sceneID = VoidEnums.SceneID.StaticEnd;
+            }
+        }
+
+        orig(self);
+    }
+    private static void MakeTextScroll(On.Menu.SlugcatSelectMenu.SlugcatPageContinue.orig_GrafUpdate orig, SlugcatSelectMenu.SlugcatPageContinue self, float timeStacker)
 	{
 		orig(self, timeStacker);
 		if (assLabel.TryGetValue(self, out var label))

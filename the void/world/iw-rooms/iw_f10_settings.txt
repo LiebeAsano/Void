@@ -1,6 +1,6 @@
-WaveSpeed: 0.3958127
-WaveLength: 0.9479064
-WaveAmplitude: 0.005225913
+WaveSpeed: 0.4559702
+WaveLength: 0.9779851
+WaveAmplitude: 5.17975E-05
 SecondWaveLength: 0.1666667
 SecondWaveAmplitude: 0
 Grime: 0.206137

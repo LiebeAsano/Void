@@ -698,16 +698,3 @@ public class VoidState
 	public Stack<AbstractPhysicalObject> SwallowedObjects { get; } = [];
 }
 
-/*public class PlayerRoomChecker
-{
-	public static bool IsRoomIDSS_AI(Player player)
-	{
-		if (player.room != null && player.room.abstractRoom != null)
-		{
-			return player.room.abstractRoom.name == "SS_AI";
-		}
-
-		return false;
-	}
-}*/
-

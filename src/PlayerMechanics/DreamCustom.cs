@@ -152,10 +152,11 @@ public static class DreamCustom
             {
                 if (saveState.GetKarmaToken() < 5)
                     saveState.EnlistDreamIfNotSeen(SaveManager.Dream.VoidHeart);
+                int random = 11 - saveState.GetVoidFoodToHibernate();
                 if (Karma11Update.VoidKarma11
                     && saveState.GetVoidFoodToHibernate() < 6
                     && !saveState.GetVoidEndingTree()
-                    && UnityEngine.Random.Range(0, 11) == 0)
+                    && UnityEngine.Random.Range(0, random) == 0)
                     saveState.EnlistDreamIfNotSeen(SaveManager.Dream.HunterRot);
             }
                 

@@ -1,8 +1,9 @@
 using UnityEngine;
 
 namespace VoidTemplate.Objects;
-using static RWCustom.Custom;
 using static Mathf;
+using static RWCustom.Custom;
+using static VoidTemplate.SaveManager;
 
 public class RedOverlay : CosmeticSprite
 {
@@ -42,7 +43,7 @@ public class RedOverlay : CosmeticSprite
         
         if(fade == 0f && lastFade > 0f) rotDir = Random.value < 0.5f ? -1f : 1f;
 
-        SoundID meow = SoundID.None;
+        SoundID meow;
 
         if (VoidDreamScript.IsVoidDream)
         {
@@ -50,25 +51,27 @@ public class RedOverlay : CosmeticSprite
         }
         else
         {
-            switch (Random.Range(0, 5))
+            if (ExternalSaveData.VoidKarma11)
             {
-                case 0:
-                    meow = Watcher.WatcherEnums.WatcherSoundID.RotLiz_Vocalize;
-                    break;
-                case 1:
-                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A;
-                    break;
-                case 2:
-                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
-                    break;
-                case 3:
-                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
-                    break;
-                case 4:
-                    meow = Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B;
-                    break;
+                meow = Random.Range(0, 4) switch
+                {
+                    0 => VoidEnums.SoundID.ViyVoiceBad1,
+                    1 => VoidEnums.SoundID.ViyVoiceBad2,
+                    2 => VoidEnums.SoundID.ViyVoiceBad3,
+                    3 => VoidEnums.SoundID.ViyVoiceBad4,
+                    _ => VoidEnums.SoundID.ProtoViyScreamSound,
+                };
             }
-        }   
+            else
+            {
+                meow = Random.Range(0, 2) switch
+                {
+                    0 => Watcher.WatcherEnums.WatcherSoundID.RotLiz_Vocalize,
+                    1 => Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A,
+                    _ => Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B,
+                };
+            }
+        } 
 
         if (soundLoop is null && fade > 0f)
         {

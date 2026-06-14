@@ -38,7 +38,7 @@ public static class MenuHooks
     private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
     {
 		orig(self, manager, showRegionSpecificBkg);
-		self.pages[0].subObjects.Add(new LastWishDiscordButton(self, self.pages[0], new(1302, 0)));
+		self.pages[0].subObjects.Add(new LastWishDiscordButton(self, self.pages[0], new(1306, 10)));
     }
 
     private static void SlugcatPageContinue_Update(MonoMod.Cil.ILContext il)

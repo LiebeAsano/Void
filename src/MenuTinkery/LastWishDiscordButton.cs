@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Menu;
 using UnityEngine;
 
@@ -11,10 +6,10 @@ namespace VoidTemplate.MenuTinkery
 {
     public class LastWishDiscordButton : SymbolButton
     {
-        public LastWishDiscordButton(Menu.Menu menu, MenuObject owner, Vector2 pos) : base(menu, owner, symbolName: "pixel", "", pos)
+        public LastWishDiscordButton(Menu.Menu menu, MenuObject owner, Vector2 pos) : base(menu, owner, symbolName: "atlas-void/discord_icon", "", pos)
         {
-            roundedRect.size = new(64, 64);
-            size = new(64, 64);
+            roundedRect.size = new(50, 50);
+            size = new(50, 50);
         }
         public override void Clicked()
         {

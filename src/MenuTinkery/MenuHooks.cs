@@ -32,7 +32,14 @@ public static class MenuHooks
 		On.Menu.SlugcatSelectMenu.SlugcatPageNewGame.ctor += TextLabelIfNotUnlocked;
 		//fix for select menu dying when there is no karma and food meter for the page
 		IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
+        On.Menu.MainMenu.ctor += MainMenu_ctor;
 	}
+
+    private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
+    {
+		orig(self, manager, showRegionSpecificBkg);
+		self.pages[0].subObjects.Add(new LastWishDiscordButton(self, self.pages[0], new(1306, 10)));
+    }
 
     private static void SlugcatPageContinue_Update(MonoMod.Cil.ILContext il)
     {

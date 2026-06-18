@@ -1,6 +1,8 @@
 ﻿using RWCustom;
+using System;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics;
+using VoidTemplate.Useful;
 
 namespace VoidTemplate.Misc;
 
@@ -8,10 +10,84 @@ public static class EngageInMovement
 {
 	public static void Hook()
 	{
-		On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
+		On.PlayerGraphics.LookAtObject += PlayerGraphics_LookAtObject;
+		On.PlayerGraphics.LookAtPoint += PlayerGraphics_LookAtPoint;
+        On.PlayerGraphics.PlayerObjectLooker.HowInterestingIsThisObject += PlayerObjectLooker_HowInterestingIsThisObject;
+        On.SlugcatHand.EngageInMovement += SlugcatHand_EngageInMovement;
 	}
 
-	public static bool SlugcatHand_EngageInMovement(On.SlugcatHand.orig_EngageInMovement orig, global::SlugcatHand slugcat_hand)
+    private static void PlayerGraphics_LookAtObject(On.PlayerGraphics.orig_LookAtObject orig, PlayerGraphics self, PhysicalObject obj)
+    {
+		if (self.player.IsViy() && 
+			(self.player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+            self.player.bodyMode == Player.BodyModeIndex.WallClimb) && 
+			obj is Player) return;
+		orig(self, obj);
+    }
+
+    private static void PlayerGraphics_LookAtPoint(On.PlayerGraphics.orig_LookAtPoint orig, PlayerGraphics self, Vector2 point, float interest)
+    {
+
+		if (self.player.IsViy() &&
+			(self.player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+			self.player.bodyMode == Player.BodyModeIndex.WallClimb) &&
+			(self.player.grasps[0] != null &&
+			self.player.grasps[0].grabbed is Player ||
+			self.player.grasps[1] != null &&
+			self.player.grasps[1].grabbed is Player))
+		{
+			if (self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
+			{
+                BodyChunk body_chunk_0 = self.player.bodyChunks[0];
+                BodyChunk body_chunk_1 = self.player.bodyChunks[1];
+
+                if (body_chunk_0.pos.x > body_chunk_1.pos.x)
+				{
+                    point = self.player.mainBodyChunk.pos + new Vector2(100f, 0.0f);
+                    self.objectLooker.timeLookingAtThis = 6;
+				}
+				else
+				{
+                    point = self.player.mainBodyChunk.pos + new Vector2(-100f, 0.0f);
+                    self.objectLooker.timeLookingAtThis = 6;
+				}
+			}
+			if (self.player.bodyMode == Player.BodyModeIndex.WallClimb)
+			{
+				BodyChunk body_chunk_0 = self.player.bodyChunks[0];
+				BodyChunk body_chunk_1 = self.player.bodyChunks[1];
+
+				if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+					if (self.player.input[0].y > 0)
+					{
+						point = self.player.mainBodyChunk.pos + new Vector2(0.0f, 100f);
+						self.objectLooker.timeLookingAtThis = 6;
+					}
+					else if (body_chunk_0.pos.y > body_chunk_1.pos.y)
+					{
+						point = self.player.mainBodyChunk.pos + new Vector2(0.0f, -100f);
+						self.objectLooker.timeLookingAtThis = 6;
+					}
+					else
+					{
+						point = self.player.mainBodyChunk.pos + new Vector2(0.0f, 0f);
+						self.objectLooker.timeLookingAtThis = 6;
+					}
+			}
+        }
+        orig(self, point, interest);
+    }
+
+    private static float PlayerObjectLooker_HowInterestingIsThisObject(On.PlayerGraphics.PlayerObjectLooker.orig_HowInterestingIsThisObject orig, PlayerGraphics.PlayerObjectLooker self, PhysicalObject obj)
+    {
+		if (self.owner.player.IsViy() &&
+            (self.owner.player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
+            self.owner.player.bodyMode == Player.BodyModeIndex.WallClimb) &&
+			obj is Player) return 0f;
+		return orig(self, obj);
+    }
+
+    public static bool SlugcatHand_EngageInMovement(On.SlugcatHand.orig_EngageInMovement orig, SlugcatHand slugcat_hand)
 	{
 		if (slugcat_hand.owner is not PlayerGraphics player_graphics ||
 			player_graphics.owner is not Player player ||
@@ -46,15 +122,16 @@ public static class EngageInMovement
 			{
 				player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(100f, 0.0f), 0f);
 				player_graphics.objectLooker.timeLookingAtThis = 6;
-			}
+            }
 			else
 			{
-				player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0.0f), 0f);
+                player_graphics.LookAtPoint(player.mainBodyChunk.pos + new Vector2(-100f, 0.0f), 0f);
 				player_graphics.objectLooker.timeLookingAtThis = 6;
 			}
+
 			player.animationFrame++;
 
-			slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
+            slugcat_hand.mode = Limb.Mode.HuntAbsolutePosition;
 
 			orig(slugcat_hand);
 

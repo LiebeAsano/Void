@@ -39,9 +39,9 @@ public static class GraspSave
                         healthState.health -= 0.00025f;
 
                         if (self.Template.quickDeath &&
-                            (UnityEngine.Random.value < -healthState.health ||
+                            (Random.value < -healthState.health ||
                              healthState.health < -1f ||
-                             (healthState.health < 0f && UnityEngine.Random.value < 0.33f)))
+                             (healthState.health < 0f && Random.value < 0.33f)))
                         {
                             self.Die();
                         }
@@ -51,10 +51,18 @@ public static class GraspSave
                 {
                     if (grabbedPlayer.playerState != null)
                     {
-                        grabbedPlayer.playerState.permanentDamageTracking += 0.00025f;
-                        if (grabbedPlayer.playerState.permanentDamageTracking >= 1f)
+                        if (grabbedPlayer.slugcatStats.name == Watcher.WatcherEnums.SlugcatStatsName.Watcher &&
+                            grabbedPlayer.room?.game?.GetStorySession.saveState.miscWorldSaveData.hasVoidWeaverAbility == true)
                         {
-                            self.Die();
+                            grabbedPlayer.SetHaloDisplayTime(20);
+                        }
+                        else
+                        {
+                            grabbedPlayer.playerState.permanentDamageTracking += 0.00025f;
+                            if (grabbedPlayer.playerState.permanentDamageTracking >= 1f)
+                            {
+                                self.Die();
+                            }
                         }
                     }
                 }
@@ -64,7 +72,7 @@ public static class GraspSave
                     playerInGrasp.input[0].pckp &&
                     !playerInGrasp.input[1].pckp &&
                     !playerInGrasp.dead &&
-                    UnityEngine.Random.Range(0, Karma11Update.VoidKarma11 ? 150 : 250) == 0)
+                    Random.Range(0, Karma11Update.VoidKarma11 ? 150 : 250) == 0)
                 {
                     self.Stun(20);
 

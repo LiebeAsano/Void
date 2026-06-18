@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using RWCustom;
-using System;
+﻿using RWCustom;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.Objects;
@@ -10,7 +7,6 @@ using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
 using static Room;
-using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
@@ -298,13 +294,13 @@ public static class Climbing
                     while (i < 5)
                     {
                         intVector += new IntVector2(0, -1);
-                        if (player.room.GetTile(intVector).Terrain == Room.Tile.TerrainType.Solid)
+                        if (player.room.GetTile(intVector).Terrain == Tile.TerrainType.Solid)
                         {
                             break;
                         }
-                        if (player.room.GetTile(intVector).Terrain == Room.Tile.TerrainType.Floor)
+                        if (player.room.GetTile(intVector).Terrain == Tile.TerrainType.Floor)
                         {
-                            if (player.room.GetTile(intVector + new IntVector2(player.input[0].x, 0)).Terrain == Room.Tile.TerrainType.Solid && !player.room.GetTile(intVector + new IntVector2(player.input[0].x, 1)).Solid)
+                            if (player.room.GetTile(intVector + new IntVector2(player.input[0].x, 0)).Terrain == Tile.TerrainType.Solid && !player.room.GetTile(intVector + new IntVector2(player.input[0].x, 1)).Solid)
                             {
                                 player.GoThroughFloors = false;
                                 break;

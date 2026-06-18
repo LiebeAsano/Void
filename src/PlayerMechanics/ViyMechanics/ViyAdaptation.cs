@@ -41,7 +41,7 @@ public static class ViyAdaptation
         {
             if (ViyLungExtended)            
                 self.slugcatStats.lungsFac = 0.0f;          
-            else if (self.room.game.IsViyStoryCampaign() && self.mainBodyChunk.submersion >= 1f)
+            else if (self.mainBodyChunk.submersion >= 1f && self.abstractCreature.world.game.IsViyStoryCampaign())
             {
                 if (Random.Range(0, 20000) == 0)
                 {
@@ -70,7 +70,7 @@ public static class ViyAdaptation
             self.stuckInChunk.owner is Player player &&
             player.IsViy())
         {
-            if (!ViyPoisonImmune && player.room.game.IsViyStoryCampaign())
+            if (!ViyPoisonImmune && player.abstractCreature.world.game.IsViyStoryCampaign())
             {
                 if (Random.Range(0, 10000) == 0)
                 {
@@ -79,7 +79,7 @@ public static class ViyAdaptation
                 }
             }
 
-            if (!ViyDartMaggotImmune && ViyPoisonImmune && player.room.game.IsViyStoryCampaign())
+            if (!ViyDartMaggotImmune && ViyPoisonImmune && player.abstractCreature.world.game.IsViyStoryCampaign())
             {
                 if (Random.Range(0, 15000) == 0)
                 {
@@ -135,7 +135,7 @@ public static class ViyAdaptation
     {
         if (self is Player player && player.IsViy() && type == Creature.DamageType.Explosion)
         {
-            if (ViyExplosiveImmune < 3 && Random.value <= 0.1f && player.room.game.IsViyStoryCampaign())
+            if (ViyExplosiveImmune < 3 && Random.value <= 0.1f && player.abstractCreature.world.game.IsViyStoryCampaign())
             {
                 _ = new Objects.KarmaRotator(player.abstractCreature.Room.realizedRoom);
                 ViyExplosiveImmune++;

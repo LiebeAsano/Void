@@ -7,6 +7,7 @@ using VoidTemplate.OptionInterface;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
+using Color = UnityEngine.Color;
 
 namespace VoidTemplate;
 
@@ -25,11 +26,55 @@ public static class DrawSprites
 
     public static void Hook()
     {
+        On.PlayerGraphics.WeaverParts.Update += WeaverParts_Update;
         On.PlayerGraphics.DrawSprites += PlayerGraphics_DrawSprites;
-
         On.PlayerGraphics.InitiateSprites += PlayerGraphics_InitiateSprites;
-
         On.PlayerGraphics.Update += PlayerGraphics_Update;
+    }
+
+    private static void WeaverParts_Update(On.PlayerGraphics.WeaverParts.orig_Update orig, PlayerGraphics.WeaverParts self)
+    {
+        var player = self.pGraphics.player;
+        if (player.grabbedBy != null)
+        {
+            foreach (var grasp in player.grabbedBy)
+            {
+                if (player.slugcatStats.name == Watcher.WatcherEnums.SlugcatStatsName.Watcher &&
+                    grasp?.grabber is Player grabberPlayer && grabberPlayer.AreVoidViy())
+                {
+                    if (player.abstractCreature.world.game.IsStorySession)
+                    {
+                        self.weaverTier = player.abstractCreature.world.game.GetStorySession.saveState.miscWorldSaveData.numberOfVoidWeaverEncounters;
+                    }
+                    if (self.pGraphics.player.isCamo)
+                    {
+                        self.camoFade = Mathf.Lerp(self.camoFade, 1f, 0.09f);
+                    }
+                    else
+                    {
+                        self.camoFade = Mathf.Lerp(self.camoFade, 0f, Mathf.Lerp(0.0005f, 0.01f, 1f - self.camoFade));
+                    }
+                    if (player.haloActivationTime > 0)
+                    {
+                        self.haloBaseAlpha = Mathf.Lerp(self.haloBaseAlpha, 1f, Mathf.Lerp(0.01f, 0.1f, self.haloBaseAlpha));
+                    }
+                    else
+                    {
+                        self.haloBaseAlpha = Mathf.Lerp(self.haloBaseAlpha, 0f, 0.1f);
+                    }
+                    if (Random.value < 0.1f)
+                    {
+                        self.haloFluxAlpha = Mathf.Lerp(0.6f, 1f, UnityEngine.Random.value);
+                    }
+                    if (self.weaverTier < 4)
+                    {
+                        self.haloBaseAlpha = 0f;
+                    }
+                    return;
+                }
+            }
+        }
+        orig(self);
     }
 
     private static void PlayerGraphics_Update(On.PlayerGraphics.orig_Update orig, PlayerGraphics self)

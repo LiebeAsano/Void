@@ -1,8 +1,4 @@
-﻿using VoidTemplate.PlayerMechanics.Karma11Features;
-using VoidTemplate.PlayerMechanics.Karma11Foundation;
-using VoidTemplate.PlayerMechanics.ViyMechanics;
-
-namespace VoidTemplate.PlayerMechanics;
+﻿namespace VoidTemplate.PlayerMechanics;
 
 public static class _PlayerMechanicsMeta
 {
@@ -29,7 +25,6 @@ public static class _PlayerMechanicsMeta
 		DreamManager.Hook();
 		EdibleChanges.Hook();
 		ElectricSpearResist.Hook();
-		ExplosiveResist.Hook();
 		ExtendedLungs.Hook();
 		SlugStats.Hook();
 		FrogResist.Hook();

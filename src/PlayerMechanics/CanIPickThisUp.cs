@@ -107,11 +107,19 @@ public static class CanIPickThisUp
         {
             if (self.owner.playerState is not null)
             {
-                voidBurn[self.owner.playerState.playerNumber]++;
-                self.owner.playerState.permanentDamageTracking += 0.00025f;
-                if (self.owner.playerState.permanentDamageTracking >= 1.0f)
+                if (self.owner.slugcatStats.name == WatcherEnums.SlugcatStatsName.Watcher &&
+                    self.owner.room?.game?.GetStorySession.saveState.miscWorldSaveData.hasVoidWeaverAbility == true)
                 {
-                    self.owner.Die();
+                    self.owner.SetHaloDisplayTime(20);
+                }
+                else
+                {
+                    voidBurn[self.owner.playerState.playerNumber]++;
+                    self.owner.playerState.permanentDamageTracking += 0.00025f;
+                    if (self.owner.playerState.permanentDamageTracking >= 1.0f)
+                    {
+                        self.owner.Die();
+                    }
                 }
             }
         }

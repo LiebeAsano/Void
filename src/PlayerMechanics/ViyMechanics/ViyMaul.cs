@@ -1,11 +1,4 @@
 ﻿using MoreSlugcats;
-using RWCustom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
@@ -14,7 +7,6 @@ public static class ViyMaul
 {
     public static void Hook()
     {
-        //On.Player.SlugcatGrab += Player_SlugcatGrab;
         On.Player.CanMaulCreature += Player_CanMaulCreature;
         On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         On.Player.Grabability += Player_Grabability;
@@ -22,7 +14,7 @@ public static class ViyMaul
 
     private static bool Player_CanMaulCreature(On.Player.orig_CanMaulCreature orig, Player self, Creature crit)
     {
-        if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        if (self.IsViy())
         {
             bool critStun = !crit.Stunned || crit.Stunned;
             if (crit != null && !crit.dead && (crit is not IPlayerEdible || crit is Centipede && !(crit as Centipede).Edible) && critStun)
@@ -36,7 +28,7 @@ public static class ViyMaul
 
     private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)
     {
-        if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        if (self.IsViy())
         {
             return true;
         }
@@ -45,7 +37,7 @@ public static class ViyMaul
 
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
     {
-        if (self.slugcatStats.name == VoidEnums.SlugcatID.Viy)
+        if (self.IsViy())
         {
             if (obj is Fly
                 || obj is Hazer
@@ -63,7 +55,8 @@ public static class ViyMaul
                 || obj is Leech
                 || obj is Deer
                 || obj is JellyFish
-                || obj is Vulture)
+                || obj is Vulture
+                || obj is Player)
             {
                 return orig(self, obj);
             }

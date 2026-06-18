@@ -15,6 +15,20 @@ namespace VoidTemplate.PlayerMechanics
         {
             if (self is Player player && player.IsVoid())
             {
+                if (type == Creature.DamageType.Explosion)
+                {
+                    int Karma = player.KarmaCap;
+                    if (Karma == 10)
+                        if (Karma11Update.VoidKarma11)
+                            Karma = 9;
+                        else
+                            Karma = 0;
+                    if (player.room?.game?.IsVoidStoryCampaign() != true && Karma11Update.VoidKarma11)
+                        Karma = 9;
+                    
+                    stunBonus *= 1f - 0.066f * (Karma + 1); 
+                    damage *= 1f - 0.066f * (Karma + 1);
+                }
                 if (source != null && source.owner is Creature)
                 {
                     self.SetKillTag((source.owner as Creature).abstractCreature);

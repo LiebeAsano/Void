@@ -1,4 +1,5 @@
 ﻿using RWCustom;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -65,27 +66,44 @@ namespace VoidTemplate
         {
             orig(self);
 
-            if (!OptionAccessors.ShortcutBlocker)
+            if (OptionAccessors.ShortcutBlocker || self.world == null)
+                return;
+
+            if (self.abstractRooms == null || self.abstractRooms.Count == 0)
+                return;
+
+            if (!self.world.TryGetShortcutBlock(out var block))
             {
-                if (!self.world.TryGetShortcutBlock(out var block))
-                {
-                    block = new WorldShortcutBlock();
-                    self.world.CreateShortcutBlock(block);
-                }
+                block = new WorldShortcutBlock();
+                self.world.CreateShortcutBlock(block);
+            }
 
-                for (int rm = 0; rm < self.world.abstractRooms.Length; rm++)
-                {
-                    AbstractRoom room = self.world.abstractRooms[rm];
+            for (int rm = 0; rm < self.abstractRooms.Count; rm++)
+            {
+                AbstractRoom room = self.abstractRooms[rm];
 
-                    if (room == self.world.offScreenDen)
+                if (room == null || room == self.world.offScreenDen)
+                    continue;
+
+                if (room.connections == null)
+                    continue;
+
+                for (int cnct = 0; cnct < room.connections.Length; cnct++)
+                {
+                    if (room.connections[cnct] <= -1)
                         continue;
 
-                    for (int cnct = 0; cnct < room.connections.Length; cnct++)
+                    if (room.world == null)
+                        continue;
+
+                    AbstractRoom targetRoom = self.world.GetAbstractRoom(room.connections[cnct]);
+                    if (targetRoom == null)
+                        continue;
+
+                    if (block.GetBlockedShortcut(room, cnct) == null)
                     {
-                        if (block.GetBlockedShortcut(room, cnct) == null && room.connections[cnct] > -1)
-                        {
-                            block.blockedShortcuts.Add(new WorldShortcutBlock.BlockedRoomExit(room, cnct));
-                        }
+                        block.blockedShortcuts.Add(new WorldShortcutBlock.BlockedRoomExit(room, cnct));
+
                     }
                 }
             }
@@ -812,7 +830,7 @@ namespace VoidTemplate
             {
                 if (!maxRegister)
                 {
-                    maxPassCount = Random.Range(3, 8);
+                    maxPassCount = UnityEngine.Random.Range(3, 8);
                     maxRegister = true;
                 }
 
@@ -882,7 +900,7 @@ namespace VoidTemplate
 
                 public override void Block()
                 {
-                    blockTime = Random.Range(400, 801);
+                    blockTime = UnityEngine.Random.Range(400, 801);
 
                     if (!room.lockedShortcuts.Contains(blockedShrotcut1))
                         room.lockedShortcuts.Add(blockedShrotcut1);
@@ -936,30 +954,76 @@ namespace VoidTemplate
                 public BlockedRoomExit(AbstractRoom fromRoom, int toRoom2Node)
                 {
                     room1 = fromRoom;
-                    room2 = fromRoom.world.GetAbstractRoom(fromRoom.connections[toRoom2Node]);
+
+                    if (fromRoom == null)
+                    {
+                        room2 = fromRoom;
+                        node1 = -1;
+                        node2 = -1;
+                        return;
+                    }
+
+                    if (toRoom2Node < 0 ||
+                        toRoom2Node >= fromRoom.connections.Length ||
+                        fromRoom.connections[toRoom2Node] <= -1)
+                    {
+                        room2 = fromRoom;
+                        node1 = toRoom2Node;
+                        node2 = -1;
+                        return;
+                    }
+
+                    int room2Index = fromRoom.connections[toRoom2Node];
+
+                    if (fromRoom.world == null)
+                    {
+                        room2 = fromRoom;
+                        node1 = toRoom2Node;
+                        node2 = -1;
+                        return;
+                    }
+
+                    room2 = fromRoom.world.GetAbstractRoom(room2Index);
+
+                    if (room2 == null)
+                    {
+                        room2 = fromRoom;
+                        node1 = toRoom2Node;
+                        node2 = -1;
+                        return;
+                    }
+
                     node1 = toRoom2Node;
                     node2 = room2.ExitIndex(fromRoom.index);
                 }
 
                 public override void Block()
                 {
-                    blockTime = Random.Range(400, 801);
+                    blockTime = UnityEngine.Random.Range(400, 801);
 
-                    if (room1.realizedRoom != null)
+                    if (room1?.realizedRoom != null && node1 >= 0)
                     {
-                        IntVector2 tile1 = room1.realizedRoom.ShortcutLeadingToNode(node1).StartTile;
-                        if (!room1.realizedRoom.lockedShortcuts.Contains(tile1))
+                        ShortcutData shortcut1 = room1.realizedRoom.ShortcutLeadingToNode(node1);
+                        if (shortcut1.destNode >= 0)
                         {
-                            room1.realizedRoom.lockedShortcuts.Add(tile1);
+                            IntVector2 tile1 = shortcut1.StartTile;
+                            if (!room1.realizedRoom.lockedShortcuts.Contains(tile1))
+                            {
+                                room1.realizedRoom.lockedShortcuts.Add(tile1);
+                            }
                         }
                     }
 
-                    if (room2.realizedRoom != null)
+                    if (room2?.realizedRoom != null && node2 >= 0 && room2 != room1)
                     {
-                        IntVector2 tile2 = room2.realizedRoom.ShortcutLeadingToNode(node2).StartTile;
-                        if (!room2.realizedRoom.lockedShortcuts.Contains(tile2))
+                        ShortcutData shortcut2 = room2.realizedRoom.ShortcutLeadingToNode(node2);
+                        if (shortcut2.destNode >= 0)
                         {
-                            room2.realizedRoom.lockedShortcuts.Add(tile2);
+                            IntVector2 tile2 = shortcut2.StartTile;
+                            if (!room2.realizedRoom.lockedShortcuts.Contains(tile2))
+                            {
+                                room2.realizedRoom.lockedShortcuts.Add(tile2);
+                            }
                         }
                     }
 
@@ -968,12 +1032,31 @@ namespace VoidTemplate
 
                 public override void Unlock()
                 {
-                    room1.realizedRoom?.lockedShortcuts.Remove(room1.realizedRoom.ShortcutLeadingToNode(node1).StartTile);
-                    room2.realizedRoom?.lockedShortcuts.Remove(room2.realizedRoom.ShortcutLeadingToNode(node2).StartTile);
+
+                    if (room1?.realizedRoom != null && node1 >= 0)
+                    {
+                        ShortcutData shortcut1 = room1.realizedRoom.ShortcutLeadingToNode(node1);
+                        if (shortcut1.destNode >= 0)
+                        {
+                            room1.realizedRoom.lockedShortcuts.Remove(shortcut1.StartTile);
+                        }
+                    }
+
+                    if (room2?.realizedRoom != null && node2 >= 0 && room2 != room1)
+                    {
+                        ShortcutData shortcut2 = room2.realizedRoom.ShortcutLeadingToNode(node2);
+                        if (shortcut2.destNode >= 0)
+                        {
+                            room2.realizedRoom.lockedShortcuts.Remove(shortcut2.StartTile);
+                        }
+                    }
                 }
 
                 public bool CompareRoomAndNode(AbstractRoom room, int node)
                 {
+                    if (room == null)
+                        return false;
+
                     return (room1 == room && node1 == node) || (room2 == room && node2 == node);
                 }
             }

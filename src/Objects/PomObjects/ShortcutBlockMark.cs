@@ -9,16 +9,11 @@ using static Pom.Pom;
 
 namespace VoidTemplate.Objects.PomObjects
 {
-    public class ShortcutBlockMark : UpdatableAndDeletable
+    public class ShortcutBlockMark(PlacedObject pObj) : UpdatableAndDeletable
     {
-        PlacedObject pObj;
+        private readonly PlacedObject pObj = pObj;
 
         public IntVector2 ShortcutPos { get => room.GetTilePosition(pObj.pos); }
-
-        public ShortcutBlockMark(PlacedObject pObj)
-        {
-            this.pObj = pObj;
-        }
 
         public override void Update(bool eu)
         {

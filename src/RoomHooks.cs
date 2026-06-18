@@ -3,6 +3,7 @@ using MonoMod.Cil;
 using MoreSlugcats;
 using RWCustom;
 using SlugBase.Features;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -289,8 +290,9 @@ namespace VoidTemplate
         private static void Player_ctor(On.Player.orig_ctor orig, Player self, AbstractCreature abstractCreature, World world)
         {
             orig(self, abstractCreature, world);
-            if (self.IsVoid() && abstractCreature.Room.name == "OE_FINAL03")
+            if (self.IsVoid() && (abstractCreature.Room.name == "OE_FINAL03" || abstractCreature.Room.name == "MS_COMMS"))
             {
+                self.sleepCurlUp = 1;
                 self.sleepCounter = 100;
             }
         }
@@ -429,14 +431,15 @@ namespace VoidTemplate
 
             orig(self, manager);
 
-            if (self?.world == null || self.Players == null)
+            if ((self?.world == null || !self.IsVoidStoryCampaign() || self.Players == null))
                 return;
-
-            AbstractRoom oeFinal03 = self.world.GetAbstractRoom("OE_FINAL03");
-            if (oeFinal03 == null)
-                return;
-
-            var spawnPos = Room.StaticGetTilePosition(new Vector2(325, 175));
+            IntVector2 spawnPos = default;
+            AbstractRoom specialSpawnRoom = self.world.GetAbstractRoom("OE_FINAL03");
+            if (specialSpawnRoom != null)
+                spawnPos = Room.StaticGetTilePosition(new Vector2(325, 175));
+            else if ((specialSpawnRoom = self.world.GetAbstractRoom("MS_COMMS")) != null)
+                spawnPos = new(20, 100);
+            else return;
 
             for (int i = 0; i < self.Players.Count; i++)
             {
@@ -444,7 +447,7 @@ namespace VoidTemplate
                 if (absPlayer == null)
                     continue;
 
-                if (absPlayer.pos.room == oeFinal03.index)
+                if (absPlayer.pos.room == specialSpawnRoom.index)
                 {
                     absPlayer.pos.Tile = new IntVector2(spawnPos.x, spawnPos.y + i);
                 }

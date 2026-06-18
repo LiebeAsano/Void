@@ -13,6 +13,7 @@ using VoidTemplate.PlayerMechanics.GhostFeatures;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.PlayerMechanics.Karma11Foundation;
 using VoidTemplate.PlayerMechanics.ViyMechanics;
+using VoidTemplate.PortalForViy;
 using VoidTemplate.Useful;
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -126,6 +127,7 @@ class _Plugin : BaseUnityPlugin
             Creatures.VoidDaddyAndProtoViy._VoidDaddyMeta.Hook();
             RainCycleChanges._RainCycleMeta.Init();
             ShortcutBlocker.Hook();
+            _PortalForViy.Init();
 
             RegisterPOMObjects();
             if (DevEnabled)

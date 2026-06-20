@@ -33,7 +33,7 @@ namespace VoidTemplate.PortalForViy
                 self.hasRequestedShutDown = true;
                 self.room.game.sawAGhost = self.worldGhost.ghostID;
                 self.room.game.GetStorySession.saveState.sessionEndingFromSpinningTopEncounter = true;
-                self.room.game.Win(false, false);
+                self.room.game.GhostShutDown(self.worldGhost.ghostID);
                 RainWorldGame.ForceSaveNewDenLocation(self.room.game, self.room.abstractRoom.name, false);
                 return;
             }

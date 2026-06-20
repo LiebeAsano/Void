@@ -4,6 +4,7 @@ public static class _CreatureInteractionsMeta
 {
 	public static void Hook()
 	{
+		AnglerEaten.Hook();
 		AntiSpiderStun.Hook();
 		DLLindigestion.Hook();
 		LeechIndigestion.Hook();

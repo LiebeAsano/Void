@@ -2,29 +2,18 @@
 [REPLACE]SI_C07 : SI_C02, SI_E01 : SWARMROOM
 
 [FINDLINESTART](Gourmand)OFFSCREEN : 0-Vulture
-[REPLACE](Gourmand)OFFSCREEN : 0-Vulture-3, 0-KingVulture-1, 0-Scavenger-6, 0-bigmoth-5
+[REPLACE](Gourmand)OFFSCREEN : 0-Vulture-3, 0-KingVulture-1, 0-Scavenger-6
 
 [FINDLINE](Yellow)OFFSCREEN : 0-Vulture
-[REPLACE](Yellow)OFFSCREEN : 0-Vulture-3, 0-Scavenger-6, 0-bigmoth-5
+[REPLACE](Yellow)OFFSCREEN : 0-Vulture-3, 0-Scavenger-6
 
 [FINDLINE](White)OFFSCREEN : 0-Vulture
-[REPLACE](White)OFFSCREEN : 0-Vulture-4, 0-Scavenger-6, 0-bigmoth-5
+[REPLACE](White)OFFSCREEN : 0-Vulture-4, 0-Scavenger-6
 
 [FINDLINE](Red)OFFSCREEN : 0-Vulture
-[REPLACE](Red)OFFSCREEN : 0-Vulture-3, 0-KingVulture-2, 0-Scavenger-8, 0-bigmoth-5
+[REPLACE](Red)OFFSCREEN : 0-Vulture-3, 0-KingVulture-2, 0-Scavenger-8
 
 [MERGE]
-CONDITIONAL LINKS
-Rivulet, Saint : SI_C07 : SI_E01 : DISCONNECTED
-Rivulet, Saint : HIDEROOM : SI_E01
-Rivulet, Saint : HIDEROOM : SI_E02
-Rivulet, Saint : HIDEROOM : SI_E03
-Rivulet, Saint : HIDEROOM : SI_E04
-Rivulet, Saint : HIDEROOM : SI_E05
-Rivulet, Saint : HIDEROOM : SI_E06
-Rivulet, Saint : HIDEROOM : GATE_SI_WARF
-END CONDITIONAL LINKS
-
 ROOMS
 GATE_SI_WARF : DISCONNECTED, SI_E03 : GATE
 SI_E01 : SI_C07, SI_E02

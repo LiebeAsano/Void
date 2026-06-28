@@ -427,7 +427,7 @@ namespace VoidTemplate.DiscordChurch
 
             try
             {
-                discord = new Discord.Discord(1393296386568753202, (ulong)CreateFlags.NoRequireDiscord);
+                discord = new Discord.Discord(1520792639232807043, (ulong)CreateFlags.NoRequireDiscord);
                 activityManager = discord.GetActivityManager();
                 discordInited = discord != null && activityManager != null;
 

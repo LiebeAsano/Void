@@ -1,20 +1,17 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Discord
+namespace Discord;
+
+public partial class StorageManager
 {
-    public partial class StorageManager
+    public IEnumerable<FileStat> Files()
     {
-        public IEnumerable<FileStat> Files()
+        var fileCount = Count();
+        var files = new List<FileStat>();
+        for (var i = 0; i < fileCount; i++)
         {
-            var fileCount = Count();
-            var files = new List<FileStat>();
-            for (var i = 0; i < fileCount; i++)
-            {
-                files.Add(StatAt(i));
-            }
-            return files;
+            files.Add(StatAt(i));
         }
+        return files;
     }
 }

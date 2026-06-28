@@ -22,6 +22,7 @@ public class RedOverlay : CosmeticSprite
     public float strength;
     public float rotationIntensity;
     float rotDir;
+    public bool ViyVoice;
     DisembodiedDynamicSoundLoop soundLoop;
     
     public override void Update(bool eu)
@@ -51,7 +52,7 @@ public class RedOverlay : CosmeticSprite
         }
         else
         {
-            if (ExternalSaveData.VoidKarma11)
+            if (ExternalSaveData.VoidKarma11 || Random.Range(0, 11) == 0)
             {
                 meow = Random.Range(0, 4) switch
                 {
@@ -61,15 +62,11 @@ public class RedOverlay : CosmeticSprite
                     3 => VoidEnums.SoundID.ViyVoiceBad4,
                     _ => VoidEnums.SoundID.ProtoViyScreamSound,
                 };
+                ViyVoice = true;
             }
             else
             {
-                meow = Random.Range(0, 2) switch
-                {
-                    0 => Watcher.WatcherEnums.WatcherSoundID.RotLiz_Vocalize,
-                    1 => Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_A,
-                    _ => Watcher.WatcherEnums.WatcherSoundID.Lizard_Voice_Rot_B,
-                };
+                meow = SoundID.Reds_Illness_LOOP; 
             }
         } 
 

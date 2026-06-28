@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using VoidTemplate.Objects;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
@@ -9,13 +8,13 @@ public static class DLLindigestion
     private sealed class DLLState
     {
         public int killTimer;
-        public bool finishEating;
+        public bool voidPoisoned;
     }
 
     private sealed class StowawayState
     {
         public int killTimer;
-        public bool finishEating;
+        public bool voidPoisoned;
     }
 
     private static readonly ConditionalWeakTable<DaddyLongLegs, DLLState> dllStates = new();
@@ -32,22 +31,20 @@ public static class DLLindigestion
 
     private static void StowawayBugEat(On.MoreSlugcats.StowawayBug.orig_Eat orig, MoreSlugcats.StowawayBug self, bool eu)
     {
-        bool triggered = false;
+        var state = stowawayStates.GetOrCreateValue(self);
 
         foreach (var eatObject in self.eatObjects)
         {
-            if (eatObject.chunk.owner is Player player && player.AreVoidViy() && player.dead)
+            if (eatObject.chunk.owner is Player player && player.AreVoidViy() && player.dead && !state.voidPoisoned)
             {
                 DestroyBody(player);
-                var state = stowawayStates.GetOrCreateValue(self);
                 state.killTimer = UnityEngine.Random.Range(160, 321);
-                state.finishEating = true;
-                triggered = true;
+                state.voidPoisoned = true;
                 break;
             }
         }
 
-        if (!triggered)
+        if (!state.voidPoisoned)
             orig(self, eu);
     }
 
@@ -65,35 +62,29 @@ public static class DLLindigestion
         }
 
         state.killTimer--;
-        if (state.killTimer <= 0)
+        if (state.killTimer <= 0 && state.voidPoisoned)
         {
+            self.eatObjects.Clear();
             self.Die();
-            if (state.finishEating)
-            {
-                self.eatObjects.Clear();
-                state.finishEating = false;
-            }
         }
     }
 
     private static void OnDaddyLongLegsEat(On.DaddyLongLegs.orig_Eat orig, DaddyLongLegs self, bool eu)
     {
-        bool triggered = false;
+        var state = dllStates.GetOrCreateValue(self);
 
         foreach (var eatObject in self.eatObjects)
         {
-            if (eatObject.chunk.owner is Player player && player.IsVoid() && player.dead && !self.HDmode)
+            if (eatObject.chunk.owner is Player player && player.IsVoid() && player.dead && !self.HDmode && !state.voidPoisoned)
             {
                 DestroyBody(player);
-                var state = dllStates.GetOrCreateValue(self);
                 state.killTimer = UnityEngine.Random.Range(120, 201);
-                state.finishEating = true;
-                triggered = true;
+                state.voidPoisoned = true;
                 break;
             }
         }
 
-        if (!triggered)
+        if (!state.voidPoisoned)
             orig(self, eu);
     }
 
@@ -111,17 +102,13 @@ public static class DLLindigestion
         }
 
         state.killTimer--;
-        if (state.killTimer <= 0)
+        if (state.killTimer <= 0 && state.voidPoisoned)
         {
+            self.eatObjects.Clear();
+            self.digestingCounter = 0;
+            self.moving = false;
+            self.tentaclesHoldOn = false;
             self.Die();
-            if (state.finishEating)
-            {
-                self.eatObjects.Clear();
-                self.digestingCounter = 0;
-                self.moving = false;
-                self.tentaclesHoldOn = false;
-                state.finishEating = false;
-            }
         }
     }
 
@@ -132,9 +119,6 @@ public static class DLLindigestion
             player.room.RemoveObject(player);
         }
 
-        if (player != null)
-        {
-            player.dead = true;
-        }
+        player?.dead = true;
     }
 }

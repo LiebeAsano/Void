@@ -64,7 +64,7 @@ public static class DrawSprites
                     }
                     if (Random.value < 0.1f)
                     {
-                        self.haloFluxAlpha = Mathf.Lerp(0.6f, 1f, UnityEngine.Random.value);
+                        self.haloFluxAlpha = Mathf.Lerp(0.6f, 1f, Random.value);
                     }
                     if (self.weaverTier < 4)
                     {

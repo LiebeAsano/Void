@@ -53,6 +53,13 @@ public static class Karma11Update
             VoidPermaNightmare = true;
             VoidKarma11 = true;
         }
+
+        if (game.rainWorld.ExpeditionMode)
+        {
+            game.GetStorySession.saveState.SetVoidMarkV3(true);
+            VoidPermaNightmare = false;
+            VoidKarma11 = false;
+        }
     }
 
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)

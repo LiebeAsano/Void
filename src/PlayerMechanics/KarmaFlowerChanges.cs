@@ -558,7 +558,7 @@ public static class KarmaFlowerChanges
             return;
         }
 
-        if (grasp.grabber is Player player2 && ((player2.IsVoid() && self.bites < 2) || player2.IsViy()))
+        if (grasp.grabber is Player player2 && (player2.IsVoid() && self.bites < 2 || player2.IsViy()) && player2.abstractCreature?.world?.game?.rainWorld.ExpeditionMode != true)
         {
             var saveState = player2.abstractCreature?.world?.game?.GetStorySession.saveState;
             if (saveState != null)

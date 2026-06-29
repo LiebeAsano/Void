@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace VoidTemplate.PlayerMechanics.GhostFeatures;
 
-namespace VoidTemplate.PlayerMechanics.GhostFeatures
+public class SBGhostSave
 {
-    public class SBGhostSave
+    public static void Hook()
     {
-        public static void Hook()
-        {
-            On.SaveState.GhostEncounter += SaveState_GhostEncounter;
-        }
+        On.SaveState.GhostEncounter += SaveState_GhostEncounter;
+    }
 
-        private static void SaveState_GhostEncounter(On.SaveState.orig_GhostEncounter orig, SaveState self, GhostWorldPresence.GhostID ghost, RainWorld rainWorld)
+    private static void SaveState_GhostEncounter(On.SaveState.orig_GhostEncounter orig, SaveState self, GhostWorldPresence.GhostID ghost, RainWorld rainWorld)
+    {
+        orig(self, ghost, rainWorld);
+        if (self.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            orig(self, ghost, rainWorld);
-            if (self.saveStateNumber == VoidEnums.SlugcatID.Void && ghost == GhostWorldPresence.GhostID.SB && self.cycleNumber == 0 && self.denPosition == SaveState.GetStoryDenPosition(VoidEnums.SlugcatID.Void, out _))
+            if (ghost == GhostWorldPresence.GhostID.SB && self.cycleNumber == 0 && self.denPosition == SaveState.GetStoryDenPosition(VoidEnums.SlugcatID.Void, out _))
             {
                 self.denPosition = "SB_S06";
-                self.progression.SaveWorldStateAndProgression(false);
             }
+            self.progression.SaveWorldStateAndProgression(false);
         }
     }
 }

@@ -74,23 +74,22 @@ public static class GraspSave
                     !playerInGrasp.dead &&
                     Random.Range(0, Karma11Update.VoidKarma11 ? 150 : 250) == 0)
                 {
-                    self.Stun(20);
-
                     if (self.room != null && self.mainBodyChunk != null)
                     {
+                        self.Stun(20);
                         self.room.PlaySound(SoundID.Slugcat_Eat_Meat_B, self.mainBodyChunk);
                         self.room.PlaySound(SoundID.Drop_Bug_Grab_Creature, self.mainBodyChunk, false, 1f, 0.76f);
+                        self.Violence
+                        (
+                            self.mainBodyChunk,
+                            new Vector2?(Vector2.zero),
+                            self.mainBodyChunk,
+                            null,
+                            Creature.DamageType.Bite,
+                            1f,
+                            30f
+                        );
                     }
-
-                    self.Violence(
-                        self.mainBodyChunk,
-                        new Vector2?(Vector2.zero),
-                        self.mainBodyChunk,
-                        null,
-                        Creature.DamageType.Bite,
-                        1f,
-                        30f
-                    );
                 }
             }
         }

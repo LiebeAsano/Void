@@ -18,23 +18,20 @@ public static class EngageInMovement
 
     private static void PlayerGraphics_LookAtObject(On.PlayerGraphics.orig_LookAtObject orig, PlayerGraphics self, PhysicalObject obj)
     {
-		if (self.player.IsViy() && 
+		if (self.player.AreVoidViy() && 
 			(self.player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            self.player.bodyMode == Player.BodyModeIndex.WallClimb) && 
-			obj is Player) return;
+            self.player.bodyMode == Player.BodyModeIndex.WallClimb &&
+            self.player.input[0].y != 0)) return;
 		orig(self, obj);
     }
 
     private static void PlayerGraphics_LookAtPoint(On.PlayerGraphics.orig_LookAtPoint orig, PlayerGraphics self, Vector2 point, float interest)
     {
 
-		if (self.player.IsViy() &&
+		if (self.player.AreVoidViy() &&
 			(self.player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-			self.player.bodyMode == Player.BodyModeIndex.WallClimb) &&
-			(self.player.grasps[0] != null &&
-			self.player.grasps[0].grabbed is Player ||
-			self.player.grasps[1] != null &&
-			self.player.grasps[1].grabbed is Player))
+			self.player.bodyMode == Player.BodyModeIndex.WallClimb &&
+            self.player.input[0].y != 0))
 		{
 			if (self.player.bodyMode == BodyModeIndexExtension.CeilCrawl)
 			{
@@ -80,10 +77,10 @@ public static class EngageInMovement
 
     private static float PlayerObjectLooker_HowInterestingIsThisObject(On.PlayerGraphics.PlayerObjectLooker.orig_HowInterestingIsThisObject orig, PlayerGraphics.PlayerObjectLooker self, PhysicalObject obj)
     {
-		if (self.owner.player.IsViy() &&
+		if (self.owner.player.AreVoidViy() &&
             (self.owner.player.bodyMode == BodyModeIndexExtension.CeilCrawl ||
-            self.owner.player.bodyMode == Player.BodyModeIndex.WallClimb) &&
-			obj is Player) return 0f;
+            self.owner.player.bodyMode == Player.BodyModeIndex.WallClimb && 
+			self.owner.player.input[0].y != 0)) return 0f;
 		return orig(self, obj);
     }
 

@@ -45,7 +45,7 @@ public static class Grabability
 
     private static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)
     {
-        if (self.owner.owner is Player player && player.IsViy())
+        if (self.owner.owner is Player player && player.AreVoidViy())
         {
             self.lastPos = self.pos;
             if (self.retract && self.mode != Limb.Mode.Retracted)
@@ -337,7 +337,7 @@ public static class Grabability
         if (self == null || obj == null)
             return false;
 
-        return self.AreVoidViy() && (obj is LanternMouse || obj is Watcher.Frog || obj is Watcher.Rat ||
+        return self.AreVoidViy() && (obj is LanternMouse || obj is EggBug || obj is Watcher.Frog || obj is Watcher.Rat ||
                (obj is Watcher.Barnacle barnacle && !barnacle.hasShell));
     }
     private static Player.ObjectGrabability Player_Grabability(On.Player.orig_Grabability orig, Player self, PhysicalObject obj)
@@ -353,7 +353,7 @@ public static class Grabability
 
         if (self.AreVoidViy())
         {
-            if (obj is Cicada)
+            if (obj is Cicada || obj is JellyFish || obj is Yeek)
                 return Player.ObjectGrabability.Drag;
 
             if (obj is Player player && player != self && !player.AreVoidViy())

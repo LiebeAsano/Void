@@ -34,6 +34,7 @@ public static class MalnourishmentDeath
 		   && self.room is not null
 		   && !self.room.game.IsVoidWorld()
 		   && self.Malnourished
-		   && !self.abstractCreature.GetPlayerState().InDream) self.Die();
+		   && !self.abstractCreature.GetPlayerState().InDream
+		   && !self.room.game.rainWorld.ExpeditionMode) self.Die();
     }
 }

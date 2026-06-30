@@ -1,9 +1,4 @@
-﻿using JollyCoop;
-using Menu;
-using MoreSlugcats;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Menu;
 
 namespace VoidTemplate.PlayerMechanics.ViyMechanics;
 
@@ -14,7 +9,7 @@ public static class VoidViySwitch
 		On.Menu.SlugcatSelectMenu.SetSlugcatColorOrder += SlugcatSelectMenu_SetSlugcatColorOrder;
 	}
 
-    private static void SlugcatSelectMenu_SetSlugcatColorOrder(On.Menu.SlugcatSelectMenu.orig_SetSlugcatColorOrder orig, Menu.SlugcatSelectMenu self)
+    private static void SlugcatSelectMenu_SetSlugcatColorOrder(On.Menu.SlugcatSelectMenu.orig_SetSlugcatColorOrder orig, SlugcatSelectMenu self)
     {
         orig(self);
 
@@ -26,6 +21,11 @@ public static class VoidViySwitch
         int indexOfHunter = self.slugcatColorOrder.IndexOf(SlugcatStats.Name.Red);
         if (indexOfHunter >= 0)
         {
+            if (voidDead && voidKarma11)
+            {
+                self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Viy);
+            }
+            else
             {
                 self.slugcatColorOrder.Insert(indexOfHunter + 1, VoidEnums.SlugcatID.Void);
             }

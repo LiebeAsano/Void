@@ -106,7 +106,7 @@ public static class SLOracle
                     {
                         saveState.SetEncountersWithMark(saveState.cycleNumber);
                         self.currentConversation = new SLOracleBehaviorHasMark.MoonConversation(OracleConversation.MoonVoidConversation[self.State.playerEncountersWithMark], self, SLOracleBehaviorHasMark.MiscItemType.NA);
-                        if (miscData.SSaiConversationsHad == 3)
+                        if (miscData.SSaiConversationsHad == 2)
                         {
                             saveState.SetVoidMeetMoon(true);
                         }

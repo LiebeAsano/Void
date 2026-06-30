@@ -340,7 +340,7 @@ public static class Spasm
                                             {
                                                 player.room.AddObject(new Tutorial(player.room,
                                                 [
-                                                    new("The forgotten...", 0, 222),
+                                                    new("What is rot...", 0, 222),
                                                 ]));
                                                 break;
                                             }
@@ -348,7 +348,7 @@ public static class Spasm
                                             {
                                                 player.room.AddObject(new Tutorial(player.room,
                                                 [
-                                                    new("The fallen...", 0, 222),
+                                                    new("The gift of reason...", 0, 222),
                                                 ]));
                                                 break;
                                             }
@@ -356,7 +356,7 @@ public static class Spasm
                                             {
                                                 player.room.AddObject(new Tutorial(player.room,
                                                 [
-                                                    new("Lonely...", 0, 222),
+                                                    new("Born to cling...", 0, 222),
                                                 ]));
                                                 break;
                                             }

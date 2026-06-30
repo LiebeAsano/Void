@@ -82,7 +82,7 @@ public static class Spasm
                                 [
                                     new("Foreign flesh...", 0, 222),
                                     new("Must be removed...", 0, 222),
-                                    new("Press 'Down' and 'Grab' to get rid of the mark of communication.", 0, 444)
+                                    new("Press 'Down' and 'Pick up' to get rid of the mark of communication.", 0, 444)
                                 ]));
                                 self.GetStorySession.saveState.SetViyMarkAvoid(true);
                                 self.GetStorySession.saveState.SetViyMarkAvoidMessage(true);
@@ -119,7 +119,7 @@ public static class Spasm
                                                 player.room.AddObject(new Tutorial(player.room,
                                                 [
                                                     new("Nearby...", 0, 222),
-                                                    new("The Void Sea is crying out...", 0, 222),
+                                                    new("The Sea is crying out...", 0, 222),
                                                 ]));
                                                 break;
                                             }
@@ -364,7 +364,7 @@ public static class Spasm
                                             {
                                                 player.room.AddObject(new Tutorial(player.room,
                                                 [
-                                                    new("Last...", 0, 222),
+                                                    new("Can feel...", 0, 222),
                                                 ]));
                                                 break;
                                             }

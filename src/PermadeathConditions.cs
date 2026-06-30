@@ -427,7 +427,7 @@ static class PermadeathConditions
         }
         else
         {
-            self.gameOverString = "Fight to get out of the grip by fast clicking 'Grab'";
+            self.gameOverString = "Fight to get out of the grip by fast clicking 'Pick up'";
         }
     }
 }

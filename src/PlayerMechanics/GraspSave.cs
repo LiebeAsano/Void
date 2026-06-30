@@ -72,7 +72,7 @@ public static class GraspSave
                     playerInGrasp.input[0].pckp &&
                     !playerInGrasp.input[1].pckp &&
                     !playerInGrasp.dead &&
-                    Random.Range(0, Karma11Update.VoidKarma11 ? 150 : 250) == 0)
+                    Random.Range(0, playerInGrasp.IsViy() ? 100 : Karma11Update.VoidKarma11 ? 150 : 200) == 0)
                 {
                     if (self.room != null && self.mainBodyChunk != null)
                     {

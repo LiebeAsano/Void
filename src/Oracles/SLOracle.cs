@@ -17,7 +17,7 @@ public static class SLOracle
 {
     public static void Hook()
     {
-        On.Oracle.ctor += Oracle_ctor;
+        //On.Oracle.ctor += Oracle_ctor;
         On.SLOracleBehaviorHasMark.InitateConversation += SLOracleBehaviorHasMark_InitateConversation;
         On.SLOracleBehaviorHasMark.TalkToDeadPlayer += SLOracleBehaviorHasMark_TalkToDeadPlayer;
         On.SLOracleBehaviorHasMark.InterruptRain += SLOracleBehaviorHasMark_InterruptRain;
@@ -1254,7 +1254,7 @@ public static class SLOracle
     internal static void MoonVoice(SLOracleBehaviorHasMark self)
     {
         SoundID randomTalk = SoundID.SL_AI_Talk_1;
-        switch (UnityEngine.Random.Range(0, 5))
+        switch (UnityEngine.Random.Range(0, 3))
         {
             case 0:
                 randomTalk = SoundID.SL_AI_Talk_1;

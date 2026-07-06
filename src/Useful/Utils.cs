@@ -11,7 +11,7 @@ using UnityEngine;
 namespace VoidTemplate.Useful;
 public static class Utils
 {
-	public const string ModID = "rainworldlastwishtest";
+	public const string ModID = "rainworldlastwish";
 	public const int TicksPerSecond = 40;
 	public static void Loginf(object e) => _Plugin.logger.LogInfo(e);
 	public static void Logerr(object e) => _Plugin.logger.LogError(e);

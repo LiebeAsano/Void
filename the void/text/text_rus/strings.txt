@@ -107,6 +107,7 @@ Far Wall|Дальняя Стена
 Icy Wastelands|Ледяные Пустоши
 Communication Array|Массив Связи
 Abyss|Бездна
+Nightmare|Кошмар
 
 //REMIX
 ~ Menu ~|~ Меню ~
@@ -126,6 +127,7 @@ Saint's ascension stuns instead of kills|Возвышение Святого о�
 ~ Assist ~|~ Помощь ~
 Fall damage|Урон от падения
 Weakened blizzard lizard|Ослабленный буреящер
+Improved Hunter|Усиленный Охотник
 Complex control|Усложнённое управление
 Gamepad controller|Управление для геймпада
 Simplified hunger|Упрощённый голод
@@ -135,6 +137,7 @@ Disable permadeath|Отключить перманентную смерть
 Unlock campaign|Разблокировать кампанию
 Enables fall damage for all creatures|Включает урон от падения для всех существ
 Disables shield and removes instant death from blizzard beam|Отключает щит и убирает мгновенную смерть от морозного луча
+Allows Hunter to maul and to put back stucked spear|Позволяет Охотнику терзать и вытаскивать застрявшие копья
 Allows Void to switch move set between climbing and running. Tap 'Special' to switch mode|Позволяет Пустотному переключаться между режимами лазания и бега. Нажмите 'Особенность', чтобы переключить режим
 
 The shortcut no longer wears out when using by Void|Трубы больше не изнашиваются при использовании Пустотным

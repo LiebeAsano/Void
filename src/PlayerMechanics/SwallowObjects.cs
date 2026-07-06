@@ -209,7 +209,7 @@ public static class SwallowObjects
                 self.abstractCreature.world.game.GetStorySession?.saveState?.SetStomachPearls(pearlIDsInPlayerStomaches);
             }
         }
-        AbstractPhysicalObject potentialPearl = self.objectInStomach;
+        //AbstractPhysicalObject potentialPearl = self.objectInStomach;
         orig(self);
         /*if (potentialPearl != null && potentialPearl.realizedObject is DataPearl && self.IsVoid() && self.room != null &&
             self.abstractCreature.world.game.session is StoryGameSession session && self.room.physicalObjects[1].Find(i => i is Oracle) is Oracle oracle)

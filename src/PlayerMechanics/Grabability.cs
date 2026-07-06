@@ -12,7 +12,7 @@ public static class Grabability
     {
         On.Player.Grabability += Player_Grabability;
         On.Creature.Update += Creature_Update;
-        On.Player.CanIPickThisUp += Player_CanIPickselfUp;
+        On.Player.CanIPickThisUp += Player_CanIPickThisUp;
         On.Player.IsCreatureLegalToHoldWithoutStun += Player_IsCreatureLegalToHoldWithoutStun;
         On.SlugcatHand.Update += SlugcatHand_Update;
         On.Player.GraphicsModuleUpdated += Player_GraphicsModuleUpdated;
@@ -45,219 +45,376 @@ public static class Grabability
 
     private static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)
     {
-        if (self.owner.owner is Player player && player.AreVoidViy())
+        if (self.owner.owner is not Player player || !player.AreVoidViy())
         {
-            self.lastPos = self.pos;
-            if (self.retract && self.mode != Limb.Mode.Retracted)
-            {
-                self.mode = Limb.Mode.HuntAbsolutePosition;
-                self.absoluteHuntPos = self.connection.pos;
-                if (Custom.DistLess(self.absoluteHuntPos, self.pos, self.huntSpeed))
-                {
-                    self.mode = Limb.Mode.Retracted;
-                }
-            }
-            if (self.mode == Limb.Mode.HuntRelativePosition)
-            {
-                self.absoluteHuntPos = self.connection.pos + Custom.RotateAroundOrigo(self.relativeHuntPos, Custom.AimFromOneVectorToAnother(self.connection.rotationChunk.pos, self.connection.pos));
-            }
-            if (self.mode == Limb.Mode.HuntRelativePosition || self.mode == Limb.Mode.HuntAbsolutePosition)
-            {
-                if (Custom.DistLess(self.absoluteHuntPos, self.pos, self.huntSpeed))
-                {
-                    self.vel = self.absoluteHuntPos - self.pos;
-                    self.reachedSnapPosition = true;
-                }
-                else
-                {
-                    self.vel = Vector2.Lerp(self.vel, Custom.DirVec(self.pos, self.absoluteHuntPos) * self.huntSpeed, self.quickness);
-                    self.reachedSnapPosition = false;
-                }
-            }
-            else if (self.mode == Limb.Mode.Retracted)
-            {
-                self.vel = self.connection.vel;
-                self.pos = self.connection.pos;
-                self.reachedSnapPosition = true;
-            }
-            else if (self.mode == Limb.Mode.Dangle)
-            {
-                self.reachedSnapPosition = false;
-            }
-            self.quickness = self.defaultQuickness;
-            self.huntSpeed = self.defaultHuntSpeed;
-            if (self.mode != Limb.Mode.Retracted)
-            {
-                self.pos += self.vel;
-                if (self.mode == Limb.Mode.HuntRelativePosition)
-                {
-                    self.pos += self.connection.vel;
-                }
-                self.vel *= self.airFriction;
-                if (self.pushOutOfTerrain)
-                {
-                    self.PushOutOfTerrain(self.owner.owner.room, self.connection.pos);
-                }
-            }
-            self.ConnectToPoint(self.connection.pos, 20f, false, 0f, self.connection.vel, 0f, 0f);
+            orig(self);
+            return;
+        }
 
-            bool flag;
-            if (self.reachingForObject)
+        PlayerGraphics playerGraphics = self.owner as PlayerGraphics;
+
+        self.lastPos = self.pos;
+
+        if (self.retract && self.mode != Limb.Mode.Retracted)
+        {
+            self.mode = Limb.Mode.HuntAbsolutePosition;
+            self.absoluteHuntPos = self.connection.pos;
+            if (Custom.DistLess(self.absoluteHuntPos, self.pos, self.huntSpeed))
             {
-                self.mode = Limb.Mode.HuntAbsolutePosition;
-                flag = false;
-                self.reachingForObject = false;
+                self.mode = Limb.Mode.Retracted;
+            }
+        }
+
+        if (self.mode == Limb.Mode.HuntRelativePosition)
+        {
+            self.absoluteHuntPos = self.connection.pos + Custom.RotateAroundOrigo(self.relativeHuntPos, Custom.AimFromOneVectorToAnother(self.connection.rotationChunk.pos, self.connection.pos));
+        }
+
+        if (self.mode == Limb.Mode.HuntRelativePosition || self.mode == Limb.Mode.HuntAbsolutePosition)
+        {
+            if (Custom.DistLess(self.absoluteHuntPos, self.pos, self.huntSpeed))
+            {
+                self.vel = self.absoluteHuntPos - self.pos;
+                self.reachedSnapPosition = true;
             }
             else
             {
-                flag = self.EngageInMovement();
+                self.vel = Vector2.Lerp(self.vel, Custom.DirVec(self.pos, self.absoluteHuntPos) * self.huntSpeed, self.quickness);
+                self.reachedSnapPosition = false;
             }
+        }
+        else if (self.mode == Limb.Mode.Retracted)
+        {
+            self.vel = self.connection.vel;
+            self.pos = self.connection.pos;
+            self.reachedSnapPosition = true;
+        }
+        else if (self.mode == Limb.Mode.Dangle)
+        {
+            self.reachedSnapPosition = false;
+        }
 
-            var grasp = player.grasps[self.limbNumber];
+        self.quickness = self.defaultQuickness;
+        self.huntSpeed = self.defaultHuntSpeed;
 
-            if (grasp?.grabbed is Player grabbedPlayer &&
-                grabbedPlayer != player &&
-                player.Grabability(grasp.grabbed) == Player.ObjectGrabability.OneHand)
+        if (self.mode != Limb.Mode.Retracted)
+        {
+            self.pos += self.vel;
+            if (self.mode == Limb.Mode.HuntRelativePosition)
             {
-                if (flag)
+                self.pos += self.connection.vel;
+            }
+            self.vel *= self.airFriction;
+            if (self.pushOutOfTerrain)
+            {
+                self.PushOutOfTerrain(player.room, self.connection.pos);
+            }
+        }
+
+        self.ConnectToPoint(self.connection.pos, 20f, false, 0f, self.connection.vel, 0f, 0f);
+
+        bool flag;
+        if (self.reachingForObject)
+        {
+            self.mode = Limb.Mode.HuntAbsolutePosition;
+            flag = false;
+            self.reachingForObject = false;
+        }
+        else
+        {
+            flag = self.EngageInMovement();
+        }
+
+        var grasp = player.grasps[self.limbNumber];
+
+        if (grasp?.grabbed is Player grabbedPlayer &&
+            grabbedPlayer != player &&
+            player.Grabability(grasp.grabbed) == Player.ObjectGrabability.OneHand)
+        {
+            if (flag)
+            {
+                if ((player.grasps[0] != null && player.HeavyCarry(player.grasps[0].grabbed)) || (ModManager.MMF && player.grasps[1] != null && player.HeavyCarry(player.grasps[1].grabbed)))
                 {
-                    if (((self.owner.owner as Player).grasps[0] != null && (self.owner.owner as Player).HeavyCarry((self.owner.owner as Player).grasps[0].grabbed)) || (ModManager.MMF && (self.owner.owner as Player).grasps[1] != null && (self.owner.owner as Player).HeavyCarry((self.owner.owner as Player).grasps[1].grabbed)))
+                    self.mode = Limb.Mode.HuntAbsolutePosition;
+                    BodyChunk bodyChunk;
+                    if (ModManager.MMF)
                     {
-                        self.mode = Limb.Mode.HuntAbsolutePosition;
-                        BodyChunk bodyChunk;
-                        if (ModManager.MMF)
-                        {
-                            bodyChunk = (((self.owner.owner as Player).grasps[0] != null && (self.owner.owner as Player).HeavyCarry((self.owner.owner as Player).grasps[0].grabbed)) ? (self.owner.owner as Player).grasps[0].grabbedChunk : (self.owner.owner as Player).grasps[1].grabbedChunk);
-                        }
-                        else
-                        {
-                            bodyChunk = (self.owner.owner as Player).grasps[0].grabbedChunk;
-                        }
-                        self.absoluteHuntPos = bodyChunk.pos + Custom.PerpendicularVector((self.connection.pos - bodyChunk.pos).normalized) * (bodyChunk.rad * 0.8f * ((self.limbNumber == 0) ? -1f : 1f));
-                        self.huntSpeed = 20f;
-                        self.quickness = 1f;
-                        flag = false;
+                        bodyChunk = ((player.grasps[0] != null && player.HeavyCarry(player.grasps[0].grabbed)) ? player.grasps[0].grabbedChunk : player.grasps[1].grabbedChunk);
                     }
-                    else if ((self.owner.owner as Player).grasps[self.limbNumber] != null)
+                    else
                     {
-                        self.mode = Limb.Mode.HuntRelativePosition;
-                        if (ModManager.MSC && (self.owner.owner as Player).SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Slugpup)
+                        bodyChunk = player.grasps[0].grabbedChunk;
+                    }
+                    self.absoluteHuntPos = bodyChunk.pos + Custom.PerpendicularVector((self.connection.pos - bodyChunk.pos).normalized) * (bodyChunk.rad * 0.8f * ((self.limbNumber == 0) ? -1f : 1f));
+                    self.huntSpeed = 20f;
+                    self.quickness = 1f;
+                    flag = false;
+                }
+                else if (player.grasps[self.limbNumber] != null)
+                {
+                    self.mode = Limb.Mode.HuntRelativePosition;
+                    if (ModManager.MSC && player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Slugpup)
+                    {
+                        self.relativeHuntPos.x = player.ThrowDirection * 3;
+                    }
+                    else
+                    {
+                        self.relativeHuntPos.x = -20f + 40f * self.limbNumber;
+                    }
+                    self.relativeHuntPos.y = -12f;
+                    if (player.eatCounter < 40)
+                    {
+                        int num = -1;
+                        int num2 = 0;
+                        while (num < 0 && num2 < 2)
                         {
-                            self.relativeHuntPos.x = (self.owner.owner as Player).ThrowDirection * 3;
-                        }
-                        else
-                        {
-                            self.relativeHuntPos.x = -20f + 40f * self.limbNumber;
-                        }
-                        self.relativeHuntPos.y = -12f;
-                        if ((self.owner.owner as Player).eatCounter < 40)
-                        {
-                            int num = -1;
-                            int num2 = 0;
-                            while (num < 0 && num2 < 2)
+                            if (player.grasps[num2] != null && player.grasps[num2].grabbed is IPlayerEdible && (player.grasps[num2].grabbed as IPlayerEdible).Edible)
                             {
-                                if ((self.owner.owner as Player).grasps[num2] != null && (self.owner.owner as Player).grasps[num2].grabbed is IPlayerEdible && ((self.owner.owner as Player).grasps[num2].grabbed as IPlayerEdible).Edible)
-                                {
-                                    num = num2;
-                                }
-                                num2++;
+                                num = num2;
                             }
-                            if (num == self.limbNumber)
-                            {
-                                self.relativeHuntPos *= Custom.LerpMap((self.owner.owner as Player).eatCounter, 40f, 20f, 0.9f, 0.7f);
-                                self.relativeHuntPos.y += Custom.LerpMap((self.owner.owner as Player).eatCounter, 40f, 20f, 2f, 4f);
-                                self.relativeHuntPos.x *= Custom.LerpMap((self.owner.owner as Player).eatCounter, 40f, 20f, 1f, 1.2f);
-                            }
+                            num2++;
                         }
-                        if (((self.owner.owner as Player).swallowAndRegurgitateCounter > 10 && (self.owner.owner as Player).objectInStomach == null) || (self.owner.owner as Player).craftingObject)
+                        if (num == self.limbNumber)
                         {
-                            int num3 = -1;
-                            int num4 = 0;
-                            while (num3 < 0 && num4 < 2)
-                            {
-                                if ((self.owner.owner as Player).grasps[num4] != null && (self.owner.owner as Player).CanBeSwallowed((self.owner.owner as Player).grasps[num4].grabbed))
-                                {
-                                    num3 = num4;
-                                }
-                                num4++;
-                            }
-                            if (num3 == self.limbNumber || (self.owner.owner as Player).craftingObject)
-                            {
-                                float num5 = Mathf.InverseLerp(10f, 90f, (float)(self.owner.owner as Player).swallowAndRegurgitateCounter);
-                                if (num5 < 0.5f)
-                                {
-                                    self.relativeHuntPos *= Mathf.Lerp(0.9f, 0.7f, num5 * 2f);
-                                    self.relativeHuntPos.y += Mathf.Lerp(2f, 4f, num5 * 2f);
-                                    self.relativeHuntPos.x *= Mathf.Lerp(1f, 1.2f, num5 * 2f);
-                                }
-                                else
-                                {
-                                    (self.owner as PlayerGraphics).blink = 5;
-                                    self.relativeHuntPos = new Vector2(0f, -4f) + Custom.RNV() * (2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
-                                    (self.owner as PlayerGraphics).head.vel += Custom.RNV() * (2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
-                                    self.owner.owner.bodyChunks[0].vel += Custom.RNV() * (0.2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
-                                }
-                            }
+                            self.relativeHuntPos *= Custom.LerpMap(player.eatCounter, 40f, 20f, 0.9f, 0.7f);
+                            self.relativeHuntPos.y += Custom.LerpMap(player.eatCounter, 40f, 20f, 2f, 4f);
+                            self.relativeHuntPos.x *= Custom.LerpMap(player.eatCounter, 40f, 20f, 1f, 1.2f);
                         }
-                        self.relativeHuntPos.x *= (1f - Mathf.Sin((self.owner.owner as Player).switchHandsProcess * 3.1415927f));
-                        if ((self.owner as PlayerGraphics).spearDir != 0f && (self.owner.owner as Player).bodyMode == Player.BodyModeIndex.Stand)
+                    }
+                    if ((player.swallowAndRegurgitateCounter > 10 && player.objectInStomach == null) || player.craftingObject)
+                    {
+                        int num3 = -1;
+                        int num4 = 0;
+                        while (num3 < 0 && num4 < 2)
                         {
-                            Vector2 b = Custom.DegToVec(180f + ((self.limbNumber == 0) ? -1f : 1f) * 8f + (self.owner.owner as Player).input[0].x * 4f) * 12f;
-                            b.y += Mathf.Sin((self.owner.owner as Player).animationFrame / 6f * 2f * 3.1415927f) * 2f;
-                            b.x -= Mathf.Cos(((self.owner.owner as Player).animationFrame + ((self.owner.owner as Player).leftFoot ? 0 : 6)) / 12f * 2f * 3.1415927f) * 4f * (self.owner.owner as Player).input[0].x;
-                            b.x += (self.owner.owner as Player).input[0].x * 2f;
-                            self.relativeHuntPos = Vector2.Lerp(self.relativeHuntPos, b, Mathf.Abs((self.owner as PlayerGraphics).spearDir));
-                            if ((self.owner.owner as Player).grasps[self.limbNumber].grabbed is Weapon)
+                            if (player.grasps[num4] != null && player.CanBeSwallowed(player.grasps[num4].grabbed))
                             {
-                                ((self.owner.owner as Player).grasps[self.limbNumber].grabbed as Weapon).ChangeOverlap(((self.owner as PlayerGraphics).spearDir > -0.4f && self.limbNumber == 0) || ((self.owner as PlayerGraphics).spearDir < 0.4f && self.limbNumber == 1));
+                                num3 = num4;
+                            }
+                            num4++;
+                        }
+                        if (num3 == self.limbNumber || player.craftingObject)
+                        {
+                            float num5 = Mathf.InverseLerp(10f, 90f, player.swallowAndRegurgitateCounter);
+                            if (num5 < 0.5f)
+                            {
+                                self.relativeHuntPos *= Mathf.Lerp(0.9f, 0.7f, num5 * 2f);
+                                self.relativeHuntPos.y += Mathf.Lerp(2f, 4f, num5 * 2f);
+                                self.relativeHuntPos.x *= Mathf.Lerp(1f, 1.2f, num5 * 2f);
+                            }
+                            else
+                            {
+                                playerGraphics.blink = 5;
+                                self.relativeHuntPos = new Vector2(0f, -4f) + Custom.RNV() * (2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
+                                playerGraphics.head.vel += Custom.RNV() * (2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
+                                player.bodyChunks[0].vel += Custom.RNV() * (0.2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
                             }
                         }
-                        flag = false;
-                        if ((self.owner.owner as Creature).grasps[self.limbNumber].grabbed is Fly && !((self.owner.owner as Creature).grasps[self.limbNumber].grabbed as Fly).dead)
+                    }
+                    self.relativeHuntPos.x *= (1f - Mathf.Sin(player.switchHandsProcess * 3.1415927f));
+                    if (playerGraphics.spearDir != 0f && player.bodyMode == Player.BodyModeIndex.Stand)
+                    {
+                        Vector2 b = Custom.DegToVec(180f + ((self.limbNumber == 0) ? -1f : 1f) * 8f + player.input[0].x * 4f) * 12f;
+                        b.y += Mathf.Sin(player.animationFrame / 6f * 2f * 3.1415927f) * 2f;
+                        b.x -= Mathf.Cos((player.animationFrame + (player.leftFoot ? 0 : 6)) / 12f * 2f * 3.1415927f) * 4f * player.input[0].x;
+                        b.x += player.input[0].x * 2f;
+                        self.relativeHuntPos = Vector2.Lerp(self.relativeHuntPos, b, Mathf.Abs(playerGraphics.spearDir));
+                        if (player.grasps[self.limbNumber].grabbed is Weapon)
                         {
-                            self.huntSpeed = Random.value * 5f;
-                            self.quickness = Random.value * 0.3f;
-                            self.vel += Custom.DegToVec(Random.value * 360f) * (Random.value * Random.value * (Custom.DistLess(self.absoluteHuntPos, self.pos, 7f) ? 4f : 1.5f));
-                            self.pos += Custom.DegToVec(Random.value * 360f) * (Random.value * 4f);
-                            (self.owner as PlayerGraphics).NudgeDrawPosition(0, Custom.DirVec((self.owner.owner as Creature).mainBodyChunk.pos, self.pos) * (3f * Random.value));
-                            (self.owner as PlayerGraphics).head.vel += Custom.DirVec((self.owner.owner as Creature).mainBodyChunk.pos, self.pos) * (2f * Random.value);
+                            (player.grasps[self.limbNumber].grabbed as Weapon).ChangeOverlap((playerGraphics.spearDir > -0.4f && self.limbNumber == 0) || (playerGraphics.spearDir < 0.4f && self.limbNumber == 1));
                         }
-                        else if ((self.owner.owner as Creature).grasps[self.limbNumber].grabbed is VultureMask)
-                        {
-                            self.relativeHuntPos *= 1f - ((self.owner.owner as Creature).grasps[self.limbNumber].grabbed as VultureMask).donned;
-                        }
+                    }
+                    flag = false;
+                    if (player.grasps[self.limbNumber].grabbed is Fly && !(player.grasps[self.limbNumber].grabbed as Fly).dead)
+                    {
+                        self.huntSpeed = Random.value * 5f;
+                        self.quickness = Random.value * 0.3f;
+                        self.vel += Custom.DegToVec(Random.value * 360f) * (Random.value * Random.value * (Custom.DistLess(self.absoluteHuntPos, self.pos, 7f) ? 4f : 1.5f));
+                        self.pos += Custom.DegToVec(Random.value * 360f) * (Random.value * 4f);
+                        playerGraphics.NudgeDrawPosition(0, Custom.DirVec(player.mainBodyChunk.pos, self.pos) * (3f * Random.value));
+                        playerGraphics.head.vel += Custom.DirVec(player.mainBodyChunk.pos, self.pos) * (2f * Random.value);
+                    }
+                    else if (player.grasps[self.limbNumber].grabbed is VultureMask)
+                    {
+                        self.relativeHuntPos *= 1f - (player.grasps[self.limbNumber].grabbed as VultureMask).donned;
                     }
                 }
-                if (flag && self.mode != Limb.Mode.Retracted)
+            }
+            if (flag && self.mode != Limb.Mode.Retracted)
+            {
+                self.retractCounter++;
+                if (self.retractCounter > 5f)
                 {
-                    self.retractCounter++;
-                    if (self.retractCounter > 5f)
+                    self.mode = Limb.Mode.HuntAbsolutePosition;
+                    self.pos = Vector2.Lerp(self.pos, player.bodyChunks[0].pos, Mathf.Clamp((self.retractCounter - 5f) * 0.05f, 0f, 1f));
+                    if (Custom.DistLess(self.pos, player.bodyChunks[0].pos, 2f) && self.reachedSnapPosition)
                     {
-                        self.mode = Limb.Mode.HuntAbsolutePosition;
-                        self.pos = Vector2.Lerp(self.pos, self.owner.owner.bodyChunks[0].pos, Mathf.Clamp((self.retractCounter - 5f) * 0.05f, 0f, 1f));
-                        if (Custom.DistLess(self.pos, self.owner.owner.bodyChunks[0].pos, 2f) && self.reachedSnapPosition)
-                        {
-                            self.mode = Limb.Mode.Retracted;
-                        }
-                        self.absoluteHuntPos = self.owner.owner.bodyChunks[0].pos;
-                        self.huntSpeed = 1f + self.retractCounter * 0.2f;
-                        self.quickness = 1f;
-                        return;
+                        self.mode = Limb.Mode.Retracted;
                     }
+                    self.absoluteHuntPos = player.bodyChunks[0].pos;
+                    self.huntSpeed = 1f + self.retractCounter * 0.2f;
+                    self.quickness = 1f;
+                    return;
+                }
+            }
+            else
+            {
+                self.retractCounter -= 10;
+                if (self.retractCounter < 0)
+                {
+                    self.retractCounter = 0;
+                }
+            }
+            return;
+        }
+
+        if (ModManager.MMF)
+        {
+            if (player.grasps[self.limbNumber] != null && player.HeavyCarry(player.grasps[self.limbNumber].grabbed))
+            {
+                flag = true;
+            }
+        }
+        else if (self.limbNumber == 0 && player.grasps[0] != null && player.HeavyCarry(player.grasps[0].grabbed))
+        {
+            flag = true;
+        }
+
+        if (flag)
+        {
+            if ((player.grasps[0] != null && player.HeavyCarry(player.grasps[0].grabbed)) || (ModManager.MMF && player.grasps[1] != null && player.HeavyCarry(player.grasps[1].grabbed)))
+            {
+                self.mode = Limb.Mode.HuntAbsolutePosition;
+                BodyChunk bodyChunk;
+                if (ModManager.MMF)
+                {
+                    bodyChunk = ((player.grasps[0] != null && player.HeavyCarry(player.grasps[0].grabbed)) ? player.grasps[0].grabbedChunk : player.grasps[1].grabbedChunk);
                 }
                 else
                 {
-                    self.retractCounter -= 10;
-                    if (self.retractCounter < 0)
+                    bodyChunk = player.grasps[0].grabbedChunk;
+                }
+                self.absoluteHuntPos = bodyChunk.pos + Custom.PerpendicularVector((self.connection.pos - bodyChunk.pos).normalized) * (bodyChunk.rad * 0.8f * ((self.limbNumber == 0) ? -1f : 1f));
+                self.huntSpeed = 20f;
+                self.quickness = 1f;
+                flag = false;
+            }
+            else if (player.grasps[self.limbNumber] != null)
+            {
+                self.mode = Limb.Mode.HuntRelativePosition;
+                if (ModManager.MSC && player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Slugpup)
+                {
+                    self.relativeHuntPos.x = player.ThrowDirection * 3;
+                }
+                else
+                {
+                    self.relativeHuntPos.x = -20f + 40f * self.limbNumber;
+                }
+                self.relativeHuntPos.y = -12f;
+                if (player.eatCounter < 40)
+                {
+                    int num = -1;
+                    int num2 = 0;
+                    while (num < 0 && num2 < 2)
                     {
-                        self.retractCounter = 0;
+                        if (player.grasps[num2] != null && player.grasps[num2].grabbed is IPlayerEdible && (player.grasps[num2].grabbed as IPlayerEdible).Edible)
+                        {
+                            num = num2;
+                        }
+                        num2++;
+                    }
+                    if (num == self.limbNumber)
+                    {
+                        self.relativeHuntPos *= Custom.LerpMap(player.eatCounter, 40f, 20f, 0.9f, 0.7f);
+                        self.relativeHuntPos.y += Custom.LerpMap(player.eatCounter, 40f, 20f, 2f, 4f);
+                        self.relativeHuntPos.x *= Custom.LerpMap(player.eatCounter, 40f, 20f, 1f, 1.2f);
                     }
                 }
-                return;
-
+                if ((player.swallowAndRegurgitateCounter > 10 && player.objectInStomach == null) || player.craftingObject)
+                {
+                    int num3 = -1;
+                    int num4 = 0;
+                    while (num3 < 0 && num4 < 2)
+                    {
+                        if (player.grasps[num4] != null && player.CanBeSwallowed(player.grasps[num4].grabbed))
+                        {
+                            num3 = num4;
+                        }
+                        num4++;
+                    }
+                    if (num3 == self.limbNumber || player.craftingObject)
+                    {
+                        float num5 = Mathf.InverseLerp(10f, 90f, player.swallowAndRegurgitateCounter);
+                        if (num5 < 0.5f)
+                        {
+                            self.relativeHuntPos *= Mathf.Lerp(0.9f, 0.7f, num5 * 2f);
+                            self.relativeHuntPos.y += Mathf.Lerp(2f, 4f, num5 * 2f);
+                            self.relativeHuntPos.x *= Mathf.Lerp(1f, 1.2f, num5 * 2f);
+                        }
+                        else
+                        {
+                            playerGraphics.blink = 5;
+                            self.relativeHuntPos = new Vector2(0f, -4f) + Custom.RNV() * (2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
+                            playerGraphics.head.vel += Custom.RNV() * (2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
+                            player.bodyChunks[0].vel += Custom.RNV() * (0.2f * Random.value * Mathf.InverseLerp(0.5f, 1f, num5));
+                        }
+                    }
+                }
+                self.relativeHuntPos.x *= (1f - Mathf.Sin(player.switchHandsProcess * 3.1415927f));
+                if (playerGraphics.spearDir != 0f && player.bodyMode == Player.BodyModeIndex.Stand)
+                {
+                    Vector2 b = Custom.DegToVec(180f + ((self.limbNumber == 0) ? -1f : 1f) * 8f + player.input[0].x * 4f) * 12f;
+                    b.y += Mathf.Sin(player.animationFrame / 6f * 2f * 3.1415927f) * 2f;
+                    b.x -= Mathf.Cos((player.animationFrame + (player.leftFoot ? 0 : 6)) / 12f * 2f * 3.1415927f) * 4f * player.input[0].x;
+                    b.x += player.input[0].x * 2f;
+                    self.relativeHuntPos = Vector2.Lerp(self.relativeHuntPos, b, Mathf.Abs(playerGraphics.spearDir));
+                    if (player.grasps[self.limbNumber].grabbed is Weapon)
+                    {
+                        (player.grasps[self.limbNumber].grabbed as Weapon).ChangeOverlap((playerGraphics.spearDir > -0.4f && self.limbNumber == 0) || (playerGraphics.spearDir < 0.4f && self.limbNumber == 1));
+                    }
+                }
+                flag = false;
+                if (player.grasps[self.limbNumber].grabbed is Fly && !(player.grasps[self.limbNumber].grabbed as Fly).dead)
+                {
+                    self.huntSpeed = Random.value * 5f;
+                    self.quickness = Random.value * 0.3f;
+                    self.vel += Custom.DegToVec(Random.value * 360f) * (Random.value * Random.value * (Custom.DistLess(self.absoluteHuntPos, self.pos, 7f) ? 4f : 1.5f));
+                    self.pos += Custom.DegToVec(Random.value * 360f) * (Random.value * 4f);
+                    playerGraphics.NudgeDrawPosition(0, Custom.DirVec(player.mainBodyChunk.pos, self.pos) * (3f * Random.value));
+                    playerGraphics.head.vel += Custom.DirVec(player.mainBodyChunk.pos, self.pos) * (2f * Random.value);
+                }
+                else if (player.grasps[self.limbNumber].grabbed is VultureMask)
+                {
+                    self.relativeHuntPos *= 1f - (player.grasps[self.limbNumber].grabbed as VultureMask).donned;
+                }
             }
         }
-        orig(self);
+
+        if (flag && self.mode != Limb.Mode.Retracted)
+        {
+            self.retractCounter++;
+            if (self.retractCounter > 5f)
+            {
+                self.mode = Limb.Mode.HuntAbsolutePosition;
+                self.pos = Vector2.Lerp(self.pos, player.bodyChunks[0].pos, Mathf.Clamp((self.retractCounter - 5f) * 0.05f, 0f, 1f));
+                if (Custom.DistLess(self.pos, player.bodyChunks[0].pos, 2f) && self.reachedSnapPosition)
+                {
+                    self.mode = Limb.Mode.Retracted;
+                }
+                self.absoluteHuntPos = player.bodyChunks[0].pos;
+                self.huntSpeed = 1f + self.retractCounter * 0.2f;
+                self.quickness = 1f;
+                return;
+            }
+        }
+        else
+        {
+            self.retractCounter -= 10;
+            if (self.retractCounter < 0)
+            {
+                self.retractCounter = 0;
+            }
+        }
     }
 
     private static void Player_GraphicsModuleUpdated(On.Player.orig_GraphicsModuleUpdated orig, Player self, bool actuallyViewed, bool eu)
@@ -470,7 +627,7 @@ public static class Grabability
         }
     }
 
-    public static bool Player_CanIPickselfUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
+    public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
     {
         if (obj is Player player && player.IsViy() && player.Consious)
         {

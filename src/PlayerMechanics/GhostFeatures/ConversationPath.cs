@@ -1,4 +1,6 @@
-﻿using RWCustom;
+﻿using MoreSlugcats;
+using RWCustom;
+using System.Collections;
 using System.IO;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures;
@@ -21,11 +23,11 @@ public static class ConversationPath
 		if (self.ghost.room.game.session is StoryGameSession session &&
 			session.saveStateNumber == VoidEnums.SlugcatID.Void)
 		{
-			var path = AssetManager.ResolveFilePath(GetGhostConversationPath(Custom.rainWorld.inGameTranslator.currentLanguage, self.id,
+			var path = AssetManager.ResolveFilePath(GetGhostConversationPath(self, Custom.rainWorld.inGameTranslator.currentLanguage, self.id,
 				session.saveState.deathPersistentSaveData.theMark));
 			if (!File.Exists(path))
 			{
-				path = AssetManager.ResolveFilePath(GetGhostConversationPath(InGameTranslator.LanguageID.English, self.id,
+				path = AssetManager.ResolveFilePath(GetGhostConversationPath(self, InGameTranslator.LanguageID.English, self.id,
 					session.saveState.deathPersistentSaveData.theMark));
 			}
 
@@ -44,16 +46,37 @@ public static class ConversationPath
 				return;
 			}
 
-			self.events.Add(new Conversation.TextEvent(self, 0, $"Can't find conv at {GetGhostConversationPath(InGameTranslator.LanguageID.English, self.id,
-				session.saveState.deathPersistentSaveData.theMark)}<LINE> for {self.id}", 0));
+			self.events.Add(new Conversation.TextEvent(self, 0, $"Can't find conv at {GetGhostConversationPath(self, InGameTranslator.LanguageID.English, self.id, session.saveState.deathPersistentSaveData.theMark)}<LINE> for {self.id}", 0));
 
 		}
 		orig(self);
 	}
-	private static string GetGhostConversationPath(InGameTranslator.LanguageID id, Conversation.ID convId, bool hasMark)
+	private static string GetGhostConversationPath(GhostConversation self, InGameTranslator.LanguageID id, Conversation.ID convId, bool hasMark)
 	{
 		var translator = Custom.rainWorld.inGameTranslator;
 		var path = $"{translator.SpecificTextFolderDirectory(id)}/{convId}_";
+		if (convId != MoreSlugcatsEnums.ConversationID.Ghost_MS)
+		{
+			switch (UnityEngine.Random.Range(0, 3))
+			{
+				case 0:
+					path += "first_";
+					break;
+				case 1:
+					path += "second_";
+					break;
+				case 2:
+					path += "third_";
+					break;
+			}
+		}
+		else
+		{
+			if (self.ghost.room.game.rainWorld.progression.miscProgressionData.beaten_Watcher_Ascension)
+				path += "third_";
+			else
+				path += SaveManager.ExternalSaveData.ViyUnlocked ? "second_" : "first_";
+        }
 		path += hasMark ? "mark.txt" : "nomark.txt";
 		return path;
 	}

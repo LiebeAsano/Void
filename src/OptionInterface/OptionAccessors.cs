@@ -13,6 +13,7 @@ public static class OptionAccessors
 
     public static bool FallDamage => cfgFallDamage.Value;
     public static bool NerfBlizzardLizard => cfgNerfBlizzardLizard.Value;
+    public static bool BuffHunter => cfgBuffHunter.Value;
     public static bool SimpleFood => cfgSimpleFood.Value;
     public static bool ShortcutBlocker => cfgShortcutBlocker.Value;
     public static bool GamepadController => cfgGamepadController.Value;
@@ -31,6 +32,7 @@ public static class OptionAccessors
     internal static Configurable<bool> cfgArenaAscensionStun;
     internal static Configurable<bool> cfgFallDamage;
     internal static Configurable<bool> cfgNerfBlizzardLizard;
+    internal static Configurable<bool> cfgBuffHunter;
     internal static Configurable<bool> cfgGamepadController;
     internal static Configurable<bool> cfgComplexControl;
     internal static Configurable<bool> cfgSimpleFood;

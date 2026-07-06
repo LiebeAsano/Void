@@ -1,4 +1,5 @@
 ﻿using RWCustom;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -693,4 +694,3 @@ public class VoidState
 	public bool InDream { get; } = VoidDreamScript.IsVoidDream;
 	public Stack<AbstractPhysicalObject> SwallowedObjects { get; } = [];
 }
-

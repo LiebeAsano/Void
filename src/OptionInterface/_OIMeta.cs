@@ -26,6 +26,7 @@ public static class _OIMeta
         OptionAccessors.cfgArenaAscensionStun = voidOI.config.Bind<bool>(uniqueprefix + "ArenaAscensionStun", false, new ConfigurableInfo("Saint's ascension stuns instead of kills", tags: "Ascension stuns"));
         OptionAccessors.cfgFallDamage = voidOI.config.Bind<bool>(uniqueprefix + "FallDamage", true, new ConfigurableInfo("Enables fall damage for all creatures", tags: "Fall damage"));
         OptionAccessors.cfgNerfBlizzardLizard = voidOI.config.Bind<bool>(uniqueprefix + "NerfBlizzardLizard", true, new ConfigurableInfo("Disables shield and removes instant death from blizzard beam", tags: "Weakened blizzard lizard"));
+        OptionAccessors.cfgBuffHunter = voidOI.config.Bind<bool>(uniqueprefix + "BuffHunter", true, new ConfigurableInfo("Allows Hunter to maul and to put back stucked spear", tags: "Improved Hunter"));
         OptionAccessors.cfgComplexControl = voidOI.config.Bind<bool>(uniqueprefix + "ComplexControl", false, new ConfigurableInfo("Allows Void to switch move set between climbing and running. Tap 'Special' to switch mode", tags: "Complex control"));
         OptionAccessors.cfgGamepadController = voidOI.config.Bind<bool>(uniqueprefix + "GamepadController", false, new ConfigurableInfo("Makes easier to climb the ceiling using a gamepad. Tap 'Special' to ceiling climb", tags: "Gamepad controller"));
         //#warning to be implemented

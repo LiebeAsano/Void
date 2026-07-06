@@ -1,7 +1,5 @@
 ﻿using Mono.Cecil.Cil;
-using Mono.Cecil;
 using System;
-using System.Linq;
 using VoidTemplate.Useful;
 using MonoMod.Cil;
 using MoreSlugcats;
@@ -59,7 +57,7 @@ public static class CanIPickThisUp
 
     public static bool Player_CanIPickThisSpear(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
     {
-        if (self.AreVoidViy() && obj is Spear spear && !self.abstractCreature.GetPlayerState().InDream)
+        if (self.AreVoidViy() && obj is Spear spear)
         {
             if (spear.mode == Weapon.Mode.StuckInWall && (!ModManager.MSC || !spear.abstractSpear.electric))
             {
@@ -69,14 +67,6 @@ public static class CanIPickThisUp
                         return orig(self, obj);
                 }
                 return true;
-            }
-        }
-        if (self.AreVoidViy() && obj is Spear)
-        {
-            foreach (var grasp in self.grasps)
-            {
-                if (grasp?.grabbed is Spear)
-                    return false;
             }
         }
         return orig(self, obj);

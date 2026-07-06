@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using VoidTemplate.OptionInterface;
 
 namespace VoidTemplate.PlayerMechanics.HunterMechanics;
 
@@ -15,6 +11,6 @@ public static class HunterCanMaul
 
     private static bool SlugcatStats_SlugcatCanMaul(On.SlugcatStats.orig_SlugcatCanMaul orig, SlugcatStats.Name slugcatNum)
     {
-        return slugcatNum == SlugcatStats.Name.Red || orig(slugcatNum);
+        return OptionAccessors.BuffHunter && slugcatNum == SlugcatStats.Name.Red || orig(slugcatNum);
     }
 }

@@ -28,6 +28,7 @@ public class VoidOptionInterface : global::OptionInterface
 		Tabs[0].GenerateBlock("~ Assist ~".TranslateStringComplex(), new Vector2(50, 340), options: [
             (cfgFallDamage, MediumGrey),
             (cfgNerfBlizzardLizard, MediumGrey),
+			(cfgBuffHunter, MediumGrey),
             (cfgComplexControl, MediumGrey),
             (cfgGamepadController, MediumGrey),
 			(cfgSimpleFood, CheatingColor),

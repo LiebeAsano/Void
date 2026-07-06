@@ -11,7 +11,7 @@ namespace VoidTemplate;
 public static class CycleEnd
 {
 	public static bool changedMark;
-	private static void log(object e) => _Plugin.logger.LogInfo(e);
+	private static void Log(object e) => _Plugin.logger.LogInfo(e);
 	public static void Hook()
 	{
 		On.ShelterDoor.Close += CycleEndLogic;

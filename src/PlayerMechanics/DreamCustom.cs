@@ -1,7 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MoreSlugcats;
-using System;
 using System.Collections.Generic;
 using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics.Karma11Features;
@@ -105,7 +104,7 @@ public static class DreamCustom
     }
 
     private static void CustomDream(On.DreamsState.orig_EndOfCycleProgress orig, DreamsState self, SaveState saveState, string currentRegion, string denPosition)
-    {
+    { 
         if (saveState.saveStateNumber == VoidEnums.SlugcatID.Void)
         {
             if (saveState.deathPersistentSaveData.karmaCap != 10)

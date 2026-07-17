@@ -1,6 +1,5 @@
 ﻿using MoreSlugcats;
 using RWCustom;
-using System.Collections;
 using System.IO;
 
 namespace VoidTemplate.PlayerMechanics.GhostFeatures;

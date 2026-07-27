@@ -1,14 +1,16 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SlugBase.SaveData;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using VoidTemplate.ScavDeadZones;
 
 namespace VoidTemplate;
 
 public static class SaveManager
 {
-    
+
     private const string uniqueprefix = "VoidSlugcat";
     private const string viyMarkAvoid = uniqueprefix + "ViyMarkAvoid";
     private const string viyMarkAvoidMessage = uniqueprefix + "ViyMarkAvoidMessage";
@@ -22,8 +24,30 @@ public static class SaveManager
     private const string voidMeetMoon = uniqueprefix + "VoidMeetMoon";
     private const string voidExtraCycles = uniqueprefix + "ExtraCycles";
     private const string hasHadFirstCycleAsViy = uniqueprefix + "ViyFirstCycle";
+    private const string scavRegionStates = uniqueprefix + "ScavRegionStates";
 
+    public static ScavRegionState GetOrCreateScavRegionState(this SaveState saveState, string region, World worldToCreate = null)
+    {
+        if (!saveState.TryGetScavRegionState(region, out var result))
+        {
+            result = new(region, worldToCreate);
+            saveState.GetScavRegionStates().Add(region, result);
+        }
+        return result;
+    }
 
+    public static bool TryGetScavRegionState(this SaveState saveState, string region, out ScavRegionState state) => saveState.GetScavRegionStates().TryGetValue(region, out state);
+
+    public static Dictionary<string, ScavRegionState> GetScavRegionStates(this SaveState saveState)
+    {
+        var data = saveState.miscWorldSaveData.GetSlugBaseData();
+        if (!data.TryGet(scavRegionStates, out Dictionary<string, ScavRegionState> states))
+        {
+            states = [];
+            data.Set(scavRegionStates, states);
+        }
+        return states;
+    }
 
     public static bool GetViyFirstCycle(this SaveState saveState) => saveState.miscWorldSaveData.GetSlugBaseData().TryGet(hasHadFirstCycleAsViy, out bool h) && h;
     public static void SetViyFirstCycle(this SaveState saveState, bool value) => saveState.miscWorldSaveData.GetSlugBaseData().Set(hasHadFirstCycleAsViy, value);

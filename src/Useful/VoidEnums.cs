@@ -14,7 +14,8 @@ public static class VoidEnums
 		ConversationID.Register();
 		SlugcatID.Register();
 		ProcessID.Register();
-		_ = MiscTalkItem.VoidMark;
+		MiscTalkItem.Registrer();
+		CustomPassageID.Register();
     }
 
 	public static class SceneID
@@ -263,8 +264,25 @@ public static class VoidEnums
 
 	public static class MiscTalkItem
 	{
-		public static SLOracleBehaviorHasMark.MiscItemType VoidMark = new("VoidMark");
-        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV2 = new("VoidMarkV2");
-        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV3 = new("VoidMarkV3");
+		public static SLOracleBehaviorHasMark.MiscItemType VoidMark;
+        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV2;
+        public static SLOracleBehaviorHasMark.MiscItemType VoidMarkV3;
+
+		public static void Registrer()
+		{
+            VoidMark = new("VoidMark", true);
+            VoidMarkV2 = new("VoidMarkV2", true);
+            VoidMarkV3 = new("VoidMarkV3", true);
+        }
+    }
+
+	public static class CustomPassageID
+	{
+		public static WinState.EndgameID Extinction;
+
+		public static void Register()
+		{
+            Extinction = new(nameof(Extinction), true);
+        }
     }
 }

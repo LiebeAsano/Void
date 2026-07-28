@@ -54,7 +54,7 @@ namespace VoidTemplate.ScavDeadZones
                     string gateName = world.GetAbstractRoom(world.gates[i]).name;
                     if (!world.DisabledMapRooms.Contains(gateName))
                     {
-                        string[] regionNames = Regex.Split(, "_");
+                        string[] regionNames = Regex.Split(gateName, "_");
                         if (regionNames.Length == 3)
                         {
                             for (int j = 1; j < 3; j++)

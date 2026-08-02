@@ -1,7 +1,7 @@
 [ADD]LW-rot : 060606 : 0000ff : LW-rot
 [ADD]LW-void : 060606 : ffdd00 : LW-void
 [ADD]LW-slugcat : 060606 : ffffff : LW-slugcat
-[ADD]LW-Outskirts : 9944ff : ee44ff : LW-Outskirts
+[ADD]LW-Outskirts : 00ccbb : 006969 : LW-Outskirts
 [ADD]LR_pearldiss : 3d43ff : 59b9ff : LR_pearl_dissertation
 [ADD]LR_archreq : 801c03 : c22700 : LR_archive_request
 [ADD]LR_secret : cf7e04 : edc305 : LR_secret

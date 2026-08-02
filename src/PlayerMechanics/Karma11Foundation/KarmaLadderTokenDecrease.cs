@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using static VoidTemplate.Useful.Utils;
 using MoreSlugcats;
 using Expedition;
+using VoidTemplate.MenuTinkery;
 
 
 namespace VoidTemplate.PlayerMechanics.Karma11Foundation;
@@ -109,6 +110,10 @@ public static class KarmaLadderTokenDecrease
 		{
 			self.currentMainLoop = new SleepAndDeathScreen(self, ID);
         }
+		else if (ID == VoidEnums.ProcessID.LeaderTableMenu)
+		{
+			self.currentMainLoop = new LeaderTableMenu(self);
+		}
 		orig(self, ID);
 	}
 

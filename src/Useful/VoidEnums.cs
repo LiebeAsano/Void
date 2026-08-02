@@ -253,8 +253,12 @@ public static class VoidEnums
 		public static void Register()
 		{
 			TokenDecrease = new("Token Decrease", true);
+			LeaderTableMenu = new(nameof(LeaderTableMenu), true);
 		}
+
 		public static ProcessManager.ProcessID TokenDecrease;
+
+		public static ProcessManager.ProcessID LeaderTableMenu;
 	}
 
 	public static class SlugcatTimeline

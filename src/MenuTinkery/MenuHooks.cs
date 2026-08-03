@@ -33,7 +33,25 @@ public static class MenuHooks
 		//fix for select menu dying when there is no karma and food meter for the page
 		IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
         On.Menu.MainMenu.ctor += MainMenu_ctor;
+        On.Menu.KarmaLadderScreen.AddContinueButton += KarmaLadderScreen_AddContinueButton;
 	}
+
+    private static void KarmaLadderScreen_AddContinueButton(On.Menu.KarmaLadderScreen.orig_AddContinueButton orig, KarmaLadderScreen self, bool black)
+    {
+		orig(self, black);
+		if (self is StoryGameStatisticsScreen menu)
+		{
+			Vector2 pos = self.continueButton.pos;
+			pos.x -= 20 + self.continueButton.size.x;
+			self.pages[0].subObjects.Add(new LoadDataButton(menu, self.pages[0], "WRITE DATA", () =>
+			{
+                self.manager.ActualShowDialog(new DialogConfirm("Вы уверены, что хотите записать данные?", self.manager, () =>
+                {
+
+                }, null));
+            }, pos, self.continueButton.size));
+		}
+    }
 
     private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
     {
@@ -186,4 +204,25 @@ public static class MenuHooks
 			assLabel.Add(self, textlabel);
 		}
 	}
+
+    public class LoadDataButton : SimpleButton
+    {
+		public Action onClick;
+        public LoadDataButton(StoryGameStatisticsScreen menu, MenuObject owner, string displayText, Action clickAction, Vector2 pos, Vector2 size) : base(menu, owner, displayText, null, pos, size)
+        {
+			onClick = clickAction;
+        }
+
+        public override void Clicked()
+        {
+			onClick();
+            menu.PlaySound(SoundID.MENU_Button_Standard_Button_Pressed);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+			buttonBehav.greyedOut = (menu as StoryGameStatisticsScreen).ButtonsGreyedOut;
+        }
+    }
 }

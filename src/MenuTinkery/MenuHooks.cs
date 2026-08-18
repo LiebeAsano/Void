@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.Useful;
+using static Menu.CheckBox;
 using static VoidTemplate.Useful.Utils;
 
 namespace VoidTemplate.MenuTinkery;
@@ -19,6 +20,11 @@ public static class MenuHooks
 	private const string TextIfEnding = "The soul is crying out for new wanderings, but the body still clings to the past.<LINE>You feel that there is only one last wish left. (To be continued...)";
     private const string TextIfSlugEnding = "The hunger is sated, but the void inside still cries out. After destroying<LINE>the colony, you continue your journey in search of survivors.";
     private static readonly ConditionalWeakTable<SlugcatSelectMenu.SlugcatPageContinue, MenuLabel> assLabel = new();
+
+	private static readonly ConditionalWeakTable<SlugcatSelectMenu, StrongBox<bool>> resetForLegalRun = new();
+
+	public static StrongBox<bool> GetResetForLegalRun(this SlugcatSelectMenu menu) => resetForLegalRun.GetOrCreateValue(menu);
+
 	public static void Hook()
 	{
 		//when voidcat is dead, those hide useless hud
@@ -34,7 +40,26 @@ public static class MenuHooks
 		IL.Menu.SlugcatSelectMenu.SlugcatPageContinue.Update += SlugcatPageContinue_Update;
         On.Menu.MainMenu.ctor += MainMenu_ctor;
         On.Menu.KarmaLadderScreen.AddContinueButton += KarmaLadderScreen_AddContinueButton;
+        On.Menu.SlugcatSelectMenu.ctor += SlugcatSelectMenu_ctor;
+        On.Menu.SlugcatSelectMenu.StartGame += SlugcatSelectMenu_StartGame;
 	}
+
+    private static void SlugcatSelectMenu_StartGame(On.Menu.SlugcatSelectMenu.orig_StartGame orig, SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
+    {
+		orig(self, storyGameCharacter);
+        if (self.GetResetForLegalRun().Value)
+		{
+
+		}
+    }
+
+    private static void SlugcatSelectMenu_ctor(On.Menu.SlugcatSelectMenu.orig_ctor orig, SlugcatSelectMenu self, ProcessManager manager)
+    {
+		orig(self, manager);
+		self.pages[0].subObjects.Add(new LegalSpeedrunResetBox(self, self.pages[0],
+            new(self.restartCheckbox.pos.x + 175 + SlugcatSelectMenu.GetRestartTextOffset(self.CurrLang), self.restartCheckbox.pos.y),
+            SlugcatSelectMenu.GetRestartTextWidth(self.CurrLang) + 55, "Reset for legal speedrun"));
+    }
 
     private static void KarmaLadderScreen_AddContinueButton(On.Menu.KarmaLadderScreen.orig_AddContinueButton orig, KarmaLadderScreen self, bool black)
     {
@@ -208,6 +233,7 @@ public static class MenuHooks
     public class LoadDataButton : SimpleButton
     {
 		public Action onClick;
+
         public LoadDataButton(StoryGameStatisticsScreen menu, MenuObject owner, string displayText, Action clickAction, Vector2 pos, Vector2 size) : base(menu, owner, displayText, null, pos, size)
         {
 			onClick = clickAction;
@@ -215,6 +241,10 @@ public static class MenuHooks
 
         public override void Clicked()
         {
+			if (buttonBehav.greyedOut)
+			{
+				return;
+			}
 			onClick();
             menu.PlaySound(SoundID.MENU_Button_Standard_Button_Pressed);
         }
@@ -223,6 +253,50 @@ public static class MenuHooks
         {
             base.Update();
 			buttonBehav.greyedOut = (menu as StoryGameStatisticsScreen).ButtonsGreyedOut;
+        }
+    }
+
+    public class LegalSpeedrunResetBox : CheckBox
+    {
+		public SlugcatSelectMenu SlugMenu => menu as SlugcatSelectMenu;
+
+        public LegalSpeedrunResetBox(SlugcatSelectMenu menu, MenuObject owner, Vector2 pos, float textWidth, string displayText, bool textOnRight = false) : base(menu, owner, default(SelfOwnCheckBox), pos, textWidth, displayText, null, textOnRight)
+        {
+
+        }
+
+		public override void Update()
+		{
+			base.Update();
+			pos.y = SlugMenu.restartCheckbox.pos.y;
+            selectable = SlugMenu.restartAvailable;
+            buttonBehav.greyedOut = !SlugMenu.restartChecked;
+			if (!SlugMenu.restartChecked)
+			{
+				Checked = false;
+			}
+        }
+
+        public override void Clicked()
+        {
+            base.Clicked();
+			SlugMenu.GetResetForLegalRun().Value = Checked;
+        }
+    }
+
+    public struct SelfOwnCheckBox : IOwnCheckBox
+    {
+        private bool _checked;
+
+        public readonly bool GetChecked(CheckBox box)
+        {
+            return _checked;
+        }
+
+
+        public void SetChecked(CheckBox box, bool c)
+        {
+            _checked = c;
         }
     }
 }

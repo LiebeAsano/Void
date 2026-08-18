@@ -38,6 +38,28 @@ namespace VoidTemplate
             IL.Player.SpitOutOfShortCut += Player_SpitOutOfShortCut_FIX;
             IL.Player.Update += Player_Update;
             On.Music.PlayerThreatTracker.Update += FixWorldMusic;
+            On.RegionGate.Update += RegionGate_Update;
+            On.WaterGate.WaterRunning += WaterGate_WaterRunning;
+            On.ElectricGate.BatteryRunning += ElectricGate_BatteryRunning;
+        }
+
+        private static void ElectricGate_BatteryRunning(On.ElectricGate.orig_BatteryRunning orig, ElectricGate self, float flow)
+        {
+            // Хук пустой не просто так, не удаляйте
+        }
+
+        private static void WaterGate_WaterRunning(On.WaterGate.orig_WaterRunning orig, WaterGate self, float flow)
+        {
+            // Хук пустой не просто так, не удаляйте
+        }
+
+        private static void RegionGate_Update(On.RegionGate.orig_Update orig, RegionGate self, bool eu)
+        {
+            orig(self, eu);
+            if (self.mode == RegionGate.Mode.Closed && self.AllDoorsInPosition())
+            {
+                self.mode = RegionGate.Mode.MiddleClosed;
+            }
         }
 
         private static void FixWorldMusic(On.Music.PlayerThreatTracker.orig_Update orig, Music.PlayerThreatTracker self)

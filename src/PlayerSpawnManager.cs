@@ -4,6 +4,8 @@ using VoidTemplate;
 using VoidTemplate.Objects;
 using VoidTemplate.Useful;
 
+namespace VoidTemplate;
+
 public static class PlayerSpawnManager
 {
 	public static void ApplyHooks()

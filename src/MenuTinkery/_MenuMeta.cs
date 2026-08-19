@@ -7,6 +7,8 @@ public static class _MenuMeta
 		DisablePassage.Hook();
 		InitGame.Hook();
 		MenuHooks.Hook();
+		LeaderTableMenuSyncHooks.Hook();
+		LeaderTableMainMenuPrefetch.Hook();
 		SelectScreenScenes.Hook();
 		DreamAssociatedSound.Startup();
 		JollyMenu.Hook();

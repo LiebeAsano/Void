@@ -51,6 +51,7 @@ namespace VoidTemplate.MenuTinkery
             slugcatSelect = new(this, speedrunRect, new(10, speedrunRect.size.y - 100), speedrunRect.size.x - 20);
             speedrunRect.subObjects.Add(slugcatSelect);
             cashedTableData = GenerateTestData(slugcatSelect.slugcats);
+            LeaderTableMenuSyncHooks.SeedCachedTables(this);
             table = new(this, speedrunRect, new(10, 70), new(speedrunRect.size.x - 20, slugcatSelect.pos.y - 160), false);
             speedrunRect.subObjects.Add(table);
             table.LoadSlugcatTable(cashedTableData[slugcatSelect.CurrentSlug]);
@@ -415,22 +416,23 @@ namespace VoidTemplate.MenuTinkery
                 int cellRowLenght = cells.GetLength(1) - 3;
                 int newDataRowLenght = newSlugData.GetLength(1);
                 bool lenghtsDevides = newDataRowLenght % cellRowLenght == 0;
-                if (lenghtsDevides)
-                    currentData = new object[(newDataRowLenght / cellRowLenght) - 1][,];
-                else
-                    currentData = new object[Mathf.CeilToInt((float)newDataRowLenght / cellRowLenght)][,];
+                currentData = new object[Mathf.Max(1, Mathf.CeilToInt((float)newDataRowLenght / cellRowLenght))][,];
                 int lastIndexY = 0;
                 for (int number = 0; number < currentData.Length; number++)
                 {
                     int newY = cellRowLenght;
-                    if (number == currentData.Length - 1 && !lenghtsDevides)
+                    if (newDataRowLenght == 0)
+                    {
+                        newY = 0;
+                    }
+                    else if (number == currentData.Length - 1 && !lenghtsDevides)
                     {
                         newY = newDataRowLenght % newY;
                     }
                     currentData[number] = new object[cells.GetLength(0), newY];
                     for (int y = 0; y < currentData[number].GetLength(1); y++, lastIndexY++)
                     {
-                        bool playerRow = newSlugData[(int)Cols.Usernames, lastIndexY].Equals(menu.playerTestName);
+                        bool playerRow = string.Equals(newSlugData[(int)Cols.Usernames, lastIndexY]?.ToString(), menu.playerTestName, StringComparison.Ordinal);
                         for (int x = 0; x < currentData[number].GetLength(0); x++)
                         {
                             currentData[number][x, y] = newSlugData[x, lastIndexY];
@@ -454,6 +456,7 @@ namespace VoidTemplate.MenuTinkery
                 {
                     tSwitch.RemoveSprites();
                     RemoveSubObject(tSwitch);
+                    tSwitch = null;
                 }
                 if (currentData.Length > 1)
                 {

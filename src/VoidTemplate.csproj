@@ -10,6 +10,8 @@
         <Reference Include="../lib/*.dll">
             <Private>false</Private>
         </Reference>
+
+        <Reference Include="System.Net.Http" />
 		
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		

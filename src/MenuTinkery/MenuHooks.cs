@@ -72,7 +72,7 @@ public static class MenuHooks
 			{
                 self.manager.ActualShowDialog(new DialogConfirm("Вы уверены, что хотите записать данные?", self.manager, () =>
                 {
-
+                    _ = LeaderTableSubmission.SubmitAsync(menu);
                 }, null));
             }, pos, self.continueButton.size));
 		}

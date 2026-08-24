@@ -1,5 +1,6 @@
 ﻿using HUD;
 using Menu;
+using Menu.Remix.MixedUI;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
@@ -23,7 +24,7 @@ public static class MenuHooks
 
 	private static readonly ConditionalWeakTable<SlugcatSelectMenu, StrongBox<bool>> resetForLegalRun = new();
 
-	public static StrongBox<bool> GetResetForLegalRun(this SlugcatSelectMenu menu) => resetForLegalRun.GetOrCreateValue(menu);
+	public static bool GetResetForLegalRun(this SlugcatSelectMenu menu) => resetForLegalRun.GetOrCreateValue(menu).Value;
 
 	public static void Hook()
 	{
@@ -47,7 +48,7 @@ public static class MenuHooks
     private static void SlugcatSelectMenu_StartGame(On.Menu.SlugcatSelectMenu.orig_StartGame orig, SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
     {
 		orig(self, storyGameCharacter);
-        if (self.GetResetForLegalRun().Value)
+        if (self.GetResetForLegalRun())
 		{
 
 		}
@@ -70,7 +71,7 @@ public static class MenuHooks
 			pos.x -= 20 + self.continueButton.size.x;
 			self.pages[0].subObjects.Add(new LoadDataButton(menu, self.pages[0], "WRITE DATA", () =>
 			{
-                self.manager.ActualShowDialog(new DialogConfirm("Вы уверены, что хотите записать данные?", self.manager, () =>
+                self.manager.ShowDialog(new DialogConfirm("Вы уверены, что хотите записать данные?", self.manager, () =>
                 {
                     _ = LeaderTableSubmission.SubmitAsync(menu);
                 }, null));
@@ -279,8 +280,25 @@ public static class MenuHooks
 
         public override void Clicked()
         {
+			if (NotLegitRunMods?.Count > 0)
+			{
+				string title = "Невозможно продолжить. Для легального спидрана отлючите следующие моды:";
+                string mods = $"\"{NotLegitRunMods[0]}\"";
+                for (int i = 1; i < NotLegitRunMods.Count; i++)
+                {
+					mods += $", \"{NotLegitRunMods[i]}\"";
+                }
+				var width = Mathf.Max(480, LabelTest.GetWidth(title));
+
+                string text = $"{title}\n\n{mods.WrapText(false, width + 80, true)}";
+				
+				Vector2 pos = DialogBoxNotify.CalculateDialogBoxSize(text, false);
+                menu.manager.ShowDialog(new DialogNotify(text, pos, menu.manager, null));
+                menu.PlaySound(SoundID.MENU_Button_Standard_Button_Pressed);
+                return;
+			}
             base.Clicked();
-			SlugMenu.GetResetForLegalRun().Value = Checked;
+			resetForLegalRun.GetOrCreateValue(SlugMenu).Value = Checked;
         }
     }
 

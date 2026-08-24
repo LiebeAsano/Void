@@ -40,7 +40,6 @@ namespace VoidTemplate.PlayerMechanics.GhostFeatures
                     }
                     return orig(self, lang, region);
                 }));
-
         }
 
 

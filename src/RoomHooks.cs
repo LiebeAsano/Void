@@ -38,22 +38,26 @@ namespace VoidTemplate
             IL.Player.SpitOutOfShortCut += Player_SpitOutOfShortCut_FIX;
             IL.Player.Update += Player_Update;
             On.Music.PlayerThreatTracker.Update += FixWorldMusic;
-            On.RegionGate.Update += RegionGate_Update;
-            On.WaterGate.WaterRunning += WaterGate_WaterRunning;
+            On.ElectricGate.Update += ElectricGate_Update;
             On.ElectricGate.BatteryRunning += ElectricGate_BatteryRunning;
+            On.ElectricGate.ctor += ElectricGate_ctor;
+        }
+
+        private static void ElectricGate_ctor(On.ElectricGate.orig_ctor orig, ElectricGate self, Room room)
+        {
+            room.world.regionState.gatesPassedThrough[room.abstractRoom.gateIndex] = false;
+            orig(self, room);
         }
 
         private static void ElectricGate_BatteryRunning(On.ElectricGate.orig_BatteryRunning orig, ElectricGate self, float flow)
         {
+            /*if () return;
+            orig(self, flow);*/
+
             // Хук пустой не просто так, не удаляйте
         }
 
-        private static void WaterGate_WaterRunning(On.WaterGate.orig_WaterRunning orig, WaterGate self, float flow)
-        {
-            // Хук пустой не просто так, не удаляйте
-        }
-
-        private static void RegionGate_Update(On.RegionGate.orig_Update orig, RegionGate self, bool eu)
+        private static void ElectricGate_Update(On.ElectricGate.orig_Update orig, ElectricGate self, bool eu)
         {
             orig(self, eu);
             if (self.mode == RegionGate.Mode.Closed && self.AllDoorsInPosition())

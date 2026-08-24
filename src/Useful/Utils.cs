@@ -4,6 +4,7 @@ using MonoMod.Cil;
 using SlugBase.Features;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -78,6 +79,8 @@ public static class Utils
             return (bool)dressMySlugcatEnabled;
         }
     }
+
+    public static ReadOnlyCollection<string> NotLegitRunMods { get; internal set; }
 }
 public static class POMUtils
 {

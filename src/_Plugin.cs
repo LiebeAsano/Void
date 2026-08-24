@@ -24,6 +24,7 @@ using VoidTemplate.ScavDeadZones;
 namespace VoidTemplate;
 
 [BepInDependency("slime-cubed.slugbase")]
+[BepInDependency("rwmodding.coreorg.rk")]
 [BepInDependency("LeeMoriya.Blood", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("ratrat.mosquitoesplugin", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("dressmyslugcat", BepInDependency.DependencyFlags.SoftDependency)]

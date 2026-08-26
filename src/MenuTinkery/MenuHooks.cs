@@ -269,10 +269,8 @@ public static class MenuHooks
 		public override void Update()
 		{
 			base.Update();
-			pos.y = SlugMenu.restartCheckbox.pos.y;
-            selectable = SlugMenu.restartAvailable;
-            buttonBehav.greyedOut = !SlugMenu.restartChecked;
-			if (!SlugMenu.restartChecked)
+            buttonBehav.greyedOut = SlugMenu.restartAvailable && !SlugMenu.restartChecked;
+			if (SlugMenu.restartAvailable && !SlugMenu.restartChecked)
 			{
 				Checked = false;
 			}

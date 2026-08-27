@@ -113,12 +113,42 @@ public sealed class PlayerResultDto
 
     [JsonProperty("deaths")]
     public int Deaths { get; set; }
+
+    [JsonProperty("steam_id")]
+    public string SteamId { get; set; }
+
+    [JsonProperty("run_token")]
+    public string RunToken { get; set; }
 }
 
 public sealed class WriteDataResponse
 {
     [JsonProperty("ok")]
     public bool Ok { get; set; }
+
+    [JsonProperty("error")]
+    public string Error { get; set; }
+}
+
+public sealed class StoryStartRequest
+{
+    [JsonProperty("slugcat")]
+    public string Slugcat { get; set; }
+
+    [JsonProperty("steam_id")]
+    public string SteamId { get; set; }
+
+    [JsonProperty("client_nonce")]
+    public string ClientNonce { get; set; }
+}
+
+public sealed class StoryStartResponse
+{
+    [JsonProperty("ok")]
+    public bool Ok { get; set; }
+
+    [JsonProperty("token")]
+    public string Token { get; set; }
 
     [JsonProperty("error")]
     public string Error { get; set; }

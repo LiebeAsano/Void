@@ -2,7 +2,6 @@
 using Mosquitoes;
 using RWCustom;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace VoidTemplate.ModsCompatibilty
 {
     public class MosquitoCompat
     {
-        private static readonly ConditionalWeakTable<Mosquito, VoidInfection> infectedMosquitoes = new();
+        private static readonly ConditionalWeakTable<object, VoidInfection> infectedMosquitoes = new();
 
         public static void Init()
         {
@@ -99,7 +98,13 @@ namespace VoidTemplate.ModsCompatibilty
         private static void ApplyPaletteHook(Action<MosquitoGraphics, RoomCamera.SpriteLeaser, RoomCamera, RoomPalette> orig, MosquitoGraphics self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
         {
             orig(self, sLeaser, rCam, palette);
-            
+
+            var bugField = self.GetType().GetField("bug");
+            if (bugField == null) return;
+
+            var mosquito = bugField.GetValue(self);
+            if (mosquito == null) return;
+
             if (infectedMosquitoes.TryGetValue(self.bug, out var infection))
             {
                 float progress = infection.timer / 240f;
@@ -118,7 +123,9 @@ namespace VoidTemplate.ModsCompatibilty
                     {
                         float value = Mathf.InverseLerp(0f, mesh.verticeColors.Length - 1, i);
 
-                        float bloat = self.bug.bloat;
+                        var bloatProperty = mosquito.GetType().GetProperty("bloat");
+                        float bloat = bloatProperty != null ? (float)bloatProperty.GetValue(mosquito) : 1f;
+
                         mesh.verticeColors[i] = Color.Lerp(voidColor, voidAccent, 0.25f + Mathf.InverseLerp(0f, 1f, value) * 0.75f * bloat);
                     }
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MoreSlugcats;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,11 @@ namespace VoidTemplate.ScavDeadZones
                 var state = story.saveState.GetOrCreateScavRegionState(self.room.world.name, self.room.world);
                 if (state.deadCount > 0)
                 {
-                    state.deadCount = Mathf.Clamp01(state.deadCount - (scav.Elite ? 0.06f : 0.02f));
+                    state.deadCount = Mathf.Clamp01(state.deadCount - 
+                        (story.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Artificer ||
+                         story.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Spear ? 
+                         scav.Elite ? 0.05f : 0.02f :
+                         scav.Elite ? 0.1f : 0.04f));
                     state.killScavs = true;
                 }
             }

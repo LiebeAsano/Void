@@ -23,7 +23,6 @@ namespace VoidTemplate.ModsCompatibilty
                         MosquitoCompat.Init();
                         break;
                     case "swalloweverything":
-                    case "willowwisp.bellyplus":
                         throw new LWIncompatibleModException(mod.name);
                 }
             }

@@ -28,6 +28,10 @@ public static class LeaderTableSubmission
         state.IsSubmitting = true;
         try
         {
+            request.RunToken = await StoryStartTokenService.GetActiveTokenAsync();
+            if (!StoryStartClientIdentity.TryGetSteamId(out string steamId))
+                throw new InvalidOperationException("Steam ID is unavailable");
+            request.SteamId = steamId;
             string idempotencyKey = CreateIdempotencyKey(request);
             WriteDataResponse response = await new LeaderTableApiClient().SubmitPlayerDataAsync(request, idempotencyKey, CancellationToken.None);
             if (!response.Ok) throw new InvalidOperationException(response.Error ?? "Server rejected WRITE DATA");

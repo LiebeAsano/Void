@@ -13,6 +13,7 @@ public interface ILeaderTableApiClient
 {
     Task<LeaderTableFetchResult> GetLeaderTableAsync(string slugcatApiName, string eTag, CancellationToken cancellationToken = default);
     Task<WriteDataResponse> SubmitPlayerDataAsync(PlayerResultDto request, string idempotencyKey, CancellationToken cancellationToken = default);
+    Task<StoryStartResponse> StartStoryAsync(StoryStartRequest request, CancellationToken cancellationToken = default);
 }
 
 public sealed class LeaderTableApiException : Exception
@@ -24,6 +25,7 @@ public sealed class LeaderTableApiException : Exception
 public sealed class LeaderTableApiClient : ILeaderTableApiClient
 {
     private const string Endpoint = "https://flarya.me/api/leader-table";
+    internal const string ClientKey = "fe08ed1761fa366d5576ebe5fabd32ad0704e5b4429390a47be6b7187d3058c8";
     private const long MaxResponseBytes = 1024 * 1024;
     private static readonly HttpClient httpClient = CreateHttpClient();
 
@@ -33,6 +35,9 @@ public sealed class LeaderTableApiClient : ILeaderTableApiClient
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         return client;
     }
+
+    private static void AuthorizeClient(HttpRequestMessage message) =>
+        message.Headers.TryAddWithoutValidation("X-Leaderboard-Client-Key", ClientKey);
 
     public async Task<LeaderTableFetchResult> GetLeaderTableAsync(string slugcatApiName, string eTag, CancellationToken cancellationToken = default)
     {
@@ -69,6 +74,7 @@ public sealed class LeaderTableApiClient : ILeaderTableApiClient
         {
             Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json")
         };
+        AuthorizeClient(message);
         message.Headers.TryAddWithoutValidation("Idempotency-Key", idempotencyKey);
         using HttpResponseMessage response = await httpClient.SendAsync(message, HttpCompletionOption.ResponseContentRead, cancellationToken);
         string body = await response.Content.ReadAsStringAsync();
@@ -81,6 +87,28 @@ public sealed class LeaderTableApiClient : ILeaderTableApiClient
             return result;
         }
         catch (JsonException exception) { throw new LeaderTableApiException(response.StatusCode, $"Leader table POST JSON is invalid: {exception.Message}"); }
+    }
+
+    public async Task<StoryStartResponse> StartStoryAsync(StoryStartRequest request, CancellationToken cancellationToken = default)
+    {
+        using var message = new HttpRequestMessage(HttpMethod.Post, "https://flarya.me/api/story-start")
+        {
+            Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json")
+        };
+        AuthorizeClient(message);
+        using HttpResponseMessage response = await httpClient.SendAsync(message, HttpCompletionOption.ResponseContentRead, cancellationToken);
+        string body = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+            throw new LeaderTableApiException(response.StatusCode, $"Story start returned {(int)response.StatusCode}: {SafeError(body)}");
+
+        try
+        {
+            StoryStartResponse result = JsonConvert.DeserializeObject<StoryStartResponse>(body);
+            if (result == null || !result.Ok || string.IsNullOrWhiteSpace(result.Token))
+                throw new LeaderTableApiException(response.StatusCode, result?.Error ?? "Story start token was rejected");
+            return result;
+        }
+        catch (JsonException exception) { throw new LeaderTableApiException(response.StatusCode, $"Story start JSON is invalid: {exception.Message}"); }
     }
 
     private static string SafeError(string body)

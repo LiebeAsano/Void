@@ -9,6 +9,7 @@ public static class InitGame
 {
 	public static void Hook()
 	{
+		On.Menu.SlugcatSelectMenu.StartGame += SlugcatSelectMenu_StartGame;
 		//statistics screen if viy is dead
 		On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
 		//set room to start if viy and playing first time
@@ -17,6 +18,13 @@ public static class InitGame
 		//On.RainWorldGame.Win += RainWorldGameOnWin;
 	}
 	private const string startingRoom = "SH_S10";
+
+	private static void SlugcatSelectMenu_StartGame(On.Menu.SlugcatSelectMenu.orig_StartGame orig, Menu.SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
+	{
+		if (self.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.New)
+			_ = RequestStoryStartTokenAsync(storyGameCharacter);
+		orig(self, storyGameCharacter);
+	}
 
 	private static void RainWorldGameOnWin(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
 	{
@@ -73,5 +81,17 @@ public static class InitGame
 			else orig(self, storyGameCharacter);
 		}
 		else orig(self, storyGameCharacter);
+	}
+
+	private static async System.Threading.Tasks.Task RequestStoryStartTokenAsync(SlugcatStats.Name storyGameCharacter)
+	{
+		try
+		{
+			await StoryStartTokenService.RequestAsync(storyGameCharacter);
+		}
+		catch (System.Exception exception)
+		{
+			LogExErr($"Story start token request failed: {exception.Message}");
+		}
 	}
 }

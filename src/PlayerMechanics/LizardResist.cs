@@ -21,7 +21,7 @@ public static class LizardResist
 
     private static void Lizard_Bite(On.Lizard.orig_Bite orig, Lizard self, BodyChunk chunk)
     {
-        if (chunk.owner is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
+        if (chunk?.owner is Player player && player.slugcatStats.name == VoidEnums.SlugcatID.Void)
         {
             float resist;
             if (player.KarmaCap == 10)

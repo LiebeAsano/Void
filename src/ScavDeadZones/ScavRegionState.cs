@@ -78,7 +78,7 @@ namespace VoidTemplate.ScavDeadZones
             {
                 if (!killScavs)
                 {
-                    deadCount = Mathf.Clamp01(deadCount + 0.03f);
+                    deadCount = Mathf.Clamp01(deadCount + 0.1f);
                 }
                 else if (deadCount <= 0)
                 {

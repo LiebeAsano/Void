@@ -81,16 +81,20 @@ public static class MenuHooks
 
     private static void MainMenu_ctor(On.Menu.MainMenu.orig_ctor orig, MainMenu self, ProcessManager manager, bool showRegionSpecificBkg)
     {
-		orig(self, manager, showRegionSpecificBkg);
-		self.pages[0].subObjects.Add(new LastWishDiscordButton(self, self.pages[0], new(1306, 10)));
+        orig(self, manager, showRegionSpecificBkg);
+
+        self.pages[0].subObjects.Add(new LastWishDiscordButton(self, self.pages[0]));
+
         float buttonWidth = MainMenu.GetButtonWidth(self.CurrLang);
-        Vector2 pos = new Vector2(683f - buttonWidth / 2f, 0f);
-        Vector2 size = new Vector2(buttonWidth, 30f);
-		self.AddMainMenuButton(new(self, self.pages[0], "LEADER TABLE", "LEADERTABLE", pos, size), () =>
-		{
-			self.PlaySound(SoundID.MENU_Switch_Page_In);
-			self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.LeaderTableMenu);
-		}, self.mainMenuButtons.Count - 1);
+        Vector2 pos = new(683f - buttonWidth / 2f, 0f);
+        Vector2 size = new(buttonWidth, 30f);
+
+        self.AddMainMenuButton(new SimpleButton(self,self.pages[0], "LEADER TABLE", "LEADERTABLE", pos, size), () =>
+            {
+                self.PlaySound(SoundID.MENU_Switch_Page_In);
+                self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.LeaderTableMenu);
+            },
+            self.mainMenuButtons.Count - 1);
     }
 
     private static void SlugcatPageContinue_Update(ILContext il)

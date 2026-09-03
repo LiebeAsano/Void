@@ -31,7 +31,7 @@ namespace VoidTemplate.ModsCompatibilty
             if (activeMods.Count > myMod.requirementsNames.Length + 1)
             {
                 RemoveReqMods(myMod);
-                Utils.NotLegitRunMods = new(activeMods.ToArray());
+                Utils.NotLegitRunMods = new([.. activeMods]);
             }
 
             void RemoveReqMods(ModManager.Mod mod)

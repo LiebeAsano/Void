@@ -83,18 +83,11 @@ public static class MenuHooks
     {
         orig(self, manager, showRegionSpecificBkg);
 
-        self.pages[0].subObjects.Add(new LastWishDiscordButton(self, self.pages[0]));
+        self.pages[0].subObjects.Add(
+            new LastWishDiscordButton(self, self.pages[0]));
 
-        float buttonWidth = MainMenu.GetButtonWidth(self.CurrLang);
-        Vector2 pos = new(683f - buttonWidth / 2f, 0f);
-        Vector2 size = new(buttonWidth, 30f);
-
-        self.AddMainMenuButton(new SimpleButton(self,self.pages[0], "LEADER TABLE", "LEADERTABLE", pos, size), () =>
-            {
-                self.PlaySound(SoundID.MENU_Switch_Page_In);
-                self.manager.RequestMainProcessSwitch(VoidEnums.ProcessID.LeaderTableMenu);
-            },
-            self.mainMenuButtons.Count - 1);
+        self.pages[0].subObjects.Add(
+            new LastWishLeaderButton(self, self.pages[0]));
     }
 
     private static void SlugcatPageContinue_Update(ILContext il)

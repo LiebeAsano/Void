@@ -1,0 +1,6 @@
+ROOMS
+LWUW_D01 : Disconnected, Disconnected, Disconnected
+END ROOMS
+
+CREATURES
+LWUW_D01 : 3-GreenLizard, 4-WhiteLizard

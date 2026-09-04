@@ -1,0 +1,4 @@
+Palette: 201
+pupSpawnChance: 0.1
+Subregion: The Disorderly Exterior
+Room Setting Templates: Leg

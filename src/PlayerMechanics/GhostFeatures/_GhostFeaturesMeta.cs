@@ -12,7 +12,7 @@
 			NoGhostHunch.Hook();
 			UpdateIL.Hook();
 			CustomGhostsPathConvs.Hook();
-			SBGhostSave.Hook();
+            SBGhostSave.Hook();
 		}
 	}
 }

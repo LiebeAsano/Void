@@ -49,25 +49,13 @@ namespace VoidTemplate.MenuTinkery
 
             symbolSprite.SetPosition(drawPos + drawSize / 2f);
 
-            float num =
-                0.5f -
-                0.5f * Mathf.Sin(
-                    Mathf.Lerp(
-                        buttonBehav.lastSin,
-                        buttonBehav.sin,
-                        timeStacker)
-                    / 30f *
-                    Mathf.PI *
-                    2f);
+            float num = 0.5f - 0.5f * Mathf.Sin(Mathf.Lerp(buttonBehav.lastSin, buttonBehav.sin, timeStacker) / 30f * Mathf.PI * 2f);
 
             num *= buttonBehav.sizeBump;
 
             symbolSprite.color = buttonBehav.greyedOut
                 ? MenuRGB(MenuColors.VeryDarkGrey)
-                : Color.Lerp(
-                    MyColor(timeStacker),
-                    MenuRGB(MenuColors.VeryDarkGrey),
-                    num);
+                : Color.Lerp(MyColor(timeStacker), MenuRGB(MenuColors.VeryDarkGrey), num);
         }
 
         public override void RemoveSprites()

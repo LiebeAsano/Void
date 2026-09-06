@@ -218,7 +218,7 @@ static class PermadeathConditions
         self.manager.musicPlayer?.DeathEvent();
         self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.StarveScreen);
     }
-
+    
     private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
     {
         if (!IsVoidStoryGame(self))
@@ -227,8 +227,7 @@ static class PermadeathConditions
             return;
         }
 
-        if (self.manager.upcomingProcess != null)
-            return;
+        if (self.manager.upcomingProcess != null) return;
 
         self.manager.musicPlayer?.FadeOutAllSongs(20f);
 
@@ -239,39 +238,51 @@ static class PermadeathConditions
             return;
           }*/
 
-        bool treeEnding = IsTreeEnding(self);
+        StoryGameSession session = self.GetStorySession;
+        SaveState save = session.saveState;
 
-        if (VoidSpecificGameOverCondition(self) && !treeEnding)
+        bool isEnding = IsTreeEnding(self) || save.GetVoidEndingTree() || save.GetEndingEncountered() || save.deathPersistentSaveData.ascended;
+        bool isDeath = !isEnding && VoidSpecificGameOverCondition(self);
+
+        if (isDeath)
         {
-            self.GetStorySession.saveState.redExtraCycles = true;
-            self.GetStorySession.saveState.SetVoidCatDead(true);
+            save.redExtraCycles = true;
+            save.SetVoidCatDead(true);
         }
 
-        if (ModManager.CoopAvailable)
-        {
-            int num = 0;
-            using IEnumerator<Player> enumerator =
-                (from x in self.session.game.Players select x.realizedCreature as Player).GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                Player player = enumerator.Current;
-                self.GetStorySession.saveState.AppendCycleToStatistics(player, self.GetStorySession, true, num);
-                num++;
-            }
-        }
-        else
-        {
-            self.GetStorySession.saveState.AppendCycleToStatistics(
-                self.Players[0].realizedCreature as Player,
-                self.GetStorySession,
-                true,
-                0
-            );
-        }
+        AppendCycleToStatistics(self, isDeath);
 
         self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
         self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
+    }
+
+    private static void AppendCycleToStatistics(RainWorldGame game, bool death)
+    {
+        StoryGameSession session = game.GetStorySession;
+        SaveState save = session.saveState;
+
+        if (ModManager.CoopAvailable)
+        {
+            int playerIndex = 0;
+
+            foreach (AbstractCreature abstractPlayer in game.Players)
+            {
+                if (abstractPlayer?.realizedCreature is not Player player)
+                    continue;
+
+                save.AppendCycleToStatistics(player, session, death, playerIndex);
+
+                playerIndex++;
+            }
+
+            return;
+        }
+
+        if (game.Players.Count > 0 &&
+            game.Players[0]?.realizedCreature is Player mainPlayer)
+        {
+            save.AppendCycleToStatistics(mainPlayer, session, death, 0);
+        }
     }
 
     #endregion

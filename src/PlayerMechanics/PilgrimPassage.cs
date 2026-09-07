@@ -1,14 +1,9 @@
-﻿using Mono.Cecil;
-using MoreSlugcats;
-using System;
+﻿using MoreSlugcats;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoidTemplate.PlayerMechanics;
 
-public static class PilgrimPasage
+public static class PilgrimPassage
 {
     public static void Hook()
     {
@@ -37,6 +32,14 @@ public static class PilgrimPasage
                     "SS",
                     "SB",
                     "LC",
+                    "WARB",
+                    "WARD",
+                    "WARE",
+                    "WARF",
+                    "WARG",
+                    "WRFA",
+                    "WRFB"
+
                 ];
             return [.. source];
         }
@@ -65,4 +68,4 @@ public static class PilgrimPasage
         }
         pilgrimTracker.consumed = false;
     }
-    }
+}

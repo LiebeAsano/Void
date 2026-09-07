@@ -103,24 +103,26 @@ public static class LeaderTableMenuSyncHooks
     private static void StoreTable(LeaderTableMenu menu, SlugcatStats.Name slugcat, LeaderTableResponse response, bool loadCurrentTable)
     {
         int rowCount = Math.Max(11, response.Entries.Count);
-        object[,] rows = new object[6, rowCount];
+        object[][,] rows = new object[2][,];
+        for (int i = 0; i < 2; i++)
+            rows[i] = new object[7, rowCount];
         for (int y = 0; y < rowCount; y++)
         {
             for (int x = 0; x < rows.GetLength(0); x++)
-                rows[x, y] = "—";
+                rows[0][x, y] = "—";
         }
         for (int i = 0; i < response.Entries.Count; i++)
         {
             LeaderTableEntry entry = response.Entries[i];
-            rows[0, i] = entry.Get("rank", "place", "position") ?? (i + 1).ToString();
-            rows[1, i] = entry.Get("name", "player", "username", "playerName", "displayName") ?? "—";
-            rows[2, i] = entry.Get("time", "duration", "timeMs") ?? "—";
-            rows[3, i] = entry.Get("score", "points") ?? "—";
-            rows[4, i] = entry.Get("cycles", "cycleCount") ?? "—";
-            rows[5, i] = entry.Get("deaths", "deathCount") ?? "—";
+            rows[0][0, i] = entry.Get("rank", "place", "position") ?? (i + 1).ToString();
+            rows[0][1, i] = entry.Get("name", "player", "username", "playerName", "displayName") ?? "—";
+            rows[0][2, i] = entry.Get("time", "duration", "timeMs") ?? "—";
+            rows[0][3, i] = entry.Get("score", "points") ?? "—";
+            rows[0][4, i] = entry.Get("cycles", "cycleCount") ?? "—";
+            rows[0][5, i] = entry.Get("deaths", "deathCount") ?? "—";
         }
         menu.cashedTableData[slugcat] = rows;
-        if (loadCurrentTable) menu.table.LoadSlugcatTable(rows);
+        if (loadCurrentTable) menu.table.LoadSlugcatTable(rows[0]);
     }
 
     private sealed class SyncState

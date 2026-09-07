@@ -18,7 +18,7 @@ namespace VoidTemplate.MenuTinkery
 
         public SimpleButton buttonRules;
 
-        public Dictionary<SlugcatStats.Name, object[,]> cashedTableData;
+        public Dictionary<SlugcatStats.Name, object[][,]> cashedTableData;
 
         public string playerTestName = "TestPlayer";
 
@@ -28,25 +28,30 @@ namespace VoidTemplate.MenuTinkery
 
         public bool scoreRunMode;
 
+        public int percentIndex;
+
         public bool lastPauseButton;
 
         private bool exitRequest;
 
         public LeaderTableMenu(ProcessManager manager) : base(manager, VoidEnums.ProcessID.LeaderTableMenu)
         {
-
             pages.Add(new(this, null, "main", 0));
             backObject = new SimpleButton(this, pages[0], Translate("BACK"), "BACK", new(50f, 728f), new(110f, 30f));
             pages[0].subObjects.Add(backObject);
-            buttons = new DisablableButton[2];
-            buttons[0] = new(this, pages[0], "SPEEDRUN", "SPEEDRUN", new(10, 668), new(668, 40), buttons, 0);
+            buttons = new DisablableButton[4];
+            buttons[0] = new(this, pages[0], "SPEEDRUN", "VIEWMODE", new(10, 668), new(668, 40), buttons, 0);
             pages[0].subObjects.Add(buttons[0]);
-            buttons[1] = new(this, pages[0], "SCORE RUN", "SCORERUN", new(688, 668), new(668, 40), buttons, 1);
+            buttons[1] = new(this, pages[0], "SCORE RUN", "VIEWMODE", new(688, 668), new(668, 40), buttons, 1);
             pages[0].subObjects.Add(buttons[1]);
+            buttons[2] = new(this, pages[0], "VOIDSEA %", "PERCENTRUN", new(10, 618), new(668, 40), buttons, 0);
+            pages[0].subObjects.Add(buttons[2]);
+            buttons[3] = new(this, pages[0], "ANY %", "PERCENTRUN", new(688, 618), new(668, 40), buttons, 1);
+            pages[0].subObjects.Add(buttons[3]);
             buttonRules = new(this, pages[0], "RULES", "RULES", new(1206, 728), new(110f, 30f));
             pages[0].subObjects.Add(buttonRules);
 
-            speedrunRect = new(this, pages[0], new(10, 40), new(1346, 608), true);
+            speedrunRect = new(this, pages[0], new(10, 40), new(1346, 568), true);
             pages[0].subObjects.Add(speedrunRect);
             slugcatSelect = new(this, speedrunRect, new(10, speedrunRect.size.y - 100), speedrunRect.size.x - 20);
             speedrunRect.subObjects.Add(slugcatSelect);
@@ -54,26 +59,30 @@ namespace VoidTemplate.MenuTinkery
             LeaderTableMenuSyncHooks.SeedCachedTables(this);
             table = new(this, speedrunRect, new(10, 70), new(speedrunRect.size.x - 20, slugcatSelect.pos.y - 160), false);
             speedrunRect.subObjects.Add(table);
-            table.LoadSlugcatTable(cashedTableData[slugcatSelect.CurrentSlug]);
+            table.LoadSlugcatTable(cashedTableData[slugcatSelect.CurrentSlug][0]);
         }
 
-        public static Dictionary<SlugcatStats.Name, object[,]> GenerateTestData(SlugcatStats.Name[] names)
+        public static Dictionary<SlugcatStats.Name, object[][,]> GenerateTestData(SlugcatStats.Name[] names)
         {
-            var res = new Dictionary<SlugcatStats.Name, object[,]>();
+            var res = new Dictionary<SlugcatStats.Name, object[][,]>();
             for (int i = 0; i < names.Length; i++)
             {
+                var m = new object[2][,];
+                res.Add(names[i], m);
                 var state = RND.state;
                 RND.InitState(names[i].Index);
-                var m = new object[6, RND.Range(50, 151)];
-                res.Add(names[i], m);
-
-                int playerIndex = RND.Range(0, m.GetLength(1));
-
-                for (int j = 0; j < m.GetLength(1); j++)
+                for (int percentRun = 0; percentRun < 2; percentRun++)
                 {
-                    m[0, j] = j + names[i].Index;
-                    m[1, j] = j == playerIndex ? "TestPlayer" : "User" + (j + names[i].Index).ToString();
-                    m[2, j] = new TimeSpan(j + names[i].Index);
+                    m[percentRun] = new object[7, RND.Range(50, 151)];
+
+                    int playerIndex = RND.Range(0, m[percentRun].GetLength(1));
+
+                    for (int j = 0; j < m[percentRun].GetLength(1); j++)
+                    {
+                        m[percentRun][0, j] = j + names[i].Index;
+                        m[percentRun][1, j] = j == playerIndex ? "TestPlayer" : "User" + (j + names[i].Index).ToString();
+                        m[percentRun][2, j] = new TimeSpan(percentRun * RND.Range(0, 30) + j + names[i].Index);
+                    }
                 }
                 RND.state = state;
             }
@@ -82,13 +91,25 @@ namespace VoidTemplate.MenuTinkery
 
         public int GetCurrentlySelectedOfSeries(string series)
         {
-            return scoreRunMode ? 1 : 0;
+            if (series == "VIEWMODE")
+            {
+                return scoreRunMode ? 1 : 0;
+            }
+            return percentIndex;
         }
 
         public void SetCurrentlySelectedOfSeries(string series, int to)
         {
-            scoreRunMode = to == 1;
-            table.SwapTimeAndScore(scoreRunMode);
+            if (series == "VIEWMODE")
+            {
+                scoreRunMode = to == 1;
+                table.SwapTimeAndScore(scoreRunMode);
+            }
+            else
+            {
+                percentIndex = to;
+                table.LoadSlugcatTable(cashedTableData[slugcatSelect.CurrentSlug][to]);
+            }
         }
 
         public override void Init()
@@ -162,7 +183,7 @@ namespace VoidTemplate.MenuTinkery
                     MoreSlugcatsEnums.SlugcatStatsName.Saint
                 ];
                 slugcats = [.. slugcats.Union(SlugcatStats.Name.values.entries.Select((s) => new SlugcatStats.Name(s)).Where((s) => !SlugcatStats.HiddenOrUnplayableSlugcat(s)))];
-
+                selectedSlugButton.slugcat = slugcats[0];
                 float sizeX = lineX;
                 prevButton = new(menu, this, "SLUGCAT_SELECT_PREV", new(), -1);
                 prevButton.pos.y -= prevButton.size.y / 2;
@@ -180,11 +201,6 @@ namespace VoidTemplate.MenuTinkery
                 slugcatButtons = new SlugcatButton[Mathf.Min(6, slugcats.Length)];
                 for (int i = 0; i < slugcatButtons.Length; i++)
                 {
-                    if (i == 0)
-                    {
-                        selectedSlugButton.slugcat = slugcats[i];
-                        selectedSlugButton.index = 0;
-                    }
                     slugcatButtons[i] = new(menu, this, slugcats[i], new(Mathf.Lerp(0, sizeX, (float)i / slugcatButtons.Length) + 100, 0), new(100, 100), slugcatButtons, i);
                     subObjects.Add(slugcatButtons[i]); ;
                 }
@@ -285,7 +301,7 @@ namespace VoidTemplate.MenuTinkery
             {
                 selectedSlugButton.slugcat = new(series);
                 selectedSlugButton.index = to;
-                menu.table.LoadSlugcatTable(menu.cashedTableData[selectedSlugButton.slugcat]);
+                menu.table.LoadSlugcatTable(menu.cashedTableData[selectedSlugButton.slugcat][menu.percentIndex]);
             }
 
             public class SlugcatButton : DisablableButton
@@ -342,7 +358,7 @@ namespace VoidTemplate.MenuTinkery
             public LeaderTable(LeaderTableMenu menu, MenuObject owner, Vector2 pos, Vector2 size, bool filled) : base(menu, owner, pos, size, filled)
             {
                 this.menu = menu;
-                cells = new TableCell[6, 13];
+                cells = new TableCell[7, 13];
                 var lerpSize = LerpCellSize(1, 12);
                 GetCell(Cols.Places, 0) = new(menu, this, new(0, LerpCellSizeY(1)), lerpSize, data: "Место");
                 GetCell(Cols.Usernames, 0) = new(menu, this, LerpCellSize(1, 1), lerpSize, leftConnection: true, data: "Ник в стиме");
@@ -350,6 +366,7 @@ namespace VoidTemplate.MenuTinkery
                 GetCell(Cols.Scores, 0) = new(menu, this, LerpCellSize(3, 1), lerpSize, leftConnection: true, data: "Очки");
                 GetCell(Cols.Cycles, 0) = new(menu, this, LerpCellSize(4, 1), lerpSize, leftConnection: true, data: "Циклы");
                 GetCell(Cols.Deaths, 0) = new(menu, this, LerpCellSize(5, 1), lerpSize, leftConnection: true, data: "Смерти");
+                GetCell(Cols.Quits, 0) = new(menu, this, LerpCellSize(6, 1), lerpSize, leftConnection: true, data: "Прерванные попытки");
                 for (int i = 0; i < cells.GetLength(0); i++)
                 {
                     subObjects.Add(cells[i, 0]);
@@ -438,7 +455,7 @@ namespace VoidTemplate.MenuTinkery
                             currentData[number][x, y] = newSlugData[x, lastIndexY];
                             if (playerRow)
                             {
-                                playerInfo ??= new string[6];
+                                playerInfo ??= new string[7];
                                 playerInfo[x] = newSlugData[x, lastIndexY]?.ToString();
                             }
                         }
@@ -449,7 +466,7 @@ namespace VoidTemplate.MenuTinkery
                 {
                     for (int i = 0; i < cells.GetLength(0); i++)
                     {
-                        cells[i, cells.GetLength(1) - 1].UpdateData(playerInfo[i]);
+                        GetCell((Cols)i, cells.GetLength(1) - 1).UpdateData(playerInfo[i]);
                     }
                 }
                 if (tSwitch != null)
@@ -531,7 +548,7 @@ namespace VoidTemplate.MenuTinkery
 
                 public void UpdateData(string data)
                 {
-                    cellData.text = data != null ? data : "NULL";
+                    cellData.text = data ?? "NULL";
                 }
 
                 public void Clear()
@@ -707,7 +724,8 @@ namespace VoidTemplate.MenuTinkery
                 Times,
                 Scores,
                 Cycles,
-                Deaths = 5
+                Deaths,
+                Quits
             }
         }
     }

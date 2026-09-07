@@ -39,7 +39,6 @@ public static class PilgrimPassage
                     "WARG",
                     "WRFA",
                     "WRFB"
-
                 ];
             return [.. source];
         }

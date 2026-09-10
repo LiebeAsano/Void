@@ -15,6 +15,7 @@ namespace VoidTemplate.RainCycleChanges
             ShortcutHooks.Hook();
             RainMeterHooks.Hook();
             FoodMeterHooks.Hook();
+            WaterGateHooks.Hook();
         }
     }
 }

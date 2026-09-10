@@ -25,19 +25,13 @@ namespace VoidTemplate.RainCycleChanges
 
                 c.EmitDelegate((FoodMeter.MeterCircle self) =>
                 {
-                    if (self.meter.IsPupFoodMeter ||
-                        self.meter.hud.owner is not Player player)
-                    {
-                        return;
-                    }
+                    if (self.meter.IsPupFoodMeter || self.meter.hud.owner is not Player player) return;
 
                     var game = player.abstractCreature.world.game;
 
-                    if (!game.IsVoidWorld() && !game.IsViyWorld())
-                        return;
+                    if (!game.IsVoidWorld() && !game.IsViyWorld()) return;
 
-                    var cycleExt =
-                        player.abstractCreature.world.rainCycle.GetRainCycleExt();
+                    var cycleExt = player.abstractCreature.world.rainCycle.GetRainCycleExt();
 
                     bool red = false;
 

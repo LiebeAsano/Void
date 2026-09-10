@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HUD;
+﻿using HUD;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using UnityEngine;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.RainCycleChanges
@@ -20,29 +16,63 @@ namespace VoidTemplate.RainCycleChanges
         private static void MeterCircle_Update(ILContext il)
         {
             ILCursor c = new(il);
+
             if (c.TryGotoNext(x => x.MatchCallvirt<FoodMeter>("get_IsPupFoodMeter")) &&
                 c.TryGotoNext(MoveType.After, x => x.MatchStfld<HUDCircle>("color")))
             {
                 c.MoveAfterLabels();
                 c.Emit(OpCodes.Ldarg_0);
+
                 c.EmitDelegate((FoodMeter.MeterCircle self) =>
                 {
-                    if (!self.meter.IsPupFoodMeter && self.meter.hud.owner is Player player
-                    && (player.abstractCreature.world.game.IsVoidWorld() || player.abstractCreature.world.game.IsViyWorld()))
+                    if (self.meter.IsPupFoodMeter ||
+                        self.meter.hud.owner is not Player player)
                     {
-                        var cycleExt = player.abstractCreature.world.rainCycle.GetRainCycleExt();
-                        int col = 0;
-                        if (cycleExt.AllowToSubtractFood && self.number >= self.meter.lastCount - self.meter.survivalLimit + cycleExt.subtractedFood && self.foodPlopped)
-                        {
-                            col = 1;
-                        }
-                        self.circles[0].color = self.circles[1].color = col;
+                        return;
                     }
+
+                    var game = player.abstractCreature.world.game;
+
+                    if (!game.IsVoidWorld() && !game.IsViyWorld())
+                        return;
+
+                    var cycleExt =
+                        player.abstractCreature.world.rainCycle.GetRainCycleExt();
+
+                    bool red = false;
+
+                    if (cycleExt.AllowToSubtractFood)
+                    {
+                        int currentFood = self.meter.lastCount;
+
+                        int requiredFood = Mathf.Max(0,self.meter.survivalLimit - cycleExt.subtractedFood);
+
+                        int firstRed;
+                        int lastRed;
+
+                        if (currentFood >= requiredFood)
+                        {
+                            firstRed = currentFood - requiredFood;
+                            lastRed = currentFood;
+                        }
+                        else
+                        {
+                            firstRed = 0;
+                            lastRed = requiredFood;
+                        }
+
+                        red = self.number >= firstRed && self.number < lastRed;
+                    }
+
+                    int color = red ? 1 : 0;
+
+                    self.circles[0].color = color;
+                    self.circles[1].color = color;
                 });
             }
             else
             {
-                Utils.LogExErr("Matching error!");
+                Utils.LogExErr("FoodMeterHooks.MeterCircle_Update: match failed!");
             }
         }
     }

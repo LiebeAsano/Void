@@ -215,6 +215,9 @@ namespace VoidTemplate.RainCycleChanges
                             GRain.drainWorldFlood = 0;
                         }
                         GRain.ResetRain();
+
+                        WaterGateHooks.RestoreAfterPostRain(owner.world);
+
                         for (int i = 0; i < owner.world.abstractRooms.Length; i++)
                         {
                             var room = owner.world.abstractRooms[i];

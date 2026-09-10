@@ -560,10 +560,7 @@ public static class Grabability
                             {
                                 player.SetKillTag(grabberPlayer.abstractCreature);
                                 player.playerState.permanentDamageTracking += 0.000125f;
-                                if (player.playerState.permanentDamageTracking >= 1.0f)
-                                {
-                                    player.Die();
-                                }
+                                if (player.playerState.permanentDamageTracking >= 1.0f) player.Die();
                             }
                         }
                     }
@@ -573,10 +570,9 @@ public static class Grabability
                         {
                             self.SetKillTag(grabberPlayer.abstractCreature);
                             (self.State as HealthState).health -= 0.000125f;
-                            if (self.Template.quickDeath && (Random.value < -(self.State as HealthState).health || (self.State as HealthState).health < -1f || ((self.State as HealthState).health < 0f && Random.value < 0.33f)))
-                            {
-                                self.Die();
-                            }
+                            if (self.Template.quickDeath && (Random.value < -(self.State as HealthState).health || 
+                               (self.State as HealthState).health < -1f || 
+                               (self.State as HealthState).health < 0f && Random.value < 0.33f)) self.Die();
                         }
                     }
                     if (grabberPlayer.Grabability(self) == Player.ObjectGrabability.OneHand && (!(self.Template.smallCreature || (self is Centipede centi && centi.Small))))
@@ -629,14 +625,10 @@ public static class Grabability
 
     public static bool Player_CanIPickThisUp(On.Player.orig_CanIPickThisUp orig, Player self, PhysicalObject obj)
     {
-        if (obj is Player player && player.IsViy() && player.Consious)
-        {
+        if (obj is Player player && player.Consious && 
+           (player.IsViy() || 
+           player.IsVoid() && player.bodyMode != Player.BodyModeIndex.Crawl)) 
             return false;
-        }
-        if (obj is Player player2 && player2.IsVoid() && player2.Consious && player2.bodyMode != Player.BodyModeIndex.Crawl)
-        {
-            return false;
-        }
         return orig(self, obj);
     }
 

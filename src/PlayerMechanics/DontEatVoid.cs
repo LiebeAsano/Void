@@ -5,27 +5,34 @@ namespace VoidTemplate.PlayerMechanics;
 
 public static class DontEatVoid
 {
-	public static void Hook()
-	{
-        On.Player.EatMeatUpdate += DontEat_Void;
-	}
+    public static void Hook()
+    {
+        On.Player.EatMeatUpdate += Player_EatMeatUpdate;
+    }
 
-    private static void DontEat_Void(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
+    private static void Player_EatMeatUpdate(On.Player.orig_EatMeatUpdate orig, Player self, int graspIndex)
     {
         orig(self, graspIndex);
-        if (self.eatMeat != 50 || self.AreVoidViy()) return;
-        foreach (var grasp in self.grasps)
+
+        if (self.eatMeat != 50 || self.AreVoidViy())
+            return;
+
+        if (self.grasps[graspIndex]?.grabbed is not Player prey)
+            return;
+
+        if (prey.IsVoid())
         {
-            if (grasp?.grabbed is Player prey && prey.IsVoid() && !Karma11Update.VoidKarma11)
+            if (!Karma11Update.VoidKarma11)
             {
                 self.Die();
-                break;
+                return;
             }
-            if (grasp?.grabbed is Player prey2 && (prey2.GetPlayerExt().voidPoisonBody || prey2.IsViy() || prey2.IsVoid() && Karma11Update.VoidKarma11))
-            {
-                self.GetPlayerExt().voidPoisonBody = true;
-                break;
-            }
+
+            self.GetPlayerExt().voidPoisonBody = true;
+            return;
         }
+
+        if (prey.IsViy() || prey.GetPlayerExt().voidPoisonBody) self.GetPlayerExt().voidPoisonBody = true;
+        
     }
 }

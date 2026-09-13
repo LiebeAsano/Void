@@ -1,24 +1,53 @@
-﻿using VoidTemplate.PlayerMechanics.Karma11Features;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using VoidTemplate.Useful;
-using static VoidTemplate.SaveManager;
 
 namespace VoidTemplate.PlayerMechanics;
 
 public static class NoForceSleep
 {
-	public static void Hook()
-	{
-		On.Player.Update += NoForceSleep_Update;
-	}
-
-    private static void NoForceSleep_Update(On.Player.orig_Update orig, Player self, bool eu)
+    public static void Hook()
     {
-        orig(self, eu);
+        IL.Player.Update += Player_Update;
+    }
 
-        if (self.IsVoid() &&
-            self.abstractCreature?.world?.game?.GetStorySession?.saveState?.GetVoidMarkV3() == false)
+    private static void Player_Update(ILContext il)
+    {
+        ILCursor c = new(il);
+
+        int patched = 0;
+
+        while (c.TryGotoNext(
+            MoveType.After,
+            x => x.MatchLdfld<Player>(nameof(Player.forceSleepCounter)),
+            x => x.MatchLdcI4(1),
+            x => x.MatchAdd()))
         {
-            self.forceSleepCounter = 0;
+            if (c.Next == null || !c.Next.MatchStfld<Player>(nameof(Player.forceSleepCounter)))
+                continue; 
+
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate(FilterForceSleepCounter);
+
+            patched++;
         }
+
+        if (patched != 2) Utils.Logerr($"{nameof(NoForceSleep)}: expected 2 forceSleepCounter increments, patched {patched}");
+        else Utils.Loginf($"{nameof(NoForceSleep)}: patched both forceSleepCounter increments");
+        
+    }
+
+    private static int FilterForceSleepCounter(int value, Player self)
+    {
+        if (!self.IsVoid())
+            return value;
+
+        if (self.abstractCreature?.world?.game?.session is not StoryGameSession story)
+            return value;
+
+        if (story.saveState.GetVoidMarkV3())
+            return value;
+
+        return 0;
     }
 }

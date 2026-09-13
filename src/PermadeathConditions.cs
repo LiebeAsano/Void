@@ -2,14 +2,11 @@
 using MoreSlugcats;
 using RWCustom;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.Useful;
-using static RegionKit.Modules.Particles.V1.PBehaviourModule;
 using static VoidTemplate.OptionInterface.OptionAccessors;
 using static VoidTemplate.Useful.Utils;
 using Object = UnityEngine.Object;

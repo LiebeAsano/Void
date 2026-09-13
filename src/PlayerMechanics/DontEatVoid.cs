@@ -33,6 +33,5 @@ public static class DontEatVoid
         }
 
         if (prey.IsViy() || prey.GetPlayerExt().voidPoisonBody) self.GetPlayerExt().voidPoisonBody = true;
-        
     }
 }

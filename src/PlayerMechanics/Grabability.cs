@@ -38,9 +38,8 @@ public static class Grabability
     {
         orig(self);
         if (self.grabber is Player p && p.AreVoidViy() && self.grabbed is Creature)
-        {
             self.grabbed.CollideWithObjects = true;
-        }
+        
     }
 
     private static void SlugcatHand_Update(On.SlugcatHand.orig_Update orig, SlugcatHand self)
@@ -59,16 +58,14 @@ public static class Grabability
         {
             self.mode = Limb.Mode.HuntAbsolutePosition;
             self.absoluteHuntPos = self.connection.pos;
-            if (Custom.DistLess(self.absoluteHuntPos, self.pos, self.huntSpeed))
-            {
+            if (Custom.DistLess(self.absoluteHuntPos, self.pos, self.huntSpeed))       
                 self.mode = Limb.Mode.Retracted;
-            }
+            
         }
 
         if (self.mode == Limb.Mode.HuntRelativePosition)
-        {
             self.absoluteHuntPos = self.connection.pos + Custom.RotateAroundOrigo(self.relativeHuntPos, Custom.AimFromOneVectorToAnother(self.connection.rotationChunk.pos, self.connection.pos));
-        }
+        
 
         if (self.mode == Limb.Mode.HuntRelativePosition || self.mode == Limb.Mode.HuntAbsolutePosition)
         {
@@ -90,10 +87,8 @@ public static class Grabability
             self.reachedSnapPosition = true;
         }
         else if (self.mode == Limb.Mode.Dangle)
-        {
             self.reachedSnapPosition = false;
-        }
-
+        
         self.quickness = self.defaultQuickness;
         self.huntSpeed = self.defaultHuntSpeed;
 
@@ -101,14 +96,11 @@ public static class Grabability
         {
             self.pos += self.vel;
             if (self.mode == Limb.Mode.HuntRelativePosition)
-            {
                 self.pos += self.connection.vel;
-            }
+            
             self.vel *= self.airFriction;
             if (self.pushOutOfTerrain)
-            {
                 self.PushOutOfTerrain(player.room, self.connection.pos);
-            }
         }
 
         self.ConnectToPoint(self.connection.pos, 20f, false, 0f, self.connection.vel, 0f, 0f);
@@ -120,11 +112,8 @@ public static class Grabability
             flag = false;
             self.reachingForObject = false;
         }
-        else
-        {
-            flag = self.EngageInMovement();
-        }
-
+        else flag = self.EngageInMovement();
+        
         var grasp = player.grasps[self.limbNumber];
 
         if (grasp?.grabbed is Player grabbedPlayer &&
@@ -422,6 +411,7 @@ public static class Grabability
         if (!self.IsViy())
         {
             orig(self, actuallyViewed, eu);
+            return;
         }
         self.spearOnBack?.GraphicsModuleUpdated(actuallyViewed, eu);
         for (int i = 0; i < 2; i++)
@@ -627,7 +617,7 @@ public static class Grabability
     {
         if (obj is Player player && player.Consious && 
            (player.IsViy() || 
-           player.IsVoid() && player.bodyMode != Player.BodyModeIndex.Crawl)) 
+            player.IsVoid() && player.bodyMode != Player.BodyModeIndex.Crawl)) 
             return false;
         return orig(self, obj);
     }

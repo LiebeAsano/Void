@@ -18,8 +18,10 @@ public static class ElectricSpearResist
             return;
         }
 
-        var pos = self.firstChunk.pos;
-        self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, pos);
-        self.room.AddObject(new Explosion.ExplosionLight(pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
+        if (self.abstractSpear.electricCharge == 0)
+            return;
+
+        self.room.PlaySound(SoundID.Jelly_Fish_Tentacle_Stun, self.firstChunk);
+        self.room.AddObject(new Explosion.ExplosionLight(self.firstChunk.pos, 200f, 1f, 4, new Color(0.7f, 1f, 1f)));
     }
 }

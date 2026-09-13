@@ -17,7 +17,6 @@ public static class _PlayerMechanicsMeta
 		CreatureGrab.Hook();
 		CreatureReleaseGrasp.Hook();
 		MovementUpdate.Hook();
-		DontBiteMimic.Hook();
 		DontEatVoid.Hook();
 		DreamManager.RegisterMaps();
         DropCarriedObject.Hook();

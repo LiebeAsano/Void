@@ -502,11 +502,11 @@ public static class Grabability
         if (self == null || obj == null)
             return orig(self, obj);
 
+        if (SlugcatStats.SlugcatCanMaul(self.SlugCatClass) && (obj is PoleMimic || obj is TentaclePlant))
+            return Player.ObjectGrabability.Drag;
+
         if (CanOneHandGrabVoidViy(self, obj))
             return Player.ObjectGrabability.OneHand;
-
-        if (obj is PoleMimic || obj is TentaclePlant)
-            return Player.ObjectGrabability.CantGrab;
 
         if (self.AreVoidViy())
         {
@@ -634,7 +634,13 @@ public static class Grabability
 
     private static bool Player_IsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabCheck)
     {
-        return grabCheck is Watcher.BigMoth bigMoth && bigMoth.Small || orig(self, grabCheck);
+        if (SlugcatStats.SlugcatCanMaul(self.SlugCatClass) && (grabCheck is PoleMimic || grabCheck is TentaclePlant))
+            return true;
+
+        if (grabCheck is Watcher.BigMoth bigMoth && bigMoth.Small)
+            return true;
+
+        return orig(self, grabCheck);
     }
 
 }

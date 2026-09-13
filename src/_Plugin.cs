@@ -14,8 +14,8 @@ using VoidTemplate.PlayerMechanics.Karma11Features;
 using VoidTemplate.PlayerMechanics.Karma11Foundation;
 using VoidTemplate.PlayerMechanics.ViyMechanics;
 using VoidTemplate.PortalForViy;
-using VoidTemplate.Useful;
 using VoidTemplate.ScavDeadZones;
+using VoidTemplate.Useful;
 
 #pragma warning disable CS0618
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]

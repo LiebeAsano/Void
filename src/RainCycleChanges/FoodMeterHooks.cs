@@ -1,8 +1,8 @@
 ﻿using HUD;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using UnityEngine;
 using VoidTemplate.Useful;
+using static VoidTemplate.RainCycleChanges.PostRainCycle;
 
 namespace VoidTemplate.RainCycleChanges
 {
@@ -17,57 +17,34 @@ namespace VoidTemplate.RainCycleChanges
         {
             ILCursor c = new(il);
 
-            if (c.TryGotoNext(x => x.MatchCallvirt<FoodMeter>("get_IsPupFoodMeter")) &&
-                c.TryGotoNext(MoveType.After, x => x.MatchStfld<HUDCircle>("color")))
+            if (c.TryGotoNext(x =>x.MatchCallvirt<FoodMeter>("get_IsPupFoodMeter")) &&
+                c.TryGotoNext(MoveType.After,x =>x.MatchStfld<HUDCircle>("color")))
             {
                 c.MoveAfterLabels();
+
                 c.Emit(OpCodes.Ldarg_0);
 
-                c.EmitDelegate((FoodMeter.MeterCircle self) =>
-                {
-                    if (self.meter.IsPupFoodMeter || self.meter.hud.owner is not Player player) return;
-
-                    var game = player.abstractCreature.world.game;
-
-                    if (!game.IsVoidWorld() && !game.IsViyWorld()) return;
-
-                    var cycleExt = player.abstractCreature.world.rainCycle.GetRainCycleExt();
-
-                    bool red = false;
-
-                    if (cycleExt.AllowToSubtractFood)
+                c.EmitDelegate(
+                    (FoodMeter.MeterCircle self) =>
                     {
-                        int currentFood = self.meter.lastCount;
+                        if (self.meter.IsPupFoodMeter || self.meter.hud.owner is not Player player)
+                            return;
+                        
+                        RainWorldGame game = player.abstractCreature?.world?.game;
 
-                        int requiredFood = Mathf.Max(0,self.meter.survivalLimit - cycleExt.subtractedFood);
+                        if (game == null || (!game.IsVoidWorld() && !game.IsViyWorld()))
+                            return;
 
-                        int firstRed;
-                        int lastRed;
+                        RainCycleExt cycleExt = player.abstractCreature.world.rainCycle.GetRainCycleExt();
+                        bool red = cycleExt.ShouldHighlightFoodPip(self.number, player.FoodInStomach);
+                        int color = red ? 1 : 0;
 
-                        if (currentFood >= requiredFood)
-                        {
-                            firstRed = currentFood - requiredFood;
-                            lastRed = currentFood;
-                        }
-                        else
-                        {
-                            firstRed = 0;
-                            lastRed = requiredFood;
-                        }
-
-                        red = self.number >= firstRed && self.number < lastRed;
-                    }
-
-                    int color = red ? 1 : 0;
-
-                    self.circles[0].color = color;
-                    self.circles[1].color = color;
-                });
+                        self.circles[0].color =color;
+                        self.circles[1].color =color;
+                    });
             }
-            else
-            {
-                Utils.LogExErr("FoodMeterHooks.MeterCircle_Update: match failed!");
-            }
+            else Utils.LogExErr("FoodMeterHooks.MeterCircle_Update: matching error!");
+            
         }
     }
 }

@@ -6,52 +6,26 @@ namespace VoidTemplate.MenuTinkery;
 
 public static class InitGame
 {
-    public static void Hook()
-    {
-        On.Menu.SlugcatSelectMenu.StartGame += SlugcatSelectMenu_StartGame;
-
-        //statistics screen if viy is dead
-        On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
-
-        //set room to start if viy and playing first time
-        //On.StoryGameSession.ctor += StoryGameSessionOnctor;
-
-        //reset need to set starting room when playing as viy after first cycle is over
-        //On.RainWorldGame.Win += RainWorldGameOnWin;
-    }
-
+    private static bool hooked;
     private const string startingRoom = "SH_S10";
 
-    private static bool TryOpenVoidStatistics(SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
+    public static void Hook()
     {
-        if (storyGameCharacter != VoidEnums.SlugcatID.Void || self.restartChecked)
-            return false;
+        CampaignStatisticsSave.Hook();
+        On.Menu.SlugcatSelectMenu.StartGame += SlugcatSelectMenu_StartGame;
+        On.Menu.SlugcatSelectMenu.ContinueStartedGame += SlugcatSelectMenu_ContinueStartedGame;
 
-        if (!MenuHooks.IsVoidPermanentlyDead(self))
-            return false;
-
-        SaveState save = MenuHooks.GetVoidMenuSaveState(self);
-
-        if (save == null)
-            return false;
-
-        if (!save.GetVoidCatDead())
-            save.SetVoidCatDead(true);
-
-        RainWorld.lastActiveSaveSlot = storyGameCharacter;
-        self.redSaveState = save;
-
-        self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
-        self.PlaySound(SoundID.MENU_Switch_Page_Out);
-
-        return true;
+        //On.StoryGameSession.ctor += StoryGameSessionOnctor;
+        //On.RainWorldGame.Win += RainWorldGameOnWin;
     }
 
     private static void SlugcatSelectMenu_StartGame(On.Menu.SlugcatSelectMenu.orig_StartGame orig, SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
     {
-        if (TryOpenVoidStatistics(self, storyGameCharacter))
+        if (CampaignStatisticsSave.TryOpenFromMainButton(self, storyGameCharacter))
             return;
 
+        // Archive reset is performed on an actual new StoryGameSession or WipeSaveState.
+        // A stale menuSetup.New left by another menu must not erase the final result.
         if (self.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.New)
             _ = RequestStoryStartTokenAsync(storyGameCharacter);
 
@@ -60,7 +34,7 @@ public static class InitGame
 
     private static void SlugcatSelectMenu_ContinueStartedGame(On.Menu.SlugcatSelectMenu.orig_ContinueStartedGame orig, SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
     {
-        if (TryOpenVoidStatistics(self, storyGameCharacter))
+        if (CampaignStatisticsSave.TryOpenFromMainButton(self, storyGameCharacter))
             return;
 
         orig(self, storyGameCharacter);
@@ -69,31 +43,17 @@ public static class InitGame
     private static void RainWorldGameOnWin(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
     {
         if (self.GetStorySession is StoryGameSession storySession &&
-            storySession.saveStateNumber == VoidEnums.SlugcatID.Viy &&
-            !storySession.saveState.GetViyFirstCycle())
-        {
+            storySession.saveStateNumber == VoidEnums.SlugcatID.Viy && !storySession.saveState.GetViyFirstCycle())
             storySession.saveState.SetViyFirstCycle(true);
-        }
 
         orig(self, malnourished, fromWarpPoint);
     }
 
-    /// <summary>
-    /// HEAVYPERF
-    /// sets starting room if playing as viy first time
-    /// </summary>
-    /// <param name="orig"></param>
-    /// <param name="self"></param>
-    /// <param name="saveStateNumber"></param>
-    /// <param name="game"></param>
     private static void StoryGameSessionOnctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
         if (saveStateNumber == VoidEnums.SlugcatID.Void)
         {
-            SaveState saveState = game.rainWorld.progression.GetOrInitiateSaveState(
-                saveStateNumber,
-                game,
-                game.manager.menuSetup,
+            SaveState saveState = game.rainWorld.progression.GetOrInitiateSaveState(saveStateNumber, game, game.manager.menuSetup,
                 !ModManager.MSC || (!game.wasAnArtificerDream && !game.manager.rainWorld.safariMode));
 
             if (!saveState.GetViyFirstCycle())

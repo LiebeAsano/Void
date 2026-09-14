@@ -253,8 +253,6 @@ public static class MenuHooks
 
         var hud = self.hud;
 
-        //deleting things from manifesting is prone to null reference exceptions, game definitely doesn't think they don't exist
-        //so to counter it we just stop stuff we don't need from rendering
         List<FNode> thingsToNotRender =
         [
             hud.karmaMeter.darkFade,

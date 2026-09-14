@@ -106,6 +106,7 @@ class _Plugin : BaseUnityPlugin
                 DevEnabled = true;
             }
             AddQuaterFood.Hook();
+            CampaignStatisticsSave.Hook();
             CycleEnd.Hook();
             DrawSprites.Hook();
             PlayerSpawnManager.ApplyHooks();

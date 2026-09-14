@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VoidTemplate.RainCycleChanges
+﻿namespace VoidTemplate.RainCycleChanges
 {
     public class _RainCycleMeta
     {
@@ -12,6 +6,7 @@ namespace VoidTemplate.RainCycleChanges
         {
             DeadlessRain.Hook();
             PostRainCycle.Hook();
+            RainFoodRequirement.Hook();
             ShortcutHooks.Hook();
             RainMeterHooks.Hook();
             FoodMeterHooks.Hook();

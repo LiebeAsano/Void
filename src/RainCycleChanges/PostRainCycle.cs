@@ -97,10 +97,20 @@ namespace VoidTemplate.RainCycleChanges
 
         private static void RainCycle_Update(On.RainCycle.orig_Update orig, RainCycle self)
         {
-            orig(self);
+            RainWorldGame game = self.world?.game;
+            RainFoodRequirement.Restore(game);
 
-            if (self.world.game.session is StoryGameSession session && session.saveStateNumber == VoidEnums.SlugcatID.Void)
-                self.GetRainCycleExt().AfterCycleUpdate();
+            try
+            {
+                orig(self);
+
+                if (game?.session is StoryGameSession session && session.saveStateNumber == VoidEnums.SlugcatID.Void)
+                    self.GetRainCycleExt().AfterCycleUpdate();
+            }
+            finally
+            {
+                RainFoodRequirement.Refresh(game);
+            }
         }
 
         public class RainCycleExt

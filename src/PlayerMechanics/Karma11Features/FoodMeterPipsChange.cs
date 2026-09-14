@@ -6,203 +6,187 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using VoidTemplate.RainCycleChanges;
 using VoidTemplate.Useful;
-using static VoidTemplate.RainCycleChanges.PostRainCycle;
 using static VoidTemplate.Useful.Utils;
 
-namespace VoidTemplate.PlayerMechanics.Karma11Features
+namespace VoidTemplate.PlayerMechanics.Karma11Features;
+
+public static class FoodMeterPipsChange
 {
-    public static class FoodMeterPipsChange
+    private static readonly ConditionalWeakTable<FoodMeter, FoodMeterExtention> meterExt = new();
+    private static bool hooked;
+    private static readonly Color gold = new(1f, 0.86f, 0f);
+    private static readonly Color inner = new(0f, 0f, 0.005f);
+
+    public static FoodMeterExtention GetMeterExt(this FoodMeter meter) => meterExt.GetOrCreateValue(meter);
+
+    public static bool ReqFoodPip(this FoodMeter.MeterCircle pip)
     {
-        private static readonly ConditionalWeakTable<FoodMeter, FoodMeterExtention> meterExt = new();
-
-        public static FoodMeterExtention GetMeterExt(this FoodMeter meter) => meterExt.GetOrCreateValue(meter);
-        
-        public static bool ReqFoodPip(this FoodMeter.MeterCircle pip)
-        {
-            if (pip.meter.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && !pip.meter.IsPupFoodMeter)
-                return pip.number >= pip.meter.survivalLimit - pip.meter.GetMeterExt().showNumFoodTohibernate;
-            else if (pip.meter.hud.owner is SleepAndDeathScreen screen && 
-                     screen.saveState.saveStateNumber == VoidEnums.SlugcatID.Void &&
-                     screen.saveState.deathPersistentSaveData.karmaCap == 10)
-                {
-                    int foodToHibernate = screen.saveState.GetVoidFoodToHibernate();
-
-                    return pip.number >= pip.meter.survivalLimit - 2 * (foodToHibernate - (screen.saveState.CanAddFoodToHibernate(pip.meter.survivalLimit) ? 1 : 0));
-                }
-
+        if (pip.meter.IsPupFoodMeter)
             return false;
+
+        if (pip.meter.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10)
+        {
+            int normal = RainFoodRequirement.GetNormalFoodToHibernate(player.slugcatStats);
+            return pip.number >= normal - pip.meter.GetMeterExt().showNumFoodTohibernate;
         }
 
-        public static void Hook()
+        if (pip.meter.hud.owner is SleepAndDeathScreen screen
+            && screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void
+            && screen.saveState.deathPersistentSaveData.karmaCap == 10)
         {
-            On.HUD.FoodMeter.MeterCircle.Draw += MeterCircle_Draw;
-            On.HUD.FoodMeter.MeterCircle.AddCircles += MeterCircle_AddCircles;
+            if (RainFoodSleep.TryGetGoldStart(pip.meter, out int start))
+                return pip.number >= start;
 
-            IL.HUD.FoodMeter.MeterCircle.Update += MeterCircle_Update;
-
-            On.HUD.FoodMeter.MeterCircle.FoodPlop += MeterCircle_FoodPlop;
-            On.HUD.FoodMeter.QuarterPipShower.Draw += QuarterPipShower_Draw;
-            On.HUD.FoodMeter.MeterCircle.Update += On_MeterCircle_Update;
-            On.HUD.FoodMeter.MeterCircle.QuarterCirclePlop += MeterCircle_QuarterCirclePlop;
+            int foodToHibernate = screen.saveState.GetVoidFoodToHibernate();
+            return pip.number >= pip.meter.survivalLimit - 2 * (foodToHibernate
+                - (screen.saveState.CanAddFoodToHibernate(pip.meter.survivalLimit) ? 1 : 0));
         }
 
-        private static void MeterCircle_QuarterCirclePlop(On.HUD.FoodMeter.MeterCircle.orig_QuarterCirclePlop orig, FoodMeter.MeterCircle self)
+        return false;
+    }
+
+    public static void Hook()
+    {
+        if (hooked) return;
+        hooked = true;
+
+        On.HUD.FoodMeter.MeterCircle.Draw += MeterCircle_Draw;
+        On.HUD.FoodMeter.MeterCircle.AddCircles += MeterCircle_AddCircles;
+        IL.HUD.FoodMeter.MeterCircle.Update += MeterCircle_Update;
+        On.HUD.FoodMeter.MeterCircle.FoodPlop += MeterCircle_FoodPlop;
+        On.HUD.FoodMeter.QuarterPipShower.Draw += QuarterPipShower_Draw;
+        On.HUD.FoodMeter.MeterCircle.Update += On_MeterCircle_Update;
+        On.HUD.FoodMeter.MeterCircle.QuarterCirclePlop += MeterCircle_QuarterCirclePlop;
+    }
+
+    private static void MeterCircle_QuarterCirclePlop(On.HUD.FoodMeter.MeterCircle.orig_QuarterCirclePlop orig, FoodMeter.MeterCircle self)
+    {
+        if (self.ReqFoodPip())
         {
-            if (self.ReqFoodPip())
+            self.rads[0, 0] += 1.5f;
+            self.meter.hud.PlaySound(VoidEnums.SoundID.UIPitch2);
+
+            FadeCircle fadeCircle = new(self.meter.hud, 10f, 4f, 0.82f, 14f, 4f, self.DrawPos(1f), self.meter.fContainer);
+            fadeCircle.circle.circleShader = fadeCircle.hud.rainWorld.Shaders["VectorCircle"];
+            fadeCircle.circle.forceColor = new Color(1f, 0.86f, 0f, 0.5f);
+            self.meter.hud.fadeCircles.Add(fadeCircle);
+            return;
+        }
+
+        orig(self);
+    }
+
+    private static void On_MeterCircle_Update(On.HUD.FoodMeter.MeterCircle.orig_Update orig, FoodMeter.MeterCircle self)
+    {
+        orig(self);
+
+        if (self.ReqFoodPip())
+        {
+            self.circles[1].rad = self.circles[0].rad - 1;
+
+            if (self.meter.hud.owner is SleepAndDeathScreen && self.foodPlopped)
             {
-                self.rads[0, 0] += 1.5f;
-                self.meter.hud.PlaySound(VoidEnums.SoundID.UIPitch2);
-
-                FadeCircle fadeCircle = new(self.meter.hud, 10f, 4f, 0.82f, 14f, 4f, self.DrawPos(1f), self.meter.fContainer);
-
-                fadeCircle.circle.circleShader = fadeCircle.hud.rainWorld.Shaders["VectorCircle"];
-                fadeCircle.circle.forceColor = new Color(1f, 0.86f, 0f, 0.5f);
-
-                self.meter.hud.fadeCircles.Add(fadeCircle);
-
-                return;
-            }
-
-            orig(self);
-        }
-
-        private static void On_MeterCircle_Update(On.HUD.FoodMeter.MeterCircle.orig_Update orig, FoodMeter.MeterCircle self)
-        {
-            orig(self);
-
-            if (self.ReqFoodPip())
-            {
-                self.circles[1].rad = self.circles[0].rad - 1;
-
-                if (self.meter.hud.owner is SleepAndDeathScreen && self.foodPlopped)
-                {
-                    if (self.eaten) self.circles[0].fade = Mathf.Lerp(self.circles[0].fade, 1, self.eatCounter / 50f);
-                    else self.circles[0].fade = 1;
-                }
-            }
-        }
-
-        private static void QuarterPipShower_Draw(On.HUD.FoodMeter.QuarterPipShower.orig_Draw orig, FoodMeter.QuarterPipShower self, float timeStacker)
-        {
-            orig(self, timeStacker);
-
-            if (self.owner.hud.owner is Player player && player.IsVoid() && player.KarmaCap == 10 && 
-                !self.owner.IsPupFoodMeter && 
-                self.owner.showCount >= self.owner.survivalLimit - player.abstractCreature?.world?.game?.GetStorySession?.saveState?.GetVoidFoodToHibernate() * 2 &&
-                self.owner.showCount < self.owner.circles.Count)
-            {
-                self.quarterPips.color = new Color(0, 0, 0.005f);
-                self.quarterPips.scale = (self.owner.circles[self.owner.showCount].circles[0].rad + 3) / 8f;
-            }
-        }
-
-        private static void MeterCircle_FoodPlop(On.HUD.FoodMeter.MeterCircle.orig_FoodPlop orig, FoodMeter.MeterCircle self)
-        {
-            if (self.ReqFoodPip())
-            {
-                self.foodPlopped = true;
-                self.rads[1, 1] += 2f;
-                self.foodPlopDelay = 16;
-                self.meter.hud.PlaySound(VoidEnums.SoundID.UIPitch1);
-
-                return;
-            }
-
-            orig(self);
-        }
-
-        private static void MeterCircle_Update(ILContext il)
-        {
-            ILCursor c = new(il);
-
-            if (c.TryGotoNext(MoveType.After, x => x.MatchNewobj<FadeCircle>()))
-            {
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate((FadeCircle circle, FoodMeter.MeterCircle self) =>
-                    {
-                        if (self.ReqFoodPip())
-                        {
-                            circle.circle.circleShader = circle.hud.rainWorld.Shaders["VectorCircle"];
-                            circle.circle.forceColor = new Color(1f, 0.86f, 0f, 0.5f);
-                        }
-
-                        return circle;
-                    });
-            }
-            else Logerr($"{nameof(Karma11Features)}." + $"{nameof(FoodMeterPipsChange)}." + $"{nameof(MeterCircle_Update)}: match failed");
-        }
-
-        private static void MeterCircle_AddCircles(On.HUD.FoodMeter.MeterCircle.orig_AddCircles orig, FoodMeter.MeterCircle self)
-        {
-            orig(self);
-
-            if (self.ReqFoodPip())
-            {
-                self.circles[1].sprite.MoveBehindOtherNode(self.circles[0].sprite);
-                self.circles[1].snapRad = self.circles[0].snapRad - 1;
-            }
-        }
-
-        private static void MeterCircle_Draw(On.HUD.FoodMeter.MeterCircle.orig_Draw orig, FoodMeter.MeterCircle self, float timeStacker)
-        {
-            bool isVoidPip = self.ReqFoodPip();
-
-            if (isVoidPip)
-            {
-                if (self.foodPlopped)
-                {
-                    self.circles[0].circleShader = self.meter.hud.rainWorld.Shaders["VectorCircle"];
-                    self.circles[1].circleShader = self.meter.hud.rainWorld.Shaders["VectorCircle"];
-                }
+                if (self.eaten)
+                    self.circles[0].fade = Mathf.Lerp(self.circles[0].fade, 1f, self.eatCounter / 50f);
                 else
-                {
-                    self.circles[0].circleShader = self.meter.hud.rainWorld.Shaders["VectorCircleFadable"];
-                    self.circles[1].circleShader = self.meter.hud.rainWorld.Shaders["VectorCircleFadable"];
-                }
+                    self.circles[0].fade = 1f;
             }
-
-            orig(self, timeStacker);
-
-            if (!isVoidPip) return;
-
-            if (self.foodPlopped)
-            {
-                bool red = false;
-
-                if (self.meter.hud.owner is Player player)
-                {
-                    RainCycleExt cycleExt = player.abstractCreature?.world?.rainCycle?.GetRainCycleExt();
-
-                    if (cycleExt != null)
-                    {
-                        red = cycleExt.ShouldHighlightFoodPip(self.number,player.FoodInStomach);
-                    }
-                }
-
-                if (red)
-                {
-                    self.circles[0].sprite.color = Color.red;
-                }
-                else
-                {
-                    self.circles[0].sprite.color = new Color(1f, 0.86f, 0f);
-                }
-
-                self.circles[1].sprite.color = new Color(0, 0, 0.005f);
-
-                if (self.circles[1].sprite.shader == self.circles[1].basicShader)
-                {
-                    self.circles[1].sprite.scale = (self.circles[1].snapRad + 4.6f) / 8f;
-                }
-            }
-
-            if (self.eaten) self.circles[0].sprite.color = Color.Lerp(Color.white, self.circles[0].sprite.color, self.eatCounter / 50f);
-            
         }
+    }
 
-        public class FoodMeterExtention
+    private static void QuarterPipShower_Draw(On.HUD.FoodMeter.QuarterPipShower.orig_Draw orig, FoodMeter.QuarterPipShower self, float timeStacker)
+    {
+        orig(self, timeStacker);
+
+        int index = self.owner.showCount;
+
+        if (self.owner.hud.owner is Player && index >= 0 && index < self.owner.circles.Count
+            && self.owner.circles[index].ReqFoodPip())
         {
-            public int showNumFoodTohibernate;
+            self.quarterPips.color = inner;
+            self.quarterPips.scale = (self.owner.circles[index].circles[0].rad + 3f) / 8f;
         }
+    }
+
+    private static void MeterCircle_FoodPlop(On.HUD.FoodMeter.MeterCircle.orig_FoodPlop orig, FoodMeter.MeterCircle self)
+    {
+        if (self.ReqFoodPip())
+        {
+            self.foodPlopped = true;
+            self.rads[1, 1] += 2f;
+            self.foodPlopDelay = 16;
+            self.meter.hud.PlaySound(VoidEnums.SoundID.UIPitch1);
+            return;
+        }
+
+        orig(self);
+    }
+
+    private static void MeterCircle_Update(ILContext il)
+    {
+        ILCursor c = new(il);
+
+        if (c.TryGotoNext(MoveType.After, x => x.MatchNewobj<FadeCircle>()))
+        {
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate((FadeCircle circle, FoodMeter.MeterCircle self) =>
+            {
+                if (self.ReqFoodPip())
+                {
+                    circle.circle.circleShader = circle.hud.rainWorld.Shaders["VectorCircle"];
+                    circle.circle.forceColor = new Color(1f, 0.86f, 0f, 0.5f);
+                }
+
+                return circle;
+            });
+        }
+        else LogExErr("FoodMeterPipsChange.MeterCircle_Update: match failed");
+    }
+
+    private static void MeterCircle_AddCircles(On.HUD.FoodMeter.MeterCircle.orig_AddCircles orig, FoodMeter.MeterCircle self)
+    {
+        orig(self);
+
+        if (self.ReqFoodPip())
+        {
+            self.circles[1].sprite.MoveBehindOtherNode(self.circles[0].sprite);
+            self.circles[1].snapRad = self.circles[0].snapRad - 1;
+        }
+    }
+
+    private static void MeterCircle_Draw(On.HUD.FoodMeter.MeterCircle.orig_Draw orig, FoodMeter.MeterCircle self, float timeStacker)
+    {
+        bool isVoidPip = self.ReqFoodPip();
+
+        if (isVoidPip)
+        {
+            string shader = self.foodPlopped ? "VectorCircle" : "VectorCircleFadable";
+            self.circles[0].circleShader = self.meter.hud.rainWorld.Shaders[shader];
+            self.circles[1].circleShader = self.meter.hud.rainWorld.Shaders[shader];
+        }
+
+        orig(self, timeStacker);
+
+        if (!isVoidPip) return;
+
+        bool rainColor = false;
+
+        if (self.foodPlopped)
+        {
+            rainColor = FoodMeterHooks.TryGetRainColor(self, timeStacker, gold, out Color outline);
+            self.circles[0].sprite.color = rainColor ? outline : gold;
+            self.circles[1].sprite.color = inner;
+
+            if (self.circles[1].sprite.shader == self.circles[1].basicShader)
+                self.circles[1].sprite.scale = (self.circles[1].snapRad + 4.6f) / 8f;
+        }
+
+        if (self.eaten && !rainColor)
+            self.circles[0].sprite.color = Color.Lerp(Color.white, self.circles[0].sprite.color, self.eatCounter / 50f);
+    }
+
+    public class FoodMeterExtention
+    {
+        public int showNumFoodTohibernate;
     }
 }

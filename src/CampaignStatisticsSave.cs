@@ -290,14 +290,6 @@ public static class CampaignStatisticsSave
 
         state.Delivered = true;
         orig(self, package);
-
-        if (!written && !state.WarningShown)
-        {
-            state.WarningShown = true;
-            const string message = "The result is displayed, but its archive could not be saved.\n" +
-                "It may be unavailable after leaving this screen. See the log.";
-            self.manager.ShowDialog(new DialogNotify(self.Translate(message), new Vector2(640f, 180f), self.manager, null));
-        }
     }
 
     private static KarmaLadderScreen.SleepDeathScreenDataPackage CreatePackage(SaveState save)

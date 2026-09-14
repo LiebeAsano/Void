@@ -12,7 +12,7 @@ namespace VoidTemplate.RainCycleChanges
 
         public static RainCycleExt GetRainCycleExt(this RainCycle rainCycle) =>
             rainCycleExt.GetValue(rainCycle, _ => new RainCycleExt(rainCycle));
-        
+
 
         public static void Hook()
         {
@@ -31,7 +31,7 @@ namespace VoidTemplate.RainCycleChanges
 
             if (ext.PostCycleStarted)
             {
-                if (self.TryGetState(out var st) && st.smoothI < 0.5 && self.flood >= 0)              
+                if (self.TryGetState(out var st) && st.smoothI < 0.5 && self.flood >= 0)
                     self.flood -= 2 * self.floodSpeed;
 
                 self.flood = Mathf.Lerp(self.flood, 0, Mathf.InverseLerp(0.85f, 1f, ext.Progress));
@@ -54,7 +54,7 @@ namespace VoidTemplate.RainCycleChanges
             orig(self, warpUsed);
 
             if (oldWorld == null || newWorld == null) return;
-            
+
             RainCycleExt oldExt = oldWorld.rainCycle.GetRainCycleExt();
             RainCycleExt newExt = newWorld.rainCycle.GetRainCycleExt();
 
@@ -87,7 +87,7 @@ namespace VoidTemplate.RainCycleChanges
 
             for (int i = 0; i < self.game.cameras.Length; i++)
             {
-                if (self.game.cameras[i].hud is HUD.HUD {rainMeter: not null} hud && hud.rainMeter.GetAfterCycleMode().Value)
+                if (self.game.cameras[i].hud is HUD.HUD { rainMeter: not null } hud && hud.rainMeter.GetAfterCycleMode().Value)
                 {
                     hud.rainMeter.slatedForDeletion = true;
                     hud.AddPart(new RainMeter(hud, hud.fContainers[1]));
@@ -148,7 +148,7 @@ namespace VoidTemplate.RainCycleChanges
             {
                 get
                 {
-                    return(float)(postCycleLength - timer) / postCycleLength;
+                    return (float)(postCycleLength - timer) / postCycleLength;
                 }
             }
 
@@ -190,9 +190,9 @@ namespace VoidTemplate.RainCycleChanges
                 {
                     if (foodPlanInitialized) return foodToConsumeThisCycle;
 
-                    if (owner?.world?.game?.session is StoryGameSession session)     
+                    if (owner?.world?.game?.session is StoryGameSession session)
                         return Mathf.Max(0, session.characterStats.foodToHibernate);
-                   
+
                     return 0;
                 }
             }
@@ -201,7 +201,7 @@ namespace VoidTemplate.RainCycleChanges
             {
                 get
                 {
-                    return Mathf.Max(0,FoodCost - subtractedFood);
+                    return Mathf.Max(0, FoodCost - subtractedFood);
                 }
             }
 
@@ -212,7 +212,6 @@ namespace VoidTemplate.RainCycleChanges
                 postCycleLength = postAfterCyceleTicks - owner.cycleLength;
 
                 if (postCycleLength <= 0) postCycleLength = 14400;
-                
             }
 
             public bool ShouldHighlightFoodPip(int pipNumber, int currentFood)
@@ -252,7 +251,7 @@ namespace VoidTemplate.RainCycleChanges
 
                 AbstractCreature absPlayer = game.FirstAlivePlayer ?? game.FirstAnyPlayer;
 
-                if (absPlayer?.state is not PlayerState playerState) return; 
+                if (absPlayer?.state is not PlayerState playerState) return;
 
                 StoryGameSession session = game.GetStorySession;
                 SaveState save = session.saveState;
@@ -261,9 +260,9 @@ namespace VoidTemplate.RainCycleChanges
 
                 fullFoodChangeCycle = save.VoidFullAnd11Karma(playerState.foodInStomach, 0, maxFood);
 
-                if (fullFoodChangeCycle) foodToConsumeThisCycle = maxFood;  
+                if (fullFoodChangeCycle) foodToConsumeThisCycle = maxFood;
                 else foodToConsumeThisCycle = session.characterStats.foodToHibernate;
-                
+
                 foodToConsumeThisCycle = Mathf.Max(0, foodToConsumeThisCycle);
 
                 foodPlanInitialized = true;
@@ -281,11 +280,12 @@ namespace VoidTemplate.RainCycleChanges
                 int shouldBeConsumed = Mathf.FloorToInt((float)elapsed / duration * foodToConsumeThisCycle);
 
                 if (timer >= end) shouldBeConsumed = foodToConsumeThisCycle;
-                
+
                 while (subtractedFood < shouldBeConsumed)
                 {
                     ConsumeOneFood(player);
                     subtractedFood++;
+
                     if (!player.playerState.alive) break;
                 }
             }
@@ -294,15 +294,21 @@ namespace VoidTemplate.RainCycleChanges
             {
                 if (player.FoodInStomach > 0)
                 {
+                    SaveState save = owner.world.game.GetStorySession.saveState;
+
+                    int totalFood = save.totFood;
+
                     player.SubtractFood(1);
+
+                    save.totFood = totalFood;
                     return;
                 }
 
-                SaveState save = owner.world.game.GetStorySession.saveState;
+                SaveState saveState = owner.world.game.GetStorySession.saveState;
 
                 int playerNumber = player.playerState.playerNumber;
 
-                if (!save.GetVoidMarkV3() || startMalnourished[playerNumber])
+                if (!saveState.GetVoidMarkV3() || startMalnourished[playerNumber])
                 {
                     player.Die();
                     return;
@@ -337,12 +343,13 @@ namespace VoidTemplate.RainCycleChanges
                 {
                     for (int i = 0; i < owner.world.game.cameras.Length; i++)
                     {
-                        if (owner.world.game.cameras[i].hud is HUD.HUD {rainMeter: not null} hud && !hud.rainMeter.GetAfterCycleMode().Value)
+                        if (owner.world.game.cameras[i].hud is HUD.HUD { rainMeter: not null } hud && !hud.rainMeter.GetAfterCycleMode().Value)
                         {
                             hud.rainMeter.slatedForDeletion = true;
                             hud.AddPart(new RainMeter(hud, hud.fContainers[1]));
                         }
                     }
+
                     metersReplaced = true;
                 }
 
@@ -352,11 +359,14 @@ namespace VoidTemplate.RainCycleChanges
 
                 if (absPlayer?.realizedCreature is Player player && player.playerState.alive)
                     UpdateFoodConsumption(player);
-                
+
                 if (TimeToStartNewCycle > 0)
                     return;
 
                 RainWorldGame game = owner.world.game;
+
+                if (!PermadeathConditions.TryPrepareVoidCycleAdvance(game))
+                    return;
 
                 absPlayer = game.FirstAlivePlayer;
 
@@ -396,11 +406,12 @@ namespace VoidTemplate.RainCycleChanges
 
                     for (int j = 0; j < room.creatures.Count; j++)
                         room.creatures[j].state.CycleTick();
-                    
 
-                    for (int j = 0; j < room.entitiesInDens.Count; j++)      
+                    for (int j = 0; j < room.entitiesInDens.Count; j++)
+                    {
                         if (room.entitiesInDens[j] is AbstractCreature crit)
-                            crit.state.CycleTick();           
+                            crit.state.CycleTick();
+                    }
                 }
 
                 for (int i = 0; i < owner.world.activeRooms.Count; i++)
@@ -414,7 +425,7 @@ namespace VoidTemplate.RainCycleChanges
                         ShortcutData shortcut = room.shortcutData(room.lockedShortcuts[j]);
 
                         if (shortcut.shortCutType != ShortcutData.Type.RoomExit) continue;
-                        
+
                         AbstractRoom leadingRoom = room.world.GetAbstractRoom(room.abstractRoom.connections[shortcut.destNode]);
 
                         if (leadingRoom != null && leadingRoom.shelter && !leadingRoom.world.brokenShelters[leadingRoom.shelterIndex])
@@ -427,23 +438,73 @@ namespace VoidTemplate.RainCycleChanges
                     SaveProgress();
 
                     for (int i = 0; i < game.cameras.Length; i++)
-                        if (game.cameras[i].hud is HUD.HUD {karmaMeter: var karmaMeter})
+                    {
+                        if (game.cameras[i].hud is HUD.HUD { karmaMeter: var karmaMeter })
                             karmaMeter.reinforceAnimation = 1;
+                    }
                 }
             }
 
             public void SaveProgress()
             {
-                SaveState saveState = owner.world.game.GetStorySession.saveState;
+                RainWorldGame game = owner.world.game;
+                StoryGameSession session = game.GetStorySession;
+                SaveState saveState = session.saveState;
 
                 saveState.cycleNumber++;
+                saveState.cyclesInCurrentWorldVersion++;
+
+                for (int i = 0; i < session.playerSessionRecords.Length; i++)
+                {
+                    PlayerSessionRecord record = session.playerSessionRecords[i];
+
+                    if (record?.kills != null && record.kills.Count > 0)
+                        saveState.AppendKills(record.kills);
+                }
+
+                session.AppendTimeOnCycleEnd(false);
+
+                RainWorld.lockGameTimer = false;
+
+                saveState.deathPersistentSaveData.survives++;
+                saveState.deathPersistentSaveData.winState.CycleCompleted(game);
 
                 if (saveState.deathPersistentSaveData.karma < saveState.deathPersistentSaveData.karmaCap)
-                    saveState.deathPersistentSaveData.karma++;   
+                    saveState.deathPersistentSaveData.karma++;
 
-                if (!owner.world.game.session.characterStats.malnourished)
-                    RainWorldGame.ForceSaveNewDenLocation(owner.world.game, ComputeNearestShelter(), true);
-                
+                if (!game.session.characterStats.malnourished)
+                    RainWorldGame.ForceSaveNewDenLocation(game, ComputeNearestShelter(), true);
+                else
+                    game.rainWorld.progression.SaveWorldStateAndProgression(false);
+
+                ResetSessionRecords(game);
+                UpdateCycleHUD(game);
+            }
+
+            private void ResetSessionRecords(RainWorldGame game)
+            {
+                StoryGameSession session = game.GetStorySession;
+
+                for (int i = 0; i < game.Players.Count; i++)
+                {
+                    if (game.Players[i]?.state is not PlayerState playerState) continue;
+
+                    session.playerSessionRecords[playerState.playerNumber] = new PlayerSessionRecord(playerState.playerNumber);
+                }
+
+                if (!game.world.singleRoomWorld && session.playerSessionRecords[0] != null)
+                    session.playerSessionRecords[0].wokeUpInRegion = game.world.region.name;
+            }
+
+
+            private void UpdateCycleHUD(RainWorldGame game)
+            {
+                for (int i = 0; i < game.cameras.Length; i++)
+                {
+                    if (game.cameras[i].hud?.map?.cycleLabel == null) continue;
+
+                    game.cameras[i].hud.map.cycleLabel.UpdateCycleText();
+                }
             }
 
             public string ComputeNearestShelter()
@@ -460,7 +521,7 @@ namespace VoidTemplate.RainCycleChanges
                         for (int j = 0; j < player.Room.connections.Length; j++)
                         {
                             float distance = shelterFinder.DistanceToShelter(i, new WorldCoordinate(player.Room.index, -1, -1, j));
-                            
+
                             if (distance < minDistance)
                             {
                                 minDistance = distance;

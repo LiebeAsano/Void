@@ -2,6 +2,8 @@
 using MoreSlugcats;
 using RWCustom;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VoidTemplate.Objects;
 using VoidTemplate.PlayerMechanics;
@@ -43,7 +45,17 @@ static class PermadeathConditions
             && !(ModManager.Expedition && game.rainWorld.ExpeditionMode);
     }
 
-    private static bool VoidSpecificGameOverCondition(RainWorldGame game)
+    public static bool IsLimitedCyclePermadeathCondition(RainWorldGame game)
+    {
+        if (!IsVoidStoryGame(game) || !PermaDeath)
+            return false;
+
+        SaveState save = game.GetStorySession.saveState;
+
+        return !VoidCycleLimit.GetCycleLimitLifted(save) && VoidCycleLimit.GetRemainingLimitedCycles(save) <= 0;
+    }
+
+    public static bool VoidSpecificGameOverCondition(RainWorldGame game)
     {
         if (!IsVoidStoryGame(game))
             return false;
@@ -51,16 +63,39 @@ static class PermadeathConditions
         StoryGameSession session = game.GetStorySession;
         SaveState save = session.saveState;
 
-        return
-            (save.deathPersistentSaveData.karma == 0 && PermaDeath)
+        return (save.deathPersistentSaveData.karma == 0 && PermaDeath)
             || save.GetKarmaToken() == 0
             || Karma11Update.VoidPermaNightmare
-            || (
-                save.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(save)
-                && save.deathPersistentSaveData.karmaCap != 10
-                && !save.GetVoidMarkV3()
-                && PermaDeath
-            );
+            || IsLimitedCyclePermadeathCondition(game);
+    }
+
+    public static bool TryPrepareVoidCycleAdvance(RainWorldGame game)
+    {
+        if (!IsVoidStoryGame(game))
+            return true;
+
+        SaveState save = game.GetStorySession.saveState;
+
+        if (!PermaDeath || VoidCycleLimit.GetCycleLimitLifted(save))
+        {
+            KarmaFlowerChanges.SaveVoidCycle = false;
+            return true;
+        }
+
+        if (KarmaFlowerChanges.SaveVoidCycle)
+        {
+            save.SetVoidExtraCycles(save.GetVoidExtraCycles() + 1);
+            KarmaFlowerChanges.SaveVoidCycle = false;
+            return true;
+        }
+
+        if (VoidCycleLimit.GetRemainingLimitedCycles(save) <= 0)
+        {
+            game.GoToRedsGameOver();
+            return false;
+        }
+
+        return true;
     }
 
     public static void SetVoidCatDeadTrue(RainWorldGame game)
@@ -81,9 +116,7 @@ static class PermadeathConditions
         }
 
         if (player != null && player.KarmaCap == 10)
-        {
             save.SetKarmaToken(Math.Max(0, save.GetKarmaToken() - 1));
-        }
 
         save.SetVoidCatDead(true);
         save.redExtraCycles = true;
@@ -148,10 +181,7 @@ static class PermadeathConditions
                         dependentOnGrasp,
                         player.FoodInStomach,
                         self.Players[0].pos.room,
-                        Custom.RestrictInRect(
-                            player.mainBodyChunk.pos,
-                            self.Players[0].realizedCreature.room.RoomRect.Grow(50f)
-                        )
+                        Custom.RestrictInRect(player.mainBodyChunk.pos, self.Players[0].realizedCreature.room.RoomRect.Grow(50f))
                     );
                 }
                 else
@@ -215,7 +245,7 @@ static class PermadeathConditions
         self.manager.musicPlayer?.DeathEvent();
         self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.StarveScreen);
     }
-    
+
     private static void RainWorldGame_GoToRedsGameOver(On.RainWorldGame.orig_GoToRedsGameOver orig, RainWorldGame self)
     {
         if (!IsVoidStoryGame(self))
@@ -224,62 +254,55 @@ static class PermadeathConditions
             return;
         }
 
-        if (self.manager.upcomingProcess != null) return;
+        if (self.manager.upcomingProcess != null)
+            return;
 
         self.manager.musicPlayer?.FadeOutAllSongs(20f);
 
         /*if (self.manager.nextSlideshow != null)
-          {
+        {
             self.manager.statsAfterCredits = true;
             self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlideShow);
             return;
-          }*/
+        }*/
+
+        bool treeEnding = IsTreeEnding(self);
+
+        if (VoidSpecificGameOverCondition(self) && !treeEnding)
+        {
+            self.GetStorySession.saveState.redExtraCycles = true;
+            self.GetStorySession.saveState.SetVoidCatDead(true);
+        }
 
         StoryGameSession session = self.GetStorySession;
         SaveState save = session.saveState;
 
-        bool isEnding = IsTreeEnding(self) || save.GetVoidEndingTree() || save.GetEndingEncountered() || save.deathPersistentSaveData.ascended;
-        bool isDeath = !isEnding && VoidSpecificGameOverCondition(self);
-
-        if (isDeath)
-        {
-            save.redExtraCycles = true;
-            save.SetVoidCatDead(true);
-        }
-
-        AppendCycleToStatistics(self, isDeath);
-
-        self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
-        self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
-    }
-
-    private static void AppendCycleToStatistics(RainWorldGame game, bool death)
-    {
-        StoryGameSession session = game.GetStorySession;
-        SaveState save = session.saveState;
-
         if (ModManager.CoopAvailable)
         {
-            int playerIndex = 0;
-
-            foreach (AbstractCreature abstractPlayer in game.Players)
+            foreach (AbstractCreature abstractPlayer in self.Players)
             {
                 if (abstractPlayer?.realizedCreature is not Player player)
                     continue;
 
-                save.AppendCycleToStatistics(player, session, death, playerIndex);
+                PlayerSessionRecord record = session.playerSessionRecords[player.playerState.playerNumber];
 
-                playerIndex++;
+                if (record?.kills != null)
+                    save.AppendKills(record.kills);
             }
-
-            return;
         }
-
-        if (game.Players.Count > 0 &&
-            game.Players[0]?.realizedCreature is Player mainPlayer)
+        else if (self.Players[0]?.realizedCreature is Player player)
         {
-            save.AppendCycleToStatistics(mainPlayer, session, death, 0);
+            PlayerSessionRecord record = session.playerSessionRecords[player.playerState.playerNumber];
+
+            if (record?.kills != null)
+                save.AppendKills(record.kills);
         }
+
+        session.AppendTimeOnCycleEnd(false);
+        save.deathPersistentSaveData.deaths++;
+
+        self.manager.rainWorld.progression.SaveWorldStateAndProgression(false);
+        self.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics, 10f);
     }
 
     #endregion
@@ -302,9 +325,7 @@ static class PermadeathConditions
         if (self.world != null && self.world.rainCycle != null && self.world.rainCycle.timer > 30 * TicksPerSecond)
         {
             if (VoidSpecificGameOverCondition(self))
-            {
                 SetVoidCatDeadTrue(self);
-            }
 
             StoryGameSession session = self.GetStorySession;
             SaveState save = session.saveState;
@@ -333,11 +354,10 @@ static class PermadeathConditions
             return;
 
         if (VoidSpecificGameOverCondition(game))
-        {
             SetVoidCatDeadTrue(game);
-        }
 
         SaveState save = game.GetStorySession.saveState;
+
         if (save.GetKarmaToken() > 0 && save.deathPersistentSaveData.karmaCap == 10)
         {
             save.SetKarmaToken(Math.Max(0, save.GetKarmaToken() - 1));
@@ -355,9 +375,7 @@ static class PermadeathConditions
             && self.parent.displayKarma.x == self.parent.moveToKarma
             && (self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.KarmaToMinScreen
                 || self.parent.menu.ID == MoreSlugcatsEnums.ProcessID.VengeanceGhostScreen
-                || (ModManager.Expedition
-                    && self.parent.menu.manager.rainWorld.ExpeditionMode
-                    && self.parent.moveToKarma == 0));
+                || (ModManager.Expedition && self.parent.menu.manager.rainWorld.ExpeditionMode && self.parent.moveToKarma == 0));
 
         if (!vanillaFlag
             && ModManager.MSC
@@ -369,10 +387,9 @@ static class PermadeathConditions
             && PermaDeath)
         {
             self.waitForAnimate++;
+
             if (self.waitForAnimate >= 50 && self.displayKarma.x == 0)
-            {
                 self.pulsateCounter++;
-            }
         }
 
         orig(self);
@@ -399,6 +416,7 @@ static class PermadeathConditions
             else
             {
                 int random = UnityEngine.Random.Range(0, 6);
+
                 switch (random)
                 {
                     case 0:
@@ -422,7 +440,9 @@ static class PermadeathConditions
                                     ? "Stop eating that..."
                                     : "Need more cycles..."
                                 : "Who are you?";
-                        if (Karma11Update.VoidKarma11) player.room.PlaySound(ViyVoiceBad());
+
+                        if (Karma11Update.VoidKarma11)
+                            player.room.PlaySound(ViyVoiceBad());
                         break;
                     case 4:
                         self.gameOverString = player.room.game.GetStorySession.saveState.GetKarmaToken() == 1 ? "Do not get in the way." : "Do not understand...";
@@ -434,8 +454,6 @@ static class PermadeathConditions
             }
         }
         else
-        {
             self.gameOverString = "Fight to get out of the grip by fast clicking 'Pick up'";
-        }
     }
 }

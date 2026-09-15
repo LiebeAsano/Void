@@ -6,7 +6,6 @@ namespace VoidTemplate.MenuTinkery;
 
 public static class InitGame
 {
-    private static bool hooked;
     private const string startingRoom = "SH_S10";
 
     public static void Hook()
@@ -21,11 +20,8 @@ public static class InitGame
 
     private static void SlugcatSelectMenu_StartGame(On.Menu.SlugcatSelectMenu.orig_StartGame orig, SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
     {
-        if (CampaignStatisticsSave.TryOpenFromMainButton(self, storyGameCharacter))
-            return;
+        if (CampaignStatisticsSave.TryOpenFromMainButton(self, storyGameCharacter)) return;
 
-        // Archive reset is performed on an actual new StoryGameSession or WipeSaveState.
-        // A stale menuSetup.New left by another menu must not erase the final result.
         if (self.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.New)
             _ = RequestStoryStartTokenAsync(storyGameCharacter);
 
@@ -34,8 +30,7 @@ public static class InitGame
 
     private static void SlugcatSelectMenu_ContinueStartedGame(On.Menu.SlugcatSelectMenu.orig_ContinueStartedGame orig, SlugcatSelectMenu self, SlugcatStats.Name storyGameCharacter)
     {
-        if (CampaignStatisticsSave.TryOpenFromMainButton(self, storyGameCharacter))
-            return;
+        if (CampaignStatisticsSave.TryOpenFromMainButton(self, storyGameCharacter)) return;
 
         orig(self, storyGameCharacter);
     }

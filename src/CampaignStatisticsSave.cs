@@ -1,8 +1,6 @@
 ﻿using Menu;
 using RWCustom;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static VoidTemplate.Useful.Utils;
@@ -13,21 +11,6 @@ namespace VoidTemplate;
 
 public static class CampaignStatisticsSave
 {
-    private sealed class MenuEntry
-    {
-        public ReadStatus Status;
-        public Snapshot Snapshot;
-    }
-
-    private sealed class MenuState
-    {
-        public int Slot = -1;
-        public int Revision = -1;
-        public readonly Dictionary<string, MenuEntry> Entries = new(StringComparer.Ordinal);
-        public SaveState PendingSave;
-        public int PendingSlot = -1;
-    }
-
     private sealed class ScreenState
     {
         public bool FromMenu;
@@ -39,10 +22,8 @@ public static class CampaignStatisticsSave
         public SaveState ReplaySave;
     }
 
-    private static readonly ConditionalWeakTable<SlugcatSelectMenu, MenuState> menuStates = new();
     private static readonly ConditionalWeakTable<StoryGameStatisticsScreen, ScreenState> screenStates = new();
     private static bool hooked;
-    private static int revision;
 
     public static bool IsRestoring { get; private set; }
 
@@ -54,68 +35,30 @@ public static class CampaignStatisticsSave
         On.Menu.StoryGameStatisticsScreen.GetDataFromGame += StoryGameStatisticsScreen_GetDataFromGame;
         On.Menu.StoryGameStatisticsScreen.CommunicateWithUpcomingProcess += StoryGameStatisticsScreen_CommunicateWithUpcomingProcess;
         On.Menu.SlugcatSelectMenu.CommunicateWithUpcomingProcess += SlugcatSelectMenu_CommunicateWithUpcomingProcess;
-        On.Menu.SlugcatSelectMenu.UpdateStartButtonText += SlugcatSelectMenu_UpdateStartButtonText;
         On.PlayerProgression.WipeSaveState += PlayerProgression_WipeSaveState;
         On.StoryGameSession.ctor += StoryGameSession_ctor;
     }
 
     private static bool Eligible(PlayerProgression progression)
     {
-        return progression?.rainWorld?.options != null &&
-            !progression.rainWorld.ExpeditionMode && !progression.rainWorld.safariMode &&
-            progression.rainWorld.options.saveSlot >= 0;
+        return progression?.rainWorld?.options != null
+            && !progression.rainWorld.ExpeditionMode
+            && !progression.rainWorld.safariMode
+            && progression.rainWorld.options.saveSlot >= 0;
     }
 
     private static bool IsKnownTerminal(SaveState save)
     {
         if (save?.deathPersistentSaveData == null) return false;
+        if (save.saveStateNumber == VoidEnums.SlugcatID.Void) return save.GetVoidCatDead();
 
-        if (save.saveStateNumber == VoidEnums.SlugcatID.Void)
-            return save.GetVoidCatDead();
-
-        return save.saveStateNumber == SlugcatStats.Name.Red &&
-            save.deathPersistentSaveData.redsDeath;
-    }
-
-    private static bool IsKnownTerminalInMenu(SlugcatSelectMenu menu, SlugcatStats.Name campaign)
-    {
-        if (campaign == VoidEnums.SlugcatID.Void && SaveManager.ExternalSaveData.VoidDead)
-            return true;
-
-        SaveState current = menu.manager.rainWorld.progression.currentSaveState;
-        return current?.saveStateNumber == campaign && IsKnownTerminal(current);
+        return save.saveStateNumber == SlugcatStats.Name.Red && save.deathPersistentSaveData.redsDeath;
     }
 
     private static SlugcatStats.Name SelectedCampaign(SlugcatSelectMenu menu)
     {
-        if (menu?.slugcatPages == null || menu.slugcatPageIndex < 0 || menu.slugcatPageIndex >= menu.slugcatPages.Count())
-            return null;
-
+        if (menu?.slugcatPages == null || menu.slugcatPageIndex < 0 || menu.slugcatPageIndex >= menu.slugcatPages.Count) return null;
         return menu.slugcatPages[menu.slugcatPageIndex].slugcatNumber;
-    }
-
-    private static MenuEntry GetEntry(SlugcatSelectMenu menu, SlugcatStats.Name campaign)
-    {
-        MenuState state = menuStates.GetValue(menu, _ => new MenuState());
-        int slot = menu.manager.rainWorld.options.saveSlot;
-
-        if (state.Slot != slot || state.Revision != revision)
-        {
-            state.Slot = slot;
-            state.Revision = revision;
-            state.Entries.Clear();
-        }
-
-        if (state.Entries.TryGetValue(campaign.value, out MenuEntry entry)) return entry;
-
-        ReadStatus status = CampaignStatisticsStore.Read(slot, campaign, out Snapshot snapshot, out string error);
-        entry = new MenuEntry { Status = status, Snapshot = snapshot };
-        state.Entries.Add(campaign.value, entry);
-
-        if (status == ReadStatus.Error)
-            LogExErr($"[CampaignStatistics] Read failed: slot={slot}, campaign={campaign.value}. {error}");
-
-        return entry;
     }
 
     public static bool Capture(SaveState save)
@@ -127,7 +70,6 @@ public static class CampaignStatisticsSave
         try
         {
             bool success = CampaignStatisticsStore.Write(slot, save.saveStateNumber, save.SaveToString(), IsKnownTerminal(save), out string error);
-            revision++;
 
             if (!success)
             {
@@ -149,13 +91,16 @@ public static class CampaignStatisticsSave
     {
         save = null;
         snapshotFound = false;
+
         if (!Eligible(progression) || campaign == null) return false;
 
         int slot = progression.rainWorld.options.saveSlot;
         ReadStatus status = CampaignStatisticsStore.Read(slot, campaign, out Snapshot snapshot, out string error);
+
         snapshotFound = status != ReadStatus.Missing;
 
         if (status == ReadStatus.Missing) return false;
+
         if (status == ReadStatus.Error)
         {
             LogExErr($"[CampaignStatistics] Load failed: slot={slot}, campaign={campaign.value}. {error}");
@@ -180,6 +125,7 @@ public static class CampaignStatisticsSave
         var randomState = UnityEngine.Random.state;
         int loadedWorldVersion = RainWorld.loadedWorldVersion;
         bool wasRestoring = IsRestoring;
+
         IsRestoring = true;
 
         try
@@ -205,9 +151,9 @@ public static class CampaignStatisticsSave
         if (!Eligible(progression) || campaign == null) return;
 
         int slot = progression.rainWorld.options.saveSlot;
+
         if (!CampaignStatisticsStore.Clear(slot, campaign, out string error))
             LogExErr($"[CampaignStatistics] Clear failed: slot={slot}, campaign={campaign.value}. {error}");
-        revision++;
     }
 
     public static bool IsArchiveView(StoryGameStatisticsScreen screen)
@@ -217,37 +163,23 @@ public static class CampaignStatisticsSave
 
     public static bool TryOpenFromMainButton(SlugcatSelectMenu menu, SlugcatStats.Name campaign)
     {
-        if (menu == null || campaign == null || menu.restartChecked || !Eligible(menu.manager.rainWorld.progression))
-            return false;
+        if (menu == null || campaign == null || menu.restartChecked || !Eligible(menu.manager.rainWorld.progression)) return false;
+        if (SelectedCampaign(menu) != campaign || menu.startButton?.menuLabel?.text != menu.Translate("STATISTICS")) return false;
 
-        MenuEntry entry = GetEntry(menu, campaign);
-        bool terminal = IsKnownTerminalInMenu(menu, campaign) ||
-            entry.Status == ReadStatus.Ready && entry.Snapshot.ForceStatistics;
-        bool statisticsLabel = SelectedCampaign(menu) == campaign &&
-            menu.startButton?.menuLabel?.text == menu.Translate("STATISTICS");
+        if (!TryLoad(menu.manager.rainWorld.progression, campaign, out SaveState save, out _))
+        {
+            return true;
+        }
 
-        if (!terminal && !statisticsLabel) return false;
+        if (menu.manager.upcomingProcess != null) return true;
 
-        if (TryLoad(menu.manager.rainWorld.progression, campaign, out SaveState save, out _))
-            Open(menu, save);
-        else
-            ShowError(menu);
-
-        return true;
-    }
-
-    private static void Open(SlugcatSelectMenu menu, SaveState save)
-    {
-        if (menu.manager.upcomingProcess != null) return;
-
-        MenuState state = menuStates.GetValue(menu, _ => new MenuState());
-        state.PendingSave = save;
-        state.PendingSlot = menu.manager.rainWorld.options.saveSlot;
         menu.redSaveState = save;
-        RainWorld.lastActiveSaveSlot = save.saveStateNumber;
-        menu.manager.rainWorld.progression.miscProgressionData.currentlySelectedSinglePlayerSlugcat = save.saveStateNumber;
+        RainWorld.lastActiveSaveSlot = campaign;
+        menu.manager.rainWorld.progression.miscProgressionData.currentlySelectedSinglePlayerSlugcat = campaign;
+
         menu.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.Statistics);
         menu.PlaySound(SoundID.MENU_Switch_Page_Out);
+        return true;
     }
 
     private static void StoryGameStatisticsScreen_GetDataFromGame(On.Menu.StoryGameStatisticsScreen.orig_GetDataFromGame orig, StoryGameStatisticsScreen self, KarmaLadderScreen.SleepDeathScreenDataPackage package)
@@ -259,6 +191,7 @@ public static class CampaignStatisticsSave
         }
 
         ScreenState state = screenStates.GetValue(self, _ => new ScreenState());
+
         if (state.Delivered || state.Failed) return;
 
         if (state.FromMenu)
@@ -271,6 +204,7 @@ public static class CampaignStatisticsSave
 
             state.ArchiveView = true;
             state.Delivered = true;
+
             orig(self, CreatePackage(state.ReplaySave));
             return;
         }
@@ -282,6 +216,7 @@ public static class CampaignStatisticsSave
         }
 
         bool written = true;
+
         if (!state.CaptureAttempted)
         {
             state.CaptureAttempted = true;
@@ -290,6 +225,7 @@ public static class CampaignStatisticsSave
 
         state.Delivered = true;
         orig(self, package);
+
     }
 
     private static KarmaLadderScreen.SleepDeathScreenDataPackage CreatePackage(SaveState save)
@@ -303,9 +239,18 @@ public static class CampaignStatisticsSave
             karma = new IntVector2(level, 100 + level);
         }
 
-        return new KarmaLadderScreen.SleepDeathScreenDataPackage(save.food, karma, data.reinforcedKarma,
-            -1, Vector2.zero, null, save, new SlugcatStats(save.saveStateNumber, save.malnourished),
-            new PlayerSessionRecord(0), save.lastMalnourished, save.malnourished);
+        return new KarmaLadderScreen.SleepDeathScreenDataPackage(
+            save.food,
+            karma,
+            data.reinforcedKarma,
+            -1,
+            Vector2.zero,
+            null,
+            save,
+            new SlugcatStats(save.saveStateNumber, save.malnourished),
+            new PlayerSessionRecord(0),
+            save.lastMalnourished,
+            save.malnourished);
     }
 
     private static void SlugcatSelectMenu_CommunicateWithUpcomingProcess(On.Menu.SlugcatSelectMenu.orig_CommunicateWithUpcomingProcess orig, SlugcatSelectMenu self, MainLoopProcess nextProcess)
@@ -316,21 +261,14 @@ public static class CampaignStatisticsSave
             return;
         }
 
-        MenuState menuState = menuStates.GetValue(self, _ => new MenuState());
         ScreenState state = screenStates.GetValue(statistics, _ => new ScreenState());
         state.FromMenu = true;
 
-        int slot = self.manager.rainWorld.options.saveSlot;
-        SaveState replay = menuState.PendingSlot == slot ? menuState.PendingSave : null;
-        menuState.PendingSave = null;
-        menuState.PendingSlot = -1;
+        SlugcatStats.Name campaign = self.redSaveState?.saveStateNumber ?? SelectedCampaign(self);
+        SaveState replay = null;
 
-        if (replay == null)
-        {
-            SlugcatStats.Name campaign = self.redSaveState?.saveStateNumber ?? SelectedCampaign(self);
-            if (campaign != null)
-                TryLoad(self.manager.rainWorld.progression, campaign, out replay, out _);
-        }
+        if (campaign != null)
+            TryLoad(self.manager.rainWorld.progression, campaign, out replay, out _);
 
         if (replay == null)
         {
@@ -340,6 +278,7 @@ public static class CampaignStatisticsSave
 
         state.ArchiveView = true;
         state.ReplaySave = replay;
+
         self.redSaveState = replay;
         RainWorld.lastActiveSaveSlot = replay.saveStateNumber;
 
@@ -351,10 +290,9 @@ public static class CampaignStatisticsSave
 
     private static void StoryGameStatisticsScreen_CommunicateWithUpcomingProcess(On.Menu.StoryGameStatisticsScreen.orig_CommunicateWithUpcomingProcess orig, StoryGameStatisticsScreen self, MainLoopProcess nextProcess)
     {
-        bool returningFromViewer = screenStates.TryGetValue(self, out ScreenState state) &&
-            (state.FromMenu || state.Failed);
+        bool archiveView = screenStates.TryGetValue(self, out ScreenState state) && state.FromMenu;
 
-        if (returningFromViewer && nextProcess is SlugcatSelectMenu menu)
+        if (archiveView && nextProcess is SlugcatSelectMenu menu)
         {
             menu.UpdateStartButtonText();
             return;
@@ -363,63 +301,49 @@ public static class CampaignStatisticsSave
         orig(self, nextProcess);
     }
 
-    private static void SlugcatSelectMenu_UpdateStartButtonText(On.Menu.SlugcatSelectMenu.orig_UpdateStartButtonText orig, SlugcatSelectMenu self)
-    {
-        orig(self);
-        SlugcatStats.Name campaign = SelectedCampaign(self);
-
-        if (campaign == null || self.startButton == null || self.restartChecked || !Eligible(self.manager.rainWorld.progression))
-            return;
-
-        MenuEntry entry = GetEntry(self, campaign);
-        if (IsKnownTerminalInMenu(self, campaign) || entry.Status == ReadStatus.Ready && entry.Snapshot.ForceStatistics)
-            self.startButton.menuLabel.text = self.Translate("STATISTICS");
-    }
-
     private static void PlayerProgression_WipeSaveState(On.PlayerProgression.orig_WipeSaveState orig, PlayerProgression self, SlugcatStats.Name saveStateNumber)
     {
-        bool endingCleanup = self.rainWorld?.processManager?.currentMainLoop is StoryGameStatisticsScreen statistics &&
-            statistics.saveState?.saveStateNumber == saveStateNumber;
+        bool endingCleanup = self.rainWorld?.processManager?.currentMainLoop is StoryGameStatisticsScreen statistics
+            && statistics.saveState?.saveStateNumber == saveStateNumber;
 
         orig(self, saveStateNumber);
-        if (!endingCleanup) Clear(self, saveStateNumber);
+
+        if (!endingCleanup)
+            Clear(self, saveStateNumber);
     }
 
     private static void StoryGameSession_ctor(On.StoryGameSession.orig_ctor orig, StoryGameSession self, SlugcatStats.Name saveStateNumber, RainWorldGame game)
     {
-        bool newGame = Eligible(game.rainWorld.progression) && !game.wasAnArtificerDream &&
-            game.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.New;
+        bool newGame = Eligible(game.rainWorld.progression)
+            && !game.wasAnArtificerDream
+            && game.manager.menuSetup.startGameCondition == ProcessManager.MenuSetup.StoryGameInitCondition.New;
 
         orig(self, saveStateNumber, game);
-        if (newGame) Clear(game.rainWorld.progression, saveStateNumber);
-    }
 
-    private static void ShowError(SlugcatSelectMenu menu)
-    {
-        const string text = "The statistics archive is missing or could not be read.\n" +
-            "No empty result will be substituted, and the campaign will not be started.";
-        menu.manager.ShowDialog(new DialogNotify(menu.Translate(text), new Vector2(640f, 180f), menu.manager, null));
+        if (newGame)
+            Clear(game.rainWorld.progression, saveStateNumber);
     }
 
     private static void RejectStatistics(StoryGameStatisticsScreen screen, ScreenState state)
     {
         if (state.Failed) return;
+
         state.Failed = true;
 
-        LogExErr("[CampaignStatistics] Statistics has no valid data source. Returning to character selection.");
-        const string text = "The statistics archive is missing or could not be read.\n" +
-            "Return to character selection. No campaign will be started.";
+        LogExErr("[CampaignStatistics] Statistics has no valid archived data source.");
 
-        screen.manager.ShowDialog(new DialogNotify(screen.Translate(text), new Vector2(640f, 180f), screen.manager, () =>
-        {
-            screen.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlugcatSelect);
-        }));
+        const string text = "The statistics archive is missing or could not be read.\nReturn to character selection.";
+
+        screen.manager.ShowDialog(new DialogNotify(
+            screen.Translate(text),
+            new Vector2(640f, 180f),
+            screen.manager,
+            () => screen.manager.RequestMainProcessSwitch(ProcessManager.ProcessID.SlugcatSelect)));
     }
 
     private static void LogResult(string action, int slot, SaveState save)
     {
-        _Plugin.logger.LogInfo($"[CampaignStatistics] {action}: slot={slot}, campaign={save.saveStateNumber.value}, " +
-            $"cycle={save.cycleNumber}, food={save.totFood}, time={save.totTime}, " +
-            $"survives={save.deathPersistentSaveData.survives}, deaths={save.deathPersistentSaveData.deaths}");
+        _Plugin.logger.LogInfo(
+            $"[CampaignStatistics] {action}: slot={slot}, campaign={save.saveStateNumber.value}, cycle={save.cycleNumber}, food={save.totFood}, time={save.totTime}, survives={save.deathPersistentSaveData.survives}, deaths={save.deathPersistentSaveData.deaths}");
     }
 }

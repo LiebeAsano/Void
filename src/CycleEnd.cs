@@ -1,6 +1,8 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
+using VoidTemplate.OptionInterface;
+using VoidTemplate.PlayerMechanics;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate;
@@ -29,6 +31,21 @@ public static class CycleEnd
 
     private static void RainWorldGame_Win(On.RainWorldGame.orig_Win orig, RainWorldGame self, bool malnourished, bool fromWarpPoint)
     {
+        if (self.IsVoidStoryCampaign()
+            && malnourished
+            && self.GetStorySession?.saveState?.malnourished == true)
+        {
+            AbstractCreature absPlayer = self.FirstAlivePlayer ?? self.FirstAnyPlayer;
+
+            if (absPlayer?.realizedCreature is Player player
+                && player.playerState.alive
+                && !player.Malnourished
+                && player.FoodInStomach >= player.MaxFoodInStomach)
+            {
+                malnourished = false;
+            }
+        }
+
         if (self.manager.upcomingProcess == null)
         {
             if (self.IsVoidWorld() && malnourished && !self.GetStorySession.saveState.GetVoidMarkV3())
@@ -37,8 +54,23 @@ public static class CycleEnd
                 return;
             }
 
-            if (self.IsVoidStoryCampaign() && !PermadeathConditions.TryPrepareVoidCycleAdvance(self))
+            if (self.IsVoidStoryCampaign() && KarmaFlowerChanges.SaveVoidCycle)
+            {
+                self.GetStorySession.saveState.SetVoidExtraCycles(
+                    self.GetStorySession.saveState.GetVoidExtraCycles() + 1);
+            }
+
+            if (self.IsVoidStoryCampaign()
+                && self.GetStorySession.saveState.cycleNumber >= VoidCycleLimit.GetVoidCycleLimit(self.GetStorySession.saveState)
+                && OptionAccessors.PermaDeath
+                && self.Players[0].realizedCreature is Player p2
+                && p2.KarmaCap != 10
+                && !self.GetStorySession.saveState.GetVoidMarkV3()
+                && !KarmaFlowerChanges.SaveVoidCycle)
+            {
+                self.GoToRedsGameOver();
                 return;
+            }
         }
 
         orig(self, malnourished, fromWarpPoint);

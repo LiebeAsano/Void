@@ -36,15 +36,37 @@ public static class KarmaFlowerChanges
         On.Player.ctor += Player_ctor;
         On.Player.Update += Plyaer_Update;
 
-        On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
-        On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
-
+        //On.KarmaFlower.BitByPlayer += KarmaFlower_BitByPlayer;
+        //On.Player.FoodInRoom_Room_bool += Player_FoodInRoom_Room_bool;
+         
         On.KarmaFlower.Update += KarmaFlower_Update;
         On.KarmaFlower.DrawSprites += KarmaFlower_DrawSprites;
         On.KarmaFlower.InitiateSprites += KarmaFlower_InitiateSprites;
         On.KarmaFlower.AddToContainer += KarmaFlower_AddToContainer;
         On.KarmaFlower.NewRoom += KarmaFlower_NewRoom;
         On.KarmaFlower.ApplyPalette += KarmaFlower_ApplyPalette;
+    }
+
+    public static void RemoveVoidKarmaProtection(RainWorldGame game)
+    {
+        if (game?.session is not StoryGameSession session)
+            return;
+
+        DeathPersistentSaveData saveData = session.saveState.deathPersistentSaveData;
+
+        if (!saveData.reinforcedKarma)
+            return;
+
+        saveData.reinforcedKarma = false;
+
+        for (int i = 0; i < game.cameras.Length; i++)
+        {
+            if (game.cameras[i].hud?.karmaMeter is not HUD.KarmaMeter karmaMeter)
+                continue;
+
+            karmaMeter.UpdateGraphic();
+            karmaMeter.forceVisibleCounter = Mathf.Max(karmaMeter.forceVisibleCounter, 120);
+        }
     }
 
     private static Color GetFlowerColor(KarmaFlower self)
@@ -330,11 +352,7 @@ public static class KarmaFlowerChanges
         sprite.color = blink ? self.blinkColor : flowerColor;
     }
 
-    private static void DrawVoidFlower(
-        KarmaFlower self,
-        RoomCamera.SpriteLeaser sLeaser,
-        float timeStacker,
-        Vector2 camPos)
+    private static void DrawVoidFlower(KarmaFlower self, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
     {
         bool blink = self.blink > 0 && Random.value < 0.5f;
         Vector2 center = Vector2.Lerp(self.firstChunk.lastPos, self.firstChunk.pos, timeStacker);
@@ -440,13 +458,7 @@ public static class KarmaFlowerChanges
         }
     }
 
-    private static void KarmaFlower_DrawSprites(
-        On.KarmaFlower.orig_DrawSprites orig,
-        KarmaFlower self,
-        RoomCamera.SpriteLeaser sLeaser,
-        RoomCamera rCam,
-        float timeStacker,
-        Vector2 camPos)
+    private static void KarmaFlower_DrawSprites(On.KarmaFlower.orig_DrawSprites orig, KarmaFlower self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker, Vector2 camPos)
     {
         if (self.slatedForDeletetion || self.room != rCam.room)
         {
@@ -516,8 +528,10 @@ public static class KarmaFlowerChanges
     private static int Player_FoodInRoom_Room_bool(On.Player.orig_FoodInRoom_Room_bool orig, Player self, Room checkRoom, bool eatAndDestroy)
     {
         int result = orig(self, checkRoom, eatAndDestroy);
-        if (self.IsVoid() && checkRoom.game.IsStorySession)
-            checkRoom.game.GetStorySession.saveState.deathPersistentSaveData.reinforcedKarma = false;
+
+        if (self.IsVoid() && checkRoom.game.IsVoidWorld())
+            RemoveVoidKarmaProtection(checkRoom.game);
+
         return result;
     }
 

@@ -5,6 +5,7 @@
         public static void Init()
         {
             DeadlessRain.Hook();
+            MartyrPassageFix.Hook();
             PostRainCycle.Hook();
             RainFoodRequirement.Hook();
             ShortcutHooks.Hook();

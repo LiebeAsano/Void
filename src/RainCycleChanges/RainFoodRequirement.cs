@@ -11,7 +11,6 @@ namespace VoidTemplate.RainCycleChanges;
 public static class RainFoodRequirement
 {
     private static readonly ConditionalWeakTable<SlugcatStats, RequirementState> states = new();
-    private static bool hooked;
 
     private sealed class RequirementState
     {
@@ -22,9 +21,6 @@ public static class RainFoodRequirement
 
     public static void Hook()
     {
-        if (hooked) return;
-        hooked = true;
-
         On.Player.Update += Player_Update;
         On.ShelterDoor.Close += ShelterDoor_Close;
         On.GlobalRain.ResetRain += GlobalRain_ResetRain;
@@ -36,15 +32,37 @@ public static class RainFoodRequirement
 
     public static int GetNormalFoodToHibernate(SlugcatStats stats)
     {
-        if (stats == null) return 0;
+        if (stats == null)
+            return 0;
+
+        if (stats.malnourished || stats.malnourishedByCreature)
+            return stats.maxFood;
 
         int required = stats.foodToHibernate;
 
         if (states.TryGetValue(stats, out RequirementState state)
-            && state.active && required == state.applied)
+            && state.active
+            && required == state.applied)
             required = state.normal;
 
         return Mathf.Clamp(required, 0, stats.maxFood);
+    }
+
+    private static SlugcatStats GetCurrentStats(RainWorldGame game, StoryGameSession session)
+    {
+        AbstractCreature absPlayer = game.FirstAlivePlayer ?? game.FirstAnyPlayer;
+
+        if (absPlayer?.realizedCreature is Player player)
+            return player.slugcatStats;
+
+        if (absPlayer?.state is PlayerState playerState
+            && session.characterStatsJollyplayer != null
+            && playerState.playerNumber >= 0
+            && playerState.playerNumber < session.characterStatsJollyplayer.Length
+            && session.characterStatsJollyplayer[playerState.playerNumber] != null)
+            return session.characterStatsJollyplayer[playerState.playerNumber];
+
+        return session.characterStats;
     }
 
     public static bool TryGetRemaining(RainWorldGame game, out int required)
@@ -59,10 +77,20 @@ public static class RainFoodRequirement
 
         RainCycleExt cycle = game.world.rainCycle.GetRainCycleExt();
 
-        if (!cycle.PostCycleStarted || !cycle.foodPlanInitialized)
+        if (!cycle.PostCycleStarted
+            || !cycle.foodPlanInitialized
+            || cycle.postCycleFailed)
             return false;
 
-        required = Mathf.Clamp(cycle.RemainingFoodCost, 0, session.characterStats.maxFood);
+        SlugcatStats stats = GetCurrentStats(game, session);
+        int maxFood = stats?.maxFood ?? session.characterStats.maxFood;
+
+        required = cycle.starvationRequirement
+            ? maxFood
+            : cycle.RemainingFoodCost;
+
+        required = Mathf.Clamp(required, 0, maxFood);
+
         return true;
     }
 
@@ -128,11 +156,18 @@ public static class RainFoodRequirement
 
     private static void Restore(SlugcatStats stats)
     {
-        if (stats == null || !states.TryGetValue(stats, out RequirementState state) || !state.active)
+        if (stats == null
+            || !states.TryGetValue(stats, out RequirementState state)
+            || !state.active)
             return;
 
         if (stats.foodToHibernate == state.applied)
-            stats.foodToHibernate = state.normal;
+        {
+            if (stats.malnourished || stats.malnourishedByCreature)
+                stats.foodToHibernate = stats.maxFood;
+            else
+                stats.foodToHibernate = state.normal;
+        }
 
         state.active = false;
     }
@@ -140,9 +175,9 @@ public static class RainFoodRequirement
     private static void Player_Update(On.Player.orig_Update orig, Player self, bool eu)
     {
         RainWorldGame game = self.abstractCreature?.world?.game;
+
         Refresh(game);
         orig(self, eu);
-
         Refresh(self.abstractCreature?.world?.game);
     }
 
@@ -161,6 +196,7 @@ public static class RainFoodRequirement
     private static void OverWorld_WorldLoaded(On.OverWorld.orig_WorldLoaded orig, OverWorld self, bool warpUsed)
     {
         RainWorldGame game = self.activeWorld?.game;
+
         Restore(game);
         orig(self, warpUsed);
         Refresh(self.activeWorld?.game);
@@ -171,14 +207,24 @@ public static class RainFoodRequirement
         if (RainFoodSleep.TryGetPayment(game, out int payment))
             return payment;
 
-        return TryGetRemaining(game, out int required) ? required : original;
+        return TryGetRemaining(game, out int required)
+            ? required
+            : original;
     }
 
     private static int MinimumFoodForShelter(int original, ShelterDoor door)
     {
-        return TryGetRemaining(door.room?.game, out int required)
-            ? Mathf.Min(original, required)
-            : original;
+        RainWorldGame game = door.room?.game;
+
+        if (!TryGetRemaining(game, out int required))
+            return original;
+
+        RainCycleExt cycle = game.world.rainCycle.GetRainCycleExt();
+
+        if (cycle.starvationRequirement)
+            return required;
+
+        return Mathf.Min(original, required);
     }
 
     private static void ShelterDoor_Update(ILContext il)
@@ -207,6 +253,7 @@ public static class RainFoodRequirement
                     comparison = comparison.Operand is ILLabel label
                         ? label.Target
                         : comparison.Operand as Instruction;
+
                     continue;
                 }
 
@@ -218,8 +265,10 @@ public static class RainFoodRequirement
 
             c.Goto(comparison);
             c.MoveAfterLabels();
+
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Func<int, ShelterDoor, int>>(MinimumFoodForShelter);
+
             patched++;
         }
 
@@ -229,10 +278,14 @@ public static class RainFoodRequirement
 
     private static bool IsFoodComparison(Instruction instruction)
     {
-        return instruction.OpCode == OpCodes.Bge || instruction.OpCode == OpCodes.Bge_S
-            || instruction.OpCode == OpCodes.Bge_Un || instruction.OpCode == OpCodes.Bge_Un_S
-            || instruction.OpCode == OpCodes.Blt || instruction.OpCode == OpCodes.Blt_S
-            || instruction.OpCode == OpCodes.Blt_Un || instruction.OpCode == OpCodes.Blt_Un_S;
+        return instruction.OpCode == OpCodes.Bge
+            || instruction.OpCode == OpCodes.Bge_S
+            || instruction.OpCode == OpCodes.Bge_Un
+            || instruction.OpCode == OpCodes.Bge_Un_S
+            || instruction.OpCode == OpCodes.Blt
+            || instruction.OpCode == OpCodes.Blt_S
+            || instruction.OpCode == OpCodes.Blt_Un
+            || instruction.OpCode == OpCodes.Blt_Un_S;
     }
 
     private static bool ShelterMalnourished(bool original, ShelterDoor door)
@@ -257,13 +310,15 @@ public static class RainFoodRequirement
         }
         else
         {
-            if (game.Players.Count == 0 || game.Players[0]?.realizedCreature is not Player player)
+            if (game.Players.Count == 0
+                || game.Players[0]?.realizedCreature is not Player player)
                 return original;
 
             food = player.FoodInRoom(door.room, false);
         }
 
         Refresh(game);
+
         return food < required;
     }
 
@@ -277,8 +332,10 @@ public static class RainFoodRequirement
             x => x.MatchCallvirt<RainWorldGame>(nameof(RainWorldGame.Win))))
         {
             c.MoveAfterLabels();
+
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Func<bool, ShelterDoor, bool>>(ShelterMalnourished);
+
             c.Index += 2;
             patched++;
         }
@@ -297,6 +354,7 @@ public static class RainFoodRequirement
         {
             c.Emit(OpCodes.Ldarg_1);
             c.EmitDelegate<Func<int, RainWorldGame, int>>(RemainingOrOriginal);
+
             patched++;
         }
 

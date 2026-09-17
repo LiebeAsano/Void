@@ -14,19 +14,12 @@ public class FoodMeterHooks
 
     private static readonly ConditionalWeakTable<FoodMeter.MeterCircle, PipState> states = new();
     private static readonly ConditionalWeakTable<FoodMeter, MeterState> meters = new();
-    private static bool hooked;
 
     private sealed class PipState
     {
         public Player owner;
         public float red;
         public float lastRed;
-        public float startRed;
-        public float eatFade;
-        public float lastEatFade;
-        public int eatDuration;
-        public bool fading;
-        public bool lastFading;
     }
 
     private sealed class MeterState
@@ -44,9 +37,6 @@ public class FoodMeterHooks
 
     public static void Hook()
     {
-        if (hooked) return;
-        hooked = true;
-
         RainFoodRequirement.Hook();
 
         On.HUD.FoodMeter.Update += FoodMeter_Update;
@@ -230,42 +220,23 @@ public class FoodMeterHooks
             state.owner = player;
             state.red = 0f;
             state.lastRed = 0f;
-            state.startRed = 0f;
-            state.eatFade = 0f;
-            state.lastEatFade = 0f;
-            state.fading = false;
-            state.lastFading = false;
         }
 
         state.lastRed = state.red;
-        state.lastFading = state.fading;
-        state.lastEatFade = state.eatFade;
 
         self.circles[1].color = 0;
         orig(self);
 
-        if (state.fading)
-        {
-            state.eatFade = self.eaten
-                ? Mathf.Clamp01((float)self.eatCounter / Mathf.Max(1, state.eatDuration))
-                : 0f;
-            state.red = state.startRed * state.eatFade;
+        bool highlighted = cycle.ShouldHighlightFoodPip(self.number, player.FoodInStomach);
+        bool waitingForAnimation = WaitingForEatFade(self, state, player);
+        float target = highlighted || waitingForAnimation ? 1f : 0f;
 
-            if (!self.eaten || self.eatCounter <= 0)
-                state.fading = false;
-        }
-        else
-        {
-            bool highlighted = cycle.ShouldHighlightFoodPip(self.number, player.FoodInStomach);
-            bool waitingForAnimation = WaitingForEatFade(self, state, player);
-            float target = highlighted || waitingForAnimation ? 1f : 0f;
-
-            state.red = Mathf.MoveTowards(state.red, target, 1f / ColorFadeTicks);
-        }
+        state.red = Mathf.MoveTowards(state.red, target, 1f / ColorFadeTicks);
 
         if (state.red > 0f)
         {
             self.circles[0].color = 1;
+
             if (!self.ReqFoodPip())
                 self.circles[1].color = 1;
         }
@@ -282,20 +253,13 @@ public class FoodMeterHooks
             || state.red <= 0f)
             return;
 
-        state.startRed = state.red;
-        state.eatFade = 1f;
-        state.lastEatFade = 1f;
-        state.eatDuration = Mathf.Max(1, self.eatCounter);
-        state.fading = true;
-        state.lastFading = true;
-
         if (cycle.PostCycleStarted
             && meters.TryGetValue(self.meter, out MeterState meter)
             && meter.owner == player && meter.target < meter.shown)
         {
             meter.from = meter.shown;
             meter.spending = self;
-            meter.duration = state.eatDuration;
+            meter.duration = Mathf.Max(1, self.eatCounter);
             meter.counter = 0;
             meter.waiting = false;
         }
@@ -342,21 +306,11 @@ public class FoodMeterHooks
 
         if (!states.TryGetValue(self, out PipState state)
             || self.meter.IsPupFoodMeter || self.meter.hud.owner != state.owner
-            || (state.red <= 0f && state.lastRed <= 0f && !state.fading && !state.lastFading))
+            || (state.red <= 0f && state.lastRed <= 0f))
             return false;
 
-        if (state.fading || state.lastFading)
-        {
-            Color start = Color.Lerp(normalColor, Color.red, state.startRed);
-            float remaining = Mathf.Lerp(state.lastEatFade, state.eatFade, timeStacker);
-            color = Color.Lerp(Color.white, start, remaining);
-        }
-        else
-        {
-            float red = Mathf.Lerp(state.lastRed, state.red, timeStacker);
-            color = Color.Lerp(normalColor, Color.red, red);
-        }
-
+        float red = Mathf.Lerp(state.lastRed, state.red, timeStacker);
+        color = Color.Lerp(normalColor, Color.red, red);
         return true;
     }
 
@@ -368,7 +322,7 @@ public class FoodMeterHooks
             || self.meter.IsPupFoodMeter || self.meter.hud.owner != state.owner)
             return false;
 
-        bool transitioning = state.fading || state.lastFading || state.red != state.lastRed
+        bool transitioning = state.red != state.lastRed
             || (state.red > 0f && state.red < 1f);
 
         if (!transitioning)

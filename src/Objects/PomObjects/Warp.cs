@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
+using VoidTemplate.RainCycleChanges;
 using VoidTemplate.Useful;
 using static Pom.Pom;
 using static VoidTemplate.Useful.POMUtils;
@@ -243,6 +244,8 @@ public class Warp : UpdatableAndDeletable
                     newWorld.rainCycle.maxPreTimer = 0;
                 }
             }
+
+            PostRainCycle.TransferCycleState(world, newWorld);
 
             if (!newWorld.activeRooms.Contains(targetAbstractRoom.realizedRoom)) newWorld.activeRooms.Add(targetAbstractRoom.realizedRoom);
 

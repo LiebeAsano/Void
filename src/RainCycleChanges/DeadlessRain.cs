@@ -1,4 +1,6 @@
-﻿using MonoMod.RuntimeDetour;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoidTemplate.Useful;
 using Watcher;
 
 namespace VoidTemplate.RainCycleChanges;
@@ -23,6 +26,8 @@ public static class DeadlessRain
         public float oy;
         public float smoothI;
         public float t;
+        public float screenShake;
+        public float microScreenShake;
     }
 
     public static readonly ConditionalWeakTable<GlobalRain, RainState> _states = new();
@@ -43,6 +48,20 @@ public static class DeadlessRain
         new Hook(typeof(GlobalRain).GetProperty("InsidePushAround").GetMethod, GlobalRain_InsidePushAround);
         On.RoomSettings.Load_Timeline += RoomSettings_Load_Timeline;
         On.GlobalRain.Update += GlobalRain_Update;
+        IL.RoomRain.Update += RoomRain_Update;
+    }
+
+    private static void RoomRain_Update(ILContext il)
+    {
+        ILCursor c = new(il);
+
+        if (c.TryGotoNext(x => x.MatchLdcR4(1400f))
+            && c.TryGotoNext(MoveType.After, x => x.MatchCall<Mathf>(nameof(Mathf.InverseLerp))))
+        {
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate((float volume, RoomRain self) => volume * PostRainCycle.RainWindDown(self.room.world));
+        }
+        else Utils.LogExErr("DeadlessRain: distant death rain volume not found");
     }
 
     private static void GlobalRain_Update(On.GlobalRain.orig_Update orig, GlobalRain self)
@@ -83,7 +102,19 @@ public static class DeadlessRain
             target = Mathf.Clamp01(target);
 
             st.smoothI = Mathf.Lerp(st.smoothI, target, 0.08f);
-            self.Intensity = st.smoothI;
+
+            float windDown = PostRainCycle.RainWindDown(self.game.world);
+
+            if (windDown >= 1f)
+            {
+                st.screenShake = self.ScreenShake;
+                st.microScreenShake = self.MicroScreenShake;
+            }
+
+            self.Intensity = st.smoothI * windDown;
+            self.RumbleSound *= windDown;
+            self.ScreenShake = st.screenShake * windDown;
+            self.MicroScreenShake = st.microScreenShake * windDown;
         }
     }
 

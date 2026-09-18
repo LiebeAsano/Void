@@ -7,6 +7,7 @@
             DeadlessRain.Hook();
             MartyrPassageFix.Hook();
             PostRainCycle.Hook();
+            PostCycleDawn.Hook();
             RainFoodRequirement.Hook();
             ShortcutHooks.Hook();
             RainMeterHooks.Hook();

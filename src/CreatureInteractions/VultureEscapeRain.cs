@@ -1,4 +1,3 @@
-using System;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using VoidTemplate.Useful;
@@ -22,7 +21,7 @@ public static class VultureEscapeRain
         {
             c.MoveAfterLabels();
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Action<VultureAI>>(EscapeRainIfRaining);
+            c.EmitDelegate(EscapeRainIfRaining);
         }
         else Utils.LogExErr("VultureEscapeRain: behavior selection not found");
     }

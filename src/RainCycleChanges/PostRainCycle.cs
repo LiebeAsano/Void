@@ -1,4 +1,5 @@
 ﻿using HUD;
+using MoreSlugcats;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
@@ -12,8 +13,20 @@ namespace VoidTemplate.RainCycleChanges
         private static readonly ConditionalWeakTable<RainCycle, RainCycleExt> rainCycleExt = new();
         private static readonly bool[] startMalnourished = new bool[32];
 
+        public const int RainWindDownTicks = 1200;
+
         public static RainCycleExt GetRainCycleExt(this RainCycle rainCycle) =>
             rainCycleExt.GetValue(rainCycle, _ => new RainCycleExt(rainCycle));
+
+        public static float RainWindDown(World world)
+        {
+            if (world?.game?.session is not StoryGameSession session || session.saveStateNumber != VoidEnums.SlugcatID.Void)
+                return 1f;
+
+            RainCycleExt ext = world.rainCycle.GetRainCycleExt();
+
+            return ext.PostCycleStarted ? Mathf.InverseLerp(0f, RainWindDownTicks, ext.TimeToStartNewCycle) : 1f;
+        }
 
         public static void Hook()
         {
@@ -47,6 +60,11 @@ namespace VoidTemplate.RainCycleChanges
 
             if (oldWorld == null || newWorld == null) return;
 
+            TransferCycleState(oldWorld, newWorld);
+        }
+
+        public static void TransferCycleState(World oldWorld, World newWorld)
+        {
             newWorld.rainCycle.deathRainHasHit = oldWorld.rainCycle.deathRainHasHit;
 
             RainCycleExt oldExt = oldWorld.rainCycle.GetRainCycleExt();
@@ -110,7 +128,12 @@ namespace VoidTemplate.RainCycleChanges
                 orig(self);
 
                 if (game?.session is StoryGameSession session && session.saveStateNumber == VoidEnums.SlugcatID.Void)
+                {
                     self.GetRainCycleExt().AfterCycleUpdate();
+
+                    if (PostCycleDawn.IsDawn(self))
+                        self.dayNightCounter--;
+                }
             }
             finally
             {
@@ -596,12 +619,20 @@ namespace VoidTemplate.RainCycleChanges
                 string returnDen = starvationReturnDen;
                 string returnLastVanillaDen = starvationReturnLastVanillaDen;
 
-                float newCycleLength = Mathf.Lerp(
+                float minutes = Mathf.Lerp(
                     game.rainWorld.setup.cycleTimeMin,
                     game.rainWorld.setup.cycleTimeMax,
-                    Random.value);
+                    Random.value) / 60f;
 
-                RainCycle newRainCycle = new(owner.world, newCycleLength);
+                if (ModManager.MMF && MMF.cfgNoRandomCycles.Value)
+                    minutes = game.rainWorld.setup.cycleTimeMax / 60f;
+
+                RainCycle newRainCycle = new(owner.world, minutes);
+
+                newRainCycle.dayNightCounter = Mathf.Min(owner.dayNightCounter, PostCycleDawn.FullNightCounter);
+
+                if (game.setupValues.cycleStartUp)
+                    newRainCycle.startUpTicks = 2400;
 
                 owner.world.rainCycle = newRainCycle;
 

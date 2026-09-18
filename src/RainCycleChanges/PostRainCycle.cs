@@ -47,9 +47,12 @@ namespace VoidTemplate.RainCycleChanges
 
             if (oldWorld == null || newWorld == null) return;
 
+            newWorld.rainCycle.deathRainHasHit = oldWorld.rainCycle.deathRainHasHit;
+
             RainCycleExt oldExt = oldWorld.rainCycle.GetRainCycleExt();
             RainCycleExt newExt = newWorld.rainCycle.GetRainCycleExt();
 
+            newExt.postCycleLength = oldExt.postCycleLength;
             newExt.timer = oldExt.timer;
             newExt.subtractedFood = oldExt.subtractedFood;
             newExt.stunned = oldExt.stunned;

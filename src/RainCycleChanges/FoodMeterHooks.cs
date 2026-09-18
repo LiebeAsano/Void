@@ -37,8 +37,6 @@ public class FoodMeterHooks
 
     public static void Hook()
     {
-        RainFoodRequirement.Hook();
-
         On.HUD.FoodMeter.Update += FoodMeter_Update;
         On.HUD.FoodMeter.Draw += FoodMeter_Draw;
         On.HUD.FoodMeter.MeterCircle.Update += MeterCircle_Update;

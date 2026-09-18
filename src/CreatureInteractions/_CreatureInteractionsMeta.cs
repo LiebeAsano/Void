@@ -20,5 +20,6 @@ public static class _CreatureInteractionsMeta
 		EdibleMoths.Hook();
 		FallDamage.CreatureFallDamage.Hook();
 		CreaturePostCycleFlag.Hook();
+		VultureEscapeRain.Hook();
 	}
 }

@@ -72,7 +72,7 @@ public static class MainMenuScene
             {
                 SaveManager.ExternalSaveData.SurvAscended = true;
             }
-            SaveState save = self.rainWorld.progression.GetOrInitiateSaveState(VoidEnums.SlugcatID.Void, null, self.menuSetup, false);
+            SaveState save = self.rainWorld.progression.PeekSaveState(VoidEnums.SlugcatID.Void);
             if (save.GetVoidCatDead() && save.deathPersistentSaveData.karmaCap == 10)
             {
                 SaveManager.ExternalSaveData.VoidDead = true;

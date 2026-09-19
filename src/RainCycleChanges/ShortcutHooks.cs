@@ -141,9 +141,25 @@ namespace VoidTemplate.RainCycleChanges
         {
             orig(self, timeStacker, camPos);
 
-            if (self.waitingForRoomToGenerateShortcuts
-                || !self.room.world.rainCycle.GetRainCycleExt().TimeToLockShelters
-                || !HasFloodWeather(self.room))
+            if (self.waitingForRoomToGenerateShortcuts)
+                return;
+
+            if (self.room.abstractRoom.shelter)
+            {
+                if (!roomStates.TryGetValue(self.room, out RoomState state) || state.rainLockedShortcuts.Count == 0)
+                    return;
+
+                for (int i = 0; i < self.room.shortcuts.Length; i++)
+                {
+                    if (state.rainLockedShortcuts.Contains(self.room.shortcuts[i].StartTile)
+                        && self.entranceSprites[i, 0] is FSprite sprite)
+                        sprite.color = Color.black;
+                }
+
+                return;
+            }
+
+            if (!self.room.world.rainCycle.GetRainCycleExt().TimeToLockShelters || !HasFloodWeather(self.room))
                 return;
 
             for (int i = 0; i < self.entranceSprites.GetLength(0); i++)

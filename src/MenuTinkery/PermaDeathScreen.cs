@@ -18,6 +18,17 @@ public static class PermaDeathScreen
 		//make the empty karma symbol not turn red in the end of permadeath animation
 		//and also not pulsate
 		On.Menu.KarmaLadder.KarmaSymbol.GrafUpdate += KarmaSymbol_GrafUpdate;
+		On.HUD.FoodMeter.Update += FoodMeter_Update;
+	}
+
+	private static void FoodMeter_Update(On.HUD.FoodMeter.orig_Update orig, HUD.FoodMeter self)
+	{
+		orig(self);
+
+		if (self.hud.owner is SleepAndDeathScreen screen
+			&& screen.GetOwnerType() == HUD.HUD.OwnerType.DeathScreen
+			&& screen.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
+			self.fade = 0f;
 	}
 
     static bool IsPlummetingScreen(this KarmaLadder karmaLadder) => karmaLadder.karmaSymbols[0].sprites[karmaLadder.karmaSymbols[0].KarmaSprite].element.name.Contains("blank");

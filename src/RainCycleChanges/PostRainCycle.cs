@@ -630,6 +630,8 @@ namespace VoidTemplate.RainCycleChanges
                 RainCycle newRainCycle = new(owner.world, minutes);
 
                 newRainCycle.dayNightCounter = Mathf.Min(owner.dayNightCounter, PostCycleDawn.FullNightCounter);
+                newRainCycle.duskPalette = owner.duskPalette;
+                newRainCycle.nightPalette = owner.nightPalette;
 
                 if (game.setupValues.cycleStartUp)
                     newRainCycle.startUpTicks = 2400;
@@ -659,20 +661,6 @@ namespace VoidTemplate.RainCycleChanges
                 }
 
                 WaterGateHooks.RestoreAfterPostRain(owner.world);
-
-                for (int i = 0; i < owner.world.abstractRooms.Length; i++)
-                {
-                    AbstractRoom room = owner.world.abstractRooms[i];
-
-                    for (int j = 0; j < room.creatures.Count; j++)
-                        room.creatures[j].state.CycleTick();
-
-                    for (int j = 0; j < room.entitiesInDens.Count; j++)
-                    {
-                        if (room.entitiesInDens[j] is AbstractCreature crit)
-                            crit.state.CycleTick();
-                    }
-                }
 
                 for (int i = 0; i < owner.world.activeRooms.Count; i++)
                 {
@@ -711,10 +699,14 @@ namespace VoidTemplate.RainCycleChanges
                     return;
                 }
 
+                PostCycleSleep.BeforeSave(owner.world);
+
                 SaveProgress();
 
                 if (postCycleFailed)
                     return;
+
+                PostCycleSleep.AfterSave(owner.world);
 
                 FoodChange.RefreshLiveFoodStats(game);
 
@@ -790,7 +782,30 @@ namespace VoidTemplate.RainCycleChanges
                 saveState.lastMalnourished = saveState.malnourished;
                 saveState.malnourished = malnourished;
 
-                saveState.cycleNumber++;
+                DeathPersistentSaveData deathPersistent = saveState.deathPersistentSaveData;
+
+                deathPersistent.sessionTrackRecord.Add(new DeathPersistentSaveData.SessionRecord(true,
+                    session.playerSessionRecords[0]?.wokeUpInRegion != game.world.region.name));
+
+                if (deathPersistent.sessionTrackRecord.Count > 20)
+                    deathPersistent.sessionTrackRecord.RemoveAt(0);
+
+                for (int i = deathPersistent.deathPositions.Count - 1; i >= 0; i--)
+                {
+                    WorldCoordinate pos = deathPersistent.deathPositions[i];
+
+                    deathPersistent.deathPositions[i] = pos.Valid
+                        ? new WorldCoordinate(pos.room, pos.x, pos.y, pos.abstractNode + 1)
+                        : new WorldCoordinate(pos.unknownName, pos.x, pos.y, pos.abstractNode + 1);
+
+                    if (deathPersistent.deathPositions[i].abstractNode >= 7)
+                        deathPersistent.deathPositions.RemoveAt(i);
+                }
+
+                deathPersistent.foodReplenishBonus = 0;
+                saveState.skipNextCycleFoodDrain = false;
+
+                saveState.RainCycleTick(game, true);
                 saveState.cyclesInCurrentWorldVersion++;
 
                 for (int i = 0; i < session.playerSessionRecords.Length; i++)
@@ -806,11 +821,14 @@ namespace VoidTemplate.RainCycleChanges
                 RainWorld.lockGameTimer = false;
 
                 saveState.deathPersistentSaveData.survives++;
-                saveState.deathPersistentSaveData.winState.CycleCompleted(game);
+                TempestPassage.RainCycleCompleted(saveState.deathPersistentSaveData.winState, game);
 
                 if (saveState.deathPersistentSaveData.karma
                     < saveState.deathPersistentSaveData.karmaCap)
                     saveState.deathPersistentSaveData.karma++;
+
+                deathPersistent.rippleLevel = Mathf.Clamp(deathPersistent.rippleLevel + 0.5f,
+                    deathPersistent.minimumRippleLevel, deathPersistent.maximumRippleLevel);
 
                 if (malnourished)
                 {

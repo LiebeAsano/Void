@@ -331,11 +331,7 @@ public static class FoodChange
                 if (name != VoidEnums.SlugcatID.Void || slugcatPageContinue.saveGameData.karmaCap != 10)
                     return origRess;
 
-                SaveState save = menu.manager.rainWorld.progression.GetOrInitiateSaveState(
-                    VoidEnums.SlugcatID.Void,
-                    null,
-                    menu.manager.menuSetup,
-                    false);
+                SaveState save = menu.manager.rainWorld.progression.PeekSaveState(VoidEnums.SlugcatID.Void);
 
                 return GetVoidMaxFood(save);
             });
@@ -351,11 +347,7 @@ public static class FoodChange
                     if (name != VoidEnums.SlugcatID.Void)
                         return origRess;
 
-                    SaveState save = menu.manager.rainWorld.progression.GetOrInitiateSaveState(
-                        VoidEnums.SlugcatID.Void,
-                        null,
-                        menu.manager.menuSetup,
-                        false);
+                    SaveState save = menu.manager.rainWorld.progression.PeekSaveState(VoidEnums.SlugcatID.Void);
 
                     if (slugcatPageContinue.saveGameData.karmaCap == 10 || save.GetVoidMarkV3())
                         return GetVoidFoodRequirement(save);

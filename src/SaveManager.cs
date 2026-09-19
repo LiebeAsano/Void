@@ -4,6 +4,7 @@ using SlugBase.SaveData;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using VoidTemplate.PlayerMechanics.Karma11Foundation;
 using VoidTemplate.ScavDeadZones;
 
 namespace VoidTemplate;
@@ -140,6 +141,51 @@ public static class SaveManager
     }
     public static void SetPebblesPearlsEaten(this SaveState save, int amount) => save.miscWorldSaveData.GetSlugBaseData().Set(pebblesPearlsEaten, amount);
     #endregion
+
+    public static SaveState PeekSaveState(this PlayerProgression progression, SlugcatStats.Name slugcat)
+    {
+        SaveState save = progression.currentSaveState?.saveStateNumber == slugcat
+            ? progression.currentSaveState
+            : LoadDetachedSaveState(progression, slugcat);
+
+        if (slugcat == VoidEnums.SlugcatID.Void || slugcat == VoidEnums.SlugcatID.Viy)
+            Karma11Symbol.currentKarmaTokens = (ushort)save.GetKarmaToken();
+
+        return save;
+    }
+
+    private static SaveState LoadDetachedSaveState(PlayerProgression progression, SlugcatStats.Name slugcat)
+    {
+        UnityEngine.Random.State randomState = UnityEngine.Random.state;
+        int loadedWorldVersion = RainWorld.loadedWorldVersion;
+
+        try
+        {
+            SaveState save = new(slugcat, progression);
+
+            if (progression.HasSaveData)
+            {
+                foreach (string line in progression.GetProgLinesFromMemory())
+                {
+                    string[] parts = line.Split(["<progDivB>"], StringSplitOptions.None);
+
+                    if (parts.Length == 2 && parts[0] == "SAVE STATE" && BackwardsCompatibilityRemix.ParseSaveNumber(parts[1]) == slugcat)
+                    {
+                        save.LoadGame(parts[1], null);
+                        return save;
+                    }
+                }
+            }
+
+            save.LoadGame("", null);
+            return save;
+        }
+        finally
+        {
+            UnityEngine.Random.state = randomState;
+            RainWorld.loadedWorldVersion = loadedWorldVersion;
+        }
+    }
 
     public static bool GetVoidCatDead(this SaveState save) => save.miscWorldSaveData.GetSlugBaseData().TryGet(voidCatDead, out bool dead) && dead;
     public static void SetVoidCatDead(this SaveState save, bool value)

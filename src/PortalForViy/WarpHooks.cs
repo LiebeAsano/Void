@@ -18,7 +18,7 @@ public class WarpHooks
 
     private static bool SleepAndDeathScreen_RevealMap(Func<Menu.SleepAndDeathScreen, bool> orig, Menu.SleepAndDeathScreen self)
     {
-        if (self.IsSleepScreen && self.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
+        if (self.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
             return false;
 
         return orig(self);

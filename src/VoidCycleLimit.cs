@@ -220,7 +220,7 @@ public static class VoidCycleLimit
         if (slugcatId != VoidEnums.SlugcatID.Void || !OptionAccessors.PermaDeath)
             return originalCycleNumber;
 
-        SaveState saveState = mainLoopProcess.manager.rainWorld.progression.GetOrInitiateSaveState(slugcatId, null, mainLoopProcess.manager.menuSetup, false);
+        SaveState saveState = mainLoopProcess.manager.rainWorld.progression.PeekSaveState(slugcatId);
 
         if (saveState == null)
             return originalCycleNumber;

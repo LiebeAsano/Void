@@ -50,7 +50,7 @@ public static class Karma11Symbol
 
         if (self.saveState.saveStateNumber == SlugcatID.Void)
         {
-            SaveState saveState = manager.rainWorld.progression.GetOrInitiateSaveState(SlugcatID.Void, null, manager.rainWorld.processManager.menuSetup, false);
+            SaveState saveState = manager.rainWorld.progression.PeekSaveState(SlugcatID.Void);
             int maxFood = 9 + (saveState.deathPersistentSaveData.karmaCap == 10 ? saveState.GetVoidExtraFood() : 0);
             int foodToHibernate = 6 + (saveState.GetVoidExtraFood() == 3 ? saveState.GetVoidFoodToHibernate() : 0);
             if (ID == ProcessID.TokenDecrease

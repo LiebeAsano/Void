@@ -35,16 +35,7 @@ public static class MenuHooks
             statistics.saveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
             return statistics.saveState;
 
-        PlayerProgression progression = menu.manager.rainWorld.progression;
-
-        if (progression.currentSaveState?.saveStateNumber == VoidEnums.SlugcatID.Void)
-            return progression.currentSaveState;
-
-        return progression.GetOrInitiateSaveState(
-            VoidEnums.SlugcatID.Void,
-            null,
-            menu.manager.menuSetup,
-            false);
+        return menu.manager.rainWorld.progression.PeekSaveState(VoidEnums.SlugcatID.Void);
     }
 
     public static bool IsVoidPermanentlyDead(Menu.Menu menu)

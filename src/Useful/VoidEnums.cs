@@ -283,10 +283,12 @@ public static class VoidEnums
 	public static class CustomPassageID
 	{
 		public static WinState.EndgameID Extinction;
+		public static WinState.EndgameID Tempest;
 
 		public static void Register()
 		{
             Extinction = new(nameof(Extinction), true);
+            Tempest = new(nameof(Tempest), true);
         }
     }
 }

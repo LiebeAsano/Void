@@ -1,5 +1,6 @@
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using VoidTemplate.RainCycleChanges;
 using VoidTemplate.Useful;
 
 namespace VoidTemplate.CreatureInteractions;
@@ -28,7 +29,7 @@ public static class VultureEscapeRain
 
     private static void EscapeRainIfRaining(VultureAI self)
     {
-        if (!self.creature.world.game.AreVoidViyWorld())
+        if (!PostRainCycle.HasRainCycle(self.creature.world.game))
             return;
 
         if (self.behavior != VultureAI.Behavior.Idle && self.behavior != VultureAI.Behavior.Hunt)

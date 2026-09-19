@@ -72,7 +72,7 @@ public static class RainFoodRequirement
         if (game?.session is not StoryGameSession session
             || session.characterStats == null
             || game.world?.rainCycle == null
-            || (!game.IsVoidWorld() && !game.IsViyWorld()))
+            || !HasRainCycle(game))
             return false;
 
         RainCycleExt cycle = game.world.rainCycle.GetRainCycleExt();

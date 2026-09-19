@@ -1,6 +1,7 @@
 ﻿using MoreSlugcats;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
+using VoidTemplate.RainCycleChanges;
 using static VoidTemplate.Useful.Utils;
 namespace VoidTemplate.PlayerMechanics;
 
@@ -42,11 +43,11 @@ public static class ColdImmunityPatch
                         if (!self.abstractCreature.HypothermiaImmune)
                         {
                             float num3 = (float)self.room.world.rainCycle.cycleLength + (float)RainWorldGame.BlizzardHardEndTimer(self.room.game.IsStorySession);
-                            self.HypothermiaGain += Mathf.Lerp(0f, RainWorldGame.BlizzardMaxColdness, Mathf.InverseLerp(0f, num3, (float)self.room.world.rainCycle.timer));
-                            self.HypothermiaGain += Mathf.Lerp(0f, 50f, Mathf.InverseLerp(num3, num3 * 5f, (float)self.room.world.rainCycle.timer));
+                            self.HypothermiaGain += Mathf.Lerp(0f, RainWorldGame.BlizzardMaxColdness, Mathf.InverseLerp(0f, num3, (float)PostCycleBlizzard.ColdTimer(self.room.world.rainCycle)));
+                            self.HypothermiaGain += Mathf.Lerp(0f, 50f, Mathf.InverseLerp(num3, num3 * 5f, (float)PostCycleBlizzard.ColdTimer(self.room.world.rainCycle)));
                         }
                         Color blizzardPixel = self.room.blizzardGraphics.GetBlizzardPixel((int)(self.mainBodyChunk.pos.x / 20f), (int)(self.mainBodyChunk.pos.y / 20f));
-                        self.HypothermiaGain += blizzardPixel.g / Mathf.Lerp(9100f, 5350f, Mathf.InverseLerp(0f, (float)self.room.world.rainCycle.cycleLength + 4300f, (float)self.room.world.rainCycle.timer));
+                        self.HypothermiaGain += blizzardPixel.g / Mathf.Lerp(9100f, 5350f, Mathf.InverseLerp(0f, (float)self.room.world.rainCycle.cycleLength + 4300f, (float)PostCycleBlizzard.ColdTimer(self.room.world.rainCycle)));
                         self.HypothermiaGain += blizzardPixel.b / 8200f;
                         self.HypothermiaExposure = blizzardPixel.g;
                         if (self.Submersion >= 0.1f)
@@ -77,6 +78,7 @@ public static class ColdImmunityPatch
                         self.HypothermiaGain /= 80f;
                     }
                     self.HypothermiaGain = Mathf.Clamp(self.HypothermiaGain, -1f, 0.0055f);
+                    self.HypothermiaGain = PostCycleBlizzard.ColdGain(self.HypothermiaGain, self.room.world);
                     self.Hypothermia += self.HypothermiaGain * (1f - 0.5f * karma + 1);
                     if (self.Hypothermia >= 0.8f && self.Consious && self.room != null && !self.room.abstractRoom.shelter)
                     {

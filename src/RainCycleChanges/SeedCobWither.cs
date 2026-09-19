@@ -43,7 +43,7 @@ public static class SeedCobWither
 
         orig(self);
 
-        if (closed && self.room.game.IsVoidWorld())
+        if (closed && PostRainCycle.HasRainCycle(self.room.game))
             openedAt.Add(self.AbstractCob, new StrongBox<int>(self.room.game.clock));
     }
 

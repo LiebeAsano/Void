@@ -5,6 +5,7 @@ using System.Threading;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics;
 using VoidTemplate.PlayerMechanics.Karma11Features;
+using Watcher;
 
 namespace VoidTemplate.RainCycleChanges
 {
@@ -18,9 +19,18 @@ namespace VoidTemplate.RainCycleChanges
         public static RainCycleExt GetRainCycleExt(this RainCycle rainCycle) =>
             rainCycleExt.GetValue(rainCycle, _ => new RainCycleExt(rainCycle));
 
+        public static bool HasRainCycle(SlugcatStats.Name slugcat) =>
+            slugcat != null && !(ModManager.Watcher && slugcat == WatcherEnums.SlugcatStatsName.Watcher);
+
+        public static bool HasRainCycle(RainWorldGame game) =>
+            game?.session is StoryGameSession session
+            && HasRainCycle(session.saveStateNumber)
+            && !game.rainWorld.safariMode
+            && !(ModManager.MSC && game.wasAnArtificerDream);
+
         public static float RainWindDown(World world)
         {
-            if (world?.game?.session is not StoryGameSession session || session.saveStateNumber != VoidEnums.SlugcatID.Void)
+            if (!HasRainCycle(world?.game))
                 return 1f;
 
             RainCycleExt ext = world.rainCycle.GetRainCycleExt();
@@ -39,6 +49,9 @@ namespace VoidTemplate.RainCycleChanges
         private static void GlobalRain_Update(On.GlobalRain.orig_Update orig, GlobalRain self)
         {
             orig(self);
+
+            if (!HasRainCycle(self.game))
+                return;
 
             RainCycleExt ext = self.game.world.rainCycle.GetRainCycleExt();
 
@@ -127,7 +140,7 @@ namespace VoidTemplate.RainCycleChanges
             {
                 orig(self);
 
-                if (game?.session is StoryGameSession session && session.saveStateNumber == VoidEnums.SlugcatID.Void)
+                if (HasRainCycle(game))
                 {
                     self.GetRainCycleExt().AfterCycleUpdate();
 
@@ -462,7 +475,9 @@ namespace VoidTemplate.RainCycleChanges
                     && playerNumber < startMalnourished.Length
                     && startMalnourished[playerNumber];
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-                if (!saveState.GetVoidMarkV3() || startedMalnourished || !consumedRainFoodThisCycle)
+                bool voidWithoutMark = saveState.saveStateNumber == VoidEnums.SlugcatID.Void && !saveState.GetVoidMarkV3();
+
+                if (voidWithoutMark || startedMalnourished || !consumedRainFoodThisCycle)
                 {
                     KillFromRainStarvation(player);
                     return false;
@@ -607,6 +622,10 @@ namespace VoidTemplate.RainCycleChanges
                 cycleFinalized = true;
 
                 bool malnourished = CurrentMalnourished(game);
+                SaveState saveState = game.GetStorySession.saveState;
+
+                saveState.lastMalnourished = saveState.malnourished;
+                saveState.malnourished = malnourished;
 
                 bool applyFoodProgression =
                     fullFoodChangeCycle
@@ -614,24 +633,18 @@ namespace VoidTemplate.RainCycleChanges
                     && subtractedFood >= foodToConsumeThisCycle;
 
                 if (applyFoodProgression)
-                    FoodChange.ApplyFullFoodProgression(game.GetStorySession.saveState);
+                    FoodChange.ApplyFullFoodProgression(saveState);
 
                 string returnDen = starvationReturnDen;
                 string returnLastVanillaDen = starvationReturnLastVanillaDen;
 
-                float minutes = Mathf.Lerp(
-                    game.rainWorld.setup.cycleTimeMin,
-                    game.rainWorld.setup.cycleTimeMax,
-                    Random.value) / 60f;
-
-                if (ModManager.MMF && MMF.cfgNoRandomCycles.Value)
-                    minutes = game.rainWorld.setup.cycleTimeMax / 60f;
-
-                RainCycle newRainCycle = new(owner.world, minutes);
+                RainCycle newRainCycle = new(owner.world, NewCycleMinutes(game));
 
                 newRainCycle.dayNightCounter = Mathf.Min(owner.dayNightCounter, PostCycleDawn.FullNightCounter);
                 newRainCycle.duskPalette = owner.duskPalette;
                 newRainCycle.nightPalette = owner.nightPalette;
+                newRainCycle.brokenAntiGrav = owner.brokenAntiGrav;
+                newRainCycle.filtrationPowerBehavior = owner.filtrationPowerBehavior;
 
                 if (game.setupValues.cycleStartUp)
                     newRainCycle.startUpTicks = 2400;
@@ -726,6 +739,23 @@ namespace VoidTemplate.RainCycleChanges
                 RainFoodRequirement.Restore(game);
             }
 
+            private static float NewCycleMinutes(RainWorldGame game)
+            {
+                if (ModManager.MMF && MMF.cfgNoRandomCycles.Value)
+                    return game.rainWorld.setup.cycleTimeMax / 60f;
+
+                SlugcatStats.Name character = game.GetStorySession.characterStats.name;
+
+                bool longCycles = character == SlugcatStats.Name.Yellow
+                    || ModManager.MSC && (character == MoreSlugcatsEnums.SlugcatStatsName.Rivulet
+                        || character == MoreSlugcatsEnums.SlugcatStatsName.Gourmand
+                        || character == MoreSlugcatsEnums.SlugcatStatsName.Saint);
+
+                float roll = longCycles ? 0.35f + 0.65f * Mathf.Pow(Random.value, 1.2f) : Random.value;
+
+                return Mathf.Lerp(game.rainWorld.setup.cycleTimeMin, game.rainWorld.setup.cycleTimeMax, roll) / 60f;
+            }
+
             private bool CurrentMalnourished(RainWorldGame game)
             {
                 if (starvationRequirement)
@@ -777,10 +807,7 @@ namespace VoidTemplate.RainCycleChanges
                 if (saveState == null)
                     return;
 
-                bool malnourished = CurrentMalnourished(game);
-
-                saveState.lastMalnourished = saveState.malnourished;
-                saveState.malnourished = malnourished;
+                bool malnourished = saveState.malnourished;
 
                 DeathPersistentSaveData deathPersistent = saveState.deathPersistentSaveData;
 
@@ -812,7 +839,12 @@ namespace VoidTemplate.RainCycleChanges
                 {
                     PlayerSessionRecord record = session.playerSessionRecords[i];
 
-                    if (record?.kills != null && record.kills.Count > 0)
+                    if (record == null)
+                        continue;
+
+                    record.wentToSleepInRegion = game.world.region.name;
+
+                    if (record.kills != null && record.kills.Count > 0)
                         saveState.AppendKills(record.kills);
                 }
 

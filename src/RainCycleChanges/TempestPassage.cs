@@ -14,7 +14,7 @@ public class TempestPassage : CustomPassage
 
     public override string DisplayName => "The Tempest";
 
-    public override bool IsAvailableForSlugcat(SlugcatStats.Name name) => name == VoidEnums.SlugcatID.Void;
+    public override bool IsAvailableForSlugcat(SlugcatStats.Name name) => PostRainCycle.HasRainCycle(name);
 
     public override WinState.EndgameTracker CreateTracker() => new WinState.FloatTracker(ID, 0f, 0f, 0f, 1f);
 

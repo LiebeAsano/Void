@@ -25,8 +25,7 @@ public static class PostCycleDawn
         return rainCycle.dayNightCounter > 0
             && rainCycle.timer < rainCycle.cycleLength
             && rainCycle.timer < rainCycle.sunDownStartTime
-            && rainCycle.world.game.session is StoryGameSession session
-            && session.saveStateNumber == VoidEnums.SlugcatID.Void;
+            && PostRainCycle.HasRainCycle(rainCycle.world.game);
     }
 
     private static void RoomCamera_UpdateDayNightPalette(On.RoomCamera.orig_UpdateDayNightPalette orig, RoomCamera self)

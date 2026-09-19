@@ -68,7 +68,7 @@ public static class DeadlessRain
     {
         orig(self);
 
-        if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void &&
+        if (PostRainCycle.HasRainCycle(self.game) &&
             self.deathRain != null &&
             self.deathRain.deathRainMode == GlobalRain.DeathRain.DeathRainMode.Mayhem)
         {
@@ -120,7 +120,7 @@ public static class DeadlessRain
 
     private static float GlobalRain_InsidePushAround(Func<GlobalRain, float> orig, GlobalRain self)
     {
-        if (self.game.StoryCharacter == VoidEnums.SlugcatID.Void)
+        if (PostRainCycle.HasRainCycle(self.game))
             return 0f;
 
         return orig(self);
@@ -131,7 +131,7 @@ public static class DeadlessRain
         bool loaded = orig(self, timelinePoint);
 
         if (loaded && !self.isTemplate &&
-            timelinePoint == VoidEnums.SlugcatTimeline.VoidTimeline &&
+            PostRainCycle.HasRainCycle(self.game) &&
             self.DangerType != RoomRain.DangerType.None &&
             self.DangerType != DLCSharedEnums.RoomRainDangerType.Blizzard &&
             self.DangerType != WatcherEnums.WatcherDangerType.Sandstorm)

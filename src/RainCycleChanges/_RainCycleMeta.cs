@@ -15,6 +15,7 @@
             FoodMeterHooks.Hook();
             WaterGateHooks.Hook();
             SeedCobWither.Hook();
+            PostCycleBlizzard.Hook();
             TempestPassage.Register();
         }
     }

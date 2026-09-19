@@ -3,7 +3,6 @@ using HUD;
 using RWCustom;
 using UnityEngine;
 using VoidTemplate.PlayerMechanics.Karma11Features;
-using VoidTemplate.Useful;
 using static VoidTemplate.RainCycleChanges.PostRainCycle;
 
 namespace VoidTemplate.RainCycleChanges;
@@ -56,7 +55,7 @@ public class FoodMeterHooks
         World world = owner.abstractCreature?.world;
         RainWorldGame game = world?.game;
 
-        if (world?.rainCycle == null || game == null || (!game.IsVoidWorld() && !game.IsViyWorld()))
+        if (world?.rainCycle == null || !HasRainCycle(game))
             return false;
 
         player = owner;

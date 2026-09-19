@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using VoidTemplate.Useful;
 
 namespace VoidTemplate.RainCycleChanges;
 
@@ -57,7 +56,7 @@ public static class WaterGateHooks
 
     private static bool IsPostRain(Room room)
     {
-        if (room?.game?.IsVoidStoryCampaign() != true || room.world?.rainCycle == null) return false;
+        if (!PostRainCycle.HasRainCycle(room?.game) || room.world?.rainCycle == null) return false;
 
         return room.world.rainCycle.GetRainCycleExt().PostCycleStarted;
     }
@@ -78,7 +77,7 @@ public static class WaterGateHooks
 
     public static void RestoreAfterPostRain(World world)
     {
-        if (world?.game?.IsVoidStoryCampaign() != true)
+        if (!PostRainCycle.HasRainCycle(world?.game))
             return;
 
         ResetWaterGateFlags(world);

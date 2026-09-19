@@ -962,15 +962,6 @@ static class OracleHooks
     {
         public SSOracleVoidBehavior(SSOracleBehavior owner, int times) : base(owner, VoidTalk, OracleConversation.PebbleVoidConversation[times - 1])
         {
-            if (ModManager.MMF && owner.oracle.room.game.IsStorySession
-                               && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked &&
-                               oracle.room.world.rainCycle.timer > oracle.room.world.rainCycle.cycleLength / 4)
-            {
-                oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
-                oracle.room.world.rainCycle.dayNightCounter = 0;
-            }
-
-
         }
 
         public override void NewAction(SSOracleBehavior.Action oldAction, SSOracleBehavior.Action newAction)
@@ -1044,11 +1035,6 @@ public class SSOracleMeetVoid_CuriousBehavior : SSOracleBehavior.ConversationBeh
         showMediaPos = new Vector2(400f, 300f);
         oracle.room.AddObject(chatLabel);
         chatLabel.Hide();
-        if (ModManager.MMF && owner.oracle.room.game.IsStorySession && owner.oracle.room.game.GetStorySession.saveState.miscWorldSaveData.memoryArraysFrolicked && oracle.room.world.rainCycle.timer > oracle.room.world.rainCycle.cycleLength / 4)
-        {
-            oracle.room.world.rainCycle.timer = oracle.room.world.rainCycle.cycleLength / 4;
-            oracle.room.world.rainCycle.dayNightCounter = 0;
-        }
     }
 
     public override void Update()

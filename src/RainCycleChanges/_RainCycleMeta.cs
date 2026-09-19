@@ -16,6 +16,8 @@
             WaterGateHooks.Hook();
             SeedCobWither.Hook();
             PostCycleBlizzard.Hook();
+            PebblesCycleRollback.Hook();
+            RotStorm.Hook();
             TempestPassage.Register();
         }
     }
